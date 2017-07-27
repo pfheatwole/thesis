@@ -88,7 +88,9 @@
 
 % List of Figures
 %%%% The LoF
-\renewcommand{\listfigurename}{LIST OF FIGURES}
+\AtBeginDocument{%
+    \renewcommand{\listfigurename}{LIST OF FIGURES}
+}
 \addtodef{\listoffigures}{\clearpage\pagestyle{lof}}{}
 \renewcommand*{\lofheadstart}{\vspace*{-\topfiddle}}
 \renewcommand*{\afterloftitle}{\thispagestyle{plain}%
@@ -96,7 +98,9 @@
 
 % List of Tables
 %%% The LoT
-\renewcommand{\listtablename}{LIST OF TABLES}
+\AtBeginDocument{%
+    \renewcommand{\listtablename}{LIST OF TABLES}
+}
 \addtodef{\listoftables}{\clearpage\pagestyle{lot}}{}
 \renewcommand*{\lotheadstart}{\vspace*{-\topfiddle}}
 \renewcommand*{\afterlottitle}{\thispagestyle{plain}%
@@ -104,7 +108,11 @@
 
 % Table of Contents
 %%%% Do the ToC
-\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\AtBeginDocument{%
+    \renewcommand{\contentsname}{TABLE OF CONTENTS}
+}
+
+
 \addtodef{\tableofcontents}{\clearpage\pagestyle{toc}}{}
 \renewcommand*{\tocheadstart}{\vspace*{-\topfiddle}}
 \renewcommand*{\aftertoctitle}{\thispagestyle{plain}%
