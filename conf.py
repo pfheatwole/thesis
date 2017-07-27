@@ -122,7 +122,6 @@ htmlhelp_basename = 'Thesisdoc'
 
 EXTRA_PREAMBLE = r"""
 \usepackage{pwasu}
-\usepackage{helvet}
 """
 
 
@@ -139,6 +138,7 @@ latex_elements = {
     #
     # 'preamble': '',
     'preamble': EXTRA_PREAMBLE,
+    'fontpkg': '\\usepackage{helvet}',
 
     # Latex figure (float) alignment
     #
