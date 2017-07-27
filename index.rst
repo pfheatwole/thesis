@@ -30,7 +30,7 @@ This is a nonprinting section
 
 .. raw:: latex
 
-    \tableofcontents
+    \tableofcontents*
     \listoffigures
 
 .. raw:: latex
