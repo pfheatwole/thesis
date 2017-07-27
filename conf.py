@@ -147,6 +147,14 @@ latex_elements = {
     # 'tableofcontents': '\\tableofcontents',
     'tableofcontents': '',
     'fncychap': '',
+
+    'makeindex': '',
+    'printindex': '',
+
+    # Latex figure (float) alignment
+    #
+    # 'figure_align': 'htbp',
+
 }
 
 latex_additional_files = [
