@@ -140,14 +140,12 @@ latex_elements = {
     'preamble': EXTRA_PREAMBLE,
     'fontpkg': '\\usepackage{helvet}',
 
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
+    # Configure memoir
     'extraclassoptions': 'openany,oneside',
     # 'maketitle': r'\thetitlepage',
-    'maketitle': '',
-    'tableofcontents': '',
+    'maketitle': '',  # Disable so I can call \frontmatter first
     # 'tableofcontents': '\\tableofcontents',
+    'tableofcontents': '',
     'fncychap': '',
 }
 
