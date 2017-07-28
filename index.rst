@@ -47,4 +47,4 @@ This is a nonprinting section
     example
     citations_example
     appendix
-    zbibliography
+    zreferences

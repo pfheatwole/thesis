@@ -176,7 +176,9 @@
 \setlength{\belowcaptionskip}{\onelineskip}
 
 %% Bibliography
-\renewcommand*{\bibname}{REFERENCES}
+\AtBeginDocument{
+    \renewcommand*{\bibname}{REFERENCES}
+}
 \setlength{\bibitemsep}{\onelineskip}
 \renewcommand*{\biblistextra}{%
 \setlength{\itemsep}{\bibitemsep}
