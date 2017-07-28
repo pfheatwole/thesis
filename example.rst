@@ -6,19 +6,30 @@ And so it begins...
 Also, here's some shwanky math to get things rolling:
 
 .. math::
+    :label: wind_triangle
 
     w^2 = v^2 + t^2 - 2\cdot v\cdot t\cdot cos(\theta_x)
 
-QED.
 
-=====  =====  =======
-A      B      A and B
-=====  =====  =======
-False  False  False
-True   False  False
-False  True   False
-True   True   True
-=====  =====  =======
+Wasn't :eq:`wind_triangle` lovely?
+
+And now a table:
+
+.. _tbl_and:
+
+.. table:: Boolean AND
+
+    =====  =====  =======
+    A      B      A and B
+    =====  =====  =======
+    False  False  False
+    True   False  False
+    False  True   False
+    True   True   True
+    =====  =====  =======
+
+Can I now reference :numref:`tbl_and`?
+
 
 And now a figure!
 
@@ -26,9 +37,3 @@ And now a figure!
     :alt: Creative Commons
 
     This is the caption.
-
-    ========= =========
-    Symbol     Meaning
-    ========= =========
-    theta      heading
-    ========= =========

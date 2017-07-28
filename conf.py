@@ -77,6 +77,7 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
+numfig = True  # Enable numbered figure and table references in HTML
 
 # -- Options for HTML output ----------------------------------------------
 
