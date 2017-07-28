@@ -26,6 +26,7 @@ This is a nonprinting section
     \frontmatter
     \thetitlepage
     \copyrightpage
+    \committeepage
 
 .. include:: abstract.rst
 

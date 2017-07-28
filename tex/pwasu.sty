@@ -9,9 +9,9 @@
                {\@ehd}}
 \endpwasu
 
-% FIXME: Already applied in sphinx?
-%\usepackage{url}
-%\urlstyle{same}
+% Grab the title and author, as defined from Sphinx
+\def\doctitle{\@title}
+\def\docauthor{\@author}
 
 \setverbatimfont{\normalfont\rmfamily} % Make verbatims the body font
 
@@ -302,24 +302,33 @@
     }}
 
 
-%%% typesets the APPROVAL page
-\newcommand{\approvalpage}{{%
-    \thispagestyle{empty}
-    \centering
-    \vspace*{-\toptafiddle}
-    \asutitle \\ by \\ \asuauthor \\[3\onelineskip]
-    has been approved \\
-    \asudefdate
-    \vfill
-    Graduate Supervisory Committee: \\[-0.5\onelineskip]
-    {\SingleSpacing
-    \asuchair \\
-    \asumembers}
-    \vfill
-    ACCEPTED BY THE GRADUATE COLLEGE
+\newcommand{\committeepage}{{
+    \begin{SingleSpace}
+    \begin{center}
+        COMMITTEE MEMBERSHIP
+    \end{center}
     \par
-    \enlargethispage{\bottafiddle}
-    \clearpage}}
+    \vspace*{0.5in}
+    %\begin{tabular}{rp{3.01in}}
+    \begin{tabular}{rl}
+        TITLE:  &\doctitle \\\\\\
+        AUTHOR: &\docauthor \\\\\\
+        %DATE SUBMITTED: &\@degreemonth~\@degreeyear  \par\\
+        DATE SUBMITTED: &<FIXME: month and year> \\\\\\
+        \\\\\\
+        COMMITTEE CHAIR:
+            &Lynne Slivovsky, Ph.D. \\
+            &Professor of Electrical Engineering \\\\\\
+        COMMITTEE MEMBER:
+            &Marty Kaliski, Ph.D. \\
+            &Professor of Electrical Engineering \\\\\\
+        COMMITTEE MEMBER:
+            &Somebody Else, M.Sc. \\
+            &Professor of Electrical Engineering \\\\\\
+    \end{tabular}
+    \end{SingleSpace}
+    \clearpage
+    }}
 
 %%% put your biographical text in this environment
 %% \begin{biosketch} I’m a person who has accomplished .... \end{biosketch}
