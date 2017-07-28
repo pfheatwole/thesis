@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Thesis'
+project = 'Paragliding Wind Detection'
 copyright = '2017, Peter Heatwole'
 author = 'Peter Heatwole'
 
@@ -167,7 +167,7 @@ latex_additional_files = [
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Thesis.tex', "Paragliding Wind Detection",
+    (master_doc, 'Thesis.tex', project,
      'Peter Heatwole', 'memoir'),
 ]
 
