@@ -41,9 +41,10 @@ This is a nonprinting section
     \pagestyle{asu}
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   intro
-   citations_example
-   appendix
-   zbibliography
+    introduction
+    example
+    citations_example
+    appendix
+    zbibliography

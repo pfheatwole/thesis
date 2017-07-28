@@ -1,5 +1,5 @@
-Introduction
-============
+Example Content
+===============
 
 And so it begins...
 
