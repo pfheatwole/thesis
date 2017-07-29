@@ -17,9 +17,8 @@
 This is a nonprinting section
 =============================
 
-.. Workaround for a (bug?) issue where the first section does not produce
-   a chapter. Means the first chapter would have no chapter entry.
-   FIXME: seems like I'm probably missing something, this should not be needed.
+.. This is a nonprinting section for the PDF, but if you delete it then the
+   first chapter won't include the chapter heading.
 
 .. raw:: latex
 
