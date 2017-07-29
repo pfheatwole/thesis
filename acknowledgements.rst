@@ -1,3 +1,9 @@
+.. only:: html or singlehtml
+
+    ****************
+    Acknowledgements
+    ****************
+
 .. raw:: latex
 
     \asuacknowledgements

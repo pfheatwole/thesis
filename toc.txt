@@ -1,0 +1,7 @@
+.. toctree::
+    :maxdepth: 3
+
+    introduction
+    example
+    appendix
+    zreferences

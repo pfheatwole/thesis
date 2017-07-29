@@ -167,7 +167,7 @@ latex_additional_files = [
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Thesis.tex', project,
+    ('index-latex', 'Thesis.tex', project,
      'Peter Heatwole', 'memoir'),
 ]
 
