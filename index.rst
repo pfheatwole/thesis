@@ -28,6 +28,7 @@ This is a nonprinting section
     \committeepage
 
 .. include:: abstract.rst
+.. include:: acknowledgements.rst
 
 .. raw:: latex
 
