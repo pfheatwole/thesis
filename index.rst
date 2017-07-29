@@ -44,6 +44,5 @@ This is a nonprinting section
 
     introduction
     example
-    citations_example
     appendix
     zreferences

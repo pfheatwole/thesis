@@ -30,9 +30,13 @@ And now a table:
 Can I now reference :numref:`tbl-and`?
 
 
-And now a figure!
+And now a figure:
 
 .. figure:: ccicon88x31.png
     :alt: Creative Commons
+    :align: center
 
     This is the caption.
+
+And a citation: :cite:`barfoot_batch_2014`, which should link to the
+References.
