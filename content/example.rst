@@ -32,7 +32,7 @@ Can I now reference :numref:`tbl-and`?
 
 And now a figure:
 
-.. figure:: ccicon88x31.png
+.. figure:: images/ccicon88x31.png
     :alt: Creative Commons
     :align: center
 
