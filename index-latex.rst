@@ -1,3 +1,5 @@
+:orphan:
+
 *******************************
 XXXXX EMPTY NONPRINTING SECTION
 *******************************
@@ -13,8 +15,8 @@ XXXXX EMPTY NONPRINTING SECTION
     \committeepage
 
 .. The Latex build must add these explicitly outside the toctree
-.. include:: abstract.rst
-.. include:: acknowledgements.rst
+.. include:: content/abstract.rst
+.. include:: content/acknowledgements.rst
 
 .. raw:: latex
 

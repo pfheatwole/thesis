@@ -1,5 +1,5 @@
 .. toctree::
-    abstract
-    acknowledgements
+    content/abstract
+    content/acknowledgements
 
 .. include:: toc.txt

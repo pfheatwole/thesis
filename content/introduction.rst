@@ -66,7 +66,7 @@ Predictive modelling
 
 
 
-.. figure:: content/wind_triangle.*
+.. figure:: images/wind_triangle.*
     :alt: Wind Triangle
     :align: center
 
