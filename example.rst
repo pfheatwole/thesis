@@ -15,9 +15,8 @@ Wasn't :eq:`wind_triangle` lovely?
 
 And now a table:
 
-.. _tbl_and:
-
 .. table:: Boolean AND
+    :name: tbl-and
 
     =====  =====  =======
     A      B      A and B
@@ -28,7 +27,7 @@ And now a table:
     True   True   True
     =====  =====  =======
 
-Can I now reference :numref:`tbl_and`?
+Can I now reference :numref:`tbl-and`?
 
 
 And now a figure!
