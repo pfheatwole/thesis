@@ -2,7 +2,7 @@
     :maxdepth: 3
 
     content/introduction
-    content/dtw
+    content/data
     content/example
     content/appendix
     content/zreferences
