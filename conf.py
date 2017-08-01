@@ -142,7 +142,10 @@ latex_elements = {
     #
     # 'preamble': '',
     'preamble': EXTRA_PREAMBLE,
-    'fontpkg': '\\usepackage{helvet}',
+    'fontpkg': r'''
+        \usepackage{helvet}
+        \PassOptionsToPackage{bookmarksnumbered}{hyperref}
+        ''',
 
     # Configure memoir
     'extraclassoptions': 'openany,oneside',
