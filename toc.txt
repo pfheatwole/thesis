@@ -1,8 +1,10 @@
 .. toctree::
-    :maxdepth: 3
+   :maxdepth: 3
 
-    content/introduction
-    content/data
-    content/example
-    content/appendix
-    content/zreferences
+   content/introduction
+   content/data
+   content/wind
+   content/pf
+   content/example
+   content/appendix
+   content/zreferences
