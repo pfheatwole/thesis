@@ -19,33 +19,34 @@ Variometer Debiasing
 Vario debiasing via dynamic time warping.
 
 Talking points:
- * How GPS lags the variometer
+
+* How GPS lags the variometer
    
- * How GPS lag causes a smoothing effect
+* How GPS lag causes a smoothing effect
 
- * How altitude pressure introduces a bias with changing altitude
+* How altitude pressure introduces a bias with changing altitude
 
-   * **Radiosonde** is a telemetry instrument carried into the atmosphere on
-     a weather balloon.
+  * **Radiosonde** is a telemetry instrument carried into the atmosphere on
+    a weather balloon.
 
-   * **Lapse rate** is the rate at which the air temperature decreases as
-     a function of altitude. A negative lapse rate means the temperature
-     increases. A sign inversion in the lapse rate corresponds to a thermal
-     inversion; for example, the temperature starts to increase with altitude
-     instead of decreasing.
+  * **Lapse rate** is the rate at which the air temperature decreases as
+    a function of altitude. A negative lapse rate means the temperature
+    increases. A sign inversion in the lapse rate corresponds to a thermal
+    inversion; for example, the temperature starts to increase with altitude
+    instead of decreasing.
 
- * Determine the vario bias from the two tracks
+* Determine the vario bias from the two tracks
 
- * Issues with aligning the two sequences
+* Issues with aligning the two sequences
 
 
 Open Questions:
 
- * If the vario assumes the International Standard Atmosphere (ISA) lapse rate
-   of ~2C/1000ft (thus accounting for that automatically), then the residual
-   error is not in fact the lapse rate, but the lapse rate error. If I compute
-   the lapse rate error, can I combine it with the ISA to report the
-   approximated "true" lapse rate? (ie, `2C + measured_error`)
+* If the vario assumes the International Standard Atmosphere (ISA) lapse rate
+  of ~2C/1000ft (thus accounting for that automatically), then the residual
+  error is not in fact the lapse rate, but the lapse rate error. If I compute
+  the lapse rate error, can I combine it with the ISA to report the
+  approximated "true" lapse rate? (ie, `2C + measured_error`)
 
 
 A variometer is a device which measures "pressure altitude", and reports the
