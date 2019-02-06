@@ -2,8 +2,7 @@
 Introduction
 ************
 
-1. Introduction to the introduction (brief version of the context, problem, and
-   response)
+1. Introduction to the introduction
 2. Context
 3. Restatement of the problem
 4. Restatement of the response
@@ -43,7 +42,6 @@ evaluated in-flight, by comparing current conditions to historical trends. In
 this way a pilot can seek out regions that are likely to contain rising air,
 and can avoid regions likely to contain sinking air.
 
-
 The basic pipeline is as follows:
 
 1. For each flight:
@@ -65,8 +63,6 @@ The basic pipeline is as follows:
    B. For regions with enough data, FIXME
 
 
-
-
 Data Preparation
 ================
 
@@ -78,7 +74,7 @@ Wind Estimation
 ===============
 
 Use simulation-based filtering to combine the filtered position data with
-a paragliding dynamics model to estimate the wind forces that were interacting
+a paraglider dynamics model to estimate the wind forces that were interacting
 with the glider.
 
 
@@ -86,9 +82,9 @@ Pattern Extraction
 ==================
 
 Combine the sets of wind estimates by time and space, then use pattern
-extraction to find wind correlations between nearby regions. Specifically, can
-you find points in space which are strong indicators of the wind conditions in
-other nearby points in space?
+recognition methods to find correlations in the wind vectors of neighboring
+regions. Specifically, can you find points in space which are strong
+indicators of the wind conditions in other nearby points in space?
 
 
 Predictive modelling
