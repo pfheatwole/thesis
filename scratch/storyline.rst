@@ -1,5 +1,5 @@
-It all started with a question: can I use old paragliding tracks to find
-patterns to the wind?
+It all started with a question: can I use old paragliding tracks to reveal
+patterns in the wind?
 
 It seemed reasonable that some regions of the topography would be more
 consistent than others. Regions with higher-than-average consistency of lift
@@ -9,25 +9,26 @@ information is present in the flight tracks to discover similar patterns using
 statistics.
 
 At first, I had a huge dream: create a model, then network a bunch of
-variometers to explore the space more quickly. It quickly became apparent that
-the model building was the more interesting, not to mention feasible, aspect
-of the project. So I put the variometer designs, the radio networking
-research, the android app, etc, on hold.
+variometers with wireless radios to explore the wind field more quickly. It
+soon became apparent that building the statistical model was the more
+interesting, not to mention more feasible, aspect of the project. And so,
+I put the variometer designs, the radio networking research, the android app,
+etc, on hold.
 
 I began exploring the data itself. The data is present in the form of so
-called **IGC tracks**. At their most basic, they are simply timestamped
-position sequences: time, latitude, longitude, and altitude. There is no
-heading information, no acceleration or velocity information, no pilot control
-input (braking, speedbar, etc), or any other indications of the current
-weather conditions of the flight.
+called **IGC tracks**. At their most basic, these files are simply timestamped
+position sequences: rows of plain text data containing time, latitude,
+longitude, and altitude. There is no heading information, no acceleration or
+velocity information, no pilot control input (braking, speedbar, etc), or any
+other indications of the current weather conditions of the flight.
 
-Thus, the recreation of the wind conditions must rely on properties of the
-paraglider wings, and the feasible operating conditions in which pilots may
-use them. Because the flight **track** (that is, the movement of the glider
-relative to the ground) is the vector sum of the **wind** vector (the movement
-of the air mass relative to the ground) plus the **relative wind** vector (the
-movement of the air mass relative to the glider), then the **track**
-represents an underdetermined system of equations.
+[[FIXME: awkward paragraph]] Thus, the recreation of the wind conditions must
+rely on properties of the paraglider wings, and the feasible operating
+conditions in which pilots may use them. Because the flight **track** (that
+is, the movement of the glider relative to the ground) is the vector sum of
+the **wind** vector (the movement of the air mass relative to the ground) plus
+the **relative wind** vector (the movement of the air mass relative to the
+glider), then the **track** represents an underdetermined system of equations.
 
 By introducing constraints in the form of 1) allowable wind speed and gust
 factor, and 2) standard operating ranges of paragliding wings, I theorized

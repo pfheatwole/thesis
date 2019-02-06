@@ -10,7 +10,7 @@ writing guidelines. Its primary points relate to:
 * Helping the reader
 
 Many of the points are not novel, but very well clarified and formalized. This
-formalization is helpful for converting an ad-hoc process into a systematic
+formalization is helpful for converting an ad hoc process into a systematic
 process. It is invaluable to have a concrete recognition of what works, what
 isn't working, and how to approach the revision process.
 
@@ -68,24 +68,24 @@ I disagree."
 
 There are also **paragraph transitions** and **transitions between sections**.
 
- * **sentence transitions**: tend to be `this + summary word`
+* **sentence transitions**: tend to be `this + summary word`
 
- * **paragraph transition**:  tend to be `this + summary phrase`
+* **paragraph transition**:  tend to be `this + summary phrase`
 
-   Careful: words like "however", "in other words" etc, at the start of
-   a paragraph, tend to confuse the reader.
+  Careful: words like "however", "in other words" etc, at the start of
+  a paragraph, tend to confuse the reader.
 
- * **section transitions**: can be at the start of a section, the end, or
-   wherever an overall structure is created.
+* **section transitions**: can be at the start of a section, the end, or
+  wherever an overall structure is created.
 
-   "For example, in a literature review, a writer may say that she is going to
-   consider the literature on a certain topic from three perspectives. The
-   reader will then be fine with three independent sections without explicit
-   transitions between them."
+  "For example, in a literature review, a writer may say that she is going to
+  consider the literature on a certain topic from three perspectives. The
+  reader will then be fine with three independent sections without explicit
+  transitions between them."
 
-   **Transitions should happen in the text, not in the headings.** As a rule
-   of thumb, read through section (and subsection) headings as if they weren't
-   there.
+  **Transitions should happen in the text, not in the headings.** As a rule
+  of thumb, read through section (and subsection) headings as if they weren't
+  there.
 
 
 Drafting
@@ -144,7 +144,7 @@ writing.
 
 
 Thesis Introductions
-====================
+--------------------
 
 Because a thesis is such a larger body of work, it can require special
 considerations. The reader should not have to wait for a complete and thorough
@@ -176,10 +176,10 @@ For example, your introduction might be structured as follows:
    
    A brief indication of how the thesis will proceed.
 
-Ideally, a good introduction will serve to make the reader feel comfortable
+*A good introduction will serve to make the reader feel comfortable
 with the document as soon as possible. It should imbue the reader with a sense
-of familiarity, that they know what to expect, thus lowering the cognitive
-overhead of trying to make sense of the content.
+of familiarity.* A good introduction lowers the cognitive overhead necessary
+to understand the body by setting clear expectations.
 
 
 Revision
@@ -195,40 +195,9 @@ and rearranging of the text; **proofreading** is the process of making
 corrections and checking for consistency (while *not* making revision changes
 that can introduce new errors!)
 
-Some activities that can be described as revision:
 
-* Word choice: is the vocabulary appropriate?
-
-* sentence structure: are the sentences easy for the reader to follow?
-
-* transitions between sentences, paragraphs, and sections: is the ordering
-  optimal, and have you signalled that order to the reader?
-
-* Tone: have you engaged the reader while still conforming to academic writing
-  conventions?
-
-* Economy: have you avoided distracting digressions or general wordiness?
-
-* Overall coherence: is there a clear and discernible argument or structure to
-  your writing?
-
-
-Some general tips:
-
-* Try reading the text aloud.
-
-* Read paragraphs out of order: focusing on paragraphs in isolation might
-  reveal cohesion issues.
-
-* A text with serious structural issues might work at the local level. This is
-  good in the sense that your local work provides a good starting point, but
-  can be deceptive if you're myopic in your review. Just because a paragraph
-  is *interally* coherent doesn't mean it fits the bigger picture.
-
-* Economy matters: phrases should always be doing important work
-
-
-Two complimentary methods for checking structural cohesion:
+Two complimentary methods for checking structural cohesion
+----------------------------------------------------------
 
 * reverse outline
 
@@ -249,52 +218,6 @@ Put another way, the *reverse outline* shows what's **wrong**, whereas the
 *topic sentence paragraph* confirms what's **right**.
 
 
-Coarse-to-Fine Issue Ordering
------------------------------
-
-It is helpful to recognize the different broader issues you will encounter,
-and create a **sequence** for dealing with them. For example, the author
-suggests this ordering:
-
-1. Broad structural issues
-
-   Start with the big issues. The most effective strategy for structural
-   revision is the reverse outline.
-
-   This stage should be ruthless. Some things may have been necessary to be
-   *written* (so you can clear up the idea in your head) but not necessary to
-   be *read*. Is it useful to the reader? If not, cut it.
-
-   Also important is to remember: **Content that may have been necessary in an
-   old draft is no longer serving a purpose in the edited text.** It might be
-   good to sequester these sections elsewhere until you can verify if they're
-   truly valuable.
-
-2. Clarity
-   
-   Eliminate unnecessary words and undue complexity * Writers are often
-   tempted to distance themselves from their ideas with awkward expressions,
-   weak verbs, and unclear subjects.
-
-3. Sentence-level errors
-
-   Subject-verb agreement, ambiguous references (unclear "this", etc), and
-   punctuation
-
-4. Cohesion problems
-
-   All the previous changes are likely to introduce new cohesion problems.
-
-   This is a good time to review the **topic sentence paragraphs** to make
-   sure the text flows naturally.
-
-This method of focusing on specific issues also encourages time efficient
-reviews: **don't try to fix all types of issues at once**. For example, by the
-time you're to the proof reading stage you probably don't to keep fiddling
-with document structure (which is likely to introduce new errors). **Be strict
-about what type of editing you're doing.**
-
-
 Reverse Outline
 ---------------
 
@@ -303,15 +226,6 @@ content-level revision. You *move the analysis to a higher level of
 abstraction so you don't get lost in the details.*
 
 The steps to creating a reverse outline:
-
-1. Number the paragraphs
-2. Identify the topic in each paragraph
-3. Arrange the topics into an outline
-4. Analyze the outline
-5. Create a revised outline
-6. Reorganize the text according to the revised outline
-7. Check for topic sentences and cohesion
-
 
 1. Number the paragraphs
 
@@ -377,6 +291,87 @@ The steps to creating a reverse outline:
    coherence.
 
 
+Some activities that can be described as revision
+-------------------------------------------------
+
+* Word choice: is the vocabulary appropriate?
+
+* sentence structure: are the sentences easy for the reader to follow?
+
+* transitions between sentences, paragraphs, and sections: is the ordering
+  optimal, and have you signalled that order to the reader?
+
+* Tone: have you engaged the reader while still conforming to academic writing
+  conventions?
+
+* Economy: have you avoided distracting digressions or general wordiness?
+
+* Overall coherence: is there a clear and discernible argument or structure to
+  your writing?
+
+
+Coarse-to-Fine Issue Ordering
+-----------------------------
+
+It is helpful to recognize the different broader issues you will encounter,
+and create a **sequence** for dealing with them. For example, the author
+suggests this ordering:
+
+1. Broad structural issues
+
+   Start with the big issues. The most effective strategy for structural
+   revision is the reverse outline.
+
+   This stage should be ruthless. Some things may have been necessary to be
+   *written* (so you can clear up the idea in your head) but not necessary to
+   be *read*. Is it useful to the reader? If not, cut it.
+
+   Also important is to remember: **Content that may have been necessary in an
+   old draft is no longer serving a purpose in the edited text.** It might be
+   good to sequester these sections elsewhere until you can verify if they're
+   truly valuable.
+
+2. Clarity
+   
+   Eliminate unnecessary words and undue complexity * Writers are often
+   tempted to distance themselves from their ideas with awkward expressions,
+   weak verbs, and unclear subjects.
+
+3. Sentence-level errors
+
+   Subject-verb agreement, ambiguous references (unclear "this", etc), and
+   punctuation
+
+4. Cohesion problems
+
+   All the previous changes are likely to introduce new cohesion problems.
+
+   This is a good time to review the **topic sentence paragraphs** to make
+   sure the text flows naturally.
+
+This method of focusing on specific issues also encourages time efficient
+reviews: **don't try to fix all types of issues at once**. For example, by the
+time you're to the proof reading stage you probably don't to keep fiddling
+with document structure (which is likely to introduce new errors). **Be strict
+about what type of editing you're doing.**
+
+
+General Tips
+------------
+
+* Try reading the text aloud.
+
+* Read paragraphs out of order: focusing on paragraphs in isolation might
+  reveal cohesion issues.
+
+* A text with serious structural issues might work at the local level. This is
+  good in the sense that your local work provides a good starting point, but
+  can be deceptive if you're myopic in your review. Just because a paragraph
+  is *interally* coherent doesn't mean it fits the bigger picture.
+
+* Economy matters: phrases should always be doing important work
+
+
 Metadiscourse
 =============
 
@@ -419,10 +414,14 @@ There are several things you can signal to the reader:
 
   * "I will attempt to..."
 
-*Signposting* is an important element of metadiscourse. These help manage
-the reader's expectations by signaling how the document is structured. This is
+*Signposting* is an important element of metadiscourse. These help manage the
+reader's expectations by signaling how the document is structured. This is
 important anywhere structure exists and would be helpful to be made explicit.
-
+However, signposting *what* you're going to do isn't as helpful as first
+communicating *why* the *what* is necessary. Consider "I will discuss particle
+filtering." versus "Recreating the flight requires filling in missing pieces;
+this type of artificial data generation is known as simulation-based
+filtering. One such method is the particle filter."
 
 Miscellaneous Notes
 ===================
@@ -447,13 +446,13 @@ item.
 
 Lists should:
 
- * Use correct parallelism
+* Use correct parallelism
 
- * Should be read in the *forward* direction (ie, shared root first)
+* Should be read in the *forward* direction (ie, shared root first)
 
-   Starting with the elements first is a *backward* list. The reader doesn't
-   know the shared root until the end, then has to think backward to connect
-   all the items.
+  Starting with the elements first is a *backward* list. The reader doesn't
+  know the shared root until the end, then has to think backward to connect
+  all the items.
 
 Lists are good for declaring the structure of upcoming content, giving the
 reader a sense of sequencing and the relationship between the upcoming
@@ -473,33 +472,33 @@ they are parallel." (https://webapps.towson.edu/ows/moduleparallel.htm)
 
 For example:
 
- * *words*: thinking, running
+* *words*: thinking, running
 
- * *infinitives*: to see, to understand
+* *infinitives*: to see, to understand
 
- * *prepositional phrases*: at the time, in the house
+* *prepositional phrases*: at the time, in the house
 
- * *subordinate clauses*: because I care, after they met
+* *subordinate clauses*: because I care, after they met
 
 Writers typically use parallelism in one of five ways:
 
- 1. With elements joined by coordinating conjunctions (esp. {and, but, or})
+1. With elements joined by coordinating conjunctions (esp. {and, but, or})
 
-    * parallel elements: "thinking and running"
+   * parallel elements: "thinking and running"
 
-    * parallel phrases: "to look but not to listen"
+   * parallel phrases: "to look but not to listen"
 
-    * parallel clauses: "after coffee or when you're done"
+   * parallel clauses: "after coffee or when you're done"
 
- 2. Within a list or a series
+2. Within a list or a series
 
- 3. With elements being compared
+3. With elements being compared
 
- 4. With elements joined by a *linking verb* or a *verb of being*
+4. With elements joined by a *linking verb* or a *verb of being*
 
- 5. With elements joined by a correlative conjunction
+5. With elements joined by a correlative conjunction
 
-    * either/or, neither/nor, both/and, not only/but also
+   * either/or, neither/nor, both/and, not only/but also
 
 
 Scaffolding Phrases
@@ -541,24 +540,24 @@ Dashes
 Parentheticals, dashes and commas are a way of "interrupting yourself", in
 progressing order of importance.
 
- * **Parentheticals** signal non-essential additions
+* **Parentheticals** signal non-essential additions
 
- * **Commas** segment the primary phrase and the supporting phrases, but the
-   supporting phrases are still less essential than the primary phrase.
+* **Commas** segment the primary phrase and the supporting phrases, but the
+  supporting phrases are still less essential than the primary phrase.
 
- * **Dashes** are like commas, but the content inside the dashes is important.
+* **Dashes** are like commas, but the content inside the dashes is important.
 
-   They can also be used instead of a comma in a sentence that is already full
-   of commas.
+  They can also be used instead of a comma in a sentence that is already full
+  of commas.
 
 
 Finding your Voice
 ------------------
- * Replace "voice" with "contribution" to consider your influence on the text
+* Replace "voice" with "contribution" to consider your influence on the text
 
- * Don't just regurgitate your findings, *contribute* to the understanding.
+* Don't just regurgitate your findings, *contribute* to the understanding.
 
- * Readers won't like a "writer-less" document; engage with them
+* Readers won't like a "writer-less" document; engage with them
 
 Some reasons your voice might not shine through into your writing:
 
