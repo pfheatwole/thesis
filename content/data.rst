@@ -85,10 +85,10 @@ be biased towards whatever altitude was most common in the flight.
 
 Another naive method would calculate the error at each timestamp, sort the
 errors by altitude, then perform a linear regression over "Error vs Altitude".
-The issue with this method is that the GPS altitude is subject to variable, and
-potentially large, time delays. Thus, the GPS altitude at one timestep may be a
-lagged version of the pressure altitude at a previous timestep. Because this
-lag is variable, a constant time lag cannot correct the time discrepancy.
+The issue with this method is that the GPS altitude is subject to variable,
+and potentially large, time delays. Thus, the GPS altitude at one timestep may
+be a lagged version of the pressure altitude at a previous timestep. Because
+this lag is variable, a constant time lag cannot correct the time discrepancy.
 
 To correctly debias the pressure altitude measurements requires dealing with
 both the dynamic altitude bias and the dynamic time lag. Thus, the solution

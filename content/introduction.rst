@@ -18,18 +18,19 @@ regions of rising air in order to gain altitude. They must also determine the
 direction and magnitude of the wind in order to calculate suitable landing
 zones.
 
-These wind patterns are completely dictated by the local topography and weather
-conditions. Although such trends can be highly  variable, general wind patterns
-can be determined over the course of many flights. For example, some sections
-of terrain might have a higher than average occurrence of rising air,
+These wind patterns are completely dictated by the local topography and
+weather conditions. Although such trends can be highly  variable, general wind
+patterns can be determined over the course of many flights. For example, some
+sections of terrain might have a higher than average occurrence of rising air,
 a situation that is highly desirable by pilots.
 
 Historically, such regional weather patterns have been communicated from pilot
 to pilot by word of mouth, but there is an another possibility. Many pilots
-use flight devices that record their flights as timestamped position sequences;
-these flights are uploaded to online databases for recreational purposes. It is
-possible that these flight databases contain sufficient information to find
-some of the general weather patterns using statistical methods.
+use flight devices that record their flights as timestamped position
+sequences; these flights are uploaded to online databases for recreational
+purposes. It is possible that these flight databases contain sufficient
+information to find some of the general weather patterns using statistical
+methods.
 
 This project is about using those timestamped paraglider flight tracks to
 recreate the wind conditions that were present at the time of the flight.
