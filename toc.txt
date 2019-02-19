@@ -5,6 +5,5 @@
    content/data
    content/wind
    content/pf
-   content/example
    content/appendix
    content/zreferences
