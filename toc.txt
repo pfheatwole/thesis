@@ -2,8 +2,5 @@
    :maxdepth: 3
 
    content/introduction
-   content/data
-   content/wind
-   content/pf
    content/appendix
    content/zreferences
