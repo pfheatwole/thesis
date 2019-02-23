@@ -2,5 +2,6 @@
    :maxdepth: 3
 
    content/introduction
+   content/body
    content/appendix
    content/zreferences
