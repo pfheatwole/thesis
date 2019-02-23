@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Paragliding Wind Detection'
+project = 'Paragliding Wind Reconstruction'
 copyright = '2017, Peter Heatwole'
 author = 'Peter Heatwole'
 
