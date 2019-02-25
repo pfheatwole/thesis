@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Paragliding Wind Reconstruction'
-copyright = '2017, Peter Heatwole'
+copyright = '2019, Peter Heatwole'
 author = 'Peter Heatwole'
 
 # The version info for the project you're documenting, acts as replacement for
