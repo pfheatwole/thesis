@@ -1,26 +1,60 @@
 Content Tasks
 =============
 
- * Write an outline
+* Write a list of topics
 
- * Write an introduction
+  This is essentially an unordered outline whose purpose is to set the scope
+  of the text. What are the topics I will need to cover? What is its impact?
 
- * Outline the atmospheric estimation process
+* Write an outline
 
- * Write an intro to particle filtering: high-level overview (simulations into
-   best guesses)
+* Write an introduction
 
- * Flowchart the processing pipeline: observations -> states, parameters,
-   constraint factors
+* Outline the atmospheric estimation process
 
-    * Nodes are functions (filter, transition, etc)
+* Write an intro to particle filtering: high-level overview (simulations into
+  best guesses)
+
+* Flowchart the processing pipeline: observations -> states, parameters,
+  constraint factors
+
+  * Nodes are functions (filter, transition, etc)
+
+
+Drafting Tasks
+==============
+
+#. Write an informal overview of the goal, problems, resources, and solutions.
+   This should be conversational: I can get through a description of my
+   project when talking to the Mohlers, I should be able to put it down on
+   paper. The key is to avoid getting hung up on the technical specifics.
+   Those can be filled in later.
+
+#. Review each section has adequately description assumptions. You need to
+   establish the assumptions and constraints of your method to make sure you
+   don't overpromise.
+
+#. Annotate the informal draft with **text-only** descriptions of good
+   supporting material (figure descriptions, equations, code references, etc.)
+   Don't worry about actually producing those elements; this is about
+   establishing a pathway to a cohesive structure: once you know what elements
+   you really want, only then should you spend time creating them.
 
 
 Editorial Tasks
 ===============
 
-Style
------
+* I'd like the ability to render sections to a PDF for markup. The PDF should
+  be localized to a specific section to avoid a "too much to chew" situation.
+  Each PDF should reference the git SHA hash; maybe
+  "YYYYMMDD-HHMMSS_SECTION_SHA.pdf". It gets messy since you can't always fix
+  all the issues at once, so you'll end up with a PDF with some fixes
+  corrected and some not. **How do you track when a revision has been
+  completed?**
+
+
+Writing Style
+-------------
 
 * Choose a voice
 
@@ -43,3 +77,13 @@ Structural
    * Use `\currentpdfbookmark{label}{bookmarkname}`
 
 * Appendices only need a single `\appendix` call; how to organize the TOC?
+
+
+Formatting
+----------
+
+See: http://www.grad.calpoly.edu/masters-thesis/masters-thesis.html
+
+* Page numbering should start on page 1
+
+* Chapter titles and section headings are not styled correctly
