@@ -22,7 +22,7 @@ Useful Reminders
   of telling yourself what you're going to work on next. Also, you can look
   back and see how your expected path has diverged.
 
-* Just signposting *what* you're going to do isn't as helpful as first
+* Signposting *what* you're going to do isn't as helpful as first
   communicating *why* the *what* is necessary.
 
   Consider "I will discuss particle filtering." versus "Recreating the flight
