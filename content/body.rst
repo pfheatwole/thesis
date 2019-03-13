@@ -2,19 +2,98 @@
 Paraglider Model
 ****************
 
-NT
+Flight simulations require a model of the aircraft. Although there are flight
+simulators that include models of specific paraglider configurations, none of
+provided parametric models. Performing statistical parameter estimation
+requires a parametric model, so I needed to create one.
+
+I started with the design from :cite:`benedettiParaglidersFlightDynamics2012`,
+and applied extensive modifications to support the needs of my thesis. This
+model combines two components: the wing and the harness.
+
+My current design uses a spherical approximation for the harness forces, with
+the center of mass coinciding with the riser attachments, so the harness
+geometry is simple. [[FIXME: this description sucks]]
+
+Each Paraglider model is built from two parts: a wing and a harness. (I am
+neglecting to model the connecting lines from the risers to the wing.)
 
 
-Geometry
-========
+Wing Geometry
+=============
 
-NT
+The majority of the geometry definitions are to describe the *parafoil*.
+A parafoil has a given planform, which is the projection of the wing onto the
+xy-plane. The planform is then curved by the connecting lines to produce the
+arched, dihedral shape of the wing.
+
+The planform dimensions describe the projected outline, but not the volumetric
+shape; the volumetric shape of the parafoil is dictated by its cross-sections.
+A 2D cross-section of a wing is called an *airfoil*. The airfoil is the
+fundamental building block of a wing. Some wings have a spanwise variation of
+the airfoil in order to adjust the performance characteristics of the wing,
+but my model has not yet implemented that detail.
 
 
 Dynamics
 ========
 
-NT
+Primary sources: bellocWindTunnelInvestigation2015,
+phillipsModernAdaptationPrandtl2000
+
+
+Source notes:
+
+* In `bellocWindTunnelInvestigation2015`, he works through several
+  developments related to estimating the dynamics, and has a great summary in
+  the introduction. In the introduction mentions that "Theoretical analysis of
+  arched wings is scarce in the literature, partly because the Prandtl lifting
+  line theory is not applicable to arched wings", then in his conclusion,
+  "using a 3D potential flow code like panel method, vortex lattices method or
+  an adapted numerical lifting line seems to be a sufficient solution to
+  obtain the characteristics of a given wing". **Usable as the basis for
+  choosing Phillips method (an adapted numerical lifting line)?**
+
+
+What are the typical ways of estimating the aerodynamics of a wing?
+
+* Lifting-lines
+
+* Vortex panels
+
+* Computational fluid dynamics
+
+
+The original way to estimate the aerodynamic forces on a wing was introduced
+by Prandtl. This method assumes that the quarter-chord of the wing is
+a straight line with a constant airfoil. More sophisticated methods allow for
+a quarter-chord that arcs in a 2D plane, but because a paragliding wing
+typically has both dihedral and sweep, it requires a 3D lifting line method.
+I chose a method developed by Phillips, which is essentially a vortex panel
+method with a single panel.
+
+My wing geometry definitions allow for the generation of a 3D mesh suitable
+for CFD, but that's beyond the scope of my project. I would love to compare
+CFD methods to Phillips.
+
+Also, my Phillips method doesn't seem to work very well. I tried to recreate
+the results from :cite:`bellocWindTunnelInvestigation2015`, but I seem to be
+overestimating the lift, thus significantly overestimating the wing's
+performance.
+
+
+.. TODO::
+
+   * Discuss the methods for estimating the aerodynamic forces on a wing. What
+     are their pros/cons; why did I choose Phillips; does my model support CFD
+     methods.
+
+   * Testing methodology: is my model correct?
+
+   * How do you go from forces to accelerations? What about the wing's
+     inertia?
+
+
 
 
 *****************
