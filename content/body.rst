@@ -123,10 +123,22 @@ chapter is a cursory overview of those "interesting" scenarios.
 Wind Fields
 ===========
 
-[1]Bencatel R, de Sousa JT, Girard A. Atmospheric flow field models applicable
-for aircraft endurance extension. Progress in Aerospace Sciences 2013;61:1–25.
+bencatelAtmosphericFlowField2013
 
-NT
+The most basic wind field is still air. Another basic test case is a uniform
+wind field, where the wind vectors are the same everywhere; the uniform wind
+field is useful to verify glider performance (a 360 turn in a non-zero wind
+field should produce a drifting helix, not a circle).
+
+The more interesting scenarios are where the wind vector is variable in time
+and/or space. Although real wind conditions are complex and variable, for
+testing purposes it is useful to focus on specific features. In
+:cite:`bencatelAtmosphericFlowField2013` they
+identify three basic categories of wind behavior: wind shear, updrafts, and
+gusts. Shear is a change in the wind vector for a change in position, updrafts
+(and downdrafts) are non-zero vertical components of the wind vector, and
+gusts are changes (typically rapid, turbulent changes) to the wind magnitude
+and/or direction.
 
 
 Control Sequences
