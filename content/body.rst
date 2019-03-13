@@ -100,7 +100,24 @@ performance.
 Flight Simulation
 *****************
 
-NT
+Flight simulation is essentially the generation of a time series of model
+states. You define the model state and control inputs, then use the model
+dynamics to iteratively update the state. 
+
+Simulated flights are essential for testing the [[accuracy/correctness]] of an
+aircraft model.
+
+They are also essential for testing flight reconstruction algorithms: unlike
+real flight data, which has many unobserved variables, a simulated flight has
+access to the entire state space. This allows you to verify how well
+a reconstructed flight matches the "true" state. It isn't perfect, of course:
+just because you can reconstruct a simulated flight doesn't mean the method
+will work on real flights, but if it fails on simulated flights then you can
+be sure it will also fail on real flights.
+
+To generate interesting test flights, you need interesting flight conditions,
+where "interesting" may refer to the wind, or pilot inputs, or both. This
+chapter is a cursory overview of those "interesting" scenarios.
 
 
 Wind Fields
