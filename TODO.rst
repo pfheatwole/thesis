@@ -12,13 +12,14 @@ Content Tasks
 
 * Outline the atmospheric estimation process
 
-* Write an intro to particle filtering: high-level overview (simulations into
-  best guesses)
 
-* Flowchart the processing pipeline: observations -> states, parameters,
-  constraint factors
+References
+----------
 
-  * Nodes are functions (filter, transition, etc)
+* Create a list of topics relevant for "prior art" papers (paraglider
+  dynamics, wind field estimation, thermal estimation, etc)
+
+* Create a list of sources for each topic, including summary notes
 
 
 Drafting Tasks
@@ -82,8 +83,19 @@ Structural
 Formatting
 ----------
 
-See: http://www.grad.calpoly.edu/masters-thesis/masters-thesis.html
+* Verify against CalPoly formatting
+  
+  * ref: http://www.grad.calpoly.edu/masters-thesis/masters-thesis.html
 
-* Page numbering should start on page 1
+  * Page numbering should start on page 1
+   
+  * Chapter titles and section headings are not styled correctly
 
-* Chapter titles and section headings are not styled correctly
+
+Bibliography
+^^^^^^^^^^^^
+
+* `sphinxcontrib-bibtex` provides the `unsrt` style, but I'd rather it use
+  `Lastname, Firstname` ordering. How difficult is that?
+
+  See: https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html#custom-formatting-sorting-and-labelling
