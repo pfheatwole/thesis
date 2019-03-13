@@ -144,7 +144,27 @@ and/or direction.
 Control Sequences
 =================
 
-NT
+A paraglider has only a few formal control inputs: a left and right brakes, an
+accelerator (or "speed bar"), and weight shifting.
+
+Braking
+-------
+
+[[What happens as a you apply a single brake? Asymmetric brakes? Symmetric
+brakes?]]
+
+
+Accelerating
+------------
+
+[[What happens when you press the accelerator?]]
+
+
+Weight Shifting
+---------------
+
+[[What happens during weight shifting?]]
+
 
 
 Simulator
