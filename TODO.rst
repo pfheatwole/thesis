@@ -22,8 +22,8 @@ References
 * Create a list of sources for each topic, including summary notes
 
 
-Drafting Tasks
-==============
+Drafting
+--------
 
 #. Write an informal overview of the goal, problems, resources, and solutions.
    This should be conversational: I can get through a description of my
@@ -77,7 +77,13 @@ Structural
 
    * Use `\currentpdfbookmark{label}{bookmarkname}`
 
-* Appendices only need a single `\appendix` call; how to organize the TOC?
+* Latex requires a **single** `\appendix` call; I don't think I can signal
+  that directly inside the TOC. This is awkward since you can't rearrange the
+  appendices in the TOC without modifying the appendices themselves.
+
+* The HTML builder doesn't label the appendices; might need to just handle
+  them manually (explicit labels in HTML, explicit `\appendix` entry for the
+  latex output).
 
 
 Formatting
