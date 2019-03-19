@@ -19,52 +19,84 @@ on the nose.]]
 Introduction to the Introduction
 ================================
 
+[[This section is a condensed version of the three moves (context, problem,
+and response). For a thesis, this may be useful for "getting to the point"
+more quickly than a full introduction, but without the extreme concision of an
+abstract.]]
+
+
 Establishing a research territory (Context):
 
-   Paragliding is a non-motorized form of flight that uses a flexible nylon
-   wing to soar using wind power. Pilots rely on their ability to find regions
-   of rising air while avoiding regions of sinking air. Although local wind
-   patterns are difficult to predict, they do exhibit regional trends;
-   Learning local wind patterns from other pilots is a key skill for learning
-   to fly in a new area.
+   * This project started with a question: is it possible to discover local
+     wind patterns using a large set of paragliding flight tracks?
+
+   * Paragliding is a non-motorized form of flight, which means it is totally
+     dependent on the local wind field.
+
+   * Paragliding pilots rely on regions of rising air for sustained flight,
+     and the horizontal wind components determines the direction and distance
+     they can fly.
+
+   * The success of a flight depends on the pilot's ability to recognize the
+     current wind configuration so that they can optimize their flight.
+
+   * Learning local wind patterns is a key skill for learning to fly in a new
+     area. [[Because a gliding aircraft is constantly descending relative to
+     the local air, it is vital that a pilot can locate regions of rising air
+     as soon as possible.]]
+
+   * Although local wind configurations are difficult to predict, they do
+     exhibit regional trends. By learning the regional trends, a pilot can
+     assess the current wind conditions more quickly.
+
 
 Establishing a niche (Problem and Significance):
 
-   Traditionally, local wind patterns are discovered by pilots with a large
-   amount of flight time in an area, and are shared directly from one pilot to
-   another. For the pilot community to learn reliable patterns, individual
-   pilots must detect the pattern and be able to communicate it with
-   precision. An alternative could be to aggregate recorded flight data
-   from many pilots over many flights and build a statistical model of the
-   wind field to reveal highly correlated regions of the wind field. This
-   model can:
+   * Traditionally, recurring wind patterns are discovered by pilots with
+     a large amount of flight time in a given area, and are shared directly
+     from one pilot to another. For the pilot community to learn reliable
+     patterns, individual pilots must detect the pattern and be able to
+     communicate it with precision.
 
-   * Automate pattern discovery
+   * An alternative could be to aggregate recorded flight data from many
+     pilots over many flights and build a predictive model of the wind field.
+     Such a model would be able to:
 
-   * Utilize all flights from all pilots instead of requiring multiple flights
-     by the same pilot.
+     * Automate pattern discovery [[Some trends may be subtle or infrequent.]]
 
-   * Expand the set of detectable patterns: a single flight can only observe
-     a small portion of the wind field. By merging multiple flights that
-     occurred at the same time, you can build a more comprehensive observation
-     of the field. With larger observations there are more opportunities for
-     detecting useful patterns.
-     
-   * Provide confidence levels: a statistical model can quantify the variance
-     in its predictions, since it knows how much evidence is present for
-     a particular pattern. [[How does this compare to word-of-mouth
-     knowledge?]]
+     * Utilize all flights from all pilots instead of requiring multiple
+       flights by the same pilot. [[If a pilot only encountered a particular
+       wind configuration a single time, they wouldn't recognize it as part of
+       a recurring pattern.]]
+
+     * Expand the set of detectable patterns: a single flight can only
+       observe a small portion of the wind field. By merging multiple flights
+       that occurred at the same time, you can build a more comprehensive
+       observation of the field. With larger observations there are more
+       opportunities for detecting useful patterns.
+
+     * Provide confidence levels: a statistical model can quantify the
+       variance in its predictions, since it knows how much evidence is
+       present for a particular pattern. [[How does this compare to
+       word-of-mouth knowledge? Pilots can be deceived/biased about their
+       experiences; memories are faulty.]]
+
+   * The problem with this option is that the vast majority of recorded flight
+     data are time series of position-only information. The question then is
+     whether position-only data provides enough information to reconstruct the
+     local wind field.
+
 
 Occupying the niche (Response):
 
-   This thesis investigates the procedures necessary for processing flight
-   data to produce a statistical model for predicting regional correlations in
-   local wind fields. It contributes a parametric paraglider dynamics model
-   for simulating paraglider flights, given a wind field and pilot control
-   inputs. Lastly, it discusses how to use the dynamics model inside
-   simulation-based filtering methods to perform statistical flight
-   reconstruction using position-only flight data.
-   
+   * This thesis investigates the procedures necessary for processing flight
+     data to produce a statistical model for predicting regional correlations
+     in local wind fields. It contributes a parametric paraglider dynamics
+     model for simulating paraglider flights, given a wind field and pilot
+     control inputs. Lastly, it discusses how to use the dynamics model inside
+     simulation-based filtering methods to perform statistical flight
+     reconstruction using position-only flight data.
+
 
 Context
 =======
