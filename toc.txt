@@ -6,8 +6,9 @@
    content/paraglider_model
    content/flight_simulation
    content/flight_reconstruction
-   content/pattern_extraction
-   content/predictive_modelling
+   content/wind_regression
+   content/wind_patterns
+   content/wind_prediction
    content/zreferences
 
    content/appendix

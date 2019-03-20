@@ -1,9 +1,13 @@
-*******************
-Predictive Modeling
-*******************
+*********************
+Wind Field Prediction
+*********************
 
-Combine the set of wind patterns into a predictive model that can be queried
-by inputting the current time, position, and wind estimates.
+Key Points:
+
+* A predictive model uses the correlated spatial regions to respond to
+  queries. Given a set of wind vector estimates (given as a batch or
+  individually), use the spatial correlations to build a estimate of the
+  highly correlated regions.
 
 
 Model Encoding
