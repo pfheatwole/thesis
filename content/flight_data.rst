@@ -1,12 +1,6 @@
-.. FIXME: the first appendix needs to explicitly add `\appendix`
-
-.. raw:: latex
-
-    \appendix
-
-***************
-Data Processing
-***************
+***********
+Flight Data
+***********
 
 Key Points:
 

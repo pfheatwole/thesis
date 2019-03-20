@@ -2,6 +2,7 @@
    :maxdepth: 3
 
    content/introduction
+   content/flight_data
    content/paraglider_model
    content/flight_simulation
    content/flight_reconstruction
@@ -9,5 +10,4 @@
    content/predictive_modelling
    content/zreferences
 
-   content/data_preparation
    content/appendix
