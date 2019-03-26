@@ -35,12 +35,11 @@ field should produce a drifting helix, not a circle).
 The more interesting scenarios are where the wind vector is variable in time
 and/or space. Although real wind conditions are complex and variable, for
 testing purposes it is useful to focus on specific features. In
-:cite:`bencatelAtmosphericFlowField2013` they
-identify three basic categories of wind behavior: wind shear, updrafts, and
-gusts. Shear is a change in the wind vector for a change in position, updrafts
-(and downdrafts) are non-zero vertical components of the wind vector, and
-gusts are changes (typically rapid, turbulent changes) to the wind magnitude
-and/or direction.
+:cite:`bencatel2013AtmosphericFlowField` they identify three basic categories
+of wind behavior: wind shear, updrafts, and gusts. Shear is a change in the
+wind vector for a change in position, updrafts (and downdrafts) are non-zero
+vertical components of the wind vector, and gusts are changes (typically
+rapid, turbulent changes) to the wind magnitude and/or direction.
 
 
 Control Sequences

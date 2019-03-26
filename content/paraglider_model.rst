@@ -7,9 +7,10 @@ simulators that include models of specific paraglider configurations, none of
 provided parametric models. Performing statistical parameter estimation
 requires a parametric model, so I needed to create one.
 
-I started with the design from :cite:`benedettiParaglidersFlightDynamics2012`,
-and applied extensive modifications to support the needs of my thesis. This
-model combines two components: the wing and the harness.
+I started with the design from
+:cite:`benedetti2012ParaglidersFlightDynamics`, and applied extensive
+modifications to support the needs of my thesis. This model combines two
+components: the wing and the harness.
 
 My current design uses a spherical approximation for the harness forces, with
 the center of mass coinciding with the riser attachments, so the harness
@@ -73,16 +74,16 @@ I chose a method developed by Phillips, which is essentially a vortex panel
 method with a single panel.
 
 Unfortunately, Phillips' method doesn't seem to work very well. I tried to
-recreate the results from :cite:`bellocWindTunnelInvestigation2015`, but
+recreate the results from :cite:`belloc2015WindTunnelInvestigation`, but
 I seem to be overestimating the lift, thus significantly overestimating the
 wing's performance. Thankfully, this is not unexpected: in
-:cite:`chreimViscousEffectsAssessment2017` they investigate Phillips'
+:cite:`chreim2017ViscousEffectsAssessment` they investigate Phillips'
 nonlinear numerical lifting line theory. He checks it for convergence and
 accuracy against three wings: straight, elliptical, and swept. It converged
 for the straight and elliptical wing, but not for the swept wing (so no good
 data could be produced), but for the other two methods is overestimated CL for
 the straight and elliptical wings. In
-:cite:`chreimChangesModernLiftingLine2018` he reintroduces the Pistolesi
+:cite:`chreim2018ChangesModernLiftingLine` he reintroduces the Pistolesi
 boundary condition to mitigate the shortcomings of Phillips' method, but he
 claims corrects the performance for wings with sweep; he does not test it with
 wings with dihedral.
@@ -95,7 +96,7 @@ method I implemented (Phillips) doesn't work terribly well, but my wing
 geometry definitions are well suited for more sophisticated methods.
 Calculating points anywhere on the wing is easy, allowing for 3/4 chord
 positions (Pistolesi boundary condition) for better numerical lifting line
-methods (see :cite:`chreimViscousEffectsAssessment2017`), or for the
+methods (see :cite:`chreim2017ViscousEffectsAssessment`), or for the
 generation of a 3D mesh suitable for CFD.
 
 
@@ -103,15 +104,15 @@ generation of a 3D mesh suitable for CFD.
 Literature Review
 -----------------
 
-* :cite:`phillipsModernAdaptationPrandtl2000` introduced a numerical LLT
+* :cite:`phillips2000ModernAdaptationPrandtl` introduced a numerical LLT
 
-* :cite:`hunsakerNumericalLiftingLineMethod2011` observed issues with wings
+* :cite:`hunsaker2011NumericalLiftingLineMethod` observed issues with wings
   with sweep and/or dihedral
 
-* :cite:`chreimViscousEffectsAssessment2017` reviewed the applicability of
+* :cite:`chreim2017ViscousEffectsAssessment` reviewed the applicability of
   Phillips method, and confirmed the issues with sweep noted by Hunsaker
 
-* :cite:`chreimChangesModernLiftingLine2018` adapted Phillips method to use
+* :cite:`chreim2018ChangesModernLiftingLine` adapted Phillips method to use
   the Pistolesi boundary conditions, and verified that is was able to predict
   the section coefficients for a wing with 45-degree sweep.
 
@@ -131,8 +132,8 @@ Literature Review
 Scratch Notes
 -------------
 
-In :cite:`hunsakerNumericalLiftingLineMethod2011` they are investigating
+In :cite:`hunsaker2011NumericalLiftingLineMethod` they are investigating
 Phillips' method and observe that CL increases as the grid is refined. **This
 is great news since that matches my experience.** (I need to read that paper,
-but this note is taken from :cite:`chreimViscousEffectsAssessment2017`,
+but this note is taken from :cite:`chreim2017ViscousEffectsAssessment`,
 section 3.1.3 (pg 7).
