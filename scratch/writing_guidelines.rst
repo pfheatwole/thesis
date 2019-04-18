@@ -540,7 +540,7 @@ writing.
 Thesis Introductions
 --------------------
 
-Because a thesis is such a larger body of work, it can require special
+Because a thesis is such a large body of work, it can require special
 considerations. The reader should not have to wait for a complete and thorough
 context before they hear the problem. You may want to start with a big picture
 version of the three moves. An **introduction to the introduction**, if you
