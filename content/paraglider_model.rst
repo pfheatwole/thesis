@@ -2,6 +2,20 @@
 Paraglider Model
 ****************
 
+Key Points:
+
+* Components of a paraglider
+
+* Physical model (geometry)
+
+* Dynamics model
+
+Considerations:
+
+* The dynamics model is required to satisfy some need. I need to establish the
+  needs of the model, then show how those needs are being met.
+
+
 Flight simulations require a model of the aircraft. Although there are flight
 simulators that include models of specific paraglider configurations, none of
 provided parametric models. Performing statistical parameter estimation

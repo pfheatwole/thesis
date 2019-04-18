@@ -2,20 +2,40 @@
 Flight Simulation
 *****************
 
-Flight simulation is essentially the generation of a time series of model
-states. You define the model state and control inputs, then use the model
-dynamics to iteratively update the state. 
+Key points:
+
+* Builds a stateful model from the stateless paraglider dynamics model
+
+* Wind field models
+
+* Control inputs
+
+* Flight generation (model + wind + controls). Useful for model verification,
+  behavior investigation, and building sample flight data for the purpose of
+  developing the flight reconstruction software.
+
+* Output: a set of time series of **true** state sequences for the wind. (The
+  control and wind inputs are deterministic; not sure if I should 
+
+
+An aircraft *dynamics model* defines the instantaneous rate of change over
+time of an aircraft's state variables in response to a given input. A *flight
+simulator* uses the aircraft dynamics model to produce a time series of model
+states called a *state trajectory*.
+
 
 Simulated flights are essential for testing the [[accuracy/correctness]] of an
-aircraft model.
+aircraft model. 
 
-They are also essential for testing flight reconstruction algorithms: unlike
-real flight data, which has many unobserved variables, a simulated flight has
-access to the entire state space. This allows you to verify how well
-a reconstructed flight matches the "true" state. It isn't perfect, of course:
-just because you can reconstruct a simulated flight doesn't mean the method
-will work on real flights, but if it fails on simulated flights then you can
-be sure it will also fail on real flights.
+They are also essential for testing flight reconstruction algorithms: they
+provide complete knowledge of the true world state, which can be used to
+validate the output of the flight reconstruction process. [[unlike real flight
+data, which has many unobserved variables, a simulated flight has access to
+the entire state space. This allows you to verify how well a reconstructed
+flight matches the "true" state. It isn't perfect, of course: just because you
+can reconstruct a simulated flight doesn't mean the method will work on real
+flights, but if it fails on simulated flights then you can be sure it will
+also fail on real flights.]]
 
 To generate interesting test flights, you need interesting flight conditions,
 where "interesting" may refer to the wind, or pilot inputs, or both. This

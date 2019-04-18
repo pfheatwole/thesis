@@ -101,68 +101,131 @@ Occupying the niche (Response):
 Context
 =======
 
-[["Provide the full context in a way that flows from the opening."
-
-In this section, I could provide examples of the kinds of wind patterns that
-would be useful for a pilot. Finding lift along a ridge, avoiding sink near
-a stream, etc.]]
+[["Provide the full context in a way that flows from the opening."]]
 
 
-* Paragliding as a sport
+* Paragliding
 
-* Paraglider wings (the aircraft)
+  * Paragliding as a sport
 
-* How pilots rely on wind (both vertical and horizontal)
+  * The equipment: wing and harness
 
-* Wind information that is important to pilots
+  * The dependency on the wind field. Discuss how pilots rely on wind (both
+    vertical and horizontal).
+
+  Paragliding is a non-motorized form of flight, which means it requires wind
+  power for sustained flight. Pilots rely on their ability to find regions of
+  rising air in order to gain altitude. They must also determine the
+  direction and magnitude of the wind in order to calculate suitable landing
+  zones. [[ie, pilots are totally dependent on the local wind pattern]]
+
+
+* Wind fields
+
+  * Characteristics (shear, updrafts, gusts)
+
+  * Patterns: dependency on time of year, latitude, topography, etc.
+
+  * Probably focus on wind field information that is important to pilots. For
+    example, house thermals, finding lift along a ridge, avoiding sink near
+    a stream, 
 
 
 Restatement of the problem
 ==========================
 
-["Restate the problem and significance in light of the more thoroughly
-detailed context."
-
-Here I can point out that paraglider flight tracks do not contain wind
-information, or data that can be directly used to estimate the wind field. You
-don't know the topography, the wind field, the pilot inputs, the wing
-parameters, or the sensor characteristics.]]
+[["Restate the problem and significance in light of the more thoroughly
+detailed context."]]
 
 
-* How pilots learn wind patterns
+* The importance of wind patterns (for pilots)
 
-* Learning wind patterns from data
+* Learning wind patterns by personal experience and word of mouth
 
-* Available flight data
+* Learning wind patterns from recorded flights
+
+   * Why would you want to do such a thing?
+
+   * What flight data is available?
+
+* The difficulties of learning wind patterns from the available data
+
+  * Position-only data: no observations of the wind vectors, topography, wing
+    parameters, sensor characteristics, pilot control inputs
+
+  * The wind field as a "hidden state", requiring simulation-based filtering
+    methods.
 
 
 Restatement of the response
 ===========================
 
-[[Discuss simulation-based filtering methods. Highlight that simulating
-a flight requires a dynamic model of the wing.]]
+[[Now that I've highlighted the set of problems, discuss my work towards
+solving those problems. This time, leverage the detail in the *full* context
+and restated problem description to elaborate on the details of the
+response.]]
 
 
-Predictive Modeling
--------------------
+* Parametric paraglider dynamics model
 
-* Flight reconstruction to estimate the wind field during a flight
+* Flight simulation
 
-* Wind field estimates to discover patterns
+  * **Does this go before or after the dynamics model? The simulator
+    establishes the need for the dynamics model.**
 
-* Wind patterns into a predictive model
+* Flight reconstruction
+
+  * The available data (time and position) is not enough to identify the wing
+    model or determine the wing state. Without the wing state, solving for the
+    wind vectors is an underdetermined system.
+
+  * How to deal with the underdetermined system (simulation-based filtering
+
+  * Running the particle filter over a specific flight produces a set of
+    observations over points in the wind field at a specific time
+
+* Wind field regression
+
+  * Each flight is a set of observations. They need to be merged (if there are
+    multiple overlapping flights) and used in a kriging process to build
+    a regression model for the wind field at the time+place of the flight.
+
+* Predictive model
+
+  * Given a set of wind field regression models, needs to find regions with
+    overlapping observations, then look for correlations in those co-observed
+    regions.
+
+  * Regional correlations must be encoded into a predictive model that can be
+    queried (ie, if part of the wind field is (noisily) observed, and they
+    have known correlations, the predictive model should produce estimates of
+    unobserved regions)
+
+  * Ultimately, this predictive model will be useable in-flight, so as the
+    pilot samples the wind field, the predictive model can suggest regions
+    with desirable wind patterns.
+
+
+**Question**: Is this *my* response, though? I haven't produced all these
+components. I have *investigated* these components, though, which is a sort of
+response...
 
 
 Contributions of my paper
 -------------------------
 
-* Defining the problem (yes, this is a contribution!)
+[[FIXME: I'm not sure where this content goes]]
+
+
+* Defining the problem (yes, this is a contribution! But I'd have to be
+  thoughtful about how I'd word that; can't just pat myself on the back for
+  coming up with an idea.)
 
 * Code
 
   * Paraglider dynamics model
 
-  * Reference wind models
+  * Reference wind models (for testing the model and generating test flights)
 
   * A simulator
 
@@ -170,16 +233,21 @@ Contributions of my paper
 
   * Rudimentary GMSPPF?  (Stretch goal!!!)
 
-I'm trying to sketch a possible path forward. This is the problem I'd like to
-solve, these are the available resources, this is how those resources might
-make a solution possible.
 
-**I am not using physical models of wind field features in the wind field
-estimation process. (Other papers specifically try to model thermal updrafts,
-etc.) I'm essentially trying to recover point measurements of a wind field;
-you could theoretically use those pseudo-observations as part of a more
-sophisticated modelling method that does make assumptions about the kinds of
-wind features being experienced.**
+* I'm implementing everything in Python. Explain why.
+
+   * Approachable syntax
+
+   * Free (unlike matlab)
+
+   * Numerical libraries (numpy, scipy)
+
+   * Large library ecosystem (s2sphere, sklearn, databases, PyMC3, pandas, etc)
+
+
+My efforts are centered on sketching a possible path forward. This is the
+problem I'd like to solve, these are the available resources, this is how
+those resources might make a solution possible.
 
 
 Roadmap
@@ -188,65 +256,26 @@ Roadmap
 [["Brief indication of how the thesis will proceed."]]
 
 
-Old Introduction
-================
-
-1. Paragliding
-
-   Paragliding is a non-motorized form of flight in which a pilot uses
-   a flexible nylon wing to fly using wind power. Pilots rely on their ability
-   to find regions of rising air in order to gain altitude. They must also
-   determine the direction and magnitude of the wind in order to calculate
-   suitable landing zones.
-
-2. Wind patterns
-   
-   These wind patterns are completely dictated by the local topography and
-   weather conditions. Although such trends can be highly variable, general
-   wind patterns can be determined over the course of many flights. For
-   example, some sections of terrain might have a higher than average
-   occurrence of rising air, a situation that is highly desirable by pilots.
-
-3. Learning the wind patterns
-   
-   Historically, such regional weather patterns have been communicated from
-   pilot to pilot by word of mouth, but there is an another possibility. Many
-   pilots use flight devices that record their flights as timestamped position
-   sequences; these flights are uploaded to online databases for recreational
-   purposes. It is possible that these flight databases contain sufficient
-   information to find some of the general weather patterns using statistical
-   methods.
-
-   This project is about using those timestamped paraglider flight tracks to
-   recreate the wind conditions that were present at the time of the flight.
-   By considering each flight as a stochastic snapshot of the possible wind
-   patterns, then given enough samples it is possible to create a database of
-   general trends, just as a human pilot would do.
-
-4. Building a predictive model
-
-   This database of patterns can be encoded into a predictive model that can
-   be evaluated in-flight, by comparing current conditions to historical
-   trends. In this way a pilot can seek out regions that are likely to contain
-   rising air, and can avoid regions likely to contain sinking air.
 
 
-New Introduction
-================
+Draft Introduction
+==================
 
-My project started with a question: can you determine local wind patterns from
-paragliding flight tracks? Flights are recorded as sequences of timestamped
-positions; I wanted to see if positions alone would provide enough
-information. The catch is that the way the wing moves through the air is
-reliant on not only the wind, but on the pilot control inputs (braking,
-accelerating, and weight shifting), as well as the performance characteristics
-of the wing itself. [In terms of model parameters, this leads to a highly
-underdetermined system of equations. [**Somewhat correct, but the system
-I need to solve is for the state, which depends on the model parameters; the
-model is essentially a set of nuisance parameters.**]] Everyone I talked to
-said it was too difficult, but no one could say *why* it couldn't be done.
-I decided to attempt the problem, even if that meant my project was nothing
-more than detailing why it was impossible.
+This project started with a question: is it possible to reveal local wind
+patterns using a large set of paragliding flight tracks? Each flight is
+recorded as a sequence of positions; I wanted to see if positions alone would
+provide enough information.
+
+The difficulty is that the way the wing moves through the air is reliant
+on not only the wind, but on the pilot control inputs (braking, accelerating,
+and weight shifting), as well as the performance characteristics of the wing
+itself. [In terms of model parameters, this leads to a highly underdetermined
+system of equations. [[**Somewhat correct, but the system I need to solve is
+for the state, which depends on the model parameters; the model is essentially
+a set of nuisance parameters.**]] Everyone I talked to said it was too
+difficult, but no one could say *why* it couldn't be done. I decided to
+attempt the problem, even if that meant my project was nothing more than
+detailing why it was impossible.
 
 My philosophy at the beginning was simple: if you told me a paraglider is
 currently flying, then without any further information I can still make
@@ -264,11 +293,9 @@ My first approach was a simple kinematics-only model using assumptions of
 average paraglider wing performance. The problem with this method is that
 estimates are still very high variance, since it is unclear which movements
 are the result of changing wind and which are the result of changing pilot
-controls. Answering that question for such an underdetermined system required
-a change to simulation-based filtering methods. [[FIXME: probably better to
-say this in terms of "There are two types of model: kinematics-only and
-dynamics. The problem with a kinematics-only model, given the limits of this
-poorly observed model, is...]] 
+controls. [[This is a good place to cite Michael von Kaenel's thesis.]]
+Answering that question for such an underdetermined system required a change
+to simulation-based filtering methods.
 
 The essence of simulation-based methods is to make many guesses about the
 current state of the system and use those guesses to predict a future state.
@@ -287,8 +314,8 @@ specifications are generally unknown for any given recorded flight; instead of
 a single, exactly-defined model, you need a parametric model that can be
 configured to match the unknown wing. Because the wing configuration is
 unknown, this estimation problem must be applied to not only the system state,
-but to the model parameters as well (also known as a "dual estimation
-problem").
+but to the model parameters as well (also known as a *dual estimation
+problem*).
 
 Given a parametric paraglider model and a method for evaluating the
 aerodynamic forces that arise from a given set of wind conditions and control
@@ -296,13 +323,13 @@ inputs, you can design a set of state dynamics equations for the total system.
 Those state dynamics are the basis of generating predictions as part of the
 particle filter time update step.
 
-The great issue then becomes the number of particles necessary to get a good
+The great issue then becomes the number of proposals necessary to get a good
 empirical estimate of the true state probability distribution; in general, the
-number of particles depends on the number of state variables, which means
+number of proposals depends on the number of state variables, which means
 a large number are required for estimating all of the model, wind, and control
 input states. Because the paraglider model dynamics are computationally
 expensive, it is prohibitively expensive to generate individual predictions
-for a large number of particles. For this reason a naive particle filter
+for a large number of proposals. For this reason a naive particle filter
 design is infeasible; more sophisticated particle methods are required.
 
 In this particular case it is helpful to realize that although the

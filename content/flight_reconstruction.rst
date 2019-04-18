@@ -2,11 +2,24 @@
 Flight Reconstruction
 *********************
 
-* Define the state
+.. TODO:
 
-* Define underdetermined systems
+   * Define the state
 
-* Define probabilistic methods / simulation-based filtering
+   * Define underdetermined systems
+
+   * Define probabilistic methods / simulation-based filtering
+
+Key Points:
+
+* Uses some subset of the available data (eg, position only) to estimate the
+  rest of the state (eg, wind vectors).
+
+* Requires dynamics for the wing + wind + control inputs to build
+  a simulation-based flight reconstruction filter
+
+* Output: a set of time series of state **estimate** sequences for the wing,
+  wind vectors, and control inputs. These outputs are 
 
 
 Particle Filtering
