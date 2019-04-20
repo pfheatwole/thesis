@@ -9,6 +9,11 @@ Key Points:
   individually), use the spatial correlations to build a estimate of the
   highly correlated regions.
 
+* How do you handle the spatiotemporal averaging? In terms of time, do you
+  group observations by a sliding 1-hour window, etc? In terms of space, do
+  you use a continuous regression model or do you use a grid?
+
+
 
 Model Encoding
 ==============

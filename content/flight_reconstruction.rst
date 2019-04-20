@@ -10,6 +10,10 @@ Flight Reconstruction
 
    * Define probabilistic methods / simulation-based filtering
 
+   * Highlight how constraints on the system dynamics and flyable wind enable
+     simulation-based filtering to put a bound on the unobservable state
+
+
 Key Points:
 
 * Uses some subset of the available data (eg, position only) to estimate the
@@ -20,6 +24,10 @@ Key Points:
 
 * Output: a set of time series of state **estimate** sequences for the wing,
   wind vectors, and control inputs. These outputs are 
+
+
+Remember: ask "is this content self-contained? Can this chapter be read by
+itself and still understood?
 
 
 Particle Filtering

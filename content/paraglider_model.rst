@@ -53,8 +53,8 @@ but my model has not yet implemented that detail.
 Dynamics
 ========
 
-Primary sources: bellocWindTunnelInvestigation2015,
-phillipsModernAdaptationPrandtl2000
+Primary sources: `belloc2015WindTunnelInvestigation`,
+`phillips2000ModernAdaptationPrandtl`
 
 
 Source notes:

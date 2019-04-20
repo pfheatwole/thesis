@@ -2,107 +2,67 @@
 Introduction
 ************
 
-The structure of an introduction to a thesis, as presented by "Explorations of
-Style":
 
-1. Introduction to the introduction
-2. Context
-3. Restatement of the problem
-4. Restatement of the response
-5. Roadmap
+Intro to the Intro
+==================
 
+.. Establishing a research territory (Context):
 
-[[FIXME: I've written these as explicit subsections, but that's probably too
-on the nose.]]
+* A paraglider is a non-motorized aircraft, which means paragliding pilots are
+  totally dependent on the local wind field.
 
+* They rely on the vertical wind component for sustained flight, and the
+  horizontal wind components determine the direction and distance they can
+  fly.
 
-Introduction to the Introduction
-================================
+* The success of a flight depends on the pilot's ability to recognize the
+  current wind configuration so that they can choose a flight path that allows
+  them to achieve their flight goals. [[Because a gliding aircraft is
+  constantly descending relative to the local air, it is vital that a pilot
+  can locate regions of rising air as soon as possible.]]
 
-[[This section is a condensed version of the three moves (context, problem,
-and response). For a thesis, this may be useful for "getting to the point"
-more quickly than a full introduction, but without the extreme concision of an
-abstract.]]
-
-
-Establishing a research territory (Context):
-
-   * This project started with a question: is it possible to discover local
-     wind patterns using a large set of paragliding flight tracks?
-
-   * Paragliding is a non-motorized form of flight, which means it is totally
-     dependent on the local wind field.
-
-   * Paragliding pilots rely on regions of rising air for sustained flight,
-     and the horizontal wind components determines the direction and distance
-     they can fly.
-
-   * The success of a flight depends on the pilot's ability to recognize the
-     current wind configuration so that they can optimize their flight.
-
-   * Learning local wind patterns is a key skill for learning to fly in a new
-     area. [[Because a gliding aircraft is constantly descending relative to
-     the local air, it is vital that a pilot can locate regions of rising air
-     as soon as possible.]]
-
-   * Although local wind configurations are difficult to predict, they do
-     exhibit regional trends. By learning the regional trends, a pilot can
-     assess the current wind conditions more quickly.
+* Although local wind configurations are difficult to predict, they do
+  exhibit regional trends. By learning the regional trends, a pilot can assess
+  the current wind conditions more quickly [[than they would without prior
+  knowledge of the patterns]].
 
 
-Establishing a niche (Problem and Significance):
+.. Establishing a niche (Problem and Significance):
 
-   * Traditionally, recurring wind patterns are discovered by pilots with
-     a large amount of flight time in a given area, and are shared directly
-     from one pilot to another. For the pilot community to learn reliable
-     patterns, individual pilots must detect the pattern and be able to
-     communicate it with precision.
+* Traditionally, recurring wind patterns are discovered by pilots with
+  a large amount of flight time in a given area, and are shared directly
+  from one pilot to another. For the pilot community to learn reliable
+  patterns, individual pilots must detect each pattern and be able to
+  communicate them with precision.
 
-   * An alternative could be to aggregate recorded flight data from many
-     pilots over many flights and build a predictive model of the wind field.
-     Such a model would be able to:
+* An alternative [[to pilots manually detecting and communicating the
+  patterns]] could be to aggregate recorded flight data from many pilots over
+  many flights and build a predictive model of the wind field.
 
-     * Automate pattern discovery [[Some trends may be subtle or infrequent.]]
-
-     * Utilize all flights from all pilots instead of requiring multiple
-       flights by the same pilot. [[If a pilot only encountered a particular
-       wind configuration a single time, they wouldn't recognize it as part of
-       a recurring pattern.]]
-
-     * Expand the set of detectable patterns: a single flight can only
-       observe a small portion of the wind field. By merging multiple flights
-       that occurred at the same time, you can build a more comprehensive
-       observation of the field. With larger observations there are more
-       opportunities for detecting useful patterns.
-
-     * Provide confidence levels: a statistical model can quantify the
-       variance in its predictions, since it knows how much evidence is
-       present for a particular pattern. [[How does this compare to
-       word-of-mouth knowledge? Pilots can be deceived/biased about their
-       experiences; memories are faulty.]]
-
-   * The problem with this option is that the vast majority of recorded flight
-     data are time series of position-only information. The question then is
-     whether position-only data provides enough information to reconstruct the
-     local wind field.
+* The difficulty with this option is that GPS devices only record a tiny
+  amount of the information available to a pilot: there is typically no
+  information regarding the orientation, velocity, acceleration, pilot control
+  inputs (brakes, accelerator, etc), or the weather conditions. Even the
+  details of the aircraft performance are unknown. The question then becomes
+  whether there is enough information in position-only data to recover the
+  wind vectors present during a flight.
 
 
-Occupying the niche (Response):
+.. Occupying the niche (Response):
 
-   * This thesis investigates the procedures necessary for processing flight
-     data to produce a statistical model for predicting regional correlations
-     in local wind fields. It contributes a parametric paraglider dynamics
-     model for simulating paraglider flights, given a wind field and pilot
-     control inputs. Lastly, it discusses how to use the dynamics model inside
-     simulation-based filtering methods to perform statistical flight
-     reconstruction using position-only flight data.
+
+* This thesis investigates the procedures necessary to produce a regression
+  model over wind fields using position-only paraglider flight data. It
+  contributes a parametric paraglider dynamics model for simulating paraglider
+  flight tracks for a given wind field and pilot control sequence. It
+  discusses how to use the dynamics model with simulation-based filtering
+  methods to perform statistical flight reconstruction. Lastly, it discusses
+  the requirements for assembling a predictive model suitable for in-flight
+  wind field estimation. [[FIXME: review these topics, liable to change]]
 
 
 Context
 =======
-
-[["Provide the full context in a way that flows from the opening."]]
-
 
 * Paragliding
 
@@ -131,14 +91,16 @@ Context
     a stream, 
 
 
-Restatement of the problem
-==========================
+Restatement of the problem (and significance)
+=============================================
 
-[["Restate the problem and significance in light of the more thoroughly
-detailed context."]]
+[[Keep in mind: the problem is "learning the wind patterns", not why the wind
+is important to paragliders.]]
 
+* The importance of determining the current wind conditions as soon as
+  possible (both pre-flight and mid-flight).
 
-* The importance of wind patterns (for pilots)
+* Why knowing historical patterns improve estimates of current conditions.
 
 * Learning wind patterns by personal experience and word of mouth
 
@@ -146,25 +108,87 @@ detailed context."]]
 
    * Why would you want to do such a thing?
 
-   * What flight data is available?
+* A statistical predictive model would be able to:
+
+  * Automate pattern discovery [[Some trends may be subtle or infrequent.]]
+
+  * Utilize all flights from all pilots instead of requiring multiple
+    flights by the same pilot. [[If a pilot only encountered a particular
+    wind configuration a single time, they wouldn't recognize it as part of
+    a recurring pattern.]]
+
+  * Expand the set of detectable patterns: a single flight can only
+    observe a small portion of the wind field. By merging multiple flights
+    that occurred at the same time, you can build a more comprehensive
+    observation of the field. With larger observations there are more
+    opportunities for detecting useful patterns.
+
+  * Provide confidence levels: a statistical model can quantify the
+    variance in its predictions, since it knows how much evidence is
+    present for a particular pattern. [[How does this compare to
+    word-of-mouth knowledge? Pilots can be deceived/biased about their
+    experiences; memories are faulty.]]
+
+* What flight data is available?
 
 * The difficulties of learning wind patterns from the available data
 
-  * Position-only data: no observations of the wind vectors, topography, wing
-    parameters, sensor characteristics, pilot control inputs
+  * Position-only data: no observations of the wind vectors, pilot inputs, or
+    topography. No knowledge of wing parameters or sensor characteristics.
 
-  * The wind field as a "hidden state", requiring simulation-based filtering
-    methods.
+[[
+
+Because the wing behavior relies on not only the wind vectors, but also on the
+wing dynamics, orientation, and pilot controls, this *inverse problem* must
+deal with a highly underdetermined system of equations. Because such a system
+cannot be solved exactly, the objective is to compute the *distribution* over
+all possible solutions. This limitation further changes the question from "can
+I recover the wind vectors?" to "can I recover a **useful** estimate of the
+wind vectors?"
+
+For example, if no information at all is given, a wind speed estimate of
+"between 0 and 150 mph" is likely to be correct, but it is not useful. If
+a pilot is told that a paraglider is currently flying, then with no further
+information they can still make reasonable assumptions about the maximum wind
+speed, since paragliding wings have relatively small operating ranges. If you
+told them the pilot's position at two points close in time, they can make an
+even better guess of the wind speed and a very rough guess about the wind
+direction. Intuitively, this is an "eliminate the impossible" approach: by
+assuming some reasonable limits on the wind speed and wing performance you can
+improve the precision of the estimate.
+
+The key frame of mind for this project is that the question is not "can you
+estimate the wind from position-only data?", but rather "how **how good** of
+an estimate of wind is possible from position-only data?" An estimate doesn't
+need to be especially precise in order to be useful to a pilot who is trying
+to understand the local wind patterns.
+
+[[What about PVA approaches that ignore the relative wind, such as Michael von
+Kaenel's thesis?]]
+
+Unfortunately, the nonlinear dynamics and multimodal distributions involved
+with this system make analytical solutions impossible. Instead,
+*simulation-based filtering* methods are required. The essence of
+simulation-based methods is to explore the possible true state by utilizing
+a large of of guesses, called *proposals*. Each proposal is a possible value
+of the current state, and each proposal creates a prediction about the future
+by utilizing the system dynamics. Each proposal receives a score, called
+a *weight*, according to how well its prediction matched the measured future
+state. Although there is no closed form probability distribution for these
+guesses, by making a large number of guesses you can arrive at an empirical
+probability distribution over solutions of the system state at each point in
+time. The precise state of the underdetermined system is still unknown, but
+the set of possible solutions may be bounded enough to be useful.
+
+]]
+
 
 
 Restatement of the response
 ===========================
 
-[[Now that I've highlighted the set of problems, discuss my work towards
-solving those problems. This time, leverage the detail in the *full* context
-and restated problem description to elaborate on the details of the
-response.]]
-
+* The massively underdetermined system necessitates simulation-based filtering
+  methods.
 
 * Parametric paraglider dynamics model
 
@@ -206,104 +230,7 @@ response.]]
     with desirable wind patterns.
 
 
-**Question**: Is this *my* response, though? I haven't produced all these
-components. I have *investigated* these components, though, which is a sort of
-response...
-
-
-Contributions of my paper
--------------------------
-
-[[FIXME: I'm not sure where this content goes]]
-
-
-* Defining the problem (yes, this is a contribution! But I'd have to be
-  thoughtful about how I'd word that; can't just pat myself on the back for
-  coming up with an idea.)
-
-* Code
-
-  * Paraglider dynamics model
-
-  * Reference wind models (for testing the model and generating test flights)
-
-  * A simulator
-
-  * IGC parsing code
-
-  * Rudimentary GMSPPF?  (Stretch goal!!!)
-
-
-* I'm implementing everything in Python. Explain why.
-
-   * Approachable syntax
-
-   * Free (unlike matlab)
-
-   * Numerical libraries (numpy, scipy)
-
-   * Large library ecosystem (s2sphere, sklearn, databases, PyMC3, pandas, etc)
-
-
-My efforts are centered on sketching a possible path forward. This is the
-problem I'd like to solve, these are the available resources, this is how
-those resources might make a solution possible.
-
-
-Roadmap
-=======
-
-[["Brief indication of how the thesis will proceed."]]
-
-
-
-
-Draft Introduction
-==================
-
-This project started with a question: is it possible to reveal local wind
-patterns using a large set of paragliding flight tracks? Each flight is
-recorded as a sequence of positions; I wanted to see if positions alone would
-provide enough information.
-
-The difficulty is that the way the wing moves through the air is reliant
-on not only the wind, but on the pilot control inputs (braking, accelerating,
-and weight shifting), as well as the performance characteristics of the wing
-itself. [In terms of model parameters, this leads to a highly underdetermined
-system of equations. [[**Somewhat correct, but the system I need to solve is
-for the state, which depends on the model parameters; the model is essentially
-a set of nuisance parameters.**]] Everyone I talked to said it was too
-difficult, but no one could say *why* it couldn't be done. I decided to
-attempt the problem, even if that meant my project was nothing more than
-detailing why it was impossible.
-
-My philosophy at the beginning was simple: if you told me a paraglider is
-currently flying, then without any further information I can still make
-reasonable assumptions about the wind speed and gustiness, since paragliding
-wings have relatively small operating ranges. If you told me the pilot's
-position at two points close in time, I can make an even better guess of the
-wind speed, [and a very broad guess about the wind direction [awkward
-phrasing]]. The key frame of mind for this project is not "can you make
-a guess about the wind from simple position information?" but rather "**how
-good** of an estimate about the wind can you make from position information?"
-An estimate doesn't need to be particularly precise in order to be useful to
-pilots trying to understand the local wind patterns.
-
-My first approach was a simple kinematics-only model using assumptions of
-average paraglider wing performance. The problem with this method is that
-estimates are still very high variance, since it is unclear which movements
-are the result of changing wind and which are the result of changing pilot
-controls. [[This is a good place to cite Michael von Kaenel's thesis.]]
-Answering that question for such an underdetermined system required a change
-to simulation-based filtering methods.
-
-The essence of simulation-based methods is to make many guesses about the
-current state of the system and use those guesses to predict a future state.
-Each guess is weighted according to how well its prediction matched the
-measured future state. Although there is no closed form probability
-distribution for these guesses, by making a large number of guesses you can
-arrive at an empirical distribution of the system state. This is the basis of
-particle filtering methods. [[Careful: verify this claim.]]
+[[
 
 The great difficulty with model simulations is that they require equations
 that encode the model dynamics. Aerodynamics are non-trivial in even the most
@@ -382,3 +309,52 @@ problem?
 #. Expand the method to deal with *unknown* paraglider model parameters by
    embedding the GMSPFF (which use proposed model parameters) into a particle
    Metropolis-Hastings method (which proposes the model parameters)
+
+]]
+
+
+
+
+Contributions of my paper
+-------------------------
+
+[[FIXME: I'm not sure where this content goes]]
+
+
+* Defining the problem (yes, this is a contribution! But I'd have to be
+  thoughtful about how I'd word that; can't just pat myself on the back for
+  coming up with an idea.)
+
+* Code
+
+  * Paraglider dynamics model
+
+  * Reference wind models (for testing the model and generating test flights)
+
+  * A simulator
+
+  * IGC parsing code
+
+  * Rudimentary GMSPPF?  (Stretch goal!!!)
+
+
+* I'm implementing everything in Python. Explain why.
+
+  * Approachable syntax
+
+  * Free (unlike matlab)
+
+  * Numerical libraries (numpy, scipy)
+
+  * Large library ecosystem (s2sphere, sklearn, databases, PyMC3, pandas, etc)
+
+
+My efforts are centered on sketching a possible path forward. This is the
+problem I'd like to solve, these are the available resources, this is how
+those resources might make a solution possible.
+
+
+Roadmap
+=======
+
+[["Brief indication of how the thesis will proceed."]]

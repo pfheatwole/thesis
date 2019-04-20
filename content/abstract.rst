@@ -8,11 +8,10 @@
 
     \asuabstract
 
-This project investigates the design requirements for building a wind field
-regression model using position-only time series data from a paraglider flight
-track. The ability to recreate the wind conditions from individual flights
-enables the possibility of learning wind patterns from databases of recorded
-flights.
+Is it possible to recover local wind vectors from position-only paragliding
+flight data? Developing that question is the purpose of this project. The
+ability to recreate the wind conditions from individual flights would enable
+the possibility of learning wind patterns from databases of recorded flights.
 
 [[I was using terminology like "feasibility", but I never did really establish
 feasibility, did I?]]
