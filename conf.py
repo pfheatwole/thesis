@@ -129,6 +129,7 @@ EXTRA_PREAMBLE = r"""
 \usepackage{pwasu}
 """
 
+latex_engine = "xelatex"  # pdflatex has poor unicode support
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -144,7 +145,8 @@ latex_elements = {
     # 'preamble': '',
     'preamble': EXTRA_PREAMBLE,
     'fontpkg': r'''
-        \usepackage{helvet}
+        \setmainfont{TeX Gyre Heros}
+        \setsansfont{TeX Gyre Heros}
         \PassOptionsToPackage{bookmarksnumbered}{hyperref}
         ''',
 
