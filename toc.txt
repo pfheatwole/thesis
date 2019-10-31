@@ -10,6 +10,7 @@
    content/wind_regression
    content/wind_patterns
    content/wind_prediction
+   content/examples
    content/zreferences
 
    content/appendix
