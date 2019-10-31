@@ -1,5 +1,6 @@
 .. toctree::
    :maxdepth: 3
+   :numbered:
 
    content/introduction
    content/flight_data
