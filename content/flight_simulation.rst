@@ -6,13 +6,11 @@ Key points:
 
 * Builds a stateful model from the stateless paraglider dynamics model
 
-* Wind field models
+* Requires dynamics models for the wing, wind, and pilot controls
 
-* Control inputs
-
-* Flight generation (model + wind + controls). Useful for model verification,
-  behavior investigation, and building sample flight data for the purpose of
-  developing the flight reconstruction software.
+* Useful for model verification, behavior investigation, and building sample
+  flight data for the purpose of developing the flight reconstruction
+  software.
 
 * Output: a set of time series of **true** state sequences for the wind. (The
   control and wind inputs are deterministic; not sure if I should 
@@ -23,19 +21,16 @@ time of an aircraft's state variables in response to a given input. A *flight
 simulator* uses the aircraft dynamics model to produce a time series of model
 states called a *state trajectory*.
 
-
 Simulated flights are essential for testing the [[accuracy/correctness]] of an
-aircraft model. 
-
-They are also essential for testing flight reconstruction algorithms: they
-provide complete knowledge of the true world state, which can be used to
-validate the output of the flight reconstruction process. [[unlike real flight
-data, which has many unobserved variables, a simulated flight has access to
-the entire state space. This allows you to verify how well a reconstructed
-flight matches the "true" state. It isn't perfect, of course: just because you
-can reconstruct a simulated flight doesn't mean the method will work on real
-flights, but if it fails on simulated flights then you can be sure it will
-also fail on real flights.]]
+aircraft model. They are also essential for testing flight reconstruction
+algorithms: they provide complete knowledge of the true world state, which can
+be used to validate the output of the flight reconstruction process. [[unlike
+real flight data, which has many unobserved variables, a simulated flight has
+access to the entire state space. This allows you to verify how well
+a reconstructed flight matches the "true" state. It isn't perfect, of course:
+just because you can reconstruct a simulated flight doesn't mean the method
+will work on real flights, but if it fails on simulated flights then you can
+be sure it will also fail on real flights.]]
 
 To generate interesting test flights, you need interesting flight conditions,
 where "interesting" may refer to the wind, or pilot inputs, or both. This
@@ -45,7 +40,13 @@ chapter is a cursory overview of those "interesting" scenarios.
 Wind Fields
 ===========
 
-bencatelAtmosphericFlowField2013
+[[Simulating a flight requires knowledge of the wind field, even if that model
+is "no wind" or similar.]]
+
+References:
+
+* :cite:`bencatel2013AtmosphericFlowField` categorizes the main types of wind
+  field features (shear, updraft, and gusts)
 
 The most basic wind field is still air. Another basic test case is a uniform
 wind field, where the wind vectors are the same everywhere; the uniform wind
@@ -92,3 +93,11 @@ Simulator
 =========
 
 NT
+
+Encoding Rotations
+------------------
+
+References:
+
+* :cite:`sola2017QuaternionKinematicsErrorstate` has a great discussion of the
+  many different quaternion encodings
