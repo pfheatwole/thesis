@@ -1,3 +1,9 @@
+This isn't (currently) a planned section in the thesis, but a holding place
+for some scattered thoughts related to all things flight reconstruction.
+Really, establishing the idea of "flight reconstruction" will probably happen
+in the introduction to the paper.
+
+
 Modelling
 =========
 
@@ -236,3 +242,27 @@ likelihood function (aka the data distribution) for my system?
 **Try to describe the likelihood function for my filter, in non-mathematical
 terms.**
 
+
+Proposal Distributions
+----------------------
+
+The great issue then becomes the number of proposals necessary to get a good
+empirical estimate of the true state probability distribution; in general, the
+number of proposals depends on the number of state variables, which means
+a large number are required for estimating all of the model, wind, and control
+input states. Because the paraglider model dynamics are computationally
+expensive, it is prohibitively expensive to generate individual predictions
+for a large number of proposals. For this reason a naive particle filter
+design is infeasible; more sophisticated particle methods are required.
+
+In this particular case it is helpful to realize that although the
+aerodynamics are expensive to compute, evaluating the likelihood of each
+prediction is cheap, since it is a simple distance calculation (the predicted
+position versus the measured position). The Gaussian mixture sigma-point
+particle filter (GMSPPF) utilizes this realization by replacing entire groups
+of particles that are nearby in the state space with a mixture of Gaussians;
+instead of propagating individual particles through the expensive dynamics,
+you propagate entire regions of the state space by propagating each mixture
+component using an unscented Kalman filter, then regenerate particles and
+their weights using the inexpensive likelihood. This method can reduce the
+number of expensive dynamics evaluations by several orders of magnitude.
