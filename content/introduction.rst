@@ -2,9 +2,15 @@
 Introduction
 ************
 
+Introduction to the paper
+=========================
+
+Following the advice from `Exploration of Style
+<https://explorationsofstyle.com/2013/02/20/structuring-a-thesis-introduction/`_.
+
 
 Intro to the Intro
-==================
+------------------
 
 .. Establishing a research territory (Context):
 
@@ -65,7 +71,7 @@ Intro to the Intro
 
 
 Context
-=======
+-------
 
 * Paragliding
 
@@ -112,7 +118,7 @@ Context
 
 
 Restatement of the problem (and significance)
-=============================================
+---------------------------------------------
 
 [[Remember: **the problem is "learning the wind patterns", not why the wind is
 important to paragliders**.]]
@@ -197,7 +203,7 @@ important to paragliders**.]]
 
 
 Restatement of the response
-===========================
+---------------------------
 
 * The goal of estimating the wind vector using incomplete and noisy
   observations of the system is referred to as a *filtering problem*.
@@ -373,6 +379,45 @@ those resources might make a solution possible.
 
 
 Roadmap
-=======
+-------
 
 [["Brief indication of how the thesis will proceed."]]
+
+
+Flight Data
+===========
+
+What are my data? These are the raw measurements for the Bayesian model, which
+is to say: these are the only observed random variables.
+
+* Discuss the raw data available in IGC tracks
+
+
+Data sanitation
+---------------
+
+Key Points:
+
+* In order to perform flight reconstruction on actual flights, you need to
+  parse, clean, and transform the IGC data into the format required by the
+  dynamics model.
+
+* The output from this stage is the only parts of the flight that were
+  observed; everything else must be simulated. The extreme limitations of this
+  data establishes the constraints for the flight reconstruction stage.
+
+
+* The fact that older tracks were inaccurate shouldn't mean we can't prepare
+  for the continuing collection of new tracks! Newer GPS devices are getting
+  very accurate; why not start designing for them?
+
+
+Example tasks:
+
+* Sanitize the timestamps
+
+* Check the GPS noise model (Chi^2 test)
+
+* Debias the variometer data (via dynamic time warping or similar)
+
+* Estimate atmospheric conditions (air density in particular)
