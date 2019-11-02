@@ -53,10 +53,48 @@ Paragliding Wing
 Physical Description
 --------------------
 
+Airfoil
+^^^^^^^
+
+The cross-sectional slices of the parafoil.
+
+Discuss the most significant points and definitions:
+
+
+Geometric definitions of the airfoil: leading edge, trailing edge, chord line,
+camber line, upper surface, lower surface
+
+Summary parameters (ref:
+http://laboratoridenvol.com/paragliderdesign/airfoils.html#4): maximum
+thickness, position of maximum thickness, max camber, position of max camber,
+nose radius, trailing edge angle (?)
+
+Aerodynamic behavior and coefficients: lift, drag, and moment curves; stall
+point; stability; more?
+
+In fact, a LOT of the aerodynamic terminology should probably be introduced
+here (as part of the discussion on airfoils). More keywords: angle of attack,
+stall point, chord, camber, pitching moment, aerodynamic center
+
+
+Parafoil
+^^^^^^^^
+
+.. TODO::
+
+   * How should I cite the "Paraglider Design Handbook"? Just as a website?
+
+
+Key points: planform (flat area, flat span, etc), lobe (projected area,
+projected span, **dihedral**), spanwise airfoils, washin/washout (geometric
+twist)
+
+
 The majority of the geometry definitions are to describe the *parafoil*.
 A parafoil has a given planform, which is the projection of the wing onto the
 xy-plane. The planform is then curved by the connecting lines to produce the
-arched, dihedral shape of the wing.
+arched, dihedral shape of the wing. (The PDH calls the frontal view the *lobe*
+and defines several lobes (circular, elliptical, double circles, etc))
 
 The planform dimensions describe the projected outline, but not the volumetric
 shape; the volumetric shape of the parafoil is dictated by its cross-sections.
@@ -64,6 +102,13 @@ A 2D cross-section of a wing is called an *airfoil*. The airfoil is the
 fundamental building block of a wing. Some wings have a spanwise variation of
 the airfoil in order to adjust the performance characteristics of the wing,
 but my model has not yet implemented that detail.
+
+
+Wing
+^^^^
+
+Parafoil + lines + risers
+
 
 
 Mathematical Model
@@ -192,8 +237,6 @@ Parafoil-Payload System
    * Discuss some of the major parafoil-payload papers and the modelling
      choices they made.
 
-   * When/where should I discuss the lines?
-
 This is the combination of wing and payload (harness).
 
 I should review existing paraglider models, including the different degrees
@@ -211,3 +254,19 @@ Mathematical Model
 ------------------
 
 NT
+
+
+Performance
+===========
+
+[[
+
+This is a **huge** topic. It's not the primary focus of my thesis, so should
+I just punt it off onto "other resources", or should I detail the basic
+performance characteristics with a few curves, or ...?
+
+At the least I should probably demonstrate that my model definition satisfies
+my design requirements. For example, build an example wing and show how it
+behaves when flying through asymmetric wind (a big feature of my design).
+
+]]
