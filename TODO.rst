@@ -1,3 +1,9 @@
+You can add ``:numbered:`` to the ``toctree`` to get section numbers, and it
+will automatically use ``<sec#>.<eq#>`` for equation cross-references, but
+I get some errors when building HTML, plus I don't want to overlap with the
+latex numbering system, right? Investigate.
+
+
 Content Tasks
 =============
 
@@ -73,6 +79,11 @@ Terminology
 Structural
 ----------
 
+* Introductions: I am using implicit introductions (chapter text preceeding
+  the first section). Should they be explicit? Some authors even use both
+  (Frigola-Alcade's dissertation, for example). **This will probably depend on
+  whether any of the introductions require subsections.**
+
 * What sections should have PDF bookmarks?
 
    * Use `\currentpdfbookmark{label}{bookmarkname}`
@@ -101,7 +112,27 @@ Formatting
 Bibliography
 ^^^^^^^^^^^^
 
+
+* What does Sphinx use ``:ref:`` to link between sections? Does CalPoly
+  require me to cite section **numbers**? I think sphinx typically substitutes
+  section labels.
+
+* Can my bibliography link backwards to sections that reference them?
+
+* I think I can use multiple bibliographies. This might be useful since my
+  topics are so varied. Should I?
+  
+  See: `https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html`_.
+
 * `sphinxcontrib-bibtex` provides the `unsrt` style, but I'd rather it use
   `Lastname, Firstname` ordering. How difficult is that?
 
   See: https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html#custom-formatting-sorting-and-labelling
+
+
+  
+Miscellaneous
+=============
+
+* Create a project-local ``spellfile`` for vim (lots of project-specific
+  words, like "kriging")
