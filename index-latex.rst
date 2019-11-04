@@ -25,4 +25,12 @@ XXXXX EMPTY NONPRINTING SECTION
     \mainmatter
     \pagestyle{asu}
 
-.. include:: toc.txt
+.. include:: toc-body.txt
+
+.. include:: toc-extra.txt
+
+.. raw:: latex
+
+   \appendix
+
+.. include:: toc-appendices.txt

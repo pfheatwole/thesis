@@ -3,6 +3,7 @@
    :numbered:
 
    content/introduction
+   content/introduction2
    content/paraglider_model
    content/flight_simulation
    content/flight_reconstruction
@@ -10,6 +11,3 @@
    content/wind_patterns
    content/wind_prediction
    content/examples
-   content/zreferences
-
-   content/appendix

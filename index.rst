@@ -4,4 +4,8 @@
    content/abstract
    content/acknowledgements
 
-.. include:: toc.txt
+.. include:: toc-body.txt
+
+.. include:: toc-extra.txt
+
+.. include:: toc-appendices.txt
