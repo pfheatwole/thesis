@@ -7,8 +7,9 @@
 
 .. only:: html or singlehtml
 
+    **********
     References
-    ==========
+    **********
 
 .. bibliography:: references.bib
    :style: unsrt
