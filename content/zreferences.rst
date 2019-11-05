@@ -11,5 +11,11 @@
     References
     **********
 
+.. ::
+
+   When Sphinx generates the `\bibsection` for the PDF it will use the
+   redefined version from the Latex style. The style file redefines the
+   `\bibname` to "REFERENCES" and adds it to the table of contents.
+
 .. bibliography:: references.bib
    :style: unsrt
