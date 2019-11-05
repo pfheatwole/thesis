@@ -33,6 +33,7 @@
 # ones.
 extensions = [
     # 'sphinx.ext.imgmath',
+    'sphinx.ext.imgconverter',
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
     'sphinxcontrib.bibtex']
