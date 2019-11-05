@@ -66,3 +66,10 @@ The ``:label:`` serves two purposes:
 
 2. It instructs Sphinx to number the equation, if ``numfig = True`` in
    ``conf.py``.
+
+
+Glossaries
+==========
+
+You can add term definitions in a glossary using the ``:term:`` directive. For
+example, :term:`term` or :term:`another term`.
