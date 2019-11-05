@@ -29,6 +29,26 @@ External URLs
 These aren't too bad: `link text <http://www.google.com>`_.
 
 
+Figures
+=======
+
+You can supply different formats for different builders and let them choose
+the appropriate version (eg, SVG for HTML and PDF for latex). Or, instead of
+converting SVG into PDF manually, use the Sphinx extension
+``sphinx.ext.imgconverter``, which automatically converts SVG into PDF for the
+latex builder.
+
+.. _wind_triangle:
+.. figure:: images/wind_triangle.*
+
+   wind_triangle
+
+Should see a :numref:`wind triangle in (Fig. %s) <wind_triangle>`.
+
+Note that figure references are different from equations in that they use
+standard reST labels ``.. _label_here`` instead of ``:label:`` options.
+
+
 Math
 ====
 
