@@ -140,8 +140,8 @@ References:
   the Pistolesi boundary conditions, and verified that is was able to predict
   the section coefficients for a wing with 45-degree sweep.
 
-* `belloc2015WindTunnelInvestigation` has actual data which I can use to check
-  my equations.
+* :cite:`belloc2015WindTunnelInvestigation` has actual data which I can use to
+  check my equations.
 
 
 Survey: what are the typical ways of estimating the aerodynamics of a wing?
