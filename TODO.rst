@@ -1,9 +1,3 @@
-You can add ``:numbered:`` to the ``toctree`` to get section numbers, and it
-will automatically use ``<sec#>.<eq#>`` for equation cross-references, but
-I get some errors when building HTML, plus I don't want to overlap with the
-latex numbering system, right? Investigate.
-
-
 Content Tasks
 =============
 
@@ -26,6 +20,10 @@ References
   dynamics, wind field estimation, thermal estimation, etc)
 
 * Create a list of sources for each topic, including summary notes
+
+* The "REFERENCES" link in the PDF is one page too high.
+
+* The REFERENCES in the PDF should come *before* the appendices?
 
 
 Drafting
@@ -79,6 +77,11 @@ Terminology
 Structural
 ----------
 
+* You can add ``:numbered:`` to the ``toctree`` to get section numbers, and it
+  will automatically use ``<sec#>.<eq#>`` for equation cross-references, but
+  I get some errors when building HTML, plus I don't want to overlap with the
+  latex numbering system, right? Investigate.
+
 * Introductions: I am using implicit introductions (chapter text preceeding
   the first section). Should they be explicit? Some authors even use both
   (Frigola-Alcade's dissertation, for example). **This will probably depend on
@@ -112,7 +115,6 @@ Formatting
 Bibliography
 ^^^^^^^^^^^^
 
-
 * What does Sphinx use ``:ref:`` to link between sections? Does CalPoly
   require me to cite section **numbers**? I think sphinx typically substitutes
   section labels.
@@ -122,15 +124,14 @@ Bibliography
 * I think I can use multiple bibliographies. This might be useful since my
   topics are so varied. Should I?
   
-  See: `https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html`_.
+  See: `<https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html>`_.
 
-* `sphinxcontrib-bibtex` provides the `unsrt` style, but I'd rather it use
-  `Lastname, Firstname` ordering. How difficult is that?
+* Should I use "Lastname, Firstname"? See "thesis/notes/Notes 2019-W45"
 
-  See: https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html#custom-formatting-sorting-and-labelling
+* Do I need to redefine ``\bibsection`` in the Latex style? Do the "Memoir"
+  defaults meet the style guidelines?
 
 
-  
 Miscellaneous
 =============
 
