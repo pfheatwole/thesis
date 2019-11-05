@@ -6,7 +6,7 @@ Introduction to the paper
 =========================
 
 Following the advice from `Exploration of Style
-<https://explorationsofstyle.com/2013/02/20/structuring-a-thesis-introduction/`_.
+<https://explorationsofstyle.com/2013/02/20/structuring-a-thesis-introduction/>`_.
 
 
 Intro to the Intro
@@ -421,3 +421,17 @@ Example tasks:
 * Debias the variometer data (via dynamic time warping or similar)
 
 * Estimate atmospheric conditions (air density in particular)
+
+
+Notes
+-----
+
+* Is it correct to say that the control inputs and the wind vectors are
+  conditionally *independent*, but conditional dependent given the pose of the
+  wing? A gut check says yes: if you asked me to guess a pilot controls in the
+  blind, I'd have to be vague, but if you told me they were banking to the
+  right with a gust coming from the left, I'd be much more inclined to believe
+  they were applying right brakes (and in the middle of a turn).
+
+  This question probably belongs together with the discussion on *maneuvering
+  target tracking*.
