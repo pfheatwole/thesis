@@ -9,12 +9,6 @@
    \addcontentsline{toc}{chapter}{Glossary}
    \chapter*{Glossary}
 
-.. ::
-
-   ********
-   Glossary
-   ********
-
 .. glossary::
 
    term
