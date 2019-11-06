@@ -41,7 +41,7 @@ latex builder.
 .. _wind_triangle:
 .. figure:: images/wind_triangle.*
 
-   wind_triangle
+   A Wind Triangle
 
 Should see a :numref:`wind triangle in (Fig. %s) <wind_triangle>`.
 
@@ -86,6 +86,28 @@ The ``:label:`` serves two purposes:
 
 2. It instructs Sphinx to number the equation, if ``numfig = True`` in
    ``conf.py``.
+
+
+Abbreviations
+=============
+
+You can use the ``:abbr:`` role for abbreviations and acronyms. For example,
+:abbr:`FIFO (first-in, first-out)` will generate a acronym with the contents
+of the parenthesis as a tool-tip (in HTML, in PDF it will output exactly).
+
+Unfortunately, I'm not sure how useful this is to me. In the text I will
+typically want to introduce the full definition first, like "first-in,
+first-out (FIFO)". Tooltips would be mildly nice to have later on, but with
+this format it'd repeat the full definition every time in the PDF (which
+I don't want). Also, Sphinx doesn't offer "List of Acronyms" functionality.
+
+However, I do like the idea of adding explicit "this is an acronym definition"
+markup to make it easier to search for those terms. Maybe a dummy role?
+
+.. todo::
+
+   Could I define my own role for marking abbreviations? And how hard would it
+   be to generate a list of those acronyms?
 
 
 Glossaries
