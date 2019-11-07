@@ -1,3 +1,10 @@
+Sphinx
+======
+
+* Re-run ``sphinx-quickstart`` and see how the new ``conf.py`` defaults
+  compare to my current version (from July 2017)
+
+
 Content Tasks
 =============
 
@@ -77,12 +84,24 @@ Terminology
 Structural
 ----------
 
-* You can add ``:numbered:`` to the ``toctree`` to get section numbers, and it
-  will automatically use ``<sec#>.<eq#>`` for equation cross-references, but
-  I get some errors when building HTML, plus I don't want to overlap with the
-  latex numbering system, right? Investigate.
+* For unnumbered chapters like "Glossary" and "Symbols", I'm using the ``..
+  only::`` directive to specify the chapter titles. I have to do that because
+  if I use regular section headings, the latex builder will set them as
+  numbered.
 
-* Introductions: I am using implicit introductions (chapter text preceeding
+  This current way works, but you can't have sections in those chapters: if
+  you try, they'll all be marked as chapters, as if the original chapter
+  heading doesn't exist. It confuses both the HTML and latex builders. I think
+  `.. only::`` is "not meant for structural elements", so that makes sense,
+  but I'm not sure how to fix this. For now, just don't use sections in
+  unnumbered chapters.
+
+* You can add ``:numbered:`` to the ``toctree`` to get section numbers in
+  HTML, and it will automatically use ``<sec#>.<eq#>`` for equation
+  cross-references, but I get some errors about "already assigned section
+  numbers" when building HTML.
+
+* Introductions: I am using implicit introductions (chapter text preceding
   the first section). Should they be explicit? Some authors even use both
   (Frigola-Alcade's dissertation, for example). **This will probably depend on
   whether any of the introductions require subsections.**
@@ -91,13 +110,16 @@ Structural
 
    * Use `\currentpdfbookmark{label}{bookmarkname}`
 
-* Latex requires a **single** `\appendix` call; I don't think I can signal
-  that directly inside the TOC. This is awkward since you can't rearrange the
-  appendices in the TOC without modifying the appendices themselves.
+   * Update (20191107): I don't know what this means?
 
-* The HTML builder doesn't label the appendices; might need to just handle
-  them manually (explicit labels in HTML, explicit `\appendix` entry for the
-  latex output).
+* The HTML builder doesn't label the appendices as appendices (it doesn't
+  label them with an alphabetical sequence); might need to just handle them
+  manually (explicit labels in HTML, explicit `\appendix` entry for the latex
+  output).
+  
+  The (small) problem is that for the HTML builder (so no appendix chapter
+  labels) ``:numref:`` has no chapter, so it references out-of-section tables
+  as "Table 1" even though it should be "Table A.1", etc.
 
 
 Formatting
@@ -111,15 +133,22 @@ Formatting
    
   * Chapter titles and section headings are not styled correctly
 
+* Code literals (surrounded by ``\`\```) are gray shaded in HTML, but have
+  white backgrounds in the PDF. I tried setting ``'sphinxsetup':
+  "VerbatimColor={rgb}{0.25,0.25,0.25}"`` in ``conf.py``, but that didn't seem
+  to work. In the tex ouput it looks like code literals are inside
+  ``\sphinxcode`` elements; might start there?
+
 
 Bibliography
 ^^^^^^^^^^^^
 
-* What does Sphinx use ``:ref:`` to link between sections? Does CalPoly
-  require me to cite section **numbers**? I think sphinx typically substitutes
-  section labels.
+* What label does Sphinx use with ``:ref:`` to link between sections? Does
+  CalPoly require me to cite section **numbers**? I think sphinx typically
+  substitutes section labels.
 
-* Can my bibliography link backwards to sections that reference them?
+* Can my bibliography link backwards to sections that reference them? (That
+  functionality is available in latex, but I forget how.)
 
 * I think I can use multiple bibliographies. This might be useful since my
   topics are so varied. Should I?
