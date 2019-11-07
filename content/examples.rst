@@ -4,6 +4,28 @@ Example Content
 
 This section is a scratchpad that reminds me how to do things in Sphinx.
 
+References
+==========
+
+Top-level documents are referenced using ``:doc:``. For example,
+:doc:`introduction`. 
+
+.. warning:: These are case sensitive.
+
+Labels can either be explicit, like :ref:`common_notation` (which is using
+a explicit, and thus global, reST label), or they can be auto-generated using
+``sphinx.ext.autosectionlabel``. The catch is that for automatic labels, you
+have to use the fully specified path from the index to the reST file. For
+example, :ref:`content/introduction:Introduction`
+
+Lastly, references can be numbered, using ``:numref:``, or labeled, using
+``:ref:``. Beware, numbering starts with the top-level numbers, so if
+a chapter or section is unnumbered it will look odd when reference outside
+that context. For example, in HTML appendices aren't given alphabetical
+sequences, so for the table in the appendix "Notation and Symbols" you'll get
+something like :numref:`common_notation`.
+
+
 Citations
 =========
 
@@ -51,6 +73,8 @@ standard reST labels ``.. _label_here`` instead of ``:label:`` options.
 
 Math
 ====
+
+Use the notation from :ref:`common_notation`.
 
 
 Inline Equations
