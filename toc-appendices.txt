@@ -8,4 +8,5 @@
 .. toctree::
    :maxdepth: 3
 
+   content/symbols
    content/appendix

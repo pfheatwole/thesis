@@ -1,6 +1,5 @@
 .. toctree::
    :maxdepth: 3
 
-   content/symbols
    content/glossary
    content/zreferences
