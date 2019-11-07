@@ -1,14 +1,8 @@
-.. only:: html or singlehtml
+********************
+Notation and Symbols
+********************
 
-   ********************
-   Notation and Symbols
-   ********************
-
-.. raw:: latex
-
-   \addcontentsline{toc}{chapter}{Notation and Symbols}
-   \chapter*{Notation and Symbols}
-
+.. _common_notation:
 .. list-table:: Common Notation
    :header-rows: 1
    :widths: 10 25
@@ -28,8 +22,8 @@
      - a vector from point A to point B (point B with respect to point A)
    * - :math:`^R \vec{x}`
      - a vector in reference frame :math:`R`
-   * - :math:`^R \dot{\vec{x}}_{B/A}`
-     - the derivative of a vector as observed in frame :math:`R`
+   * - :math:`\dot{\vec{x}}`
+     - the derivative of a vector
    * - :math:`x_k`
      - a variable at index :math:`k` of a sequence of length :math:`K`
    * - :math:`x^{(n)}`
@@ -43,13 +37,32 @@
      - an orthogonal matrix that transforms vectors from bases :math:`A` into :math:`B`
 
    * - :math:`f(\cdot)`, :math:`func(\cdot)`, etc
-     - general functions, where ``f``, ``func``, can be any identifier
+     - functions, where ``f``, ``func``, can be any identifier
    * - :math:`p(\cdot)`
      - a probability density function. This identifier is unique because it can be used
        many times for different density functions. For example, :math:`p(x)` and
        :math:`p(y)` are different functions even though both use :math:`p`.
 
+By their nature, vectors require the most intricate notation, since a fully
+specified vector might include all of:
 
-.. todo::
+1. A reference frame
 
-   * Shouldn't the derivative of a vector be taken wrt a specific reference frame?
+2. A coordinate system
+
+3. A fixed point (if it's a bound vector)
+
+For simplicity, :numref:`common_notation` only shows examples of each distinct
+element of a vector encoding. In practice, vectors may appear quite complex;
+for some realistic examples taken from
+:cite:`stevens2015AircraftControlSimulation`:
+
+.. math::
+
+   \begin{aligned}
+   \vec{p}_{A/B} &\equiv \textrm{the position of the point A with respect to point } B \\
+   \vec{v}_{A/i} &\equiv \textrm{the velocity vector of a point } A \textrm{ in frame } F_i \\
+   ^b \dot{\vec{v}}_{A/i} &\equiv \textrm{the vector derivative of } \vec{v}_{A/i} \textrm{ taken in frame } F_b \\
+   \vec{v}^C_{A/i} \equiv \left(\vec{v}_{A/i}\right)^C &\equiv \textrm{array of components of } \vec{v}_{A/i} \textrm{ in coordinate system } c \\
+   ^b \dot{\vec{v}}^c_{A/i} &\equiv \textrm{components in coordinate system } c \textrm{ of the derivative taken in frame } F_b
+   \end{aligned}
