@@ -93,6 +93,7 @@ numfig = True  # Enable numbered figure and table references in HTML
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+html_title = project  # Override "<project>'s documentation"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
