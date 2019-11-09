@@ -4,6 +4,22 @@ Introduction 2 (Alternative)
 
 (This is an off-the-cuff Bayesian modelling approach.)
 
+This entire project is a set of questions with the general form: "what is the
+value of this thing given the value of that other thing?" That is, these
+questions involve relationships between variables, where dependent variables
+take on values conditional on the values of the independent variables. And,
+since there is uncertainty in all the variables, it doesn't make sense to ask
+for for specific numbers, but the distributions that cover the plausible
+values.
+
+The framework of reasoning through conditional probability is the realm of
+Bayesian statistics. What follows is a Bayesian formulation of the goals of
+this project:
+
+
+The Bayesian Formulation
+------------------------
+
 I want to know :math:`\vec{w}_{1:T}`, but I only have :math:`\vec{y}_{1:T}`,
 so my target is to learn :math:`p(\vec{w}_{1:T} \mid \vec{y}_{1:T})`. To do
 that I need a relationship between the sequence of flight positions and the
