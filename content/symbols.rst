@@ -34,14 +34,24 @@ Notation and Symbols
    * - :math:`[X]^z`
      - a matrix exponential, where :math:`z` is a scalar
    * - :math:`[C_{B/A}]`
-     - an orthogonal matrix that transforms vectors from bases :math:`A` into :math:`B`
+     - an orthogonal matrix that transforms vectors from bases :math:`A` into
+       :math:`B`
 
    * - :math:`f(\cdot)`, :math:`func(\cdot)`, etc
      - functions, where ``f``, ``func``, can be any identifier
    * - :math:`p(\cdot)`
-     - a probability density function. This identifier is unique because it can be used
-       many times for different density functions. For example, :math:`p(x)` and
-       :math:`p(y)` are different functions even though both use :math:`p`.
+     - a probability density function. This identifier is unique because it
+       can be used many times for different density functions. For example,
+       :math:`p(x)` and :math:`p(y)` are different functions even though both
+       use :math:`p`.
+
+.. todo::
+
+   Define random variables (eg, :math:`X`) and random variates (:math:`x
+   \in X`). Most of my functions are developed in terms of deterministic
+   variables, but later those variables will be considered random (so the
+   functions are now defined in terms of random variates). Not sure if/how
+   to call this out explicitly.
 
 By their nature, vectors require the most intricate notation, since a fully
 specified vector might include all of:
