@@ -41,6 +41,12 @@ extensions = [
 
 autosectionlabel_prefix_document = True
 
+# autosectionlabel will warn if a section label is reused inside a single
+# document, regardless of section depth. Suppress those manually.
+suppress_warnings = [
+    'autosectionlabel.content/paraglider_model',
+]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
