@@ -512,11 +512,20 @@ Extra Notes
 ===========
 
 * Is it correct to say that the control inputs and the wind vectors are
-  conditionally *independent*, but conditional dependent given the pose of the
-  wing? A gut check says yes: if you asked me to guess a pilot controls in the
-  blind, I'd have to be vague, but if you told me they were banking to the
-  right with a gust coming from the left, I'd be much more inclined to believe
-  they were applying right brakes (and in the middle of a turn).
+  marginally *independent* (in the absence of the pose), but conditionally
+  dependent given the pose of the wing? A gut check says yes: if you asked
+  me to guess a pilot controls in the blind, I'd have to be vague, but if you
+  told me they were banking to the right with a gust coming from the left,
+  I'd be much more inclined to believe they were applying right brakes (and
+  in the middle of a turn).
+
+  It might help to draw the model graph for the two scenarios. Wind doesn't
+  *directly* influence the controls, it does it *indirectly*, through the
+  pilot's objective/strategy. The pilot's decision making process takes in
+  the wind, post, and objective, and produces the control output as a
+  response, but if you delete that strategy from the model graph then
+  there isn't a dependency between the wind and controls; they're only
+  related by their common effect: the trajectory.
 
   This question probably belongs together with the discussion on *maneuvering
   target tracking*.
