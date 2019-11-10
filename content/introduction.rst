@@ -66,7 +66,7 @@ Intro to the Intro
   discusses how to use the dynamics model with simulation-based filtering
   methods to perform statistical flight reconstruction. Lastly, it discusses
   the requirements for assembling a predictive model suitable for in-flight
-  wind field estimation. [[FIXME: review these topics, liable to change]]
+  wind field estimation.
 
 
 Context
@@ -348,6 +348,11 @@ Contributions of my paper
   thoughtful about how I'd word that; can't just pat myself on the back for
   coming up with an idea.)
 
+  * Clearly developing and motivating the ultimate question, identifying the
+    intermediate targets, the different forms of each targets (different
+    models), the interdependencies of the targets, pros/cons of the different
+    solutions, summarizing existing work and providing references, etc
+
 * Code
 
   * Paraglider dynamics model
@@ -422,57 +427,82 @@ Example tasks:
 * Estimate atmospheric conditions (air density in particular)
 
 
+Formalizing the Questions
+=========================
+
+The questions in this paper must be transformed into a set of mathematical
+equivalents before we can apply tools that estimate their answers.
+
+This involves acknowledging the inherent uncertainty in the data and their
+models, defining the underlying form of the questions, and using the rules of
+conditional probability to decompose the problem into a series of intermediate
+steps.
+
+
 Probabilistic Methods
-=====================
+---------------------
 
-This entire project is a set of questions with the general form: "what is the
-value of this thing given the value of that other thing?" That is, these
-questions involve relationships between variables, where dependent variables
-take on values conditional on the values of the independent variables. And,
-since there is uncertainty in all the variables, it doesn't make sense to ask
-for for specific numbers, but the distributions that cover the plausible
-values.
+It is essential to acknowledge the inescapable uncertainty throughout these
+questions. Even the small amount of data we do have, the sequence of positions
+over time, is uncertain due to sensor noise and encoding inaccuracies. When
+uncertainty cannot be eliminated, it no longer makes sense to look for
+specific answers, but rather for the distribution that covers the range of
+plausible answers. This is the realm of probabilistic methods.
 
-We need to transform these questions into mathematical equivalents in order to
-find the answers. The mathematical framework for reasoning through conditional
-probability is the realm of *Bayesian statistics*. This section provides
-a Bayesian formulation of the goals of this project.
+The starting point is to recognize that all the questions in this paper follow
+a general form: "what is the value of *this* given the value of *that*?"
+Answers depend on the relationships between variables.
+
+
+The mathematical framework for reasoning through conditional probability is
+the language of *Bayesian statistics*. 
+
+The underlying philosophy of Bayesian statistics is the use of probability to
+describe uncertainty.
+
+This section provides a Bayesian formulation of the goals of this project.
 
 
 The Bayesian Formulation
 ------------------------
 
 Before we can look for recurring patterns in the wind fields, we need to
-estimate the individual wind fields from each flight. We want to know
-:math:`\vec{w}_{1:T}`, but we only have :math:`\vec{p}_{1:T}`, so our first
-step is to learn :math:`p(\vec{w}_{1:T} \mid \vec{p}_{1:T})`. To do that we
-need a relationship between the sequence of flight positions and the wind
-vectors. That relationship is given by the paraglider aerodynamics model
+estimate the individual wind fields from each flight. Before we can estimate
+the wind field of an individual flights, we need an estimate of the sequence
+of wind vectors :math:`\vec{w}_{1:T}`.
+
+We want to know :math:`\vec{w}_{1:T}`, but we only have the sequence of
+positions :math:`\vec{p}_{1:T}`, so our first step is to target :math:`p
+\left( \vec{w}_{1:T} \mid \vec{p}_{1:T} \right)`. To do that we need
+a relationship between the sequence of flight positions and the wind vectors.
+That relationship is given by the paraglider aerodynamics model
 :math:`f({\cdot\,} ; M)`, which is parametrized by the wing model :math:`M`.
 
-If we knew :math:`M`, we might try to target :math:`p(\vec{w}_{1:T} \mid
-\vec{p}_{1:T}, M)`, but the aerodynamics model also requires the pilot inputs
-:math:`\vec{\delta}_{1:T}`, so we are forced to target :math:`p(\vec{w}_{1:T}
-\mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M)`. The problem is that we still have
-no function that can describe this distribution in closed-form. Because there
-is no analytical solution that we can solve directly, we are forced to use
-Monte Carlo methods, which approximate the target by generating samples from
-this intractable distribution. It is important to note that we also don't know
-the true :math:`\vec{\delta}` or :math:`M`, so we need to generate
-a representative set of samples for those as well.
+If we knew :math:`M`, we might try to target :math:`p \left( \vec{w}_{1:T}
+\mid \vec{p}_{1:T}, M \right)`, but the aerodynamics model also requires the
+pilot inputs :math:`\vec{\delta}_{1:T}`, so we are forced to target :math:`p
+\left( \vec{w}_{1:T} \mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)`. The
+problem is that we still have no function that can describe this distribution
+in closed-form. Because there is no analytical solution that we can solve
+directly, we are forced to use Monte Carlo methods, which approximate the
+target by generating samples from this intractable distribution. It is
+important to note that we also don't know the true :math:`\vec{\delta}_{1:T}`
+or :math:`M`, so we need to generate a representative set of samples for those
+as well.
 
 The ultimate goal is to generate representative sets of samples for each of
-the unknowns, input those samples into aerodynamic functions of the wing to
-explore the set of possible flights, called *trajectories*, then score (or
-*weight*) each possible flight based on how plausibly it could have created
-the observed flight path. That set of weighted trajectories is the Monte Carlo
-approximation of that intractable target, :math:`p(\vec{w}_{1:T} \mid
-\vec{p}_{1:T}, \vec{\delta}_{1:T}, M)`.
+the unknowns and input those samples into aerodynamic functions of the wing to
+simulate many possible flights. These simulations will generate
+a representative set of plausible flights, called *trajectories*, then score
+(or *weight*) each possible flight based on how plausibly it could have
+created the observed flight path. That set of weighted trajectories is the
+Monte Carlo approximation of that intractable target, :math:`p \left(
+\vec{w}_{1:T} \mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)`.
 
 .. math::
 
-   p(\vec{w}_{1:T} \mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M) = \frac{ p(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M)}{p(\vec{p}_{1:T}, \vec{\delta}_{1:T}, M)} \
-                                                              = \frac{ p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M\right)}{\int p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) \mathrm{d} \vec{w}_{1:T}}
+   p \left( \vec{w}_{1:T} \mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) = \frac{ p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)}{p \left( \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)} \
+                                                              = \frac{ p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) }{\int p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) \mathrm{d} \vec{w}_{1:T}}
 
 .. ::
 
@@ -484,27 +514,20 @@ approximation of that intractable target, :math:`p(\vec{w}_{1:T} \mid
                                                                  &= \frac{ p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M\right)}{\int p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) \mathrm{d} \vec{w}_{1:T}}
 
 
-Computing the target requires knowing the joint probability
-:math:`p(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M)`, which is
+Computing the target requires knowing the joint probability :math:`p \left(
+\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)`, which is
 unknown. Instead, we will use the chain rule of probability to rewrite the
-joint distribution as the product of several conditional distributions which
-we can estimate.
+joint distribution, which we *cannot* estimate, as the product of several
+conditional distributions, which we *can* estimate.
 
 .. math::
 
-   p(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M) = p(\vec{p}_{1:T} \mid \vec{w}_{1:T}, \vec{\delta}_{1:T}, M) p(\vec{w}_{1:T}, \vec{\delta}_{1:T}, M)
+   p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) = p \left( \vec{p}_{1:T} \mid \vec{w}_{1:T}, \vec{\delta}_{1:T}, M \right) p \left( \vec{w}_{1:T}, \vec{\delta}_{1:T}, M \right)
 
 
-Or, using ``\left`` and ``\right``:
-
-.. math::
-
-   p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M\right) = p\left(\vec{p}_{1:T} \mid \vec{w}_{1:T}, \vec{\delta}_{1:T}, M\right) p\left(\vec{w}_{1:T}, \vec{\delta}_{1:T}, M\right)
-
-
-We can use SMC and MCMC methods to produce samples from the joint
+At last, we can use SMC and MCMC methods to produce samples from the joint
 distribution, then average over the wind components of each particle to
-estimate our ultimate target: the distribution over the wind vectors
+estimate our ultimate target: the distribution over the wind vectors that were
 present during the flight.
 
 
