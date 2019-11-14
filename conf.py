@@ -34,10 +34,11 @@
 extensions = [
     # 'sphinx.ext.imgmath',
     'sphinx.ext.autosectionlabel',
-    'sphinx.ext.imgconverter',
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
-    'sphinxcontrib.bibtex']
+    'sphinxcontrib.bibtex',
+    'sphinxcontrib.rsvgconverter',
+]
 
 autosectionlabel_prefix_document = True
 
