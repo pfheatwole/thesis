@@ -45,7 +45,7 @@ autosectionlabel_prefix_document = True
 # autosectionlabel will warn if a section label is reused inside a single
 # document, regardless of section depth. Suppress those manually.
 suppress_warnings = [
-    'autosectionlabel.content/paraglider_model',
+    'autosectionlabel.paraglider_model',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -84,7 +84,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'scratch', 'TODO.rst']
+exclude_patterns = ['build', 'scratch', 'TODO.rst']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
