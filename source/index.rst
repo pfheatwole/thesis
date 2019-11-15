@@ -13,16 +13,16 @@ Contents
 
    .. toctree::
 
-      content/abstract
-      content/acknowledgements
+      abstract
+      acknowledgements
 
 .. only:: latex
 
    .. The latex build must add these explicitly outside the toctree since the
       latex builder doesn't respect unnumbered sections
 
-   .. include:: content/abstract.rst
-   .. include:: content/acknowledgements.rst
+   .. include:: abstract.rst
+   .. include:: acknowledgements.rst
 
    .. raw:: latex
 
@@ -35,20 +35,20 @@ Contents
    :maxdepth: 3
    :numbered:
 
-   content/introduction
-   content/paraglider_model
-   content/flight_simulation
-   content/flight_reconstruction
-   content/wind_regression
-   content/wind_patterns
-   content/wind_prediction
-   content/examples
+   introduction
+   paraglider_model
+   flight_simulation
+   flight_reconstruction
+   wind_regression
+   wind_patterns
+   wind_prediction
+   examples
 
 .. toctree::
    :maxdepth: 3
 
-   content/glossary
-   content/zreferences
+   glossary
+   zreferences
 
 .. All documents beyond this point are considered appendices
 
@@ -59,5 +59,5 @@ Contents
 .. toctree::
    :maxdepth: 3
 
-   content/symbols
-   content/appendix
+   symbols
+   appendix
