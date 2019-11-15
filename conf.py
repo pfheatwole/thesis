@@ -33,9 +33,20 @@
 # ones.
 extensions = [
     # 'sphinx.ext.imgmath',
+    'sphinx.ext.autosectionlabel',
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
-    'sphinxcontrib.bibtex']
+    'sphinxcontrib.bibtex',
+    'sphinxcontrib.rsvgconverter',
+]
+
+autosectionlabel_prefix_document = True
+
+# autosectionlabel will warn if a section label is reused inside a single
+# document, regardless of section depth. Suppress those manually.
+suppress_warnings = [
+    'autosectionlabel.content/paraglider_model',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -50,8 +61,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Paragliding Wind Detection'
-copyright = '2017, Peter Heatwole'
+project = 'Paragliding Wind Reconstruction'
+copyright = '2019, Peter Heatwole'
 author = 'Peter Heatwole'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -73,7 +84,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'scratch']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'scratch', 'TODO.rst']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -89,6 +100,7 @@ numfig = True  # Enable numbered figure and table references in HTML
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+html_title = project  # Override "<project>'s documentation"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -129,6 +141,7 @@ EXTRA_PREAMBLE = r"""
 \usepackage{pwasu}
 """
 
+latex_engine = "xelatex"  # pdflatex has poor unicode support
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -137,14 +150,15 @@ latex_elements = {
 
     # The font size ('10pt', '11pt' or '12pt').
     #
-    'pointsize': '11pt',
+    'pointsize': '10pt',
 
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
     'preamble': EXTRA_PREAMBLE,
     'fontpkg': r'''
-        \usepackage{helvet}
+        \setmainfont{TeX Gyre Heros}
+        \setsansfont{TeX Gyre Heros}
         \PassOptionsToPackage{bookmarksnumbered}{hyperref}
         ''',
 
@@ -174,7 +188,7 @@ latex_additional_files = [
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    ('index-latex', 'Thesis.tex', project,
+    ('index', 'Thesis.tex', project,
      'Peter Heatwole', 'memoir'),
 ]
 

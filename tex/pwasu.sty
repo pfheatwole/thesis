@@ -176,13 +176,14 @@
 }
 \setlength{\bibitemsep}{\onelineskip}
 \renewcommand*{\biblistextra}{%
-\setlength{\itemsep}{\bibitemsep}
+    \setlength{\itemsep}{\bibitemsep}
     \setlength{\labelwidth}{0pt}
     \setlength{\leftmargin}{3em}% hanging indent
-\setlength{\itemindent}{-\leftmargin}}
+    \setlength{\itemindent}{-\leftmargin}}
 \renewcommand*{\bibsection}{%
     \AsuSpacing
-    \chapter*{\bibname}\addcontentsline{toc}{chapter}{\bibname}
+    \addcontentsline{toc}{chapter}{\bibname}
+    \chapter*{\bibname}
     \SingleSpacing}
 
 %% endnotes
