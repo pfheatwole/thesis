@@ -14,9 +14,11 @@ Top-level documents are referenced using ``:doc:``. For example,
 
 Labels can either be explicit, like :ref:`common_notation` (which is using
 a explicit, and thus global, reST label), or they can be auto-generated using
-``sphinx.ext.autosectionlabel``. The catch is that for automatic labels, you
+``sphinx.ext.autosectionlabel``. For example,
+:ref:`introduction:Introduction`. The catch is that for automatic labels, you
 have to use the fully specified path from the index to the reST file. For
-example, :ref:`content/introduction:Introduction`
+example, if ``introduction.rst`` was in a subfolder ``source/content``, you'd
+need ``:ref:`content/introduction:Introduction```.
 
 Lastly, references can be numbered, using ``:numref:``, or labeled, using
 ``:ref:``. Beware, numbering starts with the top-level numbers, so if
