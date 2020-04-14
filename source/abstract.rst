@@ -14,7 +14,9 @@ ability to recreate the wind conditions from individual flights would enable
 the possibility of learning wind patterns from databases of recorded flights.
 
 [[I was using terminology like "feasibility", but I never did really establish
-feasibility, did I?]]
+feasibility, did I? **Maybe I can use flight test cases to demonstrate
+different flight scenarios that produce the same GPS track? Not the same as
+demonstrating success, but might at least demonstrate feasibility.**]]
 
 [[Elaborate: the purpose alone isn't good enough. **What were the outcomes?**
 For example, the stages of the proposed processing pipeline; the paraglider
