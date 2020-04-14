@@ -53,6 +53,29 @@ Drafting
    you really want, only then should you spend time creating them.
 
 
+Figures
+=======
+
+* Make a list of some useful figures for each section, where applicable
+
+* For each type of figure, develop a single, standard plotting function. Those
+  functions should adhere to the following rules: take a filename for saving
+  SVG files; text in SVG files should be left as text using "TeX Gyre Heros";
+  SVG outputs should not leave marginal whitespace.
+
+* Figure labels must be globally unique. Should prototype some standard label
+  prefixes. Might be based on the content of the figure (the specific object,
+  or that object's domain) or the section that contains the figure
+
+  At the least, it seems like a reasonable that **labels should match the
+  figure filename.** This will probably preclude using section names, since
+  I want to avoid renaming figure filenames if the sections change.
+
+  While I'm at it, **the figure sources should match the figure labels** as
+  well. It should be obvious where a figure came from.
+
+
+
 Editorial Tasks
 ===============
 
