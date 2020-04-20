@@ -38,7 +38,6 @@ Contents
    introduction
    paraglider_model
    flight_simulation
-   wind_prediction
    examples
 
 .. toctree::
