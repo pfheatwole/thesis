@@ -37,7 +37,6 @@ Contents
 
    introduction
    paraglider_model
-   flight_simulation
    examples
 
 .. toctree::
