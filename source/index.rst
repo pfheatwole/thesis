@@ -36,7 +36,6 @@ Contents
    :numbered:
 
    introduction
-   paraglider_model
    examples
 
 .. toctree::
