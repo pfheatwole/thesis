@@ -3,88 +3,31 @@ Introduction
 ************
 
 
-Introduction to a thesis
-========================
+Filtering
+=========
 
-The structure of an introduction to a thesis, as presented by "Explorations of
-Style":
+* Several great quotes from the introduction to "Particle filters and data
+  assimilation" (Fearnhead and Kunsch; 2018):
 
-1. Introduction to the introduction
+  "State space models can be used to incorporate subject knowledge on the
+  underlying dynamics of a time series by the introduction of a latent Markov
+  state-process." (This is the essence of what I'm doing, except a that I'm not
+  using the latent values to improve my estimate of the position: I'm
+  interested in the latent state itself.)
 
-   This section is a condensed version of the three moves (context, problem,
-   and response). For a thesis, this may be useful for "getting to the point"
-   more quickly than a full introduction, but without the extreme concision of
-   an abstract.
-
-2. Context
-
-   "Provides the full context in a way that flows from the opening."
-
-3. Restatement of the problem
-
-   "Restate the problem and significance in light of the more thoroughly
-   detailed context."
-
-4. Restatement of the response
-
-   Now that I've highlighted the set of problems, discuss my work towards
-   solving those problems. This time, leverage the detail in the *full*
-   context and restated problem description to elaborate on the details of the
-   response.
-
-5. Roadmap
-
-
-
-Intro to the Intro
-==================
-
-The introduction to the introduction is important to my project since the
-scope is so broad. Trying to establish the entire context in detail before
-getting to a description of what my thesis offers will make the reader wait
-a long time before they learn about my contribution. You need to **put the
-contribution of the paper front and center; the reader should know ASAP what
-they will gain by reading it.**
-
-John Swales' model for "Creating a Research Space" consists of three "moves":
-
-1. Establishing a research territory
- 
-2. Establishing a niche
- 
-3. Occupying the niche
-
- 
-(An alternative is "Context", "Problem and Significance", and "Response".)
-
-According to Explorations of Style, "An Introduction to the introduction [...]
-will be a short version of the three moves, often in as little as three
-paragraphs, ending with some sort of transition to the next section where the
-full context will be provided."
-
-In my case, I will first set the context (my research territory: paragliding
-dependencies on wind patterns), then introduce my motivating goal (my niche:
-learning wind patterns from flight data), then introduce how I've made
-progress towards goal (how I've occupied the niche: by building the flight
-reconstruction portion of the model).
-
-
-A brief introduction to paragliding
-===================================
-
-NT
+  "A state-space model specifies the joint distribution of all the variables
+  that are required for a dynamic model based on subject knowledge, and the
+  variables that have been observed."
 
 
 Relevant weather characteristics
 ================================
-
 
 Good general atmospheric references:
 
 * Atmospheric Thermodynamics (North, Erukhimova; 2009)
 
 * Atmospheric Science (Wallace, Hobbs; 2006)
-
 
 
 Some useful definitions:
@@ -224,7 +167,6 @@ Inversion layers
   that could be a really interesting model input. I'm guessing it'd be at
   least somewhat informative regarding the behavior of thermals in that region
   (presence/absence, etc).
-
 
 
 ***********
@@ -814,120 +756,32 @@ Force estimation
 Flight Reconstruction
 *********************
 
+The flight simulation section discussed how to use the paraglider model with
+known inputs (controls and wind) to generate state trajectories. Part of that
+discussion was to define the state variables. The flight reconstruction
+concept could start by defining *inverse problems* and *underdetermined
+systems*, which leads into probabilistic methods (*simulation-based
+filtering*). The purpose of flight reconstruction (in this context) is to determine the
+unknowns (here, those are the model parameters, the control inputs, and the
+wind vectors).
 
-This isn't (currently) a planned section in the thesis, but a holding place
-for some scattered thoughts related to all things flight reconstruction.
-Really, establishing the idea of "flight reconstruction" will probably happen
-in the introduction to the paper.
+Key points:
 
+* Bayesian filtering combines the observed data with prior knowledge of the
+  system to generate a joint distribution over all the variables. Bayesian
+  methods require a prior (over the state values and model parameters),
+  a likelihood (for the observed data), and model dynamics (for the state
+  transitions).
 
-Modelling
-=========
+* Monte Carlo methods generate the joint distribution by exploring the
+  possible space of plausible values. The exploration of different values uses
+  *proposals*. The proposals must incorporate existing knowledge of the
+  variables, including its constraints. For example, the model parameter
+  proposals should reflect realistic wing configurations. The wind dynamics
+  should not exceed realistic turbulence power distributions. Control inputs
+  should be relatively low frequency (eg, it's unlikely for the speedbar to go
+  from zero to maximum in a quarter of a second).
 
-
-Pilot Control Inputs
---------------------
-
-Should I model the pilot controls as *multivariate autoregressive Gaussian
-processes*? (See `turner2011GaussianProcessesState`, section 3.6)
-
-
-I'm unhappy with treating the four pilot controls as independent random walks
-(for the purpose of my filtering method), since that will generate mostly
-nonsense control sequences. There are several considerations for generating
-realistic pilot control sequences:
-
-* Controls don't change erratically (they are generally smooth)
-
-* Controls tend to change together (you don't want full left brake and right
-  weight shift, or full symmetric braking together with full speedbar)
-
-* Controls tend to be the result of a pilot attempting some maneuver (so you
-  can consider the controls a latent process of the unobserved "maneuver")
-
-
-For controlling smoothness, maybe an *integrated Ornstein-Uhlenbeck process*
-(which I think is like integrating a random walk over acceleration?), or
-a Gaussian process with an appropriately smooth kernel.
-
-For correlated controls (ie, how they vary together), I may want to think of
-the pilot controls as points on some "data generating manifold". This idea
-shows up in animation, using low-dimensional manifolds for generating
-high-dimensional human skeletal animations; see Wang's thesis
-`wang2005GaussianProcessDynamical`. The manifold is a kind of constraint on
-how the variables change together.
-
-For maneuvering, I have done no research, but this is important for realistic
-maneuvers. Without encoding a notion of maneuvers, you'll get very poor
-performance during constant input sequences, like during a 360. (Random walks
-and their ilk will be very unlikely to produce fixed brake positions, which
-are essential to smooth flights.)
-
-
-Notes to self in case Foxit crashes:
-
-* I'm currently reading "Pattern Recognition and Machine Learning", chapter 12
-  (continuous latent variables). I might then follow up with chapter 6 on
-  "kernel methods".
-
-* In Bishop, Chapter 6, page 296 (314), he has "Techniques for constructing
-  new kernels"
-
-
-Using a Gaussian process for the pilot controls
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-A Gaussian process is good for enforcing smoothness, and since they're good
-for human animation they're probably also good for handling the correlations
-and maneuvers. Another big advantage is that Gaussian probabilities are the
-easiest to combine with other methods that expect Gaussian random variables
-(eg, you can use the mean+covariance directly inside the GMSPPF?). I'm hoping
-that I can make the GMSPPF work together with the GP (the GMSPPF samples from
-the GP prior and updates the GP by using the posterior mixture as
-pseudo-observations), but there's a problem: **the GMSPPF seems nice for
-producing the filtering distribution, but not so nice for generating plausible
-state trajectories since the particles don't retain ancestor information**
-(you know the state distribution at each point, but for any point in that
-distribution you don't know the state distribution that led to that specific
-point).
-
-Aah, but wait: sure, that Gaussian mixture is a big lumpy distribution, but
-can't you just compute queries using each individual Gaussian mixture
-component **as if it was the only one** and adding their results?
-
-FULL STOP, THINK ABOUT WHAT YOU'RE DOING
-
-I've lost sight of the purpose here. The purpose of the GMSPPF is to drive
-forward the state of the wing (namely, it's pose); the evolution of that state
-is the result of the wing dynamics, given the wind and pilot controls as
-inputs. But what if I don't know the pilot controls? I need to place
-a distribution over that set of random variables as well; I also need
-a transition function to let them evolve over time, which means I need
-a dynamics model for the pilot controls. The dynamics model should encode
-realistic behaviors; I am thinking a Gaussian process is a good way to produce
-that encoding.
-
-
-Maneuvering Target Tracking
----------------------------
-
-"In manoeuvring target tracking, a primary trade-off is the robust tracking of
-manoeuvres against the accurate tracking of constant velocity (CV) motion."
-
-
-This is saying that you need to trade off between smooth motion accuracy (the
-constant velocity notion) versus accelerated maneuvers. White noise
-acceleration does provide a probability distribution with support over the
-constant velocity trajectory, but random walks are likely to generate
-unrealistic motion (aircraft are frequently well-described as CV, but random
-walks are virtually never CV).
-
-
-This is one of the different approaches I should highlight: maneuvering target
-tracking might use pre-defined maneuvers (structured dynamics) or random walk
-(unstructured). For example, the MH370 search used structured (pre-defined)
-maneuvers, but my random walk PF will probably use unstructured (random walk)
-proposals.
 
 
 Filtering
@@ -1085,56 +939,203 @@ their weights using the inexpensive likelihood. This method can reduce the
 number of expensive dynamics evaluations by several orders of magnitude.
 
 
+Modelling
+=========
+
+
+Pilot Control Inputs
+--------------------
+
+Should I model the pilot controls as *multivariate autoregressive Gaussian
+processes*? (See `turner2011GaussianProcessesState`, section 3.6)
+
+
+I'm unhappy with treating the four pilot controls as independent random walks
+(for the purpose of my filtering method), since that will generate mostly
+nonsense control sequences. There are several considerations for generating
+realistic pilot control sequences:
+
+* Controls don't change erratically (they are generally smooth)
+
+* Controls tend to change together (you don't want full left brake and right
+  weight shift, or full symmetric braking together with full speedbar)
+
+* Controls tend to be the result of a pilot attempting some maneuver (so you
+  can consider the controls a latent process of the unobserved "maneuver")
+
+
+For controlling smoothness, maybe an *integrated Ornstein-Uhlenbeck process*
+(which I think is like integrating a random walk over acceleration?), or
+a Gaussian process with an appropriately smooth kernel.
+
+For correlated controls (ie, how they vary together), I may want to think of
+the pilot controls as points on some "data generating manifold". This idea
+shows up in animation, using low-dimensional manifolds for generating
+high-dimensional human skeletal animations; see Wang's thesis
+`wang2005GaussianProcessDynamical`. The manifold is a kind of constraint on
+how the variables change together.
+
+For maneuvering, I have done no research, but this is important for realistic
+maneuvers. Without encoding a notion of maneuvers, you'll get very poor
+performance during constant input sequences, like during a 360. (Random walks
+and their ilk will be very unlikely to produce fixed brake positions, which
+are essential to smooth flights.)
+
+
+Notes to self in case Foxit crashes:
+
+* I'm currently reading "Pattern Recognition and Machine Learning", chapter 12
+  (continuous latent variables). I might then follow up with chapter 6 on
+  "kernel methods".
+
+* In Bishop, Chapter 6, page 296 (314), he has "Techniques for constructing
+  new kernels"
+
+
+Using Gaussian processes
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+A Gaussian process is good for enforcing smoothness, and since they're good
+for human animation they're probably also good for handling the correlations
+and maneuvers. Another big advantage is that Gaussian probabilities are the
+easiest to combine with other methods that expect Gaussian random variables
+(eg, you can use the mean+covariance directly inside the GMSPPF?). I'm hoping
+that I can make the GMSPPF work together with the GP (the GMSPPF samples from
+the GP prior and updates the GP by using the posterior mixture as
+pseudo-observations), but there's a problem: **the GMSPPF seems nice for
+producing the filtering distribution, but not so nice for generating plausible
+state trajectories since the particles don't retain ancestor information**
+(you know the state distribution at each point, but for any point in that
+distribution you don't know the state distribution that led to that specific
+point).
+
+Aah, but wait: sure, that Gaussian mixture is a big lumpy distribution, but
+can't you just compute queries using each individual Gaussian mixture
+component **as if it was the only one** and adding their results?
+
+FULL STOP, THINK ABOUT WHAT YOU'RE DOING
+
+I've lost sight of the purpose here. The purpose of the GMSPPF is to drive
+forward the state of the wing (namely, it's pose); the evolution of that state
+is the result of the wing dynamics, given the wind and pilot controls as
+inputs. But what if I don't know the pilot controls? I need to place
+a distribution over that set of random variables as well; I also need
+a transition function to let them evolve over time, which means I need
+a dynamics model for the pilot controls. The dynamics model should encode
+realistic behaviors; I am thinking a Gaussian process is a good way to produce
+that encoding.
+
+
+As a maneuvering target
+^^^^^^^^^^^^^^^^^^^^^^^
+
+"In manoeuvring target tracking, a primary trade-off is the robust tracking of
+manoeuvres against the accurate tracking of constant velocity (CV) motion."
+
+This is saying that you need to trade off between smooth motion accuracy (the
+constant velocity notion) versus accelerated maneuvers. White noise
+acceleration does provide a probability distribution with support over the
+constant velocity trajectory, but random walks are likely to generate
+unrealistic motion (aircraft are frequently well-described as CV, but random
+walks are virtually never CV).
+
+This is one of the different approaches I should highlight: maneuvering target
+tracking might use pre-defined maneuvers (structured dynamics) or random walk
+(unstructured). For example, the MH370 search used structured (pre-defined)
+maneuvers, but my random walk PF will probably use unstructured (random walk)
+proposals.
+
+
 ******************************
 Wind Estimation and Prediction
 ******************************
 
-* The purpose of an *online* predictive model (ie, during a flight) is
-  essentially to *calculate the conditional distribution over the wind
-  field*.
+* The goal of an *online* predictive model (ie, during a flight) is to
+  *calculate the conditional distribution over the wind field*. This goal
+  requires several steps:
+
+  1. Generate wind field point estimates from a single track
+  
+  #. Generate a wind field regression model from the point estimates
+  
+  #. Generate an set of wind field regressions models from a set of tracks
+  
+  #. Extract patterns from the set of wind field regression models
+  
+  #. Encode the patterns in a predictive Bayesian model (forecasting model)
+  
+  #. Generate wind field point estimates using an in-flight device
+  
+  #. Use the point estimates to generate a state of belief about the current
+       wind patterns
 
 
-Wind Estimation and Forecasting
--------------------------------
+* Perhaps I should start by surveying the different components of the
+  composite wind field (eg, the mean field, global shear, local shear,
+  updrafts, etc). Each component (horizontal and vertical features) may have
+  their own literature on estimation methods. This is also important for
+  honestly representing the difficulties in trying to estimate the wind field.
 
-* The first part is *wind field estimation* using position-only data
+* I must define the relevant terms: topography, convective boundary layer
 
-  It's possible that this is actually two steps: the particle filter may treat
-  each wind vector estimate as independent, or it may run a regression model
-  "on-line" as the wind vector particles appear. **I'm intrigued at the idea
-  of using the particle ensemble as a noisy observation with "on-line"
-  kriging.**
+* Am I planning on demonstrating a Gaussian process regression model for a 3D
+  wind field? Cokriging / multiple-output Gaussian processes are NOT trivial.
+  You might get decent results by treating each output dimension as
+  independent, but that doesn't seem likely.
 
-* The second part is *wind field forecasting* (building a predictive model)
 
-Both of these parts can be built using a different set of inputs/outputs
-(weather data, topographic data, flight data, etc) and different model
-components (weather model, paraglider model, etc)
+Point estimates
+---------------
 
-My paper should do a recap of wind vector estimation methods; for example, the
-circle method for estimating the horizontal components of wind, or thermal
-estimation algorithms (like that particle filter in
-`notter2018EstimationMultipleThermal`). I should review existing methods, and
-establish why they are not sufficient for my purposes. (For example, the
-circle method is unable to track thermals effectively, has poor spatial
-resolution, etc.) Most importantly, I should **always start by showing why the
-simple or "obvious" approaches to each task are insufficient.**
+* Should my paper should do a recap of wind vector estimation methods; for
+  example, the circle method for estimating the horizontal components of wind,
+  or thermal estimation algorithms (like that particle filter in
+  `notter2018EstimationMultipleThermal`). I should review existing methods,
+  and establish why they are not sufficient for my purposes. (For example, the
+  circle method is unable to track thermals effectively, has poor spatial
+  resolution, etc.) Most importantly, I should **always start by showing why
+  the simple or "obvious" approaches to each task are insufficient.**
 
-I have notes on the circling method in `~/wind/inbox/NOTES.md`, maybe I should
-organize them into a mini-section for the thesis. I already have code for the
-circle fitting, I could even have a few screenshots to show it off.
+  I have notes on the circling method in `~/wind/inbox/NOTES.md`, maybe
+  I should organize them into a mini-section for the thesis. I already have
+  code for the circle fitting, I could even have a few screenshots to show it
+  off.
 
-Perhaps I should start by surveying the different components of the composite
-wind field (eg, the mean field, global shear, local shear, updrafts, etc).
-Each component (horizontal and vertical features) may have their own
-literature on estimation methods.
+* I'm assuming the particle filter must rely on position only data from the
+  IGC file, but couldn't it incorporate "external" information? There are many
+  rich resources: mean weather values for the region, radiosonde data,
+  topographic information, weather models (eg, RASP), etc.
 
-I should probably summarize some of the relevant terms (topography, convective
-boundary layer, etc).
+* Sequential Monte Carlo methods typically use the Markov assumption for the
+  sequence of states, but is it possible to fit a regression model "on-line"
+  as the point estimates appear (as the particle filter moves forward), then
+  use that regression model for future wind proposals? (So future proposals
+  depend not only on the previous wind state, but also on the regression model
+  prediction for that point in space.) In a sense, if you consider the wind
+  field "current state" as capturing all previous wind field information,
+  I can see an argument for it satisfying the Markov assumption. Not sure how
+  you'd use it with a particle smoother though.
+
+
+Wind field regression
+---------------------
+
+* Do you use a grid? (I think this is equivalent to asking if you're using
+  a discrete or continuous regression model?) If you use a discrete grid, is
+  it a regular or irregular?
+
+* Do you use topographic features as extra inputs?
+
+* Is the regression model data-driven only, or does it incorporate physical
+  models of different wind features? (eg, does the regression model try to
+  detect wind features, such as thermals, shear lines, etc, and use physical
+  models as priors over that region?) Some papers that try to detect and
+  localize thermals then assign a physical model to each possible thermal and
+  estimate their parameters (see `notter2018EstimationMultipleThermal`).
 
 
 Kriging with non-Gaussian measurements
---------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 How does a kriging model deal with measurement uncertainty? More specifically,
 how can a kriging model (a multivariate Gaussian) incorporate measurements
@@ -1147,3 +1148,52 @@ wind vectors.
 For simplicity's sake, suppose the wind field at some point is bimodal; you
 have two significantly different possible values. Averaging a bimodal
 distribution gives an estimate that doesn't make *either* of the modes.
+
+
+Pattern Extraction
+------------------
+
+Key Points:
+
+* Each flight is a sample of some subset of a larger wind field that occurred
+  at some point in time and space. Perform a spatial or spatiotemporal
+  regression (kriging) over the noisy wind vector estimates from the flight to
+  build an estimate of the underlying wind field.
+
+* Each regression model is an observation of a particular configuration of the
+  wind field. The goal is to find patterns in the wind field configurations.
+  Use the set of wind field observations to reveal strongly correlated regions
+  of the wind field that can be used to predict each other.
+
+* A predictive model answers queries by seeing if any of the observed regions
+  are correlated with other locations of the wind field. Finding correlated
+  regions requires that sections of the wind field follow repeatable wind
+  configurations. (eg, "lift over here usually means sink over there", or "a
+  west wind over here means ridge lift over there")
+
+* Finding correlations between regions requires a large number of pairwise
+  observations of the correlated regions. (ie, you need flights that observe
+  both regions at the same time)
+
+* The wind field changes over time, so flights need to be aggregated by time
+  (open problem; group they by hour?).
+
+  How do you handle the spatiotemporal averaging? In terms of time, do you
+  group observations by a sliding 1-hour window, etc? In terms of space, do
+  you use a continuous regression model or do you use a grid?
+
+
+
+Wind field prediction
+---------------------
+
+Model Encoding
+^^^^^^^^^^^^^^
+
+* To be useable using an in-flight device with no access to cellular network,
+  the model must be self-contained, and it must meet the storage and
+  computation constraints of a low-power embedded device. How the model is
+  encoded is fundamental to how it is queried. [[Is it though? On-disk
+  encoding isn't necessarily the same as the in-memory representation; granted
+  though, the advantage of what I was doing was to make the on-disk model be
+  compact and directly queriable without loading it into memory.]]

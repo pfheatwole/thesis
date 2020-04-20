@@ -507,21 +507,21 @@ Reference: https://explorationsofstyle.com/2016/01/20/revising-out-loud/
 Introductions
 =============
 
-The standard model for structuring introductions uses three "moves":
+John Swales' model for "Creating a Research Space" consists of three "moves":
 
-1. Context
+1. Context ("Establishing a research territory")
    
    What your audience needs to know in order to understand the problem you are
    going to confront. May act as a refresher, or even a primer, to the topic,
    but will not discuss new material.
 
-2. Problem (and Significance)
+2. Problem and Significance ("Establishing a niche")
    
    What you want to accomplish, and why it will matter to have done so. The
    mere existence of a problem isn't sufficient, you should establish the
    motivation for your upcoming work.
 
-3. Response
+3. Response ("Occupying a niche")
    
    What you are actually going to do in your research to address the problem.
 
@@ -542,9 +542,13 @@ Thesis Introductions
 
 Because a thesis is such a large body of work, it can require special
 considerations. The reader should not have to wait for a complete and thorough
-context before they hear the problem. You may want to start with a big picture
-version of the three moves. An **introduction to the introduction**, if you
-will. This can be as little as three paragraphs preceding the full context.
+context before they hear the problem. You may want to start with an
+abbreviated version of the three moves. An **introduction to the
+introduction**, if you will.
+
+   "An Introduction to the introduction [...] will be a short version of the
+   three moves, often in as little as three paragraphs, ending with some sort
+   of transition to the next section where the full context will be provided."
 
 For example, your introduction might be structured as follows:
 
@@ -555,14 +559,19 @@ For example, your introduction might be structured as follows:
 
 2. Context
 
+   "Provides the full context in a way that flows from the opening."
+
 3. Restatement of the problem
+
+   "Restate the problem and significance in light of the more thoroughly
+   detailed context."
    
    Your big picture problem description was probably vague, but now that
    you've established a more detailed context you can elaborate on the finer
    points of the problem.
 
 4. Restatement of the response
-   
+
    Same deal as before: leverage the detail presented in the full context to
    elaborate on the details of the response.
 
@@ -854,6 +863,82 @@ How to write a paper
 
 Author: Oded Goldreich
 
+Really drives that the only way to produce a good paper is to be aware of the
+**purpose** of the paper. (This jives with my own frustrations: I'm not sure
+what my goal is, so I wander and flounder.)
+
+
+The purpose of a scientific paper
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+He argues that **the purpose of a scientific paper** is to communicate an idea
+(or set of ideas) to people who have the ability to either:
+
+1. Utilize the idea (make good use of it)
+
+1. Extend the idea (carry it further)
+
+Key quote: **"The first thing to do before starting to write a paper is to ask
+'what is the idea that the paper is intended to communicate?"**, where an idea
+can be:
+
+1. New ways of looking at objects ("models")
+
+2. New ways of manipulating objects ("methods" or "techniques")
+
+3. New facts concerning objects ("results")
+
+To summarize, the key idea (the model, method, or result) is intended for some
+audience that will either utilize or extend it. The people that are likely to
+utilize or extend it are the *relevant community*. **Identifying the relevant
+community is the second major step before starting to write.**
+
+The relevant community is reading this paper to achieve better understanding.
+A scientific paper fosters better understanding by *having relevant
+information* and *rearranging it in new ways*. It is the duty of the writer to
+help the reader extract the relevant information in order to foster their
+understanding.
+
+
+The needs of the reader
+^^^^^^^^^^^^^^^^^^^^^^^
+
+There is a flood of information available, so the writer must quickly and
+clearly identify the new ideas presented in the paper (starting with a good
+title)
+
+First and foremost: focus on the needs of the reader, not the desires of the
+writer. Some ways a writer can get distracted by their own desires instead of
+the needs of the reader:
+
+* Adding everything they know about the subject matter (writers love to
+  demonstrate mastery and knowledge)
+
+* Presenting the idea in the most general way possible instead of the most
+  natural (general concepts are enticing because they seem more profound)
+
+* Using terms, phrases, and notation based on personal idiosyncrasies instead
+  of focusing on simplicity
+
+* Skipping clear distinctions that establish the structure/hierarchy of the
+  information (ie, they assume the relationships are obvious)
+
+* Exploring all the subtleties and refinements of an idea when it's first
+  introduced, **before** clarifying the fundamentals of the idea.
+
+Another way to leave a reader in the dark is to lack awareness of what
+knowledge the reader has acquired by that point in the paper. The most obvious
+problem is to use terms that have not be clearly defined, but more subtle
+problems arise when the writer assumes the reader fully internalized
+a difficult concept soon after it was introduced. The writer should ask if the
+usage of a topic is developing slowly enough that it doesn't require large
+jumps on the part of the reader's understanding.
+
+And finally, explicit references are king. Implicit pointers such as "it" and
+"this" that refer to entities previously reference in a paragraph require the
+reader to maintain additional context; avoid pronouns if it's not unwieldy to
+use the name of the thing itself. 
+
 
 ******************************
 How to Write a Technical Paper
@@ -866,7 +951,166 @@ TODO
 Ten Simple Rules for Structuring Papers
 ***************************************
 
-TODO
+Authors: Mensh, Kording (2017)
+
+This paper presents ten rules: four are *principles* that apply to all parts
+of a paper, four deal with the *primary goals of the components of a paper*,
+and two provide guidance on the *process* of constructing the paper.
+
+
+Paper-wide principles (Rules 1-4)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. *Focus the paper on a central contribution, which you communicate in the
+   title.*
+
+   "The title is the ultimate refinement of the paper's contribution." This
+   not only communicates the purpose to the reader, but also guides the writer
+   towards developing support for their central thesis.
+
+2. *Write for flesh-and blood human beings who do not know your work.*
+
+   "For each element, determine the impact you want to have on people and then
+   strive to achieve that objective."
+
+   "Define technical terms clearly." Avoid magic like "a well known property
+   of cross product matrices". Explicit is better than implicit.
+
+3. *Stick to the context-content-conclusion (C-C-C) scheme.*
+
+   Stories use a beginning, body, and ending (context, content, and
+   conclusion). For the patient reader that's interested in absorbing the
+   content, setting the context establishes why the content matters. (More
+   impatient readers are better engaged by jumping to the content quickly, but
+   you can support "impatient" reading with good signposting and section
+   titles.)
+
+   Another advantage of "context first" is to establish credibility of the
+   task, or at least feasibility. If the content is surprising, it can help to
+   prep the reader towards believing the content is feasible.
+
+   The C-C-C scheme works at whole-paper scale (introduction, chapters,
+   conclusion) as well as at the paragraph scale (first sentence, body,
+   closing sentence).
+
+   **Beware violating the C-C-C scheme in an attempt to tell your personal
+   story of discovery.** Some readers might be interested in an
+   autobiographical tale of your work, but most readers want the distilled
+   output, not its chronological development.
+
+4. *Optimize your logical flow by avoiding zig-zag and using parallelism.*
+
+   "**Only the central idea of the paper should be touched upon multiple
+   times**. Otherwise, each subject should be covered in only one place in
+   order to minimize the number of subject changes."
+  
+   "Across consecutive paragraphs or sentences, **parallel messages should be
+   communicated with parallel form**. Parallelism makes it easier to read the
+   text because the reader is familiar with the structure."
+
+
+The components of a paper (Rules 5-8)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+5. *Tell a complete story in the abstract.*
+
+   "The context must communicate to the reader what gap the paper will fill.
+   The first sentence orients the reader by introducing the broader field in
+   which the particular research is situation. Then, this context is narrowed
+   until it lands on the open question that the research answered."
+
+   "The content ("Here we...") first describes the novel method or approach
+   that you used to fill the gap or question."
+
+   "The conclusion interprets the results to answer the question that we
+   posted at the end of the context section."
+
+   "This structure helps you avoid **the most common mistake with the
+   abstract, which is to talk about results before the reader is ready to
+   understand them.** Good abstracts usually take many iterations of
+   refinement to make sure the results fill the gap like a key fits its lock."
+
+6. *Communicate why the paper matters in the introduction.*
+
+   "The introduction highlights the gap that exists in current knowledge or
+   methods and why it is important."
+
+   "The structure of each introduction paragraph (except the last) serves the
+   goal of developing the gap."
+
+   The introduction differs from the abstract in several ways:
+
+   1. It **does not need to present the context**.
+
+   2. It is **somewhat more specific about the results**.
+
+   3. It **only briefly previews the conclusion of the paper**, if at all.
+
+7. *Deliver the results as a sequence of statements, supported by figures,
+   that connect logically to support the central contribution.*
+
+   "**The results section needs to convince the reader that the central claim
+   is supported by data and logic.**"
+
+   "In the outlining phase of the paper preparation, sketch out the logical
+   structure of how your results support your claim and convert this into
+   a sequence of declarative statements that become the headers of subsections
+   within the results section (and/or the titles of figures."
+
+   "Figures, their titles, and legends, are particularly important because
+   they show the most objective support (data) of the steps that culminate in
+   the paper's claim."
+
+   "The title of the figure should communicate the conclusion of the analysis,
+   and the legend should explain how it was done."
+
+   "The first results paragraph is special in that it typically summarizes the
+   overall approach to the problem outline in the introduction, along with any
+   key innovative methods that were developed." Imagine the reader was
+   impatient and skipped reading the methods, instead jumping straight to the
+   conclusion. This is your best chance to convince them that something
+   important was accomplished.
+
+   "Each subsequent paragraph in the results section starts with a sentence or
+   two that sets up the question that the paragraph answers. [...] This
+   structure makes it easy for experience readers to fact-check a paper
+   [because] it makes it easy to find the paragraph in which a suspicious
+   conclusion is drawn and to check the logic of that paragraph."
+
+8. *Discuss how the gap was filled, the limitations of the interpretation, and
+   the relevance to the field.*
+
+   The discussion section:
+
+   1. Explains how the results have filled the gap
+
+   2. Provides caveats to the interpretation
+
+   3. Describes how the paper advances the field (by providing new
+      opportunities)
+
+   "*The first discussion paragraph is special in that it generally summarizes
+   the important findings from the results* section. Some readers skip over
+   substantial parts of the results, so this paragraph at least gives them the
+   gist of that section. *Each of the following paragraphs in the discussion
+   section starts by describing an area of weakness or strength of the paper*.
+
+
+The Writing Process (Rules 9-10)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+9. *Allocate time where it matters: the title, abstract, figures, and
+   outlining.*
+
+   "The title, abstract, and figures are viewed by far more people that the
+   rest of the paper, and the methods section is read least of all. Budget
+   accordingly."
+
+10. *Get feedback to reduce, reuse, and recycle the story.*
+
+
+**Table:1 (on page 8) provides excellent signs that the rules are being
+violated.**
 
 
 ***********************************************************************
