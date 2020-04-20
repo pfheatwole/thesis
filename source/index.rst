@@ -38,7 +38,6 @@ Contents
    introduction
    paraglider_model
    flight_simulation
-   flight_reconstruction
    wind_regression
    wind_patterns
    wind_prediction
