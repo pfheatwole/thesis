@@ -2,6 +2,16 @@
 Introduction
 ************
 
+Purpose
+=======
+
+* One likely complaint is the inaccuracy of GPS data, so I should confront
+  this early on, and discuss why I think it might be worth trying anyway.
+  First, just because it's *less* accurate doesn't mean the results aren't
+  still *useful*. Also, GPS continues to improve in accuracy; the fact that
+  older tracks were often inaccurate shouldn't mean we can't start designing
+  a system for newer tracks with better accuracy.
+
 
 Filtering
 =========
@@ -11,7 +21,7 @@ Filtering
 
   "State space models can be used to incorporate subject knowledge on the
   underlying dynamics of a time series by the introduction of a latent Markov
-  state-process." (This is the essence of what I'm doing, except a that I'm not
+  state-process." (This is the essence of what I'm doing, except that I'm not
   using the latent values to improve my estimate of the position: I'm
   interested in the latent state itself.)
 
@@ -20,185 +30,12 @@ Filtering
   variables that have been observed."
 
 
-Relevant weather characteristics
-================================
-
-Good general atmospheric references:
-
-* Atmospheric Thermodynamics (North, Erukhimova; 2009)
-
-* Atmospheric Science (Wallace, Hobbs; 2006)
-
-
-Some useful definitions:
-
-* "The *geoid* is the shape the ocean surface would take under the influence
-  of gravity **and the rotation of the Earth** alone, if other influences such
-  as winds and tides were absent." This is not a sphere, or even an oblate
-  ellipsoid; it is an irregular surface, since the Earth does not have uniform
-  density; the surface of the goid is higher than the reference ellipsoid
-  wherever there a mass excess, and lower than the reference ellipsoid
-  wherever there is a mass deficit. All points on the geoid have the same
-  *effective potential* (the sum of gravitational potential energy **and**
-  centrifugal potential energy).
-
-* *geopotential altitude* is "calculated from a mathematical model that
-  adjusts the altitude to include the variation of gravity with height"
-
-* *geometric altitude* is "the standard direct vertical distance above mean
-  sea level"
-
-
-Lapse rates
------------
-
-* Lapse rates are typically given in terms of geopotential altitude (not
-  geometric altitude)
-
-* The *dry adiabatic lapse rate* is 10.0 C/km. The *moist adiabatic lapse
-  rate* is 0.55 C/km. The average lapse rate defined by the international
-  standard atmosphere is 6.49 C/km (the ISA model is "based on average
-  conditions at mid latitudes"). The average is between the dry and moist
-  adiabatic lapse rates, which makes sense.
-
-
-* Super-adiabatic lapse rates
-
-  How can the environmental lapse rate be *greater* than the DALR? **I think
-  I'm missing the significance of adiabatic processes.** I'm guessing the dry
-  adiabatic rate is kind of a reference line; if you go above or below this
-  nicely behaved curve, stability changes.
-
-  According to `theweatherprediction.com`, a super-adiabatic lapse rate is
-  usually caused by intense solar heating at the surface.
-
-
-* How does an adiabatic process work?
-
-  "An *adiabatic process* occurs without transfer of heat or mass of
-  substances between a thermodynamic system and its surroundings. In an
-  adiabatic process, energy is transferred to the surroundings only as
-  *work*."
-
-* I'm planning to group group all the {altitude, pressure} measurements into
-  a single set, and fit them to a single dry adiabatic curve. Does my "fit to
-  a single dry adiabatic curve" equivalent to saying that I'm pretending that
-  those measurements were all taken from the same parcel of air rising through
-  an adiabatic expansion?  Seems like a rather strong assumption.
-
-  Also, I'm assuming that the lapse rate doesn't vary with horizontal changes.
-  **Is this reasonable?** For example, around mountainous terrain, if the
-  boundary layer follows the topography, then the air near the mountain will
-  probably be hotter than the air further away, right? (ie, I'm assuming that
-  neighboring region will have roughly the same temperature at the same AGL?)
-
-
-Convective boundary layer
--------------------------
-
-Synonyms: *convective planetary boundary layer*, *atmospheric mixing layer*,
-*dry adiabatic layer*
-
-* The CBL is a PBL when positive buoyancy flux at the surface creates
-  a thermal instability and thus generates additional or even major turbulence
-  (aka, *convective available potential energy*, or CAPE)"
-
-* "A CBL is typical in tropical and mid-latitudes during daytime."
-
-
-* How far up do thermals extend? That is, how high can paragliders fly?
-
-  According to `garratt1994ReviewAtmosphericBoundary`, it is generally below
-  [2 - 3] km, but over deserts in mid-summer under strong surface heating the
-  ABL may be as much as 5 km deep, and even deeper in conditions of vigorous
-  cumulonimbus convection"
-
-
-In `oberson2010ConvectiveBoundaryLayer`, he emphasizes that this is the layer
-mixed by **dry** thermals; do you never have thermals in saturated air?
-
-
-
-Inversion layers
-----------------
-
-* What is an inversion layer?
-
-  When the atmospheric temperature is increasing instead of decreasing with
-  altitude.
-
-* What are the types of thermal inversions?
-
-  There are *surface* inversions near the Earth, and vs *aloft* 
-
-
-* What is the range of altitudes where they're likely to occur? Under what
-  conditions are they more common (hot or cold days)? What is the role of
-  local geography (eg, mountains increase thermal inversions in valleys)?
-
-  (Sounds like in Salt Lake City they're more common during the winter, but
-  I'm not sure if that generalizes to "they're more common during cold days".)
-
-* What are the effects of a thermal inversion layer?
-
-  * Temperature inversions block atmospheric convection. (Describe *stable*
-    versus *unstable* air; note that "unstable" is not the same as
-    "turbulent"; "instability" refers to the amount of positive bouyancy).
-    This lack of mixing traps pollutants, so air quality decreases.
-
-    I suspect this also reduces the maximum height of thermals?
-
-  * As rain falls into cooler if, it can produce freezing rain.
-
-* How do thermal inversions relate to lapse rates?
-
-* How likely are paragliders to encounter thermal inversions? (ie, how
-  important/relevant are they for the purposes of my thesis?)
-
-  They are more common above valleys surrounded by mountains, so I suppose
-  mountain flying is more likely. (Ridge soaring is typically lower altitude
-  anyway, isn't it?)
-
-
-* What are the differences between a *thermal inversion layer* and *cloud
-  base*?
-
-* Interesting sidenote: if you're able to reliably detect thermal inversions,
-  that could be a really interesting model input. I'm guessing it'd be at
-  least somewhat informative regarding the behavior of thermals in that region
-  (presence/absence, etc).
-
-
-*************
-Wind Features
-*************
-
-* I'm claiming the wind is really important to paragliders; I should describe
-  the basic features of wind fields. :cite:`bencatel2013AtmosphericFlowField`
-  categorizes the main types of wind field features (shear, updraft, and gusts)
-
-* The most basic wind field is still air. Another basic test case is a uniform
-  wind field, where the wind vectors are the same everywhere; the uniform wind
-  field is useful to verify glider performance (a 360 turn in a non-zero wind
-  field should produce a drifting helix, not a circle).
-
-  The more interesting scenarios are where the wind vector is variable in time
-  and/or space. Although real wind conditions are complex and variable, for
-  testing purposes it is useful to focus on specific features. In
-  :cite:`bencatel2013AtmosphericFlowField` they identify three basic categories
-  of wind behavior: wind shear, updrafts, and gusts. Shear is a change in the
-  wind vector for a change in position, updrafts (and downdrafts) are non-zero
-  vertical components of the wind vector, and gusts are changes (typically
-  rapid, turbulent changes) to the wind magnitude and/or direction.
-
-
 ***********
 Flight Data
 ***********
 
-This section of the paper will discuss the data I will use (IGC tracks), its
-limitations, and how I plan to mitigate those limitations.
-
+This section of the paper will discuss the data I want to use (IGC tracks),
+its limitations, and how I plan to mitigate those limitations.
 
 I've been wrestling with how to break down this information, and I suspect my
 answer lies in Bayesian modelling, as usual: the key is to **separate the raw
@@ -207,7 +44,6 @@ observe; they are noisy, but are *observable* with respect to some
 relationship with the data. So, break up "here's the raw data I have to work
 with", and "here are the random variables I can estimate from that noisy
 data".
-
 
 I'd like to get some (small) amount of credit for the work I did on parsing
 and cleaning the IGC code. I need to think about *how I present this work*.
@@ -225,7 +61,6 @@ the purposes of recreating the wind field for a given track. (Remember,
 building a regression model over a single wind field is different from
 extracting patterns from a *set* of wind fields.)
 
-
 Extra notes:
 
 * IGC tracks intended for official scoring (so called "IGC FR" tracks, versus
@@ -234,10 +69,6 @@ Extra notes:
 
 Timestamps
 ==========
-
-<TODO>
-
-Some important aspects:
 
 * These allow me to define *sequences* of data. Any data that has sequential
   structure with respect to time will gain additional information since the
@@ -261,11 +92,9 @@ variometer uses an atmospheric pressure sensor, which it converts to the
 *pressure altitude*: the geopotential altitude that would produce the given
 pressure measurement under standard atmospheric conditions.
 
-
 [[Geopotential altitude is directly useable in conservation of energy
 calculations, while pressure altitude is more convenient for pilots that need
 to assess the expected aerodynamic performance of their aircraft.]]
-
 
 Both types of measurement have advantages and disadvantages. GNSS altitudes
 are less susceptible to systematic bias, but processing delays mean they often
@@ -289,7 +118,6 @@ problems.
 
 2. Computing the true geopotential altitude from the pressure sensor data
    using the correct, non-ISA atmospheric conditions
-
 
 Estimating the true atmospheric conditions lets you compute the air density,
 and use the sensitive pressure measurements to produce better geopotential
@@ -404,7 +232,6 @@ Questions
   temperature! That might be easier than looking for a nearby reference
   temperature.
 
-
 * What about inversion layers? Should I attempt change point detection?
 
   I will probably only observe a small layer of atmosphere; if the lapse rate
@@ -433,7 +260,6 @@ speed of light and time of flight calculations from a set of satellites, the
 users position lies at the intersection of the measured ranges.
 
 
-
 Open Questions
 --------------
 
@@ -458,7 +284,6 @@ Random Notes
   an integral number of seconds." (Wikipedia:GPS Signals)
 
 
-
 Accuracy and Precision
 ----------------------
 
@@ -467,7 +292,6 @@ References:
 * `https://wiki.openstreetmap.org/wiki/Accuracy_of_GPS_data`
 
 * `Global Navigation Satellite Systems and their applications`; Madry, 2015
-
 
 Notes
 
@@ -483,7 +307,6 @@ Notes
   5 meters or better 95% of the time."
 
   See: https://www.gps.gov/technical/ps/2008-SPS-performance-standard.pdf
-
 
 * "[The] government commits to broadcasting the GPS signal in space with
   a global average *user range error* (URE) of ≤7.8 m (25.6 ft.), with 95%
@@ -516,12 +339,11 @@ Notes
 * "GPS devices typically need to receive signals from **at least 7 or
   8 satellites** to calculate location to within about 10 meters."
 
-  ref: https://support.strava.com/hc/en-us/articles/216917917-Why-is-GPS-data-sometimes-inaccurate-
-
+  See:
+  https://support.strava.com/hc/en-us/articles/216917917-Why-is-GPS-data-sometimes-inaccurate-
 
 * Some devices can combine multiple satellite systems (eg, GPS and GLONASS) to
   improve accuracy.
-
 
 What factors affect GNSS accuracy?
 
@@ -575,12 +397,8 @@ What factors affect GNSS accuracy?
   * Attenuated signals: signals are partially or totally blocked by absorption
     or reflection (examples: inside an aircraft, backpack, etc)
 
-
-How does GNSS accuracy degrade? What do the errors look like?
-
-* TODO: non-Gaussian noise
-
-* TODO: dilution of precision
+* How does GNSS accuracy degrade? What do the errors look like? (discuss
+  non-Gaussian noise, "dilution of precision", etc)
 
 
 Historical GPS accuracy
@@ -622,7 +440,7 @@ the two-sigma error was 6.3m.
 Do receivers automatically benefit from disabled SA, or did they require
 special support?
 
-ref: `https://www.gps.gov/systems/gps/modernization/sa/data/`
+See: `https://www.gps.gov/systems/gps/modernization/sa/data/`
 
 
 Fix Latency
@@ -639,7 +457,6 @@ Sources
 Read `http://catb.org/gpsd/performance.html`. Search for "list of stages",
 which discusses the processing pipeline of that application; good conceptual
 starting point for this question.
-
 
 For a reasonably representative "worst case scenario", suppose a UART at
 `9600baud, 8+1 coding`. That's `9600/9 ~= 1067` bytes/second. The standard
@@ -658,6 +475,303 @@ purposes. Errors are typically measured in nanoseconds.
 
 * See
   `https://electronics.stackexchange.com/questions/30750/why-do-gps-receivers-have-a-1-pps-output`
+
+
+Data preparation
+================
+
+Key Points:
+
+* In order to perform flight reconstruction on actual flights, you need to
+  parse, sanity check, clean, and transform the IGC data into the format
+  required by the dynamics model.
+
+* The outputs from this stage are the only parts of the flight that were
+  observed; everything else must be simulated. These data limitations
+  establish the constraints for the flight reconstruction stage.
+
+Example tasks:
+
+* Sanitize the timestamps
+
+* Debias the variometer data (via dynamic time warping or similar)
+
+* Estimate atmospheric conditions (air density in particular)
+
+
+******************
+Bayesian Filtering
+******************
+
+This section establishes the "how": how I take what I have (flight data) and
+turn it into what I need. Establishing the general form of the Bayesian filter
+will motivate the necessary pieces (the dynamics models, the data, etc)
+regardless of the filter architecture (I think?)
+
+
+Forward versus Inverse Problems
+===============================
+
+"Inverse problems include both parameter estimation and function estimation.
+[...] A common characteristic is that we attempt to infer causes from measured
+effects. A forward, or direct problem has known causes that produce effects or
+results defined by the mathematical model.  Because the measured data is often
+noisy or indistinct, the solution to the inverse problem may be difficult to
+obtain accurately."
+
+**Can I say that my application of particle filtering is to use a forward
+problem (the flight simulator) to produce a solution to the inverse problem?**
+
+Inverse problems are about inferring causes from the observed effects; seems
+like a good description of what I'm doing (only I have a tiny sample of
+observed effects; namely, a change in position over time).
+
+
+Probabilistic inference / simulation-based filtering
+====================================================
+
+I liked this sentence in Duvenaud's dissertation: "*Probabilistic inference*
+takes a group of hypotheses (a *model*) and weights those hypotheses based on
+how well their predictions match the data." **I often use the term
+"simulation-based filtering", but maybe I should review that term.**
+
+"**data** driven forecasting" vs "**model** driven forecasting"
+
+See `reich2015ProbabilisticForecastingBayesian`
+
+* Model driven: eg, by analyzing topography (for example, RASP)
+
+* Data driven: eg, by analyzing flight tracks (like von Kaenel's thesis)
+
+Basically, do you look at the observations alone (with no though to the
+underlying model), or do you also refer to the "surrogate process" from which
+they were generated?
+
+He describes "data-driven" as "bottom-up", or *empirical* models, whereas
+"model-driven" are "top-down" or *mechanistic* models. Empirical models rely
+on the data, mechanistic models rely on the model dynamics.
+
+On page 182: "model-based forecast uncertainties taking the role of prior
+distributions"
+
+
+
+Data Assimilation
+=================
+
+*Data assimilation* is to geophysics what *filtering* is to engineering. They
+both deal with the *state estimation problem* by combining theory (models)
+with observations (data). See `fearnhead2018ParticleFiltersData`. (I like this
+paper. One of its stated goals is to encourage interoperability between
+geophysics and engineering disciplines. Section 1.2 has a very helpful
+overview of the related terminologies of the two fields.)
+
+I should try to phrase my problem in terms of both, or however makes sense to
+tie in the geophysics realm. There's probably a bunch of good literature to
+cite.
+
+
+Validation
+==========
+
+I read somewhere that a guy complained about testing your model by fitting it
+against simulated data (or something; he didn't like the idea that "yay, we
+recreated data we expected!" was not helpful). Gelman, on the other hand, is
+a huge fan of *fake-data simulation*, where you generate data from a model
+using "true" parameters, then observing the behavior of the statistical
+procedures (how well they work, how they fail). There is a related procedure
+called *predictive simulation*, where you fit a model, generate data from it,
+then compare that generated data to the actual data (I believe this is also
+called *posterior predictive checking*). See
+:cite:`gelman2007DataAnalysisUsing`.
+
+
+The *curse of dimensionality* refers to needing **more** data as the dimension
+increases, so you have to pursue the *blessing of abstraction*: the more
+structure you account for, the **less** data you need. (FIXME: I don't think
+this is the correct use of the phrase *blessing of abstraction*, which refers
+to the observation that sometimes its easier to a learn general knowledge
+faster than specific knowledge?)
+
+   ^^ This is a concept I need to highlight in my thesis, since it motivates
+   my detail efforts. The more information I want to squeeze out of the data,
+   the more structure I need to introduce. You don't get something for
+   nothing: for every question you want to answer, you need either need more
+   data or more structural information (like paraglider wing dynamics)
+
+
+Jittering
+=========
+
+If the process noise is small, you don't get much variation in the particles
+during the time update. One way to decrease the odds of sample impoverishment
+is to use *jittering*. See `fearnhead1998SequentialMonteCarlo`, page 53
+
+
+
+*******
+Weather
+*******
+
+Good general atmospheric references:
+
+* Atmospheric Thermodynamics (North, Erukhimova; 2009)
+
+* Atmospheric Science (Wallace, Hobbs; 2006)
+
+
+Some useful definitions:
+
+* "The *geoid* is the shape the ocean surface would take under the influence
+  of gravity **and the rotation of the Earth** alone, if other influences such
+  as winds and tides were absent." This is not a sphere, or even an oblate
+  ellipsoid; it is an irregular surface, since the Earth does not have uniform
+  density; the surface of the geoid is higher than the reference ellipsoid
+  wherever there a mass excess, and lower than the reference ellipsoid
+  wherever there is a mass deficit. All points on the geoid have the same
+  *effective potential* (the sum of gravitational potential energy **and**
+  centrifugal potential energy).
+
+* *geopotential altitude* is "calculated from a mathematical model that
+  adjusts the altitude to include the variation of gravity with height"
+
+* *geometric altitude* is "the standard direct vertical distance above mean
+  sea level"
+
+
+Lapse rates
+===========
+
+* Lapse rates are typically given in terms of geopotential altitude (not
+  geometric altitude)
+
+* The *dry adiabatic lapse rate* is 10.0 C/km. The *moist adiabatic lapse
+  rate* is 0.55 C/km. The average lapse rate defined by the international
+  standard atmosphere is 6.49 C/km (the ISA model is "based on average
+  conditions at mid latitudes"). The average is between the dry and moist
+  adiabatic lapse rates, which makes sense.
+
+* Super-adiabatic lapse rates
+
+  How can the environmental lapse rate be *greater* than the DALR? **I think
+  I'm missing the significance of adiabatic processes.** I'm guessing the dry
+  adiabatic rate is kind of a reference line; if you go above or below this
+  nicely behaved curve, stability changes.
+
+  According to `theweatherprediction.com`, a super-adiabatic lapse rate is
+  usually caused by intense solar heating at the surface.
+
+* How does an adiabatic process work?
+
+  "An *adiabatic process* occurs without transfer of heat or mass of
+  substances between a thermodynamic system and its surroundings. In an
+  adiabatic process, energy is transferred to the surroundings only as
+  *work*."
+
+* I'm planning to group group all the {altitude, pressure} measurements into
+  a single set, and fit them to a single dry adiabatic curve. Does my "fit to
+  a single dry adiabatic curve" equivalent to saying that I'm pretending that
+  those measurements were all taken from the same parcel of air rising through
+  an adiabatic expansion?  Seems like a rather strong assumption.
+
+  Also, I'm assuming that the lapse rate doesn't vary with horizontal changes.
+  **Is this reasonable?** For example, around mountainous terrain, if the
+  boundary layer follows the topography, then the air near the mountain will
+  probably be hotter than the air further away, right? (ie, I'm assuming that
+  neighboring region will have roughly the same temperature at the same AGL?)
+
+
+Convective boundary layer
+=========================
+
+Synonyms: *convective planetary boundary layer*, *atmospheric mixing layer*,
+*dry adiabatic layer*
+
+* The CBL is a PBL when positive buoyancy flux at the surface creates
+  a thermal instability and thus generates additional or even major turbulence
+  (aka, *convective available potential energy*, or CAPE)"
+
+* "A CBL is typical in tropical and mid-latitudes during daytime."
+
+* How far up do thermals extend? That is, how high can paragliders fly?
+
+  According to `garratt1994ReviewAtmosphericBoundary`, it is generally below
+  [2 - 3] km, but over deserts in mid-summer under strong surface heating the
+  ABL may be as much as 5 km deep, and even deeper in conditions of vigorous
+  cumulonimbus convection"
+
+In `oberson2010ConvectiveBoundaryLayer`, he emphasizes that this is the layer
+mixed by **dry** thermals; do you never have thermals in saturated air?
+
+
+Inversion layers
+================
+
+* What is an inversion layer?
+
+  When the atmospheric temperature is increasing instead of decreasing with
+  altitude.
+
+* What are the types of thermal inversions?
+
+  There are *surface* inversions near the Earth, and vs *aloft* 
+
+* What is the range of altitudes where they're likely to occur? Under what
+  conditions are they more common (hot or cold days)? What is the role of
+  local geography (eg, mountains increase thermal inversions in valleys)?
+
+  (Sounds like in Salt Lake City they're more common during the winter, but
+  I'm not sure if that generalizes to "they're more common during cold days".)
+
+* What are the effects of a thermal inversion layer?
+
+  * Temperature inversions block atmospheric convection. (Describe *stable*
+    versus *unstable* air; note that "unstable" is not the same as
+    "turbulent"; "instability" refers to the amount of positive bouyancy).
+    This lack of mixing traps pollutants, so air quality decreases.
+
+    I suspect this also reduces the maximum height of thermals?
+
+  * As rain falls into cooler if, it can produce freezing rain.
+
+* How do thermal inversions relate to lapse rates?
+
+* How likely are paragliders to encounter thermal inversions? (ie, how
+  important/relevant are they for the purposes of my thesis?)
+
+  They are more common above valleys surrounded by mountains, so I suppose
+  mountain flying is more likely. (Ridge soaring is typically lower altitude
+  anyway, isn't it?)
+
+* What are the differences between a *thermal inversion layer* and *cloud
+  base*?
+
+* Interesting sidenote: if you're able to reliably detect thermal inversions,
+  that could be a really interesting model input. I'm guessing it'd be at
+  least somewhat informative regarding the behavior of thermals in that region
+  (presence/absence, etc).
+
+
+Wind Features
+=============
+
+* I'm claiming the wind is really important to paragliders; I should describe
+  the basic features of wind fields. :cite:`bencatel2013AtmosphericFlowField`
+  categorizes the main types of wind field features (shear, updraft, and gusts)
+
+* The most basic wind field is still air. Another basic test case is a uniform
+  wind field, where the wind vectors are the same everywhere; the uniform wind
+  field is useful to verify glider performance (a 360 turn in a non-zero wind
+  field should produce a drifting helix, not a circle).
+
+  The more interesting scenarios are where the wind vector is variable in time
+  and/or space. Although real wind conditions are complex and variable, for
+  testing purposes it is useful to focus on specific features. In
+  :cite:`bencatel2013AtmosphericFlowField` they identify three basic categories
+  of wind behavior: wind shear, updrafts, and gusts. Shear is a change in the
+  wind vector for a change in position, updrafts (and downdrafts) are non-zero
+  vertical components of the wind vector, and gusts are changes (typically
+  rapid, turbulent changes) to the wind magnitude and/or direction.
 
 
 ****************
@@ -1134,112 +1248,11 @@ Key points:
   should be relatively low frequency (eg, it's unlikely for the speedbar to go
   from zero to maximum in a quarter of a second).
 
-
-
-Filtering
-=========
-
-Forward versus Inverse Problems
--------------------------------
-
-"Inverse problems include both parameter estimation and function estimation.
-[...] A common characteristic is that we attempt to infer causes from measured
-effects. A forward, or direct problem has known causes that produce effects or
-results defined by the mathematical model.  Because the measured data is often
-noisy or indistinct, the solution to the inverse problem may be difficult to
-obtain accurately."
-
-**Can I say that my application of particle filtering is to use a forward
-problem (the flight simulator) to produce a solution to the inverse problem?**
-
-Inverse problems are about inferring causes from the observed effects; seems
-like a good description of what I'm doing (only I have a tiny sample of
-observed effects; namely, a change in position over time).
-
-
-Probabilistic inference / simulation-based filtering
-----------------------------------------------------
-
-I liked this sentence in Duvenaud's dissertation: "*Probabilistic inference*
-takes a group of hypotheses (a *model*) and weights those hypotheses based on
-how well their predictions match the data." **I often use the term
-"simulation-based filtering", but maybe I should review that term.**
-
-"**data** driven forecasting" vs "**model** driven forecasting"
-
-See `reich2015ProbabilisticForecastingBayesian`
-
-* Model driven: eg, by analyzing topography (for example, RASP)
-
-* Data driven: eg, by analyzing flight tracks (like von Kaenel's thesis)
-
-Basically, do you look at the observations alone (with no though to the
-underlying model), or do you also refer to the "surrogate process" from which
-they were generated?
-
-He describes "data-driven" as "bottom-up", or *empirical* models, whereas
-"model-driven" are "top-down" or *mechanistic* models. Empirical models rely
-on the data, mechanistic models rely on the model dynamics.
-
-On page 182: "model-based forecast uncertainties taking the role of prior
-distributions"
-
-
-
-Data Assimilation
------------------
-
-*Data assimilation* is to geophysics what *filtering* is to engineering. They
-both deal with the *state estimation problem* by combining theory (models)
-with observations (data). See `fearnhead2018ParticleFiltersData`. (I like this
-paper. One of its stated goals is to encourage interoperability between
-geophysics and engineering disciplines. Section 1.2 has a very helpful
-overview of the related terminologies of the two fields.)
-
-I should try to phrase my problem in terms of both, or however makes sense to
-tie in the geophysics realm. There's probably a bunch of good literature to
-cite.
-
-
-Validation
-----------
-
-I read somewhere that a guy complained about testing your model by fitting it
-against simulated data (or something; he didn't like the idea that "yay, we
-recreated data we expected!" was not helpful). Gelman, on the other hand, is
-a huge fan of *fake-data simulation*, where you generate data from a model
-using "true" parameters, then observing the behavior of the statistical
-procedures (how well they work, how they fail). There is a related procedure
-called *predictive simulation*, where you fit a model, generate data from it,
-then compare that generated data to the actual data (I believe this is also
-called *posterior predictive checking*). See
-:cite:`gelman2007DataAnalysisUsing`.
-
-
-The *curse of dimensionality* refers to needing **more** data as the dimension
-increases, so you have to pursue the *blessing of abstraction*: the more
-structure you account for, the **less** data you need. (FIXME: I don't think
-this is the correct use of the phrase *blessing of abstraction*, which refers
-to the observation that sometimes its easier to a learn general knowledge
-faster than specific knowledge?)
-
-   ^^ This is a concept I need to highlight in my thesis, since it motivates
-   my detail efforts. The more information I want to squeeze out of the data,
-   the more structure I need to introduce. You don't get something for
-   nothing: for every question you want to answer, you need either need more
-   data or more structural information (like paraglider wing dynamics)
-
-
-Jittering
----------
-
-If the process noise is small, you don't get much variation in the particles
-during the time update. One way to decrease the odds of sample impoverishment
-is to use *jittering*. See `fearnhead1998SequentialMonteCarlo`, page 53
+* Ultimately, flight reconstruction is a *filtering problem*.
 
 
 Cramer-Rao
-----------
+==========
 
 A big design point of my filter is that I know I won't get super precise
 estimates, but all I need are **sufficiently** precise estimates.
@@ -1267,7 +1280,7 @@ terms.**
 
 
 Proposal Distributions
-----------------------
+======================
 
 The great issue then becomes the number of proposals necessary to get a good
 empirical estimate of the true state probability distribution; in general, the
@@ -1291,16 +1304,11 @@ their weights using the inexpensive likelihood. This method can reduce the
 number of expensive dynamics evaluations by several orders of magnitude.
 
 
-Modelling
-=========
-
-
 Pilot Control Inputs
 --------------------
 
 Should I model the pilot controls as *multivariate autoregressive Gaussian
 processes*? (See `turner2011GaussianProcessesState`, section 3.6)
-
 
 I'm unhappy with treating the four pilot controls as independent random walks
 (for the purpose of my filtering method), since that will generate mostly
@@ -1314,7 +1322,6 @@ realistic pilot control sequences:
 
 * Controls tend to be the result of a pilot attempting some maneuver (so you
   can consider the controls a latent process of the unobserved "maneuver")
-
 
 For controlling smoothness, maybe an *integrated Ornstein-Uhlenbeck process*
 (which I think is like integrating a random walk over acceleration?), or
@@ -1332,7 +1339,6 @@ maneuvers. Without encoding a notion of maneuvers, you'll get very poor
 performance during constant input sequences, like during a 360. (Random walks
 and their ilk will be very unlikely to produce fixed brake positions, which
 are essential to smooth flights.)
-
 
 Notes to self in case Foxit crashes:
 
@@ -1396,6 +1402,17 @@ tracking might use pre-defined maneuvers (structured dynamics) or random walk
 (unstructured). For example, the MH370 search used structured (pre-defined)
 maneuvers, but my random walk PF will probably use unstructured (random walk)
 proposals.
+
+
+Likelihood function
+===================
+
+The likelihood function answers "how probable is this observation given the
+state+model?" My only observable is the GPS data, and I'll need to choose
+a noise model. GPS errors are often non-Gaussian, but that's still a common
+choice. I should at least mention that, and that there are some methods for
+attempting to "check the estimator for consistency" (eg, using a *Chi^2 test*;
+see `bar-shalom2004EstimationApplicationsTracking`, Sec:1.4.17)
 
 
 ******************************
@@ -1533,7 +1550,6 @@ Key Points:
   How do you handle the spatiotemporal averaging? In terms of time, do you
   group observations by a sliding 1-hour window, etc? In terms of space, do
   you use a continuous regression model or do you use a grid?
-
 
 
 Wind field prediction

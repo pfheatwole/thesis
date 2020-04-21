@@ -1,27 +1,37 @@
 Content Tasks
 =============
 
-* **Define concrete "key ideas" for the paper.** It drives how I develop the
-  entire paper, both in structure and content.
 
-* Convert the key ideas into a new outline.
+Drafting
+--------
 
-* Convert the new outline into a new structure.
+#. **Define the concrete "key ideas" for the paper.** It drives how I develop
+   the entire paper, both in structure and content.
 
-  Several of the sections are unlikely to remain as-is (wind field regression,
-  pattern detection, prediction). It may be useful to sequester the old
-  content; I doubt it's terribly useful anyway, so remove the clutter.
+#. Develop a topic outline. (Topic ordering implicitly encodes dependencies.)
 
-  I need to think of the most simplistic context-content-conclusion
-  sentences/paragraphs possible and get the skeleton right before adding in
-  the meat.
+#. Write an informal overview of the goal, problems, resources, and solutions.
+   This should be conversational: I can get through a description of my
+   project when talking to the Mohlers, I should be able to put it down on
+   paper. The key is to avoid getting hung up on the technical specifics.
+   Those can be filled in later.
 
-* Write an "introduction to the introduction". **Don't make the reader wait
-  a long time to understand my contribution.**
+#. Write an "introduction to the introduction". **Don't make the reader wait
+   a long time to understand my contribution.**
 
-* Draft a full abstract.
+#. Draft a full abstract.
 
-* Draft a full introduction.
+#. Draft a full introduction.
+
+#. Review each section has adequately description assumptions. You need to
+   establish the assumptions and constraints of your method to make sure you
+   don't overpromise.
+
+#. Annotate the informal draft with **text-only** descriptions of good
+   supporting material (figure descriptions, equations, code references, etc.)
+   Don't worry about actually producing those elements; this is about
+   establishing a pathway to a cohesive structure: once you know what elements
+   you really want, only then should you spend time creating them.
 
 
 References
@@ -35,26 +45,6 @@ References
 * The "REFERENCES" link in the PDF is one page too high.
 
 * The REFERENCES in the PDF should come *before* the appendices?
-
-
-Drafting
---------
-
-#. Write an informal overview of the goal, problems, resources, and solutions.
-   This should be conversational: I can get through a description of my
-   project when talking to the Mohlers, I should be able to put it down on
-   paper. The key is to avoid getting hung up on the technical specifics.
-   Those can be filled in later.
-
-#. Review each section has adequately description assumptions. You need to
-   establish the assumptions and constraints of your method to make sure you
-   don't overpromise.
-
-#. Annotate the informal draft with **text-only** descriptions of good
-   supporting material (figure descriptions, equations, code references, etc.)
-   Don't worry about actually producing those elements; this is about
-   establishing a pathway to a cohesive structure: once you know what elements
-   you really want, only then should you spend time creating them.
 
 
 Figures
@@ -77,7 +67,6 @@ Figures
 
   While I'm at it, **the figure sources should match the figure labels** as
   well. It should be obvious where a figure came from.
-
 
 
 Editorial Tasks

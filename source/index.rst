@@ -36,6 +36,7 @@ Contents
    :numbered:
 
    introduction
+   bayesian_filtering
    examples
 
 .. toctree::
