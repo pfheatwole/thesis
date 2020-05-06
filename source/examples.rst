@@ -63,7 +63,7 @@ converting SVG into PDF manually, use the Sphinx extension
 latex builder.
 
 .. _wind_triangle:
-.. figure:: images/wind_triangle.*
+.. figure:: figures/wind_triangle.*
 
    A Wind Triangle
 
