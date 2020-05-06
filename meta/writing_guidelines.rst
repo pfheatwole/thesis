@@ -68,6 +68,7 @@ on those raw materials.
 that they can fix the problems that are inevitably created during the
 composition process."
 
+
 Two complimentary methods for checking structural cohesion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -96,9 +97,9 @@ Some activities that can be described as revision
 
 * Word choice: is the vocabulary appropriate?
 
-* sentence structure: are the sentences easy for the reader to follow?
+* Sentence structure: are the sentences easy for the reader to follow?
 
-* transitions between sentences, paragraphs, and sections: is the ordering
+* Transitions between sentences, paragraphs, and sections: is the ordering
   optimal, and have you signalled that order to the reader?
 
 * Tone: have you engaged the reader while still conforming to academic writing
@@ -110,7 +111,7 @@ Some activities that can be described as revision
   your writing?
 
 
-Coarse-to-Fine Issue Ordering
+Coarse-to-Fine Issue Priority
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is helpful to recognize the different broader issues you will encounter,
@@ -128,8 +129,8 @@ suggests this ordering:
 
    Also important is to remember: **Content that may have been necessary in an
    old draft may no longer be serving a purpose in the edited text.** It might
-   be good to sequester these sections elsewhere until you can verify if
-   they're truly valuable.
+   be good to sequester these sections elsewhere until you can determine their
+   value.
 
 2. Clarity
    
@@ -150,8 +151,8 @@ suggests this ordering:
 
 This method of focusing on specific issues also encourages time efficient
 reviews: **don't try to fix all types of issues at once**. For example, by the
-time you're to the proof reading stage you probably don't to keep fiddling
-with document structure (which is likely to introduce new errors). **Be strict
+time you're to the proofreading stage you shouldn't still be fiddling with
+document structure (which is likely to introduce new errors). **Be strict
 about what type of revision you're doing.**
 
 
@@ -198,11 +199,13 @@ The Needs of Your Reader
 
 * Avoid "hedging"
 
-* Exude confidence that the reader can grasp the topic: it is my job to make
-  it clear, and yes, the topic can be clearly communicated, whatever it is.
+* Exude confidence that the reader can grasp the topic: it is the writer's job
+  to make it clear, and yes, the topic can be clearly communicated, whatever
+  it is.
 
 * Avoid "the curse of knowledge": don't lose track of what the *reader* needs
-  to know
+  to know (the "curse" is the writer losing sight of the knowledge they have
+  that the reader might not)
 
 * "Readers are entitled to a one-way trip through a piece of writing"
 
@@ -253,45 +256,44 @@ There are several things you can signal to the reader:
   Another example: "This claim raises an obvious question" signals to the
   reader that you're addressing what you believe to be a glaring issue.
 
-* How the text reflects the authors role:
+* How the text reflects the author's role:
 
   * "My use of the term ..."
 
   * "I will attempt to..."
 
 It can be helpful to review your use of of these signals. The author presented
-four questions to challenge and encourage growth in using metadiscourse, and
-recommends dedicating some revision time to asking these questions:
+**four questions to challenge and encourage growth in using metadiscourse**,
+and recommends dedicating some revision time to asking these questions:
 
-* If we are using some sorts of metadiscourse *routinely*, are we doing it
-  well?
+1. If we are using some sorts of metadiscourse *routinely*, are we doing it
+   well?
   
-* If we are *avoiding* some sorts of metadiscourse, can we deepen our
-  understanding of the norms of academic writing to be sure this judgement is
-  based on a sound understanding of disciplinary practice?
+2. If we are *avoiding* some sorts of metadiscourse, can we deepen our
+   understanding of the norms of academic writing to be sure this judgement is
+   based on a sound understanding of disciplinary practice?
   
-* If we are using some sorts of metadiscourse *hesitantly or inexpertly*,
-  could we improve our understanding of the value of such devices for the
-  reader and thus overcome our reservations?
+3. If we are using some sorts of metadiscourse *hesitantly or inexpertly*,
+   could we improve our understanding of the value of such devices for the
+   reader and thus overcome our reservations?
   
-* Lastly, if we are under-using some sorts of metadiscourse because we *lack
-  a sufficiently deep understanding of our own text*, can we learn how to
-  develop that understanding in order to meet the reader’s need for guidance
-  through our text?
+4. Lastly, if we are under-using some sorts of metadiscourse because we *lack
+   a sufficiently deep understanding of our own text*, can we learn how to
+   develop that understanding in order to meet the reader’s need for guidance
+   through our text?
 
 *Signposting* is the element of metadiscourse that manages the reader's
 expectations by signaling how the document is structured. This is important
 anywhere structure exists and would be helpful to be made explicit. However,
 signposting *what* you're going to do isn't as helpful as first communicating
 *why* the *what* is necessary. Consider "I will discuss particle filtering."
-versus "Recreating the flight requires filling in missing pieces; this type of
-artificial data generation is known as simulation-based filtering. One such
-method is the particle filter."
+versus "Recreating the flight requires filling in missing information; this
+type of artificial data generation is known as simulation-based filtering. One
+such method is the particle filter."
 
 Metadiscourse can even be helpful to the writer: similar to scaffolding,
 declaring your intent ("I will...") can guide your own thinking, but may be
 removed or refined after serving its purpose.
-
 
 
 Five Key Strategies
@@ -905,7 +907,7 @@ The needs of the reader
 
 There is a flood of information available, so the writer must quickly and
 clearly identify the new ideas presented in the paper (starting with a good
-title)
+title).
 
 First and foremost: focus on the needs of the reader, not the desires of the
 writer. Some ways a writer can get distracted by their own desires instead of
@@ -934,10 +936,10 @@ a difficult concept soon after it was introduced. The writer should ask if the
 usage of a topic is developing slowly enough that it doesn't require large
 jumps on the part of the reader's understanding.
 
-And finally, explicit references are king. Implicit pointers such as "it" and
-"this" that refer to entities previously reference in a paragraph require the
-reader to maintain additional context; avoid pronouns if it's not unwieldy to
-use the name of the thing itself. 
+And finally, explicit references are king. Avoid implicit pointers such as
+"it" and "this" that refer to entities from earlier in a paragraph require the
+reader to maintain additional context; use proper names instead of vague
+pronouns when possible.
 
 
 ******************************
@@ -1153,30 +1155,25 @@ abstract for a paper:
 
 4. State the consequences of your solution
 
-
-How do these correspond to blog posts that don't necessarily introduce a novel
-solution? They can still establish that a topic exists (the problem) and why
-it's worth studying (the consequences), the solution (the knowledge of methods
-discussed by the post for dealing with that problem), and the consequences of
-that solution (what you should learn by reading this post)
-
-
-Some examples
--------------
-
-Topic: Encoding Rotations with a Quaternion
+As an example, suppose the topic is "Encoding Rotations with Quaternions":
 
 1. In engineering, you frequently need to describe how something is rotated
    relative to a starting position.
 
 2. In three dimensions, a rotation must describe a rotation relative to all
-   three axes. The most intuitive solution is to describe three independent,
-   sequential rotations, but this is computationally expensive and introduces
-   a failure called "gimbal lock".
+   three axes. A common solution is *Euler angles*, which describe three
+   independent, sequential rotations about each axis. This method is
+   conceptually simple, but suffers from a failure called "gimbal lock".
 
-3. Instead of describing three separate rotations, an alternative is to encode
-   a new axis, and a rotation around that axis.
+3. Instead of describing three sequential rotations, an alternative is to
+   encode and a single rotation around a specific axis.
 
 4. A compact and numerically efficient way to encode an axis-angle
    representation of a 3D rotation is to use a set of four numbers called
-   a "quaternion".
+   a *quaternion*.
+
+How do these statements translate to blog posts that don't necessarily
+introduce a novel solution? They can still establish that a topic exists (the
+problem) and why it's worth studying (the consequences), the solution (the
+knowledge of methods discussed by the post for dealing with that problem), and
+the consequences of that solution (what you should learn by reading this post)
