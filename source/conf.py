@@ -107,7 +107,7 @@ html_title = project  # Override "<project>'s documentation"
 # documentation.
 #
 html_theme_options = {
-    'logo': 'hook3_freecad_clear.png',
+    'logo': 'hook3_vectorized_opt.svg',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
