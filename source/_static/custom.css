@@ -1,0 +1,9 @@
+/* Alabaster has a problem on mobile where the widths are too large. I haven't
+ * looked into it closely, but this works for now.
+ *
+ * See: https://github.com/web-platform-tests/wpt/issues/20014
+ */
+div.body {
+  min-width: auto;
+  max-width: auto;
+}
