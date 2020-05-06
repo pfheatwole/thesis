@@ -37,6 +37,8 @@ Contents
 
    introduction
    bayesian_filtering
+   paraglider_geometry
+   paraglider_dynamics
    examples
 
 .. toctree::
