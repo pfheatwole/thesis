@@ -61,8 +61,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Paragliding Wind Reconstruction'
-copyright = '2019, Peter Heatwole'
+project = 'Paraglider Flight Reconstruction'
+copyright = '2020, Peter Heatwole'
 author = 'Peter Heatwole'
 
 # The version info for the project you're documenting, acts as replacement for

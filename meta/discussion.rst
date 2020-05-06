@@ -2,8 +2,16 @@
 Introduction
 ************
 
-Purpose
-=======
+* Is my "intro to the intro" too long?
+
+* In my "intro to the intro", I setup the big picture problem (pattern
+  detection over regression models built from position-only flight data), but
+  my response on deals with a portion of that problem. So my "restatement of
+  the response" must highlight where my contributes fit into that big picture.
+
+
+Purpose/Motivation
+==================
 
 * One likely complaint is the inaccuracy of GPS data, so I should confront
   this early on, and discuss why I think it might be worth trying anyway.
@@ -13,8 +21,28 @@ Purpose
   a system for newer tracks with better accuracy.
 
 
+Intuitive Development
+=====================
+
+This is the non-mathematical development of the idea.
+
+
+Mathematical Development
+========================
+
+NT
+
+
+Wind Reconstruction
+-------------------
+
+I can probably break this into two categories: structured, and unstructured.
+Structured approaches in the vast majority of "thermal localization and
+tracking" papers.
+
+
 Filtering
-=========
+---------
 
 * Several great quotes from the introduction to "Particle filters and data
   assimilation" (Fearnhead and Kunsch; 2018):
@@ -28,6 +56,12 @@ Filtering
   "A state-space model specifies the joint distribution of all the variables
   that are required for a dynamic model based on subject knowledge, and the
   variables that have been observed."
+
+* This section should motivate the need for a dynamics model (or "motion
+  model") and a likelihood function (same thing as a "measurement model"?)
+
+  I'll need to explicitly call out my decision to convert the latitude and
+  longitude data into a tangent-plane coordinate system.
 
 
 ***********
@@ -83,28 +117,28 @@ Altitude
 ========
 
 IGC tracks include two measurements of altitude: one from a GNSS device, and
-one from a variometer.
-
-Although both devices report an altitude, the two variables are not
-equivalent. The GNSS uses signals from multiple satellites to measure the
-*geopotential altitude*: the vertical distance above the mean sea level. The
-variometer uses an atmospheric pressure sensor, which it converts to the
-*pressure altitude*: the geopotential altitude that would produce the given
-pressure measurement under standard atmospheric conditions.
+one from a variometer. The GNSS device measures signals from multiple
+satellites to determine the current *geodetic altitude*: the distance above
+the WGS84 reference ellipsoid. The variometer measures air pressure to
+determine the current *pressure altitude*: the distance above the WGS84
+reference ellipsoid that would produce the measured atmospheric pressure under
+international standard atmosphere (ISA) conditions.
+:cite:`2016IGCFlightRecorder`
 
 [[Geopotential altitude is directly useable in conservation of energy
 calculations, while pressure altitude is more convenient for pilots that need
 to assess the expected aerodynamic performance of their aircraft.]]
 
-Both types of measurement have advantages and disadvantages. GNSS altitudes
-are less susceptible to systematic bias, but processing delays mean they often
-lag behind the true position of the aircraft; this lag makes GNSS signals less
-reliable for capturing rapid altitude fluctuations. [[**Does GPS lag apply to
-horizontal the same as to the vertical? What causes GPS lag?**]] The pressure
-sensor in a variometer is more capable of capturing rapid altitude
-fluctuations, but the assumptions it makes when converting the atmospheric
-pressure to pressure altitude mean it contains a systematic,
-altitude-dependent bias.
+Both types of measurement have advantages and disadvantages. GNSS estimates
+are more prone to "spurious" fixes: relatively large, random displacements
+from the true position. GNSS altitudes are less susceptible to systematic
+bias, but processing delays mean they often lag behind the true position of
+the aircraft; this lag makes GNSS signals less reliable for capturing rapid
+altitude fluctuations. [[**Does GPS lag apply to horizontal the same as to the
+vertical? What causes GPS lag?**]] The pressure sensor in a variometer is more
+capable of capturing rapid altitude fluctuations, but the assumptions it makes
+when converting the atmospheric pressure to pressure altitude mean it contains
+a systematic, altitude-dependent bias.
 
 A flight reconstruction filter will need accurate estimates of both the
 geopotential altitude and the air density, but the IGC data only includes the
@@ -255,30 +289,17 @@ of light for the amount of time delay **as measured by the local clock**. The
 relative delay relies on the local oscillator, which may be imprecise.
 [[FIXME: verify this paragraph]]
 
-Positions are determined by trilateration [[or multilateration]]: using the
+Positions are determined by *trilateration* (or *multilateration*): using the
 speed of light and time of flight calculations from a set of satellites, the
 users position lies at the intersection of the measured ranges.
 
 
-Open Questions
---------------
+Technical Details
+-----------------
 
 * What are *ephemeris*?
 
-* What are "real-time kinematics"?
-
-
-Random Notes
-------------
-
-* Possibly want to define the common accuracy measures (root mean square, "2
-  drms" is "twice the distance root mean square error", circular error
-  probable (CEP), spherical error probable (SEP), etc)
-
-  ref: https://www.gpsworld.com/gps-accuracy-lies-damn-lies-and-statistics/
-
-* Discuss *dilution of precision*, its types, and their effects. In
-  particular, differentiate vertical and horizontal DoP.
+* What are *real-time kinematics*?
 
 * "GPS time does not follow UTC leap seconds. So GPS time is ahead of UTC by
   an integral number of seconds." (Wikipedia:GPS Signals)
@@ -294,6 +315,15 @@ References:
 * `Global Navigation Satellite Systems and their applications`; Madry, 2015
 
 Notes
+
+* Possibly want to define the common accuracy measures (root mean square, "2
+  drms" is "twice the distance root mean square error", circular error
+  probable (CEP), spherical error probable (SEP), etc)
+
+  See: https://www.gpsworld.com/gps-accuracy-lies-damn-lies-and-statistics/
+
+* What is *dilution of precision*? Discuss the different types and their
+  effects. In particular, differentiate vertical and horizontal DoP.
 
 * "GPS provides two levels of service: Standard Positioning Service (SPS) and
   Precise Positioning Service (PPS)."
@@ -497,6 +527,11 @@ Example tasks:
 * Debias the variometer data (via dynamic time warping or similar)
 
 * Estimate atmospheric conditions (air density in particular)
+
+* Track segmentation. The filter assumes the paraglider is "in-flight", so
+  this implies detecting takeoff and landing, as well as dealing with stall
+  conditions (which essentially break up the track by rapidly ramping
+  uncertainty).
 
 
 ******************
@@ -1307,13 +1342,8 @@ number of expensive dynamics evaluations by several orders of magnitude.
 Pilot Control Inputs
 --------------------
 
-Should I model the pilot controls as *multivariate autoregressive Gaussian
-processes*? (See `turner2011GaussianProcessesState`, section 3.6)
-
-I'm unhappy with treating the four pilot controls as independent random walks
-(for the purpose of my filtering method), since that will generate mostly
-nonsense control sequences. There are several considerations for generating
-realistic pilot control sequences:
+There are several considerations for generating realistic pilot control
+sequences:
 
 * Controls don't change erratically (they are generally smooth)
 
@@ -1323,9 +1353,30 @@ realistic pilot control sequences:
 * Controls tend to be the result of a pilot attempting some maneuver (so you
   can consider the controls a latent process of the unobserved "maneuver")
 
-For controlling smoothness, maybe an *integrated Ornstein-Uhlenbeck process*
-(which I think is like integrating a random walk over acceleration?), or
-a Gaussian process with an appropriately smooth kernel.
+I'm unhappy with treating the four pilot controls as independent random walks
+(for the purpose of my filtering method), since that will generate mostly
+nonsense control sequences. Also, common random walk stochastic processes such
+as *integrated white noise* or an *integrated Ornstein-Uhlenbeck process* are
+**mean reverting**, which may not be good for control inputs, because why
+would you assume a particular mean value?
+
+It's also a problem that the controls range from `0` to `1`, so the random
+walk must be constrained. You can use a Gaussian random walk with a logistic
+transform over the output to map `(-inf, +inf)` onto `(0, 1)`, but you'll need
+to adjust the magnitude of the step size near the bounds (and even then you'll
+never actually reach them), and the nonlinear transform means the steps will
+be more likely to revert to `0.5` than towards the bounds.
+
+
+And even if you solve the bounds issue, there's still the issue of "does the
+output resemble a realistic control sequence?" Control inputs do tend to have
+lots of little variations as the wing bounces around, but they're dominated by
+periodic *manuevers* where the controls vary together systematically (ie, they
+become highly correlated). Random walks will produce particularly poor
+performance during constant input maneuvers, like during a 360 turn. (Random walks
+and their ilk will be very unlikely to produce fixed brake positions, which
+are essential to smooth flights.)
+
 
 For correlated controls (ie, how they vary together), I may want to think of
 the pilot controls as points on some "data generating manifold". This idea
@@ -1334,20 +1385,61 @@ high-dimensional human skeletal animations; see Wang's thesis
 `wang2005GaussianProcessDynamical`. The manifold is a kind of constraint on
 how the variables change together.
 
-For maneuvering, I have done no research, but this is important for realistic
-maneuvers. Without encoding a notion of maneuvers, you'll get very poor
-performance during constant input sequences, like during a 360. (Random walks
-and their ilk will be very unlikely to produce fixed brake positions, which
-are essential to smooth flights.)
+* Should I model the pilot controls as *multivariate autoregressive Gaussian
+  processes*? (See `turner2011GaussianProcessesState`, section 3.6)
 
-Notes to self in case Foxit crashes:
+* **How is this done in human motion tracking?** Do they use previously
+  learned manifolds to perform a sort of "maneuvering target tracking", where
+  they determine what "maneuver" the human is performing and choose the
+  manifold for that maneuver?
 
-* I'm currently reading "Pattern Recognition and Machine Learning", chapter 12
-  (continuous latent variables). I might then follow up with chapter 6 on
-  "kernel methods".
 
-* In Bishop, Chapter 6, page 296 (314), he has "Techniques for constructing
-  new kernels"
+* There's some good info in "Pattern Recognition and Machine Learning". I like
+  Chapter:6 (kernel methods) and Chapter:12 (continuous latent variables).
+
+
+* I like the terminology used in `li2003SurveyManeuveringTarget`: they're
+  discussing the *input estimation problem*, and separate the methods into two
+  categories: *model-based* and *model-free*.
+
+  Model-based methods rely on some concept of *maneuvers*: prior knowledge of
+  likely input sequences. These can be hand-crafted or learned from data. Maneuvers
+  (particularly in high dimensional space, such as human motion) are often the
+  output of a process over some low-dimensional latent space; if you can learn
+  the manifold over that low-dimensional space and the mapping to the high
+  dimensional space, you can track the target via the latent variables.
+
+  Model-free methods are essentially random walks: they assume no prior
+  knowledge of likely input sequences. (Although they may assume knowledge of
+  the derivatives, leading to things like *integrated white noise*.) These are
+  simple to implement, but are likely to have excessively high variance
+  compared to realistic inputs.
+
+* Decision-based maneuvering target tracking is a *decision problem*. You must
+  decide about the onset and termination of a maneuver, which makes this
+  a *track segmentation problem*, which is ultimately a *change-point
+  detection problem*. (see "Part IV" of Li's "Maneuvering target tracking"
+  survey series).
+
+* Li (`li2002SurveyManeuveringTarget`) says that *decision* is selection from
+  a discrete set of candidates, whereas *estimation* is selection from
+  a continuum of candidates. So if you have a predefined set of maneuvers, you
+  have a decision-based problem (the current maneuver). If the target's
+  control inputs operate on a continuum, you have an estimation problem (the
+  current value of the input).
+
+* Interesting sidenote: consider the likely inputs from a pilot; there's a lot
+  of potential structure there. They're unlikely to symmetric brakes with
+  accelerator because it defeats the purpose. They're unlikely to use small
+  (eg, 5%) asymmetric brake inputs with accelerator since it may exhibit
+  inverted control authority. They're more likely to use weight shift with
+  accelerator for directional control. They're unlikely to use small
+  asymmetric input for a long duration, unless they're deliberately "crabbing"
+  into the wind (a huge radius 360 is uncommon).
+
+  Suppose you low-pass filtered the true control inputs. Would it look roughly
+  like a sequence of maneuver inputs? (eg, straight, left turn, straight, left
+  turn, hard left turn)
 
 
 Using Gaussian processes
@@ -1413,6 +1505,29 @@ a noise model. GPS errors are often non-Gaussian, but that's still a common
 choice. I should at least mention that, and that there are some methods for
 attempting to "check the estimator for consistency" (eg, using a *Chi^2 test*;
 see `bar-shalom2004EstimationApplicationsTracking`, Sec:1.4.17)
+
+Some of the problems with the GPS data in an arbitrary IGC file:
+
+* Unknown raw signal noise characteristics observed by the device
+
+* Unknown signal filtering performed by the device
+
+* Quantization effects from encoding lossy GPS coordinates in the IGC file
+
+
+Filter Validation
+=================
+
+One of the advantages of Bayesian methods is that you have a *generative
+model*: given all the dynamics you can generate new sample tracks, degrade
+them with synthetic noise, then use it to check the performance of the filter.
+
+It would be cool to show how the GPS coordinates degrades with different types
+of noise (Gaussian and Student-T in particular). If I had a working filter I'd
+love to see how different noise models (the true noise versus the noise model
+in the likelihood function) affect filter performance. I don't have a working
+filter, but I think this is still worth mentioning. Namely, **one of my
+deliverables is a generative model that can be used for filter validation**.
 
 
 ******************************

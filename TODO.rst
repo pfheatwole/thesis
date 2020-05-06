@@ -1,12 +1,30 @@
+* Does "Bayesian filtering" deserve it's own chapter, or should it be part of
+  the "Introduction" chapter?
+
+* I need to setup a latex macro for conditional probability. It's super ugly.
+
+  See `https://jblevins.org/log/latex-tips#conditioning`_ for a  discussion on
+  using ``|``, ``\mid``, ``\vert``, or his recommendation: ``\;\middle\vert\;``
+
+  Here's that method in a macro: https://tex.stackexchange.com/a/141711
+
+
 Content Tasks
 =============
+
+* Sketch a directed graph of the processing pipeline for converting
+  paragliding flight tracks into an in-flight predictive model. (This might be
+  helpful for motivating the structure of the paper.)
 
 
 Drafting
 --------
 
 #. **Define the concrete "key ideas" for the paper.** It drives how I develop
-   the entire paper, both in structure and content.
+   the entire paper, both in structure and content. (Possibly start with the
+   non-technical development, then convert that into technical terms. It
+   requires probabilistic methods, so satisfying the needs of that math should
+   do a pretty good job establishing the core components of the paper.)
 
 #. Develop a topic outline. (Topic ordering implicitly encodes dependencies.)
 
@@ -42,20 +60,23 @@ References
 
 * Create a list of sources for each topic, including summary notes
 
-* The "REFERENCES" link in the PDF is one page too high.
-
-* The REFERENCES in the PDF should come *before* the appendices?
-
 
 Figures
 =======
 
+* Should I choose standardize figure sizes? I'm not clear on how you choose
+  scales with SVG, but I'm guessing if you start mixing up units it gets
+  awkward (eg, mixing matplotlib or graphviz output with inkscape). At the
+  least I should choose standard unit sizes (eg, coordinate axes are 5mm
+  thickness).
+
 * Make a list of some useful figures for each section, where applicable
 
-* For each type of figure, develop a single, standard plotting function. Those
-  functions should adhere to the following rules: take a filename for saving
-  SVG files; text in SVG files should be left as text using "TeX Gyre Heros";
-  SVG outputs should not leave marginal whitespace.
+* For each type of **script-generated** figure, develop a single, standard
+  plotting function. Those functions should adhere to the following rules:
+  take a filename for saving SVG files; text in SVG files should be left as
+  text using "TeX Gyre Heros"; SVG outputs should not leave marginal
+  whitespace.
 
 * Figure labels must be globally unique. Should prototype some standard label
   prefixes. Might be based on the content of the figure (the specific object,
@@ -154,6 +175,10 @@ Formatting
   "VerbatimColor={rgb}{0.25,0.25,0.25}"`` in ``conf.py``, but that didn't seem
   to work. In the tex ouput it looks like code literals are inside
   ``\sphinxcode`` elements; might start there?
+
+* The "REFERENCES" link in the PDF is one page too high.
+
+* The REFERENCES in the PDF should come *before* the appendices?
 
 
 Bibliography
