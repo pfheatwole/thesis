@@ -48,6 +48,14 @@ suppress_warnings = [
     'autosectionlabel.paraglider_model',
 ]
 
+mathjax_config = {
+    "TeX": {  # Define TeX macros for MathJax 2.7 (3.0 changed the spec)
+        "Macros": {
+            "given": r"\;\middle\vert\;",
+        },
+    },
+}
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -141,6 +149,7 @@ htmlhelp_basename = 'Thesisdoc'
 
 EXTRA_PREAMBLE = r"""
 \usepackage{pwasu}
+\newcommand{\given}{\;\middle\vert\;}
 """
 
 latex_engine = "xelatex"  # pdflatex has poor unicode support

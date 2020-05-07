@@ -45,15 +45,15 @@ of wind vectors :math:`\vec{w}_{1:T}`.
 
 We want to know :math:`\vec{w}_{1:T}`, but we only have the sequence of
 positions :math:`\vec{p}_{1:T}`, so our first step is to target :math:`p
-\left( \vec{w}_{1:T} \mid \vec{p}_{1:T} \right)`. To do that we need
+\left( \vec{w}_{1:T} \given \vec{p}_{1:T} \right)`. To do that we need
 a relationship between the sequence of flight positions and the wind vectors.
 That relationship is given by the paraglider aerodynamics model
 :math:`f({\cdot\,} ; M)`, which is parametrized by the wing model :math:`M`.
 
 If we knew :math:`M`, we might try to target :math:`p \left( \vec{w}_{1:T}
-\mid \vec{p}_{1:T}, M \right)`, but the aerodynamics model also requires the
+\given \vec{p}_{1:T}, M \right)`, but the aerodynamics model also requires the
 pilot inputs :math:`\vec{\delta}_{1:T}`, so we are forced to target :math:`p
-\left( \vec{w}_{1:T} \mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)`. The
+\left( \vec{w}_{1:T} \given \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)`. The
 problem is that we still have no function that can describe this distribution
 in closed-form. Because there is no analytical solution that we can solve
 directly, we are forced to use Monte Carlo methods, which approximate the
@@ -69,12 +69,12 @@ a representative set of plausible flights, called *trajectories*, then score
 (or *weight*) each possible flight based on how plausibly it could have
 created the observed flight path. That set of weighted trajectories is the
 Monte Carlo approximation of that intractable target, :math:`p \left(
-\vec{w}_{1:T} \mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)`.
+\vec{w}_{1:T} \given \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)`.
 
 .. math::
 
-   p \left( \vec{w}_{1:T} \mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) = \frac{ p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)}{p \left( \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)} \
-                                                              = \frac{ p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) }{\int p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) \mathrm{d} \vec{w}_{1:T}}
+   p \left( \vec{w}_{1:T} \given \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) = \frac{ p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)}{p \left( \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right)} \
+                                                                              = \frac{ p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) }{\int p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) \mathrm{d} \vec{w}_{1:T}}
 
 .. ::
 
@@ -82,8 +82,8 @@ Monte Carlo approximation of that intractable target, :math:`p \left(
 
    .. math::
 
-      p(\vec{w}_{1:T} \mid \vec{p}_{1:T}, \vec{\delta}_{1:T}, M) &= \frac{ p(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M)}{p(\vec{p}_{1:T}, \vec{\delta}_{1:T}, M)} \\
-                                                                 &= \frac{ p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M\right)}{\int p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) \mathrm{d} \vec{w}_{1:T}}
+      p(\vec{w}_{1:T} \given \vec{p}_{1:T}, \vec{\delta}_{1:T}, M) &= \frac{ p(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M)}{p(\vec{p}_{1:T}, \vec{\delta}_{1:T}, M)} \\
+                                                                   &= \frac{ p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M\right)}{\int p\left(\vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) \mathrm{d} \vec{w}_{1:T}}
 
 
 Computing the target requires knowing the joint probability :math:`p \left(
@@ -94,8 +94,7 @@ conditional distributions, which we *can* estimate.
 
 .. math::
 
-   p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) = p \left( \vec{p}_{1:T} \mid \vec{w}_{1:T}, \vec{\delta}_{1:T}, M \right) p \left( \vec{w}_{1:T}, \vec{\delta}_{1:T}, M \right)
-
+   p \left( \vec{w}_{1:T}, \vec{p}_{1:T}, \vec{\delta}_{1:T}, M \right) = p \left( \vec{p}_{1:T} \given \vec{w}_{1:T}, \vec{\delta}_{1:T}, M \right) p \left( \vec{w}_{1:T}, \vec{\delta}_{1:T}, M \right)
 
 At last, we can use SMC and MCMC methods to produce samples from the joint
 distribution, then average over the wind components of each particle to
