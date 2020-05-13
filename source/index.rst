@@ -28,6 +28,7 @@ Contents
 
       \tableofcontents*
       \listoffigures
+      \listoftables
       \mainmatter
       \pagestyle{asu}
 
