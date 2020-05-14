@@ -10,6 +10,7 @@
    \chapter*{Glossary}
 
 .. glossary::
+   :sorted:
 
    term
       This is a sample definition.
