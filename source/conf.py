@@ -54,6 +54,7 @@ suppress_warnings = [
 
 mathjax_config = {
     "TeX": {  # Define TeX macros for MathJax 2.7 (3.0 changed the spec)
+        "extensions": ["cancel.js"],
         "Macros": {
             "given": r"\;\middle\vert\;",
         },
@@ -153,6 +154,7 @@ htmlhelp_basename = 'Thesisdoc'
 
 EXTRA_PREAMBLE = r"""
 \usepackage{pwasu}
+\usepackage{cancel}
 \newcommand{\given}{\;\middle\vert\;}
 """
 
