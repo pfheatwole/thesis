@@ -2,10 +2,13 @@
 Paraglider Geometry
 *******************
 
-.. paraglider_skeleton:
-.. figure:: figures/paraglider_diagram.*
-   :width: 75%
+.. _paraglider_diagram:
+.. figure:: figures/paraglider/paraglider_diagram.*
 
    A Paraglider
 
 NT
+
+.. figure:: figures/paraglider/yz_ref_curves.*
+
+   The lobe (yz-plane) reference curve.
