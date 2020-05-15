@@ -167,15 +167,13 @@ latex_elements = {
 
     # The font size ('10pt', '11pt' or '12pt').
     #
-    'pointsize': '10pt',
+    'pointsize': '11pt',
 
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
     'preamble': EXTRA_PREAMBLE,
     'fontpkg': r'''
-        \setmainfont{TeX Gyre Heros}
-        \setsansfont{TeX Gyre Heros}
         \PassOptionsToPackage{bookmarksnumbered}{hyperref}
         ''',
 
