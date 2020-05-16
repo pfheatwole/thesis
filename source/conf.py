@@ -42,8 +42,8 @@ extensions = [
 
 autosectionlabel_prefix_document = True
 
-# FIXME: this zoom factor doesn't seem to be correct?
-zoom_factor = (10 / 72) / (16 / 96)  # PDF uses 10pt fonts, web uses 16px
+# zoom_factor = (10 / 72) / (16 / 96)  # PDF uses 11pt fonts, web uses 16px
+zoom_factor = 0.6  # FIXME: this empirical solution works much better; why?
 rsvg_converter_args = ["-z", str(round(zoom_factor, 2))]
 
 # autosectionlabel will warn if a section label is reused inside a single
