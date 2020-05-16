@@ -6,6 +6,6 @@
 
 .. raw:: latex
 
-    \asuacknowledgements
+    \csuacknowledgements
 
 <Thanks to friends and family goes here.>

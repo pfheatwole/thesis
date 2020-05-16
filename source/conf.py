@@ -153,7 +153,7 @@ htmlhelp_basename = 'Thesisdoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 EXTRA_PREAMBLE = r"""
-\usepackage{pwasu}
+\usepackage{csu}
 \usepackage{cancel}
 \newcommand{\given}{\;\middle\vert\;}
 """
@@ -192,10 +192,11 @@ latex_elements = {
     #
     # 'figure_align': 'htbp',
 
+    'sphinxsetup': "TitleColor={named}{black}",
 }
 
 latex_additional_files = [
-    'tex/pwasu.sty'
+    'tex/csu.sty'
 ]
 
 

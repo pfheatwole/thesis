@@ -6,7 +6,7 @@
 
 .. raw:: latex
 
-    \asuabstract
+    \csuabstract
 
 It is trivial to produce an accurate estimate of the wind conditions that were
 present during a paragliding flight: simply answering "somewhere between 0 and
