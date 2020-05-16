@@ -2,12 +2,16 @@
 Introduction
 ************
 
+
+Structure of this Introduction
+==============================
+
 Following the advice from `Exploration of Style
 <https://explorationsofstyle.com/2013/02/20/structuring-a-thesis-introduction/>`_.
 
 
 Intro to the Intro
-==================
+------------------
 
 .. Establishing a research territory (Context):
 
@@ -78,7 +82,7 @@ Intro to the Intro
 
 
 Context
-=======
+-------
 
 * Paragliding
 
@@ -125,7 +129,7 @@ Context
 
 
 Restatement of the problem (and significance)
-=============================================
+---------------------------------------------
 
 [[Remember: **the problem is "learning the wind patterns, and why wind
 patterns are important to pilots", not why the wind is important in
@@ -209,7 +213,7 @@ general**.]]
 
 
 Restatement of the response
-===========================
+---------------------------
 
 * The goal of estimating the wind vector using incomplete and noisy
   observations of the system is referred to as a *filtering problem*.
@@ -348,7 +352,7 @@ problem?
 
 
 Contributions of my paper
-=========================
+-------------------------
 
 [[FIXME: I'm not sure where this content goes]]
 
@@ -391,6 +395,61 @@ those resources might make a solution possible.
 
 
 Roadmap
-=======
+-------
 
 [["Brief indication of how the thesis will proceed."]]
+
+
+
+Flight Reconstruction
+=====================
+
+What is it?
+
+How can we accomplish it? Through *Bayesian filtering*.
+
+
+Bayesian Estimation
+===================
+
+What is Bayesian estimation? A way of reasoning in the face of uncertainty,
+quantifying our state of ignorance through the laws of probability.
+
+Bayesian filtering requires knowledge of the model, which means we need
+a dynamics model for the system: the paraglider wing, the pilot inputs, and
+the wind.
+
+
+Paragliders
+===========
+
+
+.. figure:: figures/paraglider/paraglider_diagram.*
+   :name: paraglider_diagram
+   :width: 50%
+
+   A Paraglider
+
+
+Canopy
+------
+
+FIXME
+
+
+Lines
+-----
+
+FIXME
+
+
+Controls
+--------
+
+FIXME
+
+
+Payload
+-------
+
+The payload is a harness plus the pilot.
