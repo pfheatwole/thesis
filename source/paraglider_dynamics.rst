@@ -9,15 +9,15 @@ Paraglider Dynamics
    * - Wing 1
      - Wing 2
      - Wing 3
-   * - .. image:: figures/paraglider/foil2.*
-     - .. image:: figures/paraglider/foil2.*
-     - .. image:: figures/paraglider/foil2.*
-   * - .. image:: figures/paraglider/foil2.*
-     - .. image:: figures/paraglider/foil2.*
-     - .. image:: figures/paraglider/foil2.*
-   * - .. image:: figures/paraglider/foil2.*
-     - .. image:: figures/paraglider/foil2.*
-     - .. image:: figures/paraglider/foil2.*
+   * - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+   * - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+   * - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
 
 
 Canopy Aerodynamics
@@ -35,7 +35,7 @@ Non-linear lifting line theory
 
 <Introduce non-linear lifting line theory.>
 
-.. figure:: figures/paraglider/phillips_scratch.*
+.. figure:: figures/paraglider/dynamics/phillips_scratch.*
 
    Wing sections for Phillips' method.
 
@@ -88,7 +88,7 @@ This model also uses the body and payload
 
 
 .. _paraglider_fbd_9dof:
-.. figure:: figures/paraglider/paraglider_fbd_9dof.*
+.. figure:: figures/paraglider/dynamics/paraglider_fbd_9dof.*
 
    Free body diagram for a 9-DoF model.
 

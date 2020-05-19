@@ -35,7 +35,7 @@ z = R * np.sin(theta)
 # TODO: draw an ellipse in the yz-plane between the wing tips? Save time in Inkscape.
 
 fig = plt.figure(figsize=(10, 10))
-ax = fig.add_subplot(111, projection="3d", proj_type="ortho")
+ax = plt.gca(projection='3d', proj_type='ortho')
 ax.plot(x, y + 10, z)  # Counterlockwise (right wing tip)
 ax.plot(x, y , -z)  # Clockwise (left wing tip)
 gsim.plots._set_axes_equal(ax)
