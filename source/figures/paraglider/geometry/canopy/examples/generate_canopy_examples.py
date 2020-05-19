@@ -3,6 +3,7 @@ from IPython import embed  # noqa: F401
 from cycler import cycler
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401; for `projection='3d'`
+from matplotlib.collections import PolyCollection
 
 import numpy as np
 
@@ -53,7 +54,7 @@ def configure_2d_axes(ax, xlabel, ylabel, invert_x=False, invert_y=False):
     ax.set_xlim(-1.2, 1.2)
     ax.set_ylim(-.2, 1.2)
     ax.xaxis.set_ticks([-1, 1])
-    ax.yaxis.set_ticks([1])
+    ax.yaxis.set_ticks([])
 
     if invert_y:
         ax.invert_yaxis()
@@ -69,24 +70,79 @@ def configure_2d_axes(ax, xlabel, ylabel, invert_x=False, invert_y=False):
             transform=ax.get_xaxis_transform(), clip_on=False)
 
     # Add axes labels
-    xpos = 1.4 if not invert_x else -0.4
-    ypos = 1.4 if not invert_y else -0.4
+    xpos = 1.3 if not invert_x else -0.3
+    ypos = 1.5 if not invert_y else -0.5
     ax.text(xpos, 0, xlabel, fontsize=15, verticalalignment="center")
     ax.text(0, ypos, ylabel, fontsize=15, horizontalalignment="center", verticalalignment="center")
 
 
+def _plot_foil(foil, N_sections=21, N_points=50, flatten=False, ax=None):
+    """Plot a FoilGeometry in 3D."""
+    if ax is None:
+        fig, ax = _create_3d_axes()
+        ax.set_proj_type('ortho')  # FIXME: better for this application?
+        independent_plot = True
+    else:
+        independent_plot = False
+
+    sa = 1 - np.cos(np.linspace(np.pi / 2, 0, N_points))
+    for s in np.linspace(-1, 1, N_sections):
+        coords = foil.surface_xyz(s, sa, "lower", flatten=flatten).T
+        ax.plot(coords[0], coords[1], coords[2], c="r", zorder=0.9, lw=0.25)
+        coords = foil.surface_xyz(s, sa, "upper", flatten=flatten).T
+        ax.plot(coords[0], coords[1], coords[2], c="b", lw=0.25)
+
+    s = np.linspace(-1, 1, N_sections)
+    LE = foil.chord_xyz(s, 0, flatten=flatten).T
+    c4 = foil.chord_xyz(s, 0.25, flatten=flatten).T
+    TE = foil.chord_xyz(s, 1, flatten=flatten).T
+    ax.plot(LE[0], LE[1], LE[2], "k--", lw=0.8)
+    ax.plot(c4[0], c4[1], c4[2], "g--", lw=0.8)
+    ax.plot(TE[0], TE[1], TE[2], "k--", lw=0.8)
+
+    gsim.plots._set_axes_equal(ax)
+
+    # Plot projections of the quarter-chord
+    xlim = ax.get_xlim3d()
+    zlim = ax.get_zlim3d()
+
+    # Outline and quarter-chord projection onto the xy-pane (`z` held fixed)
+    z = 0.75
+    vertices = np.vstack((LE[0:2].T, TE[0:2].T[::-1]))  # shape: (2 * N_sections, 2)
+    poly = PolyCollection([vertices], facecolors=['k'], alpha=0.25)
+    ax.add_collection3d(poly, zs=[z], zdir='z')
+    ax.plot(c4[0], c4[1], z, "g--", lw=0.8)
+
+    # `x` reference curve projection onto the xy-pane
+    xyz = foil.chord_xyz(s, foil._chords.r_x(s))
+    x, y = xyz[..., 0], xyz[..., 1]
+    ax.plot(x, y, z, 'r--', lw=0.8, label="reference lines")
+
+    # Quarter-chord projection onto the yz-pane (`x` held fixed)
+    x = np.full(*c4[1].shape, -1.25)
+    ax.plot(x, c4[1], c4[2], "g--", lw=0.8, label="quarter-chord")
+
+    # `yz` reference curve projection onto the yz-pane
+    xyz = foil.chord_xyz(s, foil._chords.r_yz(s))
+    y, z = xyz[..., 1], xyz[..., 2]
+    ax.plot(x, y, z, 'r--', lw=0.8)
+
+
 def plot_3d_foil(foil):
-    fig, ax = gsim.plots._create_3d_axes(figsize=(8, 8), dpi=96)
-    ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=-135)
-    gsim.plots.plot_foil(foil, N_sections=31, flatten=False, ax=ax)
+    # Make it big; removing the whitespace greatly reduces the final size
+    fig, ax = gsim.plots._create_3d_axes(figsize=(10, 10), dpi=96)
+    # ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=-135)
+    # gsim.plots.plot_foil(foil, N_sections=31, flatten=False, ax=ax)
+    ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=45)
+    _plot_foil(foil, N_sections=31, flatten=False, ax=ax)
 
     # Hide the panes, grids, ticks, and ticklabels
-    # ax.set_axis_off()
+    ax.set_axis_off()
 
     # Hide the pane but leave the grid
-    ax.xaxis.pane.set_visible(False)
-    ax.yaxis.pane.set_visible(False)
-    ax.zaxis.pane.set_visible(False)
+    # ax.xaxis.pane.set_visible(False)
+    # ax.yaxis.pane.set_visible(False)
+    # ax.zaxis.pane.set_visible(False)
 
     # Hide the ticklabels
     # ax.set_xticklabels([])
@@ -94,7 +150,7 @@ def plot_3d_foil(foil):
     # ax.set_zticklabels([])
 
     # Remove the legend
-    ax.legend().remove()
+    # ax.legend().remove()
 
     # FIXME: this still leaves a lot of useless space in the graph. What if I
     # hid the gridlines, panes, ticks, etc, but drew some faux-panes on the xy
@@ -102,6 +158,35 @@ def plot_3d_foil(foil):
     # projections onto planes? That'd let me move them closer to the wing and
     # simplify the clutter. I would sort of miss the gridlines though; they're
     # helpful for orienting the view in 3D.
+
+    # Add faux xy and yz panes
+    # vx, vz = 0.6, 0.5
+    # xy_verts = np.array([[0.25, -1], [0.25, 1], [-vx, 1], [-vx, -1]])
+    # yz_verts = np.array([[-1, vz], [1, vz], [1, -vz], [-1, -vz]])
+    # xy_poly = PolyCollection([xy_verts], facecolors=['k'], alpha=0.10)
+    # yz_poly = PolyCollection([yz_verts], facecolors=['k'], alpha=0.10)
+    # ax.add_collection3d(xy_poly, zs=vz, zdir='z')
+    # ax.add_collection3d(yz_poly, zs=-vx, zdir='x')
+
+    # Add a faux grid
+    xx = np.linspace(-1.25, 0.25, 7)
+    yy = np.linspace(-1.25, 1.25, 11)
+    zz = np.linspace(-0.5, 0.75, 6)
+    style = {"c": "lightgray", "lw": 0.8, "zorder": -1}
+    for x in xx:
+        ax.plot([x, x], [-1.25, 1.25], [zz.max(), zz.max()], **style)
+
+    for y in yy:
+        ax.plot([xx.min(), xx.max()], [y, y], [zz.max(), zz.max()], **style)
+        ax.plot([xx.min(), xx.min()], [y, y], [zz.min(), zz.max()], **style)
+
+    for z in zz[:-1]:
+        ax.plot([xx.min(), xx.min()], [-1.25, 1.25], [z, z], **style)
+
+    ax.set_xlim(-1.25, 1.25)
+    ax.set_ylim(1.25, -1.25)
+    ax.set_zlim(1.25, -1.25)
+
 
     fig.tight_layout(pad=0)
     return fig
@@ -113,11 +198,11 @@ if __name__ == "__main__":
 
     # Flat, no taper, no twist
     examples["flat1"] = {
-        "r_x": 1,
+        "r_x": 0,
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": 0.25,
+        "chord_length": 0.5,
         "torsion": 0,
     }
 
@@ -148,16 +233,19 @@ if __name__ == "__main__":
         "r_yz": 0,
         "yz": FlatYZ(),
         "chord_length": 0.25,
-        "torsion": lambda s: np.deg2rad(25) * s**3,
+        "torsion": lambda s: np.deg2rad(25) * s**4,
     }
 
     # Manta rays!
+    #
+    # Adding 1e-3 prevents zero-length sections, which are a pain because they
+    # 
     examples["manta1"] = {
         "r_x": 0,
         "x": lambda s: 0.5 * (1 - s**2),
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": lambda s: 0.5 * (1 - abs(s)),
+        "chord_length": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
         "torsion": 0,
     }
     examples["manta2"] = {
@@ -165,7 +253,7 @@ if __name__ == "__main__":
         "x": lambda s: 0.5 * (1 - s**2),
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": lambda s: 0.5 * (1 - abs(s)),
+        "chord_length": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
         "torsion": 0,
     }
     examples["manta3"] = {
@@ -173,7 +261,7 @@ if __name__ == "__main__":
         "x": lambda s: 0.5 * (1 - s**2),
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": lambda s: 0.5 * (1 - abs(s)),
+        "chord_length": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
         "torsion": 0,
     }
 
@@ -231,24 +319,26 @@ if __name__ == "__main__":
                 axes[0, 0].plot(s, chords._chord_length(s)),
 
                 configure_2d_axes(axes[0, 1], "$s$", "$r_{xy}$")
+                axes[0, 1].set_yticks([1])
                 axes[0, 1].plot(s, chords.r_x(s))
 
                 configure_2d_axes(axes[0, 2], "$s$", "$r_{yz}$")
+                axes[0, 2].set_yticks([1])
                 axes[0, 2].plot(s, chords.r_yz(s))
 
                 # FIXME: show yticks? These are radians.
                 configure_2d_axes(axes[1, 0], "$s$", r"$\theta$")
-                axes[1, 0].set_yticks([])
                 axes[1, 0].plot(s, chords.torsion(s))
 
                 configure_2d_axes(axes[1, 1], "$s$", "$x$")
                 axes[1, 1].plot(s, chords.x(s))
 
                 configure_2d_axes(axes[1, 2], "$y$", "$z$", invert_y=True)
-                axes[1, 2].set_xticks([])  # Avoid confusion between s and y
+                axes[1, 2].set_xticklabels([])  # Avoid confusion between s and y
                 axes[1, 2].plot(*chords.yz(s).T)
 
                 fig.tight_layout()
+                fig.subplots_adjust(hspace=1.0, wspace=0.3)
 
                 if savefig:
                     fig.savefig(name + "_curves.svg")
