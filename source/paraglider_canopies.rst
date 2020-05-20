@@ -52,56 +52,188 @@ Chord Surface
 =============
 
 The chord surface is a conceptual curved surface produced by all the airfoil
-chord lines. A wing geometry can be defined by a chord surface and an airfoil
-distribution.
+chord lines. A wing geometry can be defined by a *chord surface* and an
+*airfoil distribution*.
+
+.. TODO:: define the *section index*
 
 The surface can be defined using six curves as functions of the section index:
 
-1. Chord length
+1. Chord length :math:`c(s)`
 
-2. Chord reference point for the xy-plane
+#. Geometric torsion :math:`\theta(s)`
 
-3. Chord reference point for the yz-plane
+#. Chord reference point for the xy-plane :math:`r_{xy}(s)`
 
-4. Position of the reference point in the xy-plane
+#. Chord reference point for the yz-plane :math:`r_{yz}(s)`
 
-5. Position of the reference point in the yz-plane
+#. Position of the reference point in the xy-plane :math:`x(s)`
 
-6. Geometric torsion
+#. Position of the reference point in the yz-plane :math:`\left< y(s),
+   z(s)\right>`
+
+These six functions define the scale, orientation, and position of each foil
+section. Section scale is controlled by chord; each section profile is an
+airfoil scaled by the chord length. Section orientation is controlled by
+section 
+
+.. TODO:: I should explicitly mention that with this set of definitions,
+   section profiles will always "point" towards the +x-axis (mathematically,
+   this means the plane containing each section will also contain the
+   +x-axis). I'm pretty sure this is a reasonable constraint for most wing
+   designs?
+
+The chord length is the scaling factor. Geometric torsion rotates
+section profile chords relative to their immediate neighboring sections.
+Positions
+
+
+What are the advantages of this parametric design?
+
+* It's easy to query arbitrary points on the chord surface and foil surface,
+  making it easy to integrate with existing aerodynamic methods (eg,
+  Phillips).
+
+* You can use (mostly) arbitrary functions for the curves, like linear
+  interpolators or Bezier curves. This makes it easy to design custom curve
+  shapes, and it makes it easy to recreate a geometry that was specified in
+  points (like in Belloc). You can use Bezier curves if you want.
+
+* It decouples design in the xy and yz planes, so as you design a shape
+  towards a target, adjust one parameter doesn't break the previous work (eg,
+  if you set the quarter-chord the way you want it you don't have to worry
+  about changes to geometric torsion messing that up).
+
+* As a generative model, it's easy to integrate into a CAD or 3D modeling
+  program
+
 
 
 Chord length
 ------------
 
-FIXME
+NT
+
+
+Geometric Torsion
+-----------------
+
+NT
+
+
+Design in the xy-plane
+----------------------
+
+NT
+
+
+Design in the yz-plane
+----------------------
+
+NT
 
 
 Examples
 ========
 
+
+Flat Wings
+----------
+
 Example 1
+^^^^^^^^^
+
+First, design the set of reference curves to generate the target chord
+surface:
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_curves.*
+
+Then assign an airfoil to produce the 3D wing:
+
+(**FIXME: maybe show the chord surface just this first time?**)
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_canopy.*
+
+This is an idealized version of the target canopy because it has not accounted
+for cell deformations, such as billowing.
+
+
+Example 2
+^^^^^^^^^
+
+Words here.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy.*
+
+
+Example 3
+^^^^^^^^^
+
+Words here.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy.*
+
+
+Example 4
+^^^^^^^^^
+
+Words here.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy.*
+
+
+Elliptical Wings
+----------------
+
+Here's an example with a root-to-tip anhedral angle of 33 degrees.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy.*
+
+
+Here's another example with a root-to-tip anhedral angle of 44 degrees.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_canopy.*
+
+And another with a root-to-tip anhedral angle of 44 degrees but a wingtip
+anhedral angle of 89 degrees.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy.*
+
+
+
+The Manta
 ---------
 
-First, define a set of reference curves:
+The manta ray is a great demo for `r_xy`.
 
-.. list-table:: Chord surface reference curves
-   :name: chord_surface_curves_example1
-   :header-rows: 0
-   :align: center
+If :math:`r_x = 0`:
 
-   * - .. image:: figures/paraglider/example1/chord_surface_c.*
-     - .. image:: figures/paraglider/example1/chord_surface_rxy.*
-     - .. image:: figures/paraglider/example1/chord_surface_ryz.*
-   * - .. image:: figures/paraglider/example1/chord_surface_x.*
-     - .. image:: figures/paraglider/example1/chord_surface_yz.*
-     - .. image:: figures/paraglider/example1/chord_surface_theta.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_canopy.*
 
 
-Then, assign an airfoil across the chord surface to produce an idealized
-canopy:
+If :math:`r_x = 0.5`:
 
-.. figure:: figures/paraglider/example1/canopy1.*
-   :name: canopy1
-   :width: 75%
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_curves.*
 
-   Canopy 1
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_canopy.*
+
+
+If :math:`r_x = 1`:
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_canopy.*

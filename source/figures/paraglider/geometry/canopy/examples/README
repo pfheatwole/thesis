@@ -1,1 +1,5 @@
-First run `generate_canopy_examples.py` then run `cleanup.sh`
+To build:
+
+1. `python generate_canopy_examples.py`
+
+2. `bash cleanup_canopy_examples.sh`
