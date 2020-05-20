@@ -19,7 +19,7 @@ thickness convention, 2D coefficients.
 Geometry
 --------
 
-An airfoil is the 2D profile of a cross-section of a 3D wing.
+An airfoil is a 2D cross-section of a 3D wing.
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
 

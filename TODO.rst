@@ -1,12 +1,18 @@
+* I need to standardize `r_xy` instead of simply `r_x`. It improves symmetry.
+  (You're designing in either the xy plane or the yz plane.)
+
+  And do I like the `r` name? I'm using that for vectors, these are scalars.
+
+
+* I wish I could use tables without borders for aligning sets of items. Do
+  I *ever* want tables with borders? If not, I might be able to just redefine
+  the `tabulary` environment. I think I can specify my own template
+  `tabulary.tex_t`. The one with Sphinx is in
+  `~/.anaconda3/envs/science38/lib/python3.8/site-packages/sphinx/templates/latex`
+  I'd also need some CSS to fix the HTML tables...
+
 * Does "Bayesian filtering" deserve it's own chapter, or should it be part of
   the "Introduction" chapter?
-
-* I need to setup a latex macro for conditional probability. It's super ugly.
-
-  See `https://jblevins.org/log/latex-tips#conditioning`_ for a  discussion on
-  using ``|``, ``\mid``, ``\vert``, or his recommendation: ``\;\middle\vert\;``
-
-  Here's that method in a macro: https://tex.stackexchange.com/a/141711
 
 
 Content Tasks
@@ -20,11 +26,11 @@ Content Tasks
 Drafting
 --------
 
-#. **Define the concrete "key ideas" for the paper.** It drives how I develop
-   the entire paper, both in structure and content. (Possibly start with the
-   non-technical development, then convert that into technical terms. It
-   requires probabilistic methods, so satisfying the needs of that math should
-   do a pretty good job establishing the core components of the paper.)
+#. **Define the concrete "key ideas" for the paper.** These will drive how
+   I develop the entire paper, both in structure and content. (Possibly start
+   with the non-technical development, then convert that into technical terms.
+   It requires probabilistic methods, so satisfying the needs of that math
+   should do a pretty good job establishing the core components of the paper.)
 
 #. Develop a topic outline. (Topic ordering implicitly encodes dependencies.)
 
@@ -67,8 +73,10 @@ Figures
 * Should I choose standardize figure sizes? I'm not clear on how you choose
   scales with SVG, but I'm guessing if you start mixing up units it gets
   awkward (eg, mixing matplotlib or graphviz output with inkscape). At the
-  least I should choose standard unit sizes (eg, coordinate axes are 5mm
+  least I should choose standard unit sizes (eg, coordinate axes are 1.5px
   thickness).
+
+* Should I add a license to my SVG metadata? (Inkscape -> Document Properties)
 
 * Make a list of some useful figures for each section, where applicable
 

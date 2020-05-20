@@ -10,6 +10,13 @@ Introduction
   the response" must highlight where my contributes fit into that big picture.
 
 
+Key Points
+==========
+
+* The question isn't "*can you* determine the wind in a paragliding track?",
+  but "*how precisely can you* ...?"
+
+
 Purpose/Motivation
 ==================
 
