@@ -11,11 +11,41 @@ momentum with the air.
 Airfoil
 =======
 
+**Key terms and concepts to define in this section**: upper surface, lower
+surface, leading edge, trailing edge, chord line, mean camber line, thickness,
+thickness convention, 2D coefficients.
+
+
+Geometry
+--------
+
 An airfoil is the 2D profile of a cross-section of a 3D wing.
 
-.. figure:: figures/paraglider/airfoil2.*
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
+
+   Airfoils examples.
+
+Here's a diagram of the basic airfoil geometric properties:
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_diagram.*
    :name: airfoil_diagram
-   :width: 75%
+
+   Airfoil geometry.
+
+
+There are two conventions measuring the airfoil thickness; this convention
+also determines what point is designated the *leading edge*.
+
+.. figure:: figures/paraglider/geometry/airfoil/NACA-6412-thickness-conventions.*
+   :name: airfoil_thickness
+
+   Airfoil thickness conventions.
+
+
+Coefficients
+------------
+
+NT
 
 
 Chord Surface
