@@ -6,4 +6,5 @@
 div.body {
   min-width: auto;
   max-width: auto;
+  color: black; /* Black text; Alabaster default is #3E4349 */
 }
