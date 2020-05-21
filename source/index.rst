@@ -30,7 +30,7 @@ Contents
       \listoffigures
       \listoftables
       \mainmatter
-      \pagestyle{csu}
+      \pagestyle{csupage}
 
 .. toctree::
    :maxdepth: 3

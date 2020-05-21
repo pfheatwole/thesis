@@ -101,7 +101,7 @@
 \setcounter{tocdepth}{2}
 
 %% Chapters
-\makechapterstyle{csu}{%
+\makechapterstyle{csuchapter}{%
     \setlength{\beforechapskip}{-\topfiddle}
     \setlength{\midchapskip}{1.0\onelineskip}
     \setlength{\afterchapskip}{2.0\onelineskip}
@@ -130,9 +130,8 @@
     }
 \addtodef{\appendix}{}{\chapterstyle{csuappendix}}
 
+
 %% (subsub)Sections
-\setsecheadstyle{\sffamily}
-\setsubsecheadstyle{\sffamily}
 %\setsecheadstyle{\centering\normalfont}
 %\setbeforesecskip{-1\onelineskip plus -1ex minus -.2ex}
 %\setaftersecskip{1\onelineskip plus .2ex}
@@ -142,10 +141,10 @@
 
 
 % Main text
-\makepagestyle{csu}{
-    \makeevenfoot{csu}{}{\thepage}{}
-    \makeoddfoot{csu}{}{\thepage}{}
-}
+\makepagestyle{csupage}
+    \makeevenfoot{csupage}{}{\thepage}{}
+    \makeoddfoot{csupage}{}{\thepage}{}
+\aliaspagestyle{chapter}{csupage}
 
 
 %% Customize the preliminary pages
@@ -248,7 +247,7 @@
 %\addtodef{\mainmatter}{\addtotextheight{\botfiddle}}{}
 
 % Use the `csu` chapterstyle and plain pagestyle
-\chapterstyle{csu}
+\chapterstyle{csuchapter}
 \pagestyle{plain}
 
 
