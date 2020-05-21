@@ -94,86 +94,87 @@
     \makeoddhead{lot}{Table}{}{Page}
 
 %% List of Figures
-\AtBeginDocument{%
-    \renewcommand{\listfigurename}{LIST OF FIGURES}
-}
+%\AtBeginDocument{%
+%    \renewcommand{\listfigurename}{LIST OF FIGURES}
+%}
 \addtodef{\listoffigures}{\clearpage\pagestyle{lof}}{}
 \renewcommand*{\lofheadstart}{\vspace*{-\topfiddle}}
-\renewcommand*{\afterloftitle}{\thispagestyle{plain}%
-    \par\nobreak {\normalfont Figure \hfill Page}\par\nobreak}
+%\renewcommand*{\afterloftitle}{\thispagestyle{plain}%
+%    \par\nobreak {\normalfont Figure \hfill Page}\par\nobreak}
 
 %% List of Tables
-\AtBeginDocument{%
-    \renewcommand{\listtablename}{LIST OF TABLES}
-}
+%\AtBeginDocument{%
+%    \renewcommand{\listtablename}{LIST OF TABLES}
+%}
 \addtodef{\listoftables}{\clearpage\pagestyle{lot}}{}
 \renewcommand*{\lotheadstart}{\vspace*{-\topfiddle}}
-\renewcommand*{\afterlottitle}{\thispagestyle{plain}%
-    \par\nobreak {\normalfont Table \hfill Page}\par\nobreak}
+%\renewcommand*{\afterlottitle}{\thispagestyle{plain}%
+%    \par\nobreak {\normalfont Table \hfill Page}\par\nobreak}
 
 %% Table of Contents
-\AtBeginDocument{%
-    \renewcommand{\contentsname}{TABLE OF CONTENTS}
-}
+%\AtBeginDocument{%
+%    \renewcommand{\contentsname}{TABLE OF CONTENTS}
+%}
 \addtodef{\tableofcontents}{\clearpage\pagestyle{toc}}{}
 \renewcommand*{\tocheadstart}{\vspace*{-\topfiddle}}
-\renewcommand*{\aftertoctitle}{\thispagestyle{plain}%
-    \par\nobreak \mbox{}\hfill{\normalfont Page}\par\nobreak}
-\renewcommand*{\cftchapterfont}{\normalfont}
-\renewcommand*{\cftchapterpagefont}{\normalfont}
-\renewcommand*{\cftchapterleader}{%
-    \cftchapterfont\cftdotfill{\cftchapterdotsep}}
-\renewcommand*{\cftchapterdotsep}{\cftdotsep}
-\setsecnumdepth{subsection}
+%\renewcommand*{\aftertoctitle}{\thispagestyle{plain}%
+%    \par\nobreak \mbox{}\hfill{\normalfont Page}\par\nobreak}
+%\renewcommand*{\cftchapterfont}{\normalfont}
+%\renewcommand*{\cftchapterpagefont}{\normalfont}
+%\renewcommand*{\cftchapterleader}{%
+%    \cftchapterfont\cftdotfill{\cftchapterdotsep}}
+%\renewcommand*{\cftchapterdotsep}{\cftdotsep}
+\setsecnumdepth{subsubsection}
+\setcounter{tocdepth}{2}
 
 %% No extra space before the entry, or in the LoF/LoT
 \setlength{\cftbeforechapterskip}{0pt plus 0pt}
 \renewcommand*{\insertchapterspace}{}
 
 %% Chapter
-\makechapterstyle{asu}{%
-    \setlength{\beforechapskip}{-\topfiddle}
-    \setlength{\midchapskip}{1.0\onelineskip}
-    \setlength{\afterchapskip}{1.0\onelineskip}
-    \renewcommand*{\chapnamefont}{\normalfont}
-    \renewcommand*{\chapnumfont}{\chapnamefont}
-    \renewcommand*{\printchapternum}{\centering\chapnumfont \thechapter}
-    \renewcommand*{\chaptitlefont}{\normalfont\centering}
-    \renewcommand*{\printchapternonum}{}}
-\aliaspagestyle{chapter}{empty}
+%\makechapterstyle{asu}{%
+%    \setlength{\beforechapskip}{-\topfiddle}
+%    \setlength{\midchapskip}{1.0\onelineskip}
+%    \setlength{\afterchapskip}{1.0\onelineskip}
+%    \renewcommand*{\chapnamefont}{\normalfont}
+%    \renewcommand*{\chapnumfont}{\chapnamefont}
+%    \renewcommand*{\printchapternum}{\centering\chapnumfont \thechapter}
+%    \renewcommand*{\chaptitlefont}{\normalfont\centering}
+%    \renewcommand*{\printchapternonum}{}}
+%\aliaspagestyle{chapter}{empty}
 
 %% chapter style for appendices, text comes on following page
 
-\makechapterstyle{asuappendix}{%
-    \setlength{\beforechapskip}{-\topfiddle}
-    \setlength{\midchapskip}{1.0\onelineskip}
-    \setlength{\afterchapskip}{1.0\onelineskip}
-    \renewcommand*{\chapnamefont}{\normalfont}
-    \renewcommand*{\chapnumfont}{\chapnamefont}
-    \renewcommand*{\printchaptername}{%
-        \chapnamefont\MakeUppercase{\@chapapp}}
-    \renewcommand*{\printchapternum}{\centering\chapnumfont \thechapter}
-    \renewcommand*{\chaptitlefont}{\normalfont\centering}
-    %\renewcommand*{\printchapternonum}{}
-    %\renewcommand*{\afterchaptertitle}{\clearpage}
-    }
+%\makechapterstyle{asuappendix}{%
+%    \setlength{\beforechapskip}{-\topfiddle}
+%    \setlength{\midchapskip}{1.0\onelineskip}
+%    \setlength{\afterchapskip}{1.0\onelineskip}
+%    \renewcommand*{\chapnamefont}{\normalfont}
+%    \renewcommand*{\chapnumfont}{\chapnamefont}
+%    \renewcommand*{\printchaptername}{%
+%        \chapnamefont\MakeUppercase{\@chapapp}}
+%    \renewcommand*{\printchapternum}{\centering\chapnumfont \thechapter}
+%    \renewcommand*{\chaptitlefont}{\normalfont\centering}
+%    %\renewcommand*{\printchapternonum}{}
+%    %\renewcommand*{\afterchaptertitle}{\clearpage}
+%    }
 
 %%% different chapter style for appendices, (and double spaced)
-\addtodef{\appendix}{}{\chapterstyle{asuappendix}\AsuSpacing}
+%\addtodef{\appendix}{}{\chapterstyle{asuappendix}\AsuSpacing}
 
 %%% (subsub)section styles
-\setsecheadstyle{\centering\normalfont}
-\setbeforesecskip{-1\onelineskip plus -1ex minus -.2ex}
-\setaftersecskip{1\onelineskip plus .2ex}
-\setsubsecheadstyle{\centering\normalfont}
-\setbeforesubsecskip{-1\onelineskip plus -1ex minus -.2ex}
-\setaftersubsecskip{1\onelineskip plus .2ex}
+%\setsecheadstyle{\centering\normalfont}
+%\setbeforesecskip{-1\onelineskip plus -1ex minus -.2ex}
+%\setaftersecskip{1\onelineskip plus .2ex}
+%\setsubsecheadstyle{\centering\normalfont}
+%\setbeforesubsecskip{-1\onelineskip plus -1ex minus -.2ex}
+%\setaftersubsecskip{1\onelineskip plus .2ex}
 
 
 %% Bibliography
-\AtBeginDocument{
-    \renewcommand*{\bibname}{REFERENCES}
-}
+%\AtBeginDocument{
+%    \renewcommand*{\bibname}{REFERENCES}
+%}
 \setlength{\bibitemsep}{\onelineskip}
 \renewcommand*{\biblistextra}{%
     \setlength{\itemsep}{\bibitemsep}
