@@ -1,7 +1,10 @@
-%% Based on Chapter 21 of the memoir manual: "An Example Thesis Design"
+%% Inspired by Chapter 21 of the memoir manual: "An Example Thesis Design"
+%%
+%% I tried to simplify the content from that chapter so this style is probably
+%% broken, but it appears to be working well enough.
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{csu}[2009/04/18 v0.3 ASU thesis]
+\ProvidesPackage{csu}[2020/01/01 v0.1 CSU thesis]
 
 %% This style requires the `memoir` class
 \@ifclassloaded{memoir}{\let\endcsu\relax}{\let\endcsu\endinput
@@ -9,7 +12,7 @@
                {\@ehd}}
 \endcsu
 
-% Grab the title and author, as defined from Sphinx
+%% Grab the title and author, as provided by Sphinx
 \def\doctitle{\@title}
 \def\docauthor{\@author}
 
@@ -23,84 +26,54 @@
 \renewcommand*{\foottextfont}{\normalfont\normalsize}  % Configure footnotes
 
 
-%% Margins and spacing
+%% Page margins and spacing
 
-% Set margins and textwidth
+% Body margins and textwidth
 \setlrmarginsandblock{1.5in}{1in}{*}
-\setulmarginsandblock{1in}{1in}{*}
-
-% For main body, bottom of text at 1in, footer below top of header at 1in,
-% first text line double spaced below base of header.
-%\newlength{\linespace}
-%\setlength{\linespace}{\baselineskip} % current equivalent of \onelineskip
-%\setlength{\headheight}{\onelineskip}
-%\setlength{\headsep}{\linespace}
-%\addtolength{\headsep}{-\topskip}
-%\setlength{\uppermargin}{1in}
-%\addtolength{\uppermargin}{\headheight}
-%\addtolength{\uppermargin}{\headsep}
-
-% Bottom
-%\setlength{\lowermargin}{1in}
-%\setlength{\textheight}{\paperheight}
-%\addtolength{\textheight}{-\uppermargin}
-%\addtolength{\textheight}{-\lowermargin}
+\setulmarginsandblock{1in}{1in}{*}  % FIXME: naive/broken?
 
 % Footnotes
 \setlength{\footskip}{2\onelineskip}
 \setlength{\footnotesep}{2\onelineskip}
 
-% Fiddle lengths (..ta.. for title/approval page, others for prelims)
-%\newlength{\toptafiddle} \setlength{\toptafiddle}{2\linespace}
-\newlength{\toptafiddle} \setlength{\toptafiddle}{0pt}
-\newlength{\bottafiddle} \setlength{\bottafiddle}{1in}
-\newlength{\topfiddle} \setlength{\topfiddle}{\toptafiddle}
-\newlength{\botfiddle} \setlength{\botfiddle}{\onelineskip}
+% Add 1in to top margin for preliminaries and chapter headings
+\newlength{\topfiddle} \setlength{\topfiddle}{1in}
+\addtolength{\topfiddle}{-\baselineskip}
 
+% Increase the paragraph indent
 \setlength{\parindent}{2em}
-\checkandfixthelayout[nearest]
 
-% Apply corrections for non-body (frontmatter) margins
-\newcommand*{\addtotextheight}[1]{%
-    \twocolumn
-    \addtolength{\textheight}{#1}%
-    \onecolumn}
+\checkandfixthelayout[nearest]
 
 
 %% Page styling
 
 % Table of Contents
-\AtBeginDocument{%
-    \renewcommand{\contentsname}{TABLE OF CONTENTS}
-}
+\AtBeginDocument{\renewcommand{\contentsname}{TABLE OF CONTENTS}}
 \addtodef{\tableofcontents}{\clearpage}{}
-\renewcommand*{\tocheadstart}{\vspace*{-\topfiddle}}
+\renewcommand*{\tocheadstart}{\vspace*{\topfiddle}}
 
 % List of Figures
-\AtBeginDocument{%
-    \renewcommand{\listfigurename}{LIST OF FIGURES}
-}
+\AtBeginDocument{\renewcommand{\listfigurename}{LIST OF FIGURES}}
 \addtodef{\listoffigures}{\clearpage}{}
-\renewcommand*{\lofheadstart}{\vspace*{-\topfiddle}}
+\renewcommand*{\lofheadstart}{\vspace*{\topfiddle}}
 
 % List of Tables
-\AtBeginDocument{%
-    \renewcommand{\listtablename}{LIST OF TABLES}
-}
+\AtBeginDocument{\renewcommand{\listtablename}{LIST OF TABLES}}
 \addtodef{\listoftables}{\clearpage}{}
-\renewcommand*{\lotheadstart}{\vspace*{-\topfiddle}}
+\renewcommand*{\lotheadstart}{\vspace*{\topfiddle}}
 
 % No extra space before the entry, or in the LoF/LoT
 \setlength{\cftbeforechapterskip}{0pt plus 0pt}
 \renewcommand*{\insertchapterspace}{}
 
-% Set the depth
+% Set the ToC depth and section numbering depth
 \setsecnumdepth{subsubsection}
 \setcounter{tocdepth}{2}
 
 % Chapters
 \makechapterstyle{csuchapter}{%
-    \setlength{\beforechapskip}{-\topfiddle}
+    \setlength{\beforechapskip}{\topfiddle}
     \setlength{\midchapskip}{1.0\onelineskip}
     \setlength{\afterchapskip}{2.0\onelineskip}
     \renewcommand*{\chapnamefont}{\normalfont}
@@ -109,23 +82,20 @@
     \renewcommand*{\chaptitlefont}{\normalfont\centering}
     \renewcommand*{\printchaptertitle}{\chaptitlefont\MakeUppercase}
     \renewcommand*{\printchapternonum}{}
-    }
-\aliaspagestyle{chapter}{empty}
+}
 
 % Appendices
 \makechapterstyle{csuappendix}{%
-    \setlength{\beforechapskip}{-\topfiddle}
+    \setlength{\beforechapskip}{\topfiddle}
     \setlength{\midchapskip}{1.0\onelineskip}
-    \setlength{\afterchapskip}{1.0\onelineskip}
+    \setlength{\afterchapskip}{2.0\onelineskip}
     \renewcommand*{\chapnamefont}{\normalfont}
     \renewcommand*{\chapnumfont}{\chapnamefont}
     \renewcommand*{\printchaptername}{%
         \chapnamefont\MakeUppercase{\@chapapp}}
     \renewcommand*{\printchapternum}{\centering\chapnumfont \thechapter}
     \renewcommand*{\chaptitlefont}{\normalfont\centering}
-    %\renewcommand*{\printchapternonum}{}
-    %\renewcommand*{\afterchaptertitle}{\clearpage}
-    }
+}
 \addtodef{\appendix}{}{\chapterstyle{csuappendix}}
 
 % Sections, subsections, subsubsections: override `sphinx.sty`
@@ -137,114 +107,106 @@
 \titleformat{\subsection}{\normalfont\slshape}{\thesubsection}{1em}{}
 
 % Main text
-\makepagestyle{csupage}
-    \makeevenfoot{csupage}{}{\thepage}{}
-    \makeoddfoot{csupage}{}{\thepage}{}
-\aliaspagestyle{chapter}{csupage}
+\makepagestyle{csupagestyle}
+    \makeevenfoot{csupagestyle}{}{\thepage}{}
+    \makeoddfoot{csupagestyle}{}{\thepage}{}
+\aliaspagestyle{chapter}{csupagestyle}  % Include page numbers on chapter pages
 
 
-%% Customize the preliminary pages
-
-% General macro for Abstract, etc., headings
-\newcommand*{\pretoctitle}[1]{{%
-    \clearpage
-    \centering
-    \vspace*{-\topfiddle}#1\par}}
+%% Build the preliminary pages
 
 % Title
-\newcommand{\thetitlepage}{{
+\newcommand{\csutitle}{{
     \clearpage
-    \thispagestyle{empty}
+    \thispagestyle{empty}  % No page number on the title
+    \vspace*{\topfiddle}
     \centering
-    \vspace*{-\toptafiddle}
-    \MakeUppercase{\doctitle}  % FIXME: just use \title?
+    \MakeUppercase{\doctitle}\par
     \vfill
-    {\SingleSpace
-        A Thesis \\
-        presented to \\
-        the Faculty of California Polytechnic State University,\\
-        San Luis Obispo\par
-    }
+    \begin{DoubleSpace}
+    A Thesis \\
+    presented to \\
+    the Faculty of California Polytechnic State University,\\
+    San Luis Obispo
     \vfill
-    {\SingleSpace
-        In Partial Fulfillment \\
-        of the Requirements for the Degree \\
-        Master of Science in Electrical Engineering\par
-    }
+    In Partial Fulfillment \\
+    of the Requirements for the Degree \\
+    Master of Science in Electrical Engineering
     \vfill
     by \\
     Peter Heatwole \\
     June 2020
-    \enlargethispage{-\bottafiddle}
+    \end{DoubleSpace}
+    \enlargethispage{-1in}
     \clearpage
-    }}
+}}
 
 % Copyright
-\newcommand{\copyrightpage}{{
+\newcommand{\csucopyright}{{
+    \clearpage
     \centering
     \vspace*{\fill}
+    \begin{DoubleSpace}
     \textcopyright\, 2020 \\
     Peter Heatwole \\
     ALL RIGHTS RESERVED
     \par
+    \end{DoubleSpace}
     \enlargethispage{-1in}
     \clearpage
-    }}
+}}
 
 % Committee
-\newcommand{\committeepage}{{
+\newcommand{\csucommittee}{{
     \clearpage
-    \vspace*{-\toptafiddle}
+    \vspace*{\topfiddle}
     \centering
     COMMITTEE MEMBERSHIP
-    \vspace*{0.5in}
-    \begin{SingleSpace}
-    %\begin{tabular}{rp{3.01in}}
     \begin{tabular}{rl}
-        TITLE:  &\doctitle \\\\\\
-        AUTHOR: &\docauthor \\\\\\
+        \par \\
+        TITLE:  &\doctitle \\
+        AUTHOR: &\docauthor \\
         %DATE SUBMITTED: &\@degreemonth~\@degreeyear  \par\\
-        DATE SUBMITTED: &<FIXME: month and year> \\\\\\
-        \\\\\\
+        DATE SUBMITTED: &<FIXME: month and year> \\
+        \\\\
         COMMITTEE CHAIR:
             &Lynne Slivovsky, Ph.D. \\
-            &Professor of Electrical Engineering \\\\\\
+            &Professor of Electrical Engineering \\\\
         COMMITTEE MEMBER:
             &Marty Kaliski, Ph.D. \\
-            &Professor of Electrical Engineering \\\\\\
+            &Professor of Electrical Engineering \\\\
         COMMITTEE MEMBER:
             &Somebody Else, M.Sc. \\
-            &Professor of Electrical Engineering \\\\\\
+            &Professor of Electrical Engineering \\\\
     \end{tabular}
-    \end{SingleSpace}
     \clearpage
-    }}
+}}
 
 % Abstract
-\newcommand{\csuabstract}{%
-    %\addtotextheight{-\botfiddle}%
-    \pretoctitle{ABSTRACT}
-    \begin{DoubleSpace}
-    \begin{center}
-        \doctitle \\
-        \docauthor
-    \end{center}
-    \end{DoubleSpace}
-    }
+\newcommand{\csuabstract}{{
+    \clearpage
+    \vspace*{\topfiddle}
+    \centering
+    ABSTRACT\par
+    \vspace*{1.5\onelineskip}
+    \doctitle \\
+    \vspace*{1.5\onelineskip}
+    \docauthor \\
+    \vspace*{1.5\onelineskip}
+}}
 
 % Acknowledgements
-\newcommand{\csuacknowledgements}{%
-    %\addtotextheight{-\botfiddle}%
-    \pretoctitle{ACKNOWLEDGEMENTS}
-    \vspace*{\baselineskip}}
-
-
-%% Make sure to reset text height when the mainmatter starts
-%\addtodef{\mainmatter}{\addtotextheight{\botfiddle}}{}
+\newcommand{\csuacknowledgements}{{
+    \clearpage
+    \vspace*{\topfiddle}
+    \centering
+    ACKNOWLEDGEMENTS\par
+    \vspace*{\baselineskip}
+}}
 
 % Use the `csu` chapterstyle and plain pagestyle
 \chapterstyle{csuchapter}
-\pagestyle{plain}
+\pagestyle{plain}  % FIXME: I don't understand what this does
 
-% end of .sty file
+% End of .sty file
 \endinput

@@ -5,9 +5,9 @@ Contents
 .. raw:: latex
 
     \frontmatter
-    \thetitlepage
-    \copyrightpage
-    \committeepage
+    \csutitle
+    \csucopyright
+    \csucommittee
 
 .. only:: html or singlehtml
 
@@ -30,7 +30,6 @@ Contents
       \listoffigures
       \listoftables
       \mainmatter
-      \pagestyle{csupage}
 
 .. toctree::
    :maxdepth: 3
