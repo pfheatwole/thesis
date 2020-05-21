@@ -193,7 +193,10 @@ latex_elements = {
     #
     # 'figure_align': 'htbp',
 
-    'sphinxsetup': "TitleColor={named}{black}",
+    'sphinxsetup':
+        "TitleColor={named}{black}"
+        + ",InnerLinkColor={rgb}{0.208,0.374,0.486}"
+        + ",OuterLinkColor={rgb}{0.208,0.374,0.486}",
 }
 
 latex_additional_files = [
