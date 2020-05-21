@@ -67,9 +67,7 @@
     \onecolumn}
 
 
-
 %% Page styling
-
 
 % Table of Contents
 \AtBeginDocument{%
@@ -78,14 +76,14 @@
 \addtodef{\tableofcontents}{\clearpage}{}
 \renewcommand*{\tocheadstart}{\vspace*{-\topfiddle}}
 
-%% List of Figures
+% List of Figures
 \AtBeginDocument{%
     \renewcommand{\listfigurename}{LIST OF FIGURES}
 }
 \addtodef{\listoffigures}{\clearpage}{}
 \renewcommand*{\lofheadstart}{\vspace*{-\topfiddle}}
 
-%% List of Tables
+% List of Tables
 \AtBeginDocument{%
     \renewcommand{\listtablename}{LIST OF TABLES}
 }
@@ -100,7 +98,7 @@
 \setsecnumdepth{subsubsection}
 \setcounter{tocdepth}{2}
 
-%% Chapters
+% Chapters
 \makechapterstyle{csuchapter}{%
     \setlength{\beforechapskip}{-\topfiddle}
     \setlength{\midchapskip}{1.0\onelineskip}
@@ -114,7 +112,7 @@
     }
 \aliaspagestyle{chapter}{empty}
 
-%% Appendices
+% Appendices
 \makechapterstyle{csuappendix}{%
     \setlength{\beforechapskip}{-\topfiddle}
     \setlength{\midchapskip}{1.0\onelineskip}
@@ -247,8 +245,6 @@
 % Use the `csu` chapterstyle and plain pagestyle
 \chapterstyle{csuchapter}
 \pagestyle{plain}
-
-
 
 % end of .sty file
 \endinput
