@@ -156,6 +156,7 @@ EXTRA_PREAMBLE = r"""
 \usepackage{csu}
 \usepackage{cancel}
 \newcommand{\given}{\;\middle\vert\;}
+\renewcommand{\arraystretch}{1.5}
 """
 
 latex_engine = "xelatex"  # pdflatex has poor unicode support
