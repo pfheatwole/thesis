@@ -130,15 +130,13 @@
     }
 \addtodef{\appendix}{}{\chapterstyle{csuappendix}}
 
-
-%% (subsub)Sections
-%\setsecheadstyle{\centering\normalfont}
-%\setbeforesecskip{-1\onelineskip plus -1ex minus -.2ex}
-%\setaftersecskip{1\onelineskip plus .2ex}
-%\setsubsecheadstyle{\centering\normalfont}
-%\setbeforesubsecskip{-1\onelineskip plus -1ex minus -.2ex}
-%\setaftersubsecskip{1\onelineskip plus .2ex}
-
+% Sections, subsections, subsubsections: override `sphinx.sty`
+%
+% Normally you would use `\setsecheadstyle` et al from the memoir package,
+% but sphinx hardcodes heading styles into `sphinx.sty` using the `titlesec`
+% package, so we must explicitly override `sphinx.sty` here.
+\titleformat{\section}{\normalfont\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\slshape}{\thesubsection}{1em}{}
 
 % Main text
 \makepagestyle{csupage}
