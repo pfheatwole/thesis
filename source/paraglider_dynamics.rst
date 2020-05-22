@@ -227,19 +227,30 @@ And finally, the complete system of equations:
       {\vec{F}^b_R}
    \end{bmatrix}
    =\begin{bmatrix}
-      {\vec{F}^b_{\textrm{wing,aero}}}
+      \vec{B}_1\\
+      \vec{B}_2\\
+      \vec{B}_3\\
+      \vec{B}_4
+   \end{bmatrix}
+
+where
+
+.. math::
+
+   \begin{aligned}
+      \vec{B}_1 &= {\vec{F}^b_{\textrm{wing,aero}}}
       + {\vec{F}^b_{\textrm{wing,weight}}}
       - {m_b \, {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}}
       - {m_b \, {\vec{\omega}^b_{b/e}} \times {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}}\\
-      {\vec{F}^b_{\textrm{p,aero}}}
+      \vec{B}_2 &= {\vec{F}^b_{\textrm{p,aero}}}
       + {\vec{F}^p_{\textrm{p,weight}}}
       - {m_p \, {\vec{\omega}^p_{b/e}} \times {\vec{v}^p_{R/e}}}
       - {m_p \, {\vec{\omega}^p_{p/e}} \times {\vec{\omega}^p_{p/e}} \times {\vec{r}^p_{P/R}}}\\
-      {\vec{M}^b_{\textrm{wing,aero}}}
+      \vec{B}_3 &= {\vec{M}^b_{\textrm{wing,aero}}}
       + {\vec{M}^b_{\textrm{wing,weight}}}
       - {\vec{M}^b_R}
       - {\vec{\omega}^b_{b/e} \times \left( {\mat{J^b_B} \vec{\omega}^b_{b/e}} \right)}\\
-      {\vec{M}^p_{\textrm{p,aero}}}
+      \vec{B}_4 &= {\vec{M}^p_{\textrm{p,aero}}}
       + {\vec{M}^p_R}
       - {\vec{\omega}^p_{p/e} \times \left( {\mat{J^p_P} \vec{\omega}^p_{p/e}} \right)}
-   \end{bmatrix}
+   \end{aligned}
