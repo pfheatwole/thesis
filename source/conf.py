@@ -57,6 +57,9 @@ mathjax_config = {
         "extensions": ["cancel.js"],
         "Macros": {
             "given": r"\;\middle\vert\;",
+            "vec": [r"\mathbf{#1}", 1],
+            "mat": [r"\left[#1\right]", 1],
+            "crossmat": [r"\mat{#1}^{\times}", 1],
         },
     },
 }
@@ -156,6 +159,9 @@ EXTRA_PREAMBLE = r"""
 \usepackage{csu}
 \usepackage{cancel}
 \newcommand{\given}{\;\middle\vert\;}
+\renewcommand{\vec}{\mathbf}
+\newcommand{\mat}[1]{\left[#1\right]}
+\newcommand{\crossmat}[1]{\mat{#1}^{\times}}
 \renewcommand{\arraystretch}{1.5}
 """
 

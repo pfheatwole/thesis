@@ -95,8 +95,9 @@ This model also uses the body and payload
 Use the reference geometry in :numref:`paraglider_fbd_9dof`. The nine
 degrees-of-freedom model defines the paraglider as a system of two bodies: the
 canopy and the payload (the harness). The dynamic equations can be written by
-solving for the translational momentum :math:`^e \dot{\vec{p}} = \sum{F}` and
-angular momentum :math:`^e \dot{\vec{h}} = \sum M` for both bodies.
+solving for the translational momentum :math:`^e \dot{\vec{p}}
+= \sum{\vec{F}}` and angular momentum :math:`^e \dot{\vec{h}} = \sum \vec{M}`
+for both bodies.
 
 .. math::
    :label: 9dof_body_p
@@ -181,8 +182,8 @@ angular momentum :math:`^e \dot{\vec{h}} = \sum M` for both bodies.
       &= {^b\dot{\vec{h}}_b}
          + {\vec{\omega}^b_{b/e} \times \vec{h}_b}
 
-      &= {[J^b_B]{^b \dot{\vec{\omega}}^b_{b/e}}}
-         + {\vec{\omega} \times \left( [J^b_B] \vec{\omega}^b_{b/e} \right)}
+      &= {\mat{J^b_B}{^b \dot{\vec{\omega}}^b_{b/e}}}
+         + {\vec{\omega} \times \left( \mat{J^b_B} \vec{\omega}^b_{b/e} \right)}
 
       &= {\vec{M}^b_{\textrm{wing,aero}}}
          + {\vec{M}^b_{\textrm{wing,weight}}}
@@ -199,8 +200,8 @@ angular momentum :math:`^e \dot{\vec{h}} = \sum M` for both bodies.
       &= {^p\dot{\vec{h}}_p}
          + {\vec{\omega}^p_{p/e} \times \vec{h}_p}
 
-      &= {[J^p_P]{^p \dot{\vec{\omega}}^p_{p/e}}}
-         + {\vec{\omega} \times \left( [J^p_P] \vec{\omega}^p_{p/e} \right)}
+      &= {\mat{J^p_P}{^p \dot{\vec{\omega}}^p_{p/e}}}
+         + {\vec{\omega} \times \left( \mat{J^p_P} \vec{\omega}^p_{p/e} \right)}
 
       &= {\vec{M}^p_{\textrm{wing,aero}}}
          + {\vec{M}^p_{\textrm{wing,weight}}}
@@ -214,10 +215,10 @@ And finally, the complete system of equations:
    :label: 9dof_linear_system
 
    \begin{bmatrix}
-      {m_b [I_3]} & {-m_b [\vec{r}^b_{B/R}]^{\times}]} & {[0_{3\times3}]} & {[I_3]}\\
-      {m_p [C_{p/b}]} & {[0_{3\times3}]} & {-m_p [\vec{r}^p_{p/R}]^{\times}} & {-[C_{p/b}]}\\
-      {[0_{3\times3}]} & {[J^b_B]} & {[0_{3\times3}]} & {-[\vec{r}^b_{R/B}]^{\times}}\\
-      {[0_{3\times3}]} & {[0_{3\times3}]} & {[J^p_P]} & {[\vec{r}^p_{P/R}]^{\times} [C_{p/b}]}
+      {m_b \mat{I_3}} & {-m_b \crossmat{\vec{r}^b_{B/R}}} & {\mat{0_{3\times3}}} & {\mat{I_3}}\\
+      {m_p \mat{C_{p/b}}} & {\mat{0_{3\times3}}} & {-m_p \crossmat{\vec{r}^p_{p/R}}} & {-\mat{C_{p/b}}}\\
+      {\mat{0_{3\times3}}} & {\mat{J^b_B}} & {\mat{0_{3\times3}}} & {-\crossmat{\vec{r}^b_{R/B}}}\\
+      {\mat{0_{3\times3}}} & {\mat{0_{3\times3}}} & {\mat{J^p_P}} & {\crossmat{\vec{r}^p_{P/R}} \mat{C_{p/b}}}
    \end{bmatrix}
    \begin{bmatrix}
       {^b \dot{\vec{v}}^b_{R/e}}\\
@@ -237,8 +238,8 @@ And finally, the complete system of equations:
       {\vec{M}^b_{\textrm{wing,aero}}}
       + {\vec{M}^b_{\textrm{wing,weight}}}
       - {\vec{M}^b_R}
-      - {\vec{\omega}^b_{b/e} \times \left( {[J^b_B] \vec{\omega}^b_{b/e}} \right)}\\
+      - {\vec{\omega}^b_{b/e} \times \left( {\mat{J^b_B} \vec{\omega}^b_{b/e}} \right)}\\
       {\vec{M}^p_{\textrm{p,aero}}}
       + {\vec{M}^p_R}
-      - {\vec{\omega}^p_{p/e} \times \left( {[J^p_P] \vec{\omega}^p_{p/e}} \right)}
+      - {\vec{\omega}^p_{p/e} \times \left( {\mat{J^p_P} \vec{\omega}^p_{p/e}} \right)}
    \end{bmatrix}

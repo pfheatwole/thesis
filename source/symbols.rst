@@ -29,11 +29,11 @@ Notation and Symbols
    * - :math:`x^{(n)}`
      - element :math:`n` of a set of :math:`N` elements
 
-   * - :math:`[X]_{M \times N}`
+   * - :math:`\mat{X}_{M \times N}`
      - a matrix with :math:`M` rows and :math:`N` columns
-   * - :math:`[X]^z`
+   * - :math:`\mat{X}^z`
      - a matrix exponential, where :math:`z` is a scalar
-   * - :math:`[C_{B/A}]`
+   * - :math:`\mat{C_{B/A}}`
      - an orthogonal matrix that transforms vectors from bases :math:`A` into
        :math:`B`
 
