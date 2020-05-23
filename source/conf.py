@@ -78,8 +78,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Paraglider Flight Reconstruction'
-copyright = '2020, Peter Heatwole'
-author = 'Peter Heatwole'
+copyright = '2020, Peter Frank Heatwole'
+author = 'Peter Frank Heatwole'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
