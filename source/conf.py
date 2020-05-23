@@ -78,7 +78,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Paraglider Flight Reconstruction'
-copyright = '2020, Peter Frank Heatwole'
+copyright = "2020, Peter Frank Heatwole"
 author = 'Peter Frank Heatwole'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -215,7 +215,7 @@ latex_additional_files = [
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     ('index', 'Thesis.tex', project,
-     'Peter Heatwole', 'memoir'),
+     'Peter Frank Heatwole', 'memoir'),
 ]
 
 
