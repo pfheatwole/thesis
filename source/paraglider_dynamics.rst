@@ -40,6 +40,57 @@ Non-linear lifting line theory
    Wing sections for Phillips' method.
 
 
+Apparent Mass
+=============
+
+Newton's second law states that acceleration is proportional to the net force
+applied to an object:
+
+.. math::
+
+   \sum{\vec{F}} = m \vec{a}
+
+This simple rule is sufficient and effective for determining the behavior of
+isolated objects, but when an object is immersed in a fluid it is longer
+isolated. When an object moves through a fluid it exchanges momentum with the
+fluid, and so the momentum of the fluid needs to be considered.
+
+In static scenarios, where the vehicle is not accelerating relative to the
+fluid (ie, changing speed and/or direction), this exchange of momentum is
+traditionally summarized by coefficients that describe how the forces and
+moments on the wing change with the air velocity. But for unsteady flows, where
+the vehicle is accelerating relative to the fluid, the net force on the vehicle
+can no longer be equated to the product of the vehicle's mass and acceleration.
+Instead, when a net force is applied to an object in a fluid, it will
+accelerate more slowly than the object would have in isolation; it is as if the
+vehicle has increased its mass:
+
+.. math::
+
+   \sum{\vec{F}} = (m + m_a) \vec{a}
+
+This *apparent mass* :math:`m_a` becomes increasingly more significant as the
+density of the vehicle approaches the density of the fluid. If the density of
+the vehicle is much greater than the density of the fluid the effect is often
+ignored, as is the case for traditional aircraft, which are much more dense
+than the surrounding air. For lightweight aircraft, however, such as
+a parafoil, where the density of the vehicle is much closer to the density of
+the air, the effect can be significant.
+
+Some references I need to discuss:
+
+* :cite:`lissaman1993ApparentMassEffects`: outlined a simple method for
+  estimating the apparent mass of parafoils.
+
+* :cite:`barrows2002ApparentMassParafoils`: added corrections to the equations
+  from Lissaman. Provides the setup for a linear system 6 DoF model that I used
+  as the basis for `Model6b`.
+
+* :cite:`thomasson2000EquationsMotionVehicle`: The equations in Lissaman and
+  Barrows assume irrotational flows. This paper also considers rotational flow?
+  I think?
+
+
 Dynamics Models
 ===============
 
