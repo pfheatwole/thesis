@@ -66,3 +66,17 @@ The physical model was built at a quarter-scale. Physical dimensions and positio
 
 It is important to notice the difference between the section numbers used here
 and the section indices used in the parafoil canopy geometry.
+
+.. TODO:: Should I use these tables or just give the explicit equations?
+   They're messy, bu I do like the fact that they highlight the fact that you
+   **can** use pointwise data.
+
+Inputting the values to the canopy geometry produces:
+
+.. raw:: latex
+
+   \newpage
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy.*

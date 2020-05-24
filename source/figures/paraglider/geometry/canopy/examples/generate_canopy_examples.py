@@ -7,6 +7,8 @@ from matplotlib.collections import PolyCollection
 
 import numpy as np
 
+import scipy
+
 import pfh.glidersim as gsim
 from pfh.glidersim.airfoil import Airfoil, NACA  # noqa: F401
 from pfh.glidersim.foil import (  # noqa: F401
@@ -293,8 +295,64 @@ if __name__ == "__main__":
         "torsion": 0,
     }
 
+    # -----------------------------------------------------------------------
+    # Build the reference wing from Belloc's paper
+
+    h = 3 / 8  # Arch height (vertical deflection from wing root to tips) [m]
+    cc = 2.8 / 8  # The central chord [m]
+    b = 11.00 / 8  # The projected span [m]
+    S = 25.08 / (8**2)  # The projected area [m^2]
+    AR = 4.82  # The projected aspect ratio
+    b_flat = 13.64 / 8  # The flattened span [m]
+    S_flat = 28.56 / (8**2)  # The flattened area [m^2]
+    AR_flat = 6.52  # The flattened aspect ratio
+
+    # Use Eq:1 and Eq:2 for xyz and c
+    i = np.arange(13)[::-1]  # Reverse the order to move left->right
+    thetas = i * np.pi / 12
+    xyz = np.c_[np.zeros(13), b / 2 * np.cos(thetas), -h * np.sin(thetas)]
+    k = 1.05
+    c = cc * np.sqrt(1 - (xyz.T[1] / (k * b / 2)) ** 2)  # Corrected Eq:2
+    theta = np.deg2rad([3, 3, *([0] * 9), 3, 3])
+
+    # Compute the section indices
+    L_segments = np.linalg.norm(np.diff(xyz, axis=0), axis=1)
+    s_xyz = np.cumsum(np.r_[0, L_segments]) / L_segments.sum() * 2 - 1
+
+    # Coordinates and chords are in meters, and must be normalized
+    fx = scipy.interpolate.interp1d(s_xyz, xyz.T[0] / (b_flat / 2))
+    fy = scipy.interpolate.interp1d(s_xyz, xyz.T[1] / (b_flat / 2))
+    fz = scipy.interpolate.interp1d(s_xyz, (xyz.T[2] - xyz[6, 2]) / (b_flat / 2))
+    fc = scipy.interpolate.interp1d(s_xyz, c / (b_flat / 2))
+    ftheta = scipy.interpolate.interp1d(s_xyz, theta)
+
+    class PchipInterpolatedLobe:
+        def __init__(self, s, y, z):
+            self._f = scipy.interpolate.PchipInterpolator(s, np.c_[y, z])
+            self._fd = self._f.derivative()
+
+        def __call__(self, s):
+            return self._f(s)
+
+        def derivative(self, s):
+            return self._fd(s)
+
+    s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
+    lobe = PchipInterpolatedLobe(s, fy(s), fz(s))
+
+    examples["belloc"] = {
+        "r_x": 0.6,
+        "x": 0,
+        "r_yz": 0.6,
+        "yz": lobe,
+        "chord_length": fc,
+        "torsion": ftheta,
+    }
+
+    # -----------------------------------------------------------------------
+
     # Use a common airfoil
-    airfoil = gsim.airfoil.Airfoil(None, gsim.airfoil.NACA(24018))
+    airfoil = gsim.airfoil.Airfoil(None, gsim.airfoil.NACA(23015))
 
     savefig = True  # Save the images to SVG files
     # savefig = False
