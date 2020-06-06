@@ -287,7 +287,7 @@ for beta in betas:
 S = canopy.S_flat
 q = 0.5 * rho_air * v_mag**2
 
-coefficients = {}
+nllt = {}  # Coefficients from the NLLT, keyed by beta [deg]
 for beta in betas:
     CX, CY, CZ = Fs[beta].T / (q * S)
     CN = -CZ
@@ -314,126 +314,124 @@ for beta in betas:
     # ])
     # (CD, CC, CL) = C_w2b @ [-CX, -CY, -CZ]
 
-    coefficients[beta] = {"CL": CL, "CD": CD, "CM": CM, "CM_c4": CM_c4}
+    nllt[beta] = {"CL": CL, "CD": CD, "CM": CM, "CM_c4": CM_c4}
 
 
 # ---------------------------------------------------------------------------
 # Recreate Belloc figures 5..8
 
-
 plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
+beta_names = {0: "00", 5: "05", 10: "10", 15: "15"}  # For filenames
+beta_ax = {0: (0, 0), 5: (0, 1), 10: (1, 0), 15: (1, 1)}  # Subplot axes
 
+# Load the VLM and wind tunnel data
+belloc = {}  # Coefficients from the wind tunnel, keyed  by beta [deg]
+vlm = {}  # Coefficients from the VLM method, keyed by beta [deg]
 for beta in sorted(plotted_betas.intersection(betas)):
-    b = {0: "00", 5: "05", 10: "10", 15: "15"}[beta]
-
-    belloc = pd.read_csv(f"windtunnel/beta{b}.csv")  # Belloc's raw wind tunnel data
+    b = beta_names[beta]
+    belloc[beta] = pd.read_csv(f"windtunnel/beta{b}.csv")  # Belloc's raw wind tunnel data
     names = ("alpha", "CL", "CD", "CM")
-    xflr5 = np.loadtxt(  # Inviscid solution using VLM from XLFR5
+    vlm[beta] = np.loadtxt(  # Inviscid solution using VLM from XLFR5
         f"xflr5/wing_polars/Belloc_VLM2-b{b}.txt",
         dtype=np.dtype({"names": names, "formats": [float] * 4}),
         skiprows=8,
         usecols=(0, 2, 5, 8),
     )
 
-    CL = coefficients[beta]["CL"]
-    CD = coefficients[beta]["CD"]
-    CM = coefficients[beta]["CM"]  # The global CM about the center of mass
+belloc_args = {"c": "k", "linestyle": "--", "linewidth": 1, "label": "Wind tunnel"}
+nllt_args = {"c": "b", "linestyle": "--", "linewidth": 1, "label": "NLLT"}
+vlm_args = {"c": "r", "linestyle": "--", "linewidth": 1, "label": "VLM"}
 
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.plot(np.rad2deg(alphas[beta]), CL, 'b', lw=1, label="NLLT")
-    ax.plot(xflr5["alpha"], xflr5["CL"], 'r--', lw=1, label="VLM")
-    ax.plot(belloc["Alphac"], belloc["CZa"], 'k--', lw=1, label="Wind tunnel")
-    ax.set_xlabel("alpha [deg]")
-    ax.set_ylabel("CL")
-    ax.set_xlim(-10, 25)
-    ax.set_ylim(-0.6, 1.25)
-    ax.legend(loc="lower right")
+def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
+    args = {
+        "nrows": 2,
+        "ncols": 2,
+        "sharex": True,
+        "sharey": True,
+        "figsize": (6, 6),
+    }
+
+    fig, axes = plt.subplots(**args)
+    if xlim:
+        axes[0, 0].set_xlim(*xlim)
+    if ylim:
+        axes[0, 0].set_ylim(*ylim)
+    axes[1, 0].set_xlabel(xlabel)
+    axes[1, 1].set_xlabel(xlabel)
+    axes[0, 0].set_ylabel(ylabel)
+    axes[1, 0].set_ylabel(ylabel)
+    axes[0, 0].grid(c='lightgrey', linestyle="--")
+    axes[0, 1].grid(c='lightgrey', linestyle="--")
+    axes[1, 0].grid(c='lightgrey', linestyle="--")
+    axes[1, 1].grid(c='lightgrey', linestyle="--")
+    return fig, axes
+
+
+# Plot: CL vs alpha
+fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_L}$", xlim=(-10, 25), ylim=(-0.6, 1.25))
+for beta in sorted(plotted_betas.intersection(betas)):
+    ax = axes[beta_ax[beta]]
+    ax.plot(belloc[beta]["Alphac"], belloc[beta]["CZa"], **belloc_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CL"], **nllt_args)
+    ax.plot(vlm[beta]["alpha"], vlm[beta]["CL"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
-    fig.savefig(f"CL_vs_alpha_beta{b}.svg", dpi=96)
+axes[1, 1].legend(loc="lower right")
+fig.tight_layout()
+fig.savefig(f"CL_vs_alpha.svg", dpi=96)
 
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.plot(np.rad2deg(alphas[beta]), CD, 'b', lw=1, label="NLLT")
-    ax.plot(xflr5["alpha"], xflr5["CD"], 'r--', lw=1, label="VLM")
-    ax.plot(belloc["Alphac"], belloc["CXa"], 'k--', lw=1, label="Wind tunnel")
-    ax.set_xlabel("alpha [deg]")
-    ax.set_ylabel("CD")
-    ax.set_xlim(-10, 25)
-    ax.set_ylim(0, 0.18)
-    ax.legend(loc="lower right")
+# Plot: CD vs alpha
+fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_D}$", xlim=(-10, 25), ylim=(0.0, 0.2))
+for beta in sorted(plotted_betas.intersection(betas)):
+    ax = axes[beta_ax[beta]]
+    ax.plot(belloc[beta]["Alphac"], belloc[beta]["CXa"], **belloc_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CD"], **nllt_args)
+    ax.plot(vlm[beta]["alpha"], vlm[beta]["CD"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
-    fig.savefig(f"CD_vs_alpha_beta{b}.svg", dpi=96)
+axes[1, 1].legend(loc="upper left")
+fig.tight_layout()
+fig.savefig(f"CD_vs_alpha.svg", dpi=96)
 
-    fig, ax = plt.subplots(figsize(6, 6))
-    ax.plot(belloc["Alphac"], belloc["CMT1"], 'k--', lw=1)
-    ax.plot(np.rad2deg(alphas[0]), coefficients[0]["CM"])
-    ax.plot(xflr5["alpha"], xflr5["CM"], 'r--', lw=1)
-    ax.set_xlim(-10, 25)
-    ax.set_ylim(-1.0, 0.1)
-    ax.legend(loc="lower left")
-    ax.set_title(f"$\\beta$={b}°")
-    fig.savefig(f"CM_vs_alpha_beta{b}.svg", dpi=96)
-
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.plot(CD, CL, 'b', lw=1, label="NLLT")
-    ax.plot(xflr5["CD"], xflr5["CL"], 'r--', lw=1, label="VLM")
-    ax.plot(belloc["CXa"], belloc["CZa"], 'k--', lw=1, label="Wind tunnel")
-    ax.set_xlabel("CD")
-    ax.set_ylabel("CL")
-    ax.set_xlim(0, 0.18)
-    ax.set_ylim(-0.6, 1.25)
-    ax.legend(loc="lower right")
+# Plot: CM vs alpha
+fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_{M,G}}$", xlim=(-10, 25), ylim=(-0.5, 0.1))
+for beta in sorted(plotted_betas.intersection(betas)):
+    ax = axes[beta_ax[beta]]
+    ax.plot(belloc[beta]["Alphac"], belloc[beta]["CMT1"], **belloc_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CM"], **nllt_args)
+    ax.plot(vlm[beta]["alpha"], vlm[beta]["CM"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
-    fig.savefig(f"CL_vs_CD_beta{b}.svg", dpi=96)
+axes[1, 1].legend(loc="lower left")
+fig.tight_layout()
+fig.savefig(f"CM_vs_alpha.svg", dpi=96)
 
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.plot(CM, CL, 'b', lw=1, label="NLLT")
-    ax.plot(xflr5["CM"], xflr5["CL"], 'r--', lw=1, label="VLM")
-    ax.plot(belloc["CMaT1"][:42], belloc["CZa"][:42], 'k--', lw=1, label="Wind tunnel")
-    ax.set_xlabel(r"$\mathrm{CM_G}$")
-    ax.set_ylabel("CL")
-    ax.set_xlim(-0.5, 0.1)
-    ax.set_ylim(-0.6, 1.25)
-    ax.legend(loc="lower left")
+# Plot: CL vs CD
+fig, axes = plot4x4("$\mathrm{C_D}$", "$\mathrm{C_L}$", xlim=(0, 0.2), ylim=(-0.6, 1.25))
+for beta in sorted(plotted_betas.intersection(betas)):
+    ax = axes[beta_ax[beta]]
+    ax.plot(belloc[beta]["CXa"], belloc[beta]["CZa"], **belloc_args)
+    ax.plot(nllt[beta]["CD"], nllt[beta]["CL"], **nllt_args)
+    ax.plot(vlm[beta]["CD"], vlm[beta]["CL"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
-    fig.savefig(f"CL_vs_CM_beta{b}.svg", dpi=96)
+axes[1, 1].legend(loc="lower right")
+fig.tight_layout()
+fig.savefig(f"CL_vs_CD.svg", dpi=96)
 
+# Plot: CL vs CM
+fig, axes = plot4x4("$\mathrm{C_{M,G}}$", "$\mathrm{C_L}$", xlim=(-0.5, 0.1), ylim=(-0.6, 1.25))
+for beta in sorted(plotted_betas.intersection(betas)):
+    ax = axes[beta_ax[beta]]
+    ax.plot(belloc[beta]["CMT1"][:42], belloc[beta]["CZa"][:42], **belloc_args)
+    ax.plot(nllt[beta]["CM"], nllt[beta]["CL"], **nllt_args)
+    ax.plot(vlm[beta]["CM"], vlm[beta]["CL"], **vlm_args)
+    ax.set_title(f"$\\beta$={beta}°")
+axes[1, 1].legend(loc="lower right")
+fig.tight_layout()
+fig.savefig(f"CL_vs_CM.svg", dpi=96)
 
 plt.show()
 
-
+embed()
 1/0
 
-fig, ax = plt.subplots(2, 2)
-m = "."  # Default marker
-m = None  # Disable the marker
-
-for beta in sorted(plotted_betas.intersection(betas)):
-    CL = coefficients[beta]["CL"]
-    CD = coefficients[beta]["CD"]
-    CM_G = coefficients[beta]["CM"]
-    label = f"$\\beta$={beta}°"
-    ax[0, 0].plot(np.rad2deg(alphas[beta]), CL, label=label, marker=m)
-    ax[0, 0].plot(belloc["Alphac"], belloc["CZa"], 'k--', lw=1)
-    ax[0, 0].plot(xflr5["alpha"], xflr5["CL"], 'r--', lw=1)
-    ax[1, 0].plot(CD, CL, label=label, marker=m)
-    ax[1, 0].plot(belloc["CXa"], belloc["CZa"], 'k--', lw=1)
-    ax[1, 0].plot(xflr5["CD"], xflr5["CL"], 'r--', lw=1)
-    ax[1, 1].plot(CM_G, CL, label=label, marker=m)
-    ax[1, 1].plot(belloc["CMaT1"], belloc["CZa"], 'k--', lw=1)
-
-ax[0, 0].set_xlabel("alpha [degrees]")
-ax[0, 0].set_ylabel("CL")
-ax[0, 0].set_xlim(-10, 25)
-ax[0, 0].set_ylim(-0.4, 1.0)
-ax[0, 0].legend()
-ax[0, 0].grid()
-
-ax[1, 0].set_xlabel("CD")
-ax[1, 0].set_ylabel("CL")
-ax[1, 0].set_xlim(0, 0.2)
-ax[1, 0].set_ylim(-0.4, 1.0)
-ax[1, 0].legend()
-ax[1, 0].grid()
 
 # Compute the pitching moment coefficients:
 #
@@ -441,16 +439,17 @@ ax[1, 0].grid()
 # CM_CL : due to the lift force applied to the wing
 # CM_c4 : due to the wing shape
 # CM_G: the total pitching moment = CM_CD + CM_CL + CM_c4
-CL = coefficients[0]["CL"]
-CM_G = coefficients[0]["CM"]
-CM_CD = coefficients[0]["CD"] * np.cos(alphas[0]) / cc  # Eq: 8
-CM_CL = -coefficients[0]["CL"] * np.sin(alphas[0]) / cc  # Eq: 9
+CL = nllt[0]["CL"]
+CM_G = nllt[0]["CM"]
+CM_CD = nllt[0]["CD"] * np.cos(alphas[0]) / cc  # Eq: 8
+CM_CL = -nllt[0]["CL"] * np.sin(alphas[0]) / cc  # Eq: 9
 CM_c4 = CM_G - CM_CL - CM_CD  # Eq: 7
 
 ax[0, 1].plot(CM_G, CL, label="CM_G", marker=m)
 ax[0, 1].plot(CM_CL, CL, label="CM_CL", marker=m)
 ax[0, 1].plot(CM_CD, CL, label="CM_CD", marker=m)
 ax[0, 1].plot(CM_c4, CL, label="CM_25%", marker=m)
+ax[0, 1].plot(nllt[0]["CM_c4"], CL, 'r--', label="Other CM_25%", marker=m)
 ax[0, 1].set_xlabel("CM")
 ax[0, 1].set_ylabel("CL")
 ax[0, 1].legend()
