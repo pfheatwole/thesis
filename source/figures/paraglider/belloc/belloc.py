@@ -137,10 +137,10 @@ canopy = gsim.foil.SimpleFoil(
 
 print()
 print("Finished defining the canopy. Checking fit...")
-print(f"  Projected area> Expected: {S}, Actual: {canopy.S:.3f}")
-print(f"  Flattened area> Expected: {S_flat}, Actual: {canopy.S_flat:.3f}")
-print(f"  Projected AR> Expected: {AR}, Actual: {canopy.AR:.3f}")
-print(f"  Flattened AR> Expected: {AR_flat}, Actual: {canopy.AR_flat:.3f}")
+print(f"  Projected area> Expected: {S:.4f},   Actual: {canopy.S:.4f}")
+print(f"  Flattened area> Expected: {S_flat:.4f},   Actual: {canopy.S_flat:.4f}")
+print(f"    Projected AR> Expected: {AR:.4f},   Actual: {canopy.AR:.4f}")
+print(f"    Flattened AR> Expected: {AR_flat:.4f},   Actual: {canopy.AR_flat:.4f}")
 print()
 
 wing = gsim.paraglider_wing.ParagliderWing(
