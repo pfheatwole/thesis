@@ -401,19 +401,173 @@ Roadmap
 
 
 
-Flight Reconstruction
-=====================
+Task Overview
+=============
 
-What is it?
+I'd like to develop a motivational roadmap for flight reconstruction: what is
+it, why would it be useful, and what's involved in performing it? This section
+should decompose the big picture task of "turning flight data into
+a predictive model suitable for in-flight feedback" into a collection of
+subtasks.
 
-How can we accomplish it? Through *Bayesian filtering*.
+
+1. What is flight reconstruction?
+
+   * Reconstructing the wind for an individual flight
+
+2. Why do it?
+
+   What are the applications? Make a list of related literature of tasks that
+   would benefit from solving the problem of paraglider flight reconstruction.
+
+  * Wind estimation
+
+  * Path planning algorithms (strategies to help pilots utilize the predictive
+    model while accounting for the predictive uncertainty)
+
+3. What would be required for reconstructing individual flights?
+
+  * Probabilistic simulation that needs dynamics models for all the
+    components, priors for all the variables, etc
+
+4. What would be required for the applications of flight reconstruction?
+
+  * Building regression models from individual flights
+
+  * Aggregating/merging regression models from combined flights (flights at
+    the same location at the same time)
+
+  * Aggregating regression models over multiple days to build a predictive
+    model
+
+  * Pattern detection/extraction (finding reliable patterns in the set of
+    regression models)
+
+  * Encoding the patterns into a predictive model
 
 
-Bayesian Estimation
-===================
+**Which aspects of these tasks are the focus of my paper?** I'm focused on
+building components for probabilistic flight simulation.
 
-What is Bayesian estimation? A way of reasoning in the face of uncertainty,
-quantifying our state of ignorance through the laws of probability.
+**Note to self**: I like this idea of laying out a roadmap then highlighting
+how each chapter of my paper fits into that roadmap
+
+
+The goal is to estimate the local wind field that was present during
+a paragliding flight, but the only data we have is measurements of the
+paraglider position. To use this data, we need a relationship between the
+paraglider movement and the wind. The mathematical description of how
+a paraglider's movement changes with the wind is given by the set of
+differential equations that define the glider dynamics. Thus, in addition to
+the position data, we also need knowledge of its dynamics.
+
+However, the dynamics depend on more than just the wind. They also depend on
+the paraglider wing design, the harness, the weight of the pilot, the control
+inputs from the pilot, and the current atmospheric conditions. So in order to
+use the dynamics equations, we need to choose values for these other unknowns
+variables.
+
+
+Related topics for discussion:
+
+* Flight reconstruction as a *state estimation* problem. State estimation
+  might mean improving an estimate of an observed quantity, or it could mean
+  producing an original estimate of an unobserved quantity.
+
+* Performing *parameter estimation* implies that you have a parametric model
+  in the first place.
+
+* In most aerodynamic literature, when they talk about *parameter estimation*
+  they typically have access to the aircraft in question and can execute
+  a specific set of maneuvers to learn the behavior of the system. I have no
+  access to the wing, no knowledge of the control inputs, and the maneuvers are
+  assumed unsteady (not the result of the control inputs alone).
+
+* Priors over the control inputs, wing parameters, and atmospheric conditions
+
+* Managing uncertainty using *Bayesian filtering* methods
+
+
+Some comments:
+
+* Flight path reconstruction
+
+  * The term *flight path reconstruction* seems to have a particular meaning
+    in some portions of the aerospace community, where it is used to indicate
+    kinematics-based state estimation as a component in model validation and
+    calibration. (For a good survey on this topic, see
+    :cite:`mulder1999NonlinearAircraftFlight`.) As a kinematics-based method,
+    the models are built around *specific forces* and angular rates instead of
+    aerodynamic forces and moments. As such, it is more concerned with
+    **what** an aircraft will do, now and moments **why**.
+
+    In my project, the **why** is the most important aspect. I can't use
+    kinematics-only filtering because it neglects the very thing I'm
+    interested in: why the wing moves a particular way (ie, it depends on the
+    wind).
+
+  * I'm calling my efforts in this paper "flight reconstruction" because it's
+    not just the path of the wing I'm interested in.
+
+
+I'd like to decompose this project into a collection of subtasks, then discuss
+related work in the context of those subtasks:
+
+* Paraglider model identification (finding a suitable dynamics model)
+
+* State estimation (estimating the states of all components, including the
+  wing, control inputs, and wind)
+
+* Parameter estimation (the parameters of the dynamics model)
+
+* Input estimation (control inputs and wind vectors)
+
+* Spatial regression (for the wind field), etc.
+
+* Wind field modelling (*model-free* proposals vs *model-based* proposals)
+
+* The fundamental idea of this project is to augment a tiny amount of flight
+  data with a large amount of system knowledge. Related to this idea is
+  *model-free* vs *model-based* methods: if you have information about the
+  target, use it. This project has many components, and each component needs
+  a model; conceptually you can start with *model-free* methods for everything
+  and replace them with *model-based* ones. (I'm not sure if kinematics-only
+  models would fall under model-free or not...)
+
+  From :cite:`li2003SurveyManeuveringTarget`: "a good *model-based* tracking
+  algorithm will greatly outperform any *model-free* tracking algorithm if the
+  underlying model turns out to be a good one". (See also
+  :cite:`li2005SurveyManeuveringTarget` for more discussion of this notion?)
+
+
+* An interesting paper for flight planning with environmental estimates is
+  :cite:`menezes2018EvaluationStochasticModeldependent`. Might have some
+  useful overlap for how I frame the tasks of this paper.
+
+* I need to rethink the name of my paper. I'm not actually **performing**
+  flight reconstruction, I'm just talking about it / building towards it.
+  I may also discuss topics like flight planning concepts, which I may add
+  after I publish the original paper. Maybe the name of the paper should be
+  more general, since my discussions are more general, plus it'd make it more
+  natural to extend the content later on.
+
+
+Managing Uncertainty
+====================
+
+Flight reconstruction must deal with many sources of uncertainty: the input
+data, the dynamics, the control inputs, and the atmospheric data are either
+imprecise or entirely unknown. Reconstruction accuracy demands careful
+management and quantification of that uncertainty. We need to manage and
+quantify our uncertainty.
+
+A single point estimate cannot communicate any information regarding the
+possible error.
+
+*Bayesian statistics* is a philosophical framework that interprets statements
+of *probability* as statements of ignorance. It uses the rules of probability
+to relate uncertain quantities and to quantify the "state of ignorance" of the
+result.
 
 Bayesian filtering requires knowledge of the model, which means we need
 a dynamics model for the system: the paraglider wing, the pilot inputs, and
@@ -431,25 +585,118 @@ Paragliders
    A Paraglider
 
 
+Geometry
+--------
+
 Canopy
-------
+^^^^^^
 
 FIXME
 
 
 Lines
------
+^^^^^
 
 FIXME
 
 
 Controls
---------
+^^^^^^^^
 
 FIXME
 
 
 Payload
--------
+^^^^^^^
 
 The payload is a harness plus the pilot.
+
+
+Dynamics
+--------
+
+* I should highlight the useful applications of a full non-linear dynamics
+  model (versus simple linear models such as *stability derivatives*). **Hit
+  this hard! Make it blindingly obvious that having access to an accurate
+  non-linear model will support future tasks.**
+
+
+Related Works
+=============
+
+* Wind estimation
+
+  * Offline wind estimation / Learning from flight databases
+
+    * :cite:`ultsch2010DataMiningDistinguish`
+
+    * :cite:`vonkanel2010ParaglidingNetSensorNetwork`
+
+  * Online wind estimation
+
+    * :cite:`vonkanel2011IkarusLargescaleParticipatory`
+
+    * :cite:`wirz2011RealtimeDetectionRecommendation`
+
+* Paraglider dynamics
+
+  * Canopies
+
+    * :cite:`gonzalez1993PrandtlTheoryApplied`
+
+    * :cite:`phillips2000ModernAdaptationPrandtl`
+
+    * :cite:`kulhanek2019IdentificationDegradationAerodynamic`
+
+    * :cite:`belloc2015WindTunnelInvestigation`
+
+    * :cite:`belloc2016InfluenceAirInlet`
+
+    * :cite:`lolies2019NumericalMethodsEfficient`
+
+    * :cite:`babinsky1999AerodynamicPerformanceParagliders`
+
+  * Controls
+
+    * :cite:`ward2014ParafoilControlUsing`
+
+  * Gliders
+
+    * Apparent mass
+
+      * :cite:`lissaman1993ApparentMassEffects`
+
+      * :cite:`thomasson2000EquationsMotionVehicle`
+
+      * :cite:`barrows2002ApparentMassParafoils`
+
+* Wind estimation
+
+  * :cite:`kampoon2014WindFieldEstimation`
+
+* State estimation
+
+  * :cite:`mulder1999NonlinearAircraftFlight`
+
+* Applications of a predictive wind model
+
+  * Flight reconstruction
+
+    * Malaysian Airlines Flight 370, "Bayesian Methods in the search for
+      MH370" (:cite:`davey2016BayesianMethodsSearch`)
+
+    * Flight reconstruction of a tethered glider:
+      :cite:`borobia2018FlightPathReconstructionFlight` (is this actually
+      flight **path** reconstruction?)
+
+  * Path planning during a flight
+
+    * :cite:`lawrance2011PathPlanningAutonomous`
+
+    * :cite:`lawrance2011AutonomousExplorationWind`
+
+    * :cite:`lawrance2009WindEnergyBased`
+
+  * Input estimation
+
+    * :cite:`kampoon2014WindFieldEstimation`

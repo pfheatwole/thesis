@@ -301,6 +301,22 @@ speed of light and time of flight calculations from a set of satellites, the
 users position lies at the intersection of the measured ranges.
 
 
+Misc
+----
+
+* In "Global positioning systems, inertial navigation, and integration"
+  (Grewal; 2007), he discusses "time-correlated noise" in Kalman filters. See
+  page 279
+
+* In "Global positioning systems, inertial navigation, and integration"
+  (Grewal; 2007), he discusses "rejecting anomalous sensor data" in Sec:8.9.4,
+  page 309. He uses a chi-squared test to reject outliers. As I recall, I was
+  hoping to use this information, but how?
+
+* What kind of chi-squared test is being suggested by Bar-Shalom for checking
+  the GPS noise covariance?
+
+
 Technical Details
 -----------------
 
@@ -927,13 +943,12 @@ Mathematical Model
 ------------------
 
 * Discuss the methods for estimating the aerodynamic forces on a wing. What
-  are their pros/cons; why did I choose Phillips; does my model support CFD
-  methods.
+  are their pros/cons? Why did I choose Phillips? Does my geometry make it
+  easy to use CFD methods?
 
 * Testing methodology: is my model correct?
 
-* How do you go from forces to accelerations? What about the wing's
-  inertia?
+* How do you go from forces to accelerations? What about the wing's inertia?
 
 
 References:
@@ -941,17 +956,37 @@ References:
 * :cite:`phillips2000ModernAdaptationPrandtl` introduced a numerical LLT
 
 * :cite:`hunsaker2011NumericalLiftingLineMethod` observed issues with wings
-  with sweep and/or dihedral
+  with sweep and/or dihedral. In particular, on page 4: **"As the numerical
+  integration is refined, the velocity induced along the bound portion of
+  a vortex sheet with sweep approaches infinity."** Note that this quote was
+  referring to their method using vortex sheets, but in the conclusion they
+  also say "For wings with sweep and/or dihedral, the method does not produce
+  grid-resolved results which was also found to be the case with the method of
+  Phillips and Snyder."
 
-* :cite:`chreim2017ViscousEffectsAssessment` reviewed the applicability of
-  Phillips method, and confirmed the issues with sweep noted by Hunsaker
+* :cite:`chreim2017ViscousEffectsAssessment` reviewed the effectiveness of
+  Phillips' method to flat wings with rectangular, elliptical, and swept
+  planforms. Confirmed the issues with sweep noted by Hunsaker. **Good
+  discussion of the theory.** Failed to find convergence for the swept wing?
+  Why would that be? Granted, it was swept 45 degrees, which is pretty severe.
+  He doesn't give the details of the non-convergence.
+
+* :cite:`belloc2015WindTunnelInvestigation` has actual data which I can use
+    to check my equations.
+
+* :cite:`kulhanek2019IdentificationDegradationAerodynamic` tested Phillips'
+  method on the Belloc reference wing (he also discusses many other aspects of
+  a paraglider, such as cell distortion, line drag, the harness, etc)
+
+* :cite:`mclean2012UnderstandingAerodynamicsArguing` has a good discussion on
+  lifting-line methods (see page 381) and some of their limitations, the
+  Pistolesi boundary condition, etc
 
 * :cite:`chreim2018ChangesModernLiftingLine` adapted Phillips method to use
   the Pistolesi boundary conditions, and verified that is was able to predict
   the section coefficients for a wing with 45-degree sweep.
 
-* :cite:`belloc2015WindTunnelInvestigation` has actual data which I can use to
-  check my equations.
+
 
 
 Survey: what are the typical ways of estimating the aerodynamics of a wing?
@@ -1122,8 +1157,11 @@ Steady-state assumption
 
 In the conclusion of "Specialized System Identification for Parafoil and
 Payload Systems" (Ward, Costello; 2012), they not that "the simulation is
-created entirely from steady-state data". Is this similar to assumptions I'm
-making? For example, Phillips is probably not accurate during turns.
+created entirely from steady-state data". This is one of my major assumptions
+as well. This will effect accuracy during turns and wind fluctuations, ignores
+hysteresis effects (boundary layers exhibit "memory" in that sense; you can
+the same wind vector can produce a separation bubble or not depending on how
+that state was achieved).
 
 
 Force estimation

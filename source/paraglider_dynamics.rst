@@ -20,6 +20,28 @@ Paraglider Dynamics
      - .. image:: figures/paraglider/geometry/foil2.*
 
 
+Related Work
+============
+
+* This paper is specifically about paragliding wings, but in terms of the
+  aerodynamics it is closely related to *parafoil-payload systems* (primarily
+  of interest to the military and aerospace organizations) and *kites* (kite
+  boarding, airborne wind energy systems, etc)
+
+
+* Canopy Aerodynamics
+
+  * Gonzolez 1993, :cite:`gonzalez1993PrandtlTheoryApplied`
+
+  * Belloc, :cite:`belloc2015WindTunnelInvestigation`
+
+* Paraglider Dynamics
+
+  * Babinsky 1999, :cite:`babinsky1999AerodynamicPerformanceParagliders`
+
+  * Slegers, :cite:`gorman2012EvaluationMultibodyParafoil`
+
+
 Canopy Aerodynamics
 ===================
 
@@ -33,7 +55,7 @@ NT
 Non-linear lifting line theory
 ------------------------------
 
-<Introduce non-linear lifting line theory.>
+<Introduce non-linear (aka, "numerical") lifting line theories.>
 
 .. figure:: figures/paraglider/dynamics/phillips_scratch.*
 
@@ -43,17 +65,17 @@ Non-linear lifting line theory
 Apparent Mass
 =============
 
-Newton's second law states that acceleration is proportional to the net force
-applied to an object:
+Newton's second law states that the acceleration of an isolated object is
+proportional to the net force applied to that object:
 
 .. math::
 
-   \sum{\vec{F}} = m \vec{a}
+   \vec{a} = \frac{\sum{\vec{F}}}{m}
 
 This simple rule is sufficient and effective for determining the behavior of
 isolated objects, but when an object is immersed in a fluid it is longer
-isolated. When an object moves through a fluid it exchanges momentum with the
-fluid, and so the momentum of the fluid needs to be considered.
+isolated. When an object moves through a fluid there is an exchange of
+momentum, and so the momentum of the fluid must be taken into account as well.
 
 In static scenarios, where the vehicle is not accelerating relative to the
 fluid (ie, changing speed and/or direction), this exchange of momentum is
@@ -67,7 +89,7 @@ vehicle has increased its mass:
 
 .. math::
 
-   \sum{\vec{F}} = (m + m_a) \vec{a}
+   \vec{a} = \frac{\sum{\vec{F}}}{m + m_a}
 
 This *apparent mass* :math:`m_a` becomes increasingly more significant as the
 density of the vehicle approaches the density of the fluid. If the density of
@@ -76,6 +98,18 @@ ignored, as is the case for traditional aircraft, which are much more dense
 than the surrounding air. For lightweight aircraft, however, such as
 a parafoil, where the density of the vehicle is much closer to the density of
 the air, the effect can be significant.
+
+Notes to self:
+
+* It's not correct to say that the effect becomes greater as the density of the
+  vehicle decreases. Whether it is **significant** depends only on the ratio `m
+  / m_a`. If :math:`m \gg m_a` then no worries.
+
+  However, `m` does depend on the density of the vehicle, and `m_a` does depend
+  on the density of the fluid. But `m_a` also depends on the shape of the
+  object and the relative velocity of the fluid.
+
+  It's not a big deal, but careful how you word it.
 
 Some references I need to discuss:
 

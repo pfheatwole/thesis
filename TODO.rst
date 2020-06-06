@@ -1,8 +1,24 @@
-* I need to standardize `r_xy` instead of simply `r_x`. It improves symmetry.
-  (You're designing in either the xy plane or the yz plane.)
+* Use the wing from Belloc as a case study. How to use my paraglider geometry
+  to define/implement the wing from his description, then compare his wind
+  tunnel performance to the estimate from Phillips method. Discuss likely
+  sources of error. **They key notion is to show how his pointwise measurements
+  can be converted into those six equations that define the paraglider
+  canopy.** I'm not sure if I should define the entire wing plus analysis in
+  a single section, or if this should be a recurring "Case Study" section that
+  spans several chapters: "Paraglider Canopies", "Paraglider Wings", and
+  "Paraglider Dynamics" (or whatever)
 
-  And do I like the `r` name? I'm using that for vectors, these are scalars.
+* Should my introduction chapter include a "Taxonomy of Tools" section that
+  defines what I mean by *state estimation*, *parameter estimation*, *flight
+  reconstruction*, *regression*, etc? It'd be interesting to define all the
+  components, then finish the section by defining my project in terms of those
+  components.
 
+* I should mention that my canopy geometry supports "open" parafoil designs;
+  it's easy to use just the upper surface and ignore the lower.
+
+* I should probably use bold face for vectors and matrices; the over arrows
+  are too messy
 
 * I wish I could use tables without borders for aligning sets of items. Do
   I *ever* want tables with borders? If not, I might be able to just redefine
@@ -68,7 +84,7 @@ References
 
 
 Figures
-=======
+-------
 
 * Should I choose standardize figure sizes? I'm not clear on how you choose
   scales with SVG, but I'm guessing if you start mixing up units it gets
@@ -120,6 +136,27 @@ Writing Style
   * "We will", "I will", "this paper will", etc?
 
 
+Notation, Math, etc
+-------------------
+
+* Should I use :math:`\mathcal{F}_a` for "frame a" etc?
+
+* I wish that Steven's notation for forces and moments wasn't capital letters
+  "F" and "M". I would really like to reserve lowercase-bold for vectors and
+  uppercase-bold for matrices. In Hughes he uses lowercase `f` and `g` for the
+  force and moment, which is also a bit annoying since `g` is typically
+  reserved for gravity. I could use `m` but that's typically reserved for
+  masses. **Maybe it's time I put my foot down that I simply like using
+  brackets for matrices; it enables visual scanning you can't do otherwise.
+  Also, they help reveal mistakes, kind of like physical units in equations.**
+
+* I need to standardize `r_xy` instead of simply `r_x`. It improves symmetry.
+  (You're designing in either the xy plane or the yz plane.)
+
+  And do I like name `r` for the reference positions? I'm using that for
+  vectors, these are scalars.
+
+
 Terminology
 -----------
 
@@ -161,7 +198,7 @@ Structural
   label them with an alphabetical sequence); might need to just handle them
   manually (explicit labels in HTML, explicit `\appendix` entry for the latex
   output).
-  
+
   The (small) problem is that for the HTML builder (so no appendix chapter
   labels) ``:numref:`` has no chapter, so it references out-of-section tables
   as "Table 1" even though it should be "Table A.1", etc.
@@ -171,12 +208,10 @@ Formatting
 ----------
 
 * Verify against CalPoly formatting
-  
+
   * ref: http://www.grad.calpoly.edu/masters-thesis/masters-thesis.html
 
-  * Page numbering should start on page 1
-   
-  * Chapter titles and section headings are not styled correctly
+* Chapter pages don't have page numbers
 
 * Code literals (surrounded by ``\`\```) are gray shaded in HTML, but have
   white backgrounds in the PDF. I tried setting ``'sphinxsetup':
@@ -209,12 +244,21 @@ Bibliography
 * Do I need to redefine ``\bibsection`` in the Latex style? Do the "Memoir"
   defaults meet the style guidelines?
 
+* Why does latex reorder my bibliography chapter to the end, after the
+  appendices?
+
 
 Sphinx
 ======
 
 * Re-run ``sphinx-quickstart`` and see how the new ``conf.py`` defaults
   compare to my current version (from July 2017)
+
+
+HTML
+----
+
+* The footer (copyright and license) doesn't show on mobile
 
 
 Scripts
