@@ -179,7 +179,7 @@ v_mag = 40  # Wind tunnel airspeed [m/s]
 L = 0.350  # central chord [m]
 mu = 1.81e-5  # Standard dynamic viscosity of air
 rho_air = Re * mu / (v_mag * L)
-rho_air = 1.187  # Taken directly from Belloc's data
+rho_air = 1.187  # Override: the true (mean) value from the wind tunnel data
 print("rho_air:", rho_air)
 
 # Full-range tests
@@ -437,6 +437,7 @@ Cy_a0, Cy_a5, Cy_a10, Cy_a15 = [], [], [], []
 Cl_a0, Cl_a5, Cl_a10, Cl_a15 = [], [], [], []
 Cn_a0, Cn_a5, Cn_a10, Cn_a15 = [], [], [], []
 for beta in betas:
+    # Find the indices nearest each alpha in {0, 5, 10, 15}
     ix_a0 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 0))
     ix_a5 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 5))
     ix_a10 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 10))
