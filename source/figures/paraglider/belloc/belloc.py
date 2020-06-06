@@ -171,7 +171,7 @@ wing = gsim.paraglider_wing.ParagliderWing(
 # Testing
 
 # The paper says the wind tunnel is being used at 40m/s to produce a Reynold's
-# number of 920,000. He neglects to mention the air density during the test,
+# number of 920,000. It neglects to mention the air density during the test,
 # but if the dynamic viscosity of the air is standard, then we can compute the
 # density of the air.
 Re = 0.92e6
