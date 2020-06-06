@@ -183,13 +183,19 @@ rho_air = 1.187  # Override: the true (mean) value from the wind tunnel data
 print("rho_air:", rho_air)
 
 # Full-range tests
-Fs, Ms, solutions = {}, {}, {}
-alphas = {}
+Fs = {}  # Net force
+Ms = {}  # Net moment at the "risers"
+Mc4s = {}  # Net moment from all the section pitching moments
+solutions = {}  # Solutions for Phillips' method
+alphas = {}  # The converged angles-of-attack
 betas = np.arange(16)
 # betas = [0]
 
 for kb, beta_deg in enumerate(betas):
-    Fs[beta_deg], Ms[beta_deg], solutions[beta_deg] = [], [], []
+    Fs[beta_deg] = []
+    Ms[beta_deg] = []
+    Mc4s[beta_deg] = []
+    solutions[beta_deg] = []
     cp_wing = wing.control_points(0)  # Section control points
 
     alphas_down = np.deg2rad(np.linspace(2, -5, 30))[1:]
@@ -221,6 +227,7 @@ for kb, beta_deg in enumerate(betas):
 
         Fs[beta_deg].append(F)
         Ms[beta_deg].append(M)
+        Mc4s[beta_deg].append(dM.sum(axis=0))
         solutions[beta_deg].append(ref)
 
     alphas_down = alphas_down[:ka+1]  # Truncate when convergence failed
@@ -228,6 +235,7 @@ for kb, beta_deg in enumerate(betas):
     # Reverse the order
     Fs[beta_deg] = Fs[beta_deg][::-1]
     Ms[beta_deg] = Ms[beta_deg][::-1]
+    Mc4s[beta_deg] = Mc4s[beta_deg][::-1]
     solutions[beta_deg] = solutions[beta_deg][::-1]
     alphas_down = alphas_down[::-1]
 
@@ -257,6 +265,7 @@ for kb, beta_deg in enumerate(betas):
 
         Fs[beta_deg].append(F)
         Ms[beta_deg].append(M)
+        Mc4s[beta_deg].append(dM.sum(axis=0))
         solutions[beta_deg].append(ref)
 
     alphas_up = alphas_up[:ka+1]  # Truncate when convergence failed
@@ -268,6 +277,7 @@ for kb, beta_deg in enumerate(betas):
 for beta in betas:
     Fs[beta] = np.asarray(Fs[beta])
     Ms[beta] = np.asarray(Ms[beta])
+    Mc4s[beta] = np.asarray(Mc4s[beta])
 
 # ---------------------------------------------------------------------------
 # Compute the aerodynamic coefficients
@@ -282,6 +292,7 @@ for beta in betas:
     CX, CY, CZ = Fs[beta].T / (q * S)
     CN = -CZ
     CM = Ms[beta].T[1] / (q * S * cc)  # The paper uses the central chord
+    CM_c4 = Mc4s[beta].T[1] / (q * S * cc)
 
     # From Stevens, "Aircraft Control and Simulation", pg 90 (104)
     beta_rad = np.deg2rad(beta)
@@ -303,7 +314,7 @@ for beta in betas:
     # ])
     # (CD, CC, CL) = C_w2b @ [-CX, -CY, -CZ]
 
-    coefficients[beta] = {"CL": CL, "CD": CD, "CM": CM}
+    coefficients[beta] = {"CL": CL, "CD": CD, "CM": CM, "CM_c4": CM_c4}
 
 
 # ---------------------------------------------------------------------------
@@ -316,15 +327,17 @@ for beta in sorted(plotted_betas.intersection(betas)):
     b = {0: "00", 5: "05", 10: "10", 15: "15"}[beta]
 
     belloc = pd.read_csv(f"windtunnel/beta{b}.csv")  # Belloc's raw wind tunnel data
+    names = ("alpha", "CL", "CD", "CM")
     xflr5 = np.loadtxt(  # Inviscid solution using VLM from XLFR5
         f"xflr5/wing_polars/Belloc_VLM2-b{b}.txt",
-        dtype=np.dtype({"names": ("alpha", "CL", "CD"), "formats": [float] * 3}),
+        dtype=np.dtype({"names": names, "formats": [float] * 4}),
         skiprows=8,
-        usecols=(0, 2, 5),
+        usecols=(0, 2, 5, 8),
     )
 
     CL = coefficients[beta]["CL"]
     CD = coefficients[beta]["CD"]
+    CM = coefficients[beta]["CM"]  # The global CM about the center of mass
 
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.plot(np.rad2deg(alphas[beta]), CL, 'b', lw=1, label="NLLT")
@@ -350,6 +363,16 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
     fig.savefig(f"CD_vs_alpha_beta{b}.svg", dpi=96)
 
+    fig, ax = plt.subplots(figsize(6, 6))
+    ax.plot(belloc["Alphac"], belloc["CMT1"], 'k--', lw=1)
+    ax.plot(np.rad2deg(alphas[0]), coefficients[0]["CM"])
+    ax.plot(xflr5["alpha"], xflr5["CM"], 'r--', lw=1)
+    ax.set_xlim(-10, 25)
+    ax.set_ylim(-1.0, 0.1)
+    ax.legend(loc="lower left")
+    ax.set_title(f"$\\beta$={b}°")
+    fig.savefig(f"CM_vs_alpha_beta{b}.svg", dpi=96)
+
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.plot(CD, CL, 'b', lw=1, label="NLLT")
     ax.plot(xflr5["CD"], xflr5["CL"], 'r--', lw=1, label="VLM")
@@ -362,6 +385,17 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
     fig.savefig(f"CL_vs_CD_beta{b}.svg", dpi=96)
 
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.plot(CM, CL, 'b', lw=1, label="NLLT")
+    ax.plot(xflr5["CM"], xflr5["CL"], 'r--', lw=1, label="VLM")
+    ax.plot(belloc["CMaT1"][:42], belloc["CZa"][:42], 'k--', lw=1, label="Wind tunnel")
+    ax.set_xlabel(r"$\mathrm{CM_G}$")
+    ax.set_ylabel("CL")
+    ax.set_xlim(-0.5, 0.1)
+    ax.set_ylim(-0.6, 1.25)
+    ax.legend(loc="lower left")
+    ax.set_title(f"$\\beta$={beta}°")
+    fig.savefig(f"CL_vs_CM_beta{b}.svg", dpi=96)
 
 
 plt.show()
