@@ -39,7 +39,6 @@ Contents
    bayesian_filtering
    paraglider_canopies
    paraglider_dynamics
-   belloc
    data_considerations
    examples
 
