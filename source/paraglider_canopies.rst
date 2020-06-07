@@ -128,7 +128,14 @@ NT
 Geometric Torsion
 -----------------
 
-NT
+(One of the cool things about my geometry is that you don't need to specify
+the rotation point. The airfoil angle is independent of the rotation point, so
+it's unnecessary work to require a user to calculate positions relative to
+rotation points.)
+
+.. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
+
+   Geometric torsion.
 
 
 Design in the xy-plane
