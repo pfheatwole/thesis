@@ -638,38 +638,6 @@ Related Works
 
     * :cite:`wirz2011RealtimeDetectionRecommendation`
 
-* Paraglider dynamics
-
-  * Canopies
-
-    * :cite:`gonzalez1993PrandtlTheoryApplied`
-
-    * :cite:`phillips2000ModernAdaptationPrandtl`
-
-    * :cite:`kulhanek2019IdentificationDegradationAerodynamic`
-
-    * :cite:`belloc2015WindTunnelInvestigation`
-
-    * :cite:`belloc2016InfluenceAirInlet`
-
-    * :cite:`lolies2019NumericalMethodsEfficient`
-
-    * :cite:`babinsky1999AerodynamicPerformanceParagliders`
-
-  * Controls
-
-    * :cite:`ward2014ParafoilControlUsing`
-
-  * Gliders
-
-    * Apparent mass
-
-      * :cite:`lissaman1993ApparentMassEffects`
-
-      * :cite:`thomasson2000EquationsMotionVehicle`
-
-      * :cite:`barrows2002ApparentMassParafoils`
-
 * Wind estimation
 
   * :cite:`kampoon2014WindFieldEstimation`

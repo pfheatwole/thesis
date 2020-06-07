@@ -31,9 +31,24 @@ Related Work
 
 * Canopy Aerodynamics
 
-  * Gonzolez 1993, :cite:`gonzalez1993PrandtlTheoryApplied`
+  * Gonzalez 1993, :cite:`gonzalez1993PrandtlTheoryApplied`
 
   * Belloc, :cite:`belloc2015WindTunnelInvestigation`
+
+  * :cite:`kulhanek2019IdentificationDegradationAerodynamic`
+
+  * :cite:`belloc2015WindTunnelInvestigation`
+
+  * :cite:`belloc2016InfluenceAirInlet`
+
+  * :cite:`babinsky1999AerodynamicPerformanceParagliders`
+
+  * Cells (distortions, etc):
+
+    * :cite:`kulhanek2019IdentificationDegradationAerodynamic`
+
+    * :cite:`lolies2019NumericalMethodsEfficient`
+
 
 * Paraglider Dynamics
 
@@ -41,25 +56,15 @@ Related Work
 
   * Slegers, :cite:`gorman2012EvaluationMultibodyParafoil`
 
+  * :cite:`ward2014ParafoilControlUsing`
 
-Canopy Aerodynamics
-===================
+  * Apparent mass
 
+    * :cite:`lissaman1993ApparentMassEffects`
 
-Lifting-line theory
--------------------
+    * :cite:`thomasson2000EquationsMotionVehicle`
 
-NT
-
-
-Non-linear lifting line theory
-------------------------------
-
-<Introduce non-linear (aka, "numerical") lifting line theories.>
-
-.. figure:: figures/paraglider/dynamics/phillips_scratch.*
-
-   Wing sections for Phillips' method.
+    * :cite:`barrows2002ApparentMassParafoils`
 
 
 Apparent Mass
