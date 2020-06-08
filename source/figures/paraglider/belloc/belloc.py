@@ -1,21 +1,7 @@
 """
 Recreates the paraglider analysis in "Wind Tunnel Investigation of a Rigid
 Paraglider Reference Wing", H. Belloc, 2015
-
-TODO:
-* Why am I still significantly overestimating CL? Wrong airfoil data?
-* The CM25% in the paper are positive? How? The section Cm are almost entirely
-  negative until `alpha > 10`.
-* Review my CM_G calculation; both it and CM25% look wrong (which make sense,
-  since CM25% is computed directly from CM_G, while CM_CL and CM_CD look great.
-* Review the force and moment calculations.
-* Phillips needs "Picard iterations" to deal with stalled sections
-* I need to fix how I calculate L and D when beta>0
-   * Observe in my `CL vs CD`: CD decreases with beta? Nope, wrong
-   * Also, in `CL vs alpha`, why does alpha_L0 increase with beta?
-* Review the "effective AR" equation in Eq:6
 """
-
 
 from IPython import embed
 
@@ -34,16 +20,16 @@ from scipy.interpolate import PchipInterpolator as Pchip
 # ---------------------------------------------------------------------------
 # Wing definition from the paper
 
-# Table 1: the Full-scale wing dimensions converted into 1/8 model
+# Table 1: the full-scale wing dimensions converted into 1/8 model
 h = 3 / 8  # Arch height (vertical deflection from wing root to tips) [m]
-cc = 2.8 / 8  # The central chord [m]
-b = 11.00 / 8  # The projected span [m]
-S = 25.08 / (8**2)  # The projected area [m^2]
-AR = 4.82  # The projected aspect ratio
+cc = 2.8 / 8  # Central chord [m]
+b = 11.00 / 8  # Projected span [m]
+S = 25.08 / (8**2)  # Projected area [m^2]
+AR = 4.82  # Projected aspect ratio
 
-b_flat = 13.64 / 8  # The flattened span [m]
-S_flat = 28.56 / (8**2)  # The flattened area [m^2]
-AR_flat = 6.52  # The flattened aspect ratio
+b_flat = 13.64 / 8  # Flattened span [m]
+S_flat = 28.56 / (8**2)  # Flattened area [m^2]
+AR_flat = 6.52  # Flattened aspect ratio
 
 # Table 2: Coordinates along the 0.6c line for the 1/8 model in [m]
 xyz = np.array(
@@ -115,7 +101,7 @@ class InterpolatedLobe:
 s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
 lobe = InterpolatedLobe(s, fy(s), fz(s))
 
-chord_surface = gsim.foil.ChordSurface(
+chords = gsim.foil.ChordSurface(
     x=0,
     r_x=0.6,
     yz=lobe,
@@ -130,7 +116,7 @@ sections = gsim.foil.FoilSections(
 )
 
 canopy = gsim.foil.SimpleFoil(
-    chords=chord_surface,
+    chords=chords,
     sections=sections,
     b_flat=b_flat,
 )
@@ -168,8 +154,8 @@ wing = gsim.paraglider_wing.ParagliderWing(
 # 1/0
 
 # ---------------------------------------------------------------------------
-# Testing
-
+# Simulate the wind tunnel tests
+#
 # The paper says the wind tunnel is being used at 40m/s to produce a Reynold's
 # number of 920,000. It neglects to mention the air density during the test,
 # but if the dynamic viscosity of the air is standard, then we can compute the
@@ -188,8 +174,8 @@ Ms = {}  # Net moment at the "risers"
 Mc4s = {}  # Net moment from all the section pitching moments
 solutions = {}  # Solutions for Phillips' method
 alphas = {}  # The converged angles-of-attack
-betas = np.arange(16)
-# betas = [0]
+betas = np.arange(-15, 16)
+# betas = [0, 5, 10, 15]
 
 for kb, beta_deg in enumerate(betas):
     Fs[beta_deg] = []
@@ -216,10 +202,8 @@ for kb, beta_deg in enumerate(betas):
                 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
         except gsim.foil.ForceEstimator.ConvergenceError:
-            ka -= 1  # FIXME: messing with the index!
+            ka -= 1
             break
-            # FIXME: continue, or break? Maybe try the solution from a previous
-            #        `beta`? eg: ref = solutions[betas[kb - 1]][ka]
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
@@ -254,10 +238,8 @@ for kb, beta_deg in enumerate(betas):
                 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
         except gsim.foil.ForceEstimator.ConvergenceError:
-            ka -= 1  # FIXME: messing with the index!
+            ka -= 1
             break
-            # FIXME: continue, or break? Maybe try the solution from a previous
-            #        `beta`? eg: ref = solutions[betas[kb - 1]][ka]
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
@@ -269,9 +251,7 @@ for kb, beta_deg in enumerate(betas):
         solutions[beta_deg].append(ref)
 
     alphas_up = alphas_up[:ka+1]  # Truncate when convergence failed
-
     alphas[beta_deg] = np.r_[alphas_down, alphas_up]  # Stitch them together
-
     print()
 
 for beta in betas:
@@ -289,56 +269,67 @@ q = 0.5 * rho_air * v_mag**2
 
 nllt = {}  # Coefficients from the NLLT, keyed by beta [deg]
 for beta in betas:
-    CX, CY, CZ = Fs[beta].T / (q * S)
-    CN = -CZ
-    CM = Ms[beta].T[1] / (q * S * cc)  # The paper uses the central chord
-    CM_c4 = Mc4s[beta].T[1] / (q * S * cc)
 
-    # From Stevens, "Aircraft Control and Simulation", pg 90 (104)
+    # Transform body -> wind axes. (See "Flight Vehicle Aerodynamics", Drela,
+    # 2014, Eq:6.7, page 125). Notice that Drela uses back-right-up instead of
+    # front-right-down coordinates, so the CX and CZ terms are negated.
     beta_rad = np.deg2rad(beta)
-    CD = (
-        -np.cos(alphas[beta]) * np.cos(beta_rad) * CX
-        - np.sin(beta_rad) * CY
-        + np.sin(alphas[beta]) * np.cos(beta_rad) * CN
-    )
-    CL = np.sin(alphas[beta]) * CX + np.cos(alphas[beta]) * CN
+    sa, sb = np.sin(alphas[beta]), np.full(len(alphas[beta]), np.sin(beta_rad))
+    ca, cb = np.cos(alphas[beta]), np.full(len(alphas[beta]), np.cos(beta_rad))
+    C_w2b = np.array([
+        [-ca * cb, -sb, -sa * cb],
+        [-ca * sb, cb, -sa * sb],
+        [sa, np.zeros_like(alphas[beta]), -ca]
+    ])
 
-    # Alternative form using a transformation matrix: body -> wind axes
-    # See: https://www.mathworks.com/help/aeroblks/aerodynamicforcesandmoments.html
-    # sa, sb = np.sin(alphas[beta]), np.sin(beta_rad)
-    # ca, cb = np.cos(alphas[beta]), np.cos(beta_rad)
-    # C_w2b = np.array([
-    #     [ca * cb, sb, sa * cb],
-    #     [-ca * sb, cb, -sa * sb],
-    #     [-sa, 0, ca]
-    # ])
-    # (CD, CC, CL) = C_w2b @ [-CX, -CY, -CZ]
+    # Body axes
+    CX, CY, CZ = Fs[beta].T / (q * S)
+    Cl, Cm, Cn = Ms[beta].T / (q * S * cc)
 
-    nllt[beta] = {"CL": CL, "CD": CD, "CM": CM, "CM_c4": CM_c4}
+    # Wind axes
+    CXa, CYa, CZa = np.einsum("ijk,kj->ik", C_w2b, Fs[beta] / (q * S))
+    Cla, Cma, Cna = np.einsum("ijk,kj->ik", C_w2b, Ms[beta] / (q * S * cc))
+
+    Cm_c4 = Mc4s[beta].T[1] / (q * S * cc)  # FIXME: useful?
+
+    nllt[beta] = {
+        "CX": CX,
+        "CY": CY,
+        "CZ": CZ,
+        "Cl": Cl,
+        "Cm": Cm,
+        "Cn": Cn,
+        "CXa": CXa,
+        "CYa": CYa,
+        "CZa": CZa,
+        "Cla": Cla,
+        "Cma": Cma,
+        "Cna": Cna,
+
+        "Cm_c4": Cm_c4
+    }
 
 
 # ---------------------------------------------------------------------------
 # Recreate Belloc figures 5..8
 
 plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
-beta_names = {0: "00", 5: "05", 10: "10", 15: "15"}  # For filenames
-beta_ax = {0: (0, 0), 5: (0, 1), 10: (1, 0), 15: (1, 1)}  # Subplot axes
+axes_indices = {0: (0, 0), 5: (0, 1), 10: (1, 0), 15: (1, 1)}  # Subplot axes
 
 # Load the VLM and wind tunnel data
 belloc = {}  # Coefficients from the wind tunnel, keyed  by beta [deg]
 vlm = {}  # Coefficients from the VLM method, keyed by beta [deg]
 for beta in sorted(plotted_betas.intersection(betas)):
-    b = beta_names[beta]
-    belloc[beta] = pd.read_csv(f"windtunnel/beta{b}.csv")  # Belloc's raw wind tunnel data
-    names = ("alpha", "CL", "CD", "CM")
+    belloc[beta] = pd.read_csv(f"windtunnel/beta{beta:02}.csv")  # Belloc's raw wind tunnel data
+    names = ("alpha", "CZa", "CXa", "Cm")
     vlm[beta] = np.loadtxt(  # Inviscid solution using VLM from XLFR5
-        f"xflr5/wing_polars/Belloc_VLM2-b{b}.txt",
+        f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}.txt",
         dtype=np.dtype({"names": names, "formats": [float] * 4}),
         skiprows=8,
         usecols=(0, 2, 5, 8),
     )
 
-belloc_args = {"c": "k", "linestyle": "--", "linewidth": 1, "label": "Wind tunnel"}
+belloc_args = {"c": "k", "linestyle": "-", "linewidth": 0.5, "label": "Wind tunnel"}
 nllt_args = {"c": "b", "linestyle": "--", "linewidth": 1, "label": "NLLT"}
 vlm_args = {"c": "r", "linestyle": "--", "linewidth": 1, "label": "VLM"}
 
@@ -366,14 +357,13 @@ def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
     axes[1, 1].grid(c='lightgrey', linestyle="--")
     return fig, axes
 
-
 # Plot: CL vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_L}$", xlim=(-10, 25), ylim=(-0.6, 1.25))
 for beta in sorted(plotted_betas.intersection(betas)):
-    ax = axes[beta_ax[beta]]
+    ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CZa"], **belloc_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CL"], **nllt_args)
-    ax.plot(vlm[beta]["alpha"], vlm[beta]["CL"], **vlm_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CZa"], **nllt_args)
+    ax.plot(vlm[beta]["alpha"], vlm[beta]["CZa"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower right")
 fig.tight_layout()
@@ -382,10 +372,10 @@ fig.savefig(f"CL_vs_alpha.svg", dpi=96)
 # Plot: CD vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_D}$", xlim=(-10, 25), ylim=(0.0, 0.2))
 for beta in sorted(plotted_betas.intersection(betas)):
-    ax = axes[beta_ax[beta]]
+    ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CXa"], **belloc_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CD"], **nllt_args)
-    ax.plot(vlm[beta]["alpha"], vlm[beta]["CD"], **vlm_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CXa"], **nllt_args)
+    ax.plot(vlm[beta]["alpha"], vlm[beta]["CXa"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="upper left")
 fig.tight_layout()
@@ -394,10 +384,10 @@ fig.savefig(f"CD_vs_alpha.svg", dpi=96)
 # Plot: CM vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_{M,G}}$", xlim=(-10, 25), ylim=(-0.5, 0.1))
 for beta in sorted(plotted_betas.intersection(betas)):
-    ax = axes[beta_ax[beta]]
+    ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CMT1"], **belloc_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CM"], **nllt_args)
-    ax.plot(vlm[beta]["alpha"], vlm[beta]["CM"], **vlm_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cm"], **nllt_args)
+    ax.plot(vlm[beta]["alpha"], vlm[beta]["Cm"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower left")
 fig.tight_layout()
@@ -406,10 +396,10 @@ fig.savefig(f"CM_vs_alpha.svg", dpi=96)
 # Plot: CL vs CD
 fig, axes = plot4x4("$\mathrm{C_D}$", "$\mathrm{C_L}$", xlim=(0, 0.2), ylim=(-0.6, 1.25))
 for beta in sorted(plotted_betas.intersection(betas)):
-    ax = axes[beta_ax[beta]]
+    ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["CXa"], belloc[beta]["CZa"], **belloc_args)
-    ax.plot(nllt[beta]["CD"], nllt[beta]["CL"], **nllt_args)
-    ax.plot(vlm[beta]["CD"], vlm[beta]["CL"], **vlm_args)
+    ax.plot(nllt[beta]["CXa"], nllt[beta]["CZa"], **nllt_args)
+    ax.plot(vlm[beta]["CXa"], vlm[beta]["CZa"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower right")
 fig.tight_layout()
@@ -418,57 +408,24 @@ fig.savefig(f"CL_vs_CD.svg", dpi=96)
 # Plot: CL vs CM
 fig, axes = plot4x4("$\mathrm{C_{M,G}}$", "$\mathrm{C_L}$", xlim=(-0.5, 0.1), ylim=(-0.6, 1.25))
 for beta in sorted(plotted_betas.intersection(betas)):
-    ax = axes[beta_ax[beta]]
+    ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["CMT1"][:42], belloc[beta]["CZa"][:42], **belloc_args)
-    ax.plot(nllt[beta]["CM"], nllt[beta]["CL"], **nllt_args)
-    ax.plot(vlm[beta]["CM"], vlm[beta]["CL"], **vlm_args)
+    ax.plot(nllt[beta]["Cm"], nllt[beta]["CZa"], **nllt_args)
+    ax.plot(vlm[beta]["Cm"], vlm[beta]["CZa"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
-axes[1, 1].legend(loc="lower right")
+axes[1, 1].legend(loc="lower left")
 fig.tight_layout()
 fig.savefig(f"CL_vs_CM.svg", dpi=96)
 
-plt.show()
 
-embed()
-1/0
+# Plotting coefficients as functions of beta
 
+belloc2 = {a: pd.read_csv(f"windtunnel/alpha{a:02}v40.csv") for a in [0, 5, 10, 15]}
 
-# Compute the pitching moment coefficients:
-#
-# CM_CD : due to the drag force applied to the wing
-# CM_CL : due to the lift force applied to the wing
-# CM_c4 : due to the wing shape
-# CM_G: the total pitching moment = CM_CD + CM_CL + CM_c4
-CL = nllt[0]["CL"]
-CM_G = nllt[0]["CM"]
-CM_CD = nllt[0]["CD"] * np.cos(alphas[0]) / cc  # Eq: 8
-CM_CL = -nllt[0]["CL"] * np.sin(alphas[0]) / cc  # Eq: 9
-CM_c4 = CM_G - CM_CL - CM_CD  # Eq: 7
-
-ax[0, 1].plot(CM_G, CL, label="CM_G", marker=m)
-ax[0, 1].plot(CM_CL, CL, label="CM_CL", marker=m)
-ax[0, 1].plot(CM_CD, CL, label="CM_CD", marker=m)
-ax[0, 1].plot(CM_c4, CL, label="CM_25%", marker=m)
-ax[0, 1].plot(nllt[0]["CM_c4"], CL, 'r--', label="Other CM_25%", marker=m)
-ax[0, 1].set_xlabel("CM")
-ax[0, 1].set_ylabel("CL")
-ax[0, 1].legend()
-ax[0, 1].grid()
-ax[0, 1].set_xlim(-0.5, 0.2)
-ax[0, 1].set_ylim(-0.4, 1.0)
-
-ax[1, 1].set_xlabel("CM_G")
-ax[1, 1].set_ylabel("CL")
-ax[1, 1].set_xlim(-0.5, 0.1)
-ax[1, 1].set_ylim(-0.4, 1.0)
-ax[1, 1].legend()
-ax[1, 1].grid()
-
-
-# Figures 9, 11, and 12
-Cy_a0, Cy_a5, Cy_a10, Cy_a15 = [], [], [], []
-Cl_a0, Cl_a5, Cl_a10, Cl_a15 = [], [], [], []
-Cn_a0, Cn_a5, Cn_a10, Cn_a15 = [], [], [], []
+# Build sets of coefficients as functions of beta, keyed by alpha
+Cy = {a: [] for a in [0, 5, 10, 15]}
+Cl = {a: [] for a in [0, 5, 10, 15]}
+Cn = {a: [] for a in [0, 5, 10, 15]}
 for beta in betas:
     # Find the indices nearest each alpha in {0, 5, 10, 15}
     ix_a0 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 0))
@@ -477,61 +434,55 @@ for beta in betas:
     ix_a15 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 15))
 
     # Lateral force
-    Cy_a0.append(Fs[beta].T[1][ix_a0] / (q * S))
-    Cy_a5.append(Fs[beta].T[1][ix_a5] / (q * S))
-    Cy_a10.append(Fs[beta].T[1][ix_a10] / (q * S))
-    Cy_a15.append(Fs[beta].T[1][ix_a15] / (q * S))
+    Cy[0].append(nllt[beta]["CYa"][ix_a0])
+    Cy[5].append(nllt[beta]["CYa"][ix_a5])
+    Cy[10].append(nllt[beta]["CYa"][ix_a10])
+    Cy[15].append(nllt[beta]["CYa"][ix_a15])
 
     # Rolling moment coefficients
-    Cl_a0.append(Ms[beta].T[0][ix_a0] / (q * S * cc))
-    Cl_a5.append(Ms[beta].T[0][ix_a5] / (q * S * cc))
-    Cl_a10.append(Ms[beta].T[0][ix_a10] / (q * S * cc))
-    Cl_a15.append(Ms[beta].T[0][ix_a15] / (q * S * cc))
+    Cl[0].append(nllt[beta]["Cl"][ix_a0])
+    Cl[5].append(nllt[beta]["Cl"][ix_a5])
+    Cl[10].append(nllt[beta]["Cl"][ix_a10])
+    Cl[15].append(nllt[beta]["Cl"][ix_a15])
 
     # Yawing moment coeficients
-    Cn_a0.append(Ms[beta].T[2][ix_a0] / (q * S * cc))
-    Cn_a5.append(Ms[beta].T[2][ix_a5] / (q * S * cc))
-    Cn_a10.append(Ms[beta].T[2][ix_a10] / (q * S * cc))
-    Cn_a15.append(Ms[beta].T[2][ix_a15] / (q * S * cc))
+    Cn[0].append(nllt[beta]["Cn"][ix_a0])
+    Cn[5].append(nllt[beta]["Cn"][ix_a5])
+    Cn[10].append(nllt[beta]["Cn"][ix_a10])
+    Cn[15].append(nllt[beta]["Cn"][ix_a15])
 
-fig9, ax9 = plt.subplots()
-ax9.plot(betas, Cy_a0, label=r"$\alpha$=0°")
-ax9.plot(betas, Cy_a5, label=r"$\alpha$=5°")
-ax9.plot(betas, Cy_a10, label=r"$\alpha$=10°")
-ax9.plot(betas, Cy_a15, label=r"$\alpha$=15°")
-ax9.set_xlim(-20, 20)
-ax9.set_ylim(-0.3, 0.3)
-ax9.set_title("Figure 9: The effect of sideslip on the lateral force")
-ax9.set_xlabel(r"$\beta$")
-ax9.set_ylabel(r"$\mathrm{C_y}$")
-ax9.legend()
-ax9.grid()
+# Plot: Cy vs beta
+fig, axes = plot4x4(r"$\beta$", r"$\mathrm{Cy_G}$", (-20, 20), (-0.3, 0.3))
+for alpha in [0, 5, 10, 15]:
+    ax = axes[axes_indices[alpha]]
+    ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CY"], **belloc_args)
+    ax.plot(betas, Cy[alpha], **nllt_args)
+    ax.set_title(f"$\\alpha$={alpha}°")
+axes[1, 1].legend()
+fig.tight_layout()
+fig.savefig(f"CY_vs_beta.svg", dpi=96)
 
-fig11, ax11 = plt.subplots()
-ax11.plot(betas, Cl_a0, label=r"$\alpha$=0°")
-ax11.plot(betas, Cl_a5, label=r"$\alpha$=5°")
-ax11.plot(betas, Cl_a10, label=r"$\alpha$=10°")
-ax11.plot(betas, Cl_a15, label=r"$\alpha$=15°")
-ax11.set_xlim(-20, 20)
-ax9.set_ylim(-0.2, 0.2)
-ax11.set_title("Figure 11: The effect of sideslip on the rolling moment")
-ax11.set_xlabel(r"$\beta$")
-ax11.set_ylabel(r"$\mathrm{Cl_G}$")
-ax11.legend()
-ax11.grid()
+# Plot: Cl (wing rolling coefficient) vs beta
+fig, axes = plot4x4(r"$\beta$", r"$\mathrm{Cl_G}$", (-20, 20), (-0.2, 0.2))
+for alpha in [0, 5, 10, 15]:
+    ax = axes[axes_indices[alpha]]
+    ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CLT1"], **belloc_args)
+    ax.plot(betas, Cl[alpha], **nllt_args)
+    ax.set_title(f"$\\alpha$={alpha}°")
+axes[1, 1].legend()
+fig.tight_layout()
+fig.savefig(f"Cl_vs_beta.svg", dpi=96)
 
-fig12, ax12 = plt.subplots()
-ax12.plot(betas, Cn_a0, label=r"$\alpha$=0°")
-ax12.plot(betas, Cn_a5, label=r"$\alpha$=5°")
-ax12.plot(betas, Cn_a10, label=r"$\alpha$=10°")
-ax12.plot(betas, Cn_a15, label=r"$\alpha$=15°")
-ax12.set_xlim(-20, 20)
-ax12.set_ylim(-0.1, 0.1)
-ax12.set_title("Figure 12: The effect of sideslip on the yawing moment")
-ax12.set_xlabel(r"$\beta$")
-ax12.set_ylabel(r"$\mathrm{Cn_G}$")
-ax12.legend()
-ax12.grid()
+# Plot: Cn (wing yawing coefficient) vs beta
+fig, axes = plot4x4(r"$\beta$", r"$\mathrm{Cn_G}$", (-20, 20), (-0.2, 0.2))
+for alpha in [0, 5, 10, 15]:
+    ax = axes[axes_indices[alpha]]
+    ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CNT1"], **belloc_args)
+    ax.plot(betas, Cn[alpha], **nllt_args)
+    ax.set_title(f"$\\alpha$={alpha}°")
+axes[1, 1].legend()
+fig.tight_layout()
+fig.savefig(f"Cn_vs_beta.svg", dpi=96)
 
 plt.show()
 
