@@ -131,7 +131,7 @@ print()
 
 wing = gsim.paraglider_wing.ParagliderWing(
     canopy=canopy,
-    force_estimator=gsim.foil.Phillips(canopy, 40, K=31),
+    force_estimator=gsim.foil.Phillips(canopy, 40, K=11),
     brake_geo=gsim.brake_geometry.Cubic(0, 0.75, delta_max=0),  # unused
     d_riser=0.25,  # For the 1/8 model, d_riser = 0.0875 / 0.350 = 25%
     z_riser=1,  # The 1/8 scale model has the cg 1m below the central chord
@@ -184,8 +184,10 @@ for kb, beta_deg in enumerate(betas):
     solutions[beta_deg] = []
     cp_wing = wing.control_points(0)  # Section control points
 
-    alphas_down = np.deg2rad(np.linspace(2, -5, 30))[1:]
-    alphas_up = np.deg2rad(np.linspace(2, 22, 75))
+    # Some figures assume samples at alpha = [0, 5, 10, 15], so make sure to
+    # include those test points.
+    alphas_down = np.deg2rad(np.linspace(4, -5, 37))[1:]
+    alphas_up = np.deg2rad(np.linspace(4, 22, 73))
 
     # First with decreasing alpha
     ref = None
@@ -417,39 +419,25 @@ axes[1, 1].legend(loc="lower left")
 fig.tight_layout()
 fig.savefig(f"CL_vs_CM.svg", dpi=96)
 
+# ---------------------------------------------------------------------------
 
-# Plotting coefficients as functions of beta
+# Build sets of coefficients over `betas`, keyed by alpha
+Cy = {alpha: [] for alpha in [0, 5, 10, 15]}
+Cl = {alpha: [] for alpha in [0, 5, 10, 15]}
+Cn = {alpha: [] for alpha in [0, 5, 10, 15]}
+for beta in betas:
+    for alpha in [0, 5, 10, 15]:
+        ix = np.nonzero(np.isclose(np.rad2deg(alphas[beta]), alpha))
+        if ix[0].shape[0]:
+            Cy[alpha].append(nllt[beta]["CYa"][ix][0])
+            Cl[alpha].append(nllt[beta]["Cl"][ix][0])
+            Cn[alpha].append(nllt[beta]["Cn"][ix][0])
+        else:  # pad to keep the sequences the same length as `betas`
+            Cy[alpha].append(np.nan)
+            Cl[alpha].append(np.nan)
+            Cn[alpha].append(np.nan)
 
 belloc2 = {a: pd.read_csv(f"windtunnel/alpha{a:02}v40.csv") for a in [0, 5, 10, 15]}
-
-# Build sets of coefficients as functions of beta, keyed by alpha
-Cy = {a: [] for a in [0, 5, 10, 15]}
-Cl = {a: [] for a in [0, 5, 10, 15]}
-Cn = {a: [] for a in [0, 5, 10, 15]}
-for beta in betas:
-    # Find the indices nearest each alpha in {0, 5, 10, 15}
-    ix_a0 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 0))
-    ix_a5 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 5))
-    ix_a10 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 10))
-    ix_a15 = np.argmin(np.abs(np.rad2deg(alphas[beta]) - 15))
-
-    # Lateral force
-    Cy[0].append(nllt[beta]["CYa"][ix_a0])
-    Cy[5].append(nllt[beta]["CYa"][ix_a5])
-    Cy[10].append(nllt[beta]["CYa"][ix_a10])
-    Cy[15].append(nllt[beta]["CYa"][ix_a15])
-
-    # Rolling moment coefficients
-    Cl[0].append(nllt[beta]["Cl"][ix_a0])
-    Cl[5].append(nllt[beta]["Cl"][ix_a5])
-    Cl[10].append(nllt[beta]["Cl"][ix_a10])
-    Cl[15].append(nllt[beta]["Cl"][ix_a15])
-
-    # Yawing moment coeficients
-    Cn[0].append(nllt[beta]["Cn"][ix_a0])
-    Cn[5].append(nllt[beta]["Cn"][ix_a5])
-    Cn[10].append(nllt[beta]["Cn"][ix_a10])
-    Cn[15].append(nllt[beta]["Cn"][ix_a15])
 
 # Plot: Cy vs beta
 fig, axes = plot4x4(r"$\beta$", r"$\mathrm{Cy_G}$", (-20, 20), (-0.3, 0.3))
