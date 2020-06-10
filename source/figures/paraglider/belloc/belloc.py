@@ -3,6 +3,8 @@ Recreates the paraglider analysis in "Wind Tunnel Investigation of a Rigid
 Paraglider Reference Wing", H. Belloc, 2015
 """
 
+import time
+
 from IPython import embed
 
 import matplotlib.pyplot as plt  # noqa: F401
@@ -177,6 +179,9 @@ alphas = {}  # The converged angles-of-attack
 betas = np.arange(-15, 16)
 # betas = [0, 5, 10, 15]
 
+print("\nRunning tests...")
+t_start = time.perf_counter()
+
 for kb, beta_deg in enumerate(betas):
     Fs[beta_deg] = []
     Ms[beta_deg] = []
@@ -255,6 +260,9 @@ for kb, beta_deg in enumerate(betas):
     alphas_up = alphas_up[:ka+1]  # Truncate when convergence failed
     alphas[beta_deg] = np.r_[alphas_down, alphas_up]  # Stitch them together
     print()
+
+t_stop = time.perf_counter()
+print(f"Finished in {t_stop - t_start:0.2f} seconds\n")
 
 for beta in betas:
     Fs[beta] = np.asarray(Fs[beta])
