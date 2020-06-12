@@ -150,6 +150,13 @@ Design in the yz-plane
 NT
 
 
+Foil Surface
+============
+
+The chord surface is the flat surface produced by all the section chord. To
+produce the 3D canopy, each section must be assigned an airfoil.
+
+
 Examples
 ========
 
@@ -261,7 +268,104 @@ If :math:`r_x = 1`:
 Distortions
 ===========
 
-**FIXME**: should I discuss cells, billowing, distortion, etc?
+**FIXME**: should I discuss cells, billowing, distortion, etc? I'm not working
+on / implementing these, so they can probably go in the "Limitations" section
+(whatever that turns out to be)
+
+References:
+
+* Babinksy (:cite:`babinsky1999AerodynamicPerformanceParagliders`) discusses
+  the effect of billowing on flow separation, and
+  :cite:`babinsky1999AerodynamicImprovementsParaglider` discusses using
+  stiffeners to reduce the impact
+
+* Kulhanek (:cite:`kulhanek2019IdentificationDegradationAerodynamic`) has
+  brief discussion of these impacts
+
+* Belloc (:cite:`belloc2016InfluenceAirInlet`) discusses the effects of air
+  intakes, and suggests some modeling choices
+
+* There are a bunch of papers on *fluid-structure interaction* modelling.
+
+* Altmann (:cite:`altmann2009NumericalSimulationParafoil`) discusses the
+  overall impact of cell billowing on glide performance, and has a great
+  discussion of how design choices (cell structure, ribs, etc) can mitigate
+  the problem; in future papers
+  (:cite:`altmann2015FluidStructureInteractionAnalysis`,
+  :cite:`altmann2019FluidStructureInteractionAnalysis`) he discusses
+  implementation details. Fogell
+  (:cite:`fogell2014FluidstructureInteractionSimulations`,
+  :cite:`fogell2017FluidStructureInteractionSimulation`,
+  :cite:`fogell2017FluidStructureInteractionSimulations`) has a lot to say
+  on FSI, including some critique of the applicability of Altmann's method
+  to parachutes.
+
+  Another recent paper well worth reviewing (good discussions and great
+  references list) is :cite:`lolies2019NumericalMethodsEfficient`, which is
+  co-authored by Bruce Goldsmith! Neat. One of their big ideas seems to be
+  using "mass-spring systems" from computer animation applications for
+  paraglider cloth simulations.
+
+
+Aerodynamics
+============
+
+The paraglider dynamics are complicated enough on their own, so for now I'm
+splitting the canopy aerodynamics into their own section.
+
+
+The classic method for estimating the aerodynamic performance of a wing is
+Prandtl's *lifting-line theory* (LLT). This deceptively simple model allowed
+analytical solutions to the lift distribution.
+
+For wings with significant sweep and/or dihedral, the classic LLT breaks down.
+These more complex geometries require adaptations to account for the
+non-linear behaviors, resulting in *non-linear lifting line* (NLLT) theories.
+These are often also known as "numerical" lifting-line theories, since they
+require numerical solutions.
+
+
+Inviscid methods
+----------------
+
+* It'd be cool to show a purely inviscid analysis first. Those are more common
+  in many analyses, and more commonly applied to unusual geometry. I can use
+  its poor performance to motivation Phillips' method. It also gives me the
+  chance to introduce the method (since I'll need to discuss it at some point
+  anyway before I compare it with Phillips).
+
+* Notice there are a variety of limitations to my chosen inviscid model: see
+  `https://www.xflr5.tech/docs/Part%20IV:%20Limitations.pdf`. When I say "this
+  is what inviscid methods produce", what I really mean is "this is the
+  performance of the particular inviscid method I applied"
+
+
+Phillips' numerical lifting-line
+--------------------------------
+
+.. figure:: figures/paraglider/dynamics/phillips_scratch.*
+
+   Wing sections for Phillips' method.
+
+
+* In Phillips' original derivation they assumes uniform flow for Eq:5, but I'm
+  using the non-uniform version from Hunsaker-Snyder Eq:5. Hunsaker mentions
+  that this *local upstream velocity* `V_rel,i` "differs from the global
+  freestream velocity `V_inf` in that it may also have contributions from
+  prop-wash **or rotations of the lifting surface about the aircraft center of
+  gravity.**" Is he implying that Phillips' method is useable as-is during
+  rotations?
+
+* I'm using airfoil data from XFOIL, which is unreliable post-stall, but I'm
+  including significant post-stall coefficient data anyway to observe how
+  Phillips' method behaves in those regions. It's useful to understand how the
+  method behaves in post-stall regions in the event you have accurate
+  post-stall airfoil data. (ignoring the fact that the 3D wing basically
+  shoots that to heck anyway)
+
+* By using section coefficient data, I'm ignoring cross-flow effects. I'm sure
+  the arc of the wing has a significant effect on the boundary layer, which
+  we're assuming is constant over the entire section.
 
 
 Case Study
@@ -393,7 +497,11 @@ Aerodynamics
    Global pitching coefficient vs angle of attack.
 
 This is the global pitching coefficient, which includes contributions from
-both the section pitching coefficients and the the aerodynamic forces.
+both the section pitching coefficients and the aerodynamic forces. The VLM
+estimate appears to be using the wrong reference point, but it isn't clear
+from the program documentation what the error might be. The results are left
+here for completeness and to highlight the uncertainty in how the VLM was
+applied.
 
 .. figure:: figures/paraglider/belloc/CL_vs_CD.*
 
