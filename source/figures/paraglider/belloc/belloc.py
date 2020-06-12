@@ -191,8 +191,8 @@ for kb, beta_deg in enumerate(betas):
 
     # Some figures assume samples at alpha = [0, 5, 10, 15], so make sure to
     # include those test points.
-    alphas_down = np.deg2rad(np.linspace(4, -5, 37))[1:]
-    alphas_up = np.deg2rad(np.linspace(4, 22, 73))
+    alphas_down = np.deg2rad(np.linspace(4, -5, 19))[1:]
+    alphas_up = np.deg2rad(np.linspace(4, 22, 37))
 
     # First with decreasing alpha
     ref = None
