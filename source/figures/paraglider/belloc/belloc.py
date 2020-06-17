@@ -171,6 +171,8 @@ rho_air = 1.187  # Override: the true (mean) value from the wind tunnel data
 print("rho_air:", rho_air)
 
 # Full-range tests
+dFs = {}
+dMs = {}
 Fs = {}  # Net force
 Ms = {}  # Net moment at the "risers"
 Mc4s = {}  # Net moment from all the section pitching moments
@@ -183,6 +185,8 @@ print("\nRunning tests...")
 t_start = time.perf_counter()
 
 for kb, beta_deg in enumerate(betas):
+    dFs[beta_deg] = []
+    dMs[beta_deg] = []
     Fs[beta_deg] = []
     Ms[beta_deg] = []
     Mc4s[beta_deg] = []
@@ -216,6 +220,8 @@ for kb, beta_deg in enumerate(betas):
         M = dM.sum(axis=0)  # Moment due to section `Cm`
         M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
 
+        dFs[beta_deg].append(dF)
+        dMs[beta_deg].append(dM)
         Fs[beta_deg].append(F)
         Ms[beta_deg].append(M)
         Mc4s[beta_deg].append(dM.sum(axis=0))
@@ -224,6 +230,8 @@ for kb, beta_deg in enumerate(betas):
     alphas_down = alphas_down[:ka+1]  # Truncate when convergence failed
 
     # Reverse the order
+    dFs[beta_deg] = dFs[beta_deg][::-1]
+    dMs[beta_deg] = dMs[beta_deg][::-1]
     Fs[beta_deg] = Fs[beta_deg][::-1]
     Ms[beta_deg] = Ms[beta_deg][::-1]
     Mc4s[beta_deg] = Mc4s[beta_deg][::-1]
@@ -252,6 +260,8 @@ for kb, beta_deg in enumerate(betas):
         M = dM.sum(axis=0)  # Moment due to section `Cm`
         M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
 
+        dFs[beta_deg].append(dF)
+        dMs[beta_deg].append(dM)
         Fs[beta_deg].append(F)
         Ms[beta_deg].append(M)
         Mc4s[beta_deg].append(dM.sum(axis=0))
