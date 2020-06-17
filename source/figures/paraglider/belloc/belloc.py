@@ -280,14 +280,56 @@ for beta in betas:
     Mc4s[beta] = np.asarray(Mc4s[beta])
 
 # ---------------------------------------------------------------------------
-# Compute the aerodynamic coefficients
-#
-# Uses the flattened wing area as the reference, as per the Belloc paper.
+# Load or compute the aerodynamic coefficients
 
+plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
+
+# Load the aerodynamic coefficients from other datasets, keyed by beta [deg]
+belloc = {}  # Wind tunnel, keyed  by beta [deg]
+avl = {}  # AVL's VLM method
+xflr5 = {}  # XFLR5's VLM method ("xflr5")
+nllt = {}  # Phillips' NLLT
+
+for beta in betas:
+    avl[beta] = np.genfromtxt(f"avl/polars/beta{beta:02}.txt", names=True)
+    avl[beta] = {field: avl[beta][field] for field in avl[beta].dtype.fields}
+
+for beta in sorted(plotted_betas.intersection(betas)):
+    belloc[beta] = pd.read_csv(f"windtunnel/beta{beta:02}.csv")  # Belloc's raw wind tunnel data
+    xflr5[beta] = np.genfromtxt(
+        f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}-Inviscid.txt",
+        skip_header=7,
+        names=True,
+    )
+
+# Compute the force coefficients in wind axes for the AVL dataset
+for beta in betas:
+    # Transform body -> wind axes. (See "Flight Vehicle Aerodynamics", Drela,
+    # 2014, Eq:6.7, page 125). Notice that Drela uses back-right-up instead of
+    # front-right-down coordinates, so the CX and CZ terms are negated.
+    alpha_rad = np.deg2rad(avl[beta]["alpha"])
+    beta_rad = np.deg2rad(beta)
+    k = len(avl[beta]["alpha"])
+    sa, sb = np.sin(alpha_rad), np.full(k, np.sin(beta_rad))
+    ca, cb = np.cos(alpha_rad), np.full(k, np.cos(beta_rad))
+    C_w2b = np.array([
+        [-ca * cb, -sb, -sa * cb],
+        [-ca * sb, cb, -sa * sb],
+        [sa, np.zeros_like(avl[beta]["alpha"]), -ca]
+    ])
+    CXa, CYa, CZa = np.einsum(
+        "ijk,kj->ik",
+        C_w2b,
+        np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]]
+    )
+    avl[beta]["CXa"] = CXa
+    avl[beta]["CYa"] = CYa
+    avl[beta]["CZa"] = CZa
+
+# Compute the aerodynamic coefficients from the NLLT simulations. Uses the
+# flattened wing area as the reference, as per the Belloc paper.
 S = canopy.S_flat
 q = 0.5 * rho_air * v_mag**2
-
-nllt = {}  # Coefficients from the NLLT, keyed by beta [deg]
 for beta in betas:
 
     # Transform body -> wind axes. (See "Flight Vehicle Aerodynamics", Drela,
@@ -333,25 +375,13 @@ for beta in betas:
 # ---------------------------------------------------------------------------
 # Recreate Belloc figures 5..8
 
-plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
 axes_indices = {0: (0, 0), 5: (0, 1), 10: (1, 0), 15: (1, 1)}  # Subplot axes
 
-# Load the VLM and wind tunnel data
-belloc = {}  # Coefficients from the wind tunnel, keyed  by beta [deg]
-vlm = {}  # Coefficients from the VLM method, keyed by beta [deg]
-for beta in sorted(plotted_betas.intersection(betas)):
-    belloc[beta] = pd.read_csv(f"windtunnel/beta{beta:02}.csv")  # Belloc's raw wind tunnel data
-    names = ("alpha", "CZa", "CXa", "Cm")
-    vlm[beta] = np.loadtxt(  # Inviscid solution using VLM from XLFR5
-        f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}.txt",
-        dtype=np.dtype({"names": names, "formats": [float] * 4}),
-        skiprows=8,
-        usecols=(0, 2, 5, 8),
-    )
-
-belloc_args = {"c": "k", "linestyle": "-", "linewidth": 0.5, "label": "Wind tunnel"}
-nllt_args = {"c": "b", "linestyle": "--", "linewidth": 1, "label": "NLLT"}
-vlm_args = {"c": "r", "linestyle": "--", "linewidth": 1, "label": "VLM"}
+belloc_args = {"c": "k", "linestyle": "-", "linewidth": 0.75, "label": "Wind tunnel"}
+nllt_args = {"c": "r", "linestyle": "--", "linewidth": 1, "label": "NLLT"}
+avl_args = {"c": "b", "linestyle": "--", "linewidth": 0.75, "label": "AVL"}
+xflr5_args = {"c": "g", "linestyle": "--", "linewidth": 1, "label": "XFLR5"}
+pad_args = {"h_pad": 1.75, "w_pad": 1}
 
 def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
     args = {
@@ -377,117 +407,209 @@ def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
     axes[1, 1].grid(c='lightgrey', linestyle="--")
     return fig, axes
 
+
+plot_avl = True
+plot_xflr5 = False
+
 # Plot: CL vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_L}$", xlim=(-10, 25), ylim=(-0.6, 1.25))
+fig, axes = plot4x4("$\\alpha$ [deg]", "CL", xlim=(-10, 25), ylim=(-0.6, 1.25))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CZa"], **belloc_args)
+    if plot_avl:
+        ax.plot(avl[beta]["alpha"], avl[beta]["CZa"], **avl_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["CL"], **xflr5_args)
     ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CZa"], **nllt_args)
-    ax.plot(vlm[beta]["alpha"], vlm[beta]["CZa"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower right")
-fig.tight_layout()
+fig.tight_layout(**pad_args)
 fig.savefig(f"CL_vs_alpha.svg", dpi=96)
 
 # Plot: CD vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_D}$", xlim=(-10, 25), ylim=(0.0, 0.2))
+fig, axes = plot4x4("$\\alpha$ [deg]", "CD", xlim=(-10, 25), ylim=(-0.05, 0.2))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CXa"], **belloc_args)
+    if plot_avl:
+        ax.plot(avl[beta]["alpha"], avl[beta]["CXa"], **avl_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["CD"], **xflr5_args)
     ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CXa"], **nllt_args)
-    ax.plot(vlm[beta]["alpha"], vlm[beta]["CXa"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="upper left")
-fig.tight_layout()
+fig.tight_layout(**pad_args)
 fig.savefig(f"CD_vs_alpha.svg", dpi=96)
 
-# Plot: CM vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "$\mathrm{C_{M,G}}$", xlim=(-10, 25), ylim=(-0.5, 0.1))
-for beta in sorted(plotted_betas.intersection(betas)):
-    ax = axes[axes_indices[beta]]
-    ax.plot(belloc[beta]["Alphac"], belloc[beta]["CMT1"], **belloc_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cm"], **nllt_args)
-    ax.plot(vlm[beta]["alpha"], vlm[beta]["Cm"], **vlm_args)
-    ax.set_title(f"$\\beta$={beta}°")
-axes[1, 1].legend(loc="lower left")
-fig.tight_layout()
-fig.savefig(f"CM_vs_alpha.svg", dpi=96)
-
 # Plot: CL vs CD
-fig, axes = plot4x4("$\mathrm{C_D}$", "$\mathrm{C_L}$", xlim=(0, 0.2), ylim=(-0.6, 1.25))
+fig, axes = plot4x4("CD", "CL", xlim=(-0.005, 0.2), ylim=(-0.6, 1.25))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["CXa"], belloc[beta]["CZa"], **belloc_args)
+    if plot_avl:
+        ax.plot(avl[beta]["CXa"], avl[beta]["CZa"], **avl_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["CD"], xflr5[beta]["CL"], **xflr5_args)
     ax.plot(nllt[beta]["CXa"], nllt[beta]["CZa"], **nllt_args)
-    ax.plot(vlm[beta]["CXa"], vlm[beta]["CZa"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower right")
-fig.tight_layout()
+fig.tight_layout(**pad_args)
 fig.savefig(f"CL_vs_CD.svg", dpi=96)
 
-# Plot: CL vs CM
-fig, axes = plot4x4("$\mathrm{C_{M,G}}$", "$\mathrm{C_L}$", xlim=(-0.5, 0.1), ylim=(-0.6, 1.25))
+# Plot: CL vs Cm
+fig, axes = plot4x4("Cm", "CL", xlim=(-0.5, 0.1), ylim=(-0.6, 1.25))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["CMT1"][:42], belloc[beta]["CZa"][:42], **belloc_args)
+    if plot_avl:
+        ax.plot(avl[beta]["Cm"], avl[beta]["CZa"], **avl_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["Cm"], xflr5[beta]["CL"], **xflr5_args)
     ax.plot(nllt[beta]["Cm"], nllt[beta]["CZa"], **nllt_args)
-    ax.plot(vlm[beta]["Cm"], vlm[beta]["CZa"], **vlm_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower left")
-fig.tight_layout()
-fig.savefig(f"CL_vs_CM.svg", dpi=96)
+fig.tight_layout(**pad_args)
+fig.savefig(f"CL_vs_Cm.svg", dpi=96)
+
+# Plot: Cl vs alpha
+fig, axes = plot4x4("$\\alpha$ [deg]", "Cl", xlim=(-10, 25), ylim=(-0.2, 0.05))
+for beta in sorted(plotted_betas.intersection(betas)):
+    ax = axes[axes_indices[beta]]
+    ax.plot(belloc[beta]["Alphac"], belloc[beta]["CLT1"], **belloc_args)
+    if plot_avl:
+        ax.plot(avl[beta]["alpha"], avl[beta]["Cl"], **avl_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cl"], **xflr5_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cl"], **nllt_args)
+    ax.set_title(f"$\\beta$={beta}°")
+axes[1, 1].legend(loc="upper right")
+fig.tight_layout(**pad_args)
+fig.savefig(f"Cl_vs_alpha.svg", dpi=96)
+
+# Plot: Cm vs alpha
+fig, axes = plot4x4("$\\alpha$ [deg]", "Cm", xlim=(-10, 25), ylim=(-1.25, 0.25))
+for beta in sorted(plotted_betas.intersection(betas)):
+    ax = axes[axes_indices[beta]]
+    ax.plot(belloc[beta]["Alphac"], belloc[beta]["CMT1"], **belloc_args)
+    if plot_avl:
+        ax.plot(avl[beta]["alpha"], avl[beta]["Cm"], **avl_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cm"], **xflr5_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cm"], **nllt_args)
+    ax.set_title(f"$\\beta$={beta}°")
+axes[1, 1].legend(loc="lower left")
+fig.tight_layout(**pad_args)
+fig.savefig(f"Cm_vs_alpha.svg", dpi=96)
+
+# Plot: Cn vs alpha
+fig, axes = plot4x4("$\\alpha$ [deg]", "Cn", xlim=(-10, 25), ylim=(-0.05, 0.15))
+for beta in sorted(plotted_betas.intersection(betas)):
+    ax = axes[axes_indices[beta]]
+    ax.plot(belloc[beta]["Alphac"], belloc[beta]["CNT1"], **belloc_args)
+    if plot_avl:
+        ax.plot(avl[beta]["alpha"], avl[beta]["Cn"], **avl_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cn"], **xflr5_args)
+    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cn"], **nllt_args)
+    ax.set_title(f"$\\beta$={beta}°")
+axes[1, 1].legend(loc="lower right")
+fig.tight_layout(**pad_args)
+fig.savefig(f"Cn_vs_alpha.svg", dpi=96)
 
 # ---------------------------------------------------------------------------
 
 # Build sets of coefficients over `betas`, keyed by alpha
-Cy = {alpha: [] for alpha in [0, 5, 10, 15]}
-Cl = {alpha: [] for alpha in [0, 5, 10, 15]}
-Cn = {alpha: [] for alpha in [0, 5, 10, 15]}
+nllt2 = {
+    alpha: {
+        "Cy": [],
+        "Cl": [],
+        "Cm": [],
+        "Cn": [],
+    } for alpha in [0, 5, 10, 15]
+}
 for beta in betas:
     for alpha in [0, 5, 10, 15]:
         ix = np.nonzero(np.isclose(np.rad2deg(alphas[beta]), alpha))
         if ix[0].shape[0]:
-            Cy[alpha].append(nllt[beta]["CYa"][ix][0])
-            Cl[alpha].append(nllt[beta]["Cl"][ix][0])
-            Cn[alpha].append(nllt[beta]["Cn"][ix][0])
+            nllt2[alpha]["Cy"].append(nllt[beta]["CYa"][ix][0])
+            nllt2[alpha]["Cl"].append(nllt[beta]["Cl"][ix][0])
+            nllt2[alpha]["Cm"].append(nllt[beta]["Cm"][ix][0])
+            nllt2[alpha]["Cn"].append(nllt[beta]["Cn"][ix][0])
         else:  # pad to keep the sequences the same length as `betas`
-            Cy[alpha].append(np.nan)
-            Cl[alpha].append(np.nan)
-            Cn[alpha].append(np.nan)
+            nllt2[alpha]["Cy"].append(np.nan)
+            nllt2[alpha]["Cl"].append(np.nan)
+            nllt2[alpha]["Cm"].append(np.nan)
+            nllt2[alpha]["Cn"].append(np.nan)
+
+avl2 = {
+    alpha: {
+        "Cy": [],
+        "Cl": [],
+        "Cm": [],
+        "Cn": [],
+    } for alpha in [0, 5, 10, 15]
+}
+for beta in betas:
+    alpha_rad = np.deg2rad(avl[beta]["alpha"])
+    for alpha in [0, 5, 10, 15]:
+        ix = np.nonzero(np.isclose(np.rad2deg(alphas[beta]), alpha))
+        avl2[alpha]["Cy"].append(avl[beta]["CY"][ix][0])
+        avl2[alpha]["Cl"].append(avl[beta]["Cl"][ix][0])
+        avl2[alpha]["Cm"].append(avl[beta]["Cm"][ix][0])
+        avl2[alpha]["Cn"].append(avl[beta]["Cn"][ix][0])
 
 belloc2 = {a: pd.read_csv(f"windtunnel/alpha{a:02}v40.csv") for a in [0, 5, 10, 15]}
 
 # Plot: Cy vs beta
-fig, axes = plot4x4(r"$\beta$", r"$\mathrm{Cy_G}$", (-20, 20), (-0.3, 0.3))
+fig, axes = plot4x4(r"$\beta$ [deg]", r"Cy", (-20, 20), (-0.3, 0.3))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CY"], **belloc_args)
-    ax.plot(betas, Cy[alpha], **nllt_args)
+    if plot_avl:
+        ax.plot(betas, avl2[alpha]["Cy"], **avl_args)
+    ax.plot(betas, nllt2[alpha]["Cy"], **nllt_args)
     ax.set_title(f"$\\alpha$={alpha}°")
-axes[1, 1].legend()
-fig.tight_layout()
+axes[1, 1].legend(loc="lower left")
+fig.tight_layout(**pad_args)
 fig.savefig(f"CY_vs_beta.svg", dpi=96)
 
 # Plot: Cl (wing rolling coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$", r"$\mathrm{Cl_G}$", (-20, 20), (-0.2, 0.2))
+fig, axes = plot4x4(r"$\beta$ [deg]", "Cl", (-20, 20), (-0.2, 0.2))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CLT1"], **belloc_args)
-    ax.plot(betas, Cl[alpha], **nllt_args)
+    if plot_avl:
+        ax.plot(betas, avl2[alpha]["Cl"], **avl_args)
+    ax.plot(betas, nllt2[alpha]["Cl"], **nllt_args)
     ax.set_title(f"$\\alpha$={alpha}°")
-axes[1, 1].legend()
-fig.tight_layout()
+axes[1, 1].legend(loc="lower left")
+fig.tight_layout(**pad_args)
 fig.savefig(f"Cl_vs_beta.svg", dpi=96)
 
+# Plot: Cm (wing pitching coefficient) vs beta
+fig, axes = plot4x4(r"$\beta$ [deg]", "Cm", (-20, 20), (-0.58, 0.1))
+for alpha in [0, 5, 10, 15]:
+    ax = axes[axes_indices[alpha]]
+    ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CMT1"], **belloc_args)
+    if plot_avl:
+        ax.plot(betas, avl2[alpha]["Cm"], **avl_args)
+    ax.plot(betas, nllt2[alpha]["Cm"], **nllt_args)
+    ax.set_title(f"$\\alpha$={alpha}°")
+axes[1, 1].legend()
+fig.tight_layout(**pad_args)
+fig.savefig(f"Cm_vs_beta.svg", dpi=96)
+
 # Plot: Cn (wing yawing coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$", r"$\mathrm{Cn_G}$", (-20, 20), (-0.2, 0.2))
+fig, axes = plot4x4(r"$\beta$ [deg]", "Cn", (-20, 20), (-0.2, 0.2))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CNT1"], **belloc_args)
-    ax.plot(betas, Cn[alpha], **nllt_args)
+    if plot_avl:
+        ax.plot(betas, avl2[alpha]["Cn"], **avl_args)
+    ax.plot(betas, nllt2[alpha]["Cn"], **nllt_args)
     ax.set_title(f"$\\alpha$={alpha}°")
-axes[1, 1].legend()
-fig.tight_layout()
+axes[1, 1].legend(loc="lower right")
+fig.tight_layout(**pad_args)
 fig.savefig(f"Cn_vs_beta.svg", dpi=96)
 
 plt.show()
