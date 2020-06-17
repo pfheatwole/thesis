@@ -1,0 +1,84 @@
+Belloc's reference paraglider wing
+
+# Mach
+0.0
+
+# IYsym IZsym Zsym
+0 0 0.0
+
+# Sref   Crefl   Bref
+#0.444    0.350   1.375
+#0.444    0.350   1.705
+0.444    0.350   0.350
+
+# Xref   Yref    Zref
+0.0875   0.0     -1.0
+#-25.0      0.0     0.0
+
+#--------------------------------------------------------------
+SURFACE
+Wing
+
+#Nchordwise  Cspace   Nspanwise   Sspace
+10           1.0      40          -1.0
+
+YDUPLICATE
+0.0
+
+# Xscale Yscale Zscale
+SCALE
+1.0 1.0 1.0
+
+ANGLE
+0.0
+
+#--------------------------------------------------------------
+
+# Section 0
+SECTION
+#Xle    Yle    Zle     Chord   Ainc
+0.      0.     0.      0.350   0.0
+AFILE
+naca23015_closed.dat
+
+# Section 1
+SECTION
+#Xle    Yle    Zle     Chord   Ainc
+0.007   0.178  -0.013   0.339   0.0
+AFILE
+naca23015_closed.dat
+
+# Section 2
+SECTION
+#Xle    Yle    Zle     Chord   Ainc
+0.025   0.344  -0.05    0.308   0.0
+AFILE
+naca23015_closed.dat
+
+# Section 3
+SECTION
+#Xle    Yle    Zle     Chord   Ainc
+0.055   0.486  -0.11    0.259   0.0
+AFILE
+naca23015_closed.dat
+
+# Section 4
+SECTION
+#Xle    Yle    Zle     Chord   Ainc
+0.091   0.595  -0.187   0.198   0.0
+AFILE
+naca23015_closed.dat
+
+# Section 5
+SECTION
+#Xle    Yle    Zle     Chord   Ainc
+0.128   0.668  -0.276   0.137   3.0
+AFILE
+naca23015_closed.dat
+
+# Section 6
+SECTION
+#Xle    Yle    Zle     Chord   Ainc
+0.146   0.691  -0.374   0.107   3.0
+AFILE
+naca23015_closed.dat

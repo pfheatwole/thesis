@@ -1,0 +1,10 @@
+Builds a set of inputs for AVL's command line interface to save the hassle of
+generating all the alpha/beta combinations.
+
+Run `rebuild.sh` to generate the keystroke inputs that configure, run, and save
+each test case, then convert the run outputs into polar sequences, organized by
+`beta`.
+
+Each alpha/beta combination generates a solution in AVL, which is converted
+into polars organized by `beta`. Moments are in body axes instead of stability
+axes since that simplifies comparing them to the wind tunnel data.
