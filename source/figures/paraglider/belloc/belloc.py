@@ -82,11 +82,6 @@ class InterpolatedLobe:
     """Interface to use a PchipInterpolator for the lobe."""
 
     def __init__(self, s, y, z):
-        y = np.asarray(y)
-        z = np.asarray(z)
-
-        assert y.ndim == 1 and z.ndim == 1
-
         self._f = scipy.interpolate.PchipInterpolator(s, np.c_[y, z])
         self._fd = self._f.derivative()
 
