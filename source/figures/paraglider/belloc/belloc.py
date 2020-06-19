@@ -98,6 +98,9 @@ class InterpolatedLobe:
 s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
 lobe = InterpolatedLobe(s, fy(s), fz(s))
 
+# Alternatively, use the analytical (non-sampled, smooth curvature) form
+# lobe = gsim.foil.elliptical_lobe(np.rad2deg(np.arctan(.375/.688)), 89)
+
 chords = gsim.foil.ChordSurface(
     x=0,
     r_x=0.6,
