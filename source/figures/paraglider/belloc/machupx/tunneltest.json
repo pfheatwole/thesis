@@ -1,0 +1,31 @@
+{
+  "tag": "Belloc's reference paraglider wing",
+  "run": {
+    "solve_forces": {
+      "verbose": true
+    },
+    "display_wireframe": {
+      "show_legend": true
+    },
+    "distributions": {}
+  },
+  "solver" : {
+      "type" : "scipy_fsolve"
+  },
+  "units" : "SI",
+  "scene": {
+    "atmosphere": {
+      "rho": 1.187
+    },
+    "aircraft": {
+      "belloc": {
+        "file": "belloc.json",
+        "state": {
+          "velocity": 40,
+          "alpha": 5.0,
+          "beta": 0.0
+        }
+      }
+    }
+  }
+}

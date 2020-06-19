@@ -1,0 +1,12 @@
+This is a rough draft implementation of the reference wing using `MachUpX`
+from the Utah State University. I was only interested in the `CL` to sanity
+check my implementation of the NLLT, so the airfoil coefficients are
+linearized and I didn't bother checking the pitching coefficients.
+
+Requires:
+
+* `airfoil_db`: https://github.com/usuaero/AirfoilDatabase
+
+* `MachUpX`: https://github.com/usuaero/MachUpX/
+
+To run: `python -m machupX tunneltest.json`
