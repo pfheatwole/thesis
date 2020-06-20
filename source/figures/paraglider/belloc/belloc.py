@@ -407,7 +407,7 @@ def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
 
 
 plot_avl = True
-plot_xflr5 = False
+plot_xflr5 = True
 
 # Plot: CL vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "CL", xlim=(-10, 25), ylim=(-0.6, 1.25))
@@ -461,8 +461,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.plot(belloc[beta]["CMT1"][:42], belloc[beta]["CZa"][:42], **belloc_args)
     if plot_avl:
         ax.plot(avl[beta]["Cm"], avl[beta]["CZa"], **avl_args)
-    if plot_xflr5:
-        ax.plot(xflr5[beta]["Cm"], xflr5[beta]["CL"], **xflr5_args)
+    # if plot_xflr5:
+    #     ax.plot(xflr5[beta]["Cm"], xflr5[beta]["CL"], **xflr5_args)
     ax.plot(nllt[beta]["Cm"], nllt[beta]["CZa"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower left")
@@ -476,8 +476,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CLT1"], **belloc_args)
     if plot_avl:
         ax.plot(avl[beta]["alpha"], avl[beta]["Cl"], **avl_args)
-    if plot_xflr5:
-        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cl"], **xflr5_args)
+    # if plot_xflr5:
+    #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cl"], **xflr5_args)
     ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cl"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="upper right")
@@ -491,8 +491,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CMT1"], **belloc_args)
     if plot_avl:
         ax.plot(avl[beta]["alpha"], avl[beta]["Cm"], **avl_args)
-    if plot_xflr5:
-        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cm"], **xflr5_args)
+    # if plot_xflr5:
+    #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cm"], **xflr5_args)
     ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cm"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower left")
@@ -506,8 +506,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CNT1"], **belloc_args)
     if plot_avl:
         ax.plot(avl[beta]["alpha"], avl[beta]["Cn"], **avl_args)
-    if plot_xflr5:
-        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cn"], **xflr5_args)
+    # if plot_xflr5:
+    #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cn"], **xflr5_args)
     ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cn"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower right")
