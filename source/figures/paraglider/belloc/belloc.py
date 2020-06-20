@@ -550,7 +550,7 @@ avl2 = {
 for beta in betas:
     alpha_rad = np.deg2rad(avl[beta]["alpha"])
     for alpha in [0, 5, 10, 15]:
-        ix = np.nonzero(np.isclose(np.rad2deg(alphas[beta]), alpha))
+        ix = np.nonzero(np.isclose(avl[beta]["alpha"], alpha))
         avl2[alpha]["Cy"].append(avl[beta]["CY"][ix][0])
         avl2[alpha]["Cl"].append(avl[beta]["Cl"][ix][0])
         avl2[alpha]["Cm"].append(avl[beta]["Cm"][ix][0])
