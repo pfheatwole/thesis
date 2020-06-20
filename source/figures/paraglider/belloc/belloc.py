@@ -175,35 +175,36 @@ Fs = {}  # Net force
 Ms = {}  # Net moment at the "risers"
 Mc4s = {}  # Net moment from all the section pitching moments
 solutions = {}  # Solutions for Phillips' method
-alphas = {}  # The converged angles-of-attack
 betas = np.arange(-15, 16)
 # betas = [0, 5, 10, 15]
+nllt = {}  # Coefficients for Phillips' NLLT, keyed by `beta`
 
 print("\nRunning tests...")
 t_start = time.perf_counter()
 
-for kb, beta_deg in enumerate(betas):
-    dFs[beta_deg] = []
-    dMs[beta_deg] = []
-    Fs[beta_deg] = []
-    Ms[beta_deg] = []
-    Mc4s[beta_deg] = []
-    solutions[beta_deg] = []
+for kb, beta in enumerate(betas):
+    dFs[beta] = []
+    dMs[beta] = []
+    Fs[beta] = []
+    Ms[beta] = []
+    Mc4s[beta] = []
+    solutions[beta] = []
     cp_wing = wing.control_points(0)  # Section control points
 
     # Some figures assume samples at alpha = [0, 5, 10, 15], so make sure to
     # include those test points.
-    alphas_down = np.deg2rad(np.linspace(4, -5, 19))[1:]
-    alphas_up = np.deg2rad(np.linspace(4, 22, 37))
+    alphas_down = np.linspace(4, -5, 19)[1:]
+    alphas_up = np.linspace(4, 22, 37)
 
     # First with decreasing alpha
     ref = None
     for ka, alpha in enumerate(alphas_down):
-        print(f"\rTest: alpha: {np.rad2deg(alpha): 6.2f}, beta: {beta_deg}", end="")
-        beta = np.deg2rad(beta_deg)
-        v_W2b = np.asarray(
-            [np.cos(alpha) * np.cos(beta), np.sin(beta), np.sin(alpha) * np.cos(beta)],
-        )
+        print(f"\rTest: alpha: {alpha:6.2f}, beta: {beta}", end="")
+        alpha_rad = np.deg2rad(alpha)
+        beta_rad = np.deg2rad(beta)
+        sa, sb = np.sin(alpha_rad), np.sin(beta_rad)
+        ca, cb = np.cos(alpha_rad), np.cos(beta_rad)
+        v_W2b = np.asarray([ca * cb, sb, sa * cb])
         v_W2b *= -v_mag  # The Reynolds numbers are a function of the magnitude
 
         try:
@@ -218,32 +219,33 @@ for kb, beta_deg in enumerate(betas):
         M = dM.sum(axis=0)  # Moment due to section `Cm`
         M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
 
-        dFs[beta_deg].append(dF)
-        dMs[beta_deg].append(dM)
-        Fs[beta_deg].append(F)
-        Ms[beta_deg].append(M)
-        Mc4s[beta_deg].append(dM.sum(axis=0))
-        solutions[beta_deg].append(ref)
+        dFs[beta].append(dF)
+        dMs[beta].append(dM)
+        Fs[beta].append(F)
+        Ms[beta].append(M)
+        Mc4s[beta].append(dM.sum(axis=0))
+        solutions[beta].append(ref)
 
     alphas_down = alphas_down[:ka+1]  # Truncate when convergence failed
 
     # Reverse the order
-    dFs[beta_deg] = dFs[beta_deg][::-1]
-    dMs[beta_deg] = dMs[beta_deg][::-1]
-    Fs[beta_deg] = Fs[beta_deg][::-1]
-    Ms[beta_deg] = Ms[beta_deg][::-1]
-    Mc4s[beta_deg] = Mc4s[beta_deg][::-1]
-    solutions[beta_deg] = solutions[beta_deg][::-1]
+    dFs[beta] = dFs[beta][::-1]
+    dMs[beta] = dMs[beta][::-1]
+    Fs[beta] = Fs[beta][::-1]
+    Ms[beta] = Ms[beta][::-1]
+    Mc4s[beta] = Mc4s[beta][::-1]
+    solutions[beta] = solutions[beta][::-1]
     alphas_down = alphas_down[::-1]
 
     # Continue with increasing alpha
     ref = None
     for ka, alpha in enumerate(alphas_up):
-        print(f"\rTest: alpha: {np.rad2deg(alpha): 6.2f}, beta: {beta_deg}", end="")
-        beta = np.deg2rad(beta_deg)
-        v_W2b = np.asarray(
-            [np.cos(alpha) * np.cos(beta), np.sin(beta), np.sin(alpha) * np.cos(beta)],
-        )
+        print(f"\rTest: alpha: {alpha:6.2f}, beta: {beta}", end="")
+        alpha_rad = np.deg2rad(alpha)
+        beta_rad = np.deg2rad(beta)
+        sa, sb = np.sin(alpha_rad), np.sin(beta_rad)
+        ca, cb = np.cos(alpha_rad), np.cos(beta_rad)
+        v_W2b = np.asarray([ca * cb, sb, sa * cb])
         v_W2b *= -v_mag  # The Reynolds numbers are a function of the magnitude
 
         try:
@@ -258,15 +260,16 @@ for kb, beta_deg in enumerate(betas):
         M = dM.sum(axis=0)  # Moment due to section `Cm`
         M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
 
-        dFs[beta_deg].append(dF)
-        dMs[beta_deg].append(dM)
-        Fs[beta_deg].append(F)
-        Ms[beta_deg].append(M)
-        Mc4s[beta_deg].append(dM.sum(axis=0))
-        solutions[beta_deg].append(ref)
+        dFs[beta].append(dF)
+        dMs[beta].append(dM)
+        Fs[beta].append(F)
+        Ms[beta].append(M)
+        Mc4s[beta].append(dM.sum(axis=0))
+        solutions[beta].append(ref)
 
     alphas_up = alphas_up[:ka+1]  # Truncate when convergence failed
-    alphas[beta_deg] = np.r_[alphas_down, alphas_up]  # Stitch them together
+
+    nllt[beta] = {"alpha": np.r_[alphas_down, alphas_up]}  # Converged `alpha`
     print()
 
 t_stop = time.perf_counter()
@@ -283,10 +286,9 @@ for beta in betas:
 plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
 
 # Load the aerodynamic coefficients from other datasets, keyed by beta [deg]
-belloc = {}  # Wind tunnel, keyed  by beta [deg]
+belloc = {}  # Wind tunnel measurements
 avl = {}  # AVL's VLM method
-xflr5 = {}  # XFLR5's VLM method ("xflr5")
-nllt = {}  # Phillips' NLLT
+xflr5 = {}  # XFLR5's VLM2 method
 
 for beta in betas:
     avl[beta] = np.genfromtxt(f"avl/polars/beta{beta:02}.txt", names=True)
@@ -313,7 +315,7 @@ for beta in betas:
     C_w2b = np.array([
         [-ca * cb, -sb, -sa * cb],
         [-ca * sb, cb, -sa * sb],
-        [sa, np.zeros_like(avl[beta]["alpha"]), -ca]
+        [sa, np.zeros(k), -ca]
     ])
     CXa, CYa, CZa = np.einsum(
         "ijk,kj->ik",
@@ -333,13 +335,15 @@ for beta in betas:
     # Transform body -> wind axes. (See "Flight Vehicle Aerodynamics", Drela,
     # 2014, Eq:6.7, page 125). Notice that Drela uses back-right-up instead of
     # front-right-down coordinates, so the CX and CZ terms are negated.
+    alpha_rad = np.deg2rad(nllt[beta]["alpha"])
     beta_rad = np.deg2rad(beta)
-    sa, sb = np.sin(alphas[beta]), np.full(len(alphas[beta]), np.sin(beta_rad))
-    ca, cb = np.cos(alphas[beta]), np.full(len(alphas[beta]), np.cos(beta_rad))
+    k = len(nllt[beta]["alpha"])
+    sa, sb = np.sin(alpha_rad), np.full(k, np.sin(beta_rad))
+    ca, cb = np.cos(alpha_rad), np.full(k, np.cos(beta_rad))
     C_w2b = np.array([
         [-ca * cb, -sb, -sa * cb],
         [-ca * sb, cb, -sa * sb],
-        [sa, np.zeros_like(alphas[beta]), -ca]
+        [sa, np.zeros(k), -ca]
     ])
 
     # Body axes
@@ -352,7 +356,7 @@ for beta in betas:
 
     Cm_c4 = Mc4s[beta].T[1] / (q * S * cc)  # FIXME: useful?
 
-    nllt[beta] = {
+    nllt[beta].update({
         "CX": CX,
         "CY": CY,
         "CZ": CZ,
@@ -367,7 +371,7 @@ for beta in betas:
         "Cna": Cna,
 
         "Cm_c4": Cm_c4
-    }
+    })
 
 
 # ---------------------------------------------------------------------------
@@ -418,7 +422,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
         ax.plot(avl[beta]["alpha"], avl[beta]["CZa"], **avl_args)
     if plot_xflr5:
         ax.plot(xflr5[beta]["alpha"], xflr5[beta]["CL"], **xflr5_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CZa"], **nllt_args)
+    ax.plot(nllt[beta]["alpha"], nllt[beta]["CZa"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower right")
 fig.tight_layout(**pad_args)
@@ -433,7 +437,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
         ax.plot(avl[beta]["alpha"], avl[beta]["CXa"], **avl_args)
     if plot_xflr5:
         ax.plot(xflr5[beta]["alpha"], xflr5[beta]["CD"], **xflr5_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["CXa"], **nllt_args)
+    ax.plot(nllt[beta]["alpha"], nllt[beta]["CXa"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="upper left")
 fig.tight_layout(**pad_args)
@@ -478,7 +482,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
         ax.plot(avl[beta]["alpha"], avl[beta]["Cl"], **avl_args)
     # if plot_xflr5:
     #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cl"], **xflr5_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cl"], **nllt_args)
+    ax.plot(nllt[beta]["alpha"], nllt[beta]["Cl"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="upper right")
 fig.tight_layout(**pad_args)
@@ -493,7 +497,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
         ax.plot(avl[beta]["alpha"], avl[beta]["Cm"], **avl_args)
     # if plot_xflr5:
     #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cm"], **xflr5_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cm"], **nllt_args)
+    ax.plot(nllt[beta]["alpha"], nllt[beta]["Cm"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower left")
 fig.tight_layout(**pad_args)
@@ -508,7 +512,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
         ax.plot(avl[beta]["alpha"], avl[beta]["Cn"], **avl_args)
     # if plot_xflr5:
     #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cn"], **xflr5_args)
-    ax.plot(np.rad2deg(alphas[beta]), nllt[beta]["Cn"], **nllt_args)
+    ax.plot(nllt[beta]["alpha"], nllt[beta]["Cn"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[1, 1].legend(loc="lower right")
 fig.tight_layout(**pad_args)
@@ -527,7 +531,7 @@ nllt2 = {
 }
 for beta in betas:
     for alpha in [0, 5, 10, 15]:
-        ix = np.nonzero(np.isclose(np.rad2deg(alphas[beta]), alpha))
+        ix = np.nonzero(np.isclose(nllt[beta]["alpha"], alpha))
         if ix[0].shape[0]:
             nllt2[alpha]["Cy"].append(nllt[beta]["CYa"][ix][0])
             nllt2[alpha]["Cl"].append(nllt[beta]["Cl"][ix][0])
