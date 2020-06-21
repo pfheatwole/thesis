@@ -404,7 +404,7 @@ plot_avl = True
 plot_xflr5 = True
 
 # Plot: CL vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "CL", xlim=(-10, 25), ylim=(-0.6, 1.25))
+fig, axes = plot4x4("$\\alpha$ [deg]", "CL", xlim=(-10, 25), ylim=(-0.35, 1.4))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CZa"], **belloc_args)
@@ -419,7 +419,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"CL_vs_alpha.svg", dpi=96)
 
 # Plot: CD vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "CD", xlim=(-10, 25), ylim=(-0.05, 0.2))
+fig, axes = plot4x4("$\\alpha$ [deg]", "CD", xlim=(-10, 25), ylim=(-0.01, 0.18))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CXa"], **belloc_args)
@@ -434,7 +434,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"CD_vs_alpha.svg", dpi=96)
 
 # Plot: CL vs CD
-fig, axes = plot4x4("CD", "CL", xlim=(-0.005, 0.2), ylim=(-0.6, 1.25))
+fig, axes = plot4x4("CD", "CL", xlim=(-0.01, 0.18), ylim=(-0.35, 1.4))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["CXa"], belloc[beta]["CZa"], **belloc_args)
@@ -449,7 +449,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"CL_vs_CD.svg", dpi=96)
 
 # Plot: CL vs Cm
-fig, axes = plot4x4("Cm", "CL", xlim=(-0.5, 0.1), ylim=(-0.6, 1.25))
+fig, axes = plot4x4("Cm", "CL", xlim=(-0.6, 0.08), ylim=(-0.35, 1.0))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["CMT1"][:42], belloc[beta]["CZa"][:42], **belloc_args)
@@ -464,7 +464,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"CL_vs_Cm.svg", dpi=96)
 
 # Plot: Cl vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "Cl", xlim=(-10, 25), ylim=(-0.2, 0.05))
+fig, axes = plot4x4("$\\alpha$ [deg]", "Cl", xlim=(-10, 25), ylim=(-0.21, 0.035))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CLT1"], **belloc_args)
@@ -494,7 +494,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"Cm_vs_alpha.svg", dpi=96)
 
 # Plot: Cn vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "Cn", xlim=(-10, 25), ylim=(-0.05, 0.15))
+fig, axes = plot4x4("$\\alpha$ [deg]", "Cn", xlim=(-10, 25), ylim=(-0.04, 0.24))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CNT1"], **belloc_args)
@@ -553,7 +553,7 @@ for beta in betas:
 belloc2 = {a: pd.read_csv(f"windtunnel/alpha{a:02}v40.csv") for a in [0, 5, 10, 15]}
 
 # Plot: Cy vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", r"Cy", (-20, 20), (-0.3, 0.3))
+fig, axes = plot4x4(r"$\beta$ [deg]", r"Cy", (-17, 17), (-0.23, 0.23))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CY"], **belloc_args)
@@ -566,7 +566,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"CY_vs_beta.svg", dpi=96)
 
 # Plot: Cl (wing rolling coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "Cl", (-20, 20), (-0.2, 0.2))
+fig, axes = plot4x4(r"$\beta$ [deg]", "Cl", (-17, 17), (-0.2, 0.2))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CLT1"], **belloc_args)
@@ -579,7 +579,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"Cl_vs_beta.svg", dpi=96)
 
 # Plot: Cm (wing pitching coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "Cm", (-20, 20), (-0.65, 0.1))
+fig, axes = plot4x4(r"$\beta$ [deg]", "Cm", (-17, 17), (-0.65, 0.1))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CMT1"], **belloc_args)
@@ -592,7 +592,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"Cm_vs_beta.svg", dpi=96)
 
 # Plot: Cn (wing yawing coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "Cn", (-20, 20), (-0.2, 0.2))
+fig, axes = plot4x4(r"$\beta$ [deg]", "Cn", (-17, 17), (-0.2, 0.2))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CNT1"], **belloc_args)
