@@ -74,7 +74,7 @@ ftheta = scipy.interpolate.interp1d(s_xyz, theta)
 
 airfoil = gsim.airfoil.Airfoil(
     gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
-    gsim.airfoil.NACA(23015, convention="vertical")
+    gsim.airfoil.NACA(23015, convention="vertical"),
 )
 
 
@@ -156,11 +156,11 @@ wing = gsim.paraglider_wing.ParagliderWing(
 # ---------------------------------------------------------------------------
 # Simulate the wind tunnel tests
 #
-# The paper says the wind tunnel is being used at 40m/s to produce a Reynold's
+# The paper says the wind tunnel is being used at 40m/s to produce a Reynolds
 # number of 920,000. It neglects to mention the air density during the test,
 # but if the dynamic viscosity of the air is standard, then we can compute the
 # density of the air.
-Re = 0.92e6
+Re = 0.92e6  # Reynolds number
 v_mag = 40  # Wind tunnel airspeed [m/s]
 L = 0.350  # central chord [m]
 mu = 1.81e-5  # Standard dynamic viscosity of air
@@ -169,12 +169,6 @@ rho_air = 1.187  # Override: the true (mean) value from the wind tunnel data
 print("rho_air:", rho_air)
 
 # Full-range tests
-dFs = {}
-dMs = {}
-Fs = {}  # Net force
-Ms = {}  # Net moment at the "risers"
-Mc4s = {}  # Net moment from all the section pitching moments
-solutions = {}  # Solutions for Phillips' method
 betas = np.arange(-15, 16)
 # betas = [0, 5, 10, 15]
 nllt = {}  # Coefficients for Phillips' NLLT, keyed by `beta`
@@ -183,16 +177,11 @@ print("\nRunning tests...")
 t_start = time.perf_counter()
 
 for kb, beta in enumerate(betas):
-    dFs[beta] = []
-    dMs[beta] = []
-    Fs[beta] = []
-    Ms[beta] = []
-    Mc4s[beta] = []
-    solutions[beta] = []
+    dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
     cp_wing = wing.control_points(0)  # Section control points
 
-    # Some figures assume samples at alpha = [0, 5, 10, 15], so make sure to
-    # include those test points.
+    # Some figures will look for samples at alpha = [0, 5, 10, 15], so make
+    # sure to include those test points.
     alphas_down = np.linspace(4, -5, 19)[1:]
     alphas_up = np.linspace(4, 22, 37)
 
@@ -219,22 +208,22 @@ for kb, beta in enumerate(betas):
         M = dM.sum(axis=0)  # Moment due to section `Cm`
         M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
 
-        dFs[beta].append(dF)
-        dMs[beta].append(dM)
-        Fs[beta].append(F)
-        Ms[beta].append(M)
-        Mc4s[beta].append(dM.sum(axis=0))
-        solutions[beta].append(ref)
+        dFs.append(dF)
+        dMs.append(dM)
+        Fs.append(F)
+        Ms.append(M)
+        Mc4s.append(dM.sum(axis=0))
+        solutions.append(ref)
 
     alphas_down = alphas_down[:ka+1]  # Truncate when convergence failed
 
     # Reverse the order
-    dFs[beta] = dFs[beta][::-1]
-    dMs[beta] = dMs[beta][::-1]
-    Fs[beta] = Fs[beta][::-1]
-    Ms[beta] = Ms[beta][::-1]
-    Mc4s[beta] = Mc4s[beta][::-1]
-    solutions[beta] = solutions[beta][::-1]
+    dFs = dFs[::-1]
+    dMs = dMs[::-1]
+    Fs = Fs[::-1]
+    Ms = Ms[::-1]
+    Mc4s = Mc4s[::-1]
+    solutions = solutions[::-1]
     alphas_down = alphas_down[::-1]
 
     # Continue with increasing alpha
@@ -260,25 +249,28 @@ for kb, beta in enumerate(betas):
         M = dM.sum(axis=0)  # Moment due to section `Cm`
         M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
 
-        dFs[beta].append(dF)
-        dMs[beta].append(dM)
-        Fs[beta].append(F)
-        Ms[beta].append(M)
-        Mc4s[beta].append(dM.sum(axis=0))
-        solutions[beta].append(ref)
+        dFs.append(dF)
+        dMs.append(dM)
+        Fs.append(F)
+        Ms.append(M)
+        Mc4s.append(dM.sum(axis=0))
+        solutions.append(ref)
 
     alphas_up = alphas_up[:ka+1]  # Truncate when convergence failed
 
-    nllt[beta] = {"alpha": np.r_[alphas_down, alphas_up]}  # Converged `alpha`
+    nllt[beta] = {
+        "alpha": np.r_[alphas_down, alphas_up],  # Converged `alpha`
+        "dF": np.asarray(dFs),  # Section forces
+        "dM": np.asarray(dMs),  # Net section moments
+        "F": np.asarray(Fs),  # Net forces
+        "M": np.asarray(Ms),  # Net moments
+        "Mc4": np.asarray(Mc4s),  # Section pitching moments
+        "solutions": solutions,  # Solutions for Phillips' method
+    }
     print()
 
 t_stop = time.perf_counter()
 print(f"Finished in {t_stop - t_start:0.2f} seconds\n")
-
-for beta in betas:
-    Fs[beta] = np.asarray(Fs[beta])
-    Ms[beta] = np.asarray(Ms[beta])
-    Mc4s[beta] = np.asarray(Mc4s[beta])
 
 # ---------------------------------------------------------------------------
 # Load or compute the aerodynamic coefficients
@@ -322,12 +314,10 @@ for beta in betas:
         C_w2b,
         np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]]
     )
-    avl[beta]["CXa"] = CXa
-    avl[beta]["CYa"] = CYa
-    avl[beta]["CZa"] = CZa
+    avl[beta].update({"CXa": CXa, "CYa": CYa, "CZa": CZa})
 
 # Compute the aerodynamic coefficients from the NLLT simulations. Uses the
-# flattened wing area as the reference, as per the Belloc paper.
+# flattened wing area as the reference, as per the paper.
 S = canopy.S_flat
 q = 0.5 * rho_air * v_mag**2
 for beta in betas:
@@ -347,14 +337,14 @@ for beta in betas:
     ])
 
     # Body axes
-    CX, CY, CZ = Fs[beta].T / (q * S)
-    Cl, Cm, Cn = Ms[beta].T / (q * S * cc)
+    CX, CY, CZ = nllt[beta]["F"].T / (q * S)
+    Cl, Cm, Cn = nllt[beta]["M"].T / (q * S * cc)
 
     # Wind axes
-    CXa, CYa, CZa = np.einsum("ijk,kj->ik", C_w2b, Fs[beta] / (q * S))
-    Cla, Cma, Cna = np.einsum("ijk,kj->ik", C_w2b, Ms[beta] / (q * S * cc))
+    CXa, CYa, CZa = np.einsum("ijk,kj->ik", C_w2b, nllt[beta]["F"] / (q * S))
+    Cla, Cma, Cna = np.einsum("ijk,kj->ik", C_w2b, nllt[beta]["M"] / (q * S * cc))
 
-    Cm_c4 = Mc4s[beta].T[1] / (q * S * cc)  # FIXME: useful?
+    Cm_c4 = nllt[beta]["Mc4"].T[1] / (q * S * cc)  # FIXME: useful?
 
     nllt[beta].update({
         "CX": CX,
@@ -375,7 +365,7 @@ for beta in betas:
 
 
 # ---------------------------------------------------------------------------
-# Recreate Belloc figures 5..8
+# Coefficient plots
 
 axes_indices = {0: (0, 0), 5: (0, 1), 10: (1, 0), 15: (1, 1)}  # Subplot axes
 
@@ -589,7 +579,7 @@ fig.tight_layout(**pad_args)
 fig.savefig(f"Cl_vs_beta.svg", dpi=96)
 
 # Plot: Cm (wing pitching coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "Cm", (-20, 20), (-0.58, 0.1))
+fig, axes = plot4x4(r"$\beta$ [deg]", "Cm", (-20, 20), (-0.65, 0.1))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CMT1"], **belloc_args)
