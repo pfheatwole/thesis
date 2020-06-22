@@ -58,8 +58,10 @@ mathjax_config = {
         "Macros": {
             "given": r"\;\middle\vert\;",
             "vec": [r"\mathbf{#1}", 1],
-            "mat": [r"\left[#1\right]", 1],
-            "crossmat": [r"\mat{#1}^{\times}", 1],
+            # "mat": [r"\left[#1\right]", 1],
+            # "crossmat": [r"\mat{#1}^{\times}", 1],
+            "mat": [r"\mathbf{#1}", 1],
+            "crossmat": [r"\left[{#1}\right]^{\times}", 1],
         },
     },
 }
