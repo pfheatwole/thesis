@@ -38,7 +38,7 @@ Here's a diagram of the basic airfoil geometric properties:
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_diagram.*
    :name: airfoil_diagram
 
-   Airfoil geometry.
+   Components of an airfoil.
 
 
 There are two conventions measuring the airfoil thickness; this convention
@@ -68,7 +68,7 @@ chord lines. A wing geometry can be defined by a *chord surface* and an
 
 .. TODO:: define the *section index*
 
-The surface can be defined using six curves as functions of the section index:
+The surface can be defined using six functions of the section index:
 
 1. Chord length :math:`c(s)`
 

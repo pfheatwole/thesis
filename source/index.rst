@@ -39,6 +39,7 @@ Contents
    bayesian_filtering
    canopy_geometry
    canopy_aerodynamics
+   paraglider_geometry
    paraglider_dynamics
    data_considerations
    examples

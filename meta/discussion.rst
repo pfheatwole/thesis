@@ -889,29 +889,28 @@ Physical Description
 Airfoil
 ^^^^^^^
 
-The cross-sectional slices of the parafoil.
+I'm not interested in a grand exposition of airfoil considerations. I just
+want to draw attention to the aspects that are important enough to affect my
+modeling choices. However, this might be a good place to introduced many of
+the relevant aerodynamic concepts/terminology (angle of attack, stall point,
+chord, camber, pitching moment, aerodynamic center, etc)
 
-Discuss the most significant points and definitions:
+**What are the most significant/relevant definitions and considerations?**
+
+* Geometric definitions of the airfoil: leading edge, trailing edge, chord
+  line, camber line, upper surface, lower surface
+
+* Summary parameters (ref:
+  http://laboratoridenvol.com/paragliderdesign/airfoils.html#4): maximum
+  thickness, position of maximum thickness, max camber, position of max
+  camber, nose radius, trailing edge angle (?)
+
+* Aerodynamic behavior and coefficients: lift, drag, and moment curves; stall
+  point; stability; more?
 
 
-Geometric definitions of the airfoil: leading edge, trailing edge, chord line,
-camber line, upper surface, lower surface
-
-Summary parameters (ref:
-http://laboratoridenvol.com/paragliderdesign/airfoils.html#4): maximum
-thickness, position of maximum thickness, max camber, position of max camber,
-nose radius, trailing edge angle (?)
-
-Aerodynamic behavior and coefficients: lift, drag, and moment curves; stall
-point; stability; more?
-
-In fact, a LOT of the aerodynamic terminology should probably be introduced
-here (as part of the discussion on airfoils). More keywords: angle of attack,
-stall point, chord, camber, pitching moment, aerodynamic center
-
-
-Parafoil
-^^^^^^^^
+Parafoil (Canopy)
+^^^^^^^^^^^^^^^^^
 
 * How should I cite the "Paraglider Design Handbook"? Just as a website?
 
@@ -926,11 +925,10 @@ arched, dihedral shape of the wing. (The PDH calls the frontal view the *lobe*
 and defines several lobes (circular, elliptical, double circles, etc))
 
 The planform dimensions describe the projected outline, but not the volumetric
-shape; the volumetric shape of the parafoil is dictated by its cross-sections.
-A 2D cross-section of a wing is called an *airfoil*. The airfoil is the
-fundamental building block of a wing. Some wings have a spanwise variation of
-the airfoil in order to adjust the performance characteristics of the wing,
-but my model has not yet implemented that detail.
+shape; the volumetric shape of the parafoil is dictated by its airfoils Some
+wings have a spanwise variation of the airfoil in order to adjust the
+performance characteristics of the wing, but my model has not yet implemented
+that detail.
 
 
 Wing
