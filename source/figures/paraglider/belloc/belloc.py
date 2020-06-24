@@ -133,10 +133,10 @@ wing = gsim.paraglider_wing.ParagliderWing(
     canopy=canopy,
     force_estimator=gsim.foil.Phillips(canopy, 40, K=11),
     brake_geo=gsim.brake_geometry.Cubic(0, 0.75, delta_max=0),  # unused
-    d_riser=0.25,  # For the 1/8 model, d_riser = 0.0875 / 0.350 = 25%
-    z_riser=1,  # The 1/8 scale model has the cg 1m below the central chord
-    pA=0.08,  # unused
-    pC=0.80,  # unused
+    kappa_x=0.0875 / 0.350,  # 25% back from the leading edge
+    kappa_z=1.0 / 0.350,  # 1m below the central chord
+    kappa_A=0.08,  # unused
+    kappa_C=0.80,  # unused
     kappa_a=0,  # unused
     rho_upper=0,  # Neglect gravitational forces
     rho_lower=0,
