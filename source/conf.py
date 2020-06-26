@@ -50,6 +50,7 @@ rsvg_converter_args = ["-z", str(round(zoom_factor, 2))]
 # document, regardless of section depth. Suppress those manually.
 suppress_warnings = [
     # 'autosectionlabel.paraglider_model', # Outdated, but keeping it as an example
+    'autosectionlabel.*',  # Assume I use fully-qualified section references
 ]
 
 mathjax_config = {
