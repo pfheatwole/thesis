@@ -41,6 +41,7 @@ Contents
    canopy_aerodynamics
    paraglider_geometry
    paraglider_dynamics
+   flight_simulation
    data_considerations
    examples
 
