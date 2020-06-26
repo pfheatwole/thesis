@@ -1,3 +1,11 @@
+* Should I use `h_a/R` for "angular momentum of the apparent mass `a` about
+  `R`"?  I like the slash as "X with respect to Y", which makes sense here.
+
+* I need a diagram for the 6 DoF model. I was going to just show the body
+  centroid "B", but that makes it less obvious that the 6 DoF supports weight
+  shift. Should all models include "P"? While I'm at it, is "B" still a good
+  choice?
+
 * Use the wing from Belloc as a case study. How to use my paraglider geometry
   to define/implement the wing from his description, then compare his wind
   tunnel performance to the estimate from Phillips method. Discuss likely

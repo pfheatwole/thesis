@@ -21,7 +21,7 @@ Notation and Symbols
    * - :math:`\vec{x}_{B/A}`
      - a vector from point A to point B (point B with respect to point A)
    * - :math:`^R \vec{x}`
-     - a vector in reference frame :math:`R`
+     - a vector in reference frame :math:`\mathcal{F}_R`
    * - :math:`\dot{\vec{x}}`
      - the derivative of a vector
    * - :math:`x_k`
@@ -44,6 +44,20 @@ Notation and Symbols
        can be used many times for different density functions. For example,
        :math:`p(x)` and :math:`p(y)` are different functions even though both
        use :math:`p`.
+
+Another notation which is useful when building systems of equations involving
+matrices is the *cross-product matrix operator*, so that
+:math:`\crossmat{\vec{v}} \vec{x} \equiv \vec{v} \times \vec{x}`:
+
+.. _crossmat:
+.. math::
+
+   \crossmat{\vec{v}} \equiv
+      \begin{bmatrix}
+         0 & -v_3 & v_2\\
+         v_3 & 0 & -v1\\
+         -v_2 & v_1 & 0
+      \end{bmatrix}
 
 .. todo::
 
@@ -70,9 +84,14 @@ for some realistic examples taken from
 .. math::
 
    \begin{aligned}
-   \vec{p}_{A/B} &\equiv \textrm{the position of the point A with respect to point } B \\
-   \vec{v}_{A/i} &\equiv \textrm{the velocity vector of a point } A \textrm{ in frame } F_i \\
-   ^b \dot{\vec{v}}_{A/i} &\equiv \textrm{the vector derivative of } \vec{v}_{A/i} \textrm{ taken in frame } F_b \\
-   \vec{v}^C_{A/i} \equiv \left(\vec{v}_{A/i}\right)^C &\equiv \textrm{array of components of } \vec{v}_{A/i} \textrm{ in coordinate system } c \\
-   ^b \dot{\vec{v}}^c_{A/i} &\equiv \textrm{components in coordinate system } c \textrm{ of the derivative taken in frame } F_b
+   \vec{p}_{A/B} &\equiv
+      \text{the position of the point A with respect to point } B \\
+   \vec{v}_{A/i} &\equiv
+      \text{the velocity vector of a point } A \text{ in frame } \mathcal{F}_i \\
+   ^b \dot{\vec{v}}_{A/i} &\equiv
+      \text{the vector derivative of } \vec{v}_{A/i} \text{ taken in frame } \mathcal{F}_b \\
+   \vec{v}^c_{A/i} &\equiv
+      \text{array of components of } \vec{v}_{A/i} \text{ in coordinate system } c \\
+   ^b \dot{\vec{v}}^c_{A/i} &\equiv
+      \text{components in coordinate system } c \text{ of the derivative taken in frame } \mathcal{F}_b
    \end{aligned}
