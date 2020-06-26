@@ -80,7 +80,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Paraglider Flight Reconstruction'
+project = 'Wind Field Predictive Modeling via Paraglider Flight Reconstruction: Preliminary Work'
 copyright = "2020, Peter Frank Heatwole"
 author = 'Peter Frank Heatwole'
 
