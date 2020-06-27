@@ -244,8 +244,8 @@ Every new tool should be validated, and for aerodynamic codes validation often
 involves comparing theoretical models to wind tunnel measurements. For the
 tools proposed in this paper, validation should include demonstrating the
 flexibility of the geometry definition proposed in :doc:`canopy_geometry` and
-the performance of the aerodynamics code proposed in :ref:`Phillips' numerical
-lifting-line`.
+the performance of the aerodynamics code proposed in `Phillips' numerical
+lifting-line`_.
 
 An excellent test case for the geometry and aerodynamics is available from
 :cite:`belloc2015WindTunnelInvestigation`, which provides both point-wise
