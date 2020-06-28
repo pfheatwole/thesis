@@ -16,7 +16,7 @@ from pfh.glidersim.foil import (  # noqa: F401
     SimpleFoil,
     PolynomialTorsion as PT,
     elliptical_chord,
-    elliptical_lobe,
+    elliptical_arc,
 )
 
 
@@ -267,12 +267,12 @@ if __name__ == "__main__":
         "torsion": 0,
     }
 
-    # Elliptical lobe
+    # Elliptical arc
     examples["elliptical1"] = {
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_lobe(mean_anhedral=33, max_anhedral=67),
+        "yz": gsim.foil.elliptical_arc(mean_anhedral=33, max_anhedral=67),
         "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
         "torsion": 0,
     }
@@ -281,7 +281,7 @@ if __name__ == "__main__":
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_lobe(mean_anhedral=44, max_anhedral=89),
+        "yz": gsim.foil.elliptical_arc(mean_anhedral=44, max_anhedral=89),
         "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
         "torsion": 0,
     }
@@ -290,7 +290,7 @@ if __name__ == "__main__":
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_lobe(mean_anhedral=20, max_anhedral=89),
+        "yz": gsim.foil.elliptical_arc(mean_anhedral=20, max_anhedral=89),
         "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
         "torsion": 0,
     }
@@ -326,7 +326,7 @@ if __name__ == "__main__":
     fc = scipy.interpolate.interp1d(s_xyz, c / (b_flat / 2))
     ftheta = scipy.interpolate.interp1d(s_xyz, theta)
 
-    class PchipInterpolatedLobe:
+    class PchipInterpolatedArc:
         def __init__(self, s, y, z):
             self._f = scipy.interpolate.PchipInterpolator(s, np.c_[y, z])
             self._fd = self._f.derivative()
@@ -338,13 +338,13 @@ if __name__ == "__main__":
             return self._fd(s)
 
     s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
-    lobe = PchipInterpolatedLobe(s, fy(s), fz(s))
+    arc = PchipInterpolatedArc(s, fy(s), fz(s))
 
     examples["belloc"] = {
         "r_x": 0.6,
         "x": 0,
         "r_yz": 0.6,
-        "yz": lobe,
+        "yz": arc,
         "chord_length": fc,
         "torsion": ftheta,
     }

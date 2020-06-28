@@ -78,8 +78,8 @@ airfoil = gsim.airfoil.Airfoil(
 )
 
 
-class InterpolatedLobe:
-    """Interface to use a PchipInterpolator for the lobe."""
+class InterpolatedArc:
+    """Interface to use a PchipInterpolator for the arc."""
 
     def __init__(self, s, y, z):
         self._f = scipy.interpolate.PchipInterpolator(s, np.c_[y, z])
@@ -92,19 +92,19 @@ class InterpolatedLobe:
         return self._fd(s)
 
 
-# FIXME: move the resampling logic into `InterpolatedLobe`, and make that an
+# FIXME: move the resampling logic into `InterpolatedArc`, and make that an
 #        official helper class in `foil.py`. It should also use more intelligent
 #        resampling (only needs two extra samples on either side of each point)
 s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
-lobe = InterpolatedLobe(s, fy(s), fz(s))
+arc = InterpolatedArc(s, fy(s), fz(s))
 
 # Alternatively, use the analytical (non-sampled, smooth curvature) form
-# lobe = gsim.foil.elliptical_lobe(np.rad2deg(np.arctan(.375/.688)), 89)
+# arc = gsim.foil.elliptical_arc(np.rad2deg(np.arctan(.375/.688)), 89)
 
 chords = gsim.foil.ChordSurface(
     x=0,
     r_x=0.6,
-    yz=lobe,
+    yz=arc,
     r_yz=0.6,
     chord_length=fc,
     torsion=ftheta,
