@@ -42,6 +42,7 @@ Contents
    paraglider_geometry
    paraglider_dynamics
    flight_simulation
+   case_study
    data_considerations
    examples
 
