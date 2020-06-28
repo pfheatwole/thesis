@@ -158,6 +158,8 @@ htmlhelp_basename = 'Thesisdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
+# Note: `\given` must be used inside a `\left(` and `\right)`
+
 EXTRA_PREAMBLE = r"""
 \usepackage{csu}
 \usepackage{cancel}
@@ -165,7 +167,6 @@ EXTRA_PREAMBLE = r"""
 \renewcommand{\vec}{\mathbf}
 \newcommand{\mat}[1]{\left[#1\right]}
 \newcommand{\crossmat}[1]{\mat{#1}^{\times}}
-\renewcommand{\arraystretch}{1.5}
 """
 
 latex_engine = "xelatex"  # pdflatex has poor unicode support
