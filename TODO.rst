@@ -1,3 +1,13 @@
+* Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (as
+  opposed to "section anhedral").
+
+* Can I make two parallel outlines, informal and formal, to develop the idea
+  of "predicting points of the wind field by learning from the past"? I'd love
+  to have an easy-to-follow informal development for the non-technical reader,
+  and a translation of those informal concepts into mathematical form. Show
+  that the math isn't as scary as it might seem; the notation is intimidating,
+  but ultimately it's based on logic that the reader already understands.
+
 * Should I use `h_a/R` for "angular momentum of the apparent mass `a` about
   `R`"?  I like the slash as "X with respect to Y", which makes sense here.
 

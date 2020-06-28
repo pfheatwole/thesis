@@ -8,25 +8,144 @@ A paraglider is a system of two components: a wing, and a harness.
 Paraglider Wing
 ===============
 
+Related work:
 
-Canopy
-------
-
-NT
+* :cite:`iosilevskii1995CenterGravityMinimal`
 
 
-Risers
-------
 
-NT
+Lines
+-----
 
+For real wings, the line geometry is a major factor in wing performance, but
+the subject is complex. For this project I'm not modeling the entire bridle.
+Instead, I'm using explicit placements of the riser midpoint :math:`R` and
+aggregated values for the line drag.
+
+Also, because I'm not modeling the entire geometry, I must also approximate
+the brake deflection angles. The end effect is that this implementation only
+models the final position of the risers as a function of accelerator, and the
+deflection angles of the trailing edges as a function of left and right
+brakes.
+
+Related work:
+
+* :cite:`altmann2015FluidStructureInteractionAnalysis` discusses using
+  *fluid-structure interaction* to optimize the line cascading to optimize
+  wing performance
+
+* :cite:`lolies2019NumericalMethodsEfficient` discusses the "effect of line
+  split joint angles on sail deformation"
+
+
+Riser Position
+^^^^^^^^^^^^^^
+
+[[Discuss riser position `R` as a function of the accelerator.]]
+
+
+Brakes
+^^^^^^
+
+A paraglider is equipped with two handles at the ends of sections of the
+bridle (line geometry) that are connected to the trailing edges of the canopy.
+The pilot can use these controls to deflect the trailing edge downward,
+increasing drag. Symmetric deflections slow the wing down, and asymmetric
+deflections cause the wing to turn.
+
+Topics:
+
+* The deflection geometry of individual airfoils
+
+* Deflection distribution as a function of section index.
+
+* The geometry of the bridle dictates the deflection distribution.
+
+* Simulating a braking wing requires the geometry for the deflected airfoils.
+  The geometry can either be used directly, as would be done by *vortex
+  lattice* or *computational fluid dynamics* methods, or it can be used
+  indirectly, as is done with lifting-line methods. Lifting-line methods use
+  the section coefficients, which means solving for the 2D section
+  coefficients before estimating the 3D section forces and moments.
+
+
+Mathematical Model
+~~~~~~~~~~~~~~~~~~
+
+It is computationally prohibitive to solve for the aerodynamic coefficients at
+each timestep. Instead, a set of coefficients can be produced for a set of
+deflection angles, and then the aerodynamics method can use linear
+interpolation between the individual coefficient solutions.
+
+Interpolating between coefficient solutions requires an index; the most
+natural is the deflection angle, :math:`\delta_f`. This means a standard
+definition must be chosen for the *deflection angle*.
+
+Classic airfoil software, such as XFOIL, are primarily designed for rigid
+wings, and so it is common to define flaps using a fixed hinge point at some
+point along the chord:
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_hinge.*
+
+This definition is troublesome for a flexible wing, since there is no fixed
+hinge point; the deflection occurs as a variable arc between the trailing edge
+to some point on the chord. A more convenient definition is the total
+deflection angle produced by the trailing edge:
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_arc.*
+
+This definition moves some of the complexity out of the implementation and
+into how the set of coefficients are defined. Without recording a fixed
+hinge point, the paraglider model is oblivious to how the deflection was
+achieved. On the plus side, this constraint greatly simplifies the model,
+and sets of coefficients can easily be generated for different deflection
+geometries without requiring changes to the code.
+
+To lookup the coefficients using the interpolator, the simulator requires
+the deflection angles. That is, it needs a function to produce the
+deflection angle distribution across the wing sections :math:`s` as
+a function of the brakes:
+
+.. math::
+
+   \delta_f = f \left( s, \delta_{Bl}, \delta_{Br} \right)
+
+Where :math:`s` is the *section index*, :math:`\delta_{Bl}` is the
+percentage of left brake, and :math:`\delta_{Br}` is the percentage of right
+brake.
+
+A physically accurate deflection distribution requires a proper line
+geometry for the wing, but because the line geometry was not a focus for
+this project, an approximation is used instead.
+
+For the moment, I've been using a cubic polynomial for the distribution. You
+choose a starting section (where brake deflections begin), a peak section
+(where the deflection is greatest), and a peak value (the magnitude of the
+maximum deflection angle under maximum control input). The
+applicability/accuracy of this crude model depends on the arc anhedral:
+
+.. figure:: figures/paraglider/geometry/brake_deflections_anhedral23_Bl025_Br1.*
+
+   Cubic brake deflection angle distribution with :math:`\delta_{Bl} = 0.25` and
+   :math:`\delta_{Br} = 1` for a wing with a mean anhedral angle of 23
+   degrees.
+
+.. figure:: figures/paraglider/geometry/brake_deflections_anhedral33_Bl025_Br1.*
+
+   Cubic brake deflection angle distribution with :math:`\delta_{Bl} = 0.25` and
+   :math:`\delta_{Br} = 1` for a wing with a mean anhedral angle of 33
+   degrees.
+
+**FIXME: these plots were made using the `plot_paraglider_wing` function that
+assumed fixed hinges at 0.8c and the delta is the angle from 0.8c to the TE.
+That visualization will be significantly wrong.**
 
 Accelerator
 -----------
 
 * Need an informal description first.
 
-* Discuss the assumption that the accelerator does not change the lobe. Maybe
+* Discuss the assumption that the accelerator does not change the arc. Maybe
   design a test case to show how small amounts of "flattening" change the
   performance (better glide ratio, more sensitive to weight shift, etc; easy
   to do, just modify `mean_anhedral` for the Hook3ish and leave `max_anhedral`
@@ -163,100 +282,6 @@ is a simple translation of the canopy coordinate system, so
 :math:`\vec{r}_{LE/R}^b = - \vec{r}_{R/LE}^c`, but are vectors in the two
 coordinate systems actually the same values? As in :math:`\vec{r}_{A/B}^b
 = \vec{r}_{A/B}^c` for all A and B?]]
-
-
-Brakes
-------
-
-A paraglider is equipped with two handles at the ends of sections of the
-bridle (line geometry) that are connected to the trailing edges of the canopy.
-The pilot can use these controls to deflect the trailing edge downward,
-increasing drag. Symmetric deflections slow the wing down, and asymmetric
-deflections cause the wing to turn.
-
-Topics:
-
-* The deflection geometry of individual airfoils
-
-* Deflection distribution as a function of section index.
-
-
-Mathematical Model
-^^^^^^^^^^^^^^^^^^
-
-* The geometry of the bridle dictates the deflection distribution.
-
-* Simulating a braking wing requires the geometry for the deflected airfoils.
-  The geometry can either be used directly, as would be done by *vortex
-  lattice* or *computational fluid dynamics* methods, or it can be used
-  indirectly, as is done with lifting-line methods. Lifting-line methods use
-  the section coefficients, which means solving for the 2D section
-  coefficients before estimating the 3D section forces and moments.
-
-* It is computationally prohibitive to solve for the aerodynamic coefficients
-  at each timestep. Instead, a set of coefficients can be produced for a set
-  of deflection angles, and then the aerodynamics method can use linear
-  interpolation between the individual coefficient solutions.
-
-  Interpolating between coefficient solutions requires an index; the most
-  natural is the deflection angle, :math:`\delta_f`. This means a standard
-  definition must be chosen for the *deflection angle*.
-
-  Classic airfoil software, such as XFOIL, are primarily designed for rigid
-  wings, and so it is common to define flaps using a fixed hinge point at some
-  point along the chord:
-
-  .. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_hinge.*
-
-  This definition is troublesome for a flexible wing, since there is no fixed
-  hinge point; the deflection occurs as a variable arc between the trailing edge
-  to some point on the chord. A more convenient definition is the total
-  deflection angle produced by the trailing edge:
-
-  .. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_arc.*
-
-  This definition moves some of the complexity out of the implementation and
-  into how the set of coefficients are defined. Without recording a fixed
-  hinge point, the paraglider model is oblivious to how the deflection was
-  achieved. On the plus side, this constraint greatly simplifies the model,
-  and sets of coefficients can easily be generated for different deflection
-  geometries without requiring changes to the code.
-
-* To lookup the coefficients using the interpolator, the simulator requires
-  the deflection angles. That is, it needs a function to produce the
-  deflection angle distribution across the wing sections :math:`s` as
-  a function of the brakes:
-
-  .. math::
-
-     \delta_f = f \left( s, \delta_{Bl}, \delta_{Br} \right)
-
-  Where :math:`s` is the *section index*, :math:`\delta_{Bl}` is the
-  percentage of left brake, and :math:`\delta_{Br}` is the percentage of right
-  brake.
-
-
-* A physically accurate deflection distribution requires a proper line
-  geometry for the wing, but because the line geometry was not a focus for
-  this project, an approximation is used instead.
-
-  For the moment, I've been using a cubic polynomial for the distribution. You
-  choose a starting section (where brake deflections begin), a peak section
-  (where the deflection is greatest), and a peak value (the magnitude of the
-  maximum deflection angle under maximum control input). The
-  applicability/accuracy of this crude model depends on the arc anhedral:
-
-  .. figure:: figures/paraglider/geometry/brake_deflections_anhedral23_Bl025_Br1.*
-
-     Cubic brake deflection angle distribution with :math:`\delta_{Bl} = 0.25` and
-     :math:`\delta_{Br} = 1` for a wing with a mean anhedral angle of 23
-     degrees.
-
-  .. figure:: figures/paraglider/geometry/brake_deflections_anhedral33_Bl025_Br1.*
-
-     Cubic brake deflection angle distribution with :math:`\delta_{Bl} = 0.25` and
-     :math:`\delta_{Br} = 1` for a wing with a mean anhedral angle of 33
-     degrees.
 
 
 Harness

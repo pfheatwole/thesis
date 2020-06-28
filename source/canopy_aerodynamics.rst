@@ -16,6 +16,10 @@ non-linear behaviors, resulting in *non-linear lifting line* (NLLT) theories.
 These are often also known as "numerical" lifting-line theories, since they
 require numerical solutions.
 
+Related work:
+
+* :cite:`gonzalez1993PrandtlTheoryApplied`
+
 
 Lifting-line
 ============
@@ -218,6 +222,7 @@ with the normal and chordwise wind speeds
   which is easily accessible in Python via `scipy's \`optimize\` module
   <https://docs.scipy.org/doc/scipy/reference/optimize.root-hybr.html>`_.
 
+
 Limitations
 -----------
 
@@ -231,6 +236,8 @@ Limitations
 * It uses the Kutta-Joukowski theorem for the section lift. I think the KJ
   theorem assumes uniform fluid velocity, steady-state, and unseparated? Is
   the KJ assuming inviscid flow, ie it's a potential flow solution?
+
+* Can't model a spin (backwards airflow on one wingtip)
 
 
 Case Study
@@ -340,7 +347,6 @@ It uses a NACA 23015.
 .. figure:: figures/paraglider/geometry/airfoil/NACA-23015.*
 
    NACA 23015
-
 
 
 Aerodynamics

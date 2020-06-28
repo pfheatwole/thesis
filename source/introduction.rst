@@ -3,6 +3,11 @@ Introduction
 ************
 
 
+**THIS CHAPTER IS MY CHANCE TO SELL THE READER ON THE TOPIC. CONVINCE THEM
+THAT IT WOULD BE AWESOME TO HAVE A SOLUTION, AND THAT A SOLUTION IS POSSIBLE.
+DANGLE THE IDEA AND THE THOUGHT OF COMPLETING IT.**
+
+
 Structure of this Introduction
 ==============================
 
@@ -574,51 +579,59 @@ a dynamics model for the system: the paraglider wing, the pilot inputs, and
 the wind.
 
 
-Paragliders
+Paragliding
 ===========
-
 
 .. figure:: figures/paraglider/paraglider_diagram.*
    :name: paraglider_diagram
    :width: 50%
 
-   A Paraglider
+   A Paraglider. I hate this diagram.
 
 
-Geometry
---------
+Wind Fields
+===========
 
-Canopy
-^^^^^^
-
-FIXME
+NT
 
 
-Lines
-^^^^^
+Predictive Modeling
+===================
 
-FIXME
+You want to use observations to predict the current state. (Not sure "predict"
+is the right word here though; it's more like "estimation", except that
+estimation in statistics means "estimating the true value of the observed
+thing", whereas I'm trying to estimate the value of the **unobserved** thing.)
+
+* Given a model, you would like to predict the value you would observe at
+  other points in the wind field.
+
+* Static models that simply summarize historical averages or rates aren't
+  useless, but they are pretty boring; for example, in Michael von Kaenel's
+  thesis the conclusion was simply "stay along the ridge", which pilots
+  already know.
+
+  Instead, we want a probabilistic model that gives answers that have been
+  **conditioned** on some *set of observations* :math:`\mathcal{O}
+  = \left\{x\right\}`. But there are multiple levels to this: a simple kriging
+  model can use just the current observations to try and build a regression
+  model over the current state, but conceptually the trained model is
+  essentially using the historical data as "pseudo-observations". You're not
+  just conditioning the answer based on current observations, but on the
+  historical observations as well. Mathematically, we say that the historical
+  data is encoded in a *model* :math:`\mathcal{M}`, so the distribution
+  becomes :math:`\vec{x} \sim p \left(\vec{x} \given \mathcal{O}, \mathcal{M}
+  \right)`.
+
+  This distinction is obvious to data science practitioners, but it's probably
+  helpful to make the idea explicit for the less mathematically inclined
+  reader.
 
 
-Controls
-^^^^^^^^
+Flight Reconstruction
+=====================
 
-FIXME
-
-
-Payload
-^^^^^^^
-
-The payload is a harness plus the pilot.
-
-
-Dynamics
---------
-
-* I should highlight the useful applications of a full non-linear dynamics
-  model (versus simple linear models such as *stability derivatives*). **Hit
-  this hard! Make it blindingly obvious that having access to an accurate
-  non-linear model will support future tasks.**
+NT
 
 
 Related Works

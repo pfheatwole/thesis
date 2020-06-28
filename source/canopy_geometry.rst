@@ -15,6 +15,8 @@ Related Work
 
 * "Paraglider Design Handbook", :cite:`casellasParagliderDesignHandbook`
 
+* :cite:`lingard1995RamairParachuteDesign`
+
 
 Airfoil
 =======
