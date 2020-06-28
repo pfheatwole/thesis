@@ -36,7 +36,7 @@ chordsX = gsim.foil.ChordSurface(
     r_x=0.75,
     x=0,
     r_yz=1.00,
-    yz=gsim.foil.elliptical_arc(mean_anhedral=33, max_anhedral=67),
+    yz=gsim.foil.elliptical_arc(mean_anhedral=33, tip_anhedral=67),
     chord_length=gsim.foil.elliptical_chord(root=0.5, tip=0.2),
     torsion=0,
 )
