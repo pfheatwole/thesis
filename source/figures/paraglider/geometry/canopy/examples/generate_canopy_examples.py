@@ -78,7 +78,7 @@ def configure_2d_axes(ax, xlabel, ylabel, invert_x=False, invert_y=False):
     ax.text(0, ypos, ylabel, fontsize=15, horizontalalignment="center", verticalalignment="center")
 
 
-def _plot_foil(foil, N_sections=21, N_points=50, flatten=False, ax=None):
+def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=False, ax=None):
     """Plot a FoilGeometry in 3D."""
     if ax is None:
         fig, ax = _create_3d_axes()
@@ -89,10 +89,14 @@ def _plot_foil(foil, N_sections=21, N_points=50, flatten=False, ax=None):
 
     sa = 1 - np.cos(np.linspace(np.pi / 2, 0, N_points))
     for s in np.linspace(-1, 1, N_sections):
-        coords = foil.surface_xyz(s, sa, "lower", flatten=flatten).T
-        ax.plot(coords[0], coords[1], coords[2], c="r", zorder=0.9, lw=0.25)
-        coords = foil.surface_xyz(s, sa, "upper", flatten=flatten).T
-        ax.plot(coords[0], coords[1], coords[2], c="b", lw=0.25)
+        if geometry == "airfoils":
+            coords = foil.surface_xyz(s, sa, "lower", flatten=flatten).T
+            ax.plot(coords[0], coords[1], coords[2], c="r", zorder=0.9, lw=0.25)
+            coords = foil.surface_xyz(s, sa, "upper", flatten=flatten).T
+            ax.plot(coords[0], coords[1], coords[2], c="b", lw=0.25)
+        elif geometry == "chords":
+            coords = foil.chord_xyz(s, sa).T
+            ax.plot(coords[0], coords[1], coords[2], c="k", lw=0.5)
 
     s = np.linspace(-1, 1, N_sections)
     LE = foil.chord_xyz(s, 0, flatten=flatten).T
@@ -130,13 +134,13 @@ def _plot_foil(foil, N_sections=21, N_points=50, flatten=False, ax=None):
     ax.plot(x, y, z, 'r--', lw=0.8)
 
 
-def plot_3d_foil(foil):
+def plot_3d_foil(foil, geometry="airfoils"):
     # Make it big; removing the whitespace greatly reduces the final size
     fig, ax = gsim.plots._create_3d_axes(figsize=(10, 10), dpi=96)
     # ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=-135)
     # gsim.plots.plot_foil(foil, N_sections=31, flatten=False, ax=ax)
     ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=45)
-    _plot_foil(foil, N_sections=31, flatten=False, ax=ax)
+    _plot_foil(foil, N_sections=31, geometry=geometry, flatten=False, ax=ax)
 
     # Hide the panes, grids, ticks, and ticklabels
     ax.set_axis_off()
@@ -368,6 +372,7 @@ if __name__ == "__main__":
         chords = gsim.foil.ChordSurface(**parameters)
         sections = gsim.foil.FoilSections(airfoil)
         foil = gsim.foil.SimpleFoil(chords=chords, sections=sections, b_flat=2)
+        figs = []
 
         if plot_2d:
             s = np.linspace(-1, 1, 21)
@@ -398,15 +403,23 @@ if __name__ == "__main__":
 
                 fig.tight_layout()
                 fig.subplots_adjust(hspace=1.0, wspace=0.3)
-
                 if savefig:
                     fig.savefig(name + "_curves.svg")
+                figs.append(fig)
 
         if plot_3d:
-            fig = plot_3d_foil(foil)
-
+            fig = plot_3d_foil(foil, geometry="airfoils")
             if savefig:
-                fig.savefig(name + "_canopy.svg")
+                fig.savefig(name + "_canopy_airfoils.svg")
+            figs.append(fig)
+
+            fig = plot_3d_foil(foil, geometry="chords")
+            if savefig:
+                fig.savefig(name + "_canopy_chords.svg")
+            figs.append(fig)
 
         if not savefig:
             plt.show()
+
+        for fig in figs:
+            plt.close(fig)
