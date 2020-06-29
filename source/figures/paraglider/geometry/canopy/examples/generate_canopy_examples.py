@@ -366,7 +366,8 @@ if __name__ == "__main__":
     for name, parameters in examples.items():
         print("Current example:", name)
         chords = gsim.foil.ChordSurface(**parameters)
-        foil = gsim.foil.SimpleFoil(airfoil=airfoil, chords=chords, b_flat=2)
+        sections = gsim.foil.FoilSections(airfoil)
+        foil = gsim.foil.SimpleFoil(chords=chords, sections=sections, b_flat=2)
 
         if plot_2d:
             s = np.linspace(-1, 1, 21)
