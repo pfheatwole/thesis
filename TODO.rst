@@ -168,12 +168,6 @@ Notation, Math, etc
   brackets for matrices; it enables visual scanning you can't do otherwise.
   Also, they help reveal mistakes, kind of like physical units in equations.**
 
-* I need to standardize `r_xy` instead of simply `r_x`. It improves symmetry.
-  (You're designing in either the xy plane or the yz plane.)
-
-  And do I like name `r` for the reference positions? I'm using that for
-  vectors, these are scalars.
-
 
 Terminology
 -----------

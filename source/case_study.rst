@@ -7,8 +7,26 @@ wing, (2) generate some performance curves for that wing, (3) compare it to
 expectations.]]
 
 
+Design:
+
+* TODO: Use my Hook3ish to demonstrate how to approximate a real-world wing
+  using the components I've defined.
+
+
+Analyze:
+
+* Show the polar curves. Consider if they are reasonable.
+
+* Discuss limits, like unknown airfoil, unknown true line positions, lack of
+  a proper `LineGeometry` (so brake deflections and arc changes when
+  accelerator is applied are both unknown), no cell billowing, etc etc.
+
 * TODO: Compare the real versus apparent mass matrices. Consider the relative
-  magnitudes and likely effects.
+  magnitudes and the likely effects from accounting for apparent inertia.
+
+
+
+Tests:
 
 * TODO: What are the sink rates during a hard turn? What are the sink rates
   during a hard turn? See the DHV ratings guide,
