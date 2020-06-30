@@ -380,7 +380,7 @@ if __name__ == "__main__":
                 configure_2d_axes(axes[0, 0], "$s$", "$c$")
                 axes[0, 0].plot(s, chords._chord_length(s)),
 
-                configure_2d_axes(axes[0, 1], "$s$", "$r_{xy}$")
+                configure_2d_axes(axes[0, 1], "$s$", "$r_{x}$")
                 axes[0, 1].set_yticks([1])
                 axes[0, 1].plot(s, chords.r_x(s))
 
