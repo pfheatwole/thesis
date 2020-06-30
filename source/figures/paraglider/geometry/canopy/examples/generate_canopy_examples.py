@@ -120,18 +120,16 @@ def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=Fa
     ax.plot(c4[0], c4[1], z, "g--", lw=0.8)
 
     # `x` reference curve projection onto the xy-pane
-    xyz = foil.chord_xyz(s, foil._chords.r_x(s))
-    x, y = xyz[..., 0], xyz[..., 1]
-    ax.plot(x, y, z, 'r--', lw=0.8, label="reference lines")
+    xyz = foil.chord_xyz(s, foil._chords.r_x(s)).T
+    ax.plot(xyz[0], xyz[1], z, 'r--', lw=0.8, label="reference lines")
 
     # Quarter-chord projection onto the yz-pane (`x` held fixed)
     x = np.full(*c4[1].shape, -1.25)
     ax.plot(x, c4[1], c4[2], "g--", lw=0.8, label="quarter-chord")
 
     # `yz` reference curve projection onto the yz-pane
-    xyz = foil.chord_xyz(s, foil._chords.r_yz(s))
-    y, z = xyz[..., 1], xyz[..., 2]
-    ax.plot(x, y, z, 'r--', lw=0.8)
+    xyz = foil.chord_xyz(s, foil._chords.r_yz(s)).T
+    ax.plot(x, xyz[1], xyz[2], 'r--', lw=0.8)
 
 
 def plot_3d_foil(foil, geometry="airfoils"):
