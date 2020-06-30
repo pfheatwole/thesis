@@ -126,6 +126,7 @@ html_title = project  # Override "<project>'s documentation"
 # documentation.
 #
 html_theme_options = {
+    'fixed_sidebar': True,
     'logo': 'hook3_vectorized_opt.svg',
 }
 
