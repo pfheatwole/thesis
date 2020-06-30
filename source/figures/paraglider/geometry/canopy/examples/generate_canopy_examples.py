@@ -222,22 +222,22 @@ if __name__ == "__main__":
 
     # Flat, elliptical taper, no twist
     examples["flat3"] = {
-        "r_x": 1,
+        "r_x": 0.5,
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
+        "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.1),
         "torsion": 0,
     }
 
     # Flat, no taper, twist
     examples["flat4"] = {
-        "r_x": 1,
+        "r_x": 0,
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": 0.25,
-        "torsion": lambda s: np.deg2rad(25) * s**4,
+        "chord_length": 0.5,
+        "torsion": lambda s: np.deg2rad(-25) * s**4,
     }
 
     # Manta rays!
@@ -292,7 +292,7 @@ if __name__ == "__main__":
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_arc(mean_anhedral=20, tip_anhedral=89),
+        "yz": gsim.foil.elliptical_arc(mean_anhedral=30, tip_anhedral=89),
         "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
         "torsion": 0,
     }
