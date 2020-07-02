@@ -129,22 +129,27 @@ print(f"    Projected AR> Expected: {AR:.4f},   Actual: {canopy.AR:.4f}")
 print(f"    Flattened AR> Expected: {AR_flat:.4f},   Actual: {canopy.AR_flat:.4f}")
 print()
 
-wing = gsim.paraglider_wing.ParagliderWing(
-    canopy=canopy,
-    force_estimator=gsim.foil.Phillips(canopy, 40, K=11),
-    brake_geo=gsim.brake_geometry.Cubic(0, 0.75, delta_max=0),  # unused
+lines = gsim.line_geometry.SimpleLineGeometry(
     kappa_x=0.0875 / 0.350,  # 25% back from the leading edge
     kappa_z=1.0 / 0.350,  # 1m below the central chord
     kappa_A=0.08,  # unused
     kappa_C=0.80,  # unused
     kappa_a=0,  # unused
-    rho_upper=0,  # Neglect gravitational forces
-    rho_lower=0,
-
     total_line_length=0,  # Neglect line drag
     average_line_diameter=0,
     line_drag_positions=[0, 0, 0],
     Cd_lines=0,
+    s_delta_start=0,  # unused
+    s_delta_max=0.75,  # unused
+    delta_max=0,  # unused
+)
+
+wing = gsim.paraglider_wing.ParagliderWing(
+    lines=lines,
+    canopy=canopy,
+    rho_upper=0,  # Neglect gravitational forces
+    rho_lower=0,
+    force_estimator=gsim.foil.Phillips(canopy, 40, K=11),
 )
 
 # print("\nFinished defining the complete wing. Pausing for review.\n")
@@ -198,7 +203,7 @@ for kb, beta in enumerate(betas):
 
         try:
             dF, dM, ref = wing.forces_and_moments(
-                0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
+                0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
         except gsim.foil.ForceEstimator.ConvergenceError:
             ka -= 1
@@ -239,7 +244,7 @@ for kb, beta in enumerate(betas):
 
         try:
             dF, dM, ref = wing.forces_and_moments(
-                0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
+                0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
         except gsim.foil.ForceEstimator.ConvergenceError:
             ka -= 1
