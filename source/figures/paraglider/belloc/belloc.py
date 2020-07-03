@@ -106,8 +106,8 @@ chords = gsim.foil.ChordSurface(
     r_x=0.6,
     yz=arc,
     r_yz=0.6,
-    chord_length=fc,
-    torsion=ftheta,
+    c=fc,
+    theta=ftheta,
 )
 
 sections = gsim.foil.FoilSections(
