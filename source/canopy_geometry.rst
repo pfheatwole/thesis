@@ -18,49 +18,6 @@ Related Work
 * :cite:`lingard1995RamairParachuteDesign`
 
 
-Airfoil
-=======
-
-**Key terms and concepts to define in this section**: upper surface, lower
-surface, leading edge, trailing edge, chord line, mean camber line, thickness,
-thickness convention, 2D coefficients.
-
-
-Geometry
---------
-
-An airfoil is a 2D cross-section of a 3D wing.
-
-.. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
-
-   Airfoils examples.
-
-Here's a diagram of the basic airfoil geometric properties:
-
-.. figure:: figures/paraglider/geometry/airfoil/airfoil_diagram.*
-   :name: airfoil_diagram
-
-   Components of an airfoil.
-
-
-There are two conventions measuring the airfoil thickness; this convention
-also determines what point is designated the *leading edge*. The leading and
-trailing edge of a wing section are arbitrary points that define the *chord*;
-the chord is used to nondimensionalize the airfoil geometry and define the
-*angle of attack*.
-
-.. figure:: figures/paraglider/geometry/airfoil/NACA-6412-thickness-conventions.*
-   :name: airfoil_thickness
-
-   Airfoil thickness conventions.
-
-
-Coefficients
-------------
-
-NT
-
-
 Chord Surface
 =============
 
@@ -268,8 +225,67 @@ If :math:`r_x = 1`:
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_canopy.*
 
 
+Foil Surface
+============
+
+The chord surface is the flat surface produced by all the section chord. To
+produce the 3D canopy, each section must be assigned an airfoil.
+
+
+Airfoils
+--------
+
+Related work:
+
+* :cite:`abbott1959TheoryWingSections`
+
+
+**Key terms and concepts to define in this section**: upper surface, lower
+surface, leading edge, trailing edge, chord line, mean camber line, thickness,
+thickness convention, 2D coefficients.
+
+After designing the section chords, the chord surface will produce a 3D wing
+by assigning each section a cross-sectional geometry called an *airfoil*.
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
+
+   Airfoils examples.
+
+Here's a diagram of the basic airfoil geometric properties:
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_diagram.*
+   :name: airfoil_diagram
+
+   Components of an airfoil.
+
+There are two conventions measuring the airfoil thickness; this convention
+also determines what point is designated the *leading edge*. The leading and
+trailing edge of a wing section are arbitrary points that define the *chord*;
+the chord is used to nondimensionalize the airfoil geometry and define the
+*angle of attack*.
+
+.. figure:: figures/paraglider/geometry/airfoil/NACA-6412-thickness-conventions.*
+   :name: airfoil_thickness
+
+   Airfoil thickness conventions.
+
+
+Examples
+--------
+
+Assigning a NACA 23015 airfoil to some of the previous examples:
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_airfoils.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy_airfoils.*
+
+Building a wing from 2D cross-sections also provides computational benefits
+for estimating the aerodynamic performance of the 3D wing, as discussed in
+:ref:`canopy_aerodynamics:Section Coefficients`.
+
+
 Distortions
-===========
+-----------
 
 **FIXME**: should I discuss cells, billowing, distortion, etc? I'm not working
 on / implementing these, so they can probably go in the "Limitations" section
