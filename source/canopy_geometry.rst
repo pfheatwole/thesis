@@ -21,9 +21,8 @@ Related Work
 Chord Surface
 =============
 
-The chord surface is a conceptual curved surface produced by all the airfoil
-chord lines. A wing geometry can be defined by a *chord surface* and an
-*airfoil distribution*.
+The chord surface is a conceptual curved plane produced by all the airfoil
+chord lines.
 
 .. TODO:: define the *section index*
 
@@ -33,9 +32,9 @@ The surface can be defined using six functions of the section index:
 
 #. Geometric torsion :math:`\theta(s)`
 
-#. Chord reference point for the xy-plane :math:`r_{xy}(s)`
+#. Chord reference point for the x-coordinates :math:`r_{x}(s)`
 
-#. Chord reference point for the yz-plane :math:`r_{yz}(s)`
+#. Chord reference point for the y- and z-coordinates :math:`r_{yz}(s)`
 
 #. Position of the reference point in the xy-plane :math:`x(s)`
 
@@ -58,6 +57,264 @@ section profile chords relative to their immediate neighboring sections.
 Positions
 
 
+Design Curves
+-------------
+
+
+Chord length
+^^^^^^^^^^^^
+
+NT
+
+
+Geometric Torsion
+^^^^^^^^^^^^^^^^^
+
+One advantage of this geometry definition is that you don't need to
+specify a rotation point. The airfoil angle is independent of the rotation
+point, so it's unnecessary work to require a user to calculate positions
+relative to rotation points.)
+
+.. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
+
+   Geometric torsion.
+
+
+Design in the xy-plane
+^^^^^^^^^^^^^^^^^^^^^^
+
+NT
+
+
+Design in the yz-plane
+^^^^^^^^^^^^^^^^^^^^^^
+
+NT
+
+
+Derivation
+----------
+
+Okay, new idea: this derivation is too hard to follow, so maybe start with
+a better motivation. You need a way to position and orient the wing sections.
+Traditionally, that meant specifying either points on the leading edge or
+points on the quarter-chord. Those have several limitations that make them
+frustrating to use when designing curved foils.
+
+[[List the limitations.]]
+
+There is a better way. The traditional specification goes something like:
+
+.. math::
+
+   LE = \langle x, y, z \rangle
+
+Where the coordinates are predetermined as either the leading edge or the
+quarter-chord. But if we add another term, they can specify arbitrary points
+on the chord:
+
+.. math::
+
+   LE = \langle x, y, z \rangle + p \cdot c \cdot \vec{\hat{x}}_w
+
+Where the :math:`c` are the section chord lengths and :math:`\vec{\hat{x}}_w`
+are the section :math:`x`-axes of the 3D wing. The scalar :math:`0 \le p \le
+1` specifies what position on the chord corresponds to :math:`\langle x, y,
+z \rangle`:
+0 for the leading edge, 0.25 for the quarter chord, 1 for the trailing edge,
+etc. This extra term effectively allows the designer to slide the sections
+along their local :math:`x`-axes.
+
+The downside of this simplistic adjustment is that the positions are still
+dependent on the chord lengths, and the designer is constrained to manipulate
+the x, y, and z coordinate simultaneously. It would be much easier to decouple
+the coordinates and allow them to be manipulated independently.
+
+That can be accomplished by introducing two scalars instead of just one. Call
+these :math:`r_x` and :math:`r_{yz}`, which function as :math:`p` did before,
+but now they manipulate the x-coordinates independently from the
+yz-coordinates.
+
+.. math::
+
+   LE = \langle x, y, z \rangle + (r_x - r_{yz}) \cdot c \cdot \vec{\hat{x}}_p + r_{yz} \cdot c \cdot \vec{\hat{x}}_a
+
+With this formulation you can easily specify a design as convoluted as "the
+trailing edges should lie in a plane parallel to the yz-plane, the
+quarter-chord points follow an elliptical arc in the yz-plane, and the chords
+follow an exponential distribution".
+
+The :math:`\vec{\hat{x}}_p` and :math:`\vec{\hat{x}}_a` are :math:`x`-axes for
+the flattened planform and the fully-specified arc.
+
+
+[[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]]
+
+For the following derivation, functions of the section index :math:`s` are
+implicit, so :math:`LE(s) \to LE`, :math:`r_x(s) \to r_x`, etc.
+
+First, consider the chord distribution as defining a flat surface lying in the
+:math:`xs`-plane, with all the leading edges lying on the :math:`s`-axis. The
+chord lengths can be interpreted as the :math:`x`-coordinates of the leading
+edges:
+
+.. math::
+
+   \overline{LE} = \left\langle
+      c,
+      s,
+      0
+   \right\rangle
+
+Next define the planform reference curve :math:`r_x(s)`. This function selects
+points on the section chord
+
+[[Show a plot of the chords with a reference line through them.]]
+
+These reference points can be considered as defining which points on each
+chord should lie on the :math:`s`:-axis:
+
+.. math::
+
+   \overline{LE} = \left\langle
+      r_x c,
+      s,
+      0
+   \right\rangle
+
+[[Show the chords with their reference points shift to s=0]].
+
+Because the reference points are constrained to lie between 0 and 1 (so they
+select points on each chord), this means they cannot shift the chord surface
+further than the chord lengths. To generalize the positioning, define the
+planform curve :math:`x(s)`. Instead of shifting the reference points to zero,
+the reference points x-coordinates are shifted to :math:`x(s)`:
+
+.. math::
+
+   \overline{LE} = \left\langle
+      r_x c + x,
+      s,
+      0
+   \right\rangle
+
+[[Show the chords with their reference points shifted to x(s).]]
+
+The next step is to apply any geometric torsion. Geometric torsion is defined
+as a right-handed rotation of a section about its :math:`y`-axis. After
+rotation the leading edges become:
+
+.. math::
+
+   \overline{LE} = \left\langle
+      (r_x c + x) \cos(\theta),
+      s,
+      -(r_x c + x) \sin(\theta)
+   \right\rangle
+
+
+[[more stuff]]
+
+In the same fashion, the :math:`r_{yz}(s)` curve selects points on each chord,
+:math:`y(s)` defines the section :math:`y`-coordinate, and :math:`z(s)`
+defines the z-coordinate offset. These curves do not change the 
+
+
+[[more stuff]]
+
+Define the rotation matrices for geometric torsion and section dihedral:
+
+.. math::
+   :label: section_torsion
+
+   \mat{\Theta} &\equiv \begin{bmatrix}
+      \cos(\theta) & 0 & \sin(\theta)\\
+      0 & 1 & 0\\
+      -\sin(\theta) & 0 & \cos(\theta)
+   \end{bmatrix}
+
+
+Using the traditional definition of section dihedral :math:`\Gamma
+= \tan^{-1}\left(\frac{dz}{dy}\right)`, the section rotation matrices
+are:
+
+.. math::
+   :label: section_dihedral1
+
+   \mat{\Gamma} &\equiv \begin{bmatrix}
+      1 & 0 & 0\\
+      0 & \cos(\Gamma) & -\sin(\Gamma)\\
+      0 & \sin(\Gamma) & \cos(\Gamma)
+   \end{bmatrix}
+
+The disadvantage of this definition is that the numerator goes to zero for
+wings that achieve a 90° section dihedral at the wing tips. To avoid the
+divide by zero, the arc reference curve derivatives can be used directly to
+define the rotation matrices:
+
+.. math::
+   :label: section_dihedral2
+
+   \mat{\Gamma} &\equiv \begin{bmatrix}
+      1 & 0 & 0\\
+      0 & dy/ds & -dz/ds\\
+      0 & dz/ds & dy/ds
+   \end{bmatrix}
+
+And the section :math:`x`-axes for the arched wing are:
+
+.. math::
+
+   \vec{\hat{x}} = \mat{\Gamma} \mat{\Theta} \begin{bmatrix}1\\0\\0\end{bmatrix}
+
+The leading edge then becomes:
+
+.. math::
+
+   LE = \overline{LE} + c \, r_{yz} \vec{\hat{x}}
+
+[[more stuff]]
+
+Now, change your perspective and consider the reference curves in terms of
+relative positions instead of worrying about the absolute coordinates produced
+by the current equations. Once you do that, then the whole shebang can be
+simplified by assuming that the reference points all lie on the :math:`y`-axis
+by default, and the :math:`x`, :math:`y`, and :math:`z` curves are simply
+shifting their positions along the section :math:`x`-axis. The final equation
+for the leading edge then becomes:
+
+.. math::
+
+   \mat{R} = \begin{bmatrix}
+      r_x & 0 & 0\\
+      0 & r_{yz} & 0\\
+      0 & 0 & r_{yz}
+   \end{bmatrix}
+
+.. math::
+
+   LE = \left\langle x, y, z \right\rangle + c \, \mat{R} \vec{\hat{x}}
+
+And to compute the coordinates of a point :math:`P` at on a position :math:`0
+\le p \le 1` along a section chord:
+
+.. math::
+
+   \vec{r}_{P/O}^c = LE - (p\, c) \vec{\hat{x}} - \vec{r}_{O_c/O}
+
+Where :math:`O` is the origin of the chord surface and :math:`O_c` is the
+origin of the canopy. This is used when the leading edge of the central
+section is defined as the origin of the canopy.
+
+This non-zero "canopy origin" is the price you pay for that "assume relative
+positions" perspective mentioned earlier, but it's simple enough to start by
+assuming the offset is zero, then computing :math:`LE(0)` and using that as
+the offset for all future calculations.
+
+
+Notes
+-----
+
 What are the advantages of this parametric design?
 
 * It's easy to query arbitrary points on the chord surface and foil surface,
@@ -75,73 +332,19 @@ What are the advantages of this parametric design?
   about changes to geometric torsion messing that up).
 
 * As a generative model, it's easy to integrate into a CAD or 3D modeling
-  program
-
-
-
-Chord length
-------------
-
-NT
-
-
-Geometric Torsion
------------------
-
-(One of the cool things about my geometry is that you don't need to specify
-the rotation point. The airfoil angle is independent of the rotation point, so
-it's unnecessary work to require a user to calculate positions relative to
-rotation points.)
-
-.. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
-
-   Geometric torsion.
-
-
-Design in the xy-plane
-----------------------
-
-NT
-
-
-Design in the yz-plane
-----------------------
-
-NT
-
-
-Foil Surface
-============
-
-The chord surface is the flat surface produced by all the section chord. To
-produce the 3D canopy, each section must be assigned an airfoil.
+  program that can choose how to sample from the surface.
 
 
 Examples
-========
+--------
 
-**FIXME**: doesn't this be belong to the "chord surface" section?
-
-
-Flat Wings
-----------
 
 Example 1
 ^^^^^^^^^
 
-First, design the set of reference curves to generate the target chord
-surface:
-
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_curves.*
 
-Then assign an airfoil to produce the 3D wing:
-
-(**FIXME: maybe show the chord surface just this first time?**)
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_canopy.*
-
-This is an idealized version of the target canopy because it has not accounted
-for cell deformations, such as billowing.
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_canopy_chords.*
 
 
 Example 2
@@ -151,7 +354,7 @@ Words here.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy_chords.*
 
 
 Example 3
@@ -161,7 +364,7 @@ Words here.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy_chords.*
 
 
 Example 4
@@ -171,58 +374,63 @@ Words here.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_chords.*
 
 
-Elliptical Wings
-----------------
+Example 5
+^^^^^^^^^
 
-Here's an example with a root-to-tip anhedral angle of 33 degrees.
+A circular arc with a mean anhedral of 33 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy_chords.*
 
 
-Here's another example with a root-to-tip anhedral angle of 44 degrees.
+Example 6
+^^^^^^^^^
+
+A circular arc with a mean anhedral of 44 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_canopy_chords.*
 
-And another with a root-to-tip anhedral angle of 44 degrees but a wingtip
-anhedral angle of 89 degrees.
+Example 7
+^^^^^^^^^
+
+An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
+89 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_chords.*
 
 
+Example: The Manta
+^^^^^^^^^^^^^^^^^^
 
-The Manta
----------
-
-The manta ray is a great demo for `r_xy`.
-
-If :math:`r_x = 0`:
+The "manta ray" is a great demo for `r_x`.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_canopy_chords.*
 
+   "Manta ray" with :math:`r_x = 0`
 
-If :math:`r_x = 0.5`:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_canopy_chords.*
 
+   "Manta ray" with :math:`r_x = 0.5`
 
-If :math:`r_x = 1`:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_canopy_chords.*
+
+   "Manta ray" with :math:`r_x = 1.0`
 
 
 Foil Surface

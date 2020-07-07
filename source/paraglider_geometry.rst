@@ -5,17 +5,12 @@ Paraglider Geometry
 A paraglider is a system of two components: a wing, and a harness.
 
 
-Paraglider Wing
-===============
+Line Geometry
+=============
 
 Related work:
 
 * :cite:`iosilevskii1995CenterGravityMinimal`
-
-
-
-Lines
------
 
 For real wings, the line geometry is a major factor in wing performance, but
 the subject is complex. For this project I'm not modeling the entire bridle.
@@ -38,14 +33,21 @@ Related work:
   split joint angles on sail deformation"
 
 
+[[One of the advantages of a parametric canopy geometry is that the parameters
+can themselves be functions. The reference curves discussed so far have been
+fixed values, but for a real wing many of the curves are better represented as
+functions of the line geometry. For example, the arc anhedral and chord
+lengths might be affected by the accelerator input.]]
+
+
 Riser Position
-^^^^^^^^^^^^^^
+--------------
 
 [[Discuss riser position `R` as a function of the accelerator.]]
 
 
 Brakes
-^^^^^^
+------
 
 A paraglider is equipped with two handles at the ends of sections of the
 bridle (line geometry) that are connected to the trailing edges of the canopy.
@@ -70,7 +72,7 @@ Topics:
 
 
 Mathematical Model
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 It is computationally prohibitive to solve for the aerodynamic coefficients at
 each timestep. Instead, a set of coefficients can be produced for a set of
@@ -158,6 +160,9 @@ Accelerator
   performance/stability as accelerator is applied ("hands-up" goes for the
   accelerator as well as for the brakes).
 
+* I'm using the chord lines as the connection points, but for the physical
+  wing the tabs are connected to the lower surfaces of the ribs.
+
 
 Mathematical Model
 ^^^^^^^^^^^^^^^^^^
@@ -177,7 +182,6 @@ midpoint :math:`R`:
    \overline{A} &= \left\| \vec{r}_{A/R} \right\|\\
    \overline{C} &= \left\| \vec{r}_{C/R} \right\|\\
    \end{aligned}
-
 
 The default lengths of the lines is defined by two pairs of design parameters.
 First, the default position of the riser midpoint :math:`R` is defined with

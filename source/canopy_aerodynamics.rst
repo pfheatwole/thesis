@@ -21,12 +21,6 @@ Related work:
 * :cite:`gonzalez1993PrandtlTheoryApplied`
 
 
-Lifting-line
-============
-
-[[Describe the classic approach and its limitations.]]
-
-
 Inviscid methods
 ================
 
@@ -40,6 +34,54 @@ Inviscid methods
   https://www.xflr5.tech/docs/Part%20IV:%20Limitations.pdf. When I say
   "this is what inviscid methods produce", what I really mean is "this is the
   performance of the particular inviscid method I applied"
+
+
+Viscous methods
+===============
+
+Lifting-line
+------------
+
+[[Describe the classic approach and its limitations.]]
+
+
+Section Coefficients
+--------------------
+
+[[Do these have any application to inviscid methods? I think Prandtl's
+lifting-line is a *potential flow* method, but it also uses the section
+coefficients, so I'm confused.]]
+
+
+Related work:
+
+* :cite:`abbott1959TheoryWingSections`
+
+Instead of solving the boundary layer conditions for the full 3D wing, it is
+common to treat the lifting surface as a collection of finite segments taken
+from theoretical infinite-length wings. The infinite length assumption
+eliminates 3D effects and allows the wing sections to be analyzed using 2D
+geometry. The 3D flow of the physical wing can then be approximated using the
+2D aerodynamic coefficients.
+
+Limitations:
+
+* This method assumes straight, uniformly shaped wing segments. For
+  a continuously curved wing, this approximation will never be correct,
+  although the approximation improves as the number of segments increases.
+
+* It assumes the finite segments are well approximated by the flow over the
+  infinite wing. This neglects spanwise variation in boundary layers, etc.
+
+* It is difficult to model cell distortions (due to billowing, etc) using
+  predetermined 2D geometry. It is technically possibly to estimate the final
+  cell shapes and measure the section profiles, but the "infinite wing"
+  approximation is unlikely to remain valid. If the aerodynamic effects of
+  cell distortions are of interest, they are best treated either
+  approximately, using averaged coefficient effects, or using full
+  computational fluid dynamics methods. This current work neglects the effects
+  of cell distortions and assumes all wing segments match the idealized 2D
+  airfoils.
 
 
 Phillips' numerical lifting-line
@@ -336,7 +378,15 @@ Inputting the values to the canopy geometry produces:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy.*
+   ChordSurface curves for Belloc's reference paraglider wing.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy_chords.*
+
+   3D chords for Belloc's reference paraglider wing.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy_airfoils.*
+
+   3D airfoils for Belloc's reference paraglider wing.
 
 
 Airfoils

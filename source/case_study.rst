@@ -7,13 +7,15 @@ wing, (2) generate some performance curves for that wing, (3) compare it to
 expectations.]]
 
 
-Design:
+Design
+======
 
 * TODO: Use my Hook3ish to demonstrate how to approximate a real-world wing
   using the components I've defined.
 
 
-Analyze:
+Static Analysis
+===============
 
 * Show the polar curves. Consider if they are reasonable.
 
@@ -25,8 +27,8 @@ Analyze:
   magnitudes and the likely effects from accounting for apparent inertia.
 
 
-
-Tests:
+Dynamic Analysis
+================
 
 * TODO: What are the sink rates during a hard turn? What are the sink rates
   during a hard turn? See the DHV ratings guide,
