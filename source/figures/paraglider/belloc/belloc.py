@@ -137,7 +137,7 @@ lines = gsim.line_geometry.SimpleLineGeometry(
     kappa_a=0,  # unused
     total_line_length=0,  # Neglect line drag
     average_line_diameter=0,
-    line_drag_positions=[0, 0, 0],
+    r_L2LE=[0, 0, 0],
     Cd_lines=0,
     s_delta_start=0,  # unused
     s_delta_max=0.75,  # unused
@@ -183,7 +183,9 @@ t_start = time.perf_counter()
 
 for kb, beta in enumerate(betas):
     dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
-    cp_wing = wing.control_points(0)  # Section control points
+    r_LE2R = wing.r_R2LE(0)
+    r_CP2LE = wing.control_points(0)
+    r_CP2R = r_CP2LE + r_LE2R
 
     # Some figures will look for samples at alpha = [0, 5, 10, 15], so make
     # sure to include those test points.
@@ -211,7 +213,7 @@ for kb, beta in enumerate(betas):
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
-        M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
+        M += np.cross(r_CP2R, dF).sum(axis=0)  # Add the moment due to forces
 
         dFs.append(dF)
         dMs.append(dM)
@@ -252,7 +254,7 @@ for kb, beta in enumerate(betas):
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
-        M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
+        M += np.cross(r_CP2R, dF).sum(axis=0)  # Add the moment due to forces
 
         dFs.append(dF)
         dMs.append(dM)
