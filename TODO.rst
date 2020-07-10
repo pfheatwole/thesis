@@ -1,8 +1,3 @@
-* Finish the section on the canopy geometry. IIRC, I was in the middle of
-  writing it and realized it was flawed, so I had to fix the geometry. Now
-  I need to propagate those fixes back into the paper. See `glidersim` commit
-  `8da3a401`.
-
 * Factor out the canopy plotting function from the thesis script
   `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
   it to to plot my Hook3ish
@@ -10,10 +5,10 @@
 * My `BrakeGeometry` plots are wrong. It assumes fixed hinges at 0.8c, which
   is very very wrong for the airfoil data I'm using with my Hook3ish
 
-* Write out the `ChordSurface` equations
+* Finish the `ChordSurface` equations
 
-* Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (as
-  opposed to "section anhedral").
+* Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (so
+  "the anhedral of the arc" as opposed to "section anhedral").
 
 * Can I make two parallel outlines, informal and formal, to develop the idea
   of "predicting points of the wind field by learning from the past"? I'd love

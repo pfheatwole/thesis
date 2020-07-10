@@ -68,17 +68,17 @@ The covariance matrix of the surface area:
 
 .. math::
 
-   \mat{C} = \sum^M_{m=1} a_m \vec{c}_m \vec{c}_m^T
+   \mat{C}_A = \sum^M_{m=1} a_m \vec{c}_m \vec{c}_m^T
 
-The inertia tensor of the surface area:
+The inertia tensor of the surface area about the origin :math:`O`:
 
 .. math::
 
-   J = \mathrm{trace} \left( \mat{C} \right) \vec{I}_3 - \mat{C}
+   \mat{J}_{A/O} = \mathrm{trace} \left( \mat{C}_A \right) \vec{I}_3 - \mat{C}_A
 
 And tada, there are the three relevant properties for each surface area: the
 total area :math:`A`, the centroid :math:`C`, and the inertia tensor
-:math:`J`.
+:math:`\mat{J}`.
 
 
 Volume
@@ -130,7 +130,7 @@ And the centroid of the total volume:
 
 .. math::
 
-   \overline{\vec{v}} = \frac{1}{V} \sum^N_{n=1} \overline{\vec{v}}_n
+   \overline{\vec{V}} = \frac{1}{V} \sum^N_{n=1} \overline{\vec{v}}_n
 
 Lastly, calculating the inertia tensor of the volume can be simplified by
 computing the inertia tensor of a prototypical or "canonical" tetrahedron and
@@ -169,12 +169,12 @@ And the covariance matrix of the complete volume:
 
 .. math::
 
-   \mat{C} = \sum^N_{n=1} \mat{C}_n
+   \mat{C}_V = \sum^N_{n=1} \mat{C}_n
 
-And at last, the inertia tensor of the volume can be computed directly from
-the covariance matrix:
+And at last, the inertia tensor of the volume about the origin :math:`O` can
+be computed directly from the covariance matrix:
 
 .. math::
 
-   \mat{J} = \mathrm{trace} \left( \mat{\hat{C}} \right) \vec{I}_3 - \mat{\hat{C}}
+   \mat{J}_{V/O} = \mathrm{trace} \left( \mat{C}_V \right) \vec{I}_3 - \mat{C}_V
 

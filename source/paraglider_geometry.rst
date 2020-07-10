@@ -5,6 +5,46 @@ Paraglider Geometry
 A paraglider is a system of two components: a wing, and a harness.
 
 
+Canopy
+======
+
+* The canopy geometry in :doc:`canopy_geometry` is an idealized design target
+  of the physical parafoil used for a paragliding wing.
+
+* The foil surfaces is produced by stitching together nylon sheets, and the
+  volume is produced by pressurizing the nylon surfaces through the air
+  intakes.
+
+* The physical wing needs some extra information beyond the abstract canopy
+  geometry in order to use it to estimate the paraglider dynamics:
+
+  1. Surface definitions (extent of the upper/lower surfaces, materials of the
+     surfaces)
+
+  2. Inertial properties.
+
+
+Surfaces
+--------
+
+* The extent of the upper and lower surfaces depends on the design of the air
+  intakes. Typically the upper surface of the paraglider wing wraps beyond the
+  leading edge of the airfoil until the start of the air intakes. The lower
+  surface covers the region from the downstream edge of the air intakes until
+  the trailing edge of the sections.
+
+
+Inertia
+-------
+
+[[This includes contribution from both the real mass (surface materials) and
+the apparent mass. For the real mass calculations, see :ref:`derivations:Area
+and Volume of a Mesh`, and for the apparent mass calculations see
+:ref:`paraglider_dynamics:Apparent Mass`. Those methods are for the geometry,
+and can be scaled by the surface material density and air density to produce
+the final inertia tensors.]]
+
+
 Line Geometry
 =============
 
