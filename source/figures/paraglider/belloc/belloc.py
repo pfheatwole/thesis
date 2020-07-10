@@ -57,8 +57,11 @@ c = np.array([0.107, 0.137, 0.198, 0.259, 0.308, 0.339, 0.350,
 
 theta = np.deg2rad([3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3])  # torsion [deg]
 
-# Compute the section indices
-L_segments = np.linalg.norm(np.diff(xyz, axis=0), axis=1)
+# Section indices are the normalized distances from the central section along
+# the length of the `yz` curve (so +/-1 for the far left/right, and 0 for the
+# central section). Because the left and right semispans are symmetric their
+# lengths are equal, and calculating their section indicies is simplified.
+L_segments = np.linalg.norm(np.diff(xyz.T[1:]), axis=0)
 s_xyz = np.cumsum(np.r_[0, L_segments]) / L_segments.sum() * 2 - 1
 
 # Coordinates and chords are in meters, and must be normalized
