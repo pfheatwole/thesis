@@ -838,33 +838,38 @@ Paraglider Model
 
 Key Points:
 
-* Individual components of a paraglider
+* First you describe the individual physical components (geometry, materials,
+  etc), and then the dynamics that model its physical behavior for simulation.
 
-  * The physical object (describe what it is you want to model; geometry,
-    materials, etc)
+* The "paraglider" is a composite of a wing and a payload, where the wing is
+  the canopy and lines, and the payload is the harness plus pilot.
 
-  * The dynamics (equations that encode the physical behavior for simulation)
 
-* The composite model (ie, the parafoil-payload **system**)
+Discussion notes:
 
-  * There are many references on parafoil-payload systems. It would be nice if
-    I can generalize them as composites of the wing + harness components
-    I defined earlier.
+* There is a lot of literature on *parafoil-payload* systems. Discuss that and
+  relate it to my current work.
 
-Considerations:
+* The dynamics models are designed to satisfy some need. I should clearly
+  establish the needs of each modeling component, then show that those needs
+  are being met.
 
-* The dynamics models are required to satisfy some need. I need to establish
-  the needs of each modeling component, then show that those needs are being
-  met.
+* Building a parametric paraglider model requires parametric components. One
+  of the motivations for my project is to build a top-down parametric
+  paraglider system.
 
-Simulators require dynamics models for each component, and so flight
-simulators require a model of the aircraft. Although there are existing flight
-simulators that include models of specific paraglider configurations, none of
-those models are parametric. Performing statistical parameter estimation
-requires a parametric model, so I needed to create one.
-
-Each Paraglider model is built from two parts: a wing and a harness. (I am
-neglecting to model the connecting lines from the risers to the wing.)
+* **Drive home why parametric is so important for my needs.** It makes it
+  easier to model existing wings, which makes the models easier to compare
+  against existing wings. It also makes it easier to implement existing wings,
+  which makes it less expensive to build a database/catalog of models for
+  existing wings. I need a catalog of wings in order to build a distribution
+  over the wing parameters, which is necessary for the flight reconstruction
+  model (which is uncertain about the wind model, thus needs a prior over wing
+  models.) It also increases flexibility: a fixed canopy geometry doesn't
+  allow making the lobe anhedral a function of the accelerator, which has
+  significant effects on aerodynamic performance (eg, modern wings often have
+  their best glide ratios when a small amount of speedbar has been applied,
+  keeping the wing more arced for "hands-up stability").
 
 I started with designs from :cite:`benedetti2012ParaglidersFlightDynamics`,
 and applied extensive modifications to support the needs of my thesis.
@@ -881,6 +886,10 @@ uniform (eg, when flying through a thermal).]]
 
 Paragliding Wing
 ================
+
+Discussion notes:
+
+* I am neglecting to model the connecting lines from the risers to the wing.
 
 
 Physical Description
@@ -948,6 +957,10 @@ Mathematical Model
 
 * How do you go from forces to accelerations? What about the wing's inertia?
 
+* Make sure to highlight the usefulness of having a full non-linear dynamics
+  model (versus simple linear models such as *stability derivatives*). **Hit
+  this hard! Make it blindingly obvious that having access to an accurate
+  non-linear model will support future tasks.**
 
 References:
 

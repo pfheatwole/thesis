@@ -16,7 +16,7 @@ from pfh.glidersim.foil import (  # noqa: F401
     SimpleFoil,
     PolynomialTorsion as PT,
     elliptical_chord,
-    elliptical_lobe,
+    elliptical_arc,
 )
 
 
@@ -78,7 +78,7 @@ def configure_2d_axes(ax, xlabel, ylabel, invert_x=False, invert_y=False):
     ax.text(0, ypos, ylabel, fontsize=15, horizontalalignment="center", verticalalignment="center")
 
 
-def _plot_foil(foil, N_sections=21, N_points=50, flatten=False, ax=None):
+def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=False, ax=None):
     """Plot a FoilGeometry in 3D."""
     if ax is None:
         fig, ax = _create_3d_axes()
@@ -89,10 +89,14 @@ def _plot_foil(foil, N_sections=21, N_points=50, flatten=False, ax=None):
 
     sa = 1 - np.cos(np.linspace(np.pi / 2, 0, N_points))
     for s in np.linspace(-1, 1, N_sections):
-        coords = foil.surface_xyz(s, sa, "lower", flatten=flatten).T
-        ax.plot(coords[0], coords[1], coords[2], c="r", zorder=0.9, lw=0.25)
-        coords = foil.surface_xyz(s, sa, "upper", flatten=flatten).T
-        ax.plot(coords[0], coords[1], coords[2], c="b", lw=0.25)
+        if geometry == "airfoils":
+            coords = foil.surface_xyz(s, sa, "lower", flatten=flatten).T
+            ax.plot(coords[0], coords[1], coords[2], c="r", zorder=0.9, lw=0.25)
+            coords = foil.surface_xyz(s, sa, "upper", flatten=flatten).T
+            ax.plot(coords[0], coords[1], coords[2], c="b", lw=0.25)
+        elif geometry == "chords":
+            coords = foil.chord_xyz(s, sa).T
+            ax.plot(coords[0], coords[1], coords[2], c="k", lw=0.5)
 
     s = np.linspace(-1, 1, N_sections)
     LE = foil.chord_xyz(s, 0, flatten=flatten).T
@@ -116,27 +120,25 @@ def _plot_foil(foil, N_sections=21, N_points=50, flatten=False, ax=None):
     ax.plot(c4[0], c4[1], z, "g--", lw=0.8)
 
     # `x` reference curve projection onto the xy-pane
-    xyz = foil.chord_xyz(s, foil._chords.r_x(s))
-    x, y = xyz[..., 0], xyz[..., 1]
-    ax.plot(x, y, z, 'r--', lw=0.8, label="reference lines")
+    xyz = foil.chord_xyz(s, foil._chords.r_x(s)).T
+    ax.plot(xyz[0], xyz[1], z, 'r--', lw=0.8, label="reference lines")
 
     # Quarter-chord projection onto the yz-pane (`x` held fixed)
     x = np.full(*c4[1].shape, -1.25)
     ax.plot(x, c4[1], c4[2], "g--", lw=0.8, label="quarter-chord")
 
     # `yz` reference curve projection onto the yz-pane
-    xyz = foil.chord_xyz(s, foil._chords.r_yz(s))
-    y, z = xyz[..., 1], xyz[..., 2]
-    ax.plot(x, y, z, 'r--', lw=0.8)
+    xyz = foil.chord_xyz(s, foil._chords.r_yz(s)).T
+    ax.plot(x, xyz[1], xyz[2], 'r--', lw=0.8)
 
 
-def plot_3d_foil(foil):
+def plot_3d_foil(foil, geometry="airfoils"):
     # Make it big; removing the whitespace greatly reduces the final size
     fig, ax = gsim.plots._create_3d_axes(figsize=(10, 10), dpi=96)
     # ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=-135)
     # gsim.plots.plot_foil(foil, N_sections=31, flatten=False, ax=ax)
     ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=45)
-    _plot_foil(foil, N_sections=31, flatten=False, ax=ax)
+    _plot_foil(foil, N_sections=31, geometry=geometry, flatten=False, ax=ax)
 
     # Hide the panes, grids, ticks, and ticklabels
     ax.set_axis_off()
@@ -220,22 +222,22 @@ if __name__ == "__main__":
 
     # Flat, elliptical taper, no twist
     examples["flat3"] = {
-        "r_x": 1,
+        "r_x": 0.5,
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
+        "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.1),
         "torsion": 0,
     }
 
     # Flat, no taper, twist
     examples["flat4"] = {
-        "r_x": 1,
+        "r_x": 0,
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": 0.25,
-        "torsion": lambda s: np.deg2rad(25) * s**4,
+        "chord_length": 0.5,
+        "torsion": lambda s: np.deg2rad(-25) * s**4,
     }
 
     # Manta rays!
@@ -267,12 +269,12 @@ if __name__ == "__main__":
         "torsion": 0,
     }
 
-    # Elliptical lobe
+    # Elliptical arc
     examples["elliptical1"] = {
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_lobe(mean_anhedral=33, max_anhedral=67),
+        "yz": gsim.foil.elliptical_arc(mean_anhedral=33, tip_anhedral=67),
         "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
         "torsion": 0,
     }
@@ -281,7 +283,7 @@ if __name__ == "__main__":
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_lobe(mean_anhedral=44, max_anhedral=89),
+        "yz": gsim.foil.elliptical_arc(mean_anhedral=44, tip_anhedral=89),
         "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
         "torsion": 0,
     }
@@ -290,7 +292,7 @@ if __name__ == "__main__":
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_lobe(mean_anhedral=20, max_anhedral=89),
+        "yz": gsim.foil.elliptical_arc(mean_anhedral=30, tip_anhedral=89),
         "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
         "torsion": 0,
     }
@@ -326,7 +328,7 @@ if __name__ == "__main__":
     fc = scipy.interpolate.interp1d(s_xyz, c / (b_flat / 2))
     ftheta = scipy.interpolate.interp1d(s_xyz, theta)
 
-    class PchipInterpolatedLobe:
+    class PchipInterpolatedArc:
         def __init__(self, s, y, z):
             self._f = scipy.interpolate.PchipInterpolator(s, np.c_[y, z])
             self._fd = self._f.derivative()
@@ -338,13 +340,13 @@ if __name__ == "__main__":
             return self._fd(s)
 
     s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
-    lobe = PchipInterpolatedLobe(s, fy(s), fz(s))
+    arc = PchipInterpolatedArc(s, fy(s), fz(s))
 
     examples["belloc"] = {
         "r_x": 0.6,
         "x": 0,
         "r_yz": 0.6,
-        "yz": lobe,
+        "yz": arc,
         "chord_length": fc,
         "torsion": ftheta,
     }
@@ -366,7 +368,9 @@ if __name__ == "__main__":
     for name, parameters in examples.items():
         print("Current example:", name)
         chords = gsim.foil.ChordSurface(**parameters)
-        foil = gsim.foil.SimpleFoil(airfoil=airfoil, chords=chords, b_flat=2)
+        sections = gsim.foil.FoilSections(airfoil)
+        foil = gsim.foil.SimpleFoil(chords=chords, sections=sections, b_flat=2)
+        figs = []
 
         if plot_2d:
             s = np.linspace(-1, 1, 21)
@@ -376,7 +380,7 @@ if __name__ == "__main__":
                 configure_2d_axes(axes[0, 0], "$s$", "$c$")
                 axes[0, 0].plot(s, chords._chord_length(s)),
 
-                configure_2d_axes(axes[0, 1], "$s$", "$r_{xy}$")
+                configure_2d_axes(axes[0, 1], "$s$", "$r_{x}$")
                 axes[0, 1].set_yticks([1])
                 axes[0, 1].plot(s, chords.r_x(s))
 
@@ -397,15 +401,23 @@ if __name__ == "__main__":
 
                 fig.tight_layout()
                 fig.subplots_adjust(hspace=1.0, wspace=0.3)
-
                 if savefig:
                     fig.savefig(name + "_curves.svg")
+                figs.append(fig)
 
         if plot_3d:
-            fig = plot_3d_foil(foil)
-
+            fig = plot_3d_foil(foil, geometry="airfoils")
             if savefig:
-                fig.savefig(name + "_canopy.svg")
+                fig.savefig(name + "_canopy_airfoils.svg")
+            figs.append(fig)
+
+            fig = plot_3d_foil(foil, geometry="chords")
+            if savefig:
+                fig.savefig(name + "_canopy_chords.svg")
+            figs.append(fig)
 
         if not savefig:
             plt.show()
+
+        for fig in figs:
+            plt.close(fig)

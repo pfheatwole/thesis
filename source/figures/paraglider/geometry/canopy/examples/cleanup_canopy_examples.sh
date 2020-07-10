@@ -10,7 +10,7 @@
 #
 #  4. Fits the canvas to the diagram
 
-for svgfile in *canopy.svg
+for svgfile in *canopy*.svg
 do
 	echo "Cleaning $svgfile..."
 	inkscape --actions="select-by-id:patch_1;EditDelete;select-by-id:patch_2;EditDelete;select-by-id:figure_1;SelectionUnGroup;select-by-id:axes_1;SelectionSimplify;FitCanvasToDrawing;FileSave" --with-gui --batch-process "$svgfile"

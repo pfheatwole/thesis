@@ -16,11 +16,9 @@ non-linear behaviors, resulting in *non-linear lifting line* (NLLT) theories.
 These are often also known as "numerical" lifting-line theories, since they
 require numerical solutions.
 
+Related work:
 
-Lifting-line
-============
-
-[[Describe the classic approach and its limitations.]]
+* :cite:`gonzalez1993PrandtlTheoryApplied`
 
 
 Inviscid methods
@@ -36,6 +34,54 @@ Inviscid methods
   https://www.xflr5.tech/docs/Part%20IV:%20Limitations.pdf. When I say
   "this is what inviscid methods produce", what I really mean is "this is the
   performance of the particular inviscid method I applied"
+
+
+Viscous methods
+===============
+
+Lifting-line
+------------
+
+[[Describe the classic approach and its limitations.]]
+
+
+Section Coefficients
+--------------------
+
+[[Do these have any application to inviscid methods? I think Prandtl's
+lifting-line is a *potential flow* method, but it also uses the section
+coefficients, so I'm confused.]]
+
+
+Related work:
+
+* :cite:`abbott1959TheoryWingSections`
+
+Instead of solving the boundary layer conditions for the full 3D wing, it is
+common to treat the lifting surface as a collection of finite segments taken
+from theoretical infinite-length wings. The infinite length assumption
+eliminates 3D effects and allows the wing sections to be analyzed using 2D
+geometry. The 3D flow of the physical wing can then be approximated using the
+2D aerodynamic coefficients.
+
+Limitations:
+
+* This method assumes straight, uniformly shaped wing segments. For
+  a continuously curved wing, this approximation will never be correct,
+  although the approximation improves as the number of segments increases.
+
+* It assumes the finite segments are well approximated by the flow over the
+  infinite wing. This neglects spanwise variation in boundary layers, etc.
+
+* It is difficult to model cell distortions (due to billowing, etc) using
+  predetermined 2D geometry. It is technically possibly to estimate the final
+  cell shapes and measure the section profiles, but the "infinite wing"
+  approximation is unlikely to remain valid. If the aerodynamic effects of
+  cell distortions are of interest, they are best treated either
+  approximately, using averaged coefficient effects, or using full
+  computational fluid dynamics methods. This current work neglects the effects
+  of cell distortions and assumes all wing segments match the idealized 2D
+  airfoils.
 
 
 Phillips' numerical lifting-line
@@ -218,6 +264,7 @@ with the normal and chordwise wind speeds
   which is easily accessible in Python via `scipy's \`optimize\` module
   <https://docs.scipy.org/doc/scipy/reference/optimize.root-hybr.html>`_.
 
+
 Limitations
 -----------
 
@@ -232,6 +279,8 @@ Limitations
   theorem assumes uniform fluid velocity, steady-state, and unseparated? Is
   the KJ assuming inviscid flow, ie it's a potential flow solution?
 
+* Can't model a spin (backwards airflow on one wingtip)
+
 
 Case Study
 ==========
@@ -244,8 +293,8 @@ Every new tool should be validated, and for aerodynamic codes validation often
 involves comparing theoretical models to wind tunnel measurements. For the
 tools proposed in this paper, validation should include demonstrating the
 flexibility of the geometry definition proposed in :doc:`canopy_geometry` and
-the performance of the aerodynamics code proposed in :ref:`Phillips' numerical
-lifting-line`.
+the performance of the aerodynamics code proposed in `Phillips' numerical
+lifting-line`_.
 
 An excellent test case for the geometry and aerodynamics is available from
 :cite:`belloc2015WindTunnelInvestigation`, which provides both point-wise
@@ -329,7 +378,15 @@ Inputting the values to the canopy geometry produces:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy.*
+   ChordSurface curves for Belloc's reference paraglider wing.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy_chords.*
+
+   3D chords for Belloc's reference paraglider wing.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy_airfoils.*
+
+   3D airfoils for Belloc's reference paraglider wing.
 
 
 Airfoils
@@ -340,7 +397,6 @@ It uses a NACA 23015.
 .. figure:: figures/paraglider/geometry/airfoil/NACA-23015.*
 
    NACA 23015
-
 
 
 Aerodynamics

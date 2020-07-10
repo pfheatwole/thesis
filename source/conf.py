@@ -50,16 +50,16 @@ rsvg_converter_args = ["-z", str(round(zoom_factor, 2))]
 # document, regardless of section depth. Suppress those manually.
 suppress_warnings = [
     # 'autosectionlabel.paraglider_model', # Outdated, but keeping it as an example
+    'autosectionlabel.*',  # Assume I use fully-qualified section references
 ]
 
 mathjax_config = {
     "TeX": {  # Define TeX macros for MathJax 2.7 (3.0 changed the spec)
         "extensions": ["cancel.js"],
         "Macros": {
+            "defas": r"\stackrel{\mathrm{def}}{=}",
             "given": r"\;\middle\vert\;",
             "vec": [r"\mathbf{#1}", 1],
-            # "mat": [r"\left[#1\right]", 1],
-            # "crossmat": [r"\mat{#1}^{\times}", 1],
             "mat": [r"\mathbf{#1}", 1],
             "crossmat": [r"\left[{#1}\right]^{\times}", 1],
         },
@@ -79,7 +79,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Paraglider Flight Reconstruction'
+project = 'Wind Field Predictive Modeling via Paraglider Flight Reconstruction: Preliminary Work'
 copyright = "2020, Peter Frank Heatwole"
 author = 'Peter Frank Heatwole'
 
@@ -125,6 +125,7 @@ html_title = project  # Override "<project>'s documentation"
 # documentation.
 #
 html_theme_options = {
+    'fixed_sidebar': True,
     'logo': 'hook3_vectorized_opt.svg',
 }
 
@@ -157,14 +158,17 @@ htmlhelp_basename = 'Thesisdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
+# Note: `\given` must be used inside a `\left(` and `\right)`
+
 EXTRA_PREAMBLE = r"""
 \usepackage{csu}
 \usepackage{cancel}
+\usepackage{bm}
+\newcommand{\defas}{\stackrel{\mathrm{def}}{=}}
 \newcommand{\given}{\;\middle\vert\;}
-\renewcommand{\vec}{\mathbf}
-\newcommand{\mat}[1]{\left[#1\right]}
-\newcommand{\crossmat}[1]{\mat{#1}^{\times}}
-\renewcommand{\arraystretch}{1.5}
+\renewcommand{\vec}[1]{\bm{#1}}
+\newcommand{\mat}[1]{\bm{#1}}
+\newcommand{\crossmat}[1]{\left[#1\right]^{\times}}
 """
 
 latex_engine = "xelatex"  # pdflatex has poor unicode support

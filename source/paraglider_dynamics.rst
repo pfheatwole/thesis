@@ -249,7 +249,7 @@ Barrows equation 1:
 
 .. math::
 
-   \mat{M}_a \equiv
+   \mat{M}_a \defas
    \begin{bmatrix}
       m_{11} & 0 & 0\\
       0 & m_{22} & 0\\
@@ -258,7 +258,7 @@ Barrows equation 1:
 
 .. math::
 
-   \mat{I}_a \equiv
+   \mat{I}_a \defas
    \begin{bmatrix}
       I_{11} & 0 & 0\\
       0 & I_{22} & 0\\
@@ -269,7 +269,7 @@ Define two helper matrices:
 
 .. math::
 
-   \mat{S}_2 \equiv \begin{bmatrix} 0 & 0 & 0\\0 & 1 & 0\\0 & 0 & 0\end{bmatrix}
+   \mat{S}_2 \defas \begin{bmatrix} 0 & 0 & 0\\0 & 1 & 0\\0 & 0 & 0\end{bmatrix}
 
 .. math::
 
@@ -283,7 +283,7 @@ part of the apparent inertia matrix:
 
 .. math::
 
-   \mat{J}_{a,R} \equiv
+   \mat{J}_{a,R} \defas
       \mat{I} - \crossmat{\vec{r}^c_{RC/R}} \mat{M}_a \crossmat{\vec{r}^c_{RC/R}}
       - \crossmat{\vec{r}^c_{PC/RC}} \mat{M}_a \crossmat{\vec{r}^c_{PC/RC}} \mat{S}_2
       - \mat{Q} - \mat{Q}^T

@@ -57,8 +57,11 @@ c = np.array([0.107, 0.137, 0.198, 0.259, 0.308, 0.339, 0.350,
 
 theta = np.deg2rad([3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3])  # torsion [deg]
 
-# Compute the section indices
-L_segments = np.linalg.norm(np.diff(xyz, axis=0), axis=1)
+# Section indices are the normalized distances from the central section along
+# the length of the `yz` curve (so +/-1 for the far left/right, and 0 for the
+# central section). Because the left and right semispans are symmetric their
+# lengths are equal, and calculating their section indicies is simplified.
+L_segments = np.linalg.norm(np.diff(xyz.T[1:]), axis=0)
 s_xyz = np.cumsum(np.r_[0, L_segments]) / L_segments.sum() * 2 - 1
 
 # Coordinates and chords are in meters, and must be normalized
@@ -78,8 +81,8 @@ airfoil = gsim.airfoil.Airfoil(
 )
 
 
-class InterpolatedLobe:
-    """Interface to use a PchipInterpolator for the lobe."""
+class InterpolatedArc:
+    """Interface to use a PchipInterpolator for the arc."""
 
     def __init__(self, s, y, z):
         self._f = scipy.interpolate.PchipInterpolator(s, np.c_[y, z])
@@ -92,22 +95,22 @@ class InterpolatedLobe:
         return self._fd(s)
 
 
-# FIXME: move the resampling logic into `InterpolatedLobe`, and make that an
+# FIXME: move the resampling logic into `InterpolatedArc`, and make that an
 #        official helper class in `foil.py`. It should also use more intelligent
 #        resampling (only needs two extra samples on either side of each point)
 s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
-lobe = InterpolatedLobe(s, fy(s), fz(s))
+arc = InterpolatedArc(s, fy(s), fz(s))
 
 # Alternatively, use the analytical (non-sampled, smooth curvature) form
-# lobe = gsim.foil.elliptical_lobe(np.rad2deg(np.arctan(.375/.688)), 89)
+# arc = gsim.foil.elliptical_arc(np.rad2deg(np.arctan(.375/.688)), 89)
 
 chords = gsim.foil.ChordSurface(
     x=0,
     r_x=0.6,
-    yz=lobe,
+    yz=arc,
     r_yz=0.6,
-    chord_length=fc,
-    torsion=ftheta,
+    c=fc,
+    theta=ftheta,
 )
 
 sections = gsim.foil.FoilSections(
@@ -129,22 +132,27 @@ print(f"    Projected AR> Expected: {AR:.4f},   Actual: {canopy.AR:.4f}")
 print(f"    Flattened AR> Expected: {AR_flat:.4f},   Actual: {canopy.AR_flat:.4f}")
 print()
 
-wing = gsim.paraglider_wing.ParagliderWing(
-    canopy=canopy,
-    force_estimator=gsim.foil.Phillips(canopy, 40, K=11),
-    brake_geo=gsim.brake_geometry.Cubic(0, 0.75, delta_max=0),  # unused
+lines = gsim.line_geometry.SimpleLineGeometry(
     kappa_x=0.0875 / 0.350,  # 25% back from the leading edge
     kappa_z=1.0 / 0.350,  # 1m below the central chord
     kappa_A=0.08,  # unused
     kappa_C=0.80,  # unused
     kappa_a=0,  # unused
-    rho_upper=0,  # Neglect gravitational forces
-    rho_lower=0,
-
     total_line_length=0,  # Neglect line drag
     average_line_diameter=0,
-    line_drag_positions=[0, 0, 0],
+    r_L2LE=[0, 0, 0],
     Cd_lines=0,
+    s_delta_start=0,  # unused
+    s_delta_max=0.75,  # unused
+    delta_max=0,  # unused
+)
+
+wing = gsim.paraglider_wing.ParagliderWing(
+    lines=lines,
+    canopy=canopy,
+    rho_upper=0,  # Neglect gravitational forces
+    rho_lower=0,
+    force_estimator=gsim.foil.Phillips(canopy, 40, K=11),
 )
 
 # print("\nFinished defining the complete wing. Pausing for review.\n")
@@ -178,7 +186,9 @@ t_start = time.perf_counter()
 
 for kb, beta in enumerate(betas):
     dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
-    cp_wing = wing.control_points(0)  # Section control points
+    r_LE2R = wing.r_R2LE(0)
+    r_CP2LE = wing.control_points(0)
+    r_CP2R = r_CP2LE + r_LE2R
 
     # Some figures will look for samples at alpha = [0, 5, 10, 15], so make
     # sure to include those test points.
@@ -198,7 +208,7 @@ for kb, beta in enumerate(betas):
 
         try:
             dF, dM, ref = wing.forces_and_moments(
-                0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
+                0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
         except gsim.foil.ForceEstimator.ConvergenceError:
             ka -= 1
@@ -206,7 +216,7 @@ for kb, beta in enumerate(betas):
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
-        M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
+        M += np.cross(r_CP2R, dF).sum(axis=0)  # Add the moment due to forces
 
         dFs.append(dF)
         dMs.append(dM)
@@ -239,7 +249,7 @@ for kb, beta in enumerate(betas):
 
         try:
             dF, dM, ref = wing.forces_and_moments(
-                0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
+                0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
         except gsim.foil.ForceEstimator.ConvergenceError:
             ka -= 1
@@ -247,7 +257,7 @@ for kb, beta in enumerate(betas):
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
-        M += np.cross(cp_wing, dF).sum(axis=0)  # Add the moment due to forces
+        M += np.cross(r_CP2R, dF).sum(axis=0)  # Add the moment due to forces
 
         dFs.append(dF)
         dMs.append(dM)

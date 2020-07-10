@@ -1,3 +1,22 @@
+* Factor out the canopy plotting function from the thesis script
+  `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
+  it to to plot my Hook3ish
+
+* My `BrakeGeometry` plots are wrong. It assumes fixed hinges at 0.8c, which
+  is very very wrong for the airfoil data I'm using with my Hook3ish
+
+* Finish the `ChordSurface` equations
+
+* Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (so
+  "the anhedral of the arc" as opposed to "section anhedral").
+
+* Can I make two parallel outlines, informal and formal, to develop the idea
+  of "predicting points of the wind field by learning from the past"? I'd love
+  to have an easy-to-follow informal development for the non-technical reader,
+  and a translation of those informal concepts into mathematical form. Show
+  that the math isn't as scary as it might seem; the notation is intimidating,
+  but ultimately it's based on logic that the reader already understands.
+
 * Should I use `h_a/R` for "angular momentum of the apparent mass `a` about
   `R`"?  I like the slash as "X with respect to Y", which makes sense here.
 
@@ -157,12 +176,6 @@ Notation, Math, etc
   masses. **Maybe it's time I put my foot down that I simply like using
   brackets for matrices; it enables visual scanning you can't do otherwise.
   Also, they help reveal mistakes, kind of like physical units in equations.**
-
-* I need to standardize `r_xy` instead of simply `r_x`. It improves symmetry.
-  (You're designing in either the xy plane or the yz plane.)
-
-  And do I like name `r` for the reference positions? I'm using that for
-  vectors, these are scalars.
 
 
 Terminology

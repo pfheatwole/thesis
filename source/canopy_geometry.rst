@@ -8,6 +8,14 @@ energy gained from gravity to generate useful aerodynamic forces by exchanging
 momentum with the air.
 
 
+* List the motivations for this new geometry:
+
+  * Enables mixed-design between the flat and projected geometries. (Really
+    handy to view the arched and flattened versions.)
+
+  * Decouples the design curves, making design easier
+
+
 Related Work
 ============
 
@@ -15,58 +23,84 @@ Related Work
 
 * "Paraglider Design Handbook", :cite:`casellasParagliderDesignHandbook`
 
-
-Airfoil
-=======
-
-**Key terms and concepts to define in this section**: upper surface, lower
-surface, leading edge, trailing edge, chord line, mean camber line, thickness,
-thickness convention, 2D coefficients.
+* :cite:`lingard1995RamairParachuteDesign`
 
 
-Geometry
---------
+Fundamental Definitions
+=======================
 
-An airfoil is a 2D cross-section of a 3D wing.
+* *flat span*, *flat area*, *flat aspect ratio*
 
-.. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
+* *projected span*, *projected area*, *projected aspect ratio*
 
-   Airfoils examples.
+* *section index* (not sure how to define this; it works for any reference
+  line through the sections, regardless of their length, but it involves the
+  **total** line length, doesn't it? I seem to recall frustration trying to
+  decide how to handle the fact that the lengths of `x(s)` and `yz(s)` can
+  change, and thus the position that was correct for one pair might be wrong
+  for another. For example, suppose you set `yz(0.1) = A` for some given
+  `x(s)`, but then you change `x(s)` to include a bump in the middle: the
+  `x(0.1)` will no longer correspond to the original `x(0.1)`, even if that
+  part of the original curve was unchanged.)
 
-Here's a diagram of the basic airfoil geometric properties:
+.. math::
 
-.. figure:: figures/paraglider/geometry/airfoil/airfoil_diagram.*
-   :name: airfoil_diagram
+   s \defas \frac{y_\mathrm{flat}}{\frac{b_\mathrm{flat}}{2}}
 
-   Components of an airfoil.
+[[...where :math:`b_\mathrm{flat}` is later defined as the length of
+:math:`yz(s)`. Note that **this definition assumes the semispan lengths are
+equal.**]]
 
+* *section torsion*
 
-There are two conventions measuring the airfoil thickness; this convention
-also determines what point is designated the *leading edge*. The leading and
-trailing edge of a wing section are arbitrary points that define the *chord*;
-the chord is used to nondimensionalize the airfoil geometry and define the
-*angle of attack*.
+.. math::
 
-.. figure:: figures/paraglider/geometry/airfoil/NACA-6412-thickness-conventions.*
-   :name: airfoil_thickness
+   \Theta \defas
+      \cos^{-1} \left( \frac
+         {\vec{\hat{x}}_\mathrm{section} \cdot \vec{\hat{x}}_\mathrm{wing}}
+         {\left\| \vec{\hat{x}}_\mathrm{section} \right\| \left\| \vec{\hat{x}}_\mathrm{wing} \right\|}
+      \right)
 
-   Airfoil thickness conventions.
+* *section anhedral*
 
+.. math::
 
-Coefficients
-------------
+   \Gamma \defas
+      \cos^{-1} \left( \frac
+         {\vec{\hat{y}}_\mathrm{section} \cdot \vec{\hat{y}}_\mathrm{wing}}
+         {\left\| \vec{\hat{y}}_\mathrm{section} \right\| \left\| \vec{\hat{y}}_\mathrm{wing} \right\|}
+      \right)
 
-NT
+Conceptually, the designing a wing wing can be broken into two steps:
+
+1. Define the chord length and orientation at each section.
+
+2. Assign a 2D profile to each section.
 
 
 Chord Surface
 =============
 
-The chord surface is a conceptual curved surface produced by all the airfoil
-chord lines. A wing geometry can be defined by a *chord surface* and an
-*airfoil distribution*.
+Conceptually, combining all the section chords will produce a curved surface.
+This section develops a novel, parametric geometry for designing the chord
+surface.
 
-.. TODO:: define the *section index*
+The geometry must specify:
+
+1. Chord lengths
+
+2. Chord positions
+
+3. Section orientations
+
+
+Design Curves
+-------------
+
+[[This section develops a novel parametric model of the chord surface. Discuss
+previous methods of defining the chords, and the limitations of those old
+methods. Then describe what "would" be a convenient workflow, and announce
+that this parametric form enables that more convenient workflow.]]
 
 The surface can be defined using six functions of the section index:
 
@@ -74,19 +108,19 @@ The surface can be defined using six functions of the section index:
 
 #. Geometric torsion :math:`\theta(s)`
 
-#. Chord reference point for the xy-plane :math:`r_{xy}(s)`
+#. Chord reference point for the x-coordinates :math:`r_{x}(s)`
 
-#. Chord reference point for the yz-plane :math:`r_{yz}(s)`
+#. Chord reference point for the y- and z-coordinates :math:`r_{yz}(s)`
 
-#. Position of the reference point in the xy-plane :math:`x(s)`
+#. Position of the reference point in the xs-plane :math:`x(s)`
 
 #. Position of the reference point in the yz-plane :math:`\left< y(s),
    z(s)\right>`
 
 These six functions define the scale, orientation, and position of each foil
 section. Section scale is controlled by chord; each section profile is an
-airfoil scaled by the chord length. Section orientation is controlled by
-section 
+airfoil scaled by the chord length. Section orientation is controlled by the
+position curves.
 
 .. TODO:: I should explicitly mention that with this set of definitions,
    section profiles will always "point" towards the +x-axis (mathematically,
@@ -94,10 +128,337 @@ section
    +x-axis). I'm pretty sure this is a reasonable constraint for most wing
    designs?
 
-The chord length is the scaling factor. Geometric torsion rotates
-section profile chords relative to their immediate neighboring sections.
-Positions
+The chord length is the scaling factor. Geometric torsion rotates section
+profile chords relative to their immediate neighboring sections.
 
+
+Chord length
+^^^^^^^^^^^^
+
+NT
+
+
+Geometric Torsion
+^^^^^^^^^^^^^^^^^
+
+[[I'm defining *geometric torsion* :math:`\theta` as the rotation angle about
+the section :math:`y`-axis **before** applying section anhedral. I think I did
+this because it seemed the most natural to apply twist first, since it's
+easier to reason about the twist angle when the wing is flat.
+
+If you apply twist before anhedral you also guarantee the section y-axes all
+lie in the yz-plane; they have zero x-component.
+
+It wasn't immediately obvious whether to apply torsion or dihedral first, but
+consider this: imagine the wing tip ends up with an anhedral of 90 degrees; if
+you apply torsion first (rotating the section about the body y-axis) when the
+wing is flat, then apply anhedral (rotate the section about the body x-axis),
+then the section x-axis still makes the same torsion angle relative to the
+body x-axis; this is intuitive. Conversely, imagine first rotating the section
+about the body x-axis by 90 degrees; trying to apply torsion by rotating the
+sections about the body y-axis will "squish" the leading edge of the sections,
+meaning **if you tried to flatten the wing then the trailing edge will be
+longer than the leading edge**. I suppose this might be useful to a wing
+designer, but it makes analyzing the section profiles considerably more
+complicated.
+
+Note to self: applying rotation about body-y then body-x is equivalent to
+rotating about body-x then section-y. One advantage of the "torsion then
+anhedral" definition is that you can define torsion as the angle between the
+section x-axis and the body x-axis, and anhedral is the angle between the
+section y-axis and the body y-axis.]]
+
+Is that beneficial? Does it match Belloc? He shows a twist about the section
+y-axes, which seems to imply anhedral and *then* torsion.]]
+
+One advantage of this geometry definition is that you don't need to
+specify a rotation point. The airfoil angle is independent of the rotation
+point, so it's unnecessary work to require a user to calculate positions
+relative to rotation points.)
+
+.. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
+
+   Geometric torsion.
+
+[[Highlight the fact that the rotation is not about some chosen pivot point.
+The choice pivot would only add a translation, but we're fixing the
+translation explicitly later anyway, so the choice of pivot never even comes
+into play.]]
+
+
+Design in the xs-plane
+^^^^^^^^^^^^^^^^^^^^^^
+
+"xy-plane"? More like the "x/y_flat plane"
+
+
+Design in the yz-plane
+^^^^^^^^^^^^^^^^^^^^^^
+
+* The gist of this idea: for each section of the wing, pick the point at
+  :math:`r_{yz} \, c` back from the leading edge. Project that point onto the
+  yz-plane. Do this for all sections to produce a curve. The :math:`s` is the
+  normalized length along that curve. The length of that curve also defines
+  :math:`b_\mathrm{flat}`, since it would be the span of the reference line if
+  you "unrolled" the wing so all the z-coordinates are zero.
+
+* A cool thing about this is it doesn't prevent you from designing the y- and
+  z-coordinates explicitly. You could still do that and simply compute the
+  length from each point to determine :math:`s`. That's effectively what I do
+  in `belloc.py`.
+
+Here's one simple parametrization that uses an elliptical function
+parametrized by the mean and tip anhedral values:
+
+.. figure:: figures/paraglider/geometry/elliptical_arc_dihedral.svg
+
+   Elliptical arc anhedral.
+
+
+Derivation
+----------
+
+Okay, new idea: this derivation is too hard to follow, so maybe start with
+a better motivation. You need a way to position and orient the wing sections.
+Traditionally, that meant specifying either points on the leading edge or
+points on the quarter-chord. Those have several limitations that make them
+frustrating to use when designing curved foils.
+
+[[List the limitations.]]
+
+There is a better way. The traditional specification goes something like:
+
+.. math::
+
+   LE = \langle x, y, z \rangle
+
+Where the coordinates are predetermined as either the leading edge or the
+quarter-chord. But if we add another term, they can specify arbitrary points
+on the chord:
+
+.. math::
+
+   LE = \langle x, y, z \rangle + p \cdot c \cdot \vec{\hat{x}}_w
+
+Where the :math:`c` are the section chord lengths and :math:`\vec{\hat{x}}_w`
+are the section :math:`x`-axes of the 3D wing. The scalar :math:`0 \le p \le
+1` specifies what position on the chord corresponds to :math:`\langle x, y,
+z \rangle`:
+0 for the leading edge, 0.25 for the quarter chord, 1 for the trailing edge,
+etc. This extra term effectively allows the designer to slide the sections
+along their local :math:`x`-axes.
+
+The downside of this simplistic adjustment is that the positions are still
+dependent on the chord lengths, and the designer is constrained to manipulate
+the x, y, and z coordinate simultaneously. It would be much easier to decouple
+the coordinates and allow them to be manipulated independently.
+
+That can be accomplished by introducing two scalars instead of just one. Call
+these :math:`r_x` and :math:`r_{yz}`, which function as :math:`p` did before,
+but now they manipulate the x-coordinates independently from the
+yz-coordinates.
+
+.. math::
+
+   LE = \langle x, y, z \rangle + (r_x - r_{yz}) \cdot c \cdot \vec{\hat{x}}_p + r_{yz} \cdot c \cdot \vec{\hat{x}}_a
+
+With this formulation you can easily specify a design as convoluted as "the
+trailing edges should lie in a plane parallel to the yz-plane, the
+quarter-chord points follow an elliptical arc in the yz-plane, and the chords
+follow an exponential distribution".
+
+The :math:`\vec{\hat{x}}_p` and :math:`\vec{\hat{x}}_a` are :math:`x`-axes for
+the flattened planform and the fully-specified arc.
+
+
+[[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]]
+
+For the following derivation, functions of the section index :math:`s` are
+implicit, so :math:`LE(s) \to LE`, :math:`r_x(s) \to r_x`, etc.
+
+First, consider the chord distribution as defining a flat surface lying in the
+:math:`xs`-plane, with all the leading edges lying on the :math:`s`-axis. The
+chord lengths can be interpreted as the :math:`x`-coordinates of the leading
+edges:
+
+.. math::
+
+   \overline{LE} = \left\langle
+      c,
+      s,
+      0
+   \right\rangle
+
+Next define the planform reference curve :math:`r_x(s)`. This function selects
+points on the section chord
+
+[[Show a plot of the chords with a reference line through them.]]
+
+These reference points can be considered as defining which points on each
+chord should lie on the :math:`s`:-axis:
+
+.. math::
+
+   \overline{LE} = \left\langle
+      r_x c,
+      s,
+      0
+   \right\rangle
+
+[[Show the chords with their reference points shift to s=0]].
+
+Because the reference points are constrained to lie between 0 and 1 (so they
+select points on each chord), this means they cannot shift the chord surface
+further than the chord lengths. To generalize the positioning, define the
+planform curve :math:`x(s)`. Instead of shifting the reference points to zero,
+the reference points x-coordinates are shifted to :math:`x(s)`:
+
+.. math::
+
+   \overline{LE} = \left\langle
+      r_x c + x,
+      s,
+      0
+   \right\rangle
+
+[[Show the chords with their reference points shifted to x(s).]]
+
+The next step is to apply any geometric torsion. Geometric torsion is defined
+as a right-handed rotation of a section about its :math:`y`-axis. After
+rotation the leading edges become:
+
+.. math::
+
+   \overline{LE} = \left\langle
+      (r_x c + x) \cos(\theta),
+      s,
+      -(r_x c + x) \sin(\theta)
+   \right\rangle
+
+
+[[more stuff]]
+
+In the same fashion, the :math:`r_{yz}(s)` curve selects points on each chord,
+:math:`y(s)` defines the section :math:`y`-coordinate, and :math:`z(s)`
+defines the z-coordinate offset. These curves do not change the 
+
+
+[[more stuff]]
+
+Rotation matrices for geometric torsion:
+
+.. math::
+   :label: section_torsion
+
+   \mat{\Theta} &\defas \begin{bmatrix}
+      \cos(\theta) & 0 & \sin(\theta)\\
+      0 & 1 & 0\\
+      -\sin(\theta) & 0 & \cos(\theta)
+   \end{bmatrix}
+
+
+[[We need to specify the section dihedral somehow. The **definition** of
+section dihedral is the angle made by the section y-axes; it does not say how
+to **produce** the section orientations in the first place. For my geometry
+I am merely **constraining** the section y-axes to equal the derivatives of
+the yz curve. I do this because it ensures that building finite-length
+segments from the arched wing will produce linear wing segments that are
+oriented roughly the same as the arched wing. Technically, you could define
+a yz-curve but keep the section dihedral zero everywhere, which would produce
+a slanted wing with vertical sections (sort of shearing the wing sections),
+but I think you would be hard pressed to use airfoil coefficient data to
+analyze such a sloped wing. **The airfoil data is for air flow perpendicular
+to the y-axis, so you want the section y-axes to at least be CLOSE to parallel
+to the lifting-line**; Phillips' at least computes the air flow perpendicular
+to the lifting-line, so make sure the sections are oriented that way as
+well.]]
+
+.. math::
+   :label: section_dihedral
+
+   \Gamma = \tan^{-1}\left(\frac{dz}{dy}\right)
+
+Rotation matrices for section dihedral:
+
+.. math::
+   :label: section_dihedral_matrix
+
+   \mat{\Gamma} &\defas \begin{bmatrix}
+      1 & 0 & 0\\
+      0 & \cos(\Gamma) & -\sin(\Gamma)\\
+      0 & \sin(\Gamma) & \cos(\Gamma)
+   \end{bmatrix}
+
+The disadvantage of :eq:`section_dihedral_matrix` is its dependence on
+:eq:`section_dihedral` which is undefined for wing sections that achieve a 90°
+section dihedral. To avoid the divide by zero, the matrix can be computed
+using the derivatives of the arc reference curves:
+
+.. math::
+
+   \begin{aligned}
+   K &= \frac{1}{\sqrt{\left(dy/ds\right)^2 + \left(dz/ds\right)^2}}\\
+   \\
+   \mat{\Gamma} &= \frac{1}{K} \begin{bmatrix}
+      K & 0 & 0\\
+      0 & dy/ds & -dz/ds\\
+      0 & dz/ds & dy/ds
+   \end{bmatrix}
+   \end{aligned}
+
+The section :math:`x`-axes for the arched wing are then:
+
+.. math::
+
+   \vec{\hat{x}} = \mat{\Gamma} \mat{\Theta} \begin{bmatrix}1\\0\\0\end{bmatrix}
+
+The leading edge then becomes:
+
+.. math::
+
+   LE = \overline{LE} + c \, r_{yz} \vec{\hat{x}}
+
+[[more stuff]]
+
+Now, change your perspective and consider the reference curves in terms of
+relative positions instead of worrying about the absolute coordinates produced
+by the current equations. Once you do that, then the whole shebang can be
+simplified by assuming that the reference points all lie on the :math:`y`-axis
+by default, and the :math:`x`, :math:`y`, and :math:`z` curves are simply
+shifting their positions along the section :math:`x`-axis. The final equation
+for the leading edge then becomes:
+
+.. math::
+
+   \mat{R} = \begin{bmatrix}
+      r_x & 0 & 0\\
+      0 & r_{yz} & 0\\
+      0 & 0 & r_{yz}
+   \end{bmatrix}
+
+.. math::
+
+   LE = \left\langle x, y, z \right\rangle + c \, \mat{R} \vec{\hat{x}}
+
+And to compute the coordinates of a point :math:`P` at a position :math:`0 \le
+p \le 1` along a section chord:
+
+.. math::
+
+   \vec{r}_{P/O}^c = LE - (p\, c) \vec{\hat{x}} - \vec{r}_{O_c/O}
+
+Where :math:`O` is the origin of the chord surface and :math:`O_c` is the
+origin of the canopy. This is used when the leading edge of the central
+section is defined as the origin of the canopy.
+
+This non-zero "canopy origin" is the price you pay for that "assume relative
+positions" perspective mentioned earlier, but it's simple enough to start by
+assuming the offset is zero, then computing :math:`LE(0)` and using that as
+the offset for all future calculations.
+
+
+Notes
+-----
 
 What are the advantages of this parametric design?
 
@@ -116,73 +477,19 @@ What are the advantages of this parametric design?
   about changes to geometric torsion messing that up).
 
 * As a generative model, it's easy to integrate into a CAD or 3D modeling
-  program
-
-
-
-Chord length
-------------
-
-NT
-
-
-Geometric Torsion
------------------
-
-(One of the cool things about my geometry is that you don't need to specify
-the rotation point. The airfoil angle is independent of the rotation point, so
-it's unnecessary work to require a user to calculate positions relative to
-rotation points.)
-
-.. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
-
-   Geometric torsion.
-
-
-Design in the xy-plane
-----------------------
-
-NT
-
-
-Design in the yz-plane
-----------------------
-
-NT
-
-
-Foil Surface
-============
-
-The chord surface is the flat surface produced by all the section chord. To
-produce the 3D canopy, each section must be assigned an airfoil.
+  program that can choose how to sample from the surface.
 
 
 Examples
-========
+--------
 
-**FIXME**: doesn't this be belong to the "chord surface" section?
-
-
-Flat Wings
-----------
 
 Example 1
 ^^^^^^^^^
 
-First, design the set of reference curves to generate the target chord
-surface:
-
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_curves.*
 
-Then assign an airfoil to produce the 3D wing:
-
-(**FIXME: maybe show the chord surface just this first time?**)
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_canopy.*
-
-This is an idealized version of the target canopy because it has not accounted
-for cell deformations, such as billowing.
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_canopy_chords.*
 
 
 Example 2
@@ -192,7 +499,7 @@ Words here.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy_chords.*
 
 
 Example 3
@@ -202,7 +509,7 @@ Words here.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy_chords.*
 
 
 Example 4
@@ -212,62 +519,126 @@ Words here.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_chords.*
 
 
-Elliptical Wings
-----------------
+Example 5
+^^^^^^^^^
 
-Here's an example with a root-to-tip anhedral angle of 33 degrees.
+A circular arc with a mean anhedral of 33 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy_chords.*
 
 
-Here's another example with a root-to-tip anhedral angle of 44 degrees.
+Example 6
+^^^^^^^^^
+
+A circular arc with a mean anhedral of 44 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_canopy_chords.*
 
-And another with a root-to-tip anhedral angle of 44 degrees but a wingtip
-anhedral angle of 89 degrees.
+Example 7
+^^^^^^^^^
+
+An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
+89 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_chords.*
 
 
+Example: The Manta
+^^^^^^^^^^^^^^^^^^
 
-The Manta
----------
-
-The manta ray is a great demo for `r_xy`.
-
-If :math:`r_x = 0`:
+The "manta ray" is a great demo for `r_x`.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_canopy_chords.*
 
+   "Manta ray" with :math:`r_x = 0`
 
-If :math:`r_x = 0.5`:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_canopy_chords.*
 
+   "Manta ray" with :math:`r_x = 0.5`
 
-If :math:`r_x = 1`:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_curves.*
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_canopy.*
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_canopy_chords.*
+
+   "Manta ray" with :math:`r_x = 1.0`
+
+
+Foil Surface
+============
+
+The chord surface is the flat surface produced by all the section chord. To
+produce the 3D canopy, each section must be assigned an airfoil.
+
+
+Airfoils
+--------
+
+Related work:
+
+* :cite:`abbott1959TheoryWingSections`
+
+
+**Key terms and concepts to define in this section**: upper surface, lower
+surface, leading edge, trailing edge, chord line, mean camber line, thickness,
+thickness convention, 2D coefficients.
+
+After designing the section chords, the chord surface will produce a 3D wing
+by assigning each section a cross-sectional geometry called an *airfoil*.
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
+
+   Airfoils examples.
+
+Here's a diagram of the basic airfoil geometric properties:
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_diagram.*
+   :name: airfoil_diagram
+
+   Components of an airfoil.
+
+There are two conventions measuring the airfoil thickness; this convention
+also determines what point is designated the *leading edge*. The leading and
+trailing edge of a wing section are arbitrary points that define the *chord*;
+the chord is used to nondimensionalize the airfoil geometry and define the
+*angle of attack*.
+
+.. figure:: figures/paraglider/geometry/airfoil/NACA-6412-thickness-conventions.*
+   :name: airfoil_thickness
+
+   Airfoil thickness conventions.
+
+
+Examples
+--------
+
+Assigning a NACA 23015 airfoil to some of the previous examples:
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_airfoils.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy_airfoils.*
+
+Building a wing from 2D cross-sections also provides computational benefits
+for estimating the aerodynamic performance of the 3D wing, as discussed in
+:ref:`canopy_aerodynamics:Section Coefficients`.
 
 
 Distortions
-===========
+-----------
 
 **FIXME**: should I discuss cells, billowing, distortion, etc? I'm not working
 on / implementing these, so they can probably go in the "Limitations" section

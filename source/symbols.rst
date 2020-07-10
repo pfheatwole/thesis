@@ -52,7 +52,7 @@ matrices is the *cross-product matrix operator*, so that
 .. _crossmat:
 .. math::
 
-   \crossmat{\vec{v}} \equiv
+   \crossmat{\vec{v}} \defas
       \begin{bmatrix}
          0 & -v_3 & v_2\\
          v_3 & 0 & -v1\\
@@ -84,14 +84,14 @@ for some realistic examples taken from
 .. math::
 
    \begin{aligned}
-   \vec{p}_{A/B} &\equiv
+   \vec{p}_{A/B} &\defas
       \text{the position of the point A with respect to point } B \\
-   \vec{v}_{A/i} &\equiv
+   \vec{v}_{A/i} &\defas
       \text{the velocity vector of a point } A \text{ in frame } \mathcal{F}_i \\
-   ^b \dot{\vec{v}}_{A/i} &\equiv
+   ^b \dot{\vec{v}}_{A/i} &\defas
       \text{the vector derivative of } \vec{v}_{A/i} \text{ taken in frame } \mathcal{F}_b \\
-   \vec{v}^c_{A/i} &\equiv
+   \vec{v}^c_{A/i} &\defas
       \text{array of components of } \vec{v}_{A/i} \text{ in coordinate system } c \\
-   ^b \dot{\vec{v}}^c_{A/i} &\equiv
+   ^b \dot{\vec{v}}^c_{A/i} &\defas
       \text{components in coordinate system } c \text{ of the derivative taken in frame } \mathcal{F}_b
    \end{aligned}

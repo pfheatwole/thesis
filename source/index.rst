@@ -42,6 +42,7 @@ Contents
    paraglider_geometry
    paraglider_dynamics
    flight_simulation
+   case_study
    data_considerations
    examples
 
@@ -61,4 +62,5 @@ Contents
    :maxdepth: 3
 
    symbols
+   derivations
    appendix
