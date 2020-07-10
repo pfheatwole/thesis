@@ -62,4 +62,5 @@ Contents
    :maxdepth: 3
 
    symbols
+   derivations
    appendix
