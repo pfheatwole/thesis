@@ -34,6 +34,7 @@
 extensions = [
     # 'sphinx.ext.imgmath',
     'sphinx.ext.autosectionlabel',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
     'sphinxcontrib.bibtex',
@@ -41,6 +42,11 @@ extensions = [
 ]
 
 autosectionlabel_prefix_document = True
+
+intersphinx_mapping = {
+    'glidersim': ('/home/peter/model/work/glidersim/docs/_build/html', None),
+}
+
 
 # zoom_factor = (10 / 72) / (16 / 96)  # PDF uses 11pt fonts, web uses 16px
 zoom_factor = 0.6  # FIXME: this empirical solution works much better; why?

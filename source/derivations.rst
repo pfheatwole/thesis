@@ -398,15 +398,16 @@ Paraglider Models
 Model 6a
 --------
 
-An implementation of this model is available as `Paraglider6a` in the
-`glidersim` package. It uses the riser connection point :math:`R` for the
-dynamics reference point, and incorporates the apparent mass matrix. [[The
-glidersim package also includes `Paraglider6b`, which decouples the
-translational and angular equations of motion by choosing the glider center of
-gravity for the dynamics reference point to simplify the equations of motion,
-but does not incorporate the apparent mass matrix.]]
+This design uses the riser connection point :math:`R` for the dynamics
+reference point, and incorporates the apparent mass matrix. [[The glidersim
+package also includes `Paraglider6b`, which decouples the translational and
+angular equations of motion by choosing the glider center of gravity for the
+dynamics reference point to simplify the equations of motion, but does not
+incorporate the apparent mass matrix.]]
 
-[[Can I link to the glidersim module documentation from here?]]
+An implementation of this model is available as :py:class:`Paraglider6a
+<glidersim:pfh.glidersim.paraglider.Paraglider6a>` in the ``glidersim``
+package.
 
 .. math::
    :label: model6a_p
@@ -487,16 +488,9 @@ but does not incorporate the apparent mass matrix.]]
 Model 9a
 --------
 
-The model in this section is available as `Paraglider9a` in the `glidersim`
-package. It uses the riser connection midpoint `R` as the reference point for
-both the body and the payload, which simplifies incorporating the apparent
+This design uses the riser connection midpoint `R` as the reference point
+for both the body and the payload, which simplifies incorporating the apparent
 mass matrix.
-
-[[The glidersim package also includes `Paraglider9b`, which uses the centers
-of mass as the reference points for the body and payload dynamics. That choice
-simplifies the derivatives for angular momentum (since it eliminates the
-moment arms), but it makes it more difficult to incorporate the effects of
-apparent mass.]]
 
 Similar derivations:
 
@@ -510,6 +504,16 @@ Similar derivations:
   Wireless Sensors" (Gorman;
   2012): :cite:`gorman2012EvaluationMultibodyParafoil`
 
+An implementation of this model is available as :py:class:`Paraglider9a
+<glidersim:pfh.glidersim.paraglider.Paraglider9a>` in the ``glidersim``
+package.
+
+[[The ``glidersim`` package also includes :py:class:`Paraglider9b
+<glidersim:pfh.glidersim.paraglider.Paraglider9b>`, which uses the centers of
+mass as the reference points for the body and payload dynamics. That choice
+simplifies the derivatives for angular momentum (since it eliminates the
+moment arms), but it makes it more difficult to incorporate the effects of
+apparent mass.]]
 
 .. math::
    :label: model9a_body_p
