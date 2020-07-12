@@ -28,11 +28,16 @@ Notation and Symbols
      - a variable at index :math:`k` of a sequence of length :math:`K`
    * - :math:`x^{(n)}`
      - element :math:`n` of a set of :math:`N` elements
-
    * - :math:`\mat{X}_{M \times N}`
      - a matrix with :math:`M` rows and :math:`N` columns
    * - :math:`\mat{X}^z`
      - a matrix exponential, where :math:`z` is a scalar
+   * - :math:`\left| x \right|`
+     - absolute value of a scalar
+   * - :math:`\left\| \vec{x} \right\|`
+     - Euclidean norm of a vector
+   * - :math:`\left| \mat{X} \right|`
+     - determinant of a matrix
    * - :math:`\mat{C_{B/A}}`
      - an orthogonal matrix that transforms vectors from bases :math:`A` into
        :math:`B`

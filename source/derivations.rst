@@ -40,11 +40,11 @@ cross-product of two legs of the triangle:
    a_m =
       \frac{1}{2}
       \rho
-      \left[
+      \left\|
          \left( \vec{p_{m,2}} - \vec{p_{m,1}} \right)
          \times
          \left( \vec{p_{m,3}} - \vec{p_{m,2}} \right)
-      \right]
+      \right\|
 
 The total area is the sum of the triangle areas:
 
