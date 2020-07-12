@@ -56,7 +56,7 @@ equal.**]]
 .. math::
 
    \Theta \defas
-      \cos^{-1} \left( \frac
+      \arccos \left( \frac
          {\vec{\hat{x}}_\mathrm{section} \cdot \vec{\hat{x}}_\mathrm{wing}}
          {\left\| \vec{\hat{x}}_\mathrm{section} \right\| \left\| \vec{\hat{x}}_\mathrm{wing} \right\|}
       \right)
@@ -66,7 +66,7 @@ equal.**]]
 .. math::
 
    \Gamma \defas
-      \cos^{-1} \left( \frac
+      \arccos \left( \frac
          {\vec{\hat{y}}_\mathrm{section} \cdot \vec{\hat{y}}_\mathrm{wing}}
          {\left\| \vec{\hat{y}}_\mathrm{section} \right\| \left\| \vec{\hat{y}}_\mathrm{wing} \right\|}
       \right)
@@ -376,7 +376,7 @@ well.]]
 .. math::
    :label: section_dihedral
 
-   \Gamma = \tan^{-1}\left(\frac{dz}{dy}\right)
+   \Gamma = \arctan \left( \frac{dz}{dy} \right)
 
 Rotation matrices for section dihedral:
 
