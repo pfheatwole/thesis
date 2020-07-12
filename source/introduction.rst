@@ -2,10 +2,19 @@
 Introduction
 ************
 
+The goal of this chapter should establish:
 
-**THIS CHAPTER IS MY CHANCE TO SELL THE READER ON THE TOPIC. CONVINCE THEM
-THAT IT WOULD BE AWESOME TO HAVE A SOLUTION, AND THAT A SOLUTION IS POSSIBLE.
-DANGLE THE IDEA AND THE THOUGHT OF COMPLETING IT.**
+1. The problem: learn wind patterns from recorded flights
+
+2. The value: feedback helps pilot enjoy better flights
+
+3. The difficulty: not enough good data
+
+4. The approach: simulate flights and weight them
+
+5. The focus: building a dynamics model for the particle filter
+
+6. The outcomes: a fully parametric paraglider model
 
 
 Structure of this Introduction
@@ -24,17 +33,19 @@ Intro to the Intro
   flexible wing called a *paraglider*.
 
 * Because a paraglider is a non-motorized aircraft, its motion is entirely
-  dictated by gravity and wind. Paragliding pilots are totally dependent on
-  the local air currents to achieve their flight goals.
+  dictated by interactions with gravity and wind. Paragliding pilots are
+  totally dependent on the local air currents to achieve their flight goals.
 
-* A lifting component to the wind counteracts the effect of gravity, allowing
-  the pilot to slow their descent or even gain altitude; a sinking vertical
-  component has the opposite effect. The horizontal component of the wind
+* The aerodynamic forces on the wing are the product of the relative velocity
+  between the wing and the air. If the air is ascending it allows the pilot to
+  slow their descent, or even gain altitude; conversely, sinking air will
+  cause the wing to descend more quickly. The horizontal component of the wind
   determines the direction and distance the glider can fly.
 
-* A successful flight depends on the pilot's ability to recognize and navigate
-  the current wind configuration in order to achieve their flight goals, which
-  may include optimizing for flight time, distance, or a particular route.
+* A successful flight depends on the pilot's ability to recognize the
+  structure of the local air currents and navigate them in order to achieve
+  their flight goals, which may include optimizing for flight time, distance,
+  or a particular route.
 
 * Because a glider is constantly exchanging potential energy to counteract
   gravity, the pilot must recognize the wind patterns as quickly as possible.
@@ -49,7 +60,7 @@ Intro to the Intro
 .. Establishing a niche (Problem and Significance):
 
 * Traditionally, wind patterns are discovered by pilots with a large amount of
-  flight time in a given area, and are shared directly from one pilot to
+  flight time in a particular area, and are shared directly from one pilot to
   another. For the pilot community to learn reliable patterns, individual
   pilots must first recognize them and then be able to communicate them with
   precision.
@@ -59,13 +70,14 @@ Intro to the Intro
   those flights, and build a graphical map to communicate the features of the
   wind field visually instead of relying on verbal descriptions.
 
-* In support of this idea, there already exist huge databases with millions of
-  recorded flights spanning several decades. Pilots continue to record and
-  share their flights for personal and competition purposes.
+* In support of this idea, there already exist large databases with millions
+  of recorded flights spanning several decades. These databases continue to
+  grow as pilots record and share their flights for personal and competition
+  purposes.
 
 * The difficulty with this option is that common flight devices only record
   a tiny amount of the information available to a pilot: the average flight
-  track can only be expected to include a time series of positions. There is
+  record can only be expected to include a time series of positions. There is
   typically no information regarding the orientation, velocity, acceleration,
   pilot control inputs (brakes, accelerator, etc), or the weather conditions.
   Even the details of the aircraft are unknown. The question then becomes
@@ -77,13 +89,13 @@ Intro to the Intro
 
 * This thesis investigates the procedures necessary to produce a regression
   model over wind fields using position-only time series flight data for
-  a paraglider. It contributes a parametric paraglider dynamics model for
-  simulating paraglider flight tracks for a given wind field and pilot control
-  sequence. It discusses how to use the dynamics model with simulation-based
-  filtering methods to perform statistical flight reconstruction, and
-  usability requirements for a flight track to be suitable for flight
-  reconstruction. Lastly, it discusses the requirements for assembling
-  a predictive model suitable for in-flight wind field estimation.
+  a paraglider. Its primary contribution is a parametric paraglider dynamics
+  model for simulating paraglider flight tracks for a given wind field and
+  pilot control sequence. It discusses how the dynamics model enables
+  simulation-based filtering methods to perform statistical flight
+  reconstruction, and the requirements for a flight recording to be suitable
+  for flight reconstruction. Lastly, it discusses the requirements for
+  assembling a predictive model suitable for in-flight wind field estimation.
 
 
 Context
@@ -405,7 +417,6 @@ Roadmap
 [["Brief indication of how the thesis will proceed."]]
 
 
-
 Task Overview
 =============
 
@@ -557,6 +568,134 @@ related work in the context of those subtasks:
   natural to extend the content later on.
 
 
+Brief technical development
+===========================
+
+[[This section is as much for myself as anything. I would like to start with
+the kernel of the idea and iteratively refine the details, expanding the
+question complexity while converting the details into mathematical form. The
+goal is to walk the reader through the development of the idea and how the
+math motivates the design path.]]
+
+
+The long-term objective of this project is to learn wind patterns from
+recorded flights, but the more fundamental problem is how to estimate the wind
+field from an individual flight. Each step of the process follows the same
+formula: how can we use relationships to things we know to estimate
+something we don't know? This section develops these questions by rewriting
+them in mathematical terms, letting the needs of the math guide the process.
+
+To begin, our initial problem statement is to "estimate the wind field present
+during a paraglider flight". In mathematical form, we want to know the value
+of the wind field:
+
+.. math::
+
+   \mathcal{W}
+
+Because precise knowledge is impossible, we must be content with an estimate.
+To quantify the inherent uncertainty in our estimate we must invoke the
+language of probability, so our new objective is to "estimate the probability
+distribution over the wind field:
+
+.. math::
+
+   p \left( \mathcal{W} \right)
+
+The next task is to develop relationships between what we know and what we
+want. At the beginning, the only thing we know is the sequence of the
+paraglider's position over time. To put this into mathematical terms, we start
+by defining the time as :math:`t` and the paraglider position as
+:math:`\vec{r}`. Because the flight is recorded as a sequence of position over
+time, this means everything we know is encoded in :math:`\vec{r}(t)`.
+
+However, because the position was recorded using a GPS device it will be
+subject to sensor noise. To account for the sensor noise we need the language
+of probability to formalize the uncertainty. To simplify the notation, start
+by defining :math:`\vec{r}_t \defas \vec{r}(t)`. The mathematical form of what
+we know is then given by the probability distribution over the position is
+then :math:`p(\vec{r}_t)`.
+
+Given these new terms, our original objective can be defined as "estimate the
+wind field given a sequence of positions from a paraglider flight".
+Mathematically, our objective has now become:
+
+.. math::
+
+   p\left(\mathcal{W}\right) =
+      \int_{\vec{r}_t}
+         p \left( \mathcal{W} \given \vec{r}_t \right)
+         p \left( \vec{r}_t \right)
+         \mathrm{d}\vec{r}_t
+
+Because there is no direct relationship between the global wind field and the
+positions over time, we must decompose the problem definition into
+intermediate steps. For instance, although the ultimate objective is to
+estimate the entire wind field, our relationship between the wind and the
+paraglider position comes in the form of the paraglider aerodynamics, which
+only depend on the instantaneous wind velocities :math:`\vec{w}_t`. This
+expanded goal is then:
+
+.. math::
+
+   p \left( \mathcal{W} \given \vec{w}_t, \vec{r}_t \right)
+      p \left( \vec{w}_t \given \vec{r}_t \right)
+      p \left( \vec{r}_t \right)
+
+
+Some progress can be made by expanding the term :math:`p \left( \vec{w}_t
+\given \vec{r}_t \right)`. We know that the position of the paraglider depends
+on the wind velocity. An application of Bayes formula produces:
+
+.. math::
+
+   p \left( \vec{w}_t \given \vec{r}_t \right) =
+      \frac
+         {p \left( \vec{r}_t \given \vec{w}_t \right) p \left( \vec{w}_t \right)}
+         {p \left( \vec{r}_t \right)}
+
+
+Using the terms to rewrite our objective:
+
+.. math::
+
+   p \left( \mathcal{W} \given \vec{w}_t, \vec{r}_t \right)
+      p \left( \vec{r}_t \given \vec{w}_t \right)
+      p \left( \vec{w}_t \right)
+
+
+Note that the relationship given by :math:`p \left( \vec{r}_t \given \vec{w}_t
+\right)` is ultimately one of the model dynamics. Unfortunately we don't have
+any explicit relationship between the position of a paraglider given the wind
+field; we do, however, anticipate having a dynamics model that describes the
+relationship between a paraglider's movement and the wind if we also know the
+paraglider model :math:`\mathcal{M}` and the pilot control inputs
+:math:`\vec{u}_t`. By the rules of probability we expand:
+
+.. math::
+
+   p \left( \vec{r}_t \given \vec{w}_t \right) =
+      p \left( \vec{r}_t \given \vec{w}_t, \vec{u}_t, \mathcal{M} \right)
+      p \left( \vec{u}_t, \mathcal{M} \right)
+
+
+
+Paragliding
+===========
+
+.. figure:: figures/paraglider/paraglider_diagram.*
+   :name: paraglider_diagram
+   :width: 50%
+
+   A Paraglider. I hate this diagram.
+
+
+Wind Fields
+===========
+
+[[Describe the things I'm trying to find.]]
+
+
 Managing Uncertainty
 ====================
 
@@ -579,24 +718,16 @@ a dynamics model for the system: the paraglider wing, the pilot inputs, and
 the wind.
 
 
-Paragliding
-===========
-
-.. figure:: figures/paraglider/paraglider_diagram.*
-   :name: paraglider_diagram
-   :width: 50%
-
-   A Paraglider. I hate this diagram.
-
-
-Wind Fields
-===========
-
-NT
-
-
 Predictive Modeling
 ===================
+
+[[On a track-by-track basis, I'm trying to estimate, or "learn", the wind
+velocity field as a function of position. But more than that, I am proposing
+that the wind field has regular patterns that depend on the time of day, day
+of the year, and weather conditions. Conceivably there is a useable set of
+wind field models that capture recurring elements. If you know the historical
+patterns then if you can figure out the likely current configurations then you
+should be able to predict the unobserved parts of the wind field.]]
 
 You want to use observations to predict the current state. (Not sure "predict"
 is the right word here though; it's more like "estimation", except that
@@ -631,7 +762,8 @@ thing", whereas I'm trying to estimate the value of the **unobserved** thing.)
 Flight Reconstruction
 =====================
 
-NT
+[[What is flight reconstruction? How does it related to wind field
+estimation?]]
 
 
 Related Works
