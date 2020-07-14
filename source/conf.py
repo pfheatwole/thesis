@@ -167,9 +167,10 @@ htmlhelp_basename = 'Thesisdoc'
 # Note: `\given` must be used inside a `\left(` and `\right)`
 
 EXTRA_PREAMBLE = r"""
-\usepackage{csu}
-\usepackage{cancel}
 \usepackage{bm}
+\usepackage{cancel}
+\usepackage{csu}
+\usepackage{tabulary}
 \newcommand{\defas}{\stackrel{\mathrm{def}}{=}}
 \newcommand{\given}{\;\middle\vert\;}
 \renewcommand{\vec}[1]{\bm{#1}}
