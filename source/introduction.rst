@@ -29,73 +29,64 @@ Intro to the Intro
 
 .. Establishing a research territory (Context):
 
-* Paragliding is a recreational flying activity that uses a lightweight,
-  flexible wing called a *paraglider*.
-
-* Because a paraglider is a non-motorized aircraft, its motion is entirely
-  dictated by interactions with gravity and wind. Paragliding pilots are
-  totally dependent on the local air currents to achieve their flight goals.
-
-* The aerodynamic forces on the wing are the product of the relative velocity
-  between the wing and the air. If the air is ascending it allows the pilot to
-  slow their descent, or even gain altitude; conversely, sinking air will
-  cause the wing to descend more quickly. The horizontal component of the wind
-  determines the direction and distance the glider can fly.
-
-* A successful flight depends on the pilot's ability to recognize the
-  structure of the local air currents and navigate them in order to achieve
-  their flight goals, which may include optimizing for flight time, distance,
-  or a particular route.
-
-* Because a glider is constantly exchanging potential energy to counteract
-  gravity, the pilot must recognize the wind patterns as quickly as possible.
-  One way to improve the odds of success is to learn from previous flights:
-  although local wind configurations are difficult to predict, they can
-  exhibit recurring patterns. By learning those patterns a pilot can assess
-  the current wind conditions more quickly and with better odds of success,
-  and can prioritize flying to areas that are likely to support their flight
-  goals.
+Paragliding is a recreational flying activity that uses a lightweight,
+flexible wing for non-powered flight. Because a paraglider is a non-powered
+aircraft its motion is entirely dictated by interactions with gravity and
+wind, which means paragliding pilots are totally dependent on the local air
+currents to achieve their flight goals. As with all lifting surfaces, the
+aerodynamics of a paragliding wing depend on the relative velocity between the
+wing and the air, not the relative velocity between the wing and the ground.
+If the air is ascending it allows the pilot to slow their descent, or even
+gain altitude; conversely, sinking air will cause the wing to descend more
+quickly. The horizontal component of the wind determines the direction and
+distance the glider can fly. A successful flight depends on the pilot's
+ability to recognize the structure of the local air currents and navigate them
+in order to achieve their flight goals, which may include optimizing for
+flight time, distance, or a particular route. Because a glider is constantly
+spending energy to counteract the force of gravity, the pilot must recognize
+the wind patterns as quickly as possible to minimize energy loss. Experienced
+pilots assess the nearby air currents by observing vegetation, birds, or other
+pilots, but they can also leverage knowledge gained from previous flights:
+although local wind configurations are difficult to predict, they can exhibit
+recurring patterns. By learning those patterns a pilot can assess the current
+wind conditions more quickly and with better odds of success, and can
+prioritize flying to areas that are likely to support their flight goals.
 
 
 .. Establishing a niche (Problem and Significance):
 
-* Traditionally, wind patterns are discovered by pilots with a large amount of
-  flight time in a particular area, and are shared directly from one pilot to
-  another. For the pilot community to learn reliable patterns, individual
-  pilots must first recognize them and then be able to communicate them with
-  precision.
-
-* An appealing alternative would be to aggregate recorded flight data from
-  many pilots over many flights, detect the wind patterns automatically from
-  those flights, and build a graphical map to communicate the features of the
-  wind field visually instead of relying on verbal descriptions.
-
-* In support of this idea, there already exist large databases with millions
-  of recorded flights spanning several decades. These databases continue to
-  grow as pilots record and share their flights for personal and competition
-  purposes.
-
-* The difficulty with this option is that common flight devices only record
-  a tiny amount of the information available to a pilot: the average flight
-  record can only be expected to include a time series of positions. There is
-  typically no information regarding the orientation, velocity, acceleration,
-  pilot control inputs (brakes, accelerator, etc), or the weather conditions.
-  Even the details of the aircraft are unknown. The question then becomes
-  whether there is enough information in position-only time series data to
-  recover the wind vectors that were present during a flight.
+Traditionally, wind patterns are discovered by pilots with a large amount of
+flight time in a particular area, and are shared directly from one pilot to
+another. For the pilot community to learn reliable patterns, individual pilots
+must first recognize them and then be able to communicate them with precision.
+An appealing alternative would be to aggregate recorded flight data from many
+pilots over many flights, detect the wind patterns automatically from those
+flights, and build a graphical map to communicate the features of the wind
+field visually instead of relying on verbal descriptions. In support of this
+idea, there already exist large databases with millions of recorded flights
+spanning several decades. These databases continue to grow as pilots record
+and share their flights for personal and competition purposes. The difficulty
+with this option is that common flight devices only record a tiny amount of
+the information available to a pilot: the average flight record can only be
+expected to include a time series of positions. There is typically no
+information regarding the orientation, velocity, acceleration, pilot control
+inputs (brakes, accelerator, etc), or the weather conditions. Even the details
+of the aircraft are unknown. The question then becomes whether there is enough
+information in position-only time series data to recover the wind vectors that
+were present during a flight.
 
 
 .. Occupying the niche (Response):
 
-* This thesis investigates the procedures necessary to produce a regression
-  model over wind fields using position-only time series flight data for
-  a paraglider. Its primary contribution is a parametric paraglider dynamics
-  model for simulating paraglider flight tracks for a given wind field and
-  pilot control sequence. It discusses how the dynamics model enables
-  simulation-based filtering methods to perform statistical flight
-  reconstruction, and the requirements for a flight recording to be suitable
-  for flight reconstruction. Lastly, it discusses the requirements for
-  assembling a predictive model suitable for in-flight wind field estimation.
+This thesis investigates the procedures necessary to produce a predictive
+model for wind fields using position-only time series flight data from
+a paraglider. The primary contribution of this project is a parametric
+paraglider dynamics model for simulating paraglider flight tracks for a given
+wind field and pilot control sequence. It discusses how the dynamics model
+enables simulation-based filtering methods to perform statistical flight
+reconstruction, and the requirements for a flight recording to be suitable for
+flight reconstruction. Lastly, it discusses the requirements for assembling
+a predictive model suitable for in-flight wind field estimation.
 
 
 Context
