@@ -36,7 +36,7 @@ Contents
    :numbered:
 
    introduction
-   bayesian_filtering
+   flight_reconstruction
    canopy_geometry
    canopy_aerodynamics
    paraglider_geometry
