@@ -3,23 +3,46 @@ Flight Reconstruction
 *********************
 
 The questions in this paper must be transformed into a set of mathematical
-equivalents before we can apply tools that estimate their answers.
+equivalents before we can apply tools that estimate their answers. This
+chapter converts the informal problem statements from the introduction into
+formal, probabilistic relationships.
 
-This involves acknowledging the inherent uncertainty in the data and their
-models, defining the underlying form of the questions, and using the rules of
-conditional probability to decompose the problem into a series of intermediate
-steps.
+This step involves acknowledging the inherent uncertainty in the data and
+their models, defining the underlying form of the questions, and using the
+rules of conditional probability to decompose the problem into a series of
+intermediate steps.
 
 
-Probabilistic Methods
-=====================
+Order of events:
+
+1. Reiterate the problem statement: learning wind patterns from a set of
+   tracks, which first requires learning the wind fields from individual
+   tracks.
+
+#. Learning the wind fields requires some relationship between what we know
+   (flight tracks) and what we want (wind fields). That relationship comes in
+   the form of paraglider dynamics. (**This is the motivation for my
+   paraglider dynamics model.**) Using the dynamics to build a set of
+   proposals is the realm of *simulation-based filtering*.
+
+#. Because the paraglider dynamics require more than just wind, we must
+   estimate all the components of the flight used by the dynamics. Recreating
+   the entire state of a flight is what I'm calling "flight reconstruction."
+
+**Where in these steps should I establish the necessity of acknowledging the
+inherent uncertainty?** 
+
+
+Managing Uncertainty
+====================
 
 It is essential to acknowledge the inescapable uncertainty throughout these
-questions. Even the small amount of data we do have, the sequence of positions
-over time, is uncertain due to sensor noise and encoding inaccuracies. When
-uncertainty cannot be eliminated, it no longer makes sense to look for
-specific answers, but rather for the distribution that covers the range of
-plausible answers. This is the realm of probabilistic methods.
+questions. Even the small amount of data we do have (a sequence of positions
+over time) is uncertain due to sensor noise and encoding inaccuracies
+(quantization error). When uncertainty cannot be eliminated, it no longer
+makes sense to look for exact answers, but rather for the distribution that
+covers the plausible range of answers. This is the realm of probabilistic
+methods.
 
 The starting point is to recognize that all the questions in this paper follow
 a general form: "what is the value of *this* given the value of *that*?"
@@ -33,6 +56,224 @@ The underlying philosophy of Bayesian statistics is the use of probability to
 describe uncertainty.
 
 This section provides a Bayesian formulation of the goals of this project.
+
+
+Subtask breakdown
+=================
+
+The motivation question is "how to predict the current wind field given
+observations of previous wind configurations?" Before you can build a model
+for the current wind field, you need to estimate the previous wind fields.
+Estimating the previous wind fields requires observations of each field, which
+requires generating estimates of the wind velocities present during the
+recorded flights. The path forward then becomes:
+
+1. Estimate the wind vector sequences given the position vector sequences.
+
+   You're estimating wind as a function of time, but only at discrete times.
+
+   :math:`w_{1:T} \sim p\left( w_{1:T} \given t_{1:T}, r_{1:T} \right)`
+
+   This is the "flight reconstruction" step, so really what you're doing is
+   building an estimate of the probability distribution over the wind,
+   paraglider model, and pilot inputs, then marginalizing over model and
+   controls to get just the distribution over the wind.
+
+   How you implement this depends on whether you assume the wind vectors are
+   either independent (ie, :math:`w_t \,\bot\, w_{1:t-2} \,|\, w_{t-1}`). You
+   could conceivably build the regression model over `w` as you go (so if you
+   visit an area, leave, and return relatively soon you might want to use the
+   wind vector estimate from the prior visit), but that'd be **significantly**
+   more complex.
+
+2. Build wind field regression models
+
+   Modeling considerations at this stage:
+
+   * Real wind fields vary over time. How will the model capture that
+     variability? It could appear as an explicit parameter of the regression
+     model (so the regression model is a time-varying spatial function), or it
+     could appear in the indexing scheme for the set of regression models (so
+     each day is split into time intervals and a regression model is fitted to
+     each interval).
+
+   * Wind fields vary considerably with altitude. For the purposes of
+     predictive modeling, aircraft height above ground level (AGL) may be
+     a better predictor than the absolute altitude.
+
+   * How should the spatial correlations be handled? The wind field is
+     a spatial function, and some points in the field with be known with much
+     greater certainty than others, so the uncertainty must include spatial
+     variability as well. The traditional method for placing a distribution
+     over spatial functions is to use a Gaussian process, so the choice of
+     modelling spatial correlations equates to choosing a proper kernel
+     function.
+
+3. Build a predictive model from the set of regression models
+
+   This model will try to match new observations against the set of fitted
+   regression models. Because of the computational complexity involved with
+   evaluating the full regression models, this step will likely require (at
+   least) two sub-steps:
+
+   1. Extract a set of high-confidence patterns from the regression models.
+      (There's no point calculating low-probability estimates, so record
+      strongly correlated areas and discard the rest.)
+
+   2. Select patterns that match the current observations
+
+
+Brief probabilistic development
+===============================
+
+[[This section is as much for myself as anything, as I attempt to formalize
+the description from the introduction into probabilistic terms. I would like
+to start with the kernel of the idea and iteratively refine the details,
+expanding the question complexity while converting the details into
+mathematical form. The goal is to walk the reader through the development of
+the idea and how the math motivates the design path.]]
+
+
+The long-term objective of this project is to learn wind patterns from
+recorded flights, but the more fundamental problem is how to estimate the wind
+field from an individual flight. Each step of the process follows the same
+formula: how can we use relationships to things we know to estimate
+something we don't know? This section develops these questions by rewriting
+them in mathematical terms, letting the needs of the math guide the process.
+
+To begin, our initial problem statement is to "estimate the wind field present
+during a paraglider flight". In mathematical form, we want to know the value
+of the wind field:
+
+.. math::
+
+   \mathcal{W}
+
+Because precise knowledge is impossible, we must be content with an estimate.
+To quantify the inherent uncertainty in our estimate we must invoke the
+language of probability, so our new objective is to "estimate the probability
+distribution over the wind field:
+
+.. math::
+
+   p \left( \mathcal{W} \right)
+
+The next task is to develop relationships between what we know and what we
+want. At the beginning, the only thing we know is the sequence of the
+paraglider's position over time. To put this into mathematical terms, we start
+by defining the time as :math:`t` and the paraglider position as
+:math:`\vec{r}`. Because the flight is recorded as a sequence of position over
+time, this means everything we know is encoded in :math:`\vec{r}(t)`.
+
+However, because the position was recorded using a GPS device it will be
+subject to sensor noise. To account for the sensor noise we need the language
+of probability to formalize the uncertainty. To simplify the notation, start
+by defining :math:`\vec{r}_t \defas \vec{r}(t)`. The mathematical form of what
+we know is then given by the probability distribution over the position is
+then :math:`p(\vec{r}_t)`.
+
+Given these new terms, our original objective can be defined as "estimate the
+wind field given a sequence of positions from a paraglider flight".
+Mathematically, our objective has now become:
+
+.. math::
+
+   p\left(\mathcal{W}\right) =
+      \int_{\vec{r}_t}
+         p \left( \mathcal{W} \given \vec{r}_t \right)
+         p \left( \vec{r}_t \right)
+         \mathrm{d}\vec{r}_t
+
+Because there is no direct relationship between the global wind field and the
+positions over time, we must decompose the problem definition into
+intermediate steps. For instance, although the ultimate objective is to
+estimate the entire wind field, our relationship between the wind and the
+paraglider position comes in the form of the paraglider aerodynamics, which
+only depend on the instantaneous wind velocities :math:`\vec{w}_t`. This
+expanded goal is then:
+
+.. math::
+
+   p \left( \mathcal{W} \given \vec{w}_t, \vec{r}_t \right)
+      p \left( \vec{w}_t \given \vec{r}_t \right)
+      p \left( \vec{r}_t \right)
+
+
+Some progress can be made by expanding the term :math:`p \left( \vec{w}_t
+\given \vec{r}_t \right)`. We know that the position of the paraglider depends
+on the wind velocity. An application of Bayes formula produces:
+
+.. math::
+
+   p \left( \vec{w}_t \given \vec{r}_t \right) =
+      \frac
+         {p \left( \vec{r}_t \given \vec{w}_t \right) p \left( \vec{w}_t \right)}
+         {p \left( \vec{r}_t \right)}
+
+
+Using the terms to rewrite our objective:
+
+.. math::
+
+   p \left( \mathcal{W} \given \vec{w}_t, \vec{r}_t \right)
+      p \left( \vec{r}_t \given \vec{w}_t \right)
+      p \left( \vec{w}_t \right)
+
+
+Note that the relationship given by :math:`p \left( \vec{r}_t \given \vec{w}_t
+\right)` is ultimately one of the model dynamics. Unfortunately we don't have
+any explicit relationship between the position of a paraglider given the wind
+field; we do, however, anticipate having a dynamics model that describes the
+relationship between a paraglider's movement and the wind if we also know the
+paraglider model :math:`\mathcal{M}` and the pilot control inputs
+:math:`\vec{u}_t`. By the rules of probability we expand:
+
+.. math::
+
+   p \left( \vec{r}_t \given \vec{w}_t \right) =
+      p \left( \vec{r}_t \given \vec{w}_t, \vec{u}_t, \mathcal{M} \right)
+      p \left( \vec{u}_t, \mathcal{M} \right)
+
+
+Predictive Modeling
+===================
+
+[[On a track-by-track basis, I'm trying to estimate, or "learn", the wind
+velocity field as a function of position. But more than that, I am proposing
+that the wind field has regular patterns that depend on the time of day, day
+of the year, and weather conditions. Conceivably there is a useable set of
+wind field models that capture recurring elements. If you know the historical
+patterns then if you can figure out the likely current configurations then you
+should be able to predict the unobserved parts of the wind field.]]
+
+You want to use observations to predict the current state. (Not sure "predict"
+is the right word here though; it's more like "estimation", except that
+estimation in statistics means "estimating the true value of the observed
+thing", whereas I'm trying to estimate the value of the **unobserved** thing.)
+
+* Given a model, you would like to predict the value you would observe at
+  other points in the wind field.
+
+* Static models that simply summarize historical averages or rates aren't
+  useless, but they are pretty boring; for example, in Michael von Kaenel's
+  thesis the conclusion was simply "stay along the ridge", which pilots
+  already know.
+
+  Instead, we want a probabilistic model that gives answers that have been
+  **conditioned** on some *set of observations* :math:`\mathcal{O}
+  = \left\{x\right\}`. But there are multiple levels to this: a simple kriging
+  model can use just the current observations to try and build a regression
+  model over the current state, but conceptually the trained model is
+  essentially using the historical data as "pseudo-observations". You're not
+  just conditioning the answer based on current observations, but on the
+  historical observations as well. Mathematically, we say that the historical
+  data is encoded in a *model* :math:`\mathcal{M}`, so the distribution
+  becomes :math:`\vec{x} \sim p \left(\vec{x} \given \mathcal{O}, \mathcal{M}
+  \right)`.
+
+  This distinction is obvious to data science practitioners, but it's probably
+  helpful to make the idea explicit for the less mathematically inclined
+  reader.
 
 
 The Bayesian Formulation
@@ -100,6 +341,19 @@ At last, we can use SMC and MCMC methods to produce samples from the joint
 distribution, then average over the wind components of each particle to
 estimate our ultimate target: the distribution over the wind vectors that were
 present during the flight.
+
+
+Simulation-based filtering
+==========================
+
+* "State-space models can be used to incorporate subject knowledge on the
+  underlying dynamics of a time series by the introduction of a latent Markov
+  state-process." (:cite:`fearnhead2018ParticleFiltersData`)
+
+  We tend to do this without realizing it: when we watch a paraglider moving
+  around in the air, we use our intuition of wing performance (how the wing
+  interacts with the wind) to get a feeling for what the wind is doing. We
+  incorporate use our experience with wing dynamics to estimate the wind.
 
 
 Extra Notes
