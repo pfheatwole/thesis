@@ -2,6 +2,8 @@
 Formalized Problem Statement
 ****************************
 
+[[**FIXME**: this chapter needs a good title]]
+
 The questions in this paper must be transformed into a set of mathematical
 equivalents before we can apply tools that estimate their answers. This
 chapter converts the informal problem statements from the introduction into
@@ -377,3 +379,24 @@ Extra Notes
 
   This question probably belongs together with the discussion on *maneuvering
   target tracking*.
+
+
+SNIPPETS
+========
+
+* The goal of estimating the wind vector using incomplete and noisy
+  observations of the system is referred to as a *filtering problem*.
+
+  [[This term comes from the field of *stochastic processes*, which is the
+  study of processes that are partly predictable and partly random.]]
+
+* How can you estimate the unobserved wind vectors given the observed flight
+  tracks?
+
+* What is flight reconstruction? How do you accomplish it?
+
+* What is simulation-based filtering? How does it deal with underdetermined
+  systems?
+
+* Running the particle filter over a specific flight produces a set of
+  observations over points in the wind field at a specific time
