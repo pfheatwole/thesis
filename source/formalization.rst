@@ -1,6 +1,6 @@
-*********************
-Flight Reconstruction
-*********************
+****************************
+Formalized Problem Statement
+****************************
 
 The questions in this paper must be transformed into a set of mathematical
 equivalents before we can apply tools that estimate their answers. This
