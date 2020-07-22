@@ -110,6 +110,21 @@ Topics:
   the section coefficients, which means solving for the 2D section
   coefficients before estimating the 3D section forces and moments.
 
+Good reference images for brake deflections:
+
+.. figure:: figures/paraglider/geometry/Wikimedia_Paragliding.jpg
+
+   Brake deflection, example 1.
+
+   `Photograph <https://commons.wikimedia.org/wiki/File:Paragliding.jpg>`_  by
+   Frédéric Bonifas, distributed under a CC-BY-SA 3.0 license.
+
+.. figure:: figures/paraglider/geometry/Wikimedia_ApcoAllegra.jpg
+
+   Brake deflection, example 2.
+
+   `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`_ by
+   Wikimedia contributor "PiRK" under a CC-BY-SA 3.0 license.
 
 Mathematical Model
 ^^^^^^^^^^^^^^^^^^
