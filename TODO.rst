@@ -1,21 +1,29 @@
+* Review the rambling "derivation" of the canopy geometry. In particular,
+  eliminate that old version that used `\hat{x}_a`, it's a distraction.
+
+* Write up an informal description of "this is how a pilot standing on the
+  ground would estimate the wind by watching a glider in the air". That
+  informal description is the stepping stone to understanding "flight
+  reconstruction" and how it is possible even though the answers are only
+  approximate.
+
+* Create two parallel outlines, informal and formal, to develop the idea of
+  "predicting points of the wind field by learning from the past". The
+  informal development should be easy to read by a non-technical reader. It
+  should function as a guide to show that the math isn't as scary as it might
+  seem; the notation is intimidating, but ultimately it's based on logic that
+  the reader already understands.
+
+
 * Factor out the canopy plotting function from the thesis script
   `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
   it to to plot my Hook3ish
 
-* My `BrakeGeometry` plots are wrong. It assumes fixed hinges at 0.8c, which
+* My brake deflection plots are wrong. It assumes fixed hinges at 0.8c, which
   is very very wrong for the airfoil data I'm using with my Hook3ish
-
-* Finish the `ChordSurface` equations
 
 * Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (so
   "the anhedral of the arc" as opposed to "section anhedral").
-
-* Can I make two parallel outlines, informal and formal, to develop the idea
-  of "predicting points of the wind field by learning from the past"? I'd love
-  to have an easy-to-follow informal development for the non-technical reader,
-  and a translation of those informal concepts into mathematical form. Show
-  that the math isn't as scary as it might seem; the notation is intimidating,
-  but ultimately it's based on logic that the reader already understands.
 
 * Should I use `h_a/R` for "angular momentum of the apparent mass `a` about
   `R`"?  I like the slash as "X with respect to Y", which makes sense here.

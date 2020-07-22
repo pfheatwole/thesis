@@ -111,7 +111,7 @@ Canopy Geometry
     a lifting surface by inflating nylon through the intakes.]]
 
 
-* Why is an explicit canopy geometry necessary for **this** project?
+* Why is a canopy geometry necessary for **this** project?
 
   * Paraglider dynamics depend on canopy aerodynamics. If the aerodynamics and
     inertial properties of a canopy are unknown, they must be estimated from
@@ -209,12 +209,9 @@ Canopy Geometry
     parametrization is the choice of the design curves, but that's a different
     topic that using parametric design curves.]]**
 
-  * The parametrization should map directly to the quantities of interest (ie,
-    you can say explicitly where a point on the chord goes, etc). The design
-    parameters must be intuitive: when you look at a wing you tend to notice
-    particular details; those details should drive the choice of parameters.
-    There shouldn't be intermediate translations between what you the details
-    you'd like to describe and how you specify the design.
+  * The parametrization should map directly to the quantities of interest.
+    There shouldn't be intermediate translations between the details you'd like
+    to describe and how you specify the design.
 
   * There should be as few parameters as possible. For example, I shouldn't
     have to specify a rotation point for geometric torsion; the rotation point
@@ -287,7 +284,8 @@ Related Work
     Handbook", except he requires explicit rotation points for some reason and
     he doesn't appear to allow difference reference points for `x` and `yz`.
 
-  * Benedetti 2012, :cite:`benedetti2012ParaglidersFlightDynamics`
+  * Benedetti :cite:`benedetti2012ParaglidersFlightDynamics` uses fixed `r_x
+    = r_yz = 0.25`.
 
 
 * What are some examples of design curves?
@@ -322,60 +320,122 @@ Fundamental Definitions
 
 * *projected span*, *projected area*, *projected aspect ratio*
 
-* *section index* (not sure how to define this; it works for any reference
-  line through the sections, regardless of their length, but it involves the
-  **total** line length, doesn't it? I seem to recall frustration trying to
-  decide how to handle the fact that the lengths of `x(s)` and `yz(s)` can
-  change, and thus the position that was correct for one pair might be wrong
-  for another. For example, suppose you set `yz(0.1) = A` for some given
-  `x(s)`, but then you change `x(s)` to include a bump in the middle: the
-  `x(0.1)` will no longer correspond to the original `x(0.1)`, even if that
-  part of the original curve was unchanged.)
+* *section index* [[this is a parametrization of the design curves, not
+  a fundamental property you need for a wing, or even for the leading edge
+  equation; doesn't belong here]]
 
 .. math::
 
-   s \defas \frac{y_\mathrm{flat}}{\frac{b_\mathrm{flat}}{2}}
+   s \defas \, 2 \, \frac{y_\mathrm{flat}}{b_\mathrm{flat}}
 
 [[...where :math:`b_\mathrm{flat}` is later defined as the length of
 :math:`yz(s)`. Note that **this definition assumes the semispan lengths are
 equal.**]]
 
-* *section torsion*
+* *section torsion*: the angle from the wing x-axis to the section x-axis, as
+  produced by a right-handed rotation about the wing y-axis
 
-.. math::
+  .. math::
 
-   \Theta \defas
-      \arccos \left( \frac
-         {\vec{\hat{x}}_\mathrm{section} \cdot \vec{\hat{x}}_\mathrm{wing}}
-         {\left\| \vec{\hat{x}}_\mathrm{section} \right\| \left\| \vec{\hat{x}}_\mathrm{wing} \right\|}
-      \right)
+     \Theta \defas
+        \arctan \left(
+           \frac
+              {\vec{\hat{x}}_\mathrm{wing} \times \vec{\hat{x}}_\mathrm{section}}
+              {\vec{\hat{x}}_\mathrm{wing} \cdot \vec{\hat{x}}_\mathrm{section}}
+           \cdot \vec{\hat{y}}_\mathrm{wing}
+        \right)
 
-* *section anhedral*
+* *section anhedral*: the angle from the wing y-axis to the section y-axis, as
+  produced by a right-handed rotation about the wing x-axis
 
-.. math::
+  .. math::
 
-   \Gamma \defas
-      \arccos \left( \frac
-         {\vec{\hat{y}}_\mathrm{section} \cdot \vec{\hat{y}}_\mathrm{wing}}
-         {\left\| \vec{\hat{y}}_\mathrm{section} \right\| \left\| \vec{\hat{y}}_\mathrm{wing} \right\|}
-      \right)
+     \Gamma \defas
+        \arctan \left(
+           \frac
+              {\vec{\hat{y}}_\mathrm{wing} \times \vec{\hat{y}}_\mathrm{section}}
+              {\vec{\hat{y}}_\mathrm{wing} \cdot \vec{\hat{y}}_\mathrm{section}}
+           \cdot \vec{\hat{x}}_\mathrm{wing}
+        \right)
 
-* There are also a variety of standard terms I will avoid: *planform*, *mean
-  aerodynamic chord*, maybe more? The term *planform*; most texts assume the
-  wing is flat and so the projected area is essentially the flat area, and
-  thus differentiating the two is largely neglected in standard aerodynamic
-  works. The mean aerodynamic chord is a convenient metric for comparing flat
-  wings and for some simplifying equations, but for wings with significant arc
-  anhedral I'm not sure how beneficial this term really is.
+  Note that this mathematical definition of the anhedral angle is different
+  from the conventional definition of dihedral angle. The convention for wing
+  dihedral is that the angle is measured as the positive "upwards" angle of the
+  wing. That definition is ambiguous, so this definition uses signed angles and
+  standard right-hand rules.
+
+
+* I think that these definitions that "assume a right-handed rotation" only
+  work because I am forcing the section y-axes to stay in the `yz`-plane. You
+  could create geometries that include rotation about
+  :math:`\vec{\hat{z}}_\mathrm{wing}`, but it would be a pain to analyze using
+  section data, and would require unusual section profiles to produce lift for
+  the nominal "moving straight" case while still producing useful lift for the
+  off-angle cases. In other words, I'm trying to keep this geometry simple so
+  I'm rejecting the probability that you would want such a thing is zero.
+
+  Sidenote: my "right-handed rotation about the wing x-axis" or "wing y-axis"
+  is why the rotations work the way they do. I'm not rotating about section
+  axes at all. I could have defined things in terms of rotations about the
+  section axes: why didn't I? **I suspect it's helpful when decoupling the
+  parameters. Good to call that out if possible.** Does it allow you to reason
+  about dihedral and torsion independently?
+
+  Side: I think part of this came about because I wanted to assume the arc was
+  produced by the lines. The wing starts flat, then the lines pull various
+  sections downwards (and inwards), which is why I start with a flat wing and
+  then rotate it about the global x-axis (not the section x-axes): it was
+  simply easier for me to reason about. Oh, and **to compute the final angle of
+  a section you don't have to integrate over all the section-local angles.**
+  That's pretty helpful. And if you consider the alternative (that the arc
+  produces a shearing instead of rotation), then those weird angled wing
+  segments are going to produce some funky cross-flow that seems pretty
+  unlikely to be amenable to analysis with section coefficient data.
+
+  So really, I have two implicit choices with my design:
+
+  1. `x(s)` works by translating (shearing) the wing sections
+
+  2. `yz(s)` works by rotating the wing sections
+
+  If `x(s)` rotated the wing sections you'd get wedge-shaped segments (segment
+  leading and trailing edges would be different lengths). If `yz(s)`
+  translated/sheared the wing sections you'd get diagonal segments with
+  significant cross-flow due to the spanwise pressure gradient for the section
+  (meaning the airfoil coefficients are unlikely to be representative of the
+  final behavior). **If I state up front that I want a simple geometry that's
+  amenable to analysis by wing coefficients, then these choices are well
+  motivated.** Of course, I still can't analyze billowing cells but ah well.
+
+  Aah, okay, I get it now: you start by designing the flat wing. I'm assuming
+  that when the wing is flat the only thing you design is `c(s)`, `x(s)`, and
+  `theta(s)`: the wing is flat, so that rotation is naturally about the wing
+  (global) y-axis. You then use the line geometry to pull down on the sections,
+  and I assume that pulling down will produce a bending, not a shearing, of the
+  wing segments; also, the lines don't know (or care) about the section x-axes,
+  they which is why dihedral is rotation about the global x-axis. It's all
+  about the sequence of events.
+
+
+
+* There are also a variety of standard terms I will avoid due to ambiguity:
+  *planform*, *mean aerodynamic chord*, maybe more? For *planform*, most texts
+  assume the wing is flat and so the projected area is essentially the flat
+  area, and thus differentiating the two is largely neglected in standard
+  aerodynamic works. The mean aerodynamic chord is a convenient metric for
+  comparing flat wings and for some simplifying equations, but for wings with
+  significant arc anhedral I'm not sure how beneficial this term really is;
+  it's a mistake to compare wings based on the MAC alone, so I'd rather avoid
+  any mistaken comparisons.
 
 
 Chord Surface
 =============
 
-[[This section develops a novel parametric model of the chord surface. Discuss
+[[This section develops a novel parametrization of the chord surface. Discuss
 previous methods of defining the chords, and the limitations of those old
-methods. Then describe what "would" be a convenient workflow, and announce
-that this parametric form enables that more convenient workflow.]]
+methods. Then describe what "would" be a convenient workflow, and demonstrate
+the convenience of this choice.]
 
 The first step of designing a wing using sections is to specify the scale,
 position, and orientation of the sections. The scale of a section is the length

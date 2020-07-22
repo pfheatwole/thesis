@@ -5,6 +5,24 @@ Paraglider Geometry
 A paraglider is a system of two components: a wing, and a harness.
 
 
+Related work
+============
+
+*rigging*: "the system of ropes, chains, and tackle used to support and
+control the masts, sails, and yards of a sailing vessel"
+
+* Lingard 1995: uses a *rigging angle* for positioning the payload, which is
+  related to the assumption "that the system can be induced to fly at the
+  angle of attack corresponding to optimum L/D". I don't like coupling those
+  two concepts this closely; if you want to compute the angle that would
+  induce the optimum L/D you can then specify the `kappa_x, kappa_z` just the
+  same without muddying the definition.
+
+* Benedetti :cite:`benedetti2012ParaglidersFlightDynamics` uses the same idea
+  for positioning the harness as I do, except he uses relative `x` and
+  absolute `z` whereas I use relative for both.
+
+
 Canopy
 ======
 
