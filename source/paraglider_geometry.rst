@@ -144,12 +144,16 @@ point along the chord:
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_hinge.*
 
+   Deflection angle relative to a fixed hinge point.
+
 This definition is troublesome for a flexible wing, since there is no fixed
 hinge point; the deflection occurs as a variable arc between the trailing edge
 to some point on the chord. A more convenient definition is the total
 deflection angle produced by the trailing edge:
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_arc.*
+
+   Deflection angle relative to the leading edge.
 
 This definition moves some of the complexity out of the implementation and
 into how the set of coefficients are defined. Without recording a fixed
@@ -183,15 +187,17 @@ applicability/accuracy of this crude model depends on the arc anhedral:
 
 .. figure:: figures/paraglider/geometry/brake_deflections_anhedral23_Bl025_Br1.*
 
-   Cubic brake deflection angle distribution with :math:`\delta_{Bl} = 0.25` and
-   :math:`\delta_{Br} = 1` for a wing with a mean anhedral angle of 23
-   degrees.
+   Cubic brake deflection, example 1.
+
+   Parameters: :math:`\delta_{Bl} = 0.25` and :math:`\delta_{Br} = 1` for
+   a wing with a mean anhedral angle of 23 degrees.
 
 .. figure:: figures/paraglider/geometry/brake_deflections_anhedral33_Bl025_Br1.*
 
-   Cubic brake deflection angle distribution with :math:`\delta_{Bl} = 0.25` and
-   :math:`\delta_{Br} = 1` for a wing with a mean anhedral angle of 33
-   degrees.
+   Cubic brake deflection, example 2.
+
+   Parameters: :math:`\delta_{Bl} = 0.25` and :math:`\delta_{Br} = 1` for
+   a wing with a mean anhedral angle of 33 degrees.
 
 **FIXME: these plots were made using the `plot_paraglider_wing` function that
 assumed fixed hinges at 0.8c and the delta is the angle from 0.8c to the TE.
