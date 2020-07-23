@@ -3,6 +3,167 @@ Derivations
 ***********
 
 
+General equation of a chord surface
+===================================
+
+The first step of designing a wing using *sections* is to define a function
+that returns points on the section chords as a function of some arbitrary
+*section index* and some ratio :math:`0 \le r \le 1` that specifies the
+position on the chord.
+
+Because the section leading edge will be used as the origin for the section
+profiles, it is intuitive to start by defining the leading edge as
+a parametric curve of the section index.
+
+Dropping the section index parameter for notational simplicity, this means we
+need :math:`\vec{r}_{LE/WO}^w` for each section, where :math:`WO` is the wing
+canopy origin.
+
+The chord surface is produced by specifying the position, scale, and
+orientation of each section. For the position of a section, you can use any
+reference point :math:`\mathrm{RP}` in the coordinate system of that section.
+
+.. math::
+
+   \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w =
+      \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
+      + \vec{r}_{\mathrm{LE}/\mathrm{RP}}^w
+
+If the leading edge is defined as the origin of the section, then the equation
+simplifies to:
+
+.. math::
+
+   \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w =
+         \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
+         + \mat{C}_{w/s} \vec{r}_{\mathrm{LE}/\mathrm{RP}}^s
+
+Where :math:`\mat{C}_{w/s}` is the directed cosine matrix (DCM) of the wing
+reference frame :math:`\mathcal{F}_w` with respect to the section reference
+frame :math:`\mathcal{F}_s`.
+
+Although the reference point can be any point in the section's coordinate
+system, it is convenient to constrain it to be a point on the section chord,
+in which case the reference point is a function of the chord ratio :math:`r`
+such that :math:`\vec{r}_{\mathrm{LE}/\mathrm{RP}}^s = r\, c\, \hat{x}^s_s`,
+where :math:`\hat{x}^s_s = \begin{bmatrix}1 & 0 & 0\end{bmatrix}^T` is the
+section x-axis in the section coordinate system.
+
+.. math::
+
+   \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w =
+         \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
+         + \mat{C}_{w/s} r\, c\, \hat{x}^s_s
+
+
+This equation covers the majority of the choices for chord surface
+parametrizations in common use. Designs that position the chords by specifying
+their leading edge are equivalent to setting :math:`r = 0` and
+`\vec{r}_{\mathrm{RP}/\mathrm{WO}}^w = \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w`.
+Other designs use the quarter-chord positions for the reference points, in
+which case :math:`r = 0.25`.
+
+The problem with these fixed parametrizations is that they only support
+a single reference point for design in all three dimensions. If a designer
+wants to position the quarter-chord (:math:`r = 0.25`) along a circular arch
+and the trailing edge (:math:`r = 1`) along a straight line, then they must
+manually calculate the positions that would achieve that design for a given
+reference point. It is much easier to allow different reference points for
+each dimension.
+
+Define:
+
+.. math::
+
+   \mat{R} \defas \begin{bmatrix}
+      r_x & 0 & 0\\
+      0 & r_y & 0\\
+      0 & 0 & r_z
+   \end{bmatrix}
+
+The final form of the generalized equation for the leading edge, allowing
+independent design curves and reference point for each of the position
+dimensions, is then:
+
+.. math::
+
+   \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w =
+         \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
+         + \mat{R} \mat{C}_{w/s} c\, \hat{x}^s_s
+
+And the position of some point :math:`P` at a point :math:`0 \le p \le 1` on
+the section chords:
+
+.. math::
+
+   \begin{aligned}
+   \vec{r}_{P/WO}^w
+      &= \vec{r}_{LE/WO}^w + \vec{r}_{P/LE}^w\\
+      &= \vec{r}_{LE/WO}^w - \vec{r}_{LE/P}^w\\
+      &=
+         \left(
+            \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
+            + \mat{R} \mat{C}_{w/s} c\, \hat{x}^s_s
+         \right)
+         - p\, \mat{C}_{w/s} c\, \hat{x}^s_s\\
+   \end{aligned}
+
+
+Which simplifies to the final, general form of points on the section chords as
+a function of the section index :math:`s` and the chord ratio :math:`p`:
+
+.. math::
+   :label: chord_points
+
+   \vec{r}_{P/WO}^w(s, p) =
+      \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w(s)
+      + \left(\mat{R}(s) - p\right) \mat{C}_{w/s} c(s)\, \hat{x}^s_s(s)
+
+All the notational baggage can make this equation look more complicated than
+it really is. Suppose the points on the chord are simply :math:`\left\langle
+x, y, z \right\rangle` in wing coordinates, the reference points in wing
+coordinates are :math:`\vec{r}_{RP/WO} = \left\langle x_r, y_r, z_r
+\right\rangle`, and :math:`\mat{K}(s) = \left(\mat{R}(s) - p\right) c(s)`,
+then the structure is easier to see:
+
+.. math::
+   :label: simplifed_chord_points
+
+   \left\langle x, y, z \right\rangle =
+      \left\langle x_r, y_r, z_r \right\rangle
+      + \mat{K} \hat{x}_s^w
+
+Or, using separate equations instead of matrix math:
+
+.. math::
+
+   \begin{aligned}
+   x &= x_r + (r_x - p) \hat{x}_x\\
+   y &= y_r + (r_y - p) \hat{x}_y\\
+   z &= z_r + (r_z - p) \hat{x}_z
+   \end{aligned}
+
+
+Designing a chord surface with these equations requires five steps:
+
+1. Define the *section index* :math:`s`
+
+2. Define a scalar-valued function for the section scaling factors
+   :math:`c(s)`
+
+3. Choose the reference point positions on the chords :math:`\left\{ r_x(s),
+   r_y(s), r_z(s) \right\}`.
+
+4. Define a 3-vector valued function for the section reference point positions
+   in wing coordinates :math:`\vec{r}_{RP/WO}^w(s) = \left\langle x(s), y(s),
+   z(s) \right\rangle`
+
+5. Define the section orientation matrices :math:`\mat{C}_{w/s}(s)`
+
+[[In :doc:`canopy_geometry` I show a set of choices that work well for
+designing parafoils.]]
+
+
 Area and Volume of a Mesh
 =========================
 
