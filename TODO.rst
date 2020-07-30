@@ -1,19 +1,32 @@
-* Review the rambling "derivation" of the canopy geometry. In particular,
-  eliminate that old version that used `\hat{x}_a`, it's a distraction.
-
 * Write up an informal description of "this is how a pilot standing on the
   ground would estimate the wind by watching a glider in the air". That
   informal description is the stepping stone to understanding "flight
   reconstruction" and how it is possible even though the answers are only
   approximate.
 
-* Create two parallel outlines, informal and formal, to develop the idea of
-  "predicting points of the wind field by learning from the past". The
-  informal development should be easy to read by a non-technical reader. It
-  should function as a guide to show that the math isn't as scary as it might
-  seem; the notation is intimidating, but ultimately it's based on logic that
-  the reader already understands.
+* Create two parallel outlines, informal and formal, for the overall paper:
+  work through developing the idea of "predicting points of the wind field by
+  learning from the past". The informal development should be easy to read by
+  a non-technical reader. It should function as a guide to show that the math
+  isn't as scary as it might seem; the notation is intimidating, but
+  ultimately it's based on logic that the reader already understands.
 
+
+* Review the text for `Gamma` as a reference to section dihedral. I've
+  abandoned Gamma in favor of traditional Euler angle parameters.
+
+* Review the rambling "derivation" of the canopy geometry. In particular,
+  eliminate that old version that used `\hat{x}_a`, it's a distraction.
+
+  In fact, remove most of that content entirely. I'm moving the derivation of
+  the general equation for points on the chord surface into the "Derivations"
+  chapter. **The "Canopy Geometry" chapter should be specifically about (1)
+  observing the important details of a canopy geometry, and (2) choosing
+  a parametrization of the general equation that is most suitable for
+  capturing those design details.**
+
+* Record the momentum derivatives for Barrows in the derivation. It wasn't
+  clear from the paper exactly how those worked.
 
 * Factor out the canopy plotting function from the thesis script
   `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
@@ -236,11 +249,11 @@ Structural
 Formatting
 ----------
 
+* Check headings for consistent capitalization (title case or sentence case)
+
 * Verify against CalPoly formatting
 
   * ref: http://www.grad.calpoly.edu/masters-thesis/masters-thesis.html
-
-* Chapter pages don't have page numbers
 
 * Code literals (surrounded by ``\`\```) are gray shaded in HTML, but have
   white backgrounds in the PDF. I tried setting ``'sphinxsetup':

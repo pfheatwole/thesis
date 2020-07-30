@@ -39,8 +39,8 @@ aerodynamics of a paragliding wing depend on the relative velocity between the
 wing and the air, not the relative velocity between the wing and the ground.
 If the air is ascending it allows the pilot to slow their descent, or even
 gain altitude; conversely, sinking air will cause the wing to descend more
-quickly. The horizontal component of the wind determines the direction and
-distance the glider can fly. A successful flight depends on the pilot's
+quickly. The horizontal component of the wind determines the speed the glider
+can fly in a given direction. A successful flight depends on the pilot's
 ability to recognize the structure of the local air currents and navigate them
 in order to achieve their flight goals, which may include optimizing for
 flight time, distance, or a particular route. Because a glider is constantly
@@ -68,8 +68,8 @@ idea, there already exist large databases with millions of recorded flights
 spanning several decades. These databases continue to grow as pilots record
 and share their flights for personal and competition purposes. The difficulty
 with this option is that common flight devices only record a tiny amount of
-the information available to a pilot: the average flight record can only be
-expected to include a time series of positions. There is typically no
+the information available to a pilot: in fact, the average flight record can
+only be expected to include a time series of positions. There is typically no
 information regarding the orientation, velocity, acceleration, pilot control
 inputs (brakes, accelerator, etc), or the weather conditions. Even the details
 of the aircraft are unknown. The question then becomes whether there is enough

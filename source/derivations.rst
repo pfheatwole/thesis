@@ -3,8 +3,14 @@ Derivations
 ***********
 
 
-General equation of a chord surface
-===================================
+General parametrization of a chord surface
+==========================================
+
+[[NOTE TO SELF: the origin of the chord surface is defined by the origins of
+the position functions. Let the user of the chord surface (eg,
+a `ParagliderWing`) position and orient the chord surface as they like; don't
+pollute this definition with constraints like "the origin is the central
+leading edge".]]
 
 The first step of designing a wing using *sections* is to define a function
 that returns points on the section chords as a function of some arbitrary
