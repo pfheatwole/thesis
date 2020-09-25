@@ -275,7 +275,7 @@ Canopy Geometry
 
 .. figure:: figures/paraglider/geometry/wing_sections2.svg
 
-   Wing sections.
+   Wing section profiles.
 
    Note that section profiles are not the same thing as the ribs of a parafoil.
    Parafoil ribs are the internal structure that produce the desired section

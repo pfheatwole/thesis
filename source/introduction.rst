@@ -317,9 +317,9 @@ Restatement of the response
 
    * Code
 
-     * Paraglider dynamics model
+     * Paraglider dynamics models
 
-     * Reference wind models (for testing the model and generating test flights)
+     * Simple wind models (for testing the model and generating test flights)
 
      * A simulator
 
@@ -336,6 +336,8 @@ Restatement of the response
      * Numerical libraries (numpy, scipy)
 
      * Large library ecosystem (s2sphere, sklearn, databases, PyMC3, pandas, etc)
+
+     * Easy integration into tools w/ native support (Blender, FreeCAD, QGIS)
 
 #. Things I'd like to discuss but not finish
 

@@ -35,6 +35,250 @@ Order of events:
 inherent uncertainty?** 
 
 
+SCRATCHWORK
+===========
+
+Goals:
+
+* Break the informal problem statement into subtasks
+
+* Demonstrate the need for dealing with uncertainty
+
+* Introduce filtering methods
+
+* Formalize the subtasks in the language of probability [[Don't define the
+  distributions, just use probabilistic relationships to acknowledge their
+  existence]]
+
+* Conclude with the need for a paraglider dynamics model
+
+
+Outline:
+
+1. Introduction
+
+   1. Restate the informal problem statement
+
+   #. Break the informal task into informal subtasks [[no probability yet]]
+
+      [[Maybe develop the ideas "in reverse", then summarize in order?]]
+
+      1. Estimate wind vectors from position
+
+      #. Estimate wind field regression model for an individual track
+
+      #. Build a set of regression models
+
+      #. Pattern detection over the set of regression models
+
+      #. Encode a predictive model
+
+   #. Highlight the focus of this thesis: estimating the sequence of wind vectors
+
+      * The predictive model motivates the sequence of events, but it all starts
+        with getting the wind vector time-series.
+
+      * We have uncertain position data and unknown wind, controls, and model.
+        That uncertainty motivates a probabilistic formulation.
+
+#. Probabilistic filtering
+
+   * [[For now, assume this chapter has already been written. This section
+     lets me assume the reader has all the knowledge they need for me to dive
+     right into "here's my problem as a particle filtering problem"]]
+
+   * Managing uncertainty through Bayesian probability
+
+   * Uncertainty propagates through everything, so EVERYTHING is described in
+     terms of distribution
+
+   * Conditional probability is the key, in SO many ways
+
+     * Relates what we know to estimate what we don't
+
+     * Enables decomposition (eg, Markov processes -> recursive estimation)
+
+   * Filtering problems
+
+   * Filtering frameworks [[simulation-based filtering, in particular]]
+
+   * Predictive models? (only seems relevant for understanding the ultimate
+     goal)
+
+   * Regression models? (only seems relevant once you get to the point of
+     estimating wind fields from the wind vectors)
+
+#. Formulate "wind vector estimation" as a probabilistic filtering problem
+
+   * Probably a good spot to formalize what I mean by *flight reconstruction*
+
+   * Should I focus on just the "wind vector estimation" problem, relying on
+     that informal logic, or should I work backwards ("we want a predictive
+     model, which requires a set of patterns, which requires ..."), writing
+     each one as a general probabilistic formulation?
+
+     I kind of like the idea of reiterating that "reverse order" derivation in
+     a more structured way; we'll see how icky the math gets.
+
+   * Don't choose any particular filtering architecture at this point, just
+     write the basic probabilist relationships.
+
+   * Every particle filter will need a proposal distribution and a likelihood
+
+     * **The proposal distribution motivates the need for a paraglider
+       dynamics model.** The dynamics depend on the wind and control inputs,
+       so we need dynamics (proposals) for those too.
+
+     * Not sure how I'll deal with the likelihood, if at all. I probably have
+       enough just getting through the dynamics...
+
+
+
+
+[[[[[[[[[[]]]]]]]]]]
+
+
+* What is the ultimate goal that motivated this project?
+
+  * The ultimate goal is to produce a predictive model that can estimate the
+    wind vectors at unobserved locations in the wind field given measurements
+    of other points in the wind field.
+
+  * [[Maybe use language like "patterns", etc]]
+
+
+
+* What are the subtasks?
+
+  * Finding patterns in wind field regression models requires a set of wind
+    field regression models.
+
+  * Finding individual regression models requires estimating the wind vectors
+    at individual points in time.
+
+
+* How do you use position to estimate wind?
+
+  * [[What does position tell you about wind?]]
+
+  * Individual positions tell you nothing except the fact that a pilot chose
+    to be flying that day. It suggests reasonable flying conditions, but you
+    don't even know what (the weather could have changed, the wing may be
+    unusually high performance, or the pilot could just be crazy).
+
+  * You need a sequence of position over time to learn anything.
+
+
+
+
+  * "State-space models can be used to incorporate subject knowledge of the
+    underlying dynamics of a time series by the introduction of a latent Markov
+    state-process."
+
+  * The basic strategy is one of guessing everything that could have happened,
+    eliminate the implausible scenarios, then reason about what's left.
+    Mathematically, the goal is to generate a large set of "proposals" (guesses)
+    that are consistent with the dynamics (ie, we need to guess everything that
+    could *conceviably* happen) and weight them according to how compatible they
+    are with the data (give them a plausibility score based on how likely the
+    measurement would be if the proposal was what really happened).
+
+  * Proposals are changes to the state that could happen given our knowledge of
+    the dynamics. Instead of saying "anything could happen" we assume some
+    things are impossible (such as the wing flight at the speed of light or
+    accelerating at 10g), which constrains what could have happened. We then
+    look at the measurement and constrain the possibilities even more. What's
+    left might be usefully precise, or it might still be vague.
+
+  * Recursive estimation accepts that you can't generate a proposal for the
+    entire trajectory in one go, so instead you generate proposals for each
+    time step sequentially. This assumption typically involves a Markov
+    assumption to simplify the math.
+
+
+* What makes the task difficult?
+
+  * We don't have any measurements of the thing we're estimating; only have
+    measurements of a variable which is related to it.
+
+  * There is uncertainty everywhere: the dynamics, the other state variables,
+    even the measurements are noisy.
+
+
+* How do you manage uncertainty?
+
+  * The language of probability.
+
+
+* What probabilistic tools/frameworks are available?
+
+  * Particle filters / sequential Monte Carlo
+
+
+* What do you need for a particle filter?
+
+  * Fundamentally, a particle filter needs two things:
+
+    1. Proposals
+
+    2. Likelihoods
+
+  * The proposal are for the state. In this case, the "state" is not just the
+    state of wing, but also of the wind and control inputs. Those are
+    conceptually independent systems, so really we need three proposals.
+
+  * Proposals are generically a relationship between a current value and some
+    upcoming value. The only requirement of the proposals is that they assign
+    a non-zero probability to all **possible** outcomes, but the more
+    accurately they capture the true transition probabilities the better the
+    estimate (since you're working with a finite number of particles).
+
+    If the transitions from state to state arise represent the evolution of
+    a dynamical system, then the proposal can be formed by the dynamics of the
+    system. Ideally we would we have three "true" dynamics models for the
+    wind, wind, and controls, but that's beyond the scope of this paper. For
+    now I'll just assume integrated white noise is satisfactory.
+
+
+* What do you need for the proposal?
+
+  * We don't know the "true" paraglider dynamics model, so we're using
+    a parametric approximation of it. That lack of knowledge of the parameters
+    would lead into a *parameter estimation* problem, but it's unclear if
+    statistical parameter estimation is feasible. It's probably more feasible
+    to crowdsource a collection of parameters that describe existing wings,
+    then building an empirical distribution over parameter sets. Each set can
+    be given an (empirical) weight that says how likely that wing is to have
+    been flown. You'd then run the particle filter with those weighted
+    parameter sets to produce a rough approximation of the joint distribution
+    over states and parameters.
+
+  * Related to the parameter estimation issue: if I'm allowing the parameters
+    of the wing canopy (the "design functions") to themselves be parametric,
+    then you can't assume the model is time-homogeneous. You'll need to
+    specify distributions over those hyperparameters and run parameter
+    estimation over that larger space, which would be a GIANT pain;
+    dimensional **explosion**. Well, I guess it's better to have a model that
+    *can* be that flexible even if its not feasible to utilize that
+    flexibility for some tasks. And hey, at least it'd help you quantify the
+    impact of those hyperparameters (ie, you can see how bad your homogeneous
+    model would be if the underlying data was actually using time-varying
+    parameters).
+
+
+
+* What do you need for the likelihood?
+
+
+
+* Although you could estimate the regression model for the wind field at the
+  same time as you're estimating the wind vectors (and indeed, this would
+  theoretically perform better), it's easier to model the wind vectors as
+  a Markov process.
+
+]]
+
+
 Managing Uncertainty
 ====================
 
@@ -63,7 +307,7 @@ This section provides a Bayesian formulation of the goals of this project.
 Subtask breakdown
 =================
 
-The motivation question is "how to predict the current wind field given
+The motivating question is "how to predict the current wind field given
 observations of previous wind configurations?" Before you can build a model
 for the current wind field, you need to estimate the previous wind fields.
 Estimating the previous wind fields requires observations of each field, which
@@ -74,7 +318,7 @@ recorded flights. The path forward then becomes:
 
    You're estimating wind as a function of time, but only at discrete times.
 
-   :math:`w_{1:T} \sim p\left( w_{1:T} \given t_{1:T}, r_{1:T} \right)`
+   :math:`w_{1:T} \sim p\left( w_{1:T} \given r_{1:T} \right)`
 
    This is the "flight reconstruction" step, so really what you're doing is
    building an estimate of the probability distribution over the wind,
@@ -82,7 +326,7 @@ recorded flights. The path forward then becomes:
    controls to get just the distribution over the wind.
 
    How you implement this depends on whether you assume the wind vectors are
-   either independent (ie, :math:`w_t \,\bot\, w_{1:t-2} \,|\, w_{t-1}`). You
+   either independent (ie, :math:`w_t \,\bot\, w_{0:t-2} \,|\, w_{t-1}`). You
    could conceivably build the regression model over `w` as you go (so if you
    visit an area, leave, and return relatively soon you might want to use the
    wind vector estimate from the prior visit), but that'd be **significantly**
@@ -159,6 +403,33 @@ distribution over the wind field:
 .. math::
 
    p \left( \mathcal{W} \right)
+
+
+[[Wait, this looks like a probability distribution over the models. Shouldn't
+it be more like :math:`\mathcal{W} = p(w(r))` (not sure how to write "the
+probability of wind vector `w` as a function of position `r`").
+
+How do Gaussian processes write values of a field as a function of position?
+Ah, right: a GP is a distribution over functions, not a collection of
+distributions over variables (sorta). Consider each "realization" of a GP as
+a possible "configuration" of the true function. You don't write "the
+probability of `w` as a function of `r`, you just say "what is the
+distribution over `w`?" then test that distribution at `r`.
+
+So the "wind field regression" problem isn't a problem of a bunch of individual
+estimates at different points, it's a problem of a single distribution over
+a function which takes on values at a bunch of different points. So yeah, in
+that sense you might designate :math:`W(\vec{r})` the true target, and the
+distribution over the true wind field is :math:`W(\vec{r}) \sim
+\mathcal{W}(\vec{r}) = \mathcal{G}_W(\vec{r})`.
+
+References:
+
+* "Model-based Geostatistics" (Diggle, 2007)
+
+* "Automatic model construction with Gaussian processes" (Duvenaud; 2014)
+
+]]
 
 The next task is to develop relationships between what we know and what we
 want. At the beginning, the only thing we know is the sequence of the
@@ -400,3 +671,26 @@ SNIPPETS
 
 * Running the particle filter over a specific flight produces a set of
   observations over points in the wind field at a specific time
+
+* The wind is a *latent variable*. We want to infer its value from the
+  observed variables.
+
+  Sometimes the latent variable is merely an intermediate value you add to the
+  model to connect the observations to the dynamics, but in this case it's the
+  latent variable itself which is our target. **The goal of "wind vector
+  estimation" is one of inferring a latent variable.**
+
+  A *latent variable model* is one which "aim to explain observed variables in
+  terms of latent variables"; I am attempting to explain changes in position
+  by inferring the wind, and then choosing the values that gave the "best"
+  explanation.
+
+  Technically the wind could have been measured (ie, quantitatively) in
+  practice, so in some contexts it would be called a *hidden variable*.
+
+* Every subtask has it's own modeling difficulties. Like for the wind
+  regression model, you have to just assume a mean value over the specified
+  time interval, which is obviously going to be pretty poor for high variance
+  regions. It seems likely that assumed-constant parameters in general are
+  likely to struggle; stationarity, homoscedasticity, all sorts of fun
+  concepts.

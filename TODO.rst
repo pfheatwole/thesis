@@ -1,3 +1,14 @@
+* Suppose you had the wind vectors. Assume you've identified some thermals.
+  Any hope of identifying likely **causes**? Causal explanations seem like
+  a lot of work, but things like topography (identifying orographic lift) or
+  materials (identifying likely thermal triggers, like exposed dirt versus
+  surrounding green areas, or identifying likely sinks, like water locations).
+
+  If you think about this like a geostatistician you might think about
+  relating the observations (wind vectors) to other data (topography, surface
+  characteristics, etc).
+
+
 * Write up an informal description of "this is how a pilot standing on the
   ground would estimate the wind by watching a glider in the air". That
   informal description is the stepping stone to understanding "flight
@@ -38,8 +49,8 @@
 * Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (so
   "the anhedral of the arc" as opposed to "section anhedral").
 
-* Should I use `h_a/R` for "angular momentum of the apparent mass `a` about
-  `R`"?  I like the slash as "X with respect to Y", which makes sense here.
+* Use `h_a/R` for "angular momentum of the apparent mass `a` about `R`"?
+  I like the slash as "X with respect to Y", which makes sense here.
 
 * I need a diagram for the 6 DoF model. I was going to just show the body
   centroid "B", but that makes it less obvious that the 6 DoF supports weight
@@ -62,21 +73,12 @@
   components, then finish the section by defining my project in terms of those
   components.
 
-* I should mention that my canopy geometry supports "open" parafoil designs;
-  it's easy to use just the upper surface and ignore the lower.
-
-* I should probably use bold face for vectors and matrices; the over arrows
-  are too messy
-
 * I wish I could use tables without borders for aligning sets of items. Do
   I *ever* want tables with borders? If not, I might be able to just redefine
   the `tabulary` environment. I think I can specify my own template
   `tabulary.tex_t`. The one with Sphinx is in
   `~/.anaconda3/envs/science38/lib/python3.8/site-packages/sphinx/templates/latex`
   I'd also need some CSS to fix the HTML tables...
-
-* Does "Bayesian filtering" deserve it's own chapter, or should it be part of
-  the "Introduction" chapter?
 
 
 Content Tasks
@@ -134,32 +136,20 @@ References
 Figures
 -------
 
-* Should I choose standardize figure sizes? I'm not clear on how you choose
-  scales with SVG, but I'm guessing if you start mixing up units it gets
-  awkward (eg, mixing matplotlib or graphviz output with inkscape). At the
-  least I should choose standard unit sizes (eg, coordinate axes are 1.5px
-  thickness).
+* Add licenses to my SVG metadata (Inkscape -> Document Properties)
 
-* Should I add a license to my SVG metadata? (Inkscape -> Document Properties)
-
-* Make a list of some useful figures for each section, where applicable
-
-* For each type of **script-generated** figure, develop a single, standard
-  plotting function. Those functions should adhere to the following rules:
-  take a filename for saving SVG files; text in SVG files should be left as
-  text using "TeX Gyre Heros"; SVG outputs should not leave marginal
-  whitespace.
-
-* Figure labels must be globally unique. Should prototype some standard label
-  prefixes. Might be based on the content of the figure (the specific object,
-  or that object's domain) or the section that contains the figure
+* Figure labels must be globally unique, so standardized label prefixes would
+  probably help. Could be based on the content of the figure (the specific
+  object, or that object's domain) or the section that contains the figure.
 
   At the least, it seems like a reasonable that **labels should match the
   figure filename.** This will probably preclude using section names, since
   I want to avoid renaming figure filenames if the sections change.
 
   While I'm at it, **the figure sources should match the figure labels** as
-  well. It should be obvious where a figure came from.
+  well. It should be obvious where a figure came from (within reason)
+
+* Remove scratch/unused figures (eg, `elliptical_arc_dihedral.svg`)
 
 
 Editorial Tasks
@@ -296,9 +286,13 @@ Sphinx
 * Re-run ``sphinx-quickstart`` and see how the new ``conf.py`` defaults
   compare to my current version (from July 2017)
 
+* Update to Sphinx 4 (and thus MathJax 3)
+
 
 HTML
 ----
+
+* Add a document title below the sidebar logo?
 
 * The footer (copyright and license) doesn't show on mobile
 
@@ -317,3 +311,6 @@ Miscellaneous
 
 * Create a project-local ``spellfile`` for vim (lots of project-specific
   words, like "kriging")
+
+* I should mention that my canopy geometry supports "open" parafoil designs;
+  it's easy to use just the upper surface and ignore the lower.
