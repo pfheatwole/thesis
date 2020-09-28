@@ -73,6 +73,10 @@ Flight reconstruction
 * The flight data doesn't record the wind vectors, so they must first be
   estimated from the position data.
 
+* Uncertainty in the data, wind, controls, and model all necessitate
+  statistical filtering. In particular, our goal of *uncertainty
+  quantification* maps neatly onto *Bayesian filtering*.
+
 * Introduce the recursive filtering equation to motivate the dynamics model
 
 * "The focus of this work is to provide a suitable dynamics model" (although
@@ -88,6 +92,55 @@ Canopy geometry
 
 * This chapter chooses a target level-of-detail, then presents an intuitive
   parametrization to enable creating models at that level of detail.
+
+
+Outline:
+
+1. Introduction
+
+   #. What is a canopy?
+
+   #. Why does this project need a mathematical model of canopy geometry?
+
+   #. What are the important aspects of the canopy geometry?
+
+   #. What are **MY** performance requirements for a mathematical model?
+
+   #. How do you design a mathematical model that achieves those requirements?
+
+   #. What is the rest of the chapter about?
+
+#. Chord Surface
+
+   #. Review existing parametrizations of the chord surface?
+
+   #. Introduce my general parametrization of a chord surface. Discuss the
+      section index, and how to specify scale, position, and orientation.
+
+   #. Refine/optimize/simplify the general parametrization for parafoils (this is
+      where I choose a definition of the section index, set `r_y = r_z = r_yz`,
+      parametrize `C_w/s` using Euler angles, etc. **My examples use six design
+      functions; I need to get there somehow**)
+
+   #. Discuss parametric design functions? (eg, an elliptical arc)
+
+   #. Present examples of parametric chord surfaces
+
+#. Section profiles
+
+   #. Discuss section profiles (airfoils)
+
+   #. Discuss how the airfoil affects wing performance?
+
+   #. Discuss how they can vary along the span?
+
+   #. Discuss distortions due to billowing, braking, etc?
+
+   [[This isn't meant to be an exhaustive discussion of parafoil design!]]
+
+#. Examples of complete parametric canopies
+
+#. Advantages and limitations
 
 
 Canopy aerodynamics
