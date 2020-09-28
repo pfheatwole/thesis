@@ -28,24 +28,8 @@ Purpose/Motivation
   a system for newer tracks with better accuracy.
 
 
-Intuitive Development
-=====================
-
-This is the non-mathematical development of the idea.
-
-
 Mathematical Development
 ========================
-
-NT
-
-
-Wind Reconstruction
--------------------
-
-I can probably break this into two categories: structured, and unstructured.
-Structured approaches in the vast majority of "thermal localization and
-tracking" papers.
 
 
 Filtering
@@ -557,119 +541,9 @@ Example tasks:
   uncertainty).
 
 
-******************
-Bayesian Filtering
-******************
-
-This section establishes the "how": how I take what I have (flight data) and
-turn it into what I need. Establishing the general form of the Bayesian filter
-will motivate the necessary pieces (the dynamics models, the data, etc)
-regardless of the filter architecture (I think?)
-
-
-Forward versus Inverse Problems
-===============================
-
-"Inverse problems include both parameter estimation and function estimation.
-[...] A common characteristic is that we attempt to infer causes from measured
-effects. A forward, or direct problem has known causes that produce effects or
-results defined by the mathematical model.  Because the measured data is often
-noisy or indistinct, the solution to the inverse problem may be difficult to
-obtain accurately."
-
-**Can I say that my application of particle filtering is to use a forward
-problem (the flight simulator) to produce a solution to the inverse problem?**
-
-Inverse problems are about inferring causes from the observed effects; seems
-like a good description of what I'm doing (only I have a tiny sample of
-observed effects; namely, a change in position over time).
-
-
-Probabilistic inference / simulation-based filtering
-====================================================
-
-I liked this sentence in Duvenaud's dissertation: "*Probabilistic inference*
-takes a group of hypotheses (a *model*) and weights those hypotheses based on
-how well their predictions match the data." **I often use the term
-"simulation-based filtering", but maybe I should review that term.**
-
-"**data** driven forecasting" vs "**model** driven forecasting"
-
-See `reich2015ProbabilisticForecastingBayesian`
-
-* Model driven: eg, by analyzing topography (for example, RASP)
-
-* Data driven: eg, by analyzing flight tracks (like von Kaenel's thesis)
-
-Basically, do you look at the observations alone (with no though to the
-underlying model), or do you also refer to the "surrogate process" from which
-they were generated?
-
-He describes "data-driven" as "bottom-up", or *empirical* models, whereas
-"model-driven" are "top-down" or *mechanistic* models. Empirical models rely
-on the data, mechanistic models rely on the model dynamics.
-
-On page 182: "model-based forecast uncertainties taking the role of prior
-distributions"
-
-
-
-Data Assimilation
-=================
-
-*Data assimilation* is to geophysics what *filtering* is to engineering. They
-both deal with the *state estimation problem* by combining theory (models)
-with observations (data). See `fearnhead2018ParticleFiltersData`. (I like this
-paper. One of its stated goals is to encourage interoperability between
-geophysics and engineering disciplines. Section 1.2 has a very helpful
-overview of the related terminologies of the two fields.)
-
-I should try to phrase my problem in terms of both, or however makes sense to
-tie in the geophysics realm. There's probably a bunch of good literature to
-cite.
-
-
-Validation
-==========
-
-I read somewhere that a guy complained about testing your model by fitting it
-against simulated data (or something; he didn't like the idea that "yay, we
-recreated data we expected!" was not helpful). Gelman, on the other hand, is
-a huge fan of *fake-data simulation*, where you generate data from a model
-using "true" parameters, then observing the behavior of the statistical
-procedures (how well they work, how they fail). There is a related procedure
-called *predictive simulation*, where you fit a model, generate data from it,
-then compare that generated data to the actual data (I believe this is also
-called *posterior predictive checking*). See
-:cite:`gelman2007DataAnalysisUsing`.
-
-
-The *curse of dimensionality* refers to needing **more** data as the dimension
-increases, so you have to pursue the *blessing of abstraction*: the more
-structure you account for, the **less** data you need. (FIXME: I don't think
-this is the correct use of the phrase *blessing of abstraction*, which refers
-to the observation that sometimes its easier to a learn general knowledge
-faster than specific knowledge?)
-
-   ^^ This is a concept I need to highlight in my thesis, since it motivates
-   my detail efforts. The more information I want to squeeze out of the data,
-   the more structure I need to introduce. You don't get something for
-   nothing: for every question you want to answer, you need either need more
-   data or more structural information (like paraglider wing dynamics)
-
-
-Jittering
-=========
-
-If the process noise is small, you don't get much variation in the particles
-during the time update. One way to decrease the odds of sample impoverishment
-is to use *jittering*. See `fearnhead1998SequentialMonteCarlo`, page 53
-
-
-
-*******
-Weather
-*******
+**********
+Atmosphere
+**********
 
 Good general atmospheric references:
 
@@ -832,6 +706,116 @@ Wind Features
   rapid, turbulent changes) to the wind magnitude and/or direction.
 
 
+******************
+Bayesian Filtering
+******************
+
+This section establishes the "how": how I take what I have (flight data) and
+turn it into what I need. Establishing the general form of the Bayesian filter
+will motivate the necessary pieces (the dynamics models, the data, etc)
+regardless of the filter architecture (I think?)
+
+
+Forward versus Inverse Problems
+===============================
+
+"Inverse problems include both parameter estimation and function estimation.
+[...] A common characteristic is that we attempt to infer causes from measured
+effects. A forward, or direct problem has known causes that produce effects or
+results defined by the mathematical model.  Because the measured data is often
+noisy or indistinct, the solution to the inverse problem may be difficult to
+obtain accurately."
+
+**Can I say that my application of particle filtering is to use a forward
+problem (the flight simulator) to produce a solution to the inverse problem?**
+
+Inverse problems are about inferring causes from the observed effects; seems
+like a good description of what I'm doing (only I have a tiny sample of
+observed effects; namely, a change in position over time).
+
+
+Probabilistic inference / simulation-based filtering
+====================================================
+
+I liked this sentence in Duvenaud's dissertation: "*Probabilistic inference*
+takes a group of hypotheses (a *model*) and weights those hypotheses based on
+how well their predictions match the data." **I often use the term
+"simulation-based filtering", but maybe I should review that term.**
+
+"**data** driven forecasting" vs "**model** driven forecasting"
+
+See `reich2015ProbabilisticForecastingBayesian`
+
+* Model driven: eg, by analyzing topography (for example, RASP)
+
+* Data driven: eg, by analyzing flight tracks (like von Kaenel's thesis)
+
+Basically, do you look at the observations alone (with no though to the
+underlying model), or do you also refer to the "surrogate process" from which
+they were generated?
+
+He describes "data-driven" as "bottom-up", or *empirical* models, whereas
+"model-driven" are "top-down" or *mechanistic* models. Empirical models rely
+on the data, mechanistic models rely on the model dynamics.
+
+On page 182: "model-based forecast uncertainties taking the role of prior
+distributions"
+
+
+
+Data Assimilation
+=================
+
+*Data assimilation* is to geophysics what *filtering* is to engineering. They
+both deal with the *state estimation problem* by combining theory (models)
+with observations (data). See `fearnhead2018ParticleFiltersData`. (I like this
+paper. One of its stated goals is to encourage interoperability between
+geophysics and engineering disciplines. Section 1.2 has a very helpful
+overview of the related terminologies of the two fields.)
+
+I should try to phrase my problem in terms of both, or however makes sense to
+tie in the geophysics realm. There's probably a bunch of good literature to
+cite.
+
+
+Validation
+==========
+
+I read somewhere that a guy complained about testing your model by fitting it
+against simulated data (or something; he didn't like the idea that "yay, we
+recreated data we expected!" was not helpful). Gelman, on the other hand, is
+a huge fan of *fake-data simulation*, where you generate data from a model
+using "true" parameters, then observing the behavior of the statistical
+procedures (how well they work, how they fail). There is a related procedure
+called *predictive simulation*, where you fit a model, generate data from it,
+then compare that generated data to the actual data (I believe this is also
+called *posterior predictive checking*). See
+:cite:`gelman2007DataAnalysisUsing`.
+
+
+The *curse of dimensionality* refers to needing **more** data as the dimension
+increases, so you have to pursue the *blessing of abstraction*: the more
+structure you account for, the **less** data you need. (FIXME: I don't think
+this is the correct use of the phrase *blessing of abstraction*, which refers
+to the observation that sometimes its easier to a learn general knowledge
+faster than specific knowledge?)
+
+   ^^ This is a concept I need to highlight in my thesis, since it motivates
+   my detail efforts. The more information I want to squeeze out of the data,
+   the more structure I need to introduce. You don't get something for
+   nothing: for every question you want to answer, you need either need more
+   data or more structural information (like paraglider wing dynamics)
+
+
+Jittering
+=========
+
+If the process noise is small, you don't get much variation in the particles
+during the time update. One way to decrease the odds of sample impoverishment
+is to use *jittering*. See `fearnhead1998SequentialMonteCarlo`, page 53
+
+
+
 ****************
 Paraglider Model
 ****************
@@ -884,27 +868,14 @@ freedom, or the fact that I do not want to assume that the relative wind is
 uniform (eg, when flying through a thermal).]]
 
 
-Paragliding Wing
-================
+Canopy Geometry
+===============
 
-Discussion notes:
-
-* I am neglecting to model the connecting lines from the risers to the wing.
-
-
-Physical Description
---------------------
-
-Airfoil
-^^^^^^^
-
-I'm not interested in a grand exposition of airfoil considerations. I just
-want to draw attention to the aspects that are important enough to affect my
-modeling choices. However, this might be a good place to introduced many of
-the relevant aerodynamic concepts/terminology (angle of attack, stall point,
-chord, camber, pitching moment, aerodynamic center, etc)
-
-**What are the most significant/relevant definitions and considerations?**
+* I'm not interested in a grand exposition of airfoil considerations. I just
+  want to draw attention to the aspects that are important enough to affect my
+  modeling choices. However, this might be a good place to introduced many of
+  the relevant aerodynamic concepts/terminology (angle of attack, stall point,
+  chord, camber, pitching moment, aerodynamic center, etc)
 
 * Geometric definitions of the airfoil: leading edge, trailing edge, chord
   line, camber line, upper surface, lower surface
@@ -917,31 +888,11 @@ chord, camber, pitching moment, aerodynamic center, etc)
 * Aerodynamic behavior and coefficients: lift, drag, and moment curves; stall
   point; stability; more?
 
-
-Parafoil (Canopy)
-^^^^^^^^^^^^^^^^^
-
 * How should I cite the "Paraglider Design Handbook"? Just as a website?
 
-Key points: planform (flat area, flat span, etc), lobe (projected area,
-projected span, **dihedral**), spanwise airfoils, washin/washout (geometric
-twist)
 
-The majority of the geometry definitions are to describe the *parafoil*.
-A parafoil has a given planform, which is the projection of the wing onto the
-xy-plane. The planform is then curved by the connecting lines to produce the
-arched, dihedral shape of the wing. (The PDH calls the frontal view the *lobe*
-and defines several lobes (circular, elliptical, double circles, etc))
-
-The planform dimensions describe the projected outline, but not the volumetric
-shape; the volumetric shape of the parafoil is dictated by its airfoils Some
-wings have a spanwise variation of the airfoil in order to adjust the
-performance characteristics of the wing, but my model has not yet implemented
-that detail.
-
-
-Wing
-^^^^
+Paraglider Wing
+===============
 
 Parafoil + lines + risers
 
@@ -996,8 +947,6 @@ References:
 * :cite:`chreim2018ChangesModernLiftingLine` adapted Phillips method to use
   the Pistolesi boundary conditions, and verified that is was able to predict
   the section coefficients for a wing with 45-degree sweep.
-
-
 
 
 Survey: what are the typical ways of estimating the aerodynamics of a wing?
@@ -1065,26 +1014,6 @@ Scratch notes
   :cite:`chreim2017ViscousEffectsAssessment`, section 3.1.3 (pg 7).
 
 
-Paragliding Harness
-===================
-
-This is the "payload".
-
-
-Physical Description
---------------------
-
-My current design uses a spherical approximation for the harness forces, with
-the center of mass coinciding with the riser attachments, so the harness
-geometry is simple. [[FIXME: this description sucks]]
-
-
-Mathematical Model
-------------------
-
-NT
-
-
 Parafoil-Payload System
 =======================
 
@@ -1098,18 +1027,6 @@ This is the combination of wing and payload (harness).
 I should review existing paraglider models, including the different degrees
 of freedom and what that choice implies. I should frame my new design in terms
 of existing terminology to make it easier to relate.
-
-
-Physical Description
---------------------
-
-NT
-
-
-Mathematical Model
-------------------
-
-NT
 
 
 Performance
@@ -1275,31 +1192,6 @@ where "interesting" may refer to the wind, or pilot inputs, or both. This
 chapter is a cursory overview of those "interesting" scenarios.
 
 
-Control Sequences
-=================
-
-A paraglider has only a few formal control inputs: a left and right brakes, an
-accelerator (or "speed bar"), and weight shifting.
-
-Braking
--------
-
-[[What happens as a you apply a single brake? Asymmetric brakes? Symmetric
-brakes?]]
-
-
-Accelerating
-------------
-
-[[What happens when you press the accelerator?]]
-
-
-Weight Shifting
----------------
-
-[[What happens during weight shifting?]]
-
-
 Encoding Rotations
 ==================
 
@@ -1318,17 +1210,17 @@ known inputs (controls and wind) to generate state trajectories. Part of that
 discussion was to define the state variables. The flight reconstruction
 concept could start by defining *inverse problems* and *underdetermined
 systems*, which leads into probabilistic methods (*simulation-based
-filtering*). The purpose of flight reconstruction (in this context) is to determine the
-unknowns (here, those are the model parameters, the control inputs, and the
-wind vectors).
+filtering*). The purpose of flight reconstruction (in this context) is to
+determine the unknowns (here, those are the model parameters, the control
+inputs, and the wind vectors).
 
 Key points:
 
 * Bayesian filtering combines the observed data with prior knowledge of the
   system to generate a joint distribution over all the variables. Bayesian
-  methods require a prior (over the state values and model parameters),
-  a likelihood (for the observed data), and model dynamics (for the state
-  transitions).
+  methods require priors (over the state values, model parameters, and model
+  inputs), a likelihood (for the observed data), and model dynamics (for the
+  state transitions).
 
 * Monte Carlo methods generate the joint distribution by exploring the
   possible space of plausible values. The exploration of different values uses
@@ -1595,17 +1487,17 @@ Wind Estimation and Prediction
   requires several steps:
 
   1. Generate wind field point estimates from a single track
-  
+
   #. Generate a wind field regression model from the point estimates
-  
+
   #. Generate an set of wind field regressions models from a set of tracks
-  
+
   #. Extract patterns from the set of wind field regression models
-  
+
   #. Encode the patterns in a predictive Bayesian model (forecasting model)
-  
+
   #. Generate wind field point estimates using an in-flight device
-  
+
   #. Use the point estimates to generate a state of belief about the current
        wind patterns
 

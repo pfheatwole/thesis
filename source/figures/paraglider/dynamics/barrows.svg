@@ -13,8 +13,8 @@
    viewBox="0 0 155.37888 136.06594"
    height="136.06595mm"
    width="155.37889mm"
-   sodipodi:docname="barrows_diagram.svg"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)">
+   sodipodi:docname="barrows.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <defs
      id="defs2">
     <marker
@@ -898,9 +898,9 @@
      inkscape:document-rotation="0"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="264.11038"
-     inkscape:cx="378.7048"
-     inkscape:zoom="1.4024284"
+     inkscape:cy="298.83559"
+     inkscape:cx="284.61116"
+     inkscape:zoom="1.4048611"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -1187,12 +1187,12 @@
     <path
        sodipodi:nodetypes="ccc"
        style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;marker-start:url(#marker7134);marker-end:url(#marker7726)"
-       d="m 59.686657,102.47856 h 12.078884 v 12.07888"
+       d="M 66.941895,104.29267 H 54.863011 v 12.07888"
        id="path6527" />
     <g
        style="stroke-width:2"
        inkscape:label=""
-       transform="matrix(0.5,0,0,0.5,9.4039652,62.086901)"
+       transform="matrix(0.5,0,0,0.5,22.705837,63.901008)"
        id="g6813">
       <g
          style="stroke-width:2"
@@ -1214,7 +1214,7 @@
     <g
        style="stroke-width:2"
        inkscape:label=""
-       transform="matrix(0.5,0,0,0.5,24.533507,77.2266)"
+       transform="matrix(0.5,0,0,0.5,7.6309845,79.040707)"
        id="g7119">
       <g
          style="stroke-width:2"

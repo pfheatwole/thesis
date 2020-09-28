@@ -5,6 +5,24 @@ Paraglider Geometry
 A paraglider is a system of two components: a wing, and a harness.
 
 
+Related work
+============
+
+*rigging*: "the system of ropes, chains, and tackle used to support and
+control the masts, sails, and yards of a sailing vessel"
+
+* Lingard 1995: uses a *rigging angle* for positioning the payload, which is
+  related to the assumption "that the system can be induced to fly at the
+  angle of attack corresponding to optimum L/D". I don't like coupling those
+  two concepts this closely; if you want to compute the angle that would
+  induce the optimum L/D you can then specify the `kappa_x, kappa_z` just the
+  same without muddying the definition.
+
+* Benedetti :cite:`benedetti2012ParaglidersFlightDynamics` uses the same idea
+  for positioning the harness as I do, except he uses relative `x` and
+  absolute `z` whereas I use relative for both.
+
+
 Canopy
 ======
 
@@ -110,6 +128,21 @@ Topics:
   the section coefficients, which means solving for the 2D section
   coefficients before estimating the 3D section forces and moments.
 
+Good reference images for brake deflections:
+
+.. figure:: figures/paraglider/geometry/Wikimedia_Paragliding.jpg
+
+   Brake deflection, example 1.
+
+   `Photograph <https://commons.wikimedia.org/wiki/File:Paragliding.jpg>`_  by
+   Frédéric Bonifas, distributed under a CC-BY-SA 3.0 license.
+
+.. figure:: figures/paraglider/geometry/Wikimedia_ApcoAllegra.jpg
+
+   Brake deflection, example 2.
+
+   `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`_ by
+   Wikimedia contributor "PiRK" under a CC-BY-SA 3.0 license.
 
 Mathematical Model
 ^^^^^^^^^^^^^^^^^^
@@ -129,12 +162,16 @@ point along the chord:
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_hinge.*
 
+   Deflection angle relative to a fixed hinge point.
+
 This definition is troublesome for a flexible wing, since there is no fixed
 hinge point; the deflection occurs as a variable arc between the trailing edge
 to some point on the chord. A more convenient definition is the total
 deflection angle produced by the trailing edge:
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_arc.*
+
+   Deflection angle relative to the leading edge.
 
 This definition moves some of the complexity out of the implementation and
 into how the set of coefficients are defined. Without recording a fixed
@@ -168,15 +205,17 @@ applicability/accuracy of this crude model depends on the arc anhedral:
 
 .. figure:: figures/paraglider/geometry/brake_deflections_anhedral23_Bl025_Br1.*
 
-   Cubic brake deflection angle distribution with :math:`\delta_{Bl} = 0.25` and
-   :math:`\delta_{Br} = 1` for a wing with a mean anhedral angle of 23
-   degrees.
+   Cubic brake deflection, example 1.
+
+   Parameters: :math:`\delta_{Bl} = 0.25` and :math:`\delta_{Br} = 1` for
+   a wing with a mean anhedral angle of 23 degrees.
 
 .. figure:: figures/paraglider/geometry/brake_deflections_anhedral33_Bl025_Br1.*
 
-   Cubic brake deflection angle distribution with :math:`\delta_{Bl} = 0.25` and
-   :math:`\delta_{Br} = 1` for a wing with a mean anhedral angle of 33
-   degrees.
+   Cubic brake deflection, example 2.
+
+   Parameters: :math:`\delta_{Bl} = 0.25` and :math:`\delta_{Br} = 1` for
+   a wing with a mean anhedral angle of 33 degrees.
 
 **FIXME: these plots were made using the `plot_paraglider_wing` function that
 assumed fixed hinges at 0.8c and the delta is the angle from 0.8c to the TE.

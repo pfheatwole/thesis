@@ -74,9 +74,9 @@ Two complimentary methods for checking structural cohesion
 
 * Reverse outline
 
-  Build an outline using numbered topic sentences from each paragraph,
-  reorganize the numbers to improve the text structure, then reorganize the
-  paragraphs according to their reordered numbers
+  Build an outline using numbered topic sentences from each paragraph, reorder
+  them to improve the text structure, then reorganize the paragraphs according
+  to their reordered numbers
 
   Helps you **find structural problems**.
 
@@ -111,7 +111,7 @@ Some activities that can be described as revision
   your writing?
 
 
-Coarse-to-Fine Issue Priority
+Coarse-to-fine issue priority
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is helpful to recognize the different broader issues you will encounter,
@@ -133,7 +133,7 @@ suggests this ordering:
    value.
 
 2. Clarity
-   
+
    Eliminate unnecessary words and undue complexity. Writers are often tempted
    to distance themselves from their ideas with awkward expressions, weak
    verbs, and unclear subjects.
@@ -181,7 +181,7 @@ of reverie:
   a complacent rhythm, force yourself to explicitly stop and acknowledge
   whether you have actually edited a paragraph before you move on.
 
-* Edit in stages. Choose a set of specific issues, and fix the broadest issues
+* Edit in stages. Choose a set of specific issues and fix the broadest issues
   first. This does require revising the document several times, but it has two
   advantages. First, it reduces the mental overhead of trying to fix several
   issues simultaneously. Second, premature fine editing not only wastes time
@@ -268,15 +268,15 @@ and recommends dedicating some revision time to asking these questions:
 
 1. If we are using some sorts of metadiscourse *routinely*, are we doing it
    well?
-  
+
 2. If we are *avoiding* some sorts of metadiscourse, can we deepen our
    understanding of the norms of academic writing to be sure this judgement is
    based on a sound understanding of disciplinary practice?
-  
+
 3. If we are using some sorts of metadiscourse *hesitantly or inexpertly*,
    could we improve our understanding of the value of such devices for the
    reader and thus overcome our reservations?
-  
+
 4. Lastly, if we are under-using some sorts of metadiscourse because we *lack
    a sufficiently deep understanding of our own text*, can we learn how to
    develop that understanding in order to meet the reader’s need for guidance
@@ -349,7 +349,7 @@ The steps to creating a reverse outline:
    *essential structure* of the text.
 
 4. Analyze the outline
-   
+
    "Pay particular attention to the logic and proportionality of the internal
    organization. Understanding the logic involves observing the way elements
    have been placed in relation to one another. Understanding the
@@ -358,7 +358,7 @@ The steps to creating a reverse outline:
    to create something new*.
 
 5. Create a revised outline
-   
+
    You now know more about the text you're writing than when you started. Use
    that new understanding to develop a new **abstract** structure for the
    document. This higher level of abstraction lets you avoid getting bogged
@@ -368,7 +368,7 @@ The steps to creating a reverse outline:
 6. Reorganize the text according to the revised outline
 
    **This is the first time you actually change the original text.**
-   
+
    At this point, you are only changing the structure by *reordering* the
    content; do not *change* the content yet.
 
@@ -376,9 +376,9 @@ The steps to creating a reverse outline:
    intended. This step is not for editing the content, only the ordering.
 
 7. Check for topic sentences and cohesion
-   
+
    **This is the first time you change the content itself!**
-   
+
    Because of the blind reordering, it is likely that the text will have lost
    some cohesion. This is where you resume examining issues such as word
    choice, sentence structure, transitions, tone, economy, and overall
@@ -406,13 +406,13 @@ Transitions
 Key principles to help create clear transitions:
 
 1. Avoid unclear references
-   
+
    For example "A is connected to B. This is..." versus "A is connected to B.
    This *connection* is..." This pattern is `this <summary word>`, where the
    summary word makes the "this" reference explicit.
 
 2. Avoid unnecessary transition words
-   
+
    Problematic transition words tend to be those that indicate an additional
    idea: "in addition", "also", "moreover", etc. While it is possible that the
    addition may deepen a claim (eg, "furthermore"), if it only serves to say
@@ -421,12 +421,12 @@ Key principles to help create clear transitions:
    substantive indication of the link.
 
 3. Avoid the mere *appearance* of causality
-   
+
    Causal words ("therefore", "thus", "hence") should be used sparingly, and
    only in cases of direct causal relationships.
 
 4. Use transition words to indicate a change in the direction of your text
-   
+
    If you've been building up a topic, but then want to take it in a different
    direction, make that change in direction obvious: "<buildup>. *However*,
    I disagree."
@@ -512,19 +512,19 @@ Introductions
 John Swales' model for "Creating a Research Space" consists of three "moves":
 
 1. Context ("Establishing a research territory")
-   
+
    What your audience needs to know in order to understand the problem you are
    going to confront. May act as a refresher, or even a primer, to the topic,
    but will not discuss new material.
 
 2. Problem and Significance ("Establishing a niche")
-   
+
    What you want to accomplish, and why it will matter to have done so. The
    mere existence of a problem isn't sufficient, you should establish the
    motivation for your upcoming work.
 
 3. Response ("Occupying a niche")
-   
+
    What you are actually going to do in your research to address the problem.
 
 Using this structure is effective because **it tells the reader what they need
@@ -555,7 +555,7 @@ introduction**, if you will.
 For example, your introduction might be structured as follows:
 
 1. Introduction to the introduction
-   
+
    This primes the reader for the context, so they'll be on the lookout for
    the salient points of the problem.
 
@@ -567,7 +567,7 @@ For example, your introduction might be structured as follows:
 
    "Restate the problem and significance in light of the more thoroughly
    detailed context."
-   
+
    Your big picture problem description was probably vague, but now that
    you've established a more detailed context you can elaborate on the finer
    points of the problem.
@@ -578,7 +578,7 @@ For example, your introduction might be structured as follows:
    elaborate on the details of the response.
 
 5. Roadmap
-   
+
    A brief indication of how the thesis will proceed.
 
 *A good introduction will serve to make the reader feel comfortable
@@ -1005,7 +1005,7 @@ Paper-wide principles (Rules 1-4)
    "**Only the central idea of the paper should be touched upon multiple
    times**. Otherwise, each subject should be covered in only one place in
    order to minimize the number of subject changes."
-  
+
    "Across consecutive paragraphs or sentences, **parallel messages should be
    communicated with parallel form**. Parallelism makes it easier to read the
    text because the reader is familiar with the structure."

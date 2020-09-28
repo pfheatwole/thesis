@@ -1,29 +1,26 @@
-* Factor out the canopy plotting function from the thesis script
-  `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
-  it to to plot my Hook3ish
+* Write up an informal description of "this is how a pilot standing on the
+  ground would estimate the wind by watching a glider in the air". That
+  informal description is the stepping stone to understanding "flight
+  reconstruction" and how it is possible even though the answers are only
+  approximate.
 
-* My `BrakeGeometry` plots are wrong. It assumes fixed hinges at 0.8c, which
-  is very very wrong for the airfoil data I'm using with my Hook3ish
+* Create two parallel outlines, informal and formal, for the overall paper:
+  work through developing the idea of "predicting points of the wind field by
+  learning from the past". The informal development should be easy to read by
+  a non-technical reader. It should function as a guide to show that the math
+  isn't as scary as it might seem; the notation is intimidating, but
+  ultimately it's based on logic that the reader already understands.
 
-* Finish the `ChordSurface` equations
 
-* Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (so
-  "the anhedral of the arc" as opposed to "section anhedral").
+* Should my introduction chapter include a "Taxonomy of Tools" section that
+  defines what I mean by *state estimation*, *parameter estimation*, *flight
+  reconstruction*, *regression*, etc? It'd be interesting to define all the
+  components, then finish the section by defining my project in terms of those
+  components.
 
-* Can I make two parallel outlines, informal and formal, to develop the idea
-  of "predicting points of the wind field by learning from the past"? I'd love
-  to have an easy-to-follow informal development for the non-technical reader,
-  and a translation of those informal concepts into mathematical form. Show
-  that the math isn't as scary as it might seem; the notation is intimidating,
-  but ultimately it's based on logic that the reader already understands.
 
-* Should I use `h_a/R` for "angular momentum of the apparent mass `a` about
-  `R`"?  I like the slash as "X with respect to Y", which makes sense here.
-
-* I need a diagram for the 6 DoF model. I was going to just show the body
-  centroid "B", but that makes it less obvious that the 6 DoF supports weight
-  shift. Should all models include "P"? While I'm at it, is "B" still a good
-  choice?
+Content Tasks
+=============
 
 * Use the wing from Belloc as a case study. How to use my paraglider geometry
   to define/implement the wing from his description, then compare his wind
@@ -35,31 +32,18 @@
   spans several chapters: "Paraglider Canopies", "Paraglider Wings", and
   "Paraglider Dynamics" (or whatever)
 
-* Should my introduction chapter include a "Taxonomy of Tools" section that
-  defines what I mean by *state estimation*, *parameter estimation*, *flight
-  reconstruction*, *regression*, etc? It'd be interesting to define all the
-  components, then finish the section by defining my project in terms of those
-  components.
+* Review the rambling "derivation" of the canopy geometry. In particular,
+  eliminate that old version that used `\hat{x}_a`, it's a distraction.
 
-* I should mention that my canopy geometry supports "open" parafoil designs;
-  it's easy to use just the upper surface and ignore the lower.
+  In fact, remove most of that content entirely. I'm moving the derivation of
+  the general equation for points on the chord surface into the "Derivations"
+  chapter. **The "Canopy Geometry" chapter should be specifically about (1)
+  observing the important details of a canopy geometry, and (2) choosing
+  a parametrization of the general equation that is most suitable for
+  capturing those design details.**
 
-* I should probably use bold face for vectors and matrices; the over arrows
-  are too messy
-
-* I wish I could use tables without borders for aligning sets of items. Do
-  I *ever* want tables with borders? If not, I might be able to just redefine
-  the `tabulary` environment. I think I can specify my own template
-  `tabulary.tex_t`. The one with Sphinx is in
-  `~/.anaconda3/envs/science38/lib/python3.8/site-packages/sphinx/templates/latex`
-  I'd also need some CSS to fix the HTML tables...
-
-* Does "Bayesian filtering" deserve it's own chapter, or should it be part of
-  the "Introduction" chapter?
-
-
-Content Tasks
-=============
+* Record the momentum derivatives for Barrows in the derivation. It wasn't
+  clear from the paper exactly how those worked.
 
 * Sketch a directed graph of the processing pipeline for converting
   paragliding flight tracks into an in-flight predictive model. (This might be
@@ -113,32 +97,46 @@ References
 Figures
 -------
 
-* Should I choose standardize figure sizes? I'm not clear on how you choose
-  scales with SVG, but I'm guessing if you start mixing up units it gets
-  awkward (eg, mixing matplotlib or graphviz output with inkscape). At the
-  least I should choose standard unit sizes (eg, coordinate axes are 1.5px
-  thickness).
+* I need a diagram for the 6 DoF model. I was going to just show the body
+  centroid "B", but that makes it less obvious that the 6 DoF supports weight
+  shift. Should all models include "P"? While I'm at it, is "B" still a good
+  choice?
 
-* Should I add a license to my SVG metadata? (Inkscape -> Document Properties)
+* My brake deflection plots are wrong. It assumes fixed hinges at 0.8c, which
+  is very very wrong for the airfoil data I'm using with my Hook3ish
 
-* Make a list of some useful figures for each section, where applicable
+* Factor out the canopy plotting function from the thesis script
+  `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
+  it to to plot my Hook3ish
 
-* For each type of **script-generated** figure, develop a single, standard
-  plotting function. Those functions should adhere to the following rules:
-  take a filename for saving SVG files; text in SVG files should be left as
-  text using "TeX Gyre Heros"; SVG outputs should not leave marginal
-  whitespace.
+* Add licenses to my SVG metadata (Inkscape -> Document Properties)
 
-* Figure labels must be globally unique. Should prototype some standard label
-  prefixes. Might be based on the content of the figure (the specific object,
-  or that object's domain) or the section that contains the figure
+* Figure labels must be globally unique, so standardized label prefixes would
+  probably help. Could be based on the content of the figure (the specific
+  object, or that object's domain) or the section that contains the figure.
 
   At the least, it seems like a reasonable that **labels should match the
   figure filename.** This will probably preclude using section names, since
   I want to avoid renaming figure filenames if the sections change.
 
   While I'm at it, **the figure sources should match the figure labels** as
-  well. It should be obvious where a figure came from.
+  well. It should be obvious where a figure came from (within reason)
+
+* Remove scratch/unused figures (eg, `elliptical_arc_dihedral.svg`)
+
+
+Extras
+------
+
+* Suppose you had the wind vectors. Assume you've identified some thermals.
+  Any hope of identifying likely **causes**? Causal explanations seem like
+  a lot of work, but things like topography (identifying orographic lift) or
+  materials (identifying likely thermal triggers, like exposed dirt versus
+  surrounding green areas, or identifying likely sinks, like water locations).
+
+  If you think about this like a geostatistician you might think about
+  relating the observations (wind vectors) to other data (topography, surface
+  characteristics, etc).
 
 
 Editorial Tasks
@@ -166,6 +164,9 @@ Writing Style
 Notation, Math, etc
 -------------------
 
+* Use `h_a/R` for "angular momentum of the apparent mass `a` about `R`"?
+  I like the slash as "X with respect to Y", which makes sense here.
+
 * Should I use :math:`\mathcal{F}_a` for "frame a" etc?
 
 * I wish that Steven's notation for forces and moments wasn't capital letters
@@ -181,7 +182,16 @@ Notation, Math, etc
 Terminology
 -----------
 
-* What markup style should I use for terms/definitions? (bold?)
+* Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (so
+  "the anhedral of the arc" as opposed to "section anhedral").
+
+* Should I define a Sphinx role for terms/definitions? There's already
+  a `:term:` role that requires they be in a glossary, but using explicit
+  asterisk wrappers is a bit fragile.
+
+
+* Review the text for `Gamma` as a reference to section dihedral. I've
+  abandoned Gamma in favor of traditional Euler angle parameters.
 
 
 Structural
@@ -228,11 +238,18 @@ Structural
 Formatting
 ----------
 
+* I wish I could use tables without borders for aligning sets of items. Do
+  I *ever* want tables with borders? If not, I might be able to just redefine
+  the `tabulary` environment. I think I can specify my own template
+  `tabulary.tex_t`. The one with Sphinx is in
+  `~/.anaconda3/envs/science38/lib/python3.8/site-packages/sphinx/templates/latex`
+  I'd also need some CSS to fix the HTML tables...
+
+* Check headings for consistent capitalization (title case or sentence case)
+
 * Verify against CalPoly formatting
 
   * ref: http://www.grad.calpoly.edu/masters-thesis/masters-thesis.html
-
-* Chapter pages don't have page numbers
 
 * Code literals (surrounded by ``\`\```) are gray shaded in HTML, but have
   white backgrounds in the PDF. I tried setting ``'sphinxsetup':
@@ -275,9 +292,13 @@ Sphinx
 * Re-run ``sphinx-quickstart`` and see how the new ``conf.py`` defaults
   compare to my current version (from July 2017)
 
+* Update to Sphinx 4 (and thus MathJax 3)
+
 
 HTML
 ----
+
+* Add a document title below the sidebar logo?
 
 * The footer (copyright and license) doesn't show on mobile
 
@@ -296,3 +317,6 @@ Miscellaneous
 
 * Create a project-local ``spellfile`` for vim (lots of project-specific
   words, like "kriging")
+
+* I should mention that my canopy geometry supports "open" parafoil designs;
+  it's easy to use just the upper surface and ignore the lower.

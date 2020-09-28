@@ -310,7 +310,7 @@ Chord Surface
 .. list-table:: Full-scale wing dimensions
    :header-rows: 1
 
-   * - Dimension
+   * - Property
      - Value
      - Unit
    * - Arch height
@@ -342,21 +342,21 @@ The physical model was built at a quarter-scale. Physical dimensions and
 positions were provided for the physical model.
 
 .. csv-table:: Model wing geometry data at panel’s ends
-   :header: :math:`i`, :math:`y_i` [m], :math:`z_i` [m], :math:`c_i` [m], Airfoil shifting location [%], Airfoil tilt angle [deg]
+   :header: :math:`i`, :math:`y` [m], :math:`z` [m], :math:`c` [m], :math:`r_x`, :math:`r_{yz}`, :math:`\\theta` [deg]
 
-   0, -0.688,  0.000, 0.107, 60, 3
-   1, -0.664, -0.097, 0.137, 60, 3
-   2, -0.595, -0.188, 0.198, 60, 0
-   3, -0.486, -0.265, 0.259, 60, 0
-   4, -0.344, -0.325, 0.308, 60, 0
-   5, -0.178, -0.362, 0.339, 60, 0
-   6,  0.000, -0.375, 0.350, 60, 0
-   7,  0.178, -0.362, 0.339, 60, 0
-   8,  0.344, -0.325, 0.308, 60, 0
-   9,  0.486, -0.265, 0.259, 60, 0
-   10, 0.595, -0.188, 0.198, 60, 0
-   11,  0.664, -0.097, 0.137, 60, 3
-   12,  0.688,  0.000, 0.107, 60, 3
+   0, -0.688,  0.000, 0.107, 0.6, 0.6, 3
+   1, -0.664, -0.097, 0.137, 0.6, 0.6, 3
+   2, -0.595, -0.188, 0.198, 0.6, 0.6, 0
+   3, -0.486, -0.265, 0.259, 0.6, 0.6, 0
+   4, -0.344, -0.325, 0.308, 0.6, 0.6, 0
+   5, -0.178, -0.362, 0.339, 0.6, 0.6, 0
+   6,  0.000, -0.375, 0.350, 0.6, 0.6, 0
+   7,  0.178, -0.362, 0.339, 0.6, 0.6, 0
+   8,  0.344, -0.325, 0.308, 0.6, 0.6, 0
+   9,  0.486, -0.265, 0.259, 0.6, 0.6, 0
+   10, 0.595, -0.188, 0.198, 0.6, 0.6, 0
+   11,  0.664, -0.097, 0.137, 0.6, 0.6, 3
+   12,  0.688,  0.000, 0.107, 0.6, 0.6, 3
 
 It is important to notice the difference between the section numbers used here
 and the section indices used in the parafoil canopy geometry.
@@ -439,7 +439,7 @@ applied.
    Pseudo-inviscid lift coefficient vs drag coefficient.
 
 [[Demonstrates how well the NLLT lift matches XLFR5's "Tilted Geometry" method
-over the lower rnage of alpha. Once alpha approaches stall, the NLLT diverges
+over the lower range of alpha. Once alpha approaches stall, the NLLT diverges
 since it's not a true inviscid method; it's using the viscous lift
 coefficients to determine the circulation distribution.]]
 
