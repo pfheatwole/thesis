@@ -22,8 +22,6 @@ Data Considerations
 Atmospheric Parameters
 ======================
 
-
-
 The IGC files record altitude using two different measurements: one from the
 GNSS device, one from barometric pressure. The GNSS altitude is an estimate of
 the current geometric altitude. The pressure altitude is the altitude at which
@@ -73,14 +71,12 @@ performing sequence alignment.
 Parameter Estimation
 --------------------
 
-
-
 .. FIXME: should I use the `align*` or `aligned` environment?
 
 .. math::
    :label: stochastic_pressure_to_altitude
 
-   \begin{aligned}                                                                                                                                                                                                                                                                          
+   \begin{aligned}
    h &\sim \mathcal{N}(\mu_h, 2)                                                          &\mathrm{m}\\[1.0ex]
    \mu_h &= \frac{T_0}{L} \cdot \left( 1 - {\left( \frac{p}{P_0} \right)}^{LR/Mg} \right) &\mathrm{m}\\[1.0ex]
    T_0 &\sim \mathcal{N}(288.15, 10)                                                      &\mathrm{K}\\[1.0ex]
@@ -89,7 +85,7 @@ Parameter Estimation
    R &\equiv 8.3144598                                                                    &\mathrm{J \cdot K^{-1} \cdot mol^{-1}} \\[1.0ex]
    M &\equiv 0.0289644                                                                    &\mathrm{kg \cdot mol^{-1}}\\[1.0ex]
    g &\equiv 9.80665                                                                      &\mathrm{kg \cdot m \cdot s^{-2}}
-   \end{aligned} 
+   \end{aligned}
 
 
 In :eq:`pressure_to_altitude` I do stuff.

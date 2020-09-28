@@ -65,9 +65,9 @@ section x-axis in the section coordinate system.
 This equation covers the majority of the choices for chord surface
 parametrizations in common use. Designs that position the chords by specifying
 their leading edge are equivalent to setting :math:`r = 0` and
-`\vec{r}_{\mathrm{RP}/\mathrm{WO}}^w = \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w`.
-Other designs use the quarter-chord positions for the reference points, in
-which case :math:`r = 0.25`.
+:math:`\vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
+= \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w`. Other designs use the quarter-chord
+positions for the reference points, in which case :math:`r = 0.25`.
 
 The problem with these fixed parametrizations is that they only support
 a single reference point for design in all three dimensions. If a designer

@@ -28,24 +28,8 @@ Purpose/Motivation
   a system for newer tracks with better accuracy.
 
 
-Intuitive Development
-=====================
-
-This is the non-mathematical development of the idea.
-
-
 Mathematical Development
 ========================
-
-NT
-
-
-Wind Reconstruction
--------------------
-
-I can probably break this into two categories: structured, and unstructured.
-Structured approaches in the vast majority of "thermal localization and
-tracking" papers.
 
 
 Filtering
@@ -1030,26 +1014,6 @@ Scratch notes
   :cite:`chreim2017ViscousEffectsAssessment`, section 3.1.3 (pg 7).
 
 
-Paragliding Harness
-===================
-
-This is the "payload".
-
-
-Physical Description
---------------------
-
-My current design uses a spherical approximation for the harness forces, with
-the center of mass coinciding with the riser attachments, so the harness
-geometry is simple. [[FIXME: this description sucks]]
-
-
-Mathematical Model
-------------------
-
-NT
-
-
 Parafoil-Payload System
 =======================
 
@@ -1063,18 +1027,6 @@ This is the combination of wing and payload (harness).
 I should review existing paraglider models, including the different degrees
 of freedom and what that choice implies. I should frame my new design in terms
 of existing terminology to make it easier to relate.
-
-
-Physical Description
---------------------
-
-NT
-
-
-Mathematical Model
-------------------
-
-NT
 
 
 Performance
@@ -1240,31 +1192,6 @@ where "interesting" may refer to the wind, or pilot inputs, or both. This
 chapter is a cursory overview of those "interesting" scenarios.
 
 
-Control Sequences
-=================
-
-A paraglider has only a few formal control inputs: a left and right brakes, an
-accelerator (or "speed bar"), and weight shifting.
-
-Braking
--------
-
-[[What happens as a you apply a single brake? Asymmetric brakes? Symmetric
-brakes?]]
-
-
-Accelerating
-------------
-
-[[What happens when you press the accelerator?]]
-
-
-Weight Shifting
----------------
-
-[[What happens during weight shifting?]]
-
-
 Encoding Rotations
 ==================
 
@@ -1283,17 +1210,17 @@ known inputs (controls and wind) to generate state trajectories. Part of that
 discussion was to define the state variables. The flight reconstruction
 concept could start by defining *inverse problems* and *underdetermined
 systems*, which leads into probabilistic methods (*simulation-based
-filtering*). The purpose of flight reconstruction (in this context) is to determine the
-unknowns (here, those are the model parameters, the control inputs, and the
-wind vectors).
+filtering*). The purpose of flight reconstruction (in this context) is to
+determine the unknowns (here, those are the model parameters, the control
+inputs, and the wind vectors).
 
 Key points:
 
 * Bayesian filtering combines the observed data with prior knowledge of the
   system to generate a joint distribution over all the variables. Bayesian
-  methods require a prior (over the state values and model parameters),
-  a likelihood (for the observed data), and model dynamics (for the state
-  transitions).
+  methods require priors (over the state values, model parameters, and model
+  inputs), a likelihood (for the observed data), and model dynamics (for the
+  state transitions).
 
 * Monte Carlo methods generate the joint distribution by exploring the
   possible space of plausible values. The exploration of different values uses
@@ -1560,17 +1487,17 @@ Wind Estimation and Prediction
   requires several steps:
 
   1. Generate wind field point estimates from a single track
-  
+
   #. Generate a wind field regression model from the point estimates
-  
+
   #. Generate an set of wind field regressions models from a set of tracks
-  
+
   #. Extract patterns from the set of wind field regression models
-  
+
   #. Encode the patterns in a predictive Bayesian model (forecasting model)
-  
+
   #. Generate wind field point estimates using an in-flight device
-  
+
   #. Use the point estimates to generate a state of belief about the current
        wind patterns
 

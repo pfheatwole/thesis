@@ -12,13 +12,14 @@ This chapter should establish:
 
 2. The value: feedback helps pilot enjoy better flights
 
-3. The difficulty: not enough good data
+3. The difficulty: not enough data
 
-4. The approach: simulate flights and weight them
+4. The approach: introduce more information via flight dynamics
 
 5. The focus: building a dynamics model for the particle filter
 
 6. The outcomes: a fully parametric paraglider model
+
 
 
 Intro to the Intro
@@ -45,13 +46,14 @@ ability to recognize the structure of the local air currents and navigate them
 in order to achieve their flight goals, which may include optimizing for
 flight time, distance, or a particular route. Because a glider is constantly
 spending energy to counteract the force of gravity, the pilot must recognize
-the wind patterns as quickly as possible to minimize energy loss. Experienced
-pilots assess the nearby air currents by observing vegetation, birds, or other
-pilots, but they can also leverage knowledge gained from previous flights:
-although local wind configurations are difficult to predict, they can exhibit
-recurring patterns. By learning those patterns a pilot can assess the current
-wind conditions more quickly and with better odds of success, and can
-prioritize flying to areas that are likely to support their flight goals.
+the wind patterns as quickly as possible to minimize energy loss. [[Awkward;
+I'm trying to say "time has an energy cost"]] Experienced pilots assess the
+nearby air currents by observing vegetation, birds, or other pilots, but they
+can also leverage knowledge gained from previous flights: although local wind
+configurations are difficult to predict, they can exhibit recurring patterns.
+By learning those patterns a pilot can assess the current wind conditions more
+quickly and with better odds of success, and can prioritize flying to areas
+that are likely to support their flight goals.
 
 
 .. Establishing a niche (Problem and Significance):
@@ -209,7 +211,7 @@ Restatement of the response
      doesn't mean you should trust it.
 
 #. Discuss the available data. This determines the set of possible solutions
-   (ie, it constraints the feasible set of filter designs).
+   (ie, it constrains the feasible set of filter designs).
 
    * Time series of position, approximate air density?
 
@@ -339,7 +341,7 @@ Restatement of the response
 
      * Easy integration into tools w/ native support (Blender, FreeCAD, QGIS)
 
-#. Things I'd like to discuss but not finish
+#. Things I'd like to discuss in this paper (but not finish)
 
    * Parameter estimation for the sensor noise?
 
@@ -355,7 +357,7 @@ Restatement of the response
        the total system. Those state dynamics are the basis of generating
        predictions as part of the particle filter time update step.
 
-     * Gaussian processes for the proposal distribution?
+     * A multivariate Gaussian process for the prior?
 
    * Digital elevation models for the topography?
 
@@ -574,21 +576,32 @@ Upcoming chapters:
 
 * Formalize the "restatement of the problem" in probabilistic terms. The math
   will produce a set of terms, each of which are their own topic. For example,
-  the "underdetermined system" problem is the impetus for "simulation-based
-  flight reconstruction", which segues into particle filtering, which in turn
+  the *underdetermined system* problem is the impetus for *simulation-based
+  flight reconstruction*, which segues into particle filtering, which in turn
   will necessitate the parametric model. (The focus of this project.)
 
 * Review the available data. Primary sources are IGC files, but could also
   suggest augmenting that with atmospheric equations, digital elevation
-  models, radiosondes, RASP, etc.
+  models, radiosondes, RASP, etc. Those might fit well in my discussion about
+  "adding information" to make up for the dearth of data; maybe put it under
+  a "brain storm information we can add" prior to the mathematical
+  formalization.
 
   Probably need to put this chapter earlier than the chapter on particle
   filtering. The limitations of the data is what motivates simulation-based
   filtering. Or maybe it's small enough to put this in the introduction?
 
+  [[Update 2020-09-26: on second thought, maybe not. Start with the simplest
+  possible problem statement: I have time-series of position, nothing more.
+  I can dig into the data more later on when I'm discussing filter design.
+  I'll already be discussing sensor noise, etc.]]
+
 
 Related Works
 =============
+
+[[This seems too broad to put up front; I do love papers with these sections,
+but I suspect it'd get unwieldy very fast if I put this discussion here.]]
 
 * Wind estimation
 

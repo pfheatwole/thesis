@@ -42,13 +42,34 @@ Goals:
 
 * Break the informal problem statement into subtasks
 
-* Demonstrate the need for dealing with uncertainty
+  1. Turn a sequence of positions into a sequence of wind vectors
 
-* Introduce filtering methods
+  #. Turn a sequence of wind vectors into a wind field
 
-* Formalize the subtasks in the language of probability [[Don't define the
-  distributions, just use probabilistic relationships to acknowledge their
-  existence]]
+  #. Turn a wind field into regions
+
+  #. Turn a set of wind fields into a set of patterns
+
+  #. Turn a set of patterns into a predictive model
+
+* Highlight the need for *uncertainty quantification*, which motivates
+  *Bayesian filtering*, which establishes the recursive filter equation, which
+  motivates the dynamics model
+
+* At each state you have modeling choices, including how to quantify
+  uncertainty. I've already decided I want to avoid implementation-specific
+  choices (particle filter architecture, dynamics model, etc) as much as
+  possible. I'd like to formalize the subtasks in the language of probability
+  [[Don't define the distributions, just use probabilistic relationships to
+  acknowledge their existence]]
+
+  But wait: is there any value in trying to produce a **mathematical**
+  representation of each task? I'm leaning towards no: I don't have any
+  particular mathematical form of the other tasks, but I don't think that
+  matters as much as the informal problem statement. I can use the informal
+  setup to say "before you can learn the wind patterns, you have to be able to
+  recover the wind present during an individual flight", which is what this
+  "Formalization" should probably focus on.
 
 * Conclude with the need for a paraglider dynamics model
 

@@ -439,7 +439,7 @@ applied.
    Pseudo-inviscid lift coefficient vs drag coefficient.
 
 [[Demonstrates how well the NLLT lift matches XLFR5's "Tilted Geometry" method
-over the lower rnage of alpha. Once alpha approaches stall, the NLLT diverges
+over the lower range of alpha. Once alpha approaches stall, the NLLT diverges
 since it's not a true inviscid method; it's using the viscous lift
 coefficients to determine the circulation distribution.]]
 
