@@ -9,7 +9,7 @@ Outline:
 
 #. Discuss wind patterns, their importance, and how they're learned
 
-#. Introduce the objective: predictive modeling
+#. Introduce the objective: wind field predictive modeling
 
    * Can we learn them from existing data?
 
@@ -20,8 +20,6 @@ Outline:
    1. Turn a sequence of positions into a sequence of wind vectors
 
    #. Turn a sequence of wind vectors into a wind field
-
-   #. Turn a wind field into regions
 
    #. Turn a set of wind fields into a set of patterns
 
@@ -42,13 +40,14 @@ Outline:
 
      * Specifically, we must introduce more information via flight dynamics
 
-     * Build intuition for the model-based method by given a "conversational"
+     * Build intuition for the model-based method by giving a "conversational"
        walkthrough of how a pilot might estimate the wind by watching
        a glider. They're using domain knowledge; the program should do the
        same.
 
-   * Our new goal is to quantify our intuitive knowledge so the filter can
-     integrate it with our data to get what we want.
+   * The new goal is to quantify a pilot's "intuitive" knowledge in
+     a mathematical form. The mathematical form enables statistical filtering
+     methods that can combine the knowledge with our data to get what we want.
 
 #. Summarize the contribution of this work
 
@@ -64,24 +63,61 @@ Outline:
    * Code is MIT licensed, writeup is CC-BY
 
 
-Flight reconstruction
-=====================
+Probabilistic flight reconstruction
+===================================
 
-* The first step to learning wind patterns is to estimate the wind fields from
-  individual flights.
+* [[**This chapter is responsible for convincing the reader that there exists
+  some path towards solving the informal problem statement, and that path
+  requires the dynamics. It will accomplish this by translating the informal
+  problem statement from the introduction into a formal, probabilistic
+  equation that explicitly motivates the dynamics model.**]]
 
-* The flight data doesn't record the wind vectors, so they must first be
-  estimated from the position data.
+  * Its job is to motivate the dynamics while hiding the statistics from
+    readers that only care about the dynamics.
 
-* Uncertainty in the data, wind, controls, and model all necessitate
-  statistical filtering. In particular, our goal of *uncertainty
-  quantification* maps neatly onto *Bayesian filtering*.
+  * Arguing "if you're going to solve it, you'll need the dynamics" is easier
+    than arguing "if you had the dynamics, you could solve it". This chapter
+    only deals with the first part; nevertheless, connecting the informal
+    discussion to the filtering equation adds a sense of legitimacy to the
+    objective; like "if you give me the dynamics, here's the name of the
+    theory you can use to apply it."
 
-* Introduce the recursive filtering equation to motivate the dynamics model
+    That said, this chapter should avoid discussions of how you might
+    **solve** the filtering equation; leave any discussion of filtering
+    architectures until future chapters.
 
-* "The focus of this work is to provide a suitable dynamics model" (although
-  flight reconstruction will require extra information, like priors over the
-  control inputs, wind vectors, and model parameters)
+
+* The first step to learning wind patterns is to estimate the wind vectors
+  from individual flights. (Although the wind vectors could be estimated
+  concurrently with a wind field regression model, for simplicity this chapter
+  assumes these steps are separate.)
+
+* The flight data doesn't explicitly record the wind vectors, and we can't
+  compute them directly from the positions. To estimate the wind vectors we
+  must introduce more information; specifically, we require a relationship
+  between the sequence of positions and the sequence of wind vectors.
+
+* The relationship between the wind vectors and the motion of the aircraft is
+  given by the canopy aerodynamics.
+
+* Using the canopy aerodynamics to determine the wind vectors is an *inverse
+  problem*: given the effects, we wish to determine the causes.
+
+* But this inverse problem isn't deterministic: it's stochastic. There is
+  uncertainty in the data, wind, controls, and model, so a complete solution
+  should provide *uncertainty quantification*.
+
+* Estimating the values of a stochastic process is the domain of *statistical
+  filtering*.
+
+* Statistical filtering problems involving values that evolve over time can be
+  modeled with the *recursive filtering equation*.
+
+* The recursive filtering equation requires a transition function, prior
+  distributions, and a likelihood function.
+
+* The focus of this work is on the dynamics model.
+
 
 
 Canopy geometry
