@@ -2,98 +2,37 @@
 Canopy Aerodynamics
 *******************
 
-The paraglider dynamics are complicated enough on their own, so for now I'm
-splitting the canopy aerodynamics into their own section.
+
+* What are aerodynamics?
 
 
-The classic method for estimating the aerodynamic performance of a wing is
-Prandtl's *lifting-line theory* (LLT). This deceptively simple model allowed
-analytical solutions to the lift distribution.
 
-For wings with significant sweep and/or dihedral, the classic LLT breaks down.
-These more complex geometries require adaptations to account for the
-non-linear behaviors, resulting in *non-linear lifting line* (NLLT) theories.
-These are often also known as "numerical" lifting-line theories, since they
-require numerical solutions.
+Modeling Requirements
+=====================
 
-Related work:
-
-* :cite:`gonzalez1993PrandtlTheoryApplied`
+* [[What modeling fidelity do I need?]]
 
 
-Inviscid methods
-================
-
-* It'd be cool to show a purely inviscid analysis first. Those are more common
-  in many analyses, and more commonly applied to unusual geometry. I can use
-  its poor performance to motivation Phillips' method. It also gives me the
-  chance to introduce the method (since I'll need to discuss it at some point
-  anyway before I compare it with Phillips).
-
-* Notice there are a variety of limitations to my chosen inviscid model: see
-  https://www.xflr5.tech/docs/Part%20IV:%20Limitations.pdf. When I say
-  "this is what inviscid methods produce", what I really mean is "this is the
-  performance of the particular inviscid method I applied"
-
-
-Viscous methods
-===============
-
-Lifting-line
-------------
-
-[[Describe the classic approach and its limitations.]]
-
-
-Section Coefficients
---------------------
-
-[[Do these have any application to inviscid methods? I think Prandtl's
-lifting-line is a *potential flow* method, but it also uses the section
-coefficients, so I'm confused.]]
-
-
-Related work:
-
-* :cite:`abbott1959TheoryWingSections`
-
-Instead of solving the boundary layer conditions for the full 3D wing, it is
-common to treat the lifting surface as a collection of finite segments taken
-from theoretical infinite-length wings. The infinite length assumption
-eliminates 3D effects and allows the wing sections to be analyzed using 2D
-geometry. The 3D flow of the physical wing can then be approximated using the
-2D aerodynamic coefficients.
-
-Limitations:
-
-* This method assumes straight, uniformly shaped wing segments. For
-  a continuously curved wing, this approximation will never be correct,
-  although the approximation improves as the number of segments increases.
-
-* It assumes the finite segments are well approximated by the flow over the
-  infinite wing. This neglects spanwise variation in boundary layers, etc.
-
-* It is difficult to model cell distortions (due to billowing, etc) using
-  predetermined 2D geometry. It is technically possibly to estimate the final
-  cell shapes and measure the section profiles, but the "infinite wing"
-  approximation is unlikely to remain valid. If the aerodynamic effects of
-  cell distortions are of interest, they are best treated either
-  approximately, using averaged coefficient effects, or using full
-  computational fluid dynamics methods. This current work neglects the effects
-  of cell distortions and assumes all wing segments match the idealized 2D
-  airfoils.
 
 
 Phillips' numerical lifting-line
 ================================
 
-* In Phillips' original derivation they assumes uniform flow for Eq:5, but I'm
+* **Phillips' original derivation assumes uniform flow** for Eq:5, but I'm
   using the non-uniform version from Hunsaker-Snyder Eq:5. Hunsaker mentions
   that this *local upstream velocity* `V_rel,i` "differs from the global
   freestream velocity `V_inf` in that it may also have contributions from
   prop-wash **or rotations of the lifting surface about the aircraft center of
   gravity.**" Is he implying that Phillips' method is useable as-is during
   rotations?
+
+* "The lifting-line theory of Phillips and Snyder (2000) is in reality the
+  vortex-lattice method applied using only a single lattice element in the
+  chordwise direction for each spanwise subdivision of the wing."
+  (Aerodynamics for Engineers, pg 383).
+
+  Interesting: useful to keep in mind when validating an implementation by
+  comparing it to a full lattice method.
 
 * I'm using airfoil data from XFOIL, which is unreliable post-stall, but I'm
   including significant post-stall coefficient data anyway to observe how
@@ -112,9 +51,17 @@ Phillips' numerical lifting-line
   that it only needs the quarter-chord means it's easy to use with simple
   geometry definitions (I wanted the geometry as simple as possible).
 
-  I needed a method that can handle sweep, dihedral, twist, asymmetric
-  geometry (brake deflections), asymmetric wind (turning), non-linear lift
-  coefficients.
+  I needed a method that can handle **non-linear geometry** (sweep, dihedral,
+  twist, asymmetric geometry / brake deflections, asymmetric wind / turning),
+  as well as **non-linear lift coefficients** (inviscid methods neglect any
+  notion of flow separation; I'm not trying to accurately handle stall
+  conditions, I just want graceful degradation).
+
+  I want to be able to use section data that accounts (at least approximately)
+  for **thickness** and **viscosity** (which changes the lift slope, induces
+  stall, adds pressure drag due to flow separation, and enables viscous drag
+  corrections)
+
 
 
 Derivation
@@ -265,15 +212,27 @@ with the normal and chordwise wind speeds
   <https://docs.scipy.org/doc/scipy/reference/optimize.root-hybr.html>`_.
 
 
+Improvements
+------------
+
+* The original derivation suggesting using *Newton's method*, which computes
+  the zero of a function (the residual error, in this case) via gradient
+  descent. The problem with gradient descent is that it fails if the gradient
+  goes to zero (as it does when section lift coefficients go to zero at their
+  stall points). I replaced the gradient descent method with a hybrid method
+  that uses Newton's method for large steps, and a line search when using the
+  gradient is unreliable. This can be faster (it doesn't rely on fixed step
+  sizes), and it naturally handles conditions near stall.
+
+  [[Discuss the issues with assuming that (1) the section coefficient data is
+  accurate near stall, which is highly questionable when using simulated data,
+  and (2) the assumption that the sections will independently behave as
+  predicted by their individual coefficients (which is almost definitely
+  wrong, since the sections interact.]]
+
+
 Limitations
 -----------
-
-* Treats the wing as a composite of segments from infinitely long wings (ie,
-  it assumes 2D coefficients are accurate representations of the 3D segments).
-  This assumption implies steady state conditions, uniform boundary layers
-  across the segments, no cross-flow, etc. The 2D coefficients also make an
-  assumption about the center of pressure, so I'm guessing it'll affect the
-  segment pitching moments.
 
 * It uses the Kutta-Joukowski theorem for the section lift. I think the KJ
   theorem assumes uniform fluid velocity, steady-state, and unseparated? Is
@@ -281,13 +240,63 @@ Limitations
 
 * Can't model a spin (backwards airflow on one wingtip)
 
+* Places the control points on the lifting-line, which causes issues as the
+  number of control points is increased (the grid is refined). Recall the
+  **very** informative discussion in Sec:8.2.3 from "Understanding
+  Aerodynamics" (McLeanauth; 2013): "a curved lifting-line has infinite
+  self-induced velocity" and "locating the control points away from the bound
+  vortex is still the only way to have a general formulation that doesn't
+  behave badly as the discretization is refined".
+
+  See also :cite:`chreim2018ChangesModernLiftingLine`, pg3: long discussion of
+  the PBC, and later on he notes "the circulation distribution becomes
+  unstable and leads to divergence as the mesh is refined". **Worth
+  revisiting: that paper proposes alternate horseshoe vortex geometries**.
+
+  See also: :cite:`reid2020GeneralApproachLiftingLine`, where they mention:
+
+    Previous attempts have been made to extend lifting-line theory to wings
+    with sweep. One commonly used method moves the control pints off the locus
+    of aerodynamic centers to the three-quarter chord line. This method then
+    constrains the total velocity at each control point to be tangential to
+    the wing camber line. **The downside of this approach is that it is no
+    longer possible to use arbitrary section properties that account for
+    thickness or contain viscous corrections to the lift slope.**
+
+  Most of those papers are discussing problems for wings with sweep, but it
+  seems like it'd also apply to wings with dihedral. Why wouldn't it?
+
+
+* Doesn't lifting-line theory assume minimal spanwise flow? (Aerodynamics for
+  Engineers, pg356)
+
+* Modeling of turns is highly suspect: I'm assuming that all trailing vortices
+  are parallel to the freestream of the central section. I haven't
+  investigated the theoretical impact of that assumption.
+
+* The NLLT is essentially a VLM, which is a solution to the *lifting-surface
+  theory* problem, which is "an extension of thin-airfoil theory to 3D". *Thin
+  airfoil theory* assumes the airfoil is "thin", but I'm trying to use airfoils
+  with 15% and 18% thickness! According to "Aerodynamics for Engineers"
+  (pg308), airfoil sections "typically have a maximum thickness of
+  approximately 12% of the chord and a maximum mean camber of approximately 2%
+  of the chord". (I know a NACA 24018 has an 18% thickness, not sure about
+  maximum mean camber; probably more than 2% though.) Makes sense that panel
+  methods (that have no restriction on thickness) might have some advantages.
+
+* Flow separation is a viscous effect, so you typically need to go to CFD for
+  good approximations of that. In my case, I'm using the viscous-inviscid
+  coupling method from XFOIL to predict small amounts of flow separation in
+  the section coefficients and assume it is representative of flow separation
+  on the 3D wing.
+
 
 Case Study
 ==========
 
-(This is where I'll introduce Belloc's reference wing and wind tunnel data.
+[[This is where I'll introduce Belloc's reference wing and wind tunnel data.
 I can refer to it when I'm showing examples of the chord surface geometries as
-an real-world application of the chord surface concept.)
+an real-world application of the chord surface concept.]]
 
 Every new tool should be validated, and for aerodynamic codes validation often
 involves comparing theoretical models to wind tunnel measurements. For the
@@ -480,3 +489,120 @@ Comments
   to suggest bad airfoil coefficients, doesn't it? I would think you'd have
   the least amount of flow separation at that alpha; is that intuition
   correct?
+
+* The wind tunnel data is only testing the **uniform** flow field case. In my
+  simulations I'm using this method for **asymmetric** flows (spanwise
+  variation in speed and/or direction). That's definitely questionable
+  (similar to what I mention about assuming the trailing wake is aligned to
+  the central freestream: highly questionable).
+
+  Not a big deal though; I just need to be clear that the point isn't to claim
+  this is a great model; I just need something useful for testing the geometry
+  and "good enough" for simulations.
+
+  **This was always meant to be used in an uncertain environment (stochastic
+  simulations). As long as the choice of aerodynamic method is not the
+  dominant source of error, I'm fine with it.**
+
+
+
+SCRATCH
+=======
+
+The classic method for estimating the aerodynamic performance of a wing is
+Prandtl's *lifting-line theory* (LLT). This deceptively simple model allowed
+analytical solutions to the lift distribution.
+
+For wings with significant sweep and/or dihedral, the classic LLT breaks down.
+These more complex geometries require adaptations to account for the
+non-linear behaviors, resulting in *non-linear lifting line* (NLLT) theories.
+These are often also known as "numerical" lifting-line theories, since they
+require numerical solutions.
+
+Related work:
+
+* :cite:`gonzalez1993PrandtlTheoryApplied`
+
+
+* One of my goals with this model is to provide a more detailed view of
+  paraglider aerodynamics. Too many papers start by assuming a linear model,
+  quadratic drag, etc. I think you should start with a more complete model,
+  then use **that** to produce the simplified model. **Access to a complete,
+  non-linear model enables you to quantify the error involved with simplified
+  models.**
+
+  In fact, I strongly suspect that a good solution to the computational
+  performance problem is to replace the NLLT with polynomial CL and CD whose
+  parameters (offset, slope, etc) are functions of sideslip. The problem there
+  is you'd need to assume a uniform wind. You could account for asymmetric
+  flow during turns by making the parameters functions of the angular rates,
+  but you'd still need to assume the underlying wind field is uniform.
+
+  Either way, the point is to start with a thorough model **before** applying
+  simplifications, so you can check if the simplification is reasonable.
+
+
+Inviscid methods
+----------------
+
+* It'd be cool to show a purely inviscid analysis first. Those are more common
+  in many analyses, and more commonly applied to unusual geometry. I can use
+  its poor performance to motivation Phillips' method. It also gives me the
+  chance to introduce the method (since I'll need to discuss it at some point
+  anyway before I compare it with Phillips).
+
+* Notice there are a variety of limitations to my chosen inviscid model: see
+  https://www.xflr5.tech/docs/Part%20IV:%20Limitations.pdf. When I say
+  "this is what inviscid methods produce", what I really mean is "this is the
+  performance of the particular inviscid method I applied"
+
+
+Section Coefficients
+--------------------
+
+* [[Do these have any application to inviscid methods? I think Prandtl's
+  lifting-line is a *potential flow* method, but it also uses the section
+  coefficients, so I'm confused.]]
+
+* [[Section profiles were covered in the previous chapter. The
+  computational methods use the profiles either via their section
+  coefficients, or via the surface geometry they generate.]]
+
+* Related work: :cite:`abbott1959TheoryWingSections`
+
+* Instead of solving the boundary layer conditions for the full 3D wing, it is
+  common to treat the lifting surface as a collection of finite segments taken
+  from theoretical infinite-length wings. The infinite length assumption
+  eliminates 3D effects and allows the wing sections to be analyzed using 2D
+  geometry. The 3D flow of the physical wing can then be approximated using
+  the 2D aerodynamic coefficients.
+
+Limitations of using "design by wing sections":
+
+* This method assumes straight, uniformly shaped wing segments. For
+  a continuously curved wing, this approximation will never be correct,
+  although the approximation improves as the number of segments increases.
+
+* The "wing sections" modeling assumption: treats the wing as a composite of
+  segments from infinitely long wings (ie, it assumes 2D coefficients are
+  accurate representations of the 3D segments). This assumption implies steady
+  state conditions, uniform boundary layers across the segments, no
+  cross-flow, etc. The 2D coefficients also make an assumption about the
+  center of pressure, so I'm guessing it'll affect the segment pitching
+  moments.
+
+* It is difficult to model cell distortions (due to billowing, etc) using
+  predetermined 2D geometry. It is technically possibly to estimate the final
+  cell shapes and measure the section profiles, but the "infinite wing"
+  approximation is unlikely to remain valid. If the aerodynamic effects of
+  cell distortions are of interest, they are best treated either
+  approximately, using averaged coefficient effects, or using full
+  computational fluid dynamics methods. This current work neglects the effects
+  of cell distortions and assumes all wing segments match the idealized 2D
+  airfoils.
+
+
+Discussion
+==========
+
+FIXME

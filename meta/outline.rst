@@ -66,25 +66,25 @@ Outline:
 Probabilistic flight reconstruction
 ===================================
 
-* [[**This chapter is responsible for convincing the reader that there exists
-  some path towards solving the informal problem statement, and that path
-  requires the dynamics. It will accomplish this by translating the informal
-  problem statement from the introduction into a formal, probabilistic
-  equation that explicitly motivates the dynamics model.**]]
+[[Meta: this chapter is responsible for convincing the reader that there
+exists some path towards solving the informal problem statement, and that path
+requires the dynamics. It will accomplish this by translating the informal
+problem statement from the introduction into a formal, probabilistic equation
+that explicitly motivates the dynamics model.
 
-  * Its job is to motivate the dynamics while hiding the statistics from
-    readers that only care about the dynamics.
+* It should motivate the dynamics while hiding most of the statistics from
+  readers that only care about the dynamics.
 
-  * Arguing "if you're going to solve it, you'll need the dynamics" is easier
-    than arguing "if you had the dynamics, you could solve it". This chapter
-    only deals with the first part; nevertheless, connecting the informal
-    discussion to the filtering equation adds a sense of legitimacy to the
-    objective; like "if you give me the dynamics, here's the name of the
-    theory you can use to apply it."
+* Arguing "if you're going to solve it, you'll need the dynamics" is easier
+  than arguing "if you had the dynamics, you could solve it". This chapter
+  only deals with the first part; nevertheless, connecting the informal
+  discussion to the filtering equation adds a sense of legitimacy to the
+  objective; like "if you give me the dynamics, here's the name of the
+  theory you can use to apply it."
 
-    That said, this chapter should avoid discussions of how you might
-    **solve** the filtering equation; leave any discussion of filtering
-    architectures until future chapters.
+  That said, this chapter should avoid discussions of how you might
+  **solve** the filtering equation; leave any discussion of filtering
+  architectures until future chapters.]]
 
 
 * The first step to learning wind patterns is to estimate the wind vectors
@@ -100,6 +100,9 @@ Probabilistic flight reconstruction
 * The relationship between the wind vectors and the motion of the aircraft is
   given by the canopy aerodynamics.
 
+* [[Using the aerodynamics model adds new variables, like air density and
+  control inputs. May introduce those here by using an intuitive "derivation]]
+
 * Using the canopy aerodynamics to determine the wind vectors is an *inverse
   problem*: given the effects, we wish to determine the causes.
 
@@ -110,69 +113,123 @@ Probabilistic flight reconstruction
 * Estimating the values of a stochastic process is the domain of *statistical
   filtering*.
 
-* Statistical filtering problems involving values that evolve over time can be
-  modeled with the *recursive filtering equation*.
+* [[Define the joint probability distribution over state, inputs, and
+  observations. Maybe define conditional probability here too.]]
 
-* The recursive filtering equation requires a transition function, prior
-  distributions, and a likelihood function.
+* Estimating the joint probability directly is intractable, but the Markov
+  property allows the problem to be rewritten in a tractable form: the
+  *recursive filtering equation*.
 
-* The focus of this work is on the dynamics model.
+  [[Old phrasing: "Statistical filtering problems involving values that evolve
+  over time can be modeled with the *recursive filtering equation*."]]
 
+* The recursive filtering equation is composed from a set of priors,
+  a transition function (a dynamics model), and a likelihood function (an
+  observation model).
+
+* The transition function is how we "introduce more information" into the
+  problem (via the aerodynamics).
+
+* Writing the wind vector estimation task in terms of the recursive filtering
+  equation also reveals that there are several subtasks:
+
+  1. State estimation
+
+  2. Parameter estimation (aka model estimation)
+
+  3. Input estimation (the wind vectors live in this subtask)
+
+* "Solving" the filtering problem simply means "estimate the joint probability
+  distribution", then *marginalize* the "nuisance" variables (control inputs,
+  model parameters, etc) to compute the joint distribution over the position
+  and wind vectors. (*Nuisance variables* aren't interesting by themselves,
+  but they must be accounted for: the targets depend on the nuisance
+  variables, and so the uncertainty of the nuisance variables must be
+  incorporated into the uncertainty of the target variables.)
+
+* This paper will not discuss filtering architectures for solving the
+  filtering problem. **The focus of this work is on the dynamics model, which
+  provides the transition function.**
 
 
 Canopy geometry
 ===============
 
-* The easiest way to design a parametric dynamics model is to start with
-  a parametric geometry.
+[[Meta: The easiest way to design a parametric dynamics model is to start with
+a parametric geometry. This chapter chooses a target level-of-detail, then
+presents an intuitive parametrization to enable creating models at that level
+of detail.]]
 
-* This chapter chooses a target level-of-detail, then presents an intuitive
-  parametrization to enable creating models at that level of detail.
-
-
-Outline:
 
 1. Introduction
 
    #. What is a canopy?
 
-   #. Why does this project need a mathematical model of canopy geometry?
+   #. Why does this project need a mathematical model of the canopy?
 
-   #. What are the important aspects of the canopy geometry?
+      To enable calculating the aerodynamics and inertial properties.
 
-   #. What are **MY** performance requirements for a mathematical model?
+   #. What are the important aspects of a canopy geometry?
 
-   #. How do you design a mathematical model that achieves those requirements?
+   #. What sorts of queries should the model answer? [[Points on the chords,
+      points on the surfaces, inertial properties, etc.]]
+
+   #. How do you specify a design?
+
+      * Explicit vs parametric geometries
+
+   #. What are the goals of a parametrization? (What makes a good one?)
+
+   #. How do you design a parametrization that achieves those goals?
+
+      Decompose the model into sets of parameters:
+
+      1. Section scale, position and orientation (chord surface)
+
+      2. Section profiles (foil surface)
 
    #. What is the rest of the chapter about?
 
 #. Chord Surface
 
-   #. Review existing parametrizations of the chord surface?
+   #. What is a chord surface? (Scale, position, and orientation)
 
-   #. Introduce my general parametrization of a chord surface. Discuss the
-      section index, and how to specify scale, position, and orientation.
+   #. What are the conventional parametrizations of a chord surface?
 
-   #. Refine/optimize/simplify the general parametrization for parafoils (this is
-      where I choose a definition of the section index, set `r_y = r_z = r_yz`,
-      parametrize `C_w/s` using Euler angles, etc. **My examples use six design
-      functions; I need to get there somehow**)
+   #. What are the limitations of conventional parametrizations?
 
-   #. Discuss parametric design functions? (eg, an elliptical arc)
+   #. Introduce my **general** parametrization of a chord surface.
+
+      Define the *section index*, and how to specify scale, position, and
+      orientation.
+
+   #. Introduce my **simplified** parametrization for parafoils.
+
+      This is where I choose a definition of the section index, set `r_y = r_z
+      = r_yz`, parametrize `C_w/s` using Euler angles, etc. **My examples use
+      six design functions; I need to get there somehow**)
+
+   #. Discuss parametric design functions?
+
+      The chord surface is parametrized by functions, those functions can
+      themselves be parametric (eg, an elliptical arc)
 
    #. Present examples of parametric chord surfaces
 
-#. Section profiles
+#. Foil surface
 
-   #. Discuss section profiles (airfoils)
+   * What is a *section profile*?
 
-   #. Discuss how the airfoil affects wing performance?
+   * How does the choice of airfoil effect wing performance?
 
-   #. Discuss how they can vary along the span?
+   * How does the profile vary along the span?
 
-   #. Discuss distortions due to billowing, braking, etc?
+   * How does the profile behave in-flight?
 
-   [[This isn't meant to be an exhaustive discussion of parafoil design!]]
+     Distortions due to billowing, braking, etc. (We're ignoring these, but
+     you can use the section indices to deal with them.)
+
+   * [[This should not be an exhaustive discussion of parafoil design!]]
 
 #. Examples of complete parametric canopies
 
@@ -182,7 +239,50 @@ Outline:
 Canopy aerodynamics
 ===================
 
-* This is my link between position and the wind.
+[[Meta: this is the link between position and the wind.]]
+
+
+Outline:
+
+* What are aerodynamics?
+
+* What are the modeling requirements?
+
+  * Physical model
+
+    * Non-linear geometry (straight lifting-line is unacceptable)
+
+    * Non-linear coefficients (don't **start** with a simplistic model; this
+      should provide a baseline for judging simplified models)
+
+    * Enables empirical adjustments to viscous drag (existing literature on
+      paragliders often provide empirical values that I wanted to incorporate)
+
+    * Non-uniform wind (what happens during a turn, when the wingtip enters
+      a thermal, etc)
+
+    * Relaxes the "small AoA" restriction (graceful degradation near stall)
+
+  * Practicalities
+
+    * Simple (relatively easy to implement, no dependence on external tools)
+
+    * Computationally fast (think of this as a rapid prototyping phase)
+
+
+* [[Section profiles were covered in the previous chapter. The computational
+  methods use the profiles either via their section coefficients, or via the
+  surface geometry they generate.]]
+
+#. Phillips' NLLT
+
+#. Case study: Barrows' model
+
+   * Describe the model and wind tunnel dataset
+
+   * Compare the raw data to the VLM and the NLLT
+
+#. Discussion, pros/cons
 
 
 Paraglider geometry
@@ -190,26 +290,26 @@ Paraglider geometry
 
 * The paraglider is a system composed of wing and harness.
 
+* [[Introduce my chosen specification for a paraglider wing, positioning the
+  payload, etc.]]
+
+* [[Provide an example? Like my Hook 3 model.]]
+
 
 Paraglider dynamics
 ===================
 
-* This is what we use to drive the flight simulator
+#. This provides the dynamics model for generating flight trajectories
 
-
-Case study
-==========
-
-* Walk through a simple design example for a paraglider. This should view the
-  problem from the standpoint of a user trying to approximate an existing wing
-  from technical specs and an on-hand wing. (ie, show how to use what I've
-  created)
+#. Discussion, pros/cons
 
 
 Flight simulation
 =================
 
 * The filtering equation needs a transition function
+
+* [[Talk about choosing a state representation? Quaternions, etc?]]
 
 
 Future work
@@ -225,19 +325,24 @@ Future work
 Model optimization
 ------------------
 
-* The NLLT is probably too slow to use with a particle filter. It'd be great
-  to pre-process the solutions; maybe train a neural network?
+* Even if the NLLT gives reasonable results, it's probably too slow to use
+  with a particle filter. It'd be great to pre-process the solutions; maybe
+  train a neural network?
 
 
 Data considerations
 -------------------
 
-* Need to characterize sensor noise for a wide range of tracks
+* Sensor noise (GPS, variometer)
 
-* Estimate the atmospheric parameters (air density)
+  * Not sure how to generalize over such a wide range of tracks.
 
-* Consider supplementary sources like topography (eg, a DEM), meteorology (eg,
-  RASP), related fields (drainage networks), etc
+* Atmospheric parameters (air density)
+
+* Supplementary sources
+
+  * Topography (eg, a DEM), meteorology (eg, RASP), related fields (drainage
+    networks), etc
 
 
 Filter architecture
@@ -263,15 +368,24 @@ Filter architecture
 Wind field regression
 ---------------------
 
-* Given an individual track, estimate the underlying wind field.
+* Estimate the underlying wind field of individual tracks
 
-* Assume constant mean over a fixed time interval?
+* Constraints
+
+  * Assume constant mean over a fixed time interval?
 
 
-Pattern detection
------------------
+Wind patterns
+-------------
 
-* Points or areas? Grids or polygons?
+* Modeling target
+
+  * Separate the horizontal and vertical components?
+
+  * Data-based (unstructured wind velocities) or model-based (eg, try to detect
+    thermals, shear, etc)
+
+* Representation (Points, lines, areas, volumes? Grids or polygons?)
 
 
 Predictive modeling

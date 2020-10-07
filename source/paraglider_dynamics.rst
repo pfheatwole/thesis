@@ -233,3 +233,32 @@ momentum :math:`^e \dot{\vec{p}} = \sum{\vec{F}}` and angular momentum
 :math:`^e \dot{\vec{h}} = \sum \vec{M}` for both bodies.
 
 For the derivation of the mathematical model, see :ref:`derivations:Model 9a`.
+
+
+Discussion
+==========
+
+
+Limitations
+-----------
+
+* Inherits the limitations of the aerodynamics method:
+
+  * Assumes section coefficients are representative of the entire wing segment
+    (ignores inter-segment flow effects, etc)
+
+* Rigid-body assumption (none of the canopy, connecting lines, or payload are
+  actually rigid bodies)
+
+* Quasi-steady-state assumption (I'm using steady-state aerodynamics to
+  simulate non-steady conditions by assuming the conditions are changing
+  "slowly enough.") I've included adjustments for apparent mass, but I'm still
+  assuming the steady-state solution is representative of the unsteady
+  solution.
+
+  Consider the fact that the canopy is interacting with the "underlying" wind
+  field, so that the motion of the canopy changes the local wind vectors. This
+  effect should propagate through time, but for my simulator I'm only using
+  the "global" wind field, neglecting any effects of the previous timestep. (I
+  am trying to account for apparent mass, but I don't think that's really the
+  same thing, since that doesn't change the local aerodynamics.)

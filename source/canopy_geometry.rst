@@ -86,8 +86,19 @@ Canopy Geometry
         Note that this refers to the angle, and is the same regardless of any
         particular rotation point.
 
+#. Explicit vs parametric parametrizations.
 
-#. What are **MY** performance requirements for a mathematical model?
+   * Parametric designs try to balance simplicity and flexibility. A good
+     parametrization lets you focus on high-level design without forcing you
+     into simplistic designs. [[I'm interested in "easy to create, good
+     enough" approximations of real wings, not physically-realistic
+     simulations.]]
+
+   * It's much easier to place a prior for parameters than for explicit
+     geometries. (You'd have to invent parameters you can compute for an
+     explicit geometry just so you can compare two canopies.)
+
+#. What are **MY** requirements for a parametric model?
 
    * [[The general requirement is that it enables estimating the inertial
      properties and aerodynamics, but the additional goals are that it should
@@ -107,11 +118,6 @@ Canopy Geometry
      that shifted the chords into a reasonable approximation of real wings. In
      particular, most wings have a mostly-straight trailing edge that were
      a pain to encode using leading-edge reference points.]]
-
-   * Balances simplicity and flexibility (small number of parameters versus
-     the ability to capture the significant aspects of a canopy geometry)
-     [[I'm interested in "easy to create, good enough" approximations of real
-     wings, not physically-realistic simulations.]]
 
    * Makes it easy to specify a target design
 
@@ -341,7 +347,7 @@ position, and orientation of the sections.
   * The first step of designing a wing using wing sections is to specify the
     section chords.
 
-* What are the conventional ways of describing a chord surface?
+* What are the conventional parametrizations of a chord surface?
 
   * The purpose of a parametric surface is to decompose the complicated
     surface into simple design functions. The purpose of "parametric"
@@ -356,7 +362,7 @@ position, and orientation of the sections.
     is typically the section `y` coordinate, fixed reference points, explicit
     rotation points, etc)
 
-* What are the limitations of conventional chord surface parametrizations?
+* What are the limitations of conventional parametrizations?
 
   * [[The mathematical model is supposed to be flexible and easy to use. I'm
     developing a new parametrization which suggests the conventional choices
@@ -649,6 +655,11 @@ Orientation
 
 
 [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+* Might be good to define washin, washout, angle of incidence, mounting angle,
+  etc. There's quite a bit of confusion around those terms, so I'm explicitly
+  trying to avoid using them at all. I'm using the angle relative to the
+  central chord, that's it.
 
 * *geometric torsion*: the section orientation angle produced by
   a right-handed rotation about the wing y-axis

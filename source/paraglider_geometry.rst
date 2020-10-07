@@ -375,3 +375,9 @@ pilot from the lines using attachments to two *risers*. A tensioning strap at
 chest level between the two risers provides pilot safety during violent
 maneuvers, but it also allows the pilot to choose a balance between stability
 and wing responsiveness to weight shift control.
+
+
+Case Study
+==========
+
+[[Use my Hook 3 approximation to show how you might use everything thus far.]]
