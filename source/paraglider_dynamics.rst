@@ -239,6 +239,12 @@ Discussion
 ==========
 
 
+Pros
+----
+
+* Somewhat mitigates the *steady flow* assumption by including apparent mass.
+
+
 Limitations
 -----------
 

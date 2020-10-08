@@ -34,11 +34,14 @@ Outline:
    * Consider the relationship between what we know and what we want
 
    * Consider model-free (data-driven methods) and give examples of why they
-     are inadequate. Conclude they that we need a model-driven method.
+     are inadequate.
 
    * Solution: we need more information
 
      * Specifically, we must introduce more information via flight dynamics
+
+     * Estimation methods that incorporate knowledge of the underlying system
+       dynamics are called *model-based* methods.
 
      * Build intuition for the model-based method by giving a "conversational"
        walkthrough of how a pilot might estimate the wind by watching
@@ -76,39 +79,47 @@ that explicitly motivates the dynamics model.
   readers that only care about the dynamics.
 
 * Arguing "if you're going to solve it, you'll need the dynamics" is easier
-  than arguing "if you had the dynamics, you could solve it". This chapter
-  only deals with the first part; nevertheless, connecting the informal
-  discussion to the filtering equation adds a sense of legitimacy to the
-  objective; like "if you give me the dynamics, here's the name of the
-  theory you can use to apply it."
+  than proving "if you had the dynamics, you **definitely can** solve it".
+  This chapter only deals with the first part (arguing that the dynamics are
+  necessary); nevertheless, connecting the informal discussion to the
+  filtering equation adds a sense of legitimacy to the objective; like "if you
+  give me the dynamics, here's the name of the theory you can use to
+  **possibly** solve it."
 
   That said, this chapter should avoid discussions of how you might
   **solve** the filtering equation; leave any discussion of filtering
   architectures until future chapters.]]
 
 
-* The first step to learning wind patterns is to estimate the wind vectors
-  from individual flights. (Although the wind vectors could be estimated
-  concurrently with a wind field regression model, for simplicity this chapter
-  assumes these steps are separate.)
+* The first step to learning wind patterns is to reconstruct the wind vectors
+  from individual flights. [[Although a filtering architecture could estimate
+  the wind vectors concurrently with the wind field regression model, for
+  simplicity this chapter assumes these steps are separate. In particular, it
+  models the sequence of wind vectors as a Markov process, so it can't
+  incorporate the wind field regression model into the prior for each wind
+  vector.]]
 
 * The flight data doesn't explicitly record the wind vectors, and we can't
   compute them directly from the positions. To estimate the wind vectors we
   must introduce more information; specifically, we require a relationship
-  between the sequence of positions and the sequence of wind vectors.
+  between the sequence of positions and the sequence of wind vectors at those
+  positions.
 
 * The relationship between the wind vectors and the motion of the aircraft is
   given by the canopy aerodynamics.
 
-* [[Using the aerodynamics model adds new variables, like air density and
-  control inputs. May introduce those here by using an intuitive "derivation]]
+* [[The aerodynamics model adds new variables, like air density and control
+  inputs. Maybe introduce those here by using an intuitive "derivation" that
+  predicts/assumes their existence.]]
 
 * Using the canopy aerodynamics to determine the wind vectors is an *inverse
-  problem*: given the effects, we wish to determine the causes.
+  problem*: given the effects, we wish to determine the causes. We need to
+  invert the dynamics.
 
 * But this inverse problem isn't deterministic: it's stochastic. There is
   uncertainty in the data, wind, controls, and model, so a complete solution
-  should provide *uncertainty quantification*.
+  should provide *uncertainty quantification*. Instead of providing an exact
+  answer, there will be ranges of answers and their estimated probabilities.
 
 * Estimating the values of a stochastic process is the domain of *statistical
   filtering*.
@@ -123,9 +134,9 @@ that explicitly motivates the dynamics model.
   [[Old phrasing: "Statistical filtering problems involving values that evolve
   over time can be modeled with the *recursive filtering equation*."]]
 
-* The recursive filtering equation is composed from a set of priors,
-  a transition function (a dynamics model), and a likelihood function (an
-  observation model).
+* The recursive filtering equation is composed from a set of priors
+  (probabilities before seeing any data), a transition function (a dynamics
+  model), and a likelihood function (an observation model).
 
 * The transition function is how we "introduce more information" into the
   problem (via the aerodynamics).
@@ -233,7 +244,7 @@ of detail.]]
 
 #. Examples of complete parametric canopies
 
-#. Advantages and limitations
+#. Discussion, pros/cons
 
 
 Canopy aerodynamics
@@ -288,7 +299,8 @@ Outline:
 Paraglider geometry
 ===================
 
-* The paraglider is a system composed of wing and harness.
+* The paraglider is a system composed of wing (canopy+lines) and payload
+  (harness+pilot).
 
 * [[Introduce my chosen specification for a paraglider wing, positioning the
   payload, etc.]]
@@ -310,6 +322,8 @@ Flight simulation
 * The filtering equation needs a transition function
 
 * [[Talk about choosing a state representation? Quaternions, etc?]]
+
+* [[Show some demo flights?]]
 
 
 Future work
@@ -392,3 +406,13 @@ Predictive modeling
 -------------------
 
 * How do you encode the patterns such that a mobile device can query them?
+
+
+Discussion
+==========
+
+* Highlight what's been achieved: a parametric geometry and a dynamics model
+  in Python
+
+* [[Assume an impatient reader will jump here. This is your last chance to
+  convince them the paper is worth reading.]]
