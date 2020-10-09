@@ -1,8 +1,6 @@
 Introduction
 ============
 
-Outline:
-
 1. Introduce paragliding
 
 #. Discuss wind fields and their importance to paragliding pilots
@@ -54,50 +52,43 @@ Outline:
 
 #. Summarize the contribution of this work
 
-   * This paper is in two parts: the first part is a concrete implementation
-     of a parametric paraglider dynamics model (the basis for step 1); the
-     second part is a survey of the remaining subtasks and their
-     considerations.
 
-   * Derivations are in an appendix
+Flight reconstruction
+=====================
 
-   * Implementations available in Python
+.. Meta:
 
-   * Code is MIT licensed, writeup is CC-BY
+   * This chapter is responsible for arguing that there exists some path
+     towards solving the informal problem statement (turning sequences of
+     positions into sequences of wind vectors), and that path requires the
+     dynamics. It will accomplish this by translating the informal problem
+     statement from the introduction into a formal, probabilistic equation
+     that explicitly motivates the dynamics model.
 
+   * It should motivate the dynamics while hiding most of the statistics from
+     readers that only care about the dynamics.
 
-Probabilistic flight reconstruction
-===================================
+   * Arguing "if you're going to solve it, you'll need the dynamics" is easier
+     than proving "if you had the dynamics, you **definitely can** solve it".
+     This chapter only deals with the first part (arguing that the dynamics are
+     necessary); nevertheless, connecting the informal discussion to the
+     filtering equation adds a sense of legitimacy to the objective; like "if you
+     give me the dynamics, here's the name of the theory you can use to
+     **possibly** solve it."
 
-[[Meta: this chapter is responsible for convincing the reader that there
-exists some path towards solving the informal problem statement, and that path
-requires the dynamics. It will accomplish this by translating the informal
-problem statement from the introduction into a formal, probabilistic equation
-that explicitly motivates the dynamics model.
-
-* It should motivate the dynamics while hiding most of the statistics from
-  readers that only care about the dynamics.
-
-* Arguing "if you're going to solve it, you'll need the dynamics" is easier
-  than proving "if you had the dynamics, you **definitely can** solve it".
-  This chapter only deals with the first part (arguing that the dynamics are
-  necessary); nevertheless, connecting the informal discussion to the
-  filtering equation adds a sense of legitimacy to the objective; like "if you
-  give me the dynamics, here's the name of the theory you can use to
-  **possibly** solve it."
-
-  That said, this chapter should avoid discussions of how you might
-  **solve** the filtering equation; leave any discussion of filtering
-  architectures until future chapters.]]
+     That said, this chapter should avoid discussions of how you might
+     **solve** the filtering equation; leave any discussion of filtering
+     architectures until future chapters.
 
 
 * The first step to learning wind patterns is to reconstruct the wind vectors
-  from individual flights. [[Although a filtering architecture could estimate
-  the wind vectors concurrently with the wind field regression model, for
-  simplicity this chapter assumes these steps are separate. In particular, it
-  models the sequence of wind vectors as a Markov process, so it can't
-  incorporate the wind field regression model into the prior for each wind
-  vector.]]
+  from individual flights.
+
+  [[Although a filtering architecture could estimate the wind vectors
+  concurrently with the wind field regression model, for simplicity this
+  chapter assumes these steps are separate. In particular, it models the
+  sequence of wind vectors as a Markov process, so it can't incorporate the
+  wind field regression model into the prior for each wind vector.]]
 
 * The flight data doesn't explicitly record the wind vectors, and we can't
   compute them directly from the positions. To estimate the wind vectors we
@@ -166,10 +157,12 @@ that explicitly motivates the dynamics model.
 Canopy geometry
 ===============
 
-[[Meta: The easiest way to design a parametric dynamics model is to start with
-a parametric geometry. This chapter chooses a target level-of-detail, then
-presents an intuitive parametrization to enable creating models at that level
-of detail.]]
+.. Meta:
+
+   The easiest way to design a parametric dynamics model is to start with
+   a parametric geometry. This chapter chooses a target level-of-detail, then
+   presents an intuitive parametrization to enable creating models at that
+   level of detail.
 
 
 1. Introduction
@@ -250,7 +243,9 @@ of detail.]]
 Canopy aerodynamics
 ===================
 
-[[Meta: this is the link between position and the wind.]]
+.. Meta:
+
+   This is the link between position and the wind.
 
 
 Outline:
@@ -336,18 +331,22 @@ Future work
 * Maybe call these *resources*; they're incomplete, but still useful.
 
 
-Model optimization
-------------------
+Paraglider model
+----------------
 
-* Even if the NLLT gives reasonable results, it's probably too slow to use
-  with a particle filter. It'd be great to pre-process the solutions; maybe
-  train a neural network?
+* Computational improvements for the dynamics model: Even if the NLLT gives
+  reasonable results, it's probably too slow to use with a particle filter.
+  It'd be great to pre-process the solutions; maybe train a neural network?
+
+* Distortions (mainly cell billowing)
+
+* Riser-control
 
 
-Data considerations
--------------------
+Data
+----
 
-* Sensor noise (GPS, variometer)
+* Characterizing sensor noise (GPS, variometer)
 
   * Not sure how to generalize over such a wide range of tracks.
 
@@ -374,7 +373,8 @@ Filter architecture
 
   * Wind field models and/or turbulence models for wind vectors?
 
-  * Empirical database for glider parameters?
+  * Paraglider model identification (model parameter estimation). Use an
+    empirical database for glider parameters?
 
 * Likelihood function (observation model)
 
@@ -382,7 +382,12 @@ Filter architecture
 Wind field regression
 ---------------------
 
-* Estimate the underlying wind field of individual tracks
+* Estimate the underlying wind field of individual tracks (eg, fit a kriging
+  model)
+
+* Combine flights that overlap in time + space?
+
+* Model-free or model-based?
 
 * Constraints
 
@@ -392,18 +397,36 @@ Wind field regression
 Wind patterns
 -------------
 
-* Modeling target
+* Choice of modeling target
 
   * Separate the horizontal and vertical components?
 
-  * Data-based (unstructured wind velocities) or model-based (eg, try to detect
-    thermals, shear, etc)
+  * *Model-free*  or *model-based*?
+
+    Are patterns *data-driven* (using unstructured wind velocities), or do you
+    try to detect and fit explicit thermal models, shear models, etc?
 
 * Representation (Points, lines, areas, volumes? Grids or polygons?)
 
 
 Predictive modeling
 -------------------
+
+* Given a set of wind field regression models, you need to find regions with
+  overlapping observations, then look for correlations in those co-observed
+  regions.
+
+* Regional correlations must be encoded into a predictive model that can be
+  queried (ie, if part of the wind field is (noisily) observed, and they have
+  known correlations, the predictive model should produce estimates of
+  unobserved regions)
+
+* Ultimately, this predictive model will be useable in-flight, so as the pilot
+  samples the wind field, the predictive model can suggest regions with
+  desirable wind patterns.
+
+* How to combine the set of wind field regression models into a spatiotemporal
+  predictive model?
 
 * How do you encode the patterns such that a mobile device can query them?
 

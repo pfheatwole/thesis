@@ -1,30 +1,41 @@
-***********************************
-Probabilistic Flight Reconstruction
-***********************************
+*********************
+Flight Reconstruction
+*********************
 
-[[The purpose of this chapter is to formalize step 1 (turning sequences of
-positions into a sequence of wind vectors) in order to motivate building
-a dynamics model. It does this by rewriting the problem in terms of the
-recursive filtering equation.]]
+.. Meta:
 
-The questions in this paper must be transformed into a set of mathematical
-equivalents before we can apply tools that estimate their answers. This
-chapter converts the informal problem statements from the introduction into
-formal, probabilistic relationships.
+   The purpose of this chapter is to formalize step 1 (turning sequences of
+   positions into a sequence of wind vectors) in order to motivate building
+   a dynamics model. It categorizes the problem in terms of flight
+   reconstruction, which rewrites the problem in terms of the recursive
+   filtering equation.
 
-This step involves acknowledging the inherent uncertainty in the data and
-their models, defining the underlying form of the questions, and using the
-rules of conditional probability to decompose the problem into a series of
-intermediate steps.
+   The motivating questions of this paper must be transformed into a set of
+   mathematical equivalents before we can apply tools that estimate their
+   answers. This chapter converts the informal problem statements from the
+   introduction into formal, probabilistic relationships.
 
+   This step involves acknowledging the inherent uncertainty in the data and
+   their models, defining the underlying, probabilistic form of the questions,
+   and using the rules of conditional probability to decompose the problem
+   into a series of intermediate steps.
 
+   (I had named this "probabilistic flight reconstruction", but unless you
+   have perfect knowledge of the entire system and an invertible
+   dynamics function then it's **always** going to be probabilistic.)
 
-Flight reconstruction
-=====================
 
 * What is *flight reconstruction*?
 
-* How do you perform *flight reconstruction*?
+  * [[Should this have been established in the Introduction? Or is this part
+    expanding on / formalizing the ideas proposed in the introduction?]]
+
+  * [[Might be a great place to mention the MH370 paper; that's a relatable
+    example of a flight reconstruction problem. That paper also has a nice
+    introduction to the *Chapman–Kolmogorov equation* which I should
+    reference.]]
+
+* What is the intuition behind *flight reconstruction*?
 
   * Conditional probability is the key, in SO many ways
 
@@ -42,7 +53,6 @@ Flight reconstruction
 
 * What is simulation-based filtering? How does it deal with underdetermined
   systems?
-
 
 
 SCRATCHWORK
@@ -68,9 +78,34 @@ Order of events:
    estimate all the components of the flight used by the dynamics. Recreating
    the entire state of a flight is what I'm calling "flight reconstruction."
 
-**Where in these steps should I establish the necessity of acknowledging the
-inherent uncertainty?**
+* The term *flight path reconstruction* seems to have a particular meaning in
+  some portions of the aerospace community, where it is used to indicate
+  kinematics-based state estimation as a component in model validation and
+  calibration. (For a good survey on this topic, see
+  :cite:`mulder1999NonlinearAircraftFlight`.) As a kinematics-based method,
+  the models are built around *specific forces* and angular rates instead of
+  aerodynamic forces and moments. As such, it is more concerned with
+  **describing** and aircraft's motion instead of **explaining** its motion.
+  (Counterpoint: the MH370 paper calls their methods "flight path
+  reconstruction", and they incorporate things like maneuvers, which are not
+  pure kinematics?)
 
+  I'm calling my efforts in this paper "flight reconstruction" because it's
+  not just the path of the wing I'm interested in. I'm also reconstruction the
+  environment of the flight (the wind and control inputs).
+
+* Flight reconstruction as a *state estimation* problem. State estimation
+  might mean improving an estimate of an observed quantity, or it could mean
+  producing an original estimate of an unobserved quantity.
+
+* Performing *parameter estimation* implies that you have a parametric model
+  in the first place.
+
+* In most aerodynamic literature, when they talk about *parameter estimation*
+  they typically have access to the aircraft in question and can execute
+  a specific set of maneuvers to learn the behavior of the system. I have no
+  access to the wing, no knowledge of the control inputs, and the maneuvers are
+  assumed unsteady (not the result of the control inputs alone).
 
 
 Statistical filtering
@@ -84,7 +119,6 @@ Statistical filtering
 
   [[This term comes from the field of *stochastic processes*, which is the
   study of processes that are partly predictable and partly random.]]
-
 
 
 * How can you estimate the wind vectors from position sequences?
