@@ -26,7 +26,7 @@ Intro to the Intro
 ==================
 
 [[**FIXME: these paragraphs are too long? Move some detail to the full
-sections.**]]
+sections, and update these paragraphs**]]
 
 
 .. Establishing a research territory (Context):
@@ -97,37 +97,135 @@ Context
 
 .. "Provides the full context in a way that flows from the opening."
 
+   This is only the *context* for the problem. It should only introduce
+   paragliding, and describe its dependence on wind fields.
 
-Paragliding
------------
 
-* Paragliding as a sport
+.. Introduce paragliding
 
-* What are the tasks of a paragliding pilot?
+* What is paragliding?
 
-  Paragliding is a non-motorized form of flight, which means it requires wind
-  power for sustained flight. Pilots rely on their ability to find regions of
-  rising air in order to gain altitude. They must also determine the direction
-  and magnitude of the wind in order to determine what regions of the air they
-  can access/explore, and to calculate suitable landing zones. [[ie, pilots
-  are totally dependent on the local wind pattern]]
+  * Paragliding is a recreational flying activity that uses a lightweight,
+    flexible wing for non-powered flight.
 
 * What equipment is involved? (Describe the system.)
 
+* What are the common goals of paragliding flights?
 
-Wind fields
------------
 
-* Describe the wind field as a composite of features (shear, updrafts, gusts)
+.. Discuss wind fields and their importance to paragliding pilots
 
-  Prioritize wind field information that is important to pilots. For
-  example, house thermals, finding lift along a ridge, avoiding sink near
-  a stream, etc.
+* How do paragliders depend on the wind? Why do pilots need to know the
+  structure of the wind field?
 
-* Describe the causes of a wind field.
+  * Because a paraglider is a non-powered aircraft its motion is entirely
+    dictated by interactions with gravity and wind.
 
-* Describe how the patterns depend on the time of year, latitude, topography,
-  etc.
+  * The aerodynamics of a paragliding wing are a function of the relative
+    velocity between the wing and the air, which means a pilot is totally
+    dependent on the local air currents to achieve their flight goals. If the
+    air is ascending a pilot can slow their descent, or even gain altitude;
+    conversely, sinking air will cause the wing to descend more quickly. The
+    horizontal component of the wind dictates the ground speed of the glider
+    in a given direction, which determines what regions of the air the pilot
+    can access, and what landing zones they can reach.
+
+  * A successful flight depends on the pilot's ability to recognize the
+    structure of the local air currents and navigate them in order to achieve
+    their flight goals, which may include optimizing for flight time,
+    distance, or a particular route.
+
+* What are some examples of structure in a wind field?
+
+  * [[Describe common causes of a wind field?]]
+
+  * [[Paint a basic picture of the details a pilot is looking for. Maybe
+    describe the wind field as a composite of features (shear, updrafts,
+    gusts)?]]
+
+    Prioritize wind field information that is important to pilots. For
+    example, house thermals, finding lift along a ridge, avoiding sink near
+    a stream, etc.
+
+* Why is it important to determine the structure as quickly as possible? Why
+  is it important for a pilot to be able to **predict** the structure?
+
+  * It takes a constant exchange of momentum between the wing and the air to
+    keep the paraglider airborne, so time has an energy cost.
+
+  * Efficient path planning minimizes energy expenditure.
+
+  * Pilots with better path planning are more likely to achieve their flight
+    goals.
+
+* How do pilots estimate the structure?
+
+  * By exploration
+
+  * By observing local features, such as dust, vegetation, and birds
+
+  * By using heuristics (ridge orientation to the wind, thermal triggers, etc)
+
+  * By learning local *wind patterns*
+
+
+.. Discuss wind patterns, their importance, and how they're learned
+
+* What are *wind patterns*?
+
+  * In this paper, a *wind pattern* is any recurring structure in a wind
+    field.
+
+    [[By "structure" I don't mean it needs to be follow some predetermined
+    model "structure", like shear lines, ridge lift, thermal sources/sinks,
+    etc. I simply mean subsets of the wind field with configurations that are
+    predictable based on historical patterns.]]
+
+* Why are wind patterns so valuable?
+
+  [[Consider both the vertical and horizontal components. Consider both
+  pre-flight (flight planning) and mid-flight scenarios.]]
+
+* How do pilots learn local patterns?
+
+  * By flying in the same region repeatedly.
+
+  * By talking to other pilots.
+
+* How do pilots utilize knowledge of local patterns?
+
+
+* What are problems with requiring pilots to memorize local patterns?
+
+  * More complex sites have too many variables, so pilots can only remember
+    the most dominant patterns, and must generalize the rest.
+
+
+
+
+[[
+
+Getting sleepy here, but my general train of thought is "what's the problem
+I'm setting up in this paper?" If I'm only asking "can you recover a wind
+field from a track?" then I don't have any motivation to discuss wind patterns
+or a predictive model. I kind of want to include my decomposition from flight
+track to predictive model, so it seems like the predictive model has to be
+stated somewhere as a goal. It doesn't need to be much, but I need some way to
+segue into establishing the benefits of a predictive model, the decomposing
+that into first needing the wind patterns and thus needing wind field
+recovery.
+
+Well, whatever else I do, I should probably do it in-order: start by proposing
+my desire to "learn wind patterns from flights", then step back to "first we
+need to perform flight reconstruction on individual flights, which requires
+a dynamics model", then preview the future work of "the dynamics model enables
+work on flight reconstruction, would would enable wind field estimation, which
+would enable wind field pattern detection, would would enable the predictive
+model". Quite the mouthful, but what else can I do?
+
+]]
+
+
 
 
 Restatement of the problem (and significance)
@@ -137,51 +235,22 @@ Restatement of the problem (and significance)
    detailed context."
 
 
-[[Remember: **the problem is "learning the wind patterns, and why wind
-patterns are important to pilots", not why the wind is important in
-general**.]]
+.. Introduce the long-term objective: wind field predictive model
+
+* Is it possible to build a predictive model that encodes local patterns?
 
 
-* How do pilots depend on the wind field?
+* [[I'm interested in a new of way of learning local patterns: is it possible
+  to learn them from recorded flights?]]
 
-  * Consider both the vertical and horizontal components. Consider both
-    pre-flight (flight planning) and mid-flight scenarios.
-
-* Why is it important to figure out what's happening as quickly as possible?
-
-* How do pilots (currently) predict and estimate the wind field mid-flight?
-
-  * Exploring the wind field for information comes at a cost; exploration
-    requires time, which costs energy (since the wing is always sinking).
-
-* How does learning wind patterns help a pilot make better choices?
-
-  Knowing historical trends improve the accuracy of a pilot's estimates of the
-  current conditions, and lets them make better predictions with less
-  information.
-
-  1. They improve the accuracy of a pilots interpretation of local conditions.
-
-     The wind is turbulent, which makes it easy to misinterpret momentary
-     wind fluctuations. If a pilot has accurate expectations they're less
-     likely to misinterpret those fluctuations.
-
-  2. They enable educated guesses about unobserved regions.
-
-     Path planning benefits from knowledge of the entire field, not just
-     observed locations.
-
-* How do pilots learn wind patterns (so they make better estimates)?
-
-  * Currently, through personal experience and word of mouth
 
 * What would be the advantages of learning from recorded flights?
 
   * Automate pattern discovery [[Some trends may be subtle or infrequent.]]
 
-  * Utilize all flights from all pilots instead of requiring multiple
-    flights by the same pilot. [[If a pilot only encountered a particular
-    wind configuration a single time, they wouldn't recognize it as part of
+  * Utilize all recorded flights from all pilots instead of requiring multiple
+    flights by the same pilot. [[If a pilot only encountered a particular wind
+    configuration a single time, they wouldn't recognize it as part of
     a recurring pattern.]]
 
   * Expand the set of detectable patterns: a single flight can only
@@ -190,11 +259,31 @@ general**.]]
     observation of the field. With larger observations there are more
     opportunities for detecting useful patterns.
 
-  * A statistical predictive model can provide confidence levels: it can
+  * Quantifying/encoding the patterns in mathematical form would enable the
+    creation of a *predictive model*.
+
+    A statistical predictive model can provide confidence levels: it can
     quantify the variance in its predictions, since it knows how much evidence
     is present for a particular pattern. [[How does this compare to
     word-of-mouth knowledge? Pilots can be deceived/biased about their
     experiences; memories are faulty.]]
+
+* What are the difficulties of recovering wind fields from recorded flights?
+
+  * The flight tracks are position-only time series. No record of the
+    paraglider model, pilot inputs, wind vectors, etc.
+
+* What is the benefit of having a predictive model?
+
+  * The primary goal is to help pilots determine the structure of wind fields
+    *efficiently* (both in terms of time and energy) and *accurately*.  Pilots
+    would be able to determine the wind field more efficiently and more
+    accurately if they were able to compare it to previously observed wind
+    fields. (ie, learn the patterns)
+
+  * A secondary benefit would be to help pilots predict days with good flying
+    conditions; imagine a website with a simple model that looks as prevailing
+    winds and suggests the "most probable" wind field.
 
 
 Restatement of the response
@@ -203,11 +292,30 @@ Restatement of the response
 .. "Leverage the detail presented in the full context to elaborate on the
    details of the response."
 
+
+* The ultimate goal is to build a predictive model that would help a pilot
+  recognize the structure as early as possible; ideally, before they even fly
+  into a new area.
+
+* The first step is to recover wind fields from individual tracks, which would
+  enable pattern detection across sets of tracks.
+
+
+* My goal is to detect predictable structure. Some wind field patterns can be
+  predicted based on time of day/year, some can be predicted based on the
+  values of other regions of the wind field, etc. This is the essence of
+  "conditioning" our predictions.
+
+
 First, I decompose the problem into subtasks. Second, I formalize the first
 subtask as a *flight reconstruction* problem. Third, I provide a parametric
 paraglider model suitable for flight reconstruction. Fourth, I review the
 remaining subtasks and considerations for their solutions.
 
+
+
+SCRATCH: my Deliverables
+------------------------
 
 * Derivations are in an appendix
 
@@ -215,7 +323,6 @@ remaining subtasks and considerations for their solutions.
   Python
 
 * Everything is under open licensing: code is MIT, writeup is CC-BY
-
 
 
 * Math

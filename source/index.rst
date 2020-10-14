@@ -44,6 +44,7 @@ Contents
    flight_simulation
    case_study
    data_considerations
+   future_work
    examples
 
 .. toctree::
