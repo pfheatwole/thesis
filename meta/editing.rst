@@ -56,6 +56,8 @@ Trouble Words
 
 * vario, variometer (allowable abbreviations)
 
+* Prefer "modeling" over "modelling"
+
 
 Useful Reminders
 ================

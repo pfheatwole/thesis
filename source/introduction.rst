@@ -25,8 +25,7 @@ Introduction
 Intro to the Intro
 ==================
 
-[[**FIXME: these paragraphs are too long? Move some detail to the full
-sections, and update these paragraphs**]]
+[[**FIXME: these paragraphs are outdated (and too long). Rewrite.**]]
 
 
 .. Establishing a research territory (Context):
@@ -92,16 +91,14 @@ flight reconstruction. Lastly, it discusses the requirements for assembling
 a predictive model suitable for in-flight wind field estimation.
 
 
-Context
-=======
 
-.. "Provides the full context in a way that flows from the opening."
+.. Context
 
-   This is only the *context* for the problem. It should only introduce
-   paragliding, and describe its dependence on wind fields.
+   "Provides the full context in a way that flows from the opening."
 
 
-.. Introduce paragliding
+Paragliding
+===========
 
 * What is paragliding?
 
@@ -113,10 +110,12 @@ Context
 * What are the common goals of paragliding flights?
 
 
+Wind Fields
+===========
+
 .. Discuss wind fields and their importance to paragliding pilots
 
-* How do paragliders depend on the wind? Why do pilots need to know the
-  structure of the wind field?
+* How do paragliders depend on the wind?
 
   * Because a paraglider is a non-powered aircraft its motion is entirely
     dictated by interactions with gravity and wind.
@@ -129,6 +128,8 @@ Context
     horizontal component of the wind dictates the ground speed of the glider
     in a given direction, which determines what regions of the air the pilot
     can access, and what landing zones they can reach.
+
+* Why do pilots need to know the structure of the wind field?
 
   * A successful flight depends on the pilot's ability to recognize the
     structure of the local air currents and navigate them in order to achieve
@@ -158,6 +159,15 @@ Context
   * Pilots with better path planning are more likely to achieve their flight
     goals.
 
+
+.. Restatement of the problem (and significance)
+
+   "Restate the problem and significance in light of the more thoroughly
+   detailed context."
+
+Predictive Modeling
+===================
+
 * How do pilots estimate the structure?
 
   * By exploration
@@ -166,7 +176,16 @@ Context
 
   * By using heuristics (ridge orientation to the wind, thermal triggers, etc)
 
-  * By learning local *wind patterns*
+  * By previewing atmospheric structure through meteorological forecasts
+    (weather forecasts, RASP), `soaringmeteoGFS
+    <http://soaringmeteo.org/GFSw/googleMap.html>`_
+
+  * By studying local *wind patterns*
+
+    * Word of mouth, thermal hotspot maps, `Paragliding Thermal Maps
+      <http://thermal.kk7.ch>`_ (**make sure to check the "Statistics and
+      Developer Information" sidebar; lots of great links!**), `Paragliding
+      Maps <http://www.paraglidingmaps.com>`_
 
 
 .. Discuss wind patterns, their importance, and how they're learned
@@ -181,70 +200,59 @@ Context
     etc. I simply mean subsets of the wind field with configurations that are
     predictable based on historical patterns.]]
 
-* Why are wind patterns so valuable?
+* Why are wind patterns so **particularly** valuable?
 
-  [[Consider both the vertical and horizontal components. Consider both
-  pre-flight (flight planning) and mid-flight scenarios.]]
+  [[If a wind field has recurring structure, then pilots can use that to
+  predict the structure before/without exploring that area.
 
-* How do pilots learn local patterns?
+  Consider both the vertical and horizontal components. Consider both
+  pre-flight (flight planning) and in-flight scenarios.]]
+
+* How do pilots learn wind patterns?
 
   * By flying in the same region repeatedly.
 
   * By talking to other pilots.
-
-* How do pilots utilize knowledge of local patterns?
-
 
 * What are problems with requiring pilots to memorize local patterns?
 
   * More complex sites have too many variables, so pilots can only remember
     the most dominant patterns, and must generalize the rest.
 
+* Solution: use a computer to build a predictive model from flight data
 
+* What are predictive models?
 
+  * Predictive models encode predictable structure. Some wind field patterns
+    can be predicted based on time of day/year, some can be predicted based on
+    the values of other regions of the wind field, etc. This is the essence of
+    "conditioning" our predictions.
 
-[[
+  * Predictive models inform pilots of historical trends, which can help them
+    recognize the current structure as early as possible; ideally, before they
+    even fly into a new area. They can also improve the accuracy of a pilot's
+    estimate of the current wind field.
 
-Getting sleepy here, but my general train of thought is "what's the problem
-I'm setting up in this paper?" If I'm only asking "can you recover a wind
-field from a track?" then I don't have any motivation to discuss wind patterns
-or a predictive model. I kind of want to include my decomposition from flight
-track to predictive model, so it seems like the predictive model has to be
-stated somewhere as a goal. It doesn't need to be much, but I need some way to
-segue into establishing the benefits of a predictive model, the decomposing
-that into first needing the wind patterns and thus needing wind field
-recovery.
+  * [[**Computer** models that predict the structure of the wind field.]]
 
-Well, whatever else I do, I should probably do it in-order: start by proposing
-my desire to "learn wind patterns from flights", then step back to "first we
-need to perform flight reconstruction on individual flights, which requires
-a dynamics model", then preview the future work of "the dynamics model enables
-work on flight reconstruction, would would enable wind field estimation, which
-would enable wind field pattern detection, would would enable the predictive
-model". Quite the mouthful, but what else can I do?
+  * [[I'm leaving "pattern" vague, so this can include things like Paragliding
+    Thermal Map, etc. Those tools only estimate simple point sources I'm still
+    considering them "recurring structure".]]
 
-]]
+* What is are the benefits of predictive models?
 
+  * The primary goal is to help pilots determine the structure of wind fields
+    *efficiently* (both in terms of time and energy) and *accurately*.  Pilots
+    would be able to determine the wind field more efficiently and more
+    accurately if they were able to compare it to previously observed wind
+    fields. (ie, learn the patterns)
 
+  * A secondary benefit would be to help pilots predict days with good flying
+    conditions; imagine a website with a simple model that looks as prevailing
+    winds and suggests the "most probable" wind field.
 
-
-Restatement of the problem (and significance)
-=============================================
-
-.. "Restate the problem and significance in light of the more thoroughly
-   detailed context."
-
-
-.. Introduce the long-term objective: wind field predictive model
-
-* Is it possible to build a predictive model that encodes local patterns?
-
-
-* [[I'm interested in a new of way of learning local patterns: is it possible
-  to learn them from recorded flights?]]
-
-
-* What would be the advantages of learning from recorded flights?
+* What are the advantages of a predictive model that learns from recorded
+  flights?
 
   * Automate pattern discovery [[Some trends may be subtle or infrequent.]]
 
@@ -268,53 +276,107 @@ Restatement of the problem (and significance)
     word-of-mouth knowledge? Pilots can be deceived/biased about their
     experiences; memories are faulty.]]
 
-* What are the difficulties of recovering wind fields from recorded flights?
+* What are the existing predictive models built from flight data?
+
+  * Paragliding Thermal Map, etc
+
+* What are the limitations of existing predictive models?
+
+  * Existing models can only condition on crude measurements like the season
+    or time of day, which can result in simplistic predictions that are simple
+    "average" configurations averaged over arbitrary time intervals.
+
+    [[Current predictive models have no estimate of the underlying wind field,
+    so they **can't** use it to condition the model.]]
+
+  * Predictions are better if you can condition them on current **conditions**
+    (not just time).
+
+    [[In a sense, the model is marginalizing over the unspecified inputs.
+    Existing models don't take observations of the wind field into account, so
+    they're effectively marginalizing over **all possible conditions** to
+    produce an average. (Or something like that.)]]
+
+
+.. Introduce the long-term objective: a wind field predictive model that
+   conditions on observations of the wind field (as well as time/day).
+
+* A predictive model that can condition on estimates of the wind field can
+  predict the *actual* configuration instead of some *average* configuration
+  (which is typically produced by averaging over some arbitrary time
+  interval).
+
+* This model would have advantages both for pre-flight and in-flight
+  predictions.
+
+  For in-flight predictions, it could produce estimates that are consistent
+  with the observations of the current wind configuration (averages lump
+  everything together).
+
+  For pre-flight predictions, you could use global-scale wind forecasts as
+  pseudo-observations to forecast details of the local wind field.
+
+  [[Note: you don't have to use the same predictive model for both; for
+  example, if you have wind forecasts on a grid of the surrounding area, you
+  could train the model using the values of those predictor variables (which
+  are **not** the same thing as observations of the wind field itself.]]
+
+* Before you can build a predictive model over wind fields, you need the wind
+  wind fields. To get the wind fields, you need the wind vectors. To get the
+  wind vectors from position, you need to use the paraglider dynamics to infer
+  the cause (the wind) based on the observed effect (the paraglider motion).
+
+* The first step is to recover the actual wind vectors instead of using
+  paraglider motion as a proxy for the wind vectors.
+
+* What are the difficulties of recovering wind fields from a paragliding
+  flight record? Is it even possible?
 
   * The flight tracks are position-only time series. No record of the
     paraglider model, pilot inputs, wind vectors, etc.
 
-* What is the benefit of having a predictive model?
 
-  * The primary goal is to help pilots determine the structure of wind fields
-    *efficiently* (both in terms of time and energy) and *accurately*.  Pilots
-    would be able to determine the wind field more efficiently and more
-    accurately if they were able to compare it to previously observed wind
-    fields. (ie, learn the patterns)
+.. Restatement of the response
 
-  * A secondary benefit would be to help pilots predict days with good flying
-    conditions; imagine a website with a simple model that looks as prevailing
-    winds and suggests the "most probable" wind field.
-
-
-Restatement of the response
-===========================
-
-.. "Leverage the detail presented in the full context to elaborate on the
+   "Leverage the detail presented in the full context to elaborate on the
    details of the response."
 
+My Response Here
+================
 
-* The ultimate goal is to build a predictive model that would help a pilot
-  recognize the structure as early as possible; ideally, before they even fly
-  into a new area.
-
-* The first step is to recover wind fields from individual tracks, which would
-  enable pattern detection across sets of tracks.
+.. So, the goal is to build a predictive model that conditions on observations
+   of the wind field. How does this paper respond to that challenge?
 
 
-* My goal is to detect predictable structure. Some wind field patterns can be
-  predicted based on time of day/year, some can be predicted based on the
-  values of other regions of the wind field, etc. This is the essence of
-  "conditioning" our predictions.
+*  [[People are already predicting aspects of the wind field structure from
+   data (eg, thermal maps). **This is to do is qualitatively different from
+   conditioning on things like "month". This section must communicate that.**
+
+   I must contrast my approach with existing methods that "learn from flight
+   data", like the thermal maps. Those are *model-free* methods
+   (kinematic-based filtering), I'm focusing on *model-based* methods.
+
+   Another difference: I think the flight-based maps average over all flights
+   (possibly segmented by month/season). I'm interested in a predictive model
+   that can condition the prediction based on current conditions; for that you
+   need individual patterns, not a simple average.]]
 
 
-First, I decompose the problem into subtasks. Second, I formalize the first
-subtask as a *flight reconstruction* problem. Third, I provide a parametric
-paraglider model suitable for flight reconstruction. Fourth, I review the
-remaining subtasks and considerations for their solutions.
+* The goals of this paper:
+
+  1. Decompose the "build a predictive model" into formalized subtasks
+
+  #. Define the *flight reconstruction* subtask, and establish that it
+     requires a parametric paraglider model
+
+  #. Provide a parametric dynamics model suitable for recovering the wind
+     vectors
+
+  #. Survey the remaining work
 
 
 
-SCRATCH: my Deliverables
+SCRATCH: My Deliverables
 ------------------------
 
 * Derivations are in an appendix
@@ -388,6 +450,25 @@ Upcoming chapters:
 
 SCRATCH
 =======
+
+* My intermediate objective is *model-based* filtering to estimate the
+  underlying wind field. (*Model-based* methods can dramatically outperform
+  *model-free* methods such as kinematics-only Kalman filters).
+
+  Model-free methods like "paragliding thermal map" tend to just show
+  "pilots found lift near the ridge, and sink over bodies of water".
+  Interesting, but ultimately **not very informative**, because that
+  information is already encoded in heuristics that pilot's already know: lift
+  along ridges, sink over bodies of water.
+
+* Existing predictive models (thermal maps) use the paraglider motion as
+  a proxy for the wind vector. Because of ambiguity in the horizontal motion,
+  they ignore it and only use the vertical component. The result is a map that
+  simply shows the average vertical velocity, which doesn't necessarily
+  correspond to the actual wind field. (I think "Paragliding Thermal Maps"
+  tries to "locate" the thermal trigger, which might explain why it assumes
+  ridges are always awesome.)
+
 
 * The fact that the solution involves a distribution over all possible
   solutions highlights the fact that the question is not "can I produce an
@@ -549,6 +630,7 @@ Related Works
 
 [[This seems too broad to put up front; I do love papers with these sections,
 but I suspect it'd get unwieldy very fast if I put this discussion here.]]
+
 
 * Wind estimation
 

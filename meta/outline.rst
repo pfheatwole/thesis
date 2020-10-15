@@ -3,29 +3,88 @@ introduction that gives away the punchline**. Let the reader determine at
 a glance what the chapter will discuss and the basic conclusions.
 
 
-
 Introduction
 ============
 
+
 .. Context
 
-1. Introduce paragliding
+Paragliding
+-----------
 
-#. Discuss wind fields and their importance to paragliding pilots
+* Introduce paragliding as a sport
 
-#. Discuss wind patterns, their importance, and how they're learned
+
+Wind fields
+-----------
+
+* Introduce wind fields
+
+* Discuss the importance of wind to paragliding pilots
+
+* Discuss how pilots benefit from knowledge of the structure of the wind
+
+* Discuss global structure of the *atmospheric boundary layer*
+
+  * Lapse rates, thermal convection, orographic lift, mountain waves, etc.
+
+  * [[These combine with the topology to produce local structure?]]
+
+* Discuss local structure in wind fields
+
+  * Thermal lift and sink, orographic link, shear, etc
 
 
 .. Problem and significance
 
-#. Introduce the objective: wind field predictive modeling
+Predictive modeling
+-------------------
 
-   * Can we learn them from existing data?
+* Discuss how pilots try to estimate wind field structure
 
-   * What are the advantages?
+  * Pre-flight methods: topology heuristics (observing ridge lines
+    perpendicular to the prevailing wind, etc), meteorological models (wind
+    forecasts, RASP), flight data-based models (Paragliding Map, Paragliding
+    Thermal Maps, hotspot maps, etc)
+
+  * In-flight methods: exploration, heuristics, local features (dust, blowing
+    vegetation, birds, ripples on water), flight data-based models (adding
+    hotspot maps to your GPS, etc)
+
+* Define *wind patterns* as "recurring structure"
+
+* Discuss the importance of wind patterns to paragliding pilots
+
+  * [[If a wind field has recurring structure, then pilots can use that to
+    predict the structure before/without exploring that area.]]
+
+* How do pilots learn wind patterns?
+
+  [[Specifically, the non-computational methods of pattern discovery.]]
+
+* Discuss the limitations of relying on humans to build knowledge of patterns
+
+* Can patterns be extracted from existing data?
+
+  Yes, people are doing it already: Paragliding Thermal Map, etc.
+
+* Define *predictive modeling* for estimating wind patterns
+
+* What are the limitations of existing predictive models?
+
+  [[They only condition on time+day, not on the current configuration.]]
+
+
+.. Introduce the motivation of this paper
+
+* A predictive model would be much more useful if it could condition on
+  observations of the **current** (or forecasted) wind field.
 
 
 .. Response
+
+My Response Here
+----------------
 
 #. Decompose the problem into subtasks
 
@@ -65,7 +124,8 @@ Introduction
      methods that can combine the knowledge with our data to get what we want.
 
 
-.. Roadmap
+Roadmap
+-------
 
 #. Summarize the contribution of this work
 
@@ -342,15 +402,48 @@ Paraglider geometry
 Paraglider dynamics
 ===================
 
-#. This provides the dynamics model for generating flight trajectories
+* Define the canopy dynamics
 
-#. Discussion, pros/cons
+  * What are they? What are they used for?
+
+  * Provides the dynamics model for generating flight trajectories
+
+* Modeling requirements
+
+* Survey the common options
+
+* Phillips' NLLT
+
+* Case study: wind tunnel test data
+
+  * Introduce the test (the model, the test setup, and the data)
+
+  * Why is this a good test?
+
+    * In terms of aerodynamics: good representation of the unusual geometry of
+      a paraglider; completely known geometry (including airfoil); extensive
+      data for a range of wind conditions; internal wood structure maintains
+      the shape, eliminating uncertainty due to distortions
+
+    * It also provides a good demonstration of how to use my geometry.
+
+  * Discuss the results
+
+* Discussion
 
 
 Flight simulation
 =================
 
-* The filtering equation needs a transition function
+* Define *flight simulation* for the purposes of this paper
+
+* Why does this paper need a flight simulator?
+
+  * To generate test flights for validation. At first this is only helpful for
+    superficial checks (do flights "look" correct?), but will eventually be
+    necessary for physical flight validation.
+
+  * The filtering equation needs a transition function
 
 * [[Talk about choosing a state representation? Quaternions, etc?]]
 
@@ -360,11 +453,12 @@ Flight simulation
 Future work
 ===========
 
-* Survey the remaining steps
+.. Review the steps (from data generating to the predictive model) and survey
+   the open questions / remaining work for each step.
 
-  * Summarize the tidbits I've learned and open questions I know about?
+   * Summarize the tidbits I've learned and open questions I know about?
 
-* Maybe call these *resources*; they're incomplete, but still useful.
+   * Maybe call these *resources*; they're incomplete, but still useful.
 
 
 Paraglider model
@@ -413,6 +507,10 @@ Filter architecture
     empirical database for glider parameters?
 
 * Likelihood function (observation model)
+
+* Architecture
+
+  * Suggest the GMSPPF?
 
 
 Wind field regression
