@@ -204,7 +204,7 @@ Flight reconstruction
 
 * [[Introduce sequential processes]]
 
-* [[State-space models of sequential data-generating processes]]
+* [[*State-space models* of sequential data-generating processes]]
 
 * [[Converting a state-space model to a statistical model]]
 
@@ -214,6 +214,9 @@ Flight reconstruction
 .. Flight reconstruction
 
 * Flight reconstruction as a filtering problem
+
+  [[Could also model this as a *state-estimation problem* if you consider the
+  unknown inputs as "state".]]
 
 * Define a state-space model of the paraglider position
 
@@ -261,79 +264,93 @@ Canopy geometry
    level of detail.
 
 
-1. Introduction
+* What is a canopy?
 
-   #. What is a canopy?
+* Why does this project need a mathematical model of the canopy?
 
-   #. Why does this project need a mathematical model of the canopy?
+  To enable calculating the aerodynamics and inertial properties.
 
-      To enable calculating the aerodynamics and inertial properties.
+* Describe the physical system
 
-   #. What are the important aspects of a canopy geometry?
+* Choose the model requirements
 
-   #. What sorts of queries should the model answer? [[Points on the chords,
-      points on the surfaces, inertial properties, etc.]]
+  * What are the important aspects of a canopy geometry?
 
-   #. How do you specify a design?
+  * What sorts of queries should the model answer? [[Points on the chords,
+    points on the surfaces, inertial properties, etc.]]
 
-      * Explicit vs parametric geometries
+* How do users specify a design?
 
-   #. What are the goals of a parametrization? (What makes a good one?)
+  * Explicit vs parametric geometries
 
-   #. How do you design a parametrization that achieves those goals?
+* What are the goals of a parametrization? (What makes a good one?)
 
-      Decompose the model into sets of parameters:
+* How do you design a parametrization that achieves those goals?
 
-      1. Section scale, position and orientation (chord surface)
+  Decompose the model into sets of parameters:
 
-      2. Section profiles (foil surface)
+  1. *Chord surface*: section scale, position and orientation
 
-   #. What is the rest of the chapter about?
+  2. *Foil surface*: section profiles
 
-#. Chord Surface
+* What is the rest of the chapter about?
 
-   #. What is a chord surface? (Scale, position, and orientation)
 
-   #. What are the conventional parametrizations of a chord surface?
+Chord Surface
+-------------
 
-   #. What are the limitations of conventional parametrizations?
+* What is a chord surface? (Scale, position, and orientation)
 
-   #. Introduce my **general** parametrization of a chord surface.
+* What are the conventional parametrizations of a chord surface?
 
-      Define the *section index*, and how to specify scale, position, and
-      orientation.
+* What are the limitations of conventional parametrizations?
 
-   #. Introduce my **simplified** parametrization for parafoils.
+* Introduce my **general** parametrization of a chord surface.
 
-      This is where I choose a definition of the section index, set `r_y = r_z
-      = r_yz`, parametrize `C_w/s` using Euler angles, etc. **My examples use
-      six design functions; I need to get there somehow**)
+  Define the *section index*, and how to specify scale, position, and
+  orientation.
 
-   #. Discuss parametric design functions?
+* Introduce my **simplified** parametrization for parafoils.
 
-      The chord surface is parametrized by functions, those functions can
-      themselves be parametric (eg, an elliptical arc)
+  This is where I choose a definition of the section index, set `r_y = r_z
+  = r_yz`, parametrize `C_w/s` using Euler angles, etc. **My examples use
+  six design functions; I need to get there somehow**)
 
-   #. Present examples of parametric chord surfaces
+* Discuss parametric design functions?
 
-#. Foil surface
+  The chord surface is parametrized by functions, those functions can
+  themselves be parametric (eg, an elliptical arc)
 
-   * What is a *section profile*?
+* Present examples of parametric chord surfaces
 
-   * How does the choice of airfoil effect wing performance?
 
-   * How does the profile vary along the span?
+Foil surface
+------------
 
-   * How does the profile behave in-flight?
+* What is a *section profile*?
 
-     Distortions due to billowing, braking, etc. (We're ignoring these, but
-     you can use the section indices to deal with them.)
+* How does the choice of airfoil effect wing performance?
 
-   * [[This should not be an exhaustive discussion of parafoil design!]]
+* How does the profile vary along the span?
 
-#. Examples of complete parametric canopies
+* How does the profile behave in-flight?
 
-#. Discussion, pros/cons
+  Distortions due to billowing, braking, etc. (We're ignoring these, but
+  you can use the section indices to deal with them.)
+
+* [[This should not be an exhaustive discussion of parafoil design!]]
+
+
+Examples
+--------
+
+* Examples of complete parametric canopies
+
+
+Discussion
+----------
+
+* Discussion, pros/cons
 
 
 Canopy aerodynamics
@@ -343,8 +360,6 @@ Canopy aerodynamics
 
    This is the link between position and the wind.
 
-
-Outline:
 
 * What are aerodynamics?
 
@@ -371,20 +386,19 @@ Outline:
 
     * Computationally fast (think of this as a rapid prototyping phase)
 
-
 * [[Section profiles were covered in the previous chapter. The computational
   methods use the profiles either via their section coefficients, or via the
   surface geometry they generate.]]
 
-#. Phillips' NLLT
+* Phillips' NLLT
 
-#. Case study: Barrows' model
+* Case study: Barrows' model
 
-   * Describe the model and wind tunnel dataset
+  * Describe the model and wind tunnel dataset
 
-   * Compare the raw data to the VLM and the NLLT
+  * Compare the raw data to the VLM and the NLLT
 
-#. Discussion, pros/cons
+* Discussion, pros/cons
 
 
 Paraglider geometry

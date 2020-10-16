@@ -1,24 +1,13 @@
-************
+********
+Chapters
+********
+
+
 Introduction
-************
-
-* Is my "intro to the intro" too long?
-
-* In my "intro to the intro", I setup the big picture problem (pattern
-  detection over regression models built from position-only flight data), but
-  my response on deals with a portion of that problem. So my "restatement of
-  the response" must highlight where my contributes fit into that big picture.
-
-
-Key Points
-==========
+============
 
 * The question isn't "*can you* determine the wind in a paragliding track?",
   but "*how precisely can you* ...?"
-
-
-Purpose/Motivation
-==================
 
 * One likely complaint is the inaccuracy of GPS data, so I should confront
   this early on, and discuss why I think it might be worth trying anyway.
@@ -28,522 +17,301 @@ Purpose/Motivation
   a system for newer tracks with better accuracy.
 
 
-Mathematical Development
-========================
+Formalization
+=============
 
+This section establishes the "how": how I take what I have (flight data) and
+turn it into what I need. Establishing the general form of the Bayesian filter
+will motivate the necessary pieces (the dynamics models, the data, etc)
+regardless of the filter architecture (I think?)
 
-Filtering
----------
 
-* Several great quotes from the introduction to "Particle filters and data
-  assimilation" (Fearnhead and Kunsch; 2018):
-
-  "State space models can be used to incorporate subject knowledge on the
-  underlying dynamics of a time series by the introduction of a latent Markov
-  state-process." (This is the essence of what I'm doing, except that I'm not
-  using the latent values to improve my estimate of the position: I'm
-  interested in the latent state itself.)
+Canopy Geometry
+===============
 
-  "A state-space model specifies the joint distribution of all the variables
-  that are required for a dynamic model based on subject knowledge, and the
-  variables that have been observed."
+* Describe the individual physical components? (geometry, materials, etc)
 
-* This section should motivate the need for a dynamics model (or "motion
-  model") and a likelihood function (same thing as a "measurement model"?)
+* I'm not interested in a grand exposition of airfoil considerations. I just
+  want to draw attention to the aspects that are important enough to affect my
+  modeling choices. However, this might be a good place to introduced many of
+  the relevant aerodynamic concepts/terminology (angle of attack, stall point,
+  chord, camber, pitching moment, aerodynamic center, etc)
 
-  I'll need to explicitly call out my decision to convert the latitude and
-  longitude data into a tangent-plane coordinate system.
+* Geometric definitions of the airfoil: leading edge, trailing edge, chord
+  line, camber line, upper surface, lower surface
 
+* Summary parameters (ref:
+  http://laboratoridenvol.com/paragliderdesign/airfoils.html#4): maximum
+  thickness, position of maximum thickness, max camber, position of max
+  camber, nose radius, trailing edge angle (?)
 
-***********
-Flight Data
-***********
+* Aerodynamic behavior and coefficients: lift, drag, and moment curves; stall
+  point; stability; more?
 
-This section of the paper will discuss the data I want to use (IGC tracks),
-its limitations, and how I plan to mitigate those limitations.
+* How should I cite the "Paraglider Design Handbook"? Just as a website?
 
-I've been wrestling with how to break down this information, and I suspect my
-answer lies in Bayesian modelling, as usual: the key is to **separate the raw
-data from the random variables**. There are variables that I'm trying to
-observe; they are noisy, but are *observable* with respect to some
-relationship with the data. So, break up "here's the raw data I have to work
-with", and "here are the random variables I can estimate from that noisy
-data".
 
-I'd like to get some (small) amount of credit for the work I did on parsing
-and cleaning the IGC code. I need to think about *how I present this work*.
-I was thinking about putting it in an appendix, but the more I think about it,
-the more I think it should go up front.
+Canopy Aerodynamics
+===================
 
-Start the paper by showing what data is available in an normal IGC track.
-Time, latitude, longitude, pressure altitude, and GNSS altitude. Discuss the
-limitations of that data (no sensor characteristics, etc), and summarize what
-you can reasonably output.
+* Discuss the methods for estimating the aerodynamic forces on a wing. What
+  are their pros/cons? Why did I choose Phillips? Does my geometry make it
+  easy to use CFD methods?
 
-**Establishing the information available from a normal IGC track sets up the
-rest of the work!** Highlighting the data shows what you have to work with for
-the purposes of recreating the wind field for a given track. (Remember,
-building a regression model over a single wind field is different from
-extracting patterns from a *set* of wind fields.)
-
-Extra notes:
-
-* IGC tracks intended for official scoring (so called "IGC FR" tracks, versus
-  "non-IGC FR" tracks, to use the official IGC spec nomenclature) are required 
-
-
-Timestamps
-==========
-
-* These allow me to define *sequences* of data. Any data that has sequential
-  structure with respect to time will gain additional information since the
-  **measurements are correlated**.
-
-* Timestamps in IGC tracks are untrustworthy. Describe the cleaning process.
-
-* Timestamps in IGC tracks have variable time resolution.
-
-
-Altitude
-========
-
-IGC tracks include two measurements of altitude: one from a GNSS device, and
-one from a variometer. The GNSS device measures signals from multiple
-satellites to determine the current *geodetic altitude*: the distance above
-the WGS84 reference ellipsoid. The variometer measures air pressure to
-determine the current *pressure altitude*: the distance above the WGS84
-reference ellipsoid that would produce the measured atmospheric pressure under
-international standard atmosphere (ISA) conditions.
-:cite:`2016IGCFlightRecorder`
+* Make sure to highlight the usefulness of having a full non-linear dynamics
+  model (versus simple linear models such as *stability derivatives*). **Hit
+  this hard! Make it blindingly obvious that having access to an accurate
+  non-linear model will support future tasks.**
 
-[[Geopotential altitude is directly useable in conservation of energy
-calculations, while pressure altitude is more convenient for pilots that need
-to assess the expected aerodynamic performance of their aircraft.]]
+* I will need to discuss the limitations of the lifting-line methods. For
+  starters, you need to have previously computed the coefficients for the
+  deformed section profile, including when braking, and for the range of
+  Reynolds numbers.
 
-Both types of measurement have advantages and disadvantages. GNSS estimates
-are more prone to "spurious" fixes: relatively large, random displacements
-from the true position. GNSS altitudes are less susceptible to systematic
-bias, but processing delays mean they often lag behind the true position of
-the aircraft; this lag makes GNSS signals less reliable for capturing rapid
-altitude fluctuations. [[**Does GPS lag apply to horizontal the same as to the
-vertical? What causes GPS lag?**]] The pressure sensor in a variometer is more
-capable of capturing rapid altitude fluctuations, but the assumptions it makes
-when converting the atmospheric pressure to pressure altitude mean it contains
-a systematic, altitude-dependent bias.
+* Steady-state assumption: In the conclusion of "Specialized System
+  Identification for Parafoil and Payload Systems" (Ward, Costello; 2012), they
+  note that "the simulation is created entirely from steady-state data". This
+  is one of my major assumptions as well. This will effect accuracy during
+  turns and wind fluctuations, and ignores hysteresis effects (boundary layers
+  exhibit "memory" in a sense; the same wind vector can produce a separation
+  bubble or not depending on how that state was achieved).
 
-A flight reconstruction filter will need accurate estimates of both the
-geopotential altitude and the air density, but the IGC data only includes the
-lagged geopotential altitude measurements and no direct observations of the
-air density. This means that the GNSS and pressure altitudes must be combined
-to not only improve the geopotential altitude measurements, but also to
-estimate the air density. Those requirements pose two strongly coupled
-problems.
 
-1. Estimating the true atmospheric conditions
+Validation
+----------
 
-2. Computing the true geopotential altitude from the pressure sensor data
-   using the correct, non-ISA atmospheric conditions
+* I'll be using Belloc's wind tunnel data, but what other considerations are
+  their for checking the performance (accuracy) of the model? And how do
+  I communicate it?
 
-Estimating the true atmospheric conditions lets you compute the air density,
-and use the sensitive pressure measurements to produce better geopotential
-altitude measurements. [[The pressure measurements do not suffer from the time
-lag and smoothing that plagues the GNSS measurements.]]
+* I should choose the most common performance measures of a wing and show those
+  (the "polar curves", stability curves, etc?)
 
+* Should I make a plot of uniform and non-uniform wind? Maybe show the two
+  section lift plots on top of each other. Maybe a summary statistic ("the
+  asymmetric wind case produce 20% more lift on the other side!" etc)
 
-Main Body
----------
 
-[[**This section is mostly old crap**]]
-
-A variometer is a device which measures "pressure altitude", and reports the
-vertical change in pressure altitude. Although this is effective as a local
-measure of altitude, absolute pressure altitude has two problems related to
-biasing:
-
-1. A fixed-offset bias
-
-2. A dynamic-offset bias
-
-The fixed-offset is a stationary bias between the true altitude and the
-measured pressure altitude. This error occurs because the pressure at a given
-altitude will vary with the current weather conditions. To correct this error,
-a reference altitude must be used to calibrate the variometer. Because this
-calibration requires a known altitude, which is often unknown at paragliding
-launch sites, many paragliding tracks are not calibrated at all. Thus, there
-is a constant bias across the entire track.
-
-In addition, there is a dynamic bias that varies with altitude. This error
-occurs due to the assumptions required to convert pressure and temperature
-into an estimate of altitude. **The variometer is able to measure temperature
-and pressure, but not the lapse rate; that is, it does not know the true
-change in altitude for a given change in temperature. Thus, the variometer
-must rely on an average: the International Standard Atmosphere (ISA) is
-defined around the average pressure at sea level (1013.25hPa), the average
-temperature (15C), and the average lapse rate (2C/1000ft). Because the vario
-assumes the lapse rate, its altitude estimate will only match the geometric
-altitude when the average temperature of the air column is equal to the
-average temperature predicted by the ISA.**
-
-An approximate correction to the fixed-offset bias can be implemented by
-computing the average altitude across the entire track, for both the GPS and
-pressure altitudes, then subtracting that error from the pressure altitude
-series. For example, if the average GPS altitude is 553m, and the average
-variometer altitude is 545m, then the error is 545m - 553m = -8m. However,
-this naive average error will include both the fixed and dynamic errors. Thus,
-as the altitude range of the flight increases, then this "average" error will
-be biased towards whatever altitude was most common in the flight.
-
-Another naive method would calculate the error at each timestamp, sort the
-errors by altitude, then perform a linear regression over "Error vs Altitude".
-The issue with this method is that the GPS altitude is subject to variable,
-and potentially large, time delays. Thus, the GPS altitude at one timestep may
-be a lagged version of the pressure altitude at a previous timestep. Because
-this lag is variable, a constant time lag cannot correct the time discrepancy.
-
-To correctly debias the pressure altitude measurements requires dealing with
-both the dynamic altitude bias and the dynamic time lag. Thus, the solution
-becomes a sequence alignment issue.
-
-One approach to sequence alignment of two time series is dynamic time warping.
-
-
-Talking points
---------------
-
-* What data is available (GNSS altitude and pressure altitude)
-
-* Pros/cons:
-
-  * GNSS altitude lags the variometer, and often introduces a smoothing effect
-
-  * Pressure altitude assumes standard ISA conditions, which introduces
-    a systematic, altitude-dependent bias
-
-* Atmospheric characteristics
-
-  * **Lapse rate**: the rate at which the air temperature decreases as
-    a function of altitude. A negative lapse rate means the temperature
-    increases. A sign inversion in the lapse rate corresponds to a thermal
-    inversion; for example, the temperature starts to increase with altitude
-    instead of decreasing.
-
-* Atmospheric measurements
-
-  * **Radiosonde** is a telemetry instrument carried into the atmosphere on
-    a weather balloon.
-
-* Recovering pressure from pressure altitude
-
-* Sequence alignment of GNSS and pressure altitude with dynamic time warping
-  (this gives you the correct {pressure, altitude} pairs, else you'd be using
-  the lagged altitudes)
-
-* Estimating atmospheric conditions using a least-squares fit of atmospheric
-  pressure and GNSS altitude (uses the atmospheric equations)
-
-
-Questions
----------
-
-* What about humidity? See `guinn2016QuantifyingEffectsHumidity`.
-
-* Using a reference temperature (eg, at an airport) should include the
-  {altitude, temperature} point on the fit line. Not available in general, but
-  would be helpful if I could at least find a few flights that I could use for
-  validation (my estimate versus IGRA data, airport data, etc)
-
-  Oh, alternatively, if you *knew* the altitude at takeoff, and the variometer
-  gave the pressure, then you can (assuming the humidity) determine the
-  temperature! That might be easier than looking for a nearby reference
-  temperature.
-
-* What about inversion layers? Should I attempt change point detection?
-
-  I will probably only observe a small layer of atmosphere; if the lapse rate
-  is not constant from MSL to the lowest observed atmosphere, then it's likely
-  a least-squares fit of the MSL temperature and pressure will be
-  unrealistically high/low.
-  
-  The fact that the MSL parameters are unrealistic isn't a problem if I know
-  not to extrapolate outside the observed range, but it does reveal a flaw:
-  what if there are inversion layers *inside* the observed range?
-
-
-GPS Data
-========
-
-The position data in IGC tracks comes from global navigation satellite systems
-(GNSS), such as GPS, Galileo, GLONASS, QZSS, and Beidou.
-
-The systems work based on *pseudo-ranges*: the distance traveled at the speed
-of light for the amount of time delay **as measured by the local clock**. The
-relative delay relies on the local oscillator, which may be imprecise.
-[[FIXME: verify this paragraph]]
-
-Positions are determined by *trilateration* (or *multilateration*): using the
-speed of light and time of flight calculations from a set of satellites, the
-users position lies at the intersection of the measured ranges.
-
-
-Misc
-----
-
-* In "Global positioning systems, inertial navigation, and integration"
-  (Grewal; 2007), he discusses "time-correlated noise" in Kalman filters. See
-  page 279
-
-* In "Global positioning systems, inertial navigation, and integration"
-  (Grewal; 2007), he discusses "rejecting anomalous sensor data" in Sec:8.9.4,
-  page 309. He uses a chi-squared test to reject outliers. As I recall, I was
-  hoping to use this information, but how?
-
-* What kind of chi-squared test is being suggested by Bar-Shalom for checking
-  the GPS noise covariance?
-
-
-Technical Details
------------------
-
-* What are *ephemeris*?
-
-* What are *real-time kinematics*?
-
-* "GPS time does not follow UTC leap seconds. So GPS time is ahead of UTC by
-  an integral number of seconds." (Wikipedia:GPS Signals)
-
-
-Accuracy and Precision
-----------------------
-
-References:
-
-* `https://wiki.openstreetmap.org/wiki/Accuracy_of_GPS_data`
-
-* `Global Navigation Satellite Systems and their applications`; Madry, 2015
-
-Notes
-
-* Possibly want to define the common accuracy measures (root mean square, "2
-  drms" is "twice the distance root mean square error", circular error
-  probable (CEP), spherical error probable (SEP), etc)
-
-  See: https://www.gpsworld.com/gps-accuracy-lies-damn-lies-and-statistics/
-
-* What is *dilution of precision*? Discuss the different types and their
-  effects. In particular, differentiate vertical and horizontal DoP.
-
-* "GPS provides two levels of service: Standard Positioning Service (SPS) and
-  Precise Positioning Service (PPS)."
-
-  See:
-  https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/faq/gps/
-
-  According to the "SPS performance standard", "with current (2007)
-  Signal-in-Space (SIS) accuracy, well designed GPS receivers have been
-  achieving horizontal accuracy of 3 meters or better and vertical accuracy of
-  5 meters or better 95% of the time."
-
-  See: https://www.gps.gov/technical/ps/2008-SPS-performance-standard.pdf
-
-* "[The] government commits to broadcasting the GPS signal in space with
-  a global average *user range error* (URE) of ≤7.8 m (25.6 ft.), with 95%
-  probability. Actual performance exceeds the specification. On May 11, 2016,
-  the global average URE was ≤0.715 m (2.3 ft.), 95% of the time.
-
-  *User range error* is a measure of ranging accuracy (distance from the user
-  to a satellite), *user accuracy* refers to how close the device's calculated
-  position is from the true, expressed as a radius."
-
-  "GPS-enabled smartphones are typically accurate to within a 4.9m radius
-  under open sky."
-
-  See: https://www.gps.gov/systems/gps/performance/accuracy/
-
-
-* "Position accuracy, 95%
-
-  * <= 9m horizontal, global average
-
-  * <= 15m vertical, global average
-
-  * <= 17m horizontal, worst site
-
-  * <= 37m vertical, worst site
-
-  See: https://www.gps.gov/systems/gps/performance/
-
-
-* "GPS devices typically need to receive signals from **at least 7 or
-  8 satellites** to calculate location to within about 10 meters."
-
-  See:
-  https://support.strava.com/hc/en-us/articles/216917917-Why-is-GPS-data-sometimes-inaccurate-
-
-* Some devices can combine multiple satellite systems (eg, GPS and GLONASS) to
-  improve accuracy.
-
-What factors affect GNSS accuracy?
-
-* GNSS factors:
-
-  * *Selective availability*: prior to 2000-05-01, clock degradation
-    (process-δ) and ephemeris manipulation (process-ε) reduced accuracy from
-    ~10m to ~100m. The process-δ acts directly over satellite clock
-    fundamental frequency, which has a direct impact on pseudoranges to be
-    calculated by user's receivers. The process-ε consists in truncating
-    information related to the orbits.
-    (`https://gssc.esa.int/navipedia/index.php/GPS_Services`)
-
-    When SA was disabled, normal GPS receivers automatically benefited. They
-    did not require modifications; the signals degradations were simply turned
-    off.
-
-    According to `https://www.gps.gov/systems/gps/modernization/sa/faq/`, "in
-    theory, civil receivers [SPS] should now match the accuracy of PPS
-    receivers under normal circumstances. [...] PPS still gives advantages to
-    the military beyond accuracy."
-
-* Receiver design factors:
-
-  * Hardware: antenna, augmentation schemes (differential GPS (most commonly
-    used for maritime, but is being discontinued), wide area augmentation
-    system (for aviation), etc)
-
-  * Algorithmic: forward error correction, processing latency, battery life
-    versus accuracy trade-offs, etc
-
-  * Other: real-time kinematic (RTK) positioning
-
-* Situational factors:
-
-  * Ionospheric conditions (ionized particles; "the state of the ionosphere is
-    the single major source of error in our GPS error budget" [Madry, p43])
-
-  * Tropospheric conditions (water vapor and other particulates attentuate and
-    **delay** the signals (different frequencies are delayed by different
-    amounts); relatively minor source of error?)
-
-  * Satellite geometry (how many are visible by the user, and how are they
-    positioned relative to the user)
-
-  * Reflected signals: reflections show up as time delayed signals, which
-    break the time of flight calculations, and *multipath propagation* produce
-    multiple, likely desynchronized, copies of a signal (examples: between
-    tall buildings, canyon walls, etc)
-
-  * Attenuated signals: signals are partially or totally blocked by absorption
-    or reflection (examples: inside an aircraft, backpack, etc)
-
-* How does GNSS accuracy degrade? What do the errors look like? (discuss
-  non-Gaussian noise, "dilution of precision", etc)
-
-
-Historical GPS accuracy
-^^^^^^^^^^^^^^^^^^^^^^^
-
-* What can I say in terms of average performance? I need to choose an assumed
-  baseline (worst-case) performance in order to interpret the data.
-
-* How did typical GPS accuracy change over time?
-  
-* Are newer devices more or less accurate (eg, they might be trading off
-  accuracy for better battery life; see
-  `https://fellrnr.com/wiki/GPS_Accuracy`)
-
-
-Differential GPS
-^^^^^^^^^^^^^^^^
-
-* What is it?
-
-* When was it introduced?
-
-* How common is it in commodity GPS receivers?
-
-* The US Coast Guard ran the NDGPS network, but they're shutting that down as
-  of 2018 since the average GPS performance satisfies maritime performance
-  requirements, and since alternative GPS augmentation schemes are available
-  (eg, for agriculture, aviation, etc).
-
-
-Selective Availability
-^^^^^^^^^^^^^^^^^^^^^^
-
-* What is it?
-
-Disabled on 2000-05-03. With SA the two-sigma error was 45m, without SA
-the two-sigma error was 6.3m.
-
-Do receivers automatically benefit from disabled SA, or did they require
-special support?
-
-See: `https://www.gps.gov/systems/gps/modernization/sa/data/`
-
-
-Fix Latency
+Scratchwork
 -----------
 
-* Is the signal lag the same for horizontal and vertical data?
+The original way to estimate the aerodynamic forces on a wing was introduced
+by Prandtl. This method assumes that the quarter-chord of the wing is
+a straight line with a constant airfoil. More sophisticated methods allow for
+a quarter-chord that arcs in a 2D plane, but because a paragliding wing
+typically has both dihedral and sweep, it requires a 3D lifting line method.
+I chose a method developed by Phillips, which is essentially a vortex panel
+method with a single panel.
 
-* What is the GPS satellite transmit frequency?
+Unfortunately, Phillips' method doesn't seem to work very well. I tried to
+recreate the results from :cite:`belloc2015WindTunnelInvestigation`, but
+I seem to be overestimating the lift, thus significantly overestimating the
+wing's performance. Thankfully, this is not unexpected: in
+:cite:`chreim2017ViscousEffectsAssessment` they investigate Phillips'
+nonlinear numerical lifting line theory. He checks it for convergence and
+accuracy against three wings: straight, elliptical, and swept. It converged
+for the straight and elliptical wing, but not for the swept wing (so no good
+data could be produced), but for the other two methods is overestimated CL for
+the straight and elliptical wings. In
+:cite:`chreim2018ChangesModernLiftingLine` he reintroduces the *Pistolesi
+boundary condition* to mitigate the shortcomings of Phillips' method, but he
+claims corrects the performance for wings with sweep; he does not test it with
+wings with dihedral.
 
-
-Sources
-^^^^^^^
-
-Read `http://catb.org/gpsd/performance.html`. Search for "list of stages",
-which discusses the processing pipeline of that application; good conceptual
-starting point for this question.
-
-For a reasonably representative "worst case scenario", suppose a UART at
-`9600baud, 8+1 coding`. That's `9600/9 ~= 1067` bytes/second. The standard
-NMEA fix sequence is 65 bytes, so ~6.1ms to transmit a basic fix.
-
-
-Receiver Synchronization
-------------------------
-
-High-end GPS receivers can include *disciplined oscillators* (DO). It would
-see it adjusts the temperature around an oscillating crystal to tune the
-frequency. Tuning is performed by comparing clock output against the GPS
-signals. The DO is used to generate an **extremely** accurate and precise 1 HZ
-output (aka, a "1 pulse per second" line, or 1PPS) for synchronization
-purposes. Errors are typically measured in nanoseconds.
-
-* See
-  `https://electronics.stackexchange.com/questions/30750/why-do-gps-receivers-have-a-1-pps-output`
-
-
-Data preparation
-================
-
-Key Points:
-
-* In order to perform flight reconstruction on actual flights, you need to
-  parse, sanity check, clean, and transform the IGC data into the format
-  required by the dynamics model.
-
-* The outputs from this stage are the only parts of the flight that were
-  observed; everything else must be simulated. These data limitations
-  establish the constraints for the flight reconstruction stage.
-
-Example tasks:
-
-* Sanitize the timestamps
-
-* Debias the variometer data (via dynamic time warping or similar)
-
-* Estimate atmospheric conditions (air density in particular)
-
-* Track segmentation. The filter assumes the paraglider is "in-flight", so
-  this implies detecting takeoff and landing, as well as dealing with stall
-  conditions (which essentially break up the track by rapidly ramping
-  uncertainty).
+Thankfully, all this uncertainty isn't a big deal in terms of my project,
+since I'm not expecting to filter true flight tracks anyway. My model is still
+sufficient to demonstrate the qualitative behavior of a wing in interesting
+flight scenarios, as well as for developing the infrastructure. True, the
+method I implemented (Phillips) doesn't work terribly well, but my wing
+geometry definitions are well suited for more sophisticated methods.
+Calculating points anywhere on the wing is easy, allowing for 3/4 chord
+positions (the *Pistolesi boundary condition*) for better numerical lifting
+line methods (see :cite:`chreim2017ViscousEffectsAssessment`), or for the
+generation of a 3D mesh suitable for computational fluid dynamics (CFD)
+methods.
 
 
-**********
+References
+----------
+
+* :cite:`phillips2000ModernAdaptationPrandtl` introduced a numerical LLT
+
+* :cite:`hunsaker2011NumericalLiftingLineMethod` investigates Phillips' method
+  and observe that CL increases as the grid is refined. **This is great news
+  since that matches my experience.** (I need to read that paper, but this note
+  is taken from :cite:`chreim2017ViscousEffectsAssessment`, section 3.1.3 (pg7).
+
+  Observed issues with wings with sweep and/or dihedral. In particular, on pg4:
+  **"As the numerical integration is refined, the velocity induced along the
+  bound portion of a vortex sheet with sweep approaches infinity."** Note that
+  this quote was referring to their method using vortex sheets, but in the
+  conclusion they also say "For wings with sweep and/or dihedral, the method
+  does not produce grid-resolved results which was also found to be the case
+  with the method of Phillips and Snyder."
+
+* :cite:`chreim2017ViscousEffectsAssessment` reviewed the effectiveness of
+  Phillips' method to flat wings with rectangular, elliptical, and swept
+  planforms. Confirmed the issues with sweep noted by Hunsaker. **Good
+  discussion of the theory.** Failed to find convergence for the swept wing?
+  Why would that be? Granted, it was swept 45 degrees, which is pretty severe.
+  He doesn't give the details of the non-convergence.
+
+* :cite:`chreim2018ChangesModernLiftingLine` adapted Phillips method to use
+  the Pistolesi boundary conditions, and verified that is was able to predict
+  the section coefficients for a wing with 45-degree sweep.
+
+* :cite:`mclean2012UnderstandingAerodynamicsArguing` has a good discussion on
+  lifting-line methods (see page 381) and some of their limitations, the
+  Pistolesi boundary condition, etc
+
+* `bellocWindTunnelInvestigation2015`: wind tunnel data, useful for checking if
+  Phillips' method is applicable to a paraglider (assuming my section
+  coefficient data and implementation are correct)
+
+  Works through several developments related to estimating the dynamics, and
+  has a great summary in the introduction. In the introduction mentions that
+  "Theoretical analysis of arched wings is scarce in the literature, partly
+  because the Prandtl lifting line theory is not applicable to arched wings",
+  then in his conclusion, "using a 3D potential flow code like panel method,
+  vortex lattices method or an adapted numerical lifting line seems to be
+  a sufficient solution to obtain the characteristics of a given wing".
+
+* :cite:`kulhanek2019IdentificationDegradationAerodynamic` tested Phillips'
+  method on the Belloc reference wing (he also discusses many other aspects of
+  a paraglider, such as cell distortion, line drag, the harness, etc)
+
+
+Paraglider Geometry
+===================
+
+* Building a parametric paraglider model requires parametric components. One
+  of the motivations for my project is to build a top-down parametric
+  paraglider system.
+
+* **Drive home why parametric is so important for my needs.** It makes it
+  easier to model existing wings, which makes the models easier to compare
+  against existing wings. It also makes it easier to implement existing wings,
+  which makes it less expensive to build a database/catalog of models for
+  existing wings. I need a catalog of wings in order to build a distribution
+  over the wing parameters, which is necessary for the flight reconstruction
+  model (which is uncertain about the wind model, thus needs a prior over wing
+  models.) It also increases flexibility: a fixed canopy geometry doesn't
+  allow making the lobe anhedral a function of the accelerator, which has
+  significant effects on aerodynamic performance (eg, modern wings often have
+  their best glide ratios when a small amount of speedbar has been applied,
+  keeping the wing more arced for "hands-up stability").
+
+* I started with designs from :cite:`benedetti2012ParaglidersFlightDynamics`,
+  and applied extensive modifications to support the needs of my thesis.
+
+
+Paraglider Dynamics
+===================
+
+* Should I discuss my commitment to stateless models?
+
+* I should include a test case flying through some sort of non-uniform wind
+  field, since that was one of my original design requirements of the
+  aerodynamics method. Glancing blow of a thermal was my original idea.
+
+* There is a lot of literature on *parafoil-payload* systems. Discuss that and
+  relate it to my current work. Degrees of freedom, connection types, etc. Good
+  to frame my design in terms of existing literature to make them easier to
+  relate.
+
+
+
+Conservation of angular momentum
+--------------------------------
+
+.. code:: python
+
+   # With `delta_a = 0`
+   In [1]: J_w.round(3)
+   Out[1]:
+   array([[386.351,   0.   ,   3.449],
+          [  0.   , 334.429,   0.   ],
+          [  3.449,   0.   ,  53.431]])
+
+   # With `delta_a = 1`
+   In [1]: J_w.round(3)
+   Out[1]:
+   array([[378.398,   0.   , -36.486],
+          [  0.   , 330.8  ,   0.   ],
+          [-36.486,   0.   ,  57.755]])
+
+
+So, when you press the accelerator you'd expect `P` an `Q` to increase, and
+`R` to decrease (in order to maintain angular momentum). Thankfully the change
+is relatively minor (in my opinion). The +x displacement does reduce the yaw
+rate by about 8%, but you're not usually yawing terribly fast anyway, right?
+
+So, I will *ignore* conservation of angular momentum due to changes in
+accelerator and air density (that is, changes over time), but I will
+*incorporate* their instantaneous values when calculating angular
+acceleration.
+
+
+Flight Simulation
+=================
+
+Key points:
+
+* Defines a set of states.
+
+  These states do not need to be the same thing you would give the dynamics
+  model, but you need to be able to convert between the two; for example, the
+  position state might be `lat/lng/ele`  even though the paraglider dynamics
+  expects `x/y/z`. This is important later when using the dynamics for
+  filtering, since the flight data deals with latitude and longitude. The
+  simplest is to use the *flat-Earth equations* ("Aircraft Control and
+  Simulation"; Stevens, 2016); the tangent-plane approximation should work fine
+  over the small ranges typically covered by a paraglider.
+
+* Builds a stateful model from the stateless paraglider dynamics model
+
+* Requires dynamics models for the wing, wind, and pilot controls
+
+* Useful for model verification, behavior investigation, and building sample
+  flight data for the purpose of developing the flight reconstruction
+  software.
+
+
+An aircraft *dynamics model* defines the instantaneous rate of change over
+time of an aircraft's state variables in response to a given input. A *flight
+simulator* uses the aircraft dynamics model to produce a time series of model
+states called a *state trajectory*.
+
+Simulated flights are essential for testing the [[accuracy/correctness]] of an
+aircraft model. They are also essential for testing flight reconstruction
+algorithms: they provide complete knowledge of the true world state, which can
+be used to validate the output of the flight reconstruction process. [[unlike
+real flight data, which has many unobserved variables, a simulated flight has
+access to the entire state space. This allows you to verify how well
+a reconstructed flight matches the "true" state. It isn't perfect, of course:
+just because you can reconstruct a simulated flight doesn't mean the method
+will work on real flights, but if it fails on simulated flights then you can
+be sure it will also fail on real flights.]]
+
+To generate interesting test flights, you need interesting flight conditions,
+where "interesting" may refer to the wind, or pilot inputs, or both. This
+chapter is a cursory overview of those "interesting" scenarios.
+
+
+Encoding Rotations
+------------------
+
+* :cite:`sola2017QuaternionKinematicsErrorstate` has a great discussion of the
+  many different quaternion encodings
+
+
+******
+Topics
+******
+
+
 Atmosphere
-**********
+==========
 
 Good general atmospheric references:
 
@@ -552,7 +320,8 @@ Good general atmospheric references:
 * Atmospheric Science (Wallace, Hobbs; 2006)
 
 
-Some useful definitions:
+Definitions
+-----------
 
 * "The *geoid* is the shape the ocean surface would take under the influence
   of gravity **and the rotation of the Earth** alone, if other influences such
@@ -572,7 +341,7 @@ Some useful definitions:
 
 
 Lapse rates
-===========
+-----------
 
 * Lapse rates are typically given in terms of geopotential altitude (not
   geometric altitude)
@@ -614,7 +383,7 @@ Lapse rates
 
 
 Convective boundary layer
-=========================
+-------------------------
 
 Synonyms: *convective planetary boundary layer*, *atmospheric mixing layer*,
 *dry adiabatic layer*
@@ -637,7 +406,7 @@ mixed by **dry** thermals; do you never have thermals in saturated air?
 
 
 Inversion layers
-================
+----------------
 
 * What is an inversion layer?
 
@@ -685,11 +454,7 @@ Inversion layers
 
 
 Wind Features
-=============
-
-* I'm claiming the wind is really important to paragliders; I should describe
-  the basic features of wind fields. :cite:`bencatel2013AtmosphericFlowField`
-  categorizes the main types of wind field features (shear, updraft, and gusts)
+-------------
 
 * The most basic wind field is still air. Another basic test case is a uniform
   wind field, where the wind vectors are the same everywhere; the uniform wind
@@ -706,65 +471,88 @@ Wind Features
   rapid, turbulent changes) to the wind magnitude and/or direction.
 
 
-******************
 Bayesian Filtering
-******************
+==================
 
-This section establishes the "how": how I take what I have (flight data) and
-turn it into what I need. Establishing the general form of the Bayesian filter
-will motivate the necessary pieces (the dynamics models, the data, etc)
-regardless of the filter architecture (I think?)
+
+* The *curse of dimensionality* refers to needing **more** data as the
+  dimension increases. When you simplify the model, you can abstract away some
+  of the detail, leading to the *blessing of abstraction*
+  (:cite:`goodman2011LearningTheoryCausality`), which refers to the observation
+  that sometimes its easier to a learn general knowledge faster than specific
+  knowledge. (ie, simpler models are less specific, thus more general, but
+  there are fewer parameters (and possibly **simpler** parameters) which are
+  easier to fit (less data).
+
+* The more information I want to squeeze out of the data, the more structure
+  I need to introduce. You don't get something for nothing: for every question
+  you want to answer, you need either need more data or more structural
+  information (like paraglider wing dynamics)
+
+
+State-space models
+------------------
+
+* Several great quotes from the introduction to "Particle filters and data
+  assimilation" (Fearnhead and Kunsch; 2018):
+
+  "State space models can be used to incorporate subject knowledge on the
+  underlying dynamics of a time series by the introduction of a latent Markov
+  state-process." (This is the essence of what I'm doing, except that I'm not
+  using the latent values to improve my estimate of the position: I'm
+  interested in the latent state itself.)
+
+  "A state-space model specifies the joint distribution of all the variables
+  that are required for a dynamic model based on subject knowledge, and the
+  variables that have been observed."
 
 
 Forward versus Inverse Problems
-===============================
+-------------------------------
 
-"Inverse problems include both parameter estimation and function estimation.
-[...] A common characteristic is that we attempt to infer causes from measured
-effects. A forward, or direct problem has known causes that produce effects or
-results defined by the mathematical model.  Because the measured data is often
-noisy or indistinct, the solution to the inverse problem may be difficult to
-obtain accurately."
+* "Inverse problems include both parameter estimation and function estimation.
+  [...] A common characteristic is that we attempt to infer causes from
+  measured effects. A forward, or direct problem has known causes that produce
+  effects or results defined by the mathematical model. Because the measured
+  data is often noisy or indistinct, the solution to the inverse problem may be
+  difficult to obtain accurately."
 
-**Can I say that my application of particle filtering is to use a forward
-problem (the flight simulator) to produce a solution to the inverse problem?**
+* In a sense, filtering uses solutions to the forward problem to produce
+  a weighted set of solutions to the inverse problem.
 
-Inverse problems are about inferring causes from the observed effects; seems
-like a good description of what I'm doing (only I have a tiny sample of
-observed effects; namely, a change in position over time).
+* Inverse problems attempt to infer unobserved causes from the observed
+  effects.
 
 
 Probabilistic inference / simulation-based filtering
-====================================================
+----------------------------------------------------
 
-I liked this sentence in Duvenaud's dissertation: "*Probabilistic inference*
-takes a group of hypotheses (a *model*) and weights those hypotheses based on
-how well their predictions match the data." **I often use the term
-"simulation-based filtering", but maybe I should review that term.**
+* I liked this sentence in Duvenaud's dissertation:
 
-"**data** driven forecasting" vs "**model** driven forecasting"
+    "*Probabilistic inference* takes a group of hypotheses (a *model*) and
+    weights those hypotheses based on how well their predictions match the
+    data."
 
-See `reich2015ProbabilisticForecastingBayesian`
+* "**data** driven forecasting" vs "**model** driven forecasting" (see
+  `reich2015ProbabilisticForecastingBayesian`)
 
-* Model driven: eg, by analyzing topography (for example, RASP)
+  * Model driven: eg, by analyzing topography (for example, RASP)
 
-* Data driven: eg, by analyzing flight tracks (like von Kaenel's thesis)
+  * Data driven: eg, by analyzing raw position (like von Kaenel's thesis)
 
-Basically, do you look at the observations alone (with no though to the
-underlying model), or do you also refer to the "surrogate process" from which
-they were generated?
+  Basically, do you look at the observations alone (with no though to the
+  underlying model), or do you also refer to the "surrogate process" (the
+  *data-generating process*) from which they were generated?
 
-He describes "data-driven" as "bottom-up", or *empirical* models, whereas
-"model-driven" are "top-down" or *mechanistic* models. Empirical models rely
-on the data, mechanistic models rely on the model dynamics.
+  He describes "data-driven" as "bottom-up", or *empirical* models, whereas
+  "model-driven" are "top-down" or *mechanistic* models. Empirical models rely
+  on the data, mechanistic models rely on the model dynamics.
 
-On page 182: "model-based forecast uncertainties taking the role of prior
-distributions"
-
+  On page 182: "model-based forecast uncertainties taking the role of prior distributions"
 
 
 Data Assimilation
-=================
+-----------------
 
 *Data assimilation* is to geophysics what *filtering* is to engineering. They
 both deal with the *state estimation problem* by combining theory (models)
@@ -779,36 +567,22 @@ cite.
 
 
 Validation
-==========
+----------
 
-I read somewhere that a guy complained about testing your model by fitting it
-against simulated data (or something; he didn't like the idea that "yay, we
-recreated data we expected!" was not helpful). Gelman, on the other hand, is
-a huge fan of *fake-data simulation*, where you generate data from a model
-using "true" parameters, then observing the behavior of the statistical
-procedures (how well they work, how they fail). There is a related procedure
-called *predictive simulation*, where you fit a model, generate data from it,
-then compare that generated data to the actual data (I believe this is also
-called *posterior predictive checking*). See
-:cite:`gelman2007DataAnalysisUsing`.
-
-
-The *curse of dimensionality* refers to needing **more** data as the dimension
-increases, so you have to pursue the *blessing of abstraction*: the more
-structure you account for, the **less** data you need. (FIXME: I don't think
-this is the correct use of the phrase *blessing of abstraction*, which refers
-to the observation that sometimes its easier to a learn general knowledge
-faster than specific knowledge?)
-
-   ^^ This is a concept I need to highlight in my thesis, since it motivates
-   my detail efforts. The more information I want to squeeze out of the data,
-   the more structure I need to introduce. You don't get something for
-   nothing: for every question you want to answer, you need either need more
-   data or more structural information (like paraglider wing dynamics)
+* I read somewhere that a guy complained about testing your model by fitting it
+  against simulated data (or something; he didn't like the idea that "yay, we
+  recreated data we expected!" was not helpful). Gelman, on the other hand, is
+  a huge fan of *fake-data simulation*, where you generate data from a model
+  using "true" parameters, then observing the behavior of the statistical
+  procedures (how well they work, how they fail). There is a related procedure
+  called *predictive simulation*, where you fit a model, generate data from it,
+  then compare that generated data to the actual data (I believe this is also
+  called *posterior predictive checking*). See
+  :cite:`gelman2007DataAnalysisUsing`.
 
 
 Jittering
-=========
+---------
 
 If the process noise is small, you don't get much variation in the particles
 during the time update. One way to decrease the odds of sample impoverishment
@@ -816,394 +590,8 @@ is to use *jittering*. See `fearnhead1998SequentialMonteCarlo`, page 53
 
 
 
-****************
-Paraglider Model
-****************
-
-Key Points:
-
-* First you describe the individual physical components (geometry, materials,
-  etc), and then the dynamics that model its physical behavior for simulation.
-
-* The "paraglider" is a composite of a wing and a payload, where the wing is
-  the canopy and lines, and the payload is the harness plus pilot.
-
-
-Discussion notes:
-
-* There is a lot of literature on *parafoil-payload* systems. Discuss that and
-  relate it to my current work.
-
-* The dynamics models are designed to satisfy some need. I should clearly
-  establish the needs of each modeling component, then show that those needs
-  are being met.
-
-* Building a parametric paraglider model requires parametric components. One
-  of the motivations for my project is to build a top-down parametric
-  paraglider system.
-
-* **Drive home why parametric is so important for my needs.** It makes it
-  easier to model existing wings, which makes the models easier to compare
-  against existing wings. It also makes it easier to implement existing wings,
-  which makes it less expensive to build a database/catalog of models for
-  existing wings. I need a catalog of wings in order to build a distribution
-  over the wing parameters, which is necessary for the flight reconstruction
-  model (which is uncertain about the wind model, thus needs a prior over wing
-  models.) It also increases flexibility: a fixed canopy geometry doesn't
-  allow making the lobe anhedral a function of the accelerator, which has
-  significant effects on aerodynamic performance (eg, modern wings often have
-  their best glide ratios when a small amount of speedbar has been applied,
-  keeping the wing more arced for "hands-up stability").
-
-I started with designs from :cite:`benedetti2012ParaglidersFlightDynamics`,
-and applied extensive modifications to support the needs of my thesis.
-
-
-Behaviors
-=========
-
-[[I should start by discussing the behaviors I would like to capture, since
-that determines things what must be modeled. Things like the degrees of
-freedom, or the fact that I do not want to assume that the relative wind is
-uniform (eg, when flying through a thermal).]]
-
-
-Canopy Geometry
-===============
-
-* I'm not interested in a grand exposition of airfoil considerations. I just
-  want to draw attention to the aspects that are important enough to affect my
-  modeling choices. However, this might be a good place to introduced many of
-  the relevant aerodynamic concepts/terminology (angle of attack, stall point,
-  chord, camber, pitching moment, aerodynamic center, etc)
-
-* Geometric definitions of the airfoil: leading edge, trailing edge, chord
-  line, camber line, upper surface, lower surface
-
-* Summary parameters (ref:
-  http://laboratoridenvol.com/paragliderdesign/airfoils.html#4): maximum
-  thickness, position of maximum thickness, max camber, position of max
-  camber, nose radius, trailing edge angle (?)
-
-* Aerodynamic behavior and coefficients: lift, drag, and moment curves; stall
-  point; stability; more?
-
-* How should I cite the "Paraglider Design Handbook"? Just as a website?
-
-
-Paraglider Wing
-===============
-
-Parafoil + lines + risers
-
-
-Mathematical Model
-------------------
-
-* Discuss the methods for estimating the aerodynamic forces on a wing. What
-  are their pros/cons? Why did I choose Phillips? Does my geometry make it
-  easy to use CFD methods?
-
-* Testing methodology: is my model correct?
-
-* How do you go from forces to accelerations? What about the wing's inertia?
-
-* Make sure to highlight the usefulness of having a full non-linear dynamics
-  model (versus simple linear models such as *stability derivatives*). **Hit
-  this hard! Make it blindingly obvious that having access to an accurate
-  non-linear model will support future tasks.**
-
-References:
-
-* :cite:`phillips2000ModernAdaptationPrandtl` introduced a numerical LLT
-
-* :cite:`hunsaker2011NumericalLiftingLineMethod` observed issues with wings
-  with sweep and/or dihedral. In particular, on page 4: **"As the numerical
-  integration is refined, the velocity induced along the bound portion of
-  a vortex sheet with sweep approaches infinity."** Note that this quote was
-  referring to their method using vortex sheets, but in the conclusion they
-  also say "For wings with sweep and/or dihedral, the method does not produce
-  grid-resolved results which was also found to be the case with the method of
-  Phillips and Snyder."
-
-* :cite:`chreim2017ViscousEffectsAssessment` reviewed the effectiveness of
-  Phillips' method to flat wings with rectangular, elliptical, and swept
-  planforms. Confirmed the issues with sweep noted by Hunsaker. **Good
-  discussion of the theory.** Failed to find convergence for the swept wing?
-  Why would that be? Granted, it was swept 45 degrees, which is pretty severe.
-  He doesn't give the details of the non-convergence.
-
-* :cite:`belloc2015WindTunnelInvestigation` has actual data which I can use
-    to check my equations.
-
-* :cite:`kulhanek2019IdentificationDegradationAerodynamic` tested Phillips'
-  method on the Belloc reference wing (he also discusses many other aspects of
-  a paraglider, such as cell distortion, line drag, the harness, etc)
-
-* :cite:`mclean2012UnderstandingAerodynamicsArguing` has a good discussion on
-  lifting-line methods (see page 381) and some of their limitations, the
-  Pistolesi boundary condition, etc
-
-* :cite:`chreim2018ChangesModernLiftingLine` adapted Phillips method to use
-  the Pistolesi boundary conditions, and verified that is was able to predict
-  the section coefficients for a wing with 45-degree sweep.
-
-
-Survey: what are the typical ways of estimating the aerodynamics of a wing?
-
-* Lifting-lines
-
-* Vortex panels
-
-* Computational fluid dynamics
-
-
-The original way to estimate the aerodynamic forces on a wing was introduced
-by Prandtl. This method assumes that the quarter-chord of the wing is
-a straight line with a constant airfoil. More sophisticated methods allow for
-a quarter-chord that arcs in a 2D plane, but because a paragliding wing
-typically has both dihedral and sweep, it requires a 3D lifting line method.
-I chose a method developed by Phillips, which is essentially a vortex panel
-method with a single panel.
-
-Unfortunately, Phillips' method doesn't seem to work very well. I tried to
-recreate the results from :cite:`belloc2015WindTunnelInvestigation`, but
-I seem to be overestimating the lift, thus significantly overestimating the
-wing's performance. Thankfully, this is not unexpected: in
-:cite:`chreim2017ViscousEffectsAssessment` they investigate Phillips'
-nonlinear numerical lifting line theory. He checks it for convergence and
-accuracy against three wings: straight, elliptical, and swept. It converged
-for the straight and elliptical wing, but not for the swept wing (so no good
-data could be produced), but for the other two methods is overestimated CL for
-the straight and elliptical wings. In
-:cite:`chreim2018ChangesModernLiftingLine` he reintroduces the *Pistolesi
-boundary condition* to mitigate the shortcomings of Phillips' method, but he
-claims corrects the performance for wings with sweep; he does not test it with
-wings with dihedral.
-
-Thankfully, all this uncertainty isn't a big deal in terms of my project,
-since I'm not expecting to filter true flight tracks anyway. My model is still
-sufficient to demonstrate the qualitative behavior of a wing in interesting
-flight scenarios, as well as for developing the infrastructure. True, the
-method I implemented (Phillips) doesn't work terribly well, but my wing
-geometry definitions are well suited for more sophisticated methods.
-Calculating points anywhere on the wing is easy, allowing for 3/4 chord
-positions (the *Pistolesi boundary condition*) for better numerical lifting
-line methods (see :cite:`chreim2017ViscousEffectsAssessment`), or for the
-generation of a 3D mesh suitable for computational fluid dynamics (CFD)
-methods.
-
-
-Scratch notes
--------------
-
-* In `bellocWindTunnelInvestigation2015`, he works through several
-  developments related to estimating the dynamics, and has a great summary in
-  the introduction. In the introduction mentions that "Theoretical analysis of
-  arched wings is scarce in the literature, partly because the Prandtl lifting
-  line theory is not applicable to arched wings", then in his conclusion,
-  "using a 3D potential flow code like panel method, vortex lattices method or
-  an adapted numerical lifting line seems to be a sufficient solution to
-  obtain the characteristics of a given wing". **Usable as the basis for
-  choosing Phillips method (an adapted numerical lifting line)?**
-
-* In :cite:`hunsaker2011NumericalLiftingLineMethod` they are investigating
-  Phillips' method and observe that CL increases as the grid is refined.
-  **This is great news since that matches my experience.** (I need to read
-  that paper, but this note is taken from
-  :cite:`chreim2017ViscousEffectsAssessment`, section 3.1.3 (pg 7).
-
-
-Parafoil-Payload System
-=======================
-
-.. TODO::
-
-   * Discuss some of the major parafoil-payload papers and the modelling
-     choices they made.
-
-This is the combination of wing and payload (harness).
-
-I should review existing paraglider models, including the different degrees
-of freedom and what that choice implies. I should frame my new design in terms
-of existing terminology to make it easier to relate.
-
-
-Performance
-===========
-
-This is a **huge** topic. It's not the primary focus of my thesis, so should
-I just punt it off onto "other resources", or should I detail the basic
-performance characteristics with a few curves, or ...?
-
-At the least I should probably demonstrate that my model definition satisfies
-my design requirements. For example, build an example wing and show how it
-behaves when flying through asymmetric wind (a big feature of my design).
-
-
-Discussion
-==========
-
-* Should I discuss my commitment to stateless models?
-
-Limitations
------------
-
-Conservation of angular momentum
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code:: python
-
-   # With `delta_a = 0`
-   In [1]: J_w.round(3)
-   Out[1]:
-   array([[386.351,   0.   ,   3.449],
-          [  0.   , 334.429,   0.   ],
-          [  3.449,   0.   ,  53.431]])
-
-   # With `delta_a = 1`
-   In [1]: J_w.round(3)
-   Out[1]:
-   array([[378.398,   0.   , -36.486],
-          [  0.   , 330.8  ,   0.   ],
-          [-36.486,   0.   ,  57.755]])
-
-
-So, when you press the accelerator you'd expect `P` an `Q` to increase, and
-`R` to decrease (in order to maintain angular momentum). Thankfully the change
-is relatively minor (in my opinion). The +x displacement does reduce the yaw
-rate by about 8%, but you're not usually yawing terribly fast anyway, right?
-
-So, I will *ignore* conservation of angular momentum due to changes in
-accelerator and air density (that is, changes over time), but I will
-*incorporate* their instantaneous values when calculating angular
-acceleration.
-
-
-Steady-state assumption
-^^^^^^^^^^^^^^^^^^^^^^^
-
-In the conclusion of "Specialized System Identification for Parafoil and
-Payload Systems" (Ward, Costello; 2012), they not that "the simulation is
-created entirely from steady-state data". This is one of my major assumptions
-as well. This will effect accuracy during turns and wind fluctuations, ignores
-hysteresis effects (boundary layers exhibit "memory" in that sense; you can
-the same wind vector can produce a separation bubble or not depending on how
-that state was achieved).
-
-
-Force estimation
-^^^^^^^^^^^^^^^^
-
-* I will need to discuss the limitations of the lifting-line methods. For
-  starters, you need to have previously computed the coefficients for the
-  deformed section profile, including when braking, and for the range of
-  Reynolds numbers.
-
-
-
-Figures
-=======
-
-
-Geometry
---------
-
-* Geometric definitions
-
-  Should supplement the geometric definitions with plots that are annotated to
-  highlight the parameters, where possible (lengths and angles, mostly)
-
-* Examples of each type of design parameter:
-
-  * Elliptical planforms: flat span, length of the central chord, taper
-    (length ratio of central chord versus wing tip chord), ``sweepMed``
-    (maximum rate of change of sweep angle?), ``sweepMax`` (angle from central
-    leading edge to the wing tip leading edge?), torsion (*does this really
-    belong to the elliptical planform? or to the general case parafoil
-    planform?*)
-
-  * Elliptical lobes: ``dihedralMed`` (maximum of change of curvature?),
-    ``dihedralMax`` (angle from the central chord to the wing tip chord?)
-
-
-The planform and lobe diagrams are 2D. Just make some tables (possibly in the
-same SVG, instead of using RST tables?) with different combinations. **Make
-sure to have the parameters clearly labeled in the diagrams. Don't be like
-Benedetti.**
-
-I'm not sure how to best show the 3D versions of the completed parafoil.
-Graphing 3D in still images is kind of awkward. Probably best to keep them
-simple (no grids, minimal axes labels), this is for basic **qualitative**
-understanding, not for quantitative purposes.
-
-
-Moment of inertia
------------------
-
-* Are any figures essential for describing this concept? Can I just quietly
-  skip my nasty derivation?
-
-
-Force estimation
-----------------
-
-* Should I try to define the geometry for Phillips' method, or should I simply
-  reference his paper? It would be *nice* if I could make a diagram that
-  describes my implementation, but that seems like a LOT of work.
-
-
-*****************
-Flight Simulation
-*****************
-
-Key points:
-
-* Builds a stateful model from the stateless paraglider dynamics model
-
-* Requires dynamics models for the wing, wind, and pilot controls
-
-* Useful for model verification, behavior investigation, and building sample
-  flight data for the purpose of developing the flight reconstruction
-  software.
-
-* Output: a set of time series of **true** state sequences for the wind. (The
-  control and wind inputs are deterministic; not sure if I should 
-
-
-An aircraft *dynamics model* defines the instantaneous rate of change over
-time of an aircraft's state variables in response to a given input. A *flight
-simulator* uses the aircraft dynamics model to produce a time series of model
-states called a *state trajectory*.
-
-Simulated flights are essential for testing the [[accuracy/correctness]] of an
-aircraft model. They are also essential for testing flight reconstruction
-algorithms: they provide complete knowledge of the true world state, which can
-be used to validate the output of the flight reconstruction process. [[unlike
-real flight data, which has many unobserved variables, a simulated flight has
-access to the entire state space. This allows you to verify how well
-a reconstructed flight matches the "true" state. It isn't perfect, of course:
-just because you can reconstruct a simulated flight doesn't mean the method
-will work on real flights, but if it fails on simulated flights then you can
-be sure it will also fail on real flights.]]
-
-To generate interesting test flights, you need interesting flight conditions,
-where "interesting" may refer to the wind, or pilot inputs, or both. This
-chapter is a cursory overview of those "interesting" scenarios.
-
-
-Encoding Rotations
-==================
-
-References:
-
-* :cite:`sola2017QuaternionKinematicsErrorstate` has a great discussion of the
-  many different quaternion encodings
-
-
-*********************
 Flight Reconstruction
-*********************
+=====================
 
 The flight simulation section discussed how to use the paraglider model with
 known inputs (controls and wind) to generate state trajectories. Part of that
@@ -1231,11 +619,38 @@ Key points:
   should be relatively low frequency (eg, it's unlikely for the speedbar to go
   from zero to maximum in a quarter of a second).
 
-* Ultimately, flight reconstruction is a *filtering problem*.
+* Ultimately, flight reconstruction is a *Bayesian filtering problem*
+
+
+Data preparation
+----------------
+
+Key Points:
+
+* In order to perform flight reconstruction on actual flights, you need to
+  parse, sanity check, clean, and transform the IGC data into the format
+  required by the dynamics model.
+
+* The outputs from this stage are the only parts of the flight that were
+  observed; everything else must be simulated. These data limitations
+  establish the constraints for the flight reconstruction stage.
+
+Example tasks:
+
+* Sanitize the timestamps
+
+* Debias the variometer data (via dynamic time warping or similar)
+
+* Estimate atmospheric conditions (air density in particular)
+
+* Track segmentation. The filter assumes the paraglider is "in-flight", so
+  this implies detecting takeoff and landing, as well as dealing with stall
+  conditions (which essentially break up the track by rapidly ramping
+  uncertainty).
 
 
 Cramer-Rao
-==========
+----------
 
 A big design point of my filter is that I know I won't get super precise
 estimates, but all I need are **sufficiently** precise estimates.
@@ -1263,7 +678,7 @@ terms.**
 
 
 Proposal Distributions
-======================
+----------------------
 
 The great issue then becomes the number of proposals necessary to get a good
 empirical estimate of the true state probability distribution; in general, the
@@ -1288,7 +703,7 @@ number of expensive dynamics evaluations by several orders of magnitude.
 
 
 Pilot Control Inputs
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 There are several considerations for generating realistic pilot control
 sequences:
@@ -1348,7 +763,8 @@ how the variables change together.
 
 * I like the terminology used in `li2003SurveyManeuveringTarget`: they're
   discussing the *input estimation problem*, and separate the methods into two
-  categories: *model-based* and *model-free*.
+  categories: *model-based* and *model-free*. (Related: "data driven" vs "model
+  driven", from :cite:`reich2015ProbabilisticForecastingBayesian`)
 
   Model-based methods rely on some concept of *maneuvers*: prior knowledge of
   likely input sequences. These can be hand-crafted or learned from data. Maneuvers
@@ -1391,7 +807,7 @@ how the variables change together.
 
 
 Using Gaussian processes
-^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------
 
 A Gaussian process is good for enforcing smoothness, and since they're good
 for human animation they're probably also good for handling the correlations
@@ -1425,7 +841,7 @@ that encoding.
 
 
 As a maneuvering target
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 "In manoeuvring target tracking, a primary trade-off is the robust tracking of
 manoeuvres against the accurate tracking of constant velocity (CV) motion."
@@ -1445,7 +861,7 @@ proposals.
 
 
 Likelihood function
-===================
+^^^^^^^^^^^^^^^^^^^
 
 The likelihood function answers "how probable is this observation given the
 state+model?" My only observable is the GPS data, and I'll need to choose
@@ -1462,9 +878,12 @@ Some of the problems with the GPS data in an arbitrary IGC file:
 
 * Quantization effects from encoding lossy GPS coordinates in the IGC file
 
+* I'll need to explicitly call out my decision to convert the latitude and
+  longitude data into a tangent-plane coordinate system.
+
 
 Filter Validation
-=================
+^^^^^^^^^^^^^^^^^
 
 One of the advantages of Bayesian methods is that you have a *generative
 model*: given all the dynamics you can generate new sample tracks, degrade
@@ -1478,9 +897,8 @@ filter, but I think this is still worth mentioning. Namely, **one of my
 deliverables is a generative model that can be used for filter validation**.
 
 
-******************************
 Wind Estimation and Prediction
-******************************
+==============================
 
 * The goal of an *online* predictive model (ie, during a flight) is to
   *calculate the conditional distribution over the wind field*. This goal
@@ -1615,11 +1033,8 @@ Key Points:
   you use a continuous regression model or do you use a grid?
 
 
-Wind field prediction
----------------------
-
 Model Encoding
-^^^^^^^^^^^^^^
+==============
 
 * To be useable using an in-flight device with no access to cellular network,
   the model must be self-contained, and it must meet the storage and
@@ -1628,3 +1043,457 @@ Model Encoding
   encoding isn't necessarily the same as the in-memory representation; granted
   though, the advantage of what I was doing was to make the on-disk model be
   compact and directly queriable without loading it into memory.]]
+
+
+Flight Data
+===========
+
+This section of the paper will discuss the data I want to use (IGC tracks),
+its limitations, and how I plan to mitigate those limitations.
+
+I've been wrestling with how to break down this information, and I suspect my
+answer lies in Bayesian modeling, as usual: the key is to **separate the raw
+data from the random variables**. There are variables that I'm trying to
+observe; they are noisy, but are *observable* with respect to some
+relationship with the data. So, break up "here's the raw data I have to work
+with", and "here are the random variables I can estimate from that noisy
+data".
+
+I'd like to get some (small) amount of credit for the work I did on parsing
+and cleaning the IGC code. I need to think about *how I present this work*.
+I was thinking about putting it in an appendix, but the more I think about it,
+the more I think it should go up front.
+
+Start the paper by showing what data is available in an normal IGC track.
+Time, latitude, longitude, pressure altitude, and GNSS altitude. Discuss the
+limitations of that data (no sensor characteristics, etc), and summarize what
+you can reasonably output.
+
+**Establishing the information available from a normal IGC track sets up the
+rest of the work!** Highlighting the data shows what you have to work with for
+the purposes of recreating the wind field for a given track. (Remember,
+building a regression model over a single wind field is different from
+extracting patterns from a *set* of wind fields.)
+
+Extra notes:
+
+* IGC tracks intended for official scoring (so called "IGC FR" tracks, versus
+  "non-IGC FR" tracks, to use the official IGC spec nomenclature) are required 
+
+
+Timestamps
+----------
+
+* These allow me to define *sequences* of data. Any data that has sequential
+  structure with respect to time will gain additional information since the
+  **measurements are correlated**.
+
+* Timestamps in IGC tracks are untrustworthy. Describe the cleaning process.
+
+* Timestamps in IGC tracks have variable time resolution.
+
+
+Altitude
+--------
+
+IGC tracks include two measurements of altitude: one from a GNSS device, and
+one from a variometer. The GNSS device measures signals from multiple
+satellites to determine the current *geodetic altitude*: the distance above
+the WGS84 reference ellipsoid. The variometer measures air pressure to
+determine the current *pressure altitude*: the distance above the WGS84
+reference ellipsoid that would produce the measured atmospheric pressure under
+international standard atmosphere (ISA) conditions.
+:cite:`2016IGCFlightRecorder`
+
+[[Geopotential altitude is directly useable in conservation of energy
+calculations, while pressure altitude is more convenient for pilots that need
+to assess the expected aerodynamic performance of their aircraft.]]
+
+Both types of measurement have advantages and disadvantages. GNSS estimates
+are more prone to "spurious" fixes: relatively large, random displacements
+from the true position. GNSS altitudes are less susceptible to systematic
+bias, but processing delays mean they often lag behind the true position of
+the aircraft; this lag makes GNSS signals less reliable for capturing rapid
+altitude fluctuations. [[**Does GPS lag apply to horizontal the same as to the
+vertical? What causes GPS lag?**]] The pressure sensor in a variometer is more
+capable of capturing rapid altitude fluctuations, but the assumptions it makes
+when converting the atmospheric pressure to pressure altitude mean it contains
+a systematic, altitude-dependent bias.
+
+A flight reconstruction filter will need accurate estimates of both the
+geopotential altitude and the air density, but the IGC data only includes the
+lagged geopotential altitude measurements and no direct observations of the
+air density. This means that the GNSS and pressure altitudes must be combined
+to not only improve the geopotential altitude measurements, but also to
+estimate the air density. Those requirements pose two strongly coupled
+problems.
+
+1. Estimating the true atmospheric conditions
+
+2. Computing the true geopotential altitude from the pressure sensor data
+   using the correct, non-ISA atmospheric conditions
+
+Estimating the true atmospheric conditions lets you compute the air density,
+and use the sensitive pressure measurements to produce better geopotential
+altitude measurements. [[The pressure measurements do not suffer from the time
+lag and smoothing that plagues the GNSS measurements.]]
+
+
+Main Body
+^^^^^^^^^
+
+[[**This section is mostly old crap**]]
+
+A variometer is a device which measures "pressure altitude", and reports the
+vertical change in pressure altitude. Although this is effective as a local
+measure of altitude, absolute pressure altitude has two problems related to
+biasing:
+
+1. A fixed-offset bias
+
+2. A dynamic-offset bias
+
+The fixed-offset is a stationary bias between the true altitude and the
+measured pressure altitude. This error occurs because the pressure at a given
+altitude will vary with the current weather conditions. To correct this error,
+a reference altitude must be used to calibrate the variometer. Because this
+calibration requires a known altitude, which is often unknown at paragliding
+launch sites, many paragliding tracks are not calibrated at all. Thus, there
+is a constant bias across the entire track.
+
+In addition, there is a dynamic bias that varies with altitude. This error
+occurs due to the assumptions required to convert pressure and temperature
+into an estimate of altitude. **The variometer is able to measure temperature
+and pressure, but not the lapse rate; that is, it does not know the true
+change in altitude for a given change in temperature. Thus, the variometer
+must rely on an average: the International Standard Atmosphere (ISA) is
+defined around the average pressure at sea level (1013.25hPa), the average
+temperature (15C), and the average lapse rate (2C/1000ft). Because the vario
+assumes the lapse rate, its altitude estimate will only match the geometric
+altitude when the average temperature of the air column is equal to the
+average temperature predicted by the ISA.**
+
+An approximate correction to the fixed-offset bias can be implemented by
+computing the average altitude across the entire track, for both the GPS and
+pressure altitudes, then subtracting that error from the pressure altitude
+series. For example, if the average GPS altitude is 553m, and the average
+variometer altitude is 545m, then the error is 545m - 553m = -8m. However,
+this naive average error will include both the fixed and dynamic errors. Thus,
+as the altitude range of the flight increases, then this "average" error will
+be biased towards whatever altitude was most common in the flight.
+
+Another naive method would calculate the error at each timestamp, sort the
+errors by altitude, then perform a linear regression over "Error vs Altitude".
+The issue with this method is that the GPS altitude is subject to variable,
+and potentially large, time delays. Thus, the GPS altitude at one timestep may
+be a lagged version of the pressure altitude at a previous timestep. Because
+this lag is variable, a constant time lag cannot correct the time discrepancy.
+
+To correctly debias the pressure altitude measurements requires dealing with
+both the dynamic altitude bias and the dynamic time lag. Thus, the solution
+becomes a sequence alignment issue.
+
+One approach to sequence alignment of two time series is dynamic time warping.
+
+
+Talking points
+^^^^^^^^^^^^^^
+
+* What data is available (GNSS altitude and pressure altitude)
+
+* Pros/cons:
+
+  * GNSS altitude lags the variometer, and often introduces a smoothing effect
+
+  * Pressure altitude assumes standard ISA conditions, which introduces
+    a systematic, altitude-dependent bias
+
+* Atmospheric characteristics
+
+  * **Lapse rate**: the rate at which the air temperature decreases as
+    a function of altitude. A negative lapse rate means the temperature
+    increases. A sign inversion in the lapse rate corresponds to a thermal
+    inversion; for example, the temperature starts to increase with altitude
+    instead of decreasing.
+
+* Atmospheric measurements
+
+  * **Radiosonde** is a telemetry instrument carried into the atmosphere on
+    a weather balloon.
+
+* Recovering pressure from pressure altitude
+
+* Sequence alignment of GNSS and pressure altitude with dynamic time warping
+  (this gives you the correct {pressure, altitude} pairs, else you'd be using
+  the lagged altitudes)
+
+* Estimating atmospheric conditions using a least-squares fit of atmospheric
+  pressure and GNSS altitude (uses the atmospheric equations)
+
+
+Questions
+^^^^^^^^^
+
+* What about humidity? See `guinn2016QuantifyingEffectsHumidity`.
+
+* Using a reference temperature (eg, at an airport) should include the
+  {altitude, temperature} point on the fit line. Not available in general, but
+  would be helpful if I could at least find a few flights that I could use for
+  validation (my estimate versus IGRA data, airport data, etc)
+
+  Oh, alternatively, if you *knew* the altitude at takeoff, and the variometer
+  gave the pressure, then you can (assuming the humidity) determine the
+  temperature! That might be easier than looking for a nearby reference
+  temperature.
+
+* What about inversion layers? Should I attempt change point detection?
+
+  I will probably only observe a small layer of atmosphere; if the lapse rate
+  is not constant from MSL to the lowest observed atmosphere, then it's likely
+  a least-squares fit of the MSL temperature and pressure will be
+  unrealistically high/low.
+  
+  The fact that the MSL parameters are unrealistic isn't a problem if I know
+  not to extrapolate outside the observed range, but it does reveal a flaw:
+  what if there are inversion layers *inside* the observed range?
+
+
+GPS Data
+--------
+
+The position data in IGC tracks comes from global navigation satellite systems
+(GNSS), such as GPS, Galileo, GLONASS, QZSS, and Beidou.
+
+The systems work based on *pseudo-ranges*: the distance traveled at the speed
+of light for the amount of time delay **as measured by the local clock**. The
+relative delay relies on the local oscillator, which may be imprecise.
+[[FIXME: verify this paragraph]]
+
+Positions are determined by *trilateration* (or *multilateration*): using the
+speed of light and time of flight calculations from a set of satellites, the
+users position lies at the intersection of the measured ranges.
+
+
+Misc
+^^^^
+
+* In "Global positioning systems, inertial navigation, and integration"
+  (Grewal; 2007), he discusses "time-correlated noise" in Kalman filters. See
+  page 279
+
+* In "Global positioning systems, inertial navigation, and integration"
+  (Grewal; 2007), he discusses "rejecting anomalous sensor data" in Sec:8.9.4,
+  page 309. He uses a chi-squared test to reject outliers. As I recall, I was
+  hoping to use this information, but how?
+
+* What kind of chi-squared test is being suggested by Bar-Shalom for checking
+  the GPS noise covariance?
+
+
+Technical Details
+^^^^^^^^^^^^^^^^^
+
+* What are *ephemeris*?
+
+* What are *real-time kinematics*?
+
+* "GPS time does not follow UTC leap seconds. So GPS time is ahead of UTC by
+  an integral number of seconds." (Wikipedia:GPS Signals)
+
+
+Accuracy and Precision
+^^^^^^^^^^^^^^^^^^^^^^
+
+References:
+
+* `https://wiki.openstreetmap.org/wiki/Accuracy_of_GPS_data`
+
+* `Global Navigation Satellite Systems and their applications`; Madry, 2015
+
+Notes
+
+* Possibly want to define the common accuracy measures (root mean square, "2
+  drms" is "twice the distance root mean square error", circular error
+  probable (CEP), spherical error probable (SEP), etc)
+
+  See: https://www.gpsworld.com/gps-accuracy-lies-damn-lies-and-statistics/
+
+* What is *dilution of precision*? Discuss the different types and their
+  effects. In particular, differentiate vertical and horizontal DoP.
+
+* "GPS provides two levels of service: Standard Positioning Service (SPS) and
+  Precise Positioning Service (PPS)."
+
+  See:
+  https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/faq/gps/
+
+  According to the "SPS performance standard", "with current (2007)
+  Signal-in-Space (SIS) accuracy, well designed GPS receivers have been
+  achieving horizontal accuracy of 3 meters or better and vertical accuracy of
+  5 meters or better 95% of the time."
+
+  See: https://www.gps.gov/technical/ps/2008-SPS-performance-standard.pdf
+
+* "[The] government commits to broadcasting the GPS signal in space with
+  a global average *user range error* (URE) of ≤7.8 m (25.6 ft.), with 95%
+  probability. Actual performance exceeds the specification. On May 11, 2016,
+  the global average URE was ≤0.715 m (2.3 ft.), 95% of the time.
+
+  *User range error* is a measure of ranging accuracy (distance from the user
+  to a satellite), *user accuracy* refers to how close the device's calculated
+  position is from the true, expressed as a radius."
+
+  "GPS-enabled smartphones are typically accurate to within a 4.9m radius
+  under open sky."
+
+  See: https://www.gps.gov/systems/gps/performance/accuracy/
+
+
+* "Position accuracy, 95%
+
+  * <= 9m horizontal, global average
+
+  * <= 15m vertical, global average
+
+  * <= 17m horizontal, worst site
+
+  * <= 37m vertical, worst site
+
+  See: https://www.gps.gov/systems/gps/performance/
+
+
+* "GPS devices typically need to receive signals from **at least 7 or
+  8 satellites** to calculate location to within about 10 meters."
+
+  See:
+  https://support.strava.com/hc/en-us/articles/216917917-Why-is-GPS-data-sometimes-inaccurate-
+
+* Some devices can combine multiple satellite systems (eg, GPS and GLONASS) to
+  improve accuracy.
+
+What factors affect GNSS accuracy?
+
+* GNSS factors:
+
+  * *Selective availability*: prior to 2000-05-01, clock degradation
+    (process-δ) and ephemeris manipulation (process-ε) reduced accuracy from
+    ~10m to ~100m. The process-δ acts directly over satellite clock
+    fundamental frequency, which has a direct impact on pseudoranges to be
+    calculated by user's receivers. The process-ε consists in truncating
+    information related to the orbits.
+    (`https://gssc.esa.int/navipedia/index.php/GPS_Services`)
+
+    When SA was disabled, normal GPS receivers automatically benefited. They
+    did not require modifications; the signals degradations were simply turned
+    off.
+
+    According to `https://www.gps.gov/systems/gps/modernization/sa/faq/`, "in
+    theory, civil receivers [SPS] should now match the accuracy of PPS
+    receivers under normal circumstances. [...] PPS still gives advantages to
+    the military beyond accuracy."
+
+* Receiver design factors:
+
+  * Hardware: antenna, augmentation schemes (differential GPS (most commonly
+    used for maritime, but is being discontinued), wide area augmentation
+    system (for aviation), etc)
+
+  * Algorithmic: forward error correction, processing latency, battery life
+    versus accuracy trade-offs, etc
+
+  * Other: real-time kinematic (RTK) positioning
+
+* Situational factors:
+
+  * Ionospheric conditions (ionized particles; "the state of the ionosphere is
+    the single major source of error in our GPS error budget" [Madry, p43])
+
+  * Tropospheric conditions (water vapor and other particulates attentuate and
+    **delay** the signals (different frequencies are delayed by different
+    amounts); relatively minor source of error?)
+
+  * Satellite geometry (how many are visible by the user, and how are they
+    positioned relative to the user)
+
+  * Reflected signals: reflections show up as time delayed signals, which
+    break the time of flight calculations, and *multipath propagation* produce
+    multiple, likely desynchronized, copies of a signal (examples: between
+    tall buildings, canyon walls, etc)
+
+  * Attenuated signals: signals are partially or totally blocked by absorption
+    or reflection (examples: inside an aircraft, backpack, etc)
+
+* How does GNSS accuracy degrade? What do the errors look like? (discuss
+  non-Gaussian noise, "dilution of precision", etc)
+
+
+Historical GPS accuracy
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* What can I say in terms of average performance? I need to choose an assumed
+  baseline (worst-case) performance in order to interpret the data.
+
+* How did typical GPS accuracy change over time?
+
+* Are newer devices more or less accurate (eg, they might be trading off
+  accuracy for better battery life; see
+  `https://fellrnr.com/wiki/GPS_Accuracy`)
+
+
+Differential GPS
+^^^^^^^^^^^^^^^^
+
+* What is it?
+
+* When was it introduced?
+
+* How common is it in commodity GPS receivers?
+
+* The US Coast Guard ran the NDGPS network, but they're shutting that down as
+  of 2018 since the average GPS performance satisfies maritime performance
+  requirements, and since alternative GPS augmentation schemes are available
+  (eg, for agriculture, aviation, etc).
+
+
+Selective Availability
+^^^^^^^^^^^^^^^^^^^^^^
+
+* What is it?
+
+* Disabled on 2000-05-03. With SA the two-sigma error was 45m, without SA the
+  two-sigma error was 6.3m.
+
+* Do receivers automatically benefit from disabled SA, or did they require
+  special support?
+
+See: `https://www.gps.gov/systems/gps/modernization/sa/data/`
+
+
+Latency (from fix to readout)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Is the signal lag the same for horizontal and vertical data?
+
+* What is the GPS satellite transmit frequency?
+
+* Read `http://catb.org/gpsd/performance.html`. Search for "list of stages",
+  which discusses the processing pipeline of that application; good conceptual
+  starting point for this question.
+
+  For a reasonably representative "worst case scenario", suppose a UART at
+  `9600baud, 8+1 coding`. That's `9600/9 ~= 1067` bytes/second. The standard
+  NMEA fix sequence is 65 bytes, so ~6.1ms to transmit a basic fix.
+
+
+Receiver Synchronization
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+High-end GPS receivers can include *disciplined oscillators* (DO). It would
+see it adjusts the temperature around an oscillating crystal to tune the
+frequency. Tuning is performed by comparing clock output against the GPS
+signals. The DO is used to generate an **extremely** accurate and precise 1 HZ
+output (aka, a "1 pulse per second" line, or 1PPS) for synchronization
+purposes. Errors are typically measured in nanoseconds.
+
+* See
+  `https://electronics.stackexchange.com/questions/30750/why-do-gps-receivers-have-a-1-pps-output`
