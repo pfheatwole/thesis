@@ -4,6 +4,22 @@ Paraglider Geometry
 
 A paraglider is a system of two components: a wing, and a harness.
 
+[[Should this chapter be "Paraglider Wing Geometry"? The paraglider wing and
+paraglider geometries are a bit squished together as-is. Probably needs
+a simple rewording.]]
+
+
+Modeling requirements
+=====================
+
+* [[Should this go below related work? Makes sense if I specify my
+  requirements up front so I can point out when existing literature fails to
+  satisfy them.]]
+
+* Closely related to :ref:`canopy_geometry:Modeling requirements`; review
+  that.
+
+
 
 Related work
 ============
@@ -134,14 +150,14 @@ Good reference images for brake deflections:
 
    Brake deflection, example 1.
 
-   `Photograph <https://commons.wikimedia.org/wiki/File:Paragliding.jpg>`_  by
+   `Photograph <https://commons.wikimedia.org/wiki/File:Paragliding.jpg>`__  by
    Frédéric Bonifas, distributed under a CC-BY-SA 3.0 license.
 
 .. figure:: figures/paraglider/geometry/Wikimedia_ApcoAllegra.jpg
 
    Brake deflection, example 2.
 
-   `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`_ by
+   `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`__ by
    Wikimedia contributor "PiRK" under a CC-BY-SA 3.0 license.
 
 Mathematical Model

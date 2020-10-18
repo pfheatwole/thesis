@@ -17,8 +17,62 @@ Introduction
   a system for newer tracks with better accuracy.
 
 
-Formalization
-=============
+Predictive modeling
+-------------------
+
+Conditioning
+^^^^^^^^^^^^
+
+* I feel rather strongly that a predictive model that can condition on
+  observations of the current wind field **could** dramatically outperform
+  a static prediction. What's not clear is **when** it would.
+
+  MVK briefly considered this in Sec:4.2 but his conclusion what that the
+  weather conditions that would determine if you'd fly in the first place
+  don't help further when predicting thermal (beyond simple day+time
+  selectors).
+
+  His conclusion was that the fact that you're flying in an area in the first
+  place then that already contains the information that the conditions must be
+  favorable, and the thermals that occur are those associated with those
+  favorable conditions; the weather conditions themselves are superfluous.
+
+  He didn't elaborate on his procedure, how he determined the wind, etc, so
+  I'm not willing to put much confidence in this conclusion.
+
+  It might be suggestive, though, that (assuming he did the analysis
+  correctly) that the kinds of thermals his tool looks for are relatively
+  insensitive to wind conditions; this could either mean that (1) those
+  thermals are fundamentally insensitive to wind direction, or (2) his
+  procedure is only capable of detecting the kinds of thermals that are
+  insensitive to wind.
+
+  His analysis focused on mountainous areas and cross country flights; that
+  might have something to do with it. Maybe high altitude mountain thermals
+  tend to be less sensitive to prevailing winds. Pity he didn't consider
+  pairwise correlations of hotspot occurrences.
+
+
+What they predict
+^^^^^^^^^^^^^^^^^
+
+* Most predictions built from flight data are "thermal hotspot" maps. They
+  start by detecting regions where the glider exceeded some minimum sinkrate
+  or it ascended more than some cutoff threshold. (If you failed to core
+  a thermal then no record would be kept. Granted, that might be a good thing,
+  but it also might be too pessimistic.) Then they might try to determine the
+  thermal trigger point: `Track2Thermic` assumes a simple linear
+  extrapolation; MVK is similar, but he tries to correct the linear
+  extrapolation model by seeking elevation peaks near that line.
+
+  Ultimately though, they use *heuristics* to estimate the wind, not actual
+  system dynamics.
+
+
+Flight Reconstruction
+=====================
+
+This chapter 
 
 This section establishes the "how": how I take what I have (flight data) and
 turn it into what I need. Establishing the general form of the Bayesian filter
@@ -951,6 +1005,16 @@ Point estimates
   code for the circle fitting, I could even have a few screenshots to show it
   off.
 
+* Limitations of the *circle method*:
+
+  * Target needs to be circling
+
+  * Assumes constant airspeedx
+
+  * The naive implementation is really sensitive to noise, so it needs to
+    average over a significant period of time. The more samples you average
+    over the worse the precision (averaging discards information)
+
 * I'm assuming the particle filter must rely on position only data from the
   IGC file, but couldn't it incorporate "external" information? There are many
   rich resources: mean weather values for the region, radiosonde data,
@@ -1031,6 +1095,12 @@ Key Points:
   How do you handle the spatiotemporal averaging? In terms of time, do you
   group observations by a sliding 1-hour window, etc? In terms of space, do
   you use a continuous regression model or do you use a grid?
+
+* Computing the regression field for a track generates a lot of data, but you
+  can compress the result by discarding information about regions that didn't
+  exceed some "confidence threshold". If you're not confident, don't waste
+  compute time on that region when you're generating the patterns. **Knowledge
+  of structure leads to compression opportunities.**
 
 
 Model Encoding

@@ -525,7 +525,7 @@ recorded flights. The path forward then becomes:
      greater certainty than others, so the uncertainty must include spatial
      variability as well. The traditional method for placing a distribution
      over spatial functions is to use a Gaussian process, so the choice of
-     modelling spatial correlations equates to choosing a proper kernel
+     modeling spatial correlations equates to choosing a proper kernel
      function.
 
 3. Build a predictive model from the set of regression models

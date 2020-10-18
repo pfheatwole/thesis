@@ -12,6 +12,27 @@ Modeling Requirements
 
 * [[What modeling fidelity do I need?]]
 
+  * Supports non-linear geometry
+
+  * Supports non-linear aerodynamics
+
+    * Needs graceful degradation at stall
+
+    * Non-uniform wind (due to wing turning, wind gradients, thermals, etc)
+
+  * Viscosity
+
+    * Many papers on parafoils provide empirical viscous drag correction
+      factors to the section coefficients.
+
+  * Computationally efficient/fast
+
+    * The particle filter will need to generate a huge number of simulations,
+      so the aerodynamics must be fast.
+
+    * Ultimately this method is likely to be replaced with an approximation,
+      but it's still nice to work with the "full" model whenever possible.
+
 
 
 
@@ -62,6 +83,14 @@ Phillips' numerical lifting-line
   stall, adds pressure drag due to flow separation, and enables viscous drag
   corrections)
 
+* I like this comment in Belloc's paper: "Theoretical analysis of arched wings
+  is scarce in the literature, partly because the Prandtl lifting line theory
+  is not applicable to arched wings", then in his conclusion, "using a 3D
+  potential flow code like panel method, vortex lattices method or an adapted
+  numerical lifting line seems to be a sufficient solution to obtain the
+  characteristics of a given wing."
+
+  I hadn't thought about the NLLT as a "3D potential flow code".
 
 
 Derivation
@@ -289,6 +318,10 @@ Limitations
   coupling method from XFOIL to predict small amounts of flow separation in
   the section coefficients and assume it is representative of flow separation
   on the 3D wing.
+
+* This is a steady-state (non-accelerated) solution; in particular, it doesn't
+  include corrections for apparent mass. (See
+  :ref:`paraglider_dynamics:Apparent Mass`).
 
 
 Case Study

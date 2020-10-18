@@ -241,6 +241,20 @@ Canopy Geometry
 #. What is the rest of the chapter about?
 
 
+
+Modeling requirements
+=====================
+
+* Supports the most common [broad-strokes] design parameters of a paraglider:
+  airfoil, chord length, taper, geometric torsion, etc. (air intakes?)
+
+* Flexible enough that users can approximate existing designs (the choice of
+  parametrization factors into this)
+
+* As simple as possible (intuitive to use, "frugal" in number of parameters)
+
+
+
 Related Work
 ============
 
@@ -262,7 +276,7 @@ Related Work
     his design curves?]]
 
 
-[[Also, "design by wing sections" is closely related to common 3D modelling
+[[Also, "design by wing sections" is closely related to common 3D modeling
 methods. It is similar to *lofting* in the sense that you are generating
 a solid by interpolating between profiles at each section. It is similar to
 *sweeping* a profile along a curve, except that the profile (the shape being
@@ -1039,7 +1053,7 @@ References:
 * Belloc (:cite:`belloc2016InfluenceAirInlet`) discusses the effects of air
   intakes, and suggests some modeling choices
 
-* There are a bunch of papers on *fluid-structure interaction* modelling.
+* There are a bunch of papers on *fluid-structure interaction* modeling.
 
 * Altmann (:cite:`altmann2009NumericalSimulationParafoil`) discusses the
   overall impact of cell billowing on glide performance, and has a great

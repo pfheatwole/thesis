@@ -4,8 +4,10 @@ Flight Simulation
 
 * Define the state variables, representations of orientation, etc
 
-* Highlight that the dynamics so far are stateless. The simulator is free to
-  use whatever orientation encoding it wants (Euler angles, quaternions, etc).
+* Highlight that the dynamics so far are stateless. The dynamics take Euler
+  angles as inputs, but the simulator is free to use whatever orientation
+  encoding it wants for storing the orientation state (Euler angles,
+  quaternions, etc).
 
 
 Test Cases

@@ -28,6 +28,17 @@ Paraglider Dynamics
      - .. image:: figures/paraglider/geometry/foil2.*
 
 
+Modeling requirements
+=====================
+
+* I put a lot of work into non-uniform wind, etc, in the aerodynamics. The
+  dynamics model should be capable of leveraging that flexibility.
+
+* Intuitive (as possible), sufficiently flexible, etc.
+
+* Degrees of freedom? (eg, include relative motion of the harness?)
+
+
 Related Work
 ============
 

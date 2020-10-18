@@ -138,15 +138,12 @@ Wind Fields
 
 * What are some examples of structure in a wind field?
 
-  * [[Describe common causes of a wind field?]]
-
-  * [[Paint a basic picture of the details a pilot is looking for. Maybe
-    describe the wind field as a composite of features (shear, updrafts,
-    gusts)?]]
+  * [[Describe the local wind field as a composite of basic features: shear,
+    updrafts, and gusts. See :cite:`bencatel2013AtmosphericFlowField`
 
     Prioritize wind field information that is important to pilots. For
     example, house thermals, finding lift along a ridge, avoiding sink near
-    a stream, etc.
+    a stream, etc.]]
 
 * Why is it important to determine the structure as quickly as possible? Why
   is it important for a pilot to be able to **predict** the structure?
@@ -356,15 +353,20 @@ My Response Here
    data", like the thermal maps. Those are *model-free* methods
    (kinematic-based filtering), I'm focusing on *model-based* methods.
 
+   (Related: "data driven" vs "model driven", from "Probabilistic forecasting
+   and Bayesian data assimilation" (Reich, Cotter; 2015). Also, page 549 of
+   "Statistical Rethinking" (McElreath; 2020), which is discussing the problem
+   of using noisy data to predict future data (like simple ARMA models do,
+   thus propagating measurement error into the prediction.)
+
    Another difference: I think the flight-based maps average over all flights
    (possibly segmented by month/season). I'm interested in a predictive model
    that can condition the prediction based on current conditions; for that you
    need individual patterns, not a simple average.]]
 
+* Decompose the "build a predictive model" into formalized subtasks
 
 * The goals of this paper:
-
-  1. Decompose the "build a predictive model" into formalized subtasks
 
   #. Define the *flight reconstruction* subtask, and establish that it
      requires a parametric paraglider model
@@ -460,6 +462,18 @@ SCRATCH
   Interesting, but ultimately **not very informative**, because that
   information is already encoded in heuristics that pilot's already know: lift
   along ridges, sink over bodies of water.
+
+  Worse, they neglect the fact that a paraglider can be ascending in sink
+  (under weird conditions), or descending in lift. This makes the "data" far
+  noisy; you could fix this by averaging if you had a ton of observations, but
+  you don't: each observation is precious.
+
+* Interesting: you can think of the methods that are simple averages over
+  a time interval as a prior for the wind field during that interval. I'm just
+  wanting to take it further and condition that prior (to get the posterior).
+  I think that's kinda what he means on page 171 (182) of "Probabilistic
+  forecasting and Bayesian data assimilation" when he mentions "model-based
+  forecast uncertainties taking the role of prior distributions"
 
 * Existing predictive models (thermal maps) use the paraglider motion as
   a proxy for the wind vector. Because of ambiguity in the horizontal motion,
@@ -646,9 +660,7 @@ but I suspect it'd get unwieldy very fast if I put this discussion here.]]
 
     * :cite:`wirz2011RealtimeDetectionRecommendation`
 
-* Wind estimation
-
-  * :cite:`kampoon2014WindFieldEstimation`
+    * :cite:`kampoon2014WindFieldEstimation`
 
 * State estimation
 

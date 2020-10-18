@@ -3,6 +3,21 @@ introduction that gives away the punchline**. Let the reader determine at
 a glance what the chapter will discuss and the basic conclusions.
 
 
+* Linear state-space models are ones where you can take the transition
+  function and replace (or closely approximate) it with a matrix operation
+  that computes the next state as a linear combination of the current state.
+  So you start with `x_{k+1} = f(x_k)` and must be able to write `x_{k+1}
+  = dot(A, x_k)`, for some matrix `A`.
+
+* Is it correct that the *state-estimation problem* is just one specific
+  instance of the more general *filtering problems*?
+
+  *Filtering* is most generally "recursively estimating the posterior of some
+  latent process given a sequence of observations". The posterior might be
+  over the state, the inputs, or the model. **Filtering is not a uniquely
+  defined operation.**
+
+
 Introduction
 ============
 
@@ -72,10 +87,30 @@ Predictive modeling
 
 * What are the limitations of existing predictive models?
 
-  [[They only condition on time+day, not on the current configuration.]]
+  * Limited in what they predict: many (most?) existing tools are simple
+    thermal detectors; they don't predict the actual wind field. They only
+    predict the vertical component.
+
+  * Limited in how they predict: they only condition on time+day, not on the
+    current configuration.
+
+    [[Well, that's not strictly true: `Track2Thermic` tags hotspots with
+    estimates of the wind direction, but that's just a static list of thermals
+    in some region, not a predictive model. You could theoretically create
+    a "predictive model" that filters the hotspots based on current wind
+    direction, but I'm not aware of such a tool.]]
+
+  * Limited in how they detect: they typically work by detecting "large"
+    features in the wind field by applying heuristics to the paraglider motion
+    instead of trying to estimate the actual wind vectors from system dynamics
+    and extracting features from the underlying wind field.
 
 
 .. Introduce the motivation of this paper
+
+* [[Recover the actual wind vectors so tools don't have to rely on heuristics,
+  and would enable predictive models that can predict features based on
+  observations of the wind field.]]
 
 * A predictive model would be much more useful if it could condition on
   observations of the **current** (or forecasted) wind field.
@@ -86,42 +121,59 @@ Predictive modeling
 My Response Here
 ----------------
 
-#. Decompose the problem into subtasks
+* Decompose the problem into subtasks
 
-   1. Turn a sequence of positions into a sequence of wind vectors
+  1. Turn a sequence of positions into a sequence of wind vectors
 
-   #. Turn a sequence of wind vectors into a wind field
+  #. Turn a sequence of wind vectors into a wind field
 
-   #. Turn a set of wind fields into a set of patterns
+  #. Turn a set of wind fields into a set of patterns
 
-   #. Turn a set of patterns into a predictive model
+  #. Turn a set of patterns into a predictive model
 
-#. Foreshadow the overarching need for uncertainty management in all steps
+* Everything builds off of getting good estimates of the wind vectors from the
+  available flight data.
 
-#. Explicitly focus on the first step
+* Describe the available data
 
-   * Describe the available data (briefly)
+* Do methods exist to estimate the wind vectors from the available data?
 
-   * Consider the relationship between what we know and what we want
+  * [[Yes, but they are model-free (data-driven methods); give examples of
+    why they are inadequate]]
 
-   * Consider model-free (data-driven methods) and give examples of why they
-     are inadequate.
+  * Existing predictive models (Paragliding Thermal Maps et al) tend to focus
+    only on the vertical component, and use the paraglider's velocity as
+    a proxy.
 
-   * Solution: we need more information
+  * There is the *circle method*, but it only estimate the horizontal
+    components, plus it has a variety of limitations.
 
-     * Specifically, we must introduce more information via flight dynamics
+* Conclusion: we need better estimates of the wind vectors. The model-free
+  (data-driven) methods were inadequate: we need 
 
-     * Estimation methods that incorporate knowledge of the underlying system
-       dynamics are called *model-based* methods.
+* Explicitly focus on the first step
 
-     * Build intuition for the model-based method by giving a "conversational"
-       walkthrough of how a pilot might estimate the wind by watching
-       a glider. They're using domain knowledge; the program should do the
-       same.
+  * Consider the relationship between what we know and what we want
 
-   * The new goal is to quantify a pilot's "intuitive" knowledge in
-     a mathematical form. The mathematical form enables statistical filtering
-     methods that can combine the knowledge with our data to get what we want.
+  * Solution: we need more information
+
+    * Specifically, we must introduce more information via flight dynamics
+
+    * Estimation methods that incorporate knowledge of the underlying system
+      dynamics are called *model-based* methods.
+
+    * Build intuition for the model-based method by giving a "conversational"
+      walkthrough of how a pilot might estimate the wind by watching
+      a glider. They're using domain knowledge; the program should do the
+      same.
+
+  * The new goal is to quantify a pilot's "intuitive" knowledge in
+    a mathematical form. The mathematical form enables statistical filtering
+    methods that can combine the knowledge with our data to get what we want.
+
+#. Describe some of the requirements for a "good" model
+
+   * Foreshadow the overarching need for uncertainty management in all steps
 
 
 Roadmap
@@ -498,8 +550,8 @@ Data
 
 * Supplementary sources
 
-  * Topography (eg, a DEM), meteorology (eg, RASP), related fields (drainage
-    networks), etc
+  * Topography (eg, a DEM), meteorology (eg, RASP, TherMap), related fields
+    (drainage networks, flowfield tools for wind farms), etc
 
 
 Filter architecture
