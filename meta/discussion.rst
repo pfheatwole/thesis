@@ -20,6 +20,64 @@ Introduction
 Predictive modeling
 -------------------
 
+
+Problems of discovery and use
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Problems of discovery: patterns are discovered by combining structural
+  information gained by repeated flights in the same area.
+
+  * Pilots must recognize the structure during a flight. The structure may be
+    subtle or the pilot may not be paying attention.
+
+    [[Local structure may be predictive of structure elsewhere, but humans
+    are usually better at recognizing local features than relationships
+    separated by space.
+
+    Some pilots are more likely to remember the presence of structure versus
+    it's absence, but the absence of a feature might be highly predictive of
+    structure elsewhere.
+
+    Humans are pretty good at patterns, but I expect computers to beat them
+    here (given sufficient data); maybe this is the result of pilots only
+    being able to view snippets of the wind field at any one time, as opposed
+    to after the flight where the computer gets to see the entire field
+    simultaneously?]]
+
+  * Pilots have to remember the structure. Wind fields are complicated, so
+    pilots can only remember the average structure and the most significant
+    features. Over time, memory of those details fade.
+
+  * Pilots must be able to communicate the structure. Sharing information
+    verbally is imprecise and time consuming.
+
+  * Pilots have to recognize **recurring** structure. If some details don't
+    seem significant they're likely to be overlooked.
+
+
+  * Discovering recurring patterns requires combining the data from repeated
+    flights in the same area. Individual pilots may intuitively combine the
+    data from their own flights, but unless they share their experiences
+    with other pilots then the flights of a group of pilots cannot be
+    combined.
+
+    Structure must be communicated clearly, but communication between pilots
+    is verbal, which is imprecise and time consuming.
+
+  * If two pilots fly in the same area on the same day, they're likely to
+    sample different parts of the wind field. That information should be
+    combined into a joint estimate.
+
+* Problems of use
+
+  * Pilots have to **remember** the patterns. Most pilots just memorize the
+    most reliable features and rely on heuristics for guessing the rest.
+
+  * Pilots have to recognize when they are applicable. [[Some only apply
+    during the summer, or if there's a north wind, etc.]]
+
+
+
 Conditioning
 ^^^^^^^^^^^^
 
@@ -1029,6 +1087,11 @@ Point estimates
   field "current state" as capturing all previous wind field information,
   I can see an argument for it satisfying the Markov assumption. Not sure how
   you'd use it with a particle smoother though.
+
+* I have a complaint that the hotpots from "Paraglider Thermal Maps" largely
+  boil down to "fly along the ridge", but in hindsight that shouldn't be
+  surprising since **that algorithm explicitly fits the trigger points to
+  ridges**.
 
 
 Wind field regression

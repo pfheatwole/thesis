@@ -3,20 +3,6 @@ introduction that gives away the punchline**. Let the reader determine at
 a glance what the chapter will discuss and the basic conclusions.
 
 
-* Linear state-space models are ones where you can take the transition
-  function and replace (or closely approximate) it with a matrix operation
-  that computes the next state as a linear combination of the current state.
-  So you start with `x_{k+1} = f(x_k)` and must be able to write `x_{k+1}
-  = dot(A, x_k)`, for some matrix `A`.
-
-* Is it correct that the *state-estimation problem* is just one specific
-  instance of the more general *filtering problems*?
-
-  *Filtering* is most generally "recursively estimating the posterior of some
-  latent process given a sequence of observations". The posterior might be
-  over the state, the inputs, or the model. **Filtering is not a uniquely
-  defined operation.**
-
 
 Introduction
 ============
@@ -47,7 +33,7 @@ Wind fields
 
 * Discuss local structure in wind fields
 
-  * Thermal lift and sink, orographic link, shear, etc
+  * Thermal lift and sink, orographic lift, shear (including venturi), etc
 
 
 .. Problem and significance
@@ -55,131 +41,110 @@ Wind fields
 Predictive modeling
 -------------------
 
-* Discuss how pilots try to estimate wind field structure
+* How do pilots estimate the structure of the current wind field?
 
-  * Pre-flight methods: topology heuristics (observing ridge lines
-    perpendicular to the prevailing wind, etc), meteorological models (wind
-    forecasts, RASP), flight data-based models (Paragliding Map, Paragliding
-    Thermal Maps, hotspot maps, etc)
-
-  * In-flight methods: exploration, heuristics, local features (dust, blowing
-    vegetation, birds, ripples on water), flight data-based models (adding
-    hotspot maps to your GPS, etc)
-
-* Define *wind patterns* as "recurring structure"
+* Define *wind patterns* as "**recurring** structure"
 
 * Discuss the importance of wind patterns to paragliding pilots
 
-  * [[If a wind field has recurring structure, then pilots can use that to
-    predict the structure before/without exploring that area.]]
+* How do pilots traditionally *discover* wind patterns?
 
-* How do pilots learn wind patterns?
+* How do pilots traditionally *use* wind patterns?
 
-  [[Specifically, the non-computational methods of pattern discovery.]]
+* What are the difficulties of discovering and using wind patterns?
 
-* Discuss the limitations of relying on humans to build knowledge of patterns
+* Goal: discover patterns using flight data (to address the problems of
+  discovery) and encode them in a predictive model (to address the problems of
+  use)
 
-* Can patterns be extracted from existing data?
-
-  Yes, people are doing it already: Paragliding Thermal Map, etc.
+* What are the advantages of discovering patterns using flight data?
 
 * Define *predictive modeling* for estimating wind patterns
 
-* What are the limitations of existing predictive models?
+* What are the advantages of encoding patterns in a predictive model?
 
-  * Limited in what they predict: many (most?) existing tools are simple
-    thermal detectors; they don't predict the actual wind field. They only
-    predict the vertical component.
 
-  * Limited in how they predict: they only condition on time+day, not on the
-    current configuration.
+[[**Where do I introduce the available data?**]]
 
-    [[Well, that's not strictly true: `Track2Thermic` tags hotspots with
-    estimates of the wind direction, but that's just a static list of thermals
-    in some region, not a predictive model. You could theoretically create
-    a "predictive model" that filters the hotspots based on current wind
-    direction, but I'm not aware of such a tool.]]
 
-  * Limited in how they detect: they typically work by detecting "large"
-    features in the wind field by applying heuristics to the paraglider motion
-    instead of trying to estimate the actual wind vectors from system dynamics
-    and extracting features from the underlying wind field.
+* Are there existing tools for building predictive models from the available
+  flight data?
+
+* What are the limitations of existing tools? [[Do they provide satisfactory
+  solutions to the problems of discovery and use?]]
+
+* Why are the existing tools so limited?
+
+  * They're limited in what structure they can extract because they rely on
+    *heuristics*: approximation methods that assume the wind field contains
+    certain features with some explicit structure, and uses motion signatures
+    to detect those features.
+
+  * That limitation also means they're limited in how they can predict because
+    they can only condition predictions on structure they can detect.
+
+* What's wrong with using heuristics to estimate the wind field?
+
+  * They require particular motion signatures: thermal detectors may require
+    a minimum sink rate, or total altitude gained; horizontal wind vectors may
+    require that the glider was circling at a fixed airspeed, etc.
+
+  * To avoid false positives, they typically "summarize" an entire interval of
+    a track, and require minimum durations.
+
+    As a result, they tend to "smooth out" the regions they fit. They assume
+    a sort of "averaged structure" over the interval. Subtleties in the wind
+    field are lost.
+
+  * Each heuristic can only detect its explicit features.
+
+* How do you produce better estimates of the wind field?
+
+  * Heuristics are *model-free* methods, which rely on **coincidental**
+    relationships between the particular motion sequence and the feature being
+    detected. Using a *model-based* method enables introducing **causal**
+    relationships: causal dynamics introduce "more" information and are able
+    to extract more information from the data.
 
 
 .. Introduce the motivation of this paper
 
-* [[Recover the actual wind vectors so tools don't have to rely on heuristics,
-  and would enable predictive models that can predict features based on
-  observations of the wind field.]]
+* How would better wind field estimation help?
 
-* A predictive model would be much more useful if it could condition on
-  observations of the **current** (or forecasted) wind field.
+* How do you estimate the wind field from flight data?
+
+* Describe the available data
+
+* Are there existing methods for estimating the wind vectors from flight data?
+
+* Conclusion: a *model-based* approach is required.
 
 
 .. Response
 
-My Response Here
-----------------
+Flight Reconstruction
+---------------------
 
-* Decompose the problem into subtasks
+* [[Build intuition for the model-based method by giving a "conversational"
+  walk-through of how a pilot might estimate the wind by watching a glider.
+  They're using domain knowledge; the program should do the same.
 
-  1. Turn a sequence of positions into a sequence of wind vectors
+  In essence, that "intuitive" solution is simulating flights. They're doing
+  flight reconstruction in their head.
 
-  #. Turn a sequence of wind vectors into a wind field
+  The new goal is to quantify a pilot's "intuitive" knowledge in mathematical
+  form. The mathematical form enables statistical filtering methods that can
+  combine the knowledge with our data to get what we want.]]
 
-  #. Turn a set of wind fields into a set of patterns
+* [[Describe some of the requirements for a "good" model. Foreshadow the
+  overarching need for uncertainty management in all steps.]]
 
-  #. Turn a set of patterns into a predictive model
-
-* Everything builds off of getting good estimates of the wind vectors from the
-  available flight data.
-
-* Describe the available data
-
-* Do methods exist to estimate the wind vectors from the available data?
-
-  * [[Yes, but they are model-free (data-driven methods); give examples of
-    why they are inadequate]]
-
-  * Existing predictive models (Paragliding Thermal Maps et al) tend to focus
-    only on the vertical component, and use the paraglider's velocity as
-    a proxy.
-
-  * There is the *circle method*, but it only estimate the horizontal
-    components, plus it has a variety of limitations.
-
-* Conclusion: we need better estimates of the wind vectors. The model-free
-  (data-driven) methods were inadequate: we need 
-
-* Explicitly focus on the first step
-
-  * Consider the relationship between what we know and what we want
-
-  * Solution: we need more information
-
-    * Specifically, we must introduce more information via flight dynamics
-
-    * Estimation methods that incorporate knowledge of the underlying system
-      dynamics are called *model-based* methods.
-
-    * Build intuition for the model-based method by giving a "conversational"
-      walkthrough of how a pilot might estimate the wind by watching
-      a glider. They're using domain knowledge; the program should do the
-      same.
-
-  * The new goal is to quantify a pilot's "intuitive" knowledge in
-    a mathematical form. The mathematical form enables statistical filtering
-    methods that can combine the knowledge with our data to get what we want.
-
-#. Describe some of the requirements for a "good" model
-
-   * Foreshadow the overarching need for uncertainty management in all steps
 
 
 Roadmap
 -------
 
-#. Summarize the contribution of this work
+* [[Summarize the contribution of this work]]
 
 
 Flight reconstruction

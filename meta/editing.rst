@@ -58,6 +58,8 @@ Trouble Words
 
 * Prefer "modeling" over "modelling"
 
+* Prefer "thermaling" over "thermalling"
+
 
 Useful Reminders
 ================
