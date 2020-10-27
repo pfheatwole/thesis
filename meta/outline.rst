@@ -59,46 +59,73 @@ Predictive modeling
 
 * What are the advantages of discovering patterns using flight data?
 
-* Define *predictive modeling* for estimating wind patterns
+* Define *predictive modeling*
 
 * What are the advantages of encoding patterns in a predictive model?
 
+* Unfortunately the available data does not contain any explicit information
+  about the wind fields, so the first step towards building a predictive model
+  is to estimate the wind field from the data of each recorded flight.
 
-[[**Where do I introduce the available data?**]]
+
+Wind field estimation
+---------------------
+
+* [[Explain the objective: estimating wind field structure from position-only
+  data]]
+
+* [[Discuss existing tools: linearized thermals, circle method, etc]]
+
+* [[Explain the limitations of existing tools]]
+
+  * They rely on *heuristics*: approximation methods that rely on the wind
+    field containing features with some explicit structure that can be
+    detected based on particular patterns of the paraglider motion.
+
+    Thermal detectors may require a minimum sink rate, or total altitude
+    gained; horizontal wind estimators may require that the glider was
+    circling at a fixed airspeed, etc.
+
+  * Each heuristic can only detect its explicit features. The rest of the data
+    is discarded, which also discards valuable information.
+
+  * To avoid false positives, heuristics typically introduce constraints on
+    the motion such as minimum duration, minimum number of cycles, etc.
+
+    Given the interval, the heuristic produces an output that is assumed to be
+    a representative summary of the entire interval. The output is a sort of
+    "averaged structure" that is assumed to be representative of the wind
+    field over the entire interval.
+
+    As a result, they tend to "smooth out" the regions they fit. Subtleties in
+    the wind field are lost.
+
+    [[FIXME: I don't like this phrasing, but it'll do for now.]]
+
+* [[Conclusion: existing methods are inadequate. We need better estimators.]]
 
 
-* Are there existing tools for building predictive models from the available
-  flight data?
+.. Now that we've seen how estimators can underperform we have more context for
+   designing better ones in a principled way.
 
-* What are the limitations of existing tools? [[Do they provide satisfactory
-  solutions to the problems of discovery and use?]]
+* [[Establish the performance criteria of a wind field estimator]]
 
-* Why are the existing tools so limited?
+  * Don't rely on specific motion patterns
 
-  * They're limited in what structure they can extract because they rely on
-    *heuristics*: approximation methods that assume the wind field contains
-    certain features with some explicit structure, and uses motion signatures
-    to detect those features.
+  * Don't depend on explicit wind structure (ie, don't limit the estimator to
+    structure that adheres to an explicit model, like a linearized thermal.
+    You can *summarize* regions of the wind field using that sort of
+    structure, but that should not be fundamental to *estimating* the wind
+    field.)
 
-  * That limitation also means they're limited in how they can predict because
-    they can only condition predictions on structure they can detect.
+  * Provide uncertainty quantification
 
-* What's wrong with using heuristics to estimate the wind field?
+* [[How can we produce such an estimator?]]
 
-  * They require particular motion signatures: thermal detectors may require
-    a minimum sink rate, or total altitude gained; horizontal wind vectors may
-    require that the glider was circling at a fixed airspeed, etc.
-
-  * To avoid false positives, they typically "summarize" an entire interval of
-    a track, and require minimum durations.
-
-    As a result, they tend to "smooth out" the regions they fit. They assume
-    a sort of "averaged structure" over the interval. Subtleties in the wind
-    field are lost.
-
-  * Each heuristic can only detect its explicit features.
-
-* How do you produce better estimates of the wind field?
+  * Existing models can't be easily extended to satisfy the criteria. Conclude
+    that model-free methods are inadequate; model-based methods are required
+    to produce "better" estimates of the wind field (ie, we need full *flight
+    reconstruction*).
 
   * Heuristics are *model-free* methods, which rely on **coincidental**
     relationships between the particular motion sequence and the feature being
@@ -107,17 +134,34 @@ Predictive modeling
     to extract more information from the data.
 
 
-.. Introduce the motivation of this paper
+* [[MISC:
 
-* How would better wind field estimation help?
+  * You can only predict what you can detect.
 
-* How do you estimate the wind field from flight data?
+    You can only discover "recurring structure" involving structure you're
+    capable of detecting that structure in the first place.
 
-* Describe the available data
+  * You can only condition predictions on structure you can detect (applies
+    both to detecting structure from data and in-flight)
 
-* Are there existing methods for estimating the wind vectors from flight data?
+  * Accuracy is important both when estimating from data and in-flight. If
+    you're trying to condition a prediction based on some variable, then your
+    "from data" and "in-flight" estimates better agree or the predictions
+    could be worse than an unconditional (marginalized) prediction.
 
-* Conclusion: a *model-based* approach is required.
+  * Discuss uncertainty quantification?
+
+  * Earlier I discussed aspect of wind field structure like thermals, sink,
+    and shear, but don't those are sort of "summaries" of the wind field.
+    Those are good targets for "feature detectors", but I'm arguing that
+    better feature detectors can be created if they have access to the
+    underlying wind field.
+
+    I need to show how model-free methods are incapable of estimating those
+    from the available data.
+
+  ]]
+
 
 
 .. Response
@@ -136,9 +180,10 @@ Flight Reconstruction
   form. The mathematical form enables statistical filtering methods that can
   combine the knowledge with our data to get what we want.]]
 
+* [[Define *flight reconstruction*?]]
+
 * [[Describe some of the requirements for a "good" model. Foreshadow the
   overarching need for uncertainty management in all steps.]]
-
 
 
 Roadmap

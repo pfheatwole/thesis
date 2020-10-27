@@ -20,6 +20,10 @@ Introduction
 Predictive modeling
 -------------------
 
+* Note to self: this paper is strictly focused on estimating wind field
+  structure from flight data. Any discussion of extracting patterns from sets
+  of flights must be relegated to the "Future Work" chapter.
+
 
 Problems of discovery and use
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -111,20 +115,27 @@ Conditioning
   pairwise correlations of hotspot occurrences.
 
 
-What they predict
-^^^^^^^^^^^^^^^^^
+Wind field estimation
+---------------------
 
-* Most predictions built from flight data are "thermal hotspot" maps. They
-  start by detecting regions where the glider exceeded some minimum sinkrate
-  or it ascended more than some cutoff threshold. (If you failed to core
-  a thermal then no record would be kept. Granted, that might be a good thing,
-  but it also might be too pessimistic.) Then they might try to determine the
-  thermal trigger point: `Track2Thermic` assumes a simple linear
-  extrapolation; MVK is similar, but he tries to correct the linear
-  extrapolation model by seeking elevation peaks near that line.
+* Most existing tools that extract wind field structure from IGC files are
+  "thermal hotspot" maps. They start by detecting regions where the glider
+  exceeded some minimum sinkrate or it ascended more than some cutoff
+  threshold. (If you failed to core a thermal then no record would be kept.
+  Granted, that might be a good thing, but it also might be too pessimistic.)
+  Then they might try to determine the thermal trigger point: `Track2Thermic`
+  assumes a simple linear extrapolation; MVK is similar, but he tries to
+  correct the linear extrapolation model by seeking elevation peaks near that
+  line.
 
   Ultimately though, they use *heuristics* to estimate the wind, not actual
   system dynamics.
+
+* Kept getting lost on how to present existing tools (linearized thermals,
+  circling method, etc) that attempt to extract wind field structure from
+  position-only flight data. Do I introduce them first, discuss their
+  inadequacies, and only then define my performance criteria? Or do I define
+  the criteria then show how existing tools fail to satisfy them?
 
 
 Flight Reconstruction
