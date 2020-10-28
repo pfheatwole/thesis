@@ -4,15 +4,25 @@ Flight Reconstruction
 
 .. Meta:
 
-   * This chapter should motivate the paraglider dynamics model.
+   * Introduce inverse problems and filtering problems
+
+   * Argue that full flight reconstruction is necessary for wind vector
+     estimation
+
+   * Motivate the paraglider dynamics model.
 
    * It should convert the informal problem statement (turning sequences of
-     positions into sequences of wind vectors) into the more general problem
+     positions into sequences of wind vectors) into the formal problem
      of flight reconstruction.
 
    * It should establish flight reconstruction as a filtering problem. It
      should not discuss filtering architectures for solving the filtering
      problem.
+
+
+   * It should introduce all the state variables (paraglider, controls, and
+     wind), the basic form of the paraglider dynamics function, the notion of
+     a parametric paraglider model, parameters of that model, etc.
 
    * The big objective of this paper is to argue that there exists *some* path
      towards estimating wind vectors from position data. The objective of this
@@ -29,6 +39,9 @@ Flight Reconstruction
 Key points:
 
 * To estimate the wind fields, we need the wind vectors.
+
+  [[Jumping the gun here: the more general problem is "we need a relationship
+  between the wind field and the paraglider's change in position over time"]]
 
 * Flight tracks don't record wind vectors; they only record position.
 
