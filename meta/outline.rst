@@ -198,21 +198,25 @@ Flight reconstruction
 .. Informal overview (conversational definition of the problem)
 
 * Recap: the objective that motivates this paper is to estimate wind fields
-  from flight data so the fields can analyzed for patterns. Estimating the
-  wind fields requires knowledge of the wind vectors that were encountered
-  during a flight.
+  from flight data so the fields can analyzed for patterns.
 
-* Paraglider flight data is limited to position and time, but a paraglider's
-  change in position depends on the wind. This relationship introduces
-  a statistical dependence that can be used to infer information about the
-  wind vectors from the position sequence.
+* Paraglider flight data is limited to position and time, with no direct
+  observations of the wind field (making this an *inverse problem*), but we
+  can use the knowledge that a paraglider's change in position depends on the
+  *wind vectors*, the value of the wind field, at that position. This
+  relationship introduces a statistical dependence that can be used to infer
+  information about the wind vectors from the position sequence.
 
   [[Whether the strength of this relationship is sufficient for usefully
   precise estimates is another question.]]
 
-* [[Introduce *inverse problems*:  we observe the effect, and wish to
-  determine the cause. Solving this inverse problem requires using the
-  paraglider dynamics.]]
+* [[Introduce *inverse problems*: we don't have any direct observations of the
+  wind field, so we have to rely on its relationship to the data. In this
+  case, we have observed an effect, and wish to determine the cause. Solving
+  this inverse problem requires using the paraglider dynamics.]]
+
+* Estimating the wind fields becomes a problem of estimating the wind vectors
+  that were encountered during the flight.
 
 * Although our target is the wind vectors, the dynamics also depend on other
   variables, such as pilot controls, and on the paraglider design itself.
@@ -220,22 +224,34 @@ Flight reconstruction
   the "complete state" of the flight.
 
 * This chapter describes how to build a statistical model of a paraglider
-  flight; how to use it to estimate the full joint probability from the
+  flight, how to use it to estimate the full joint probability from the
   sequence of positions, and how to use the joint probability distribution to
   compute the estimate of the sequence of wind vectors.
 
 
 .. Solving for unknown variables (general review)
 
+Inverse problems
+----------------
+
 * Simple example of solving an equation, and a system of equations
 
 * Define *underdetermined system*
 
-* "Fixing" an underdetermined system by adding more information: more data, or
-  more relationships
+* You can "fix" an underdetermined system by adding more information: more
+  data, or more relationships (equations)
 
 * What if you still don't have enough information? What does it mean to
   "solve" an underdetermined system?
+
+  We have to rely on statistical inference: instead of "solving" the problem,
+  we infer properties of the distribution over what the solution might be.
+
+* Define *inverse problem*
+
+* We are trying to estimate the wind vectors using observations of position.
+  We don't observe the wind vectors directly, so wind vector estimation from
+  the available data is an *inverse problem*.
 
 * Underdetermined systems cannot be solved exactly, they can only be solved
   approximately. Instead of seeking the single "true" value, the problem
@@ -254,17 +270,22 @@ Flight reconstruction
   informative about the value of the target.]]
 
 
-.. Filtering problems
+Filtering problems
+------------------
 
 * A common example of an underdetermined system is a measurement corrupted by
   noise.
+
+* [[Sometimes observations are produced in a sequential fashion]]
+
+* [[Introduce sequential processes]]
+
+* [[Sequential estimation has a special mathematical form]]
 
 * Define *filtering problem*
 
 * Solving a *filtering problem* requires a model of the *data-generating
   process*
-
-* [[Introduce sequential processes]]
 
 * [[*State-space models* of sequential data-generating processes]]
 
@@ -273,12 +294,11 @@ Flight reconstruction
 * [[Using the full statistical model to solve the filtering problem]]
 
 
-.. Flight reconstruction
+Flight reconstruction as a filtering problem
+--------------------------------------------
 
-* Flight reconstruction as a filtering problem
-
-  [[Could also model this as a *state-estimation problem* if you consider the
-  unknown inputs as "state".]]
+.. Could also model this as a *state-estimation problem* if you consider
+   the unknown inputs as "state".
 
 * Define a state-space model of the paraglider position
 
@@ -287,7 +307,7 @@ Flight reconstruction
 * Define *nuisance variable*
 
 * [[Unlike unpredictable noise terms, these nuisance variables have structured
-  dynamics that capture essential information. They should not ]]
+  dynamics that capture essential information.]]
 
 * Nevertheless, evaluating the paraglider dynamics requires concrete values
   for all of its parameters. Where do those values come from?
@@ -303,6 +323,11 @@ Flight reconstruction
   Every filtering architecture that uses a transition function is "simulating"
   the dynamics. I sure highlight the need to simulate the unknown data, but
   stop using this term: it's not informative.**
+
+* [[Flight reconstruction (as we'll be doing it) is many problems in one:
+  state-estimation, input-estimation, and parameter-estimation. In the end we
+  will marginalize over the nuisance variables to get just the posterior
+  distributions of the wind vectors.]]
 
 
 .. Conclusion
@@ -564,8 +589,8 @@ Data
     (drainage networks, flowfield tools for wind farms), etc
 
 
-Filter architecture
--------------------
+Flight reconstruction
+---------------------
 
 * Need to "solve" the filtering/smoothing equations for the posterior
 
@@ -584,9 +609,11 @@ Filter architecture
 
 * Likelihood function (observation model)
 
-* Architecture
 
-  * Suggest the GMSPPF?
+Filter architecture
+^^^^^^^^^^^^^^^^^^^
+
+* Suggest the GMSPPF?
 
 
 Wind field regression
