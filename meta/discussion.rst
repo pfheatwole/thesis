@@ -1,3 +1,19 @@
+* *wind vector* or *wind velocity*  ?
+
+  In general, "velocity" is "rate change of position". The wind isn't changing
+  position (the air is), so I'm tending towards "vector"
+
+  Ooh, but "wind vector" typically refers to the horizontal component only.
+  Dare I use *air velocity* for 3D local wind?
+
+* I'm assuming that the wind field regression model would capture all the
+  information about the wind field, but does the fact that the pilot chose to
+  core in a particular way contain any information that would not be capture
+  by the wind field estimate? Would there be any "residual information" in the
+  paraglider track once you have the wind field regression model?
+
+
+
 ********
 Chapters
 ********
@@ -6,7 +22,7 @@ Chapters
 Introduction
 ============
 
-* The question isn't "*can you* determine the wind in a paragliding track?",
+* The question isn't "*can you* estimate the wind from a paragliding track?",
   but "*how precisely can you* ...?"
 
 * One likely complaint is the inaccuracy of GPS data, so I should confront
@@ -16,13 +32,64 @@ Introduction
   older tracks were often inaccurate shouldn't mean we can't start designing
   a system for newer tracks with better accuracy.
 
+* Don't mix up the two problems: *discovery* and *use*. If a tool deals with
+  both, don't get focused on the tool: stay focused on the individual problem.
 
 Predictive modeling
 -------------------
 
+* I'm interested in both *estimation* and *prediction*: pilots want accurate
+  estimates of places they've been (estimation), but also of places they
+  haven't been yet (prediction).
+
 * Note to self: this paper is strictly focused on estimating wind field
   structure from flight data. Any discussion of extracting patterns from sets
   of flights must be relegated to the "Future Work" chapter.
+
+* You can only predict what you can detect.
+
+  You can only discover "recurring structure" involving structure you're
+  capable of detecting that structure in the first place.
+
+* You can only condition predictions on structure you can detect (applies
+  both to detecting structure from data and in-flight)
+
+* Accuracy is important both when estimating from data and in-flight. If
+  you're trying to condition a prediction based on some variable, then your
+  "from data" and "in-flight" estimates better agree or the predictions
+  could be worse than an unconditional (marginalized) prediction.
+
+* Discuss uncertainty quantification?
+
+* Earlier I discussed aspect of wind field structure like thermals, sink,
+  and shear, but don't those are sort of "summaries" of the wind field.
+  Those are good targets for "feature detectors", but I'm arguing that
+  better feature detectors can be created if they have access to the
+  underlying wind field.
+
+  I need to show how model-free methods are incapable of estimating those
+  from the available data.
+
+* Static models that simply summarize historical averages or rates aren't
+  useless, but they are pretty boring; for example, in Michael von Kaenel's
+  thesis the conclusion was simply "stay along the ridge", which pilots
+  already know.
+
+  Instead, we want a probabilistic model that gives answers that have been
+  **conditioned** on some *set of observations* :math:`\mathcal{O}
+  = \left\{x\right\}`. But there are multiple levels to this: a simple kriging
+  model can use just the current observations to try and build a regression
+  model over the current state, but conceptually the trained model is
+  essentially using the historical data as "pseudo-observations". You're not
+  just conditioning the answer based on current observations, but on the
+  historical observations as well. Mathematically, we say that the historical
+  data is encoded in a *model* :math:`\mathcal{M}`, so the distribution
+  becomes :math:`\vec{x} \sim p \left(\vec{x} \given \mathcal{O}, \mathcal{M}
+  \right)`.
+
+  This distinction is obvious to data science practitioners, but it's probably
+  helpful to make the idea explicit for the less mathematically inclined
+  reader.
 
 
 Problems of discovery and use
@@ -118,6 +185,66 @@ Conditioning
 Wind field estimation
 ---------------------
 
+* To **motivate why it's worth the cost and complexity to recover the wind
+  vectors**, I need to start with existing tools (that rely on heuristics),
+  list out their limitations, then explain the advantages of estimating the
+  actual wind field.
+
+* What do you stand to gain by recovering the wind vectors?
+
+  1. Eliminate (or mitigate) the limitations of relying on heuristics
+
+     * **Use all the information** (don't discard chunks of the track between
+       segments; if a glider "loses" the thermal and reenters, don't discard the
+       information when they're "outside" the thermal)
+
+     * Don't rely on **fixed feature structure** (like linear thermals)
+
+     * Don't rely on arbitrary (and difficult to tune) thresholds
+
+  2. Enable new functionality / flexibility in learning features
+
+     * Compare the estimated field to forecasts (RASP, Regtherm)
+
+     * Use observations of the actual wind field to predict the features
+
+* The two methods I've heard of to estimate the horizontal wind are (1) the
+  circle method, and (2) fitting a linearized thermal core and estimating the
+  wind from its inclination. I think both methods assume constant horizontal
+  airspeed?
+
+* Thermal detectors and the like don't have access to good estimates of the
+  wind vectors, so they rely on heuristics over paraglider motion.
+
+  Also, because they don't estimate the fine detail of the wind field, thermal
+  detectors **summarize** regions of the field using pre-defined *features*.
+
+  This isn't good use of the information available in the track. They use
+  heuristics over noisy position measurements which were caused by the
+  underlying structure. By going straight to the features, they're skipping
+  the extra information we have (knowing how the wind causes the motion).
+  **Feature extraction should be split into two steps: (1) estimate the wind
+  vectors, and (2) extract features from the wind vectors.**  Doing those two
+  steps at the same time is suboptimal.
+
+  Hm, a try at rewording this: the goal is to reveal structure in the wind
+  field. The problem with existing tools is that they never deal with the wind
+  field itself; instead they rely on heuristics to "guess" the structure in
+  the field. Their analysis relies on the **effects** of the wind field, not
+  the wind field itself. The same cause can have many different effects, which
+  is why trying to determine the cause from an observed effect is such a pain.
+
+  Features are summary information about the *effects*, what I really want is
+  information about the underlying *cause*.
+
+  Learning via hard-coded features depends on the paraglider track having
+  a particular structure (eg, coring a thermal), but **the structure of the
+  flight is not indicative of the underlying structure**. It's suggestive, but
+  not equivalent. Using the dynamics lets you recover the underlying structure
+  without depending on structure of the flight (although circling flight will
+  definitely help reduce uncertainty).
+
+
 * Most existing tools that extract wind field structure from IGC files are
   "thermal hotspot" maps. They start by detecting regions where the glider
   exceeded some minimum sinkrate or it ascended more than some cutoff
@@ -137,16 +264,625 @@ Wind field estimation
   inadequacies, and only then define my performance criteria? Or do I define
   the criteria then show how existing tools fail to satisfy them?
 
+* **Do the limitations of existing predictive tools stem from their lack of
+  access to the underlying wind field?**
+
+  Can I start with some limitations of existing tools (limitations in their
+  existing functionality or straight up missing functionality) and establish
+  that those limitations stem from the fact that they're trying to extract
+  information from the **effects** of the underlying thing instead of working
+  on the thing itself?
+
+  eg, instead of locating regions of that wind field with rising air, they
+  have to rely on heuristics of the paraglider motion
+
+Thermal hotspot detectors
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* I don't think any of the "thermal detector" type models attempt to determine
+  the actual vertical wind velocity. They use heuristics of the paraglider
+  motion as a decision function to segment the track based on whether the
+  glider appears to be in a thermal.
+
+* Relying on the paraglider motion introduces (at least) two assumptions:
+
+  1. The pilot successfully detect the thermal
+
+  2. They successfully cored the thermal.
+
+     If they missed it, or if they tried and failed, the flight will not
+     satisfy the threshold.
+
+* They assume the motion of the glider tracks the shape of the thermal.
+
+* Rely on track segmentation. Appears that most split the track into "gliding"
+  and "thermaling" segments. For each "thermal" segment, they mark a hotspot.
+  They might use the average horizontal position, or they may try to determine
+  the trigger point.
+
+* Methods that attempt to determine the trigger start by linearizing the
+  paraglider motion over the thermal segment, and project back to the surface
+  to mark a trigger point; some methods simply mark the line's intersection
+  with the surface, others (like MVK) attempt to find a nearby point on the
+  surface that are more probable to act as thermal triggers (eg, cliffs or
+  peaks).
+
+* Using linearization of paraglider motion to determine trigger points assumes
+  that the motion center is coincident with the thermal center. Seems like that
+  kind of extrapolation is bound to be pretty noisy, especially as AGL
+  increases. Also, linearization assumes the thermal is linear, but it's common
+  for them to bend.
+
+* Some (like `Track2Thermic`) will record extra information about the thermal,
+  such as its inclination (as a proxy for the wind direction).
+
+* By relying on heuristics (such as minimum descent rate, altitude gained, etc)
+  they are sensitive to noise. To avoid false positives, they usually apply
+  thresholds, such as minimum duration or total altitude gained. The thresholds
+  must be large enough to avoid false positives, but not so large as too miss
+  short segments.
+
+* They are effectively looking for "thermal signatures" in the paraglider
+  motion. This might actually be more effective than a general wind field
+  regression approach, but thresholding will likely result in most of the
+  tracks (and thus data) being discarded.
+
+* MVK looked into filtering hotspots based on weather conditions (cloud base,
+  wind direction and speed, etc), and concluded they didn't provide any extra
+  information. In the end he only filters based on day and time-of-day. His
+  explanation is that flights in a region occur under similar weather
+  conditions; in other words, **the fact that the flight occurred at all
+  already contains all the useful information**. The pilot has already selected
+  for those conditions.
+
+  Some concerns about his conclusions:
+
+  * How did he filter based on wind? (Pointwise correlations for each hotspot
+    against some prevailing wind? Against the wind at the hotspot?
+
+  * What values for the wind did he use?
+
+    In the "Multi Centroid" section of Sec:3.5.3 he mentions using the
+    linearization to estimate the wind direction and strength; I assume he
+    used this for filtering, which could **easily** explain it. Using
+    linearized paraglider motion to estimate wind drift is almost definitely
+    going to be super noisy.
+
+    Did he estimate it for each hotspot? Did he try to estimate some global
+    mean? He mentions "Regtherm": did he look up the values from that? You
+    need to make sure that the estimates of the wind vectors match the actual
+    underlying field; if the wind estimates from he flight data are wrong, if
+    the forecasts from Regtherm are wrong, etc, you'll get junk output.
+
+* Limitations
+
+  * Don't try to estimate the wind vectors themselves. Instead they rely on
+    heuristics: motion patterns the indicate a thermal.
+
+  * The patterns are relatively noisy feature detectors, so they apply threshold
+    functions to "validate" segments.
+
+  * Determining the "trigger point" relies on the ability to linearize the
+    thermaling segment. (MVK uses piecewise linearization on the top and bottom
+    halves to deal with "bending".)
+
+  * **It would be a better to say "these are the regions where pilots often
+    experienced lift" instead of "these are the points where pilots successfully
+    cored a thermal".**
+
+    I'm also interested in mapping regions of sink; keep the solution more
+    general.
+
+* Discussion
+
+  * What if you applied this type of model to the general wind field instead of
+    the paraglider track? Best of both worlds? 
+
+    * Focusing on the actual wind field would eliminate relying on the pilot to
+      have noticed the thermal and to have cored it correctly.
+
+    * Might allow replacing the arbitrary thresholds with proper probabilistic
+      distributions. You're either confident of the estimate or not.
+
+    * The "hotspot" is a very concise information summary, which is nice, and is
+      probably the information a pilot would really want anyway.
+
+  * If you started by estimating the wind field, could you use these methods
+    there? The goal would be to utilize their strengths (computationally cheap,
+    hotspot maps are intuitive) while avoiding their negatives (use the variance
+    of the wind field instead of clumsy threshold functions, don't rely on the
+    paraglider motion to estimate a linear fit to the thermal, etc)
+
+    It's possible that this "hotspot detector" idea is useful for higher AGL
+    scenarios.
+
+Circling method
+^^^^^^^^^^^^^^^
+
+One problem with the circling method is that it assumes constant airspeed.
+
+If a track isn't circling then the circle fit will be dominated by noise:
+fluctuations in airspeed, fluctuations in wind speed, and observation error.
+When the glider is circling, it affords a sort of triangulation; similar to
+triangulation, you don't want the ground velocities to be collinear. Circling
+lets you constrain the solution to a reasonably small region.
+
+
+
 
 Flight Reconstruction
 =====================
 
-This chapter 
+The primary goal of this chapter is to motivate the paraglider dynamics model.
+It should provide a conceptual explanation of how to estimate the sequence of
+wind vectors given the sequence of positions. It should introduce Bayesian
+filtering and model-based methods. It should define a state-space model for
+the data-generating process, and briefly describe how the SSM can be used to
+solve the recursive filtering problem; the SSM should clearly motivate the
+three dynamics functions (wing, wind, and controls). It should not discuss
+specific filtering architectures (particle filters, etc) for solving the
+filtering problem.
 
-This section establishes the "how": how I take what I have (flight data) and
-turn it into what I need. Establishing the general form of the Bayesian filter
-will motivate the necessary pieces (the dynamics models, the data, etc)
-regardless of the filter architecture (I think?)
+
+* Our initial goal is to estimate the wind *field*, but the flight data does
+  not record any direct observations of the wind field. It only records the
+  glider position over time. Thus, estimating the wind field from the data is
+  an *inverse problem*: we need a relationship between the glider's position
+  over time, and the wind field.
+
+  The glider interacts with the wind field through the local wind vectors. The
+  interaction is given by the canopy aerodynamics. Thus, we have an
+  intermediate goal: first, use the canopy aerodynamics to estimate
+  observations of the local wind vectors, then use the local wind vectors to
+  build a regression model over the wind field (or maybe use them to fit some
+  explicit wind field structure, like a thermal).
+
+  **We have no relationship between the wind field as a whole and the
+  paraglider's position over time. We only have a relationship to the local
+  wind vectors. Thus, we must use our knowledge of the canopy aerodynamics to
+  estimate the local wind vectors before we can build the complete regression
+  model. (Technically you could build the regression model as part of the wind
+  vector estimation process, but this chapter is merely establishing the basic
+  workflow.)**
+
+* It is essential to acknowledge the inescapable uncertainty throughout these
+  questions. Even the small amount of data we do have (a sequence of positions
+  over time) is uncertain due to sensor noise and encoding inaccuracies
+  (quantization error). When uncertainty cannot be eliminated, it no longer
+  makes sense to look for exact answers, but rather for the distribution that
+  covers the plausible range of answers. This is the realm of probabilistic
+  methods.
+
+* What is simulation-based filtering? How does it deal with underdetermined
+  systems?
+
+* Individual positions tell you nothing except the fact that a pilot chose to
+  be flying that day. It suggests reasonable flying conditions, but you can't
+  even be sure of that (the weather could have changed, the wing may be
+  unusually high performance, or the pilot could just be crazy). The important
+  information is how the position changes over time.
+
+* Although a filtering architecture could estimate the wind vectors
+  concurrently with the wind field regression model, for simplicity this
+  chapter assumes these steps are separate. In particular, it models the
+  sequence of wind vectors as a Markov process, which means the wind field
+  regression model can't be incorporated into the prior for each wind vector.
+
+* We're trying to relate motion to wind vectors, and that relationship is
+  defined by the canopy aerodynamics, so any solution must utilize the canopy
+  aerodynamics.
+
+* This inverse problem isn't deterministic: it's stochastic. There is
+  uncertainty in the data, wind, controls, and model, so a complete solution
+  should provide *uncertainty quantification*. Instead of providing an exact
+  answer, there will be ranges of answers and their estimated probabilities.
+
+* Estimating the values of a stochastic process is a *statistical filtering
+  problem*.
+
+* Estimating the joint probability directly is intractable, but the Markov
+  property allows the problem to be rewritten in a tractable form: the
+  *recursive filtering equation*.
+
+  [[Old phrasing: "Statistical filtering problems involving values that evolve
+  over time can be modeled with the *recursive filtering equation*."]]
+
+* The recursive filtering equation is composed from a set of priors
+  (probabilities before seeing any data), a transition function (a dynamics
+  model), and a likelihood function (an observation model).
+
+* The transition function is how we "introduce more information" into the
+  problem (via the aerodynamics).
+
+* Writing the wind vector estimation task in terms of the recursive filtering
+  equation also reveals that there are several subtasks:
+
+  1. State estimation
+
+  2. Parameter estimation (aka model estimation)
+
+  3. Input estimation (wind and control vector sequences)
+
+* "Solving" the filtering problem simply means "estimate the joint probability
+  distribution", then *marginalize* the "nuisance" variables (control inputs,
+  model parameters, etc) to compute the joint distribution over the position
+  and wind vectors. (*Nuisance variables* aren't interesting by themselves,
+  but they must be accounted for: the targets depend on the nuisance
+  variables, and so the uncertainty of the nuisance variables must be
+  incorporated into the uncertainty of the target variables.)
+
+* In shorter form, given a statistical model (in the form of the state-space
+  model) we want to compute the posterior over the states, inputs, and model
+  parameters.
+
+  (See "Philosophy and the practice of Bayesian statistics"; Gelman and
+  Shalizi, 2013, pp11-12)
+
+* This paper will not discuss filtering architectures for solving the
+  filtering problem (this includes all of state, parameter, and input
+  estimation). **The focus of this work is on the dynamics model, which
+  provides the transition function.**
+
+* The term *flight path reconstruction* seems to have a particular meaning in
+  some portions of the aerospace community, where it is used to indicate
+  kinematics-based state estimation as a component in model validation and
+  calibration. (For a good survey on this topic, see
+  :cite:`mulder1999NonlinearAircraftFlight`.) As a kinematics-based method,
+  the models are built around *specific forces* and angular rates instead of
+  aerodynamic forces and moments. As such, it is more concerned with
+  **describing** and aircraft's motion instead of **explaining** its motion.
+  (Counterpoint: the MH370 paper calls their methods "flight path
+  reconstruction", and they incorporate things like maneuvers, which are not
+  pure kinematics?)
+
+  I'm calling my efforts in this paper "flight reconstruction" because it's
+  not just the path of the wing I'm interested in. I'm also reconstruction the
+  environment of the flight (the wind and control inputs).
+
+* Flight reconstruction as a *state estimation* problem. State estimation
+  might mean improving an estimate of an observed quantity, or it could mean
+  producing an original estimate of an unobserved quantity.
+
+* Performing *parameter estimation* implies that you have a parametric model
+  in the first place.
+
+* In most aerodynamic literature, when they talk about *parameter estimation*
+  they typically have access to the aircraft in question and can execute
+  a specific set of maneuvers to learn the behavior of the system. I have no
+  access to the wing, no knowledge of the control inputs, and the maneuvers are
+  assumed unsteady (not the result of the control inputs alone).
+
+* What are some of the problems we face?
+
+  * Indirect observations (it's an inverse problem)
+
+  * Our transition function depends on unobserved variables (underdetermined
+    system)
+
+  * We don't have an inverse transition function for the state (have to rely on
+    the forward transitions and work backwards)
+
+  * We don't know the forward transition function (we don't know the paraglider
+    parameters)
+
+* My main point is that existing tools are limited in what structure they can
+  detect/estimate given a flight track. To do better, we need a model-based
+  solution: we need a dynamics model.
+
+* If you can produce a better estimate of the structure of the wind field
+  during a flight, then you can detect better patterns.
+
+* More detailed knowledge of the wind field structure means more opportunities
+  for conditioning predictions. The goal is to condition on the structure. If
+  you're limited to the coarse features that existing tools can extract, then
+  you're limited in how you can condition.
+
+* If estimates of the conditioning variable are poor, then you might be better
+  of with marginal predictions.
+
+
+Key points
+----------
+
+* Introduce inverse problems and filtering problems
+
+* Argue that full flight reconstruction is necessary for wind vector
+ estimation
+
+* Motivate the paraglider dynamics model.
+
+* It should convert the informal problem statement (turning sequences of
+ positions into sequences of wind vectors) into the formal problem
+ of flight reconstruction.
+
+* It should establish flight reconstruction as a filtering problem. It
+ should not discuss filtering architectures for solving the filtering
+ problem.
+
+* It should introduce all the state variables (paraglider, controls, and
+ wind), the basic form of the paraglider dynamics function, the notion of
+ a parametric paraglider model, parameters of that model, etc.
+
+* The big objective of this paper is to argue that there exists *some* path
+ towards estimating wind vectors from position data. The objective of this
+ chapter is to argue that the complete system dynamics (paraglider,
+ controls, and environment) are *necessary* to solve the filtering problem.
+ It should not attempt to argue that the system dynamics are *sufficient*
+ to solve the filtering problem.
+
+* It should leave the reader with a clear map of the steps that would be
+ required to use the dynamics to perform flight reconstruction.
+
+
+Introduction
+------------
+
+* The motivating questions of this paper must be transformed into a set of
+  mathematical equivalents before we can apply tools that estimate their
+  answers. This chapter converts the informal problem statements from the
+  introduction into formal, probabilistic relationships.
+
+  This step involves acknowledging the inherent uncertainty in the data and
+  their models, defining the underlying, probabilistic form of the questions,
+  and using the rules of conditional probability to decompose the problem into
+  a series of intermediate steps.
+
+* The starting point for any statistical analysis should be to understand the
+  *data-generating process*. If your target is directly involved in the DGP,
+  then great, you've got statistical dependence to work with. If not, you'll
+  need to introduce additional relationships to induce statistical dependence
+  between the observed variables and the target.
+
+* What is *flight reconstruction*?
+
+  * In this paper, the term *flight reconstruction* refers to this process of
+    estimating the complete state of the flight at each time step. The rest of
+    this chapter defines the "complete state", why it is necessary, etc.
+
+  * [[Should this have been established in the Introduction? Or is this part
+    expanding on / formalizing the ideas proposed in the introduction?]]
+
+  * [[Might be a great place to mention the MH370 paper; that's a relatable
+    example of a flight reconstruction problem. That paper also has a nice
+    introduction to the *Chapman–Kolmogorov equation* which I should
+    reference.]]
+
+* What is the intuition behind *flight reconstruction*?
+
+  * Conditional probability is the key, in SO many ways
+
+    * Relates what we know to estimate what we don't
+
+    * Enables decomposition (eg, Markov processes -> recursive estimation)
+
+* What makes the task difficult?
+
+  * We don't have any measurements of the thing we're estimating; we only have
+    measurements of a variable which is **related** to it.
+
+  * There is uncertainty everywhere: the dynamics, the other state variables,
+    even the measurements are noisy.
+
+
+Statistical modeling
+--------------------
+
+* Is "underdetermined system" the right term? I have latent variables I can't
+  solve for exactly, but I can at least produce some estimate of their value.
+  I suspect "underdetermined" is wrong (albeit useful for developing the
+  concept). See `jaynes1984PriorInformationAmbiguity` for a discussion.
+
+  I think "underdetermined" is probably fine (ie, accurate enough; its meaning
+  is clear). In `jaynes1984PriorInformationAmbiguity` he mentions that when
+  Bertrand used "ill-posed" he "evidently meant the term in the sense of
+  'underdetermined'".
+
+* Interesting to consider the link between *inverse problems* and *statistical
+  inference*. I like the discussion at the start of "Introduction to Bayesian
+  Computing" (Calvetti, Somersallo; 2007; pg1)
+
+  * *inverse problem*: "the problem of retrieving information of unknown
+    quantities by **indirect** observations"
+
+  * *statistical inference*: "the problem of inferring properties of an
+    unknown distribution from data generated from that distribution"
+    (Calvetti, Somersallo; 2007; pg1)
+
+    Another view: in `jaynes1984PriorInformationAmbiguity`, he (in
+    a roundabout way) says that *inference* is the quantitative use of
+    probability theory for reasoning logically in indeterminate situations.
+
+  Suppose you have `X = Y + Z`. If you observe Y and Z you can "retrieve
+  information" about X via those indirect observations. That's an inverse
+  problem.
+
+  But we don't have perfect measurements of Y or Z. So we're still doing an
+  inverse problem, but now instead of complete information about X, we have
+  incomplete information. If we know the distributions of Y and Z we can
+  determine the distribution of X, but X is still considered a *random
+  variable*.
+
+* **I strongly support using `=` for the state-space model, and `~` for the
+  resulting statistical model.**
+
+* "Probabilistic learning of nonlinear dynamical systems using sequential
+  Monte Carlo", page 4, equation 7. In fact, just reread Sec:2 until it
+  clicks. This is probably the crux of how I motivate the paraglider dynamics.
+
+* [[Discuss solving systems of equations? Seems like a good place to introduce
+  the idea of "solving" underdetermined systems.
+
+  Solving inverse problems is like solving systems of equations: to solve for
+  the unknowns you need enough information, where "information" comes in two
+  forms: data, and relationships. We don't have enough data, and probably
+  can't obtain more (beyond general meteorology information, elevation models,
+  etc), so we must try to introduce extra relationships until we have enough
+  information.
+
+  Sometimes though there simply enough enough information to completely
+  determine the state of all the variables. Such *underdetermined systems*
+  cannot be solved exactly; they can only be constrained to some limited
+  range. The question then is not "is the value known precisely?" but rather
+  "is the value known well enough to be useful?"
+
+* Like most real-world inverse problems, there is uncertainty in every aspect
+  of this model: the position sequences are noisy measurements of the true
+  position, the paraglider dynamics are an approximation of the true model,
+  etc.
+
+  Thus, a complete solution to the inverse problem must provide *uncertainty
+  quantification* along with any answer. This is not a measure of the true
+  accuracy, but at least it summarizes all the uncertainty that the model is
+  aware of.
+
+State-space modeling
+^^^^^^^^^^^^^^^^^^^^
+
+* State-space models:
+
+  * Model the evolution of some state over time, with (potentially noisy)
+    observations of that state.
+
+  * The idea is to implicitly describe the trajectory using repeated *steps*
+    generated by the state transition function.
+
+  * The *filtering problem* is to produce an estimate of the current state given
+    all the observations up to the current time.
+
+  * The observations 
+
+A basic discrete-time state space model:
+
+.. math::
+
+   \begin{aligned}
+   \vec{x}_{k} &= f_x \left( \vec{x}_{k-1}, \vec{\delta}_{k-1}, \vec{w}_{k-1}, \mathcal{M} \right) \\
+   \vec{\delta}_{k} &= f_{\delta} \left( \vec{\delta}_{k-1} \right) \\
+   \vec{w}_{k} &= f_{w} \left( \vec{w}_{k-1} \right) \\
+   \vec{z}_k &= g \left( \vec{x}_k \right)
+   \end{aligned}
+
+And what would it look like in a Bayesian filtering problem?
+
+.. math::
+
+   p_{\mathcal{M}} \left( \vec{x}_{0:K} \given \vec{z}_{0:K} \right) =
+     p_{\mathcal{M}} \left( \vec{x}_{0:K-1} \given \vec{z}_{0:K-1} \right)
+     \frac
+       {
+         p \left( \vec{x}_{k} \given \vec{x}_{k-1}, \vec{\delta}_{k-1}, \vec{w}_{k-1}, \mathcal{M} \right)
+         p \left( \vec{\delta}_{k} \given \vec{\delta}_{k-1} \right)
+         p \left( \vec{w}_{k} \given \vec{w}_{k-1} \right)
+         p \left( \vec{z}_k \given \vec{x}_k \right)
+      }
+      {p \left( \vec{z}_k \given \vec{z}_{0:k-1} \right)}
+
+Or, for the full flight reconstruction problem:
+
+.. math::
+
+   p \left( \vec{x}_{0:K}, \vec{\delta}_{0:K}, \vec{w}_{0:K} \given \vec{z}_{1:K} \right) =
+     \prod_{k=1}^K \Big\{
+       p \left( \vec{z}_k \given \vec{x}_k \right)
+       p \left( \vec{x}_k \given \vec{x}_{k-1}, \vec{\delta}_{k-1}, \vec{w}_{k-1} \right)
+       p \left( \vec{\delta}_k \given \vec{\delta}_{k-1} \right)
+       p \left( \vec{w}_k \given \vec{w}_{k-1} \right)
+     \Big\}
+     p \left( \vec{x}_0 \right)
+     p \left( \vec{\delta}_0 \right)
+     p \left( \vec{w}_0 \right)
+     p \left( \mathcal{M} \right)
+
+**Maybe I should introduce a general form of this equation when I'm talking
+about state-space models, then refer back to it. Don't define this explicitly
+(what does it add to the discussion?), leave it in state-space model form.**
+
+
+* "State-space models can be used to incorporate subject knowledge on the
+  underlying dynamics of a time series by the introduction of a latent Markov
+  state-process." (:cite:`fearnhead2018ParticleFiltersData`)
+
+  We tend to do this without realizing it: when we watch a paraglider moving
+  around in the air, we use our intuition of wing performance (how the wing
+  interacts with the wind) to get a feeling for what the wind is doing. We
+  incorporate use our experience with wing dynamics to estimate the wind.
+
+State-estimation
+^^^^^^^^^^^^^^^^
+
+* Good books on state estimation:
+
+  * "Optimal State Estimation" (Simon; 2006)
+
+  * "Time series analysis by state space methods" (Durbin, Koopman; 2012)
+
+* Although you could estimate the regression model for the wind field at the
+  same time as you're estimating the wind vectors (and indeed, this would
+  theoretically perform better), it's easier to model the wind vectors as
+  a Markov process.
+
+* The wind is a *latent variable*. We want to infer its value from the
+  observed variables.
+
+  Sometimes the latent variable is merely an intermediate value you add to the
+  model to connect the observations to the dynamics, but in this case it's the
+  latent variable itself which is our target. **The goal of "wind vector
+  estimation" is to infer a latent variable.**
+
+  A *latent variable model* is one which "aim to explain observed variables in
+  terms of latent variables"; I am attempting to explain changes in position
+  by inferring the wind, and then choosing the values that gave the "best"
+  explanation.
+
+  Technically the wind could have been measured (but wasn't), so in some
+  contexts it would be called a *hidden variable*.
+
+* Every subtask has it's own modeling difficulties. Like for the wind
+  regression model, you have to just assume a mean value over the specified
+  time interval, which is obviously going to be pretty poor for high variance
+  regions. It seems likely that assumed-constant parameters in general are
+  likely to struggle; stationarity, homoscedasticity, all sorts of fun
+  concepts.
+
+* Is it correct to say that the control inputs and the wind vectors are
+  marginally *independent* (in the absence of the pose), but conditionally
+  dependent given the pose of the wing? A gut check says yes: if you asked
+  me to guess a pilot controls in the blind, I'd have to be vague, but if you
+  told me they were banking to the right with a gust coming from the left,
+  I'd be much more inclined to believe they were applying right brakes (and
+  in the middle of a turn).
+
+  It might help to draw the model graph for the two scenarios. Wind doesn't
+  *directly* influence the controls, it does it *indirectly*, through the
+  pilot's objective/strategy. The pilot's decision making process takes in
+  the wind, post, and objective, and produces the control output as a
+  response, but if you delete that strategy from the model graph then
+  there isn't a dependency between the wind and controls; they're only
+  related by their common effect: the trajectory.
+
+  This question probably belongs together with the discussion on *maneuvering
+  target tracking*.
+
+
+Paraglider modeling
+-------------------
+
+* Commit to a rigid body assumption
+
+* Sufficiently flexible to model the most important details of real gliders
+
+* Parametrization that makes it easy for users to create desired
+  configurations (generating a representative set of wings would be a lot
+  easier if more people get involved in coding up the configurations)
+
+* The model design should also consider the aerodynamics methods that will be
+  required. Designing with wing sections makes enables analysis using
+  lifting-line methods, which are fast and useably accurate for our purposes.
+  **Call out design by wing sections as a deliberate design choice.**
+
+* Need to consider the aerodynamic scenarios we're going to ask of the model:
+  I was interested in "glancing blows" through a thermal (when the wing tips
+  experience different vertical wind), for example.
 
 
 Canopy Geometry
@@ -1107,6 +1843,11 @@ Point estimates
 
 Wind field regression
 ---------------------
+
+* I'm trying to estimate the wind field from instantaneous estimates of points
+  in the wind field (the wind vectors). Those observations are subject to
+  measurement noise, model error (eg, the rigid body assumption), even
+  fluctuations in the wind field.
 
 * Do you use a grid? (I think this is equivalent to asking if you're using
   a discrete or continuous regression model?) If you use a discrete grid, is

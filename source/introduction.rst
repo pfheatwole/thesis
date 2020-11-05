@@ -404,6 +404,12 @@ Predictive Modeling
 
 * Conclusion: a *model-based* approach is required.
 
+* In particular, we need to model the paraglider dynamics. The canopy
+  aerodynamics provide the link between the paraglider motion and the wind
+  field. But, because the paraglider only interacts with points in the wind
+  field, the relationship only provides information about the local wind
+  vectors.
+
 
 .. Restatement of the response
 

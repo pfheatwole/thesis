@@ -47,6 +47,9 @@ Predictive modeling
 
 * Discuss the importance of wind patterns to paragliding pilots
 
+* Pilots who want to make use of wind patterns face two problems: *discovery*
+  and *use*.
+
 * How do pilots traditionally *discover* wind patterns?
 
 * How do pilots traditionally *use* wind patterns?
@@ -74,7 +77,7 @@ Wind field estimation
 * [[Explain the objective: estimating wind field structure from position-only
   data]]
 
-* [[Discuss existing tools: linearized thermals, circle method, etc]]
+* [[Discuss existing methods: linearized thermals, circle method, etc]]
 
 * [[Explain the limitations of existing tools]]
 
@@ -134,51 +137,14 @@ Wind field estimation
     to extract more information from the data.
 
 
-* [[MISC:
-
-  * You can only predict what you can detect.
-
-    You can only discover "recurring structure" involving structure you're
-    capable of detecting that structure in the first place.
-
-  * You can only condition predictions on structure you can detect (applies
-    both to detecting structure from data and in-flight)
-
-  * Accuracy is important both when estimating from data and in-flight. If
-    you're trying to condition a prediction based on some variable, then your
-    "from data" and "in-flight" estimates better agree or the predictions
-    could be worse than an unconditional (marginalized) prediction.
-
-  * Discuss uncertainty quantification?
-
-  * Earlier I discussed aspect of wind field structure like thermals, sink,
-    and shear, but don't those are sort of "summaries" of the wind field.
-    Those are good targets for "feature detectors", but I'm arguing that
-    better feature detectors can be created if they have access to the
-    underlying wind field.
-
-    I need to show how model-free methods are incapable of estimating those
-    from the available data.
-
-  ]]
-
-
-
 .. Response
 
 Flight Reconstruction
 ---------------------
 
-* [[Build intuition for the model-based method by giving a "conversational"
-  walk-through of how a pilot might estimate the wind by watching a glider.
-  They're using domain knowledge; the program should do the same.
-
-  In essence, that "intuitive" solution is simulating flights. They're doing
-  flight reconstruction in their head.
-
-  The new goal is to quantify a pilot's "intuitive" knowledge in mathematical
-  form. The mathematical form enables statistical filtering methods that can
-  combine the knowledge with our data to get what we want.]]
+* [[We don't have a relationship to estimate the total wind field directly
+  from a position sequence. We have to start by estimating **local** wind
+  vectors using the **changes** in position.]]
 
 * [[Define *flight reconstruction*?]]
 
@@ -195,149 +161,159 @@ Roadmap
 Flight reconstruction
 =====================
 
-.. Informal overview (conversational definition of the problem)
+.. The Introduction introduced the data (time series of positions), and
+   motivated the need for better estimates of the wind vectors. This chapter
+   walks through producing wind vector estimates from the positions.
 
-* Recap: the objective that motivates this paper is to estimate wind fields
-  from flight data so the fields can analyzed for patterns.
+* Recap: the goal is to estimate local wind vectors during a flight using
+  position-only flight data.
 
-* Paraglider flight data is limited to position and time, with no direct
-  observations of the wind field (making this an *inverse problem*), but we
-  can use the knowledge that a paraglider's change in position depends on the
-  *wind vectors*, the value of the wind field, at that position. This
-  relationship introduces a statistical dependence that can be used to infer
-  information about the wind vectors from the position sequence.
+* Informal description of how that could be done.
 
-  [[Whether the strength of this relationship is sufficient for usefully
-  precise estimates is another question.]]
+  [[A pilot estimating wind vectors by observing a paraglider in-flight.]]
 
-* [[Introduce *inverse problems*: we don't have any direct observations of the
-  wind field, so we have to rely on its relationship to the data. In this
-  case, we have observed an effect, and wish to determine the cause. Solving
-  this inverse problem requires using the paraglider dynamics.]]
-
-* Estimating the wind fields becomes a problem of estimating the wind vectors
-  that were encountered during the flight.
-
-* Although our target is the wind vectors, the dynamics also depend on other
-  variables, such as pilot controls, and on the paraglider design itself.
-  These additional *nuisance variables* must be jointly estimated as part of
-  the "complete state" of the flight.
-
-* This chapter describes how to build a statistical model of a paraglider
-  flight, how to use it to estimate the full joint probability from the
-  sequence of positions, and how to use the joint probability distribution to
-  compute the estimate of the sequence of wind vectors.
+* Chapter objectives
 
 
-.. Solving for unknown variables (general review)
+* The objective is to use a recorded flight track to estimate the wind vectors
+  encountered during that flight.
 
-Inverse problems
-----------------
+* This task is difficult because the data does not contain direct observations
+  of the wind vectors. The only data is position and time. There aren't many
+  sources of additional data for a flight that occurred in the past; an
+  additional information must from the structure encoded in the relationships
+  between variables. In this case, the relationship is *causal*: the data are
+  observations of an effect (paraglider motion), and we wish to infer the
+  cause (wind vectors). [[We want to determine the conditions that produced
+  the sequence of position measurements.]]
 
-* Simple example of solving an equation, and a system of equations
+* [[Define *inverse problem*. Give a few examples? Discuss why they are hard
+  and how they can fail?]]
 
-* Define *underdetermined system*
+* Solving an inverse problem requires a mathematical relationship between the
+  observations (the data) and the target. That relationship introduces more
+  information by imposing additional structure not present in the data alone.
 
-* You can "fix" an underdetermined system by adding more information: more
-  data, or more relationships (equations)
+* The key insight is that the data was produced by some *data-generating
+  process*. A mathematical model of the *data-generating process* provides
+  a relationship that can be used to solve the inverse problem.
 
-* What if you still don't have enough information? What does it mean to
-  "solve" an underdetermined system?
+* The model encodes the relationships between all the variables involved in
+  producing the positions. It allows the designer to capture their subject
+  knowledge of how the data and the target are related.
 
-  We have to rely on statistical inference: instead of "solving" the problem,
-  we infer properties of the distribution over what the solution might be.
+* In this case, the data are a sequence of position measurements over time.
+  The paraglider's change in position is simply its motion, which is
+  determined by the paraglider dynamics. The paraglider dynamics are the
+  result of interactions with gravity and wind. The interactions with the wind
+  are described by the canopy aerodynamics.
 
-* Define *inverse problem*
+  [[You could **describe** the motion with kinematics, but kinematics are not
+  causal relationships. You can't use them to infer anything about the
+  environment.]]
 
-* We are trying to estimate the wind vectors using observations of position.
-  We don't observe the wind vectors directly, so wind vector estimation from
-  the available data is an *inverse problem*.
+* There is flexibility in designing the paraglider dynamics model, but for our
+  current problem it must incorporate the canopy aerodynamics in some way,
+  since the aerodynamics are what define the relationship between the state of
+  the wind field and the paraglider motion. To estimate the wind vectors from
+  the flight data, we must model the data-generating process with a paraglider
+  dynamics model that incorporates the canopy aerodynamics.
 
-* Underdetermined systems cannot be solved exactly, they can only be solved
-  approximately. Instead of seeking the single "true" value, the problem
-  becomes one of estimating a distribution over all possible values.
+* Given a suitable model of the paraglider dynamics, we can define a model of
+  the data-generating process. The data is a sequence, and the natural
+  representation of a sequential process is the *state-space model*.
+
+* [[Define a state-space model for the position data-generating process using
+  the paraglider dynamics only. Assume wind and control inputs are known.]]
+
+* [[This definition is incomplete: the paraglider dynamics depend
+  on the control inputs and the wind vectors, which do not appear in the
+  model. The model must have definitions for all variables involved.]]
+
+* [[We now have a complete model of the data-generating process, and it can be
+  used to solve the inverse problem.]]
+
+* [[But there's a problem: it includes a lot of variables with unknown values.
+  The system as-is is indeterminate: with no constraints on the value of the
+  control inputs and wind vectors there are no constraints on the paraglider
+  state. The "answer" could be anything.
+
+  The underlying problem is uncertainty: uncertain variable values, uncertain
+  model dynamics, and uncertain measurements. Logical reasoning in
+  indeterminate systems requires probability theory. Instead of seeking
+  **exact** answers, the "solution" to the inverse problem is to estimate
+  entire probability distributions over **all** possible answers.
+
+  The question is no longer "can we compute the answer" but "how well can we
+  constrain the range of plausible answers". There might not be enough
+  information to constrain the wind vectors; hard to tell at this point.
+
+  Should I introduce underdetermined systems, and discuss stochastic equations
+  as underdetermined systems?]]
 
 
-* [[The goal is to use statistics to gain information about some target based
-  in information gained from some observed data. Conditioning one variable on
-  another requires a **statistical dependency** between the them. The
-  relationship can be direct or indirect.
+* "The idea of using the math of probability to represent and manipulate
+  uncertainty is commonly referred to as *Bayesian statistics*"
+  (`schon2018ProbabilisticLearningNonlinear`). Bayesian statistics is
+  a framework for reasoning through conditional probability.
 
-  The natural starting place for any data analysis problem is to define
-  a model of the data-generating process. If the target is not a member of the
-  data-generating process you must be able to extend the model with new
-  relationships to induce the dependency. Otherwise, the observed data is not
-  informative about the value of the target.]]
+* At this point it can be helpful to rewrite our problem statement in
+  probabilistic terms.
+
+* Our original goal of estimating the wind vectors given the observed data is
+  equivalent to saying we need to estimate the probability distribution over
+  wind vectors given the data, written as `p(wind | data)`.
+
+* This distribution by itself is intractable, which is what motivated our need
+  to model the *data-generating process*. We introduced the paraglider
+  dynamics in order to establish the relationship between position and wind,
+  but those dynamics depend on more than just the wind vectors: they also
+  depend on the pilot control inputs, air density, and the design of the wing
+  itself. Thus, solving this inverse problem means we need to estimate more
+  than just the wind vectors: we need estimates for the entire set of inputs.
+
+* Those additional quantities are commonly referred to as *nuisance
+  variables*, since they are not (explicitly) of interest to our problem,
+  nevertheless they are necessary to compute our goal.
+
+* [[find `p(wind | data)` by estimating the full joint pdf then marginalizing
+  the *nuisance variables*]]
+
+* We can't estimate the full joint pdf directly since it's also intractable,
+  but thankfully the process model satisfies the *Markov property*. *Markov
+  processes* are intuitive to represent as a state-space model. State-space
+  models can be used to decompose the joint pdf into independent factors which
+  a be estimated recursively to build up the full joint distribution.
+
+* The objective now is to use the state-space model to build up the full joint
+  distribution so we can marginalize the nuisance variables in order to
+  compute `p(wind | data)`.
 
 
-Filtering problems
-------------------
 
-* A common example of an underdetermined system is a measurement corrupted by
-  noise.
+* [[The state-space model is a system of equations. In theory, we would like
+  to invert them (solve for the unknown), but that's not possible here (too
+  many unknowns, too complicated, etc). What's more, even if we knew the wind
+  vectors and control inputs, the inverse probably doesn't even exist: it's
+  pretty unlikely that this is a 1:1 function. Instead, we must be content
+  with using the *forward dynamics* to generate a weighted set (a
+  distribution) of possible solutions.]]
 
-* [[Sometimes observations are produced in a sequential fashion]]
-
-* [[Introduce sequential processes]]
-
-* [[Sequential estimation has a special mathematical form]]
 
 * Define *filtering problem*
 
-* Solving a *filtering problem* requires a model of the *data-generating
-  process*
+* *Flight reconstruction* as a filtering problem
 
-* [[*State-space models* of sequential data-generating processes]]
+* This paper only provides the paraglider dynamics. The rest must be dealt
+  with in the "Future Work" section.
 
-* [[Converting a state-space model to a statistical model]]
+* [[I should at least preview how you use the recursive filtering equation to
+  solve the filtering problem? If you can't invert the dynamics you have to
+  rely on sequential state estimation via forward simulation.
 
-* [[Using the full statistical model to solve the filtering problem]]
-
-
-Flight reconstruction as a filtering problem
---------------------------------------------
-
-.. Could also model this as a *state-estimation problem* if you consider
-   the unknown inputs as "state".
-
-* Define a state-space model of the paraglider position
-
-* Review the components of the state-space model
-
-* Define *nuisance variable*
-
-* [[Unlike unpredictable noise terms, these nuisance variables have structured
-  dynamics that capture essential information.]]
-
-* Nevertheless, evaluating the paraglider dynamics requires concrete values
-  for all of its parameters. Where do those values come from?
-
-* Define *simulation-based filtering*
-
-  [[Essentially, you draw "guesses" for the unobserved variables from
-  a proposal distribution, then use the rules of probability to compute the
-  posterior probability of the target while accounting for the uncertainty in
-  those unobserved variables.]]
-
-  **I should probably stop using the phrase "simulation-based filtering".
-  Every filtering architecture that uses a transition function is "simulating"
-  the dynamics. I sure highlight the need to simulate the unknown data, but
-  stop using this term: it's not informative.**
-
-* [[Flight reconstruction (as we'll be doing it) is many problems in one:
-  state-estimation, input-estimation, and parameter-estimation. In the end we
-  will marginalize over the nuisance variables to get just the posterior
-  distributions of the wind vectors.]]
-
-
-.. Conclusion
-
-* In this paper, the term *flight reconstruction* refers to this process
-  of estimating the full joint probability distribution over all the variables
-  in the state-space model for the entire flight sequence.
-
-* The focus of this paper is to provide a parametric paraglider model suitable
-  for flight reconstruction of average, non-acrobatic paragliding flights.
+  Solving a filtering problem requires a filtering architecture, which is
+  beyond the scope of this paper, although I'll probably mention it in the
+  "Future Work" chapter. ]]
 
 
 Canopy geometry
