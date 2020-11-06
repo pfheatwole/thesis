@@ -279,34 +279,7 @@ Paraglider geometry
 Paraglider dynamics
 ===================
 
-* Define the canopy dynamics
-
-  * What are they? What are they used for?
-
-  * Provides the dynamics model for generating flight trajectories
-
-* Modeling requirements
-
-* Survey the common options
-
-* Phillips' NLLT
-
-* Case study: wind tunnel test data
-
-  * Introduce the test (the model, the test setup, and the data)
-
-  * Why is this a good test?
-
-    * In terms of aerodynamics: good representation of the unusual geometry of
-      a paraglider; completely known geometry (including airfoil); extensive
-      data for a range of wind conditions; internal wood structure maintains
-      the shape, eliminating uncertainty due to distortions
-
-    * It also provides a good demonstration of how to use my geometry.
-
-  * Discuss the results
-
-* Discussion
+[["Outline" moved into the chapter body]]
 
 
 Flight simulation

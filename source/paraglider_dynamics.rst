@@ -1,11 +1,3 @@
-
-A paraglider can be considered a system composed of canopy, lines, harness,
-and pilot. Although nearly every component are highly flexible they tend to
-remain relatively rigid during normal flight. The flight dynamics can be
-greatly simplified by assuming a rigid body model.
-
-
-
 *******************
 Paraglider Dynamics
 *******************
@@ -28,8 +20,22 @@ Paraglider Dynamics
      - .. image:: figures/paraglider/geometry/foil2.*
 
 
+* [[Define *dynamics*.
+
+  What are they? What are they used for? They're what I'll be using to
+  generate flight trajectories.]]
+
+
 Modeling requirements
 =====================
+
+* [[This stage is about what I'm **not** choosing to model as much as it is
+  about what I am.]]
+
+* [[A paraglider can be considered a system composed of canopy, lines,
+  harness, and pilot. Although nearly every component are highly flexible they
+  tend to remain relatively rigid during normal flight. The flight dynamics
+  can be greatly simplified by assuming a rigid body model.]]
 
 * I put a lot of work into non-uniform wind, etc, in the aerodynamics. The
   dynamics model should be capable of leveraging that flexibility.

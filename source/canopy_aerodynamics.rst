@@ -352,7 +352,22 @@ Case Study
 
 [[This is where I'll introduce Belloc's reference wing and wind tunnel data.
 I can refer to it when I'm showing examples of the chord surface geometries as
-an real-world application of the chord surface concept.]]
+an real-world application of the chord surface concept.
+
+* Introduce the test (the model, the test setup, and the data)
+
+* Why is this a good test?
+
+  * In terms of aerodynamics: good representation of the unusual geometry of
+    a paraglider; completely known geometry (including airfoil); extensive
+    data for a range of wind conditions; internal wood structure maintains
+    the shape, eliminating uncertainty due to distortions
+
+  * It also provides a good demonstration of how to use my geometry.
+
+* Discuss the results
+
+]]
 
 Every new tool should be validated, and for aerodynamic codes validation often
 involves comparing theoretical models to wind tunnel measurements. For the
