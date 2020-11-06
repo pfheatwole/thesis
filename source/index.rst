@@ -45,6 +45,7 @@ Contents
    case_study
    data_considerations
    future_work
+   conclusion
    examples
 
 .. toctree::

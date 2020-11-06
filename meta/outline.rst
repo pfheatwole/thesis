@@ -4,18 +4,6 @@ a glance what the chapter will discuss and the basic conclusions.
 
 
 
-Introduction
-============
-
-[["Outline" moved into the chapter body]]
-
-
-Flight reconstruction
-=====================
-
-[["Outline" moved into the chapter body]]
-
-
 Canopy geometry
 ===============
 
@@ -114,43 +102,3 @@ Discussion
 ----------
 
 * Discussion, pros/cons
-
-
-Canopy aerodynamics
-===================
-
-[["Outline" moved into the chapter body]]
-
-
-Paraglider geometry
-===================
-
-[["Outline" moved into the chapter body]]
-
-
-Paraglider dynamics
-===================
-
-[["Outline" moved into the chapter body]]
-
-
-Flight simulation
-=================
-
-[["Outline" moved into the chapter body]]
-
-
-Future work
-===========
-
-[["Outline" moved into the chapter body]]
-
-
-Discussion
-==========
-
-* Highlight what's been achieved: a parametric geometry and a dynamics model
-  in Python
-
-* [[Assume an impatient reader will jump here. This is your last chance to
-  convince them the paper is worth reading.]]
