@@ -2,233 +2,238 @@
 Canopy Geometry
 ***************
 
-1. What is a canopy?
+* What is a canopy?
 
-   * The essential component of gliding flight is the lifting surface.
+  * The essential component of gliding flight is the lifting surface.
 
-   * [[Examples of lifting surfaces. Typically symmetric, etc. In this case,
-     we're interested in parafoils, which are simply a way of producing
-     a lifting surface by inflating nylon through the intakes.]]
+  * [[Examples of lifting surfaces. Typically symmetric, etc. In this case,
+    we're interested in parafoils, which are simply a way of producing
+    a lifting surface by inflating nylon through the intakes.]]
 
-     .. figure:: figures/paraglider/geometry/Wikimedia_Nova_X-Act.jpg
-        :width: 75%
+    .. figure:: figures/paraglider/geometry/Wikimedia_Nova_X-Act.jpg
+       :width: 75%
 
-        Paraglider side view.
+       Paraglider side view.
 
-        `Photograph <https://www.flickr.com/photos/69401216@N00/2820146477/>`_ by
-        Pascal Vuylsteker, distributed under a CC-BY-SA 2.0 license.
+       `Photograph <https://www.flickr.com/photos/69401216@N00/2820146477/>`_ by
+       Pascal Vuylsteker, distributed under a CC-BY-SA 2.0 license.
 
-#. Why does this project need a canopy geometry?
+* Why does this project need a mathematical model of the canopy geometry?
 
-   * [[To estimate the inertial properties and aerodynamics]]
+  * [[To estimate the inertial properties and aerodynamics]]
 
-   * Paraglider dynamics depend on canopy aerodynamics and inertial
-     properties. I'm generating new wing geometries, so these are unknown. If
-     the aerodynamics and inertial properties of a canopy are unknown, they
-     must be estimated from the geometry itself. [[In particular I plan to
-     utilize the section coefficient data, but you could also use CFD, etc.]]
+  * Paraglider dynamics depend on canopy aerodynamics and inertial
+    properties. I'm generating new wing geometries, so these are unknown. If
+    the aerodynamics and inertial properties of a canopy are unknown, they
+    must be estimated from the geometry itself. [[In particular I plan to
+    utilize the section coefficient data, but you could also use CFD, etc.]]
 
-   * For straight wings there are elegant aerodynamics models that work well
-     for small angles of attack, but those simple methods are based on linear
-     relationships that do not hold for the highly non-linear geometry of
-     a typical parafoil.
+  * For straight wings there are elegant aerodynamics models that work well
+    for small angles of attack, but those simple methods are based on linear
+    relationships that do not hold for the highly non-linear geometry of
+    a typical parafoil.
 
-     [[Discuss how the discrepancy between linear theories and actual
-     performance becomes more pronounced as alpha/beta increase. They also
-     can't handle asymmetric wind, such as when the wing is turning.]]
-
-#. What are the important aspects of a canopy geometry?
-
-   * [[What details of a canopy's shape are required (or at least useful) for
-     defining a model that satisfies the needs of this project?
-
-     These are not necessarily the variables you would choose to parametrize
-     the geometry; they might simply be helpful for discussing/understanding
-     the shape of a canopy. For example, anhedral is ambiguous, so I'm using
-     Euler roll angles for section "anhedral". These are here to establish the
-     details of the shape and thus the flexibility required by the
-     parametrization.
-
-     Related: "General aviation aircraft design" (Gudmundsson; 2013),
-     chapter 9: "Anatomy of a wing"]]
-
-   * *flat* versus *projected* values
-
-   * *flat span*, *flat area*, *flat aspect ratio*
-
-   * *projected span*, *projected area*, *projected aspect ratio*
-
-   * There are also a variety of standard terms I will avoid due to ambiguity:
-     *planform*, *mean aerodynamic chord*, maybe more? For *planform*, most texts
-     assume the wing is flat and so the projected area is essentially the flat
-     area, and thus differentiating the two is largely neglected in standard
-     aerodynamic works. The mean aerodynamic chord is a convenient metric for
-     comparing flat wings and for some simplifying equations, but for wings with
-     significant arc anhedral I'm not sure how beneficial this term really is;
-     it's a mistake to compare wings based on the MAC alone, so I'd rather avoid
-     any mistaken comparisons.
-
-   * *dihedral*, *anhedral*: not sure how to define this for a wing. It's
-     traditionally defined for flat wings, as `arctan(z/y)` of the section
-     position, but that's pretty unhelpful for a paraglider. It also doesn't
-     differentiate between `arctan(z/y)` and `arctan(dz/dy)` of a section. Still,
-     discussing curvature leads nicely into a discussion of the *arc*, so
-     whatever.
-
-   * *arc*
-
-   * *geometric torsion*: relative pitch angle of a section
-
-     .. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
-
-        Geometric torsion.
-
-        Note that this refers to the angle, and is the same regardless of any
-        particular rotation point.
-
-#. Explicit vs parametric parametrizations.
-
-   * Parametric designs try to balance simplicity and flexibility. A good
-     parametrization lets you focus on high-level design without forcing you
-     into simplistic designs. [[I'm interested in "easy to create, good
-     enough" approximations of real wings, not physically-realistic
-     simulations.]]
-
-   * It's much easier to place a prior for parameters than for explicit
-     geometries. (You'd have to invent parameters you can compute for an
-     explicit geometry just so you can compare two canopies.)
-
-#. What are **MY** requirements for a parametric model?
-
-   * [[The general requirement is that it enables estimating the inertial
-     properties and aerodynamics, but the additional goals are that it should
-     be: expressive, intuitive, able to use existing data, minimize
-     parameters, general enough to accommodate deformations (billowing,
-     braking, accelerator, etc.
-
-     There already exist parametrizations I could have used, so this is really
-     about my extra demands that made the existing methods come up short.
-     Driving that home will require some careful examples to establish the
-     limitations of existing methods.
-
-     I think the biggest difference is that I chose to increase the complexity
-     by adding the "reference point" parameters. I decided to pay the
-     "simplicity" cost because of the "intuitive" gain; for elliptical chord
-     lengths it was easier to adjust `r_x` than to find a parametric `x(s)`
-     that shifted the chords into a reasonable approximation of real wings. In
-     particular, most wings have a mostly-straight trailing edge that were
-     a pain to encode using leading-edge reference points.]]
-
-   * Makes it easy to specify a target design
-
-     * Each design parameter should be intuitive and capture the target
-       property directly (avoiding intermediate translations)
-
-     * Makes it easy to incorporate existing design data. There are three main
-       sources of information for the geometry of a paragliding canopy:
-
-       1. Technical specifications (from researchers or a manufacturer)
-
-       2. Pictures
-
-       3. The wing itself
-
-     * Support mixed-design between the flattened and inflated geometries.
-
-       Parafoils only produce an arched geometry when they are inflated. It
-       can be convenient to specify some values in terms of the non-inflated
-       wing.
-
-       [[A good choice of section index is key here. I should be able to
-       define `c(s)` and `x(s)` by spreading a wing out on the grass and
-       simply **measuring** the chord lengths and `x` positions of an edge.]]
-
-     * Able to express continuous deformations [[from braking, C-riser
-       piloting, accelerator flattening, weight shift, cell billowing, etc.]]
-
-   * Minimizes the number of design parameters
-
-     [[Should this be in the list of general goals? I already list "easy to
-     use", but this goal is specifically targeted at simplifying statistical
-     analysis. The structural knowledge of each parameter also tends to make
-     them more amenable to statistical summarization.
-
-     One long-term goal of this geometry is to allow people to encode
-     approximations of existing wings. Once you've built up a database of
-     models of physical wings you can generate a distribution over the wing
-     parameters.
-
-     Another "blue skies" goal is to produce a model that is amenable to
-     statistical parameter estimation. This implies that as few parameters
-     as possible should be used (to reduce the dimensionality). Also
-     advantageous to decompose the parameters to maximize the variance of
-     each parameter (ala principal component analysis); the choice of
-     parameterization determines the parameter distributions, and it might
-     be helpful to "eliminate" some of the variance by using stronger priors
-     over some of the parameters. Like, instead of some complicated `X` you
-     decompose into simpler `Y` and `Z`, then place a strong prior over `Z` or
-     even treat `Z` as constant, so the only variance remaining is that in
-     `Y`, which makes the parameter estimation easier.]]
-
-   * [[Segue into "you can simplify both the specification and the analysis of
-     a wing by decomposing it into a set of design parameters. The traditional
-     way to do that is *wing sections*.]]
+    [[Discuss how the discrepancy between linear theories and actual
+    performance becomes more pronounced as alpha/beta increase. They also
+    can't handle asymmetric wind, such as when the wing is turning.]]
 
 
-#. How do you design a mathematical model that achieves those requirements?
+.. Describe the physical system
 
-   * [[Through careful decomposition and parametrization. Introduce "wing
-     sections" and how they simplify wing design using a two step process
-     (specify the scale, position, and orientation of sections, then assign
-     section profiles). Introduce the concept of section chords and the chord
-     surface.]]
+* What are the important aspects of a canopy geometry?
 
-   * The shape of a parafoil canopy can be defined in many ways. The simplest
-     way is to specify a set of points over the surface to produce an explicit
-     representation of the shape. The issue is that the intricate, non-linear
-     geometry of a parafoil requires a large number of points.
+  * [[What details of a canopy's shape are required (or at least useful) for
+    defining a model that satisfies the needs of this project?
 
-   * Instead of defining the shape with an explicit set of points, the complex
-     shapes of parafoil canopies can usually be decomposed into a simpler set
-     of parametric equations.
+    These are not necessarily the variables you would choose to parametrize
+    the geometry; they might simply be helpful for discussing/understanding
+    the shape of a canopy. For example, anhedral is ambiguous, so I'm using
+    Euler roll angles for section "anhedral". These are here to establish the
+    details of the shape and thus the flexibility required by the
+    parametrization.
 
-   * If a complex shape can be represented with simple parametric equations,
-     then each parameter of the parametric equations tend to be better at
-     capturing structural knowledge than the explicit set of points.
+    Related: "General aviation aircraft design" (Gudmundsson; 2013),
+    chapter 9: "Anatomy of a wing"]]
 
-   * Because each parameter communicates more information than an explicit
-     coordinate, fewer parameters are required, which tends to mean much less
-     work is required to specify a design target.
+  * *flat* versus *projected* values
 
-   * The conventional way to decompose a wing is to use *wing sections*. Wing
-     sections make a wing easier to design and easier to analyze.
+  * *flat span*, *flat area*, *flat aspect ratio*
 
-     [[Discuss designing with chords + profiles versus designing the surfaces
-     directly.]]
+  * *projected span*, *projected area*, *projected aspect ratio*
 
-   * Instead of designing the 3D shape of a wing directly (ie, as a large set
-     of points), simple wings are traditionally decomposed into 2D wing
-     *sections* :cite:`abbott1959TheoryWingSections` distributed along the
-     span.
+  * There are also a variety of standard terms I will avoid due to ambiguity:
+    *planform*, *mean aerodynamic chord*, maybe more? For *planform*, most texts
+    assume the wing is flat and so the projected area is essentially the flat
+    area, and thus differentiating the two is largely neglected in standard
+    aerodynamic works. The mean aerodynamic chord is a convenient metric for
+    comparing flat wings and for some simplifying equations, but for wings with
+    significant arc anhedral I'm not sure how beneficial this term really is;
+    it's a mistake to compare wings based on the MAC alone, so I'd rather avoid
+    any mistaken comparisons.
 
-     [[I don't like this phrasing: what does "directly" mean? Probably better
-     to talk in terms of **structure**, since I'm thinking in terms of
-     structured vs unstructured shapes; maybe use those terms?]]
+  * *dihedral*, *anhedral*: not sure how to define this for a wing. It's
+    traditionally defined for flat wings, as `arctan(z/y)` of the section
+    position, but that's pretty unhelpful for a paraglider. It also doesn't
+    differentiate between `arctan(z/y)` and `arctan(dz/dy)` of a section. Still,
+    discussing curvature leads nicely into a discussion of the *arc*, so
+    whatever.
 
-   * [[What the advantages of designing with wing sections as opposed to
-     designing arbitrary wing geometries? ie, what are the benefits of the
-     structured approach of "design by wing sections"?]]
+  * *arc*
 
-   * Designing the wing is then broken into two steps:
+  * *geometric torsion*: relative pitch angle of a section
 
-     1. Specify the scale, position, and orientation of each section.
+    .. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
 
-     2. Assign a 2D profile to each section, called an *airfoil*, which
-        defines the upper and lower surfaces of the section.
+       Geometric torsion.
 
-   * There are a variety of conventions for the first step. [[This is where
-     you specify the chord surface. By "variety of conventions" what I mean is
-     "variety of parametrizations", but they're all relatively similar.]]
+       Note that this refers to the angle, and is the same regardless of any
+       particular rotation point.
+
+
+.. Establish the model requirements
+
+* Explicit vs parametric parametrizations.
+
+  * Parametric designs try to balance simplicity and flexibility. A good
+    parametrization lets you focus on high-level design without forcing you
+    into simplistic designs. [[I'm interested in "easy to create, good
+    enough" approximations of real wings, not physically-realistic
+    simulations.]]
+
+  * It's much easier to place a prior for parameters than for explicit
+    geometries. (You'd have to invent parameters you can compute for an
+    explicit geometry just so you can compare two canopies.)
+
+* What are **MY** requirements for a parametric model?
+
+  * [[The general requirement is that it enables estimating the inertial
+    properties and aerodynamics, but the additional goals are that it should
+    be: expressive, intuitive, able to use existing data, minimize
+    parameters, general enough to accommodate deformations (billowing,
+    braking, accelerator, etc.
+
+    There already exist parametrizations I could have used, so this is really
+    about my extra demands that made the existing methods come up short.
+    Driving that home will require some careful examples to establish the
+    limitations of existing methods.
+
+    I think the biggest difference is that I chose to increase the complexity
+    by adding the "reference point" parameters. I decided to pay the
+    "simplicity" cost because of the "intuitive" gain; for elliptical chord
+    lengths it was easier to adjust `r_x` than to find a parametric `x(s)`
+    that shifted the chords into a reasonable approximation of real wings. In
+    particular, most wings have a mostly-straight trailing edge that were
+    a pain to encode using leading-edge reference points.]]
+
+  * Makes it easy to specify a target design
+
+    * Each design parameter should be intuitive and capture the target
+      property directly (avoiding intermediate translations)
+
+    * Makes it easy to incorporate existing design data. There are three main
+      sources of information for the geometry of a paragliding canopy:
+
+      1. Technical specifications (from researchers or a manufacturer)
+
+      2. Pictures
+
+      3. The wing itself
+
+    * Support mixed-design between the flattened and inflated geometries.
+
+      Parafoils only produce an arched geometry when they are inflated. It
+      can be convenient to specify some values in terms of the non-inflated
+      wing.
+
+      [[A good choice of section index is key here. I should be able to
+      define `c(s)` and `x(s)` by spreading a wing out on the grass and
+      simply **measuring** the chord lengths and `x` positions of an edge.]]
+
+    * Able to express continuous deformations [[from braking, C-riser
+      piloting, accelerator flattening, weight shift, cell billowing, etc.]]
+
+  * Minimizes the number of design parameters
+
+    [[Should this be in the list of general goals? I already list "easy to
+    use", but this goal is specifically targeted at simplifying statistical
+    analysis. The structural knowledge of each parameter also tends to make
+    them more amenable to statistical summarization.
+
+    One long-term goal of this geometry is to allow people to encode
+    approximations of existing wings. Once you've built up a database of
+    models of physical wings you can generate a distribution over the wing
+    parameters.
+
+    Another "blue skies" goal is to produce a model that is amenable to
+    statistical parameter estimation. This implies that as few parameters
+    as possible should be used (to reduce the dimensionality). Also
+    advantageous to decompose the parameters to maximize the variance of
+    each parameter (ala principal component analysis); the choice of
+    parameterization determines the parameter distributions, and it might
+    be helpful to "eliminate" some of the variance by using stronger priors
+    over some of the parameters. Like, instead of some complicated `X` you
+    decompose into simpler `Y` and `Z`, then place a strong prior over `Z` or
+    even treat `Z` as constant, so the only variance remaining is that in
+    `Y`, which makes the parameter estimation easier.]]
+
+  * [[Segue into "you can simplify both the specification and the analysis of
+    a wing by decomposing it into a set of design parameters. The traditional
+    way to do that is *wing sections*.]]
+
+* How do you design a mathematical model that achieves those requirements?
+
+  * [[Through careful decomposition and parametrization. Introduce "wing
+    sections" and how they simplify wing design using a two step process
+    (specify the scale, position, and orientation of sections, then assign
+    section profiles). Introduce the concept of section chords and the chord
+    surface.]]
+
+  * The shape of a parafoil canopy can be defined in many ways. The simplest
+    way is to specify a set of points over the surface to produce an explicit
+    representation of the shape. The issue is that the intricate, non-linear
+    geometry of a parafoil requires a large number of points.
+
+  * Instead of defining the shape with an explicit set of points, the complex
+    shapes of parafoil canopies can usually be decomposed into a simpler set
+    of parametric equations.
+
+  * If a complex shape can be represented with simple parametric equations,
+    then each parameter of the parametric equations tend to be better at
+    capturing structural knowledge than the explicit set of points.
+
+  * Because each parameter communicates more information than an explicit
+    coordinate, fewer parameters are required, which tends to mean much less
+    work is required to specify a design target.
+
+  * The conventional way to decompose a wing is to use *wing sections*. Wing
+    sections make a wing easier to design and easier to analyze.
+
+    [[Discuss designing with chords + profiles versus designing the surfaces
+    directly.]]
+
+  * Instead of designing the 3D shape of a wing directly (ie, as a large set
+    of points), simple wings are traditionally decomposed into 2D wing
+    *sections* :cite:`abbott1959TheoryWingSections` distributed along the
+    span.
+
+    [[I don't like this phrasing: what does "directly" mean? Probably better
+    to talk in terms of **structure**, since I'm thinking in terms of
+    structured vs unstructured shapes; maybe use those terms?]]
+
+  * [[What the advantages of designing with wing sections as opposed to
+    designing arbitrary wing geometries? ie, what are the benefits of the
+    structured approach of "design by wing sections"?]]
+
+  * Designing the wing is then broken into two steps:
+
+    1. Specify the scale, position, and orientation of each section.
+
+    2. Assign a 2D profile to each section, called an *airfoil*, which
+       defines the upper and lower surfaces of the section.
+
+  * There are a variety of conventions for the first step. [[This is where
+    you specify the chord surface. By "variety of conventions" what I mean is
+    "variety of parametrizations", but they're all relatively similar.]]
 
 .. figure:: figures/paraglider/geometry/wing_sections2.svg
 
@@ -238,8 +243,7 @@ Canopy Geometry
    Parafoil ribs are the internal structure that produce the desired section
    profile at specific points along the span.
 
-#. What is the rest of the chapter about?
-
+* What is the rest of the chapter about?
 
 
 Modeling requirements
@@ -252,7 +256,6 @@ Modeling requirements
   parametrization factors into this)
 
 * As simple as possible (intuitive to use, "frugal" in number of parameters)
-
 
 
 Related Work
