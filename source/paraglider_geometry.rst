@@ -2,11 +2,15 @@
 Paraglider Geometry
 *******************
 
-A paraglider is a system of two components: a wing, and a harness.
+A paraglider is a system of two components: a wing (canopy + lines), and
+a payload (harness + pilot).
 
-[[Should this chapter be "Paraglider Wing Geometry"? The paraglider wing and
-paraglider geometries are a bit squished together as-is. Probably needs
-a simple rewording.]]
+* [[This chapter is a bit squished since I need to to define both the wing
+  geometry and the payload. They're both pretty simple though so it should be
+  fine? The wing geometry just adds lines to a canopy and specifies the
+  surface materials; I'm not trying to model individual risers, describe
+  parafoil cells, etc. The harness I'm just going to say "here's the basic
+  idea, I'm going to model it as a sphere.]]
 
 
 Modeling requirements

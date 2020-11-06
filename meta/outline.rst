@@ -273,13 +273,7 @@ Canopy aerodynamics
 Paraglider geometry
 ===================
 
-* The paraglider is a system composed of wing (canopy+lines) and payload
-  (harness+pilot).
-
-* [[Introduce my chosen specification for a paraglider wing, positioning the
-  payload, etc.]]
-
-* [[Provide an example? Like my Hook 3 model.]]
+[["Outline" moved into the chapter body]]
 
 
 Paraglider dynamics
