@@ -35,6 +35,11 @@ Introduction
 * Don't mix up the two problems: *discovery* and *use*. If a tool deals with
   both, don't get focused on the tool: stay focused on the individual problem.
 
+* Note to self: this paper is strictly focused on estimating wind vectors from
+  flight data. Any discussion of estimating structure or extracting patterns
+  from sets of flights must be relegated to the "Future Work" chapter.
+
+
 Predictive modeling
 -------------------
 
@@ -42,14 +47,8 @@ Predictive modeling
   estimates of places they've been (estimation), but also of places they
   haven't been yet (prediction).
 
-* Note to self: this paper is strictly focused on estimating wind field
-  structure from flight data. Any discussion of extracting patterns from sets
-  of flights must be relegated to the "Future Work" chapter.
-
-* You can only predict what you can detect.
-
-  You can only discover "recurring structure" involving structure you're
-  capable of detecting that structure in the first place.
+* You can only predict what you can detect. You can only discover "recurring
+  structure" if you're capable of detecting that structure in the first place.
 
 * You can only condition predictions on structure you can detect (applies
   both to detecting structure from data and in-flight)
@@ -59,16 +58,11 @@ Predictive modeling
   "from data" and "in-flight" estimates better agree or the predictions
   could be worse than an unconditional (marginalized) prediction.
 
-* Discuss uncertainty quantification?
-
 * Earlier I discussed aspect of wind field structure like thermals, sink,
   and shear, but don't those are sort of "summaries" of the wind field.
   Those are good targets for "feature detectors", but I'm arguing that
   better feature detectors can be created if they have access to the
   underlying wind field.
-
-  I need to show how model-free methods are incapable of estimating those
-  from the available data.
 
 * Static models that simply summarize historical averages or rates aren't
   useless, but they are pretty boring; for example, in Michael von Kaenel's
@@ -148,7 +142,6 @@ Problems of discovery and use
     during the summer, or if there's a north wind, etc.]]
 
 
-
 Conditioning
 ^^^^^^^^^^^^
 
@@ -190,7 +183,7 @@ Wind field estimation
   list out their limitations, then explain the advantages of estimating the
   actual wind field.
 
-* What do you stand to gain by recovering the wind vectors?
+  What do you stand to gain by recovering the wind vectors?
 
   1. Eliminate (or mitigate) the limitations of relying on heuristics
 
@@ -208,43 +201,6 @@ Wind field estimation
 
      * Use observations of the actual wind field to predict the features
 
-* The two methods I've heard of to estimate the horizontal wind are (1) the
-  circle method, and (2) fitting a linearized thermal core and estimating the
-  wind from its inclination. I think both methods assume constant horizontal
-  airspeed?
-
-* Thermal detectors and the like don't have access to good estimates of the
-  wind vectors, so they rely on heuristics over paraglider motion.
-
-  Also, because they don't estimate the fine detail of the wind field, thermal
-  detectors **summarize** regions of the field using pre-defined *features*.
-
-  This isn't good use of the information available in the track. They use
-  heuristics over noisy position measurements which were caused by the
-  underlying structure. By going straight to the features, they're skipping
-  the extra information we have (knowing how the wind causes the motion).
-  **Feature extraction should be split into two steps: (1) estimate the wind
-  vectors, and (2) extract features from the wind vectors.**  Doing those two
-  steps at the same time is suboptimal.
-
-  Hm, a try at rewording this: the goal is to reveal structure in the wind
-  field. The problem with existing tools is that they never deal with the wind
-  field itself; instead they rely on heuristics to "guess" the structure in
-  the field. Their analysis relies on the **effects** of the wind field, not
-  the wind field itself. The same cause can have many different effects, which
-  is why trying to determine the cause from an observed effect is such a pain.
-
-  Features are summary information about the *effects*, what I really want is
-  information about the underlying *cause*.
-
-  Learning via hard-coded features depends on the paraglider track having
-  a particular structure (eg, coring a thermal), but **the structure of the
-  flight is not indicative of the underlying structure**. It's suggestive, but
-  not equivalent. Using the dynamics lets you recover the underlying structure
-  without depending on structure of the flight (although circling flight will
-  definitely help reduce uncertainty).
-
-
 * Most existing tools that extract wind field structure from IGC files are
   "thermal hotspot" maps. They start by detecting regions where the glider
   exceeded some minimum sinkrate or it ascended more than some cutoff
@@ -257,6 +213,33 @@ Wind field estimation
 
   Ultimately though, they use *heuristics* to estimate the wind, not actual
   system dynamics.
+
+* Thermal detectors are *feature detectors*. They don't estimate the fine
+  detail of the wind field; instead they **summarize** regions of the wind
+  field using some predefined structure. They don't have access to good
+  estimates of the actual wind field, so they rely on heuristics over
+  paraglider motion.
+
+  Heuristics rely on the **effects** of the wind field, not the wind field
+  itself. The same cause can have many different effects, which is why trying
+  to determine the cause from an observed effect is such a pain. More
+  importantly, features are summary information about the *effects*, but what
+  I really want is information about the underlying *cause*.
+
+  Heuristics fail to make full use of our domain knowledge of canopy
+  aerodynamics. There is structure in the data that is not used to collect
+  more information. They make inefficient use of the data.
+
+  In summary, heuristics rely on the paraglider track having a particular
+  structure (eg, coring a thermal), but **the structure of the flight is not
+  necessarily indicative of the underlying structure**. It's suggestive, but
+  not equivalent. Using the dynamics lets you recover the underlying structure
+  without depending on structure of the flight (although circling flight will
+  definitely help reduce uncertainty).
+
+  **Feature extraction should be split into two steps: (1) estimate the wind
+  vectors, and (2) extract features from the wind vectors.** Doing those two
+  steps at the same time is suboptimal.
 
 * Kept getting lost on how to present existing tools (linearized thermals,
   circling method, etc) that attempt to extract wind field structure from
@@ -275,6 +258,7 @@ Wind field estimation
 
   eg, instead of locating regions of that wind field with rising air, they
   have to rely on heuristics of the paraglider motion
+
 
 Thermal hotspot detectors
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -396,18 +380,17 @@ Thermal hotspot detectors
     It's possible that this "hotspot detector" idea is useful for higher AGL
     scenarios.
 
+
 Circling method
 ^^^^^^^^^^^^^^^
 
-One problem with the circling method is that it assumes constant airspeed.
+* Assumes constant airspeed.
 
-If a track isn't circling then the circle fit will be dominated by noise:
-fluctuations in airspeed, fluctuations in wind speed, and observation error.
-When the glider is circling, it affords a sort of triangulation; similar to
-triangulation, you don't want the ground velocities to be collinear. Circling
-lets you constrain the solution to a reasonably small region.
-
-
+* If a track isn't circling then the circle fit will be dominated by noise:
+  fluctuations in airspeed, fluctuations in wind speed, and observation error.
+  When the glider is circling, it affords a sort of triangulation; similar to
+  triangulation, you don't want the ground velocities to be collinear.
+  Circling lets you constrain the solution to a reasonably small region.
 
 
 Flight Reconstruction
