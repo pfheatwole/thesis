@@ -285,19 +285,7 @@ Paraglider dynamics
 Flight simulation
 =================
 
-* Define *flight simulation* for the purposes of this paper
-
-* Why does this paper need a flight simulator?
-
-  * To generate test flights for validation. At first this is only helpful for
-    superficial checks (do flights "look" correct?), but will eventually be
-    necessary for physical flight validation.
-
-  * The filtering equation needs a transition function
-
-* [[Talk about choosing a state representation? Quaternions, etc?]]
-
-* [[Show some demo flights?]]
+[["Outline" moved into the chapter body]]
 
 
 Future work
