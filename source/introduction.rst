@@ -100,6 +100,8 @@ a predictive model suitable for in-flight wind field estimation.
 Paragliding
 ===========
 
+.. Introduce paragliding as a sport
+
 * What is paragliding?
 
   * Paragliding is a recreational flying activity that uses a lightweight,
@@ -113,9 +115,12 @@ Paragliding
 Wind Fields
 ===========
 
-.. Discuss wind fields and their importance to paragliding pilots
+.. Introduce wind fields and their importance to paragliding pilots
 
-* How do paragliders depend on the wind?
+* [[Define *wind field*. Specifically, wind is the motion of air relative to
+  the ground. Define *wind vector* here as well?]]
+
+* Why is the wind field important to paragliding pilots?
 
   * Because a paraglider is a non-powered aircraft its motion is entirely
     dictated by interactions with gravity and wind.
@@ -129,21 +134,28 @@ Wind Fields
     in a given direction, which determines what regions of the air the pilot
     can access, and what landing zones they can reach.
 
-* Why do pilots need to know the structure of the wind field?
 
-  * A successful flight depends on the pilot's ability to recognize the
-    structure of the local air currents and navigate them in order to achieve
-    their flight goals, which may include optimizing for flight time,
-    distance, or a particular route.
+.. Discuss wind field structure
+
+* Define *atmospheric boundary layer*
 
 * What are some examples of structure in a wind field?
 
-  * [[Describe the local wind field as a composite of basic features: shear,
+  * [[Thermal lift and sink, orographic lift, shear (including venturi), etc.
+
+    Describe the local wind field as a composite of basic features? Shear,
     updrafts, and gusts. See :cite:`bencatel2013AtmosphericFlowField`
 
     Prioritize wind field information that is important to pilots. For
     example, house thermals, finding lift along a ridge, avoiding sink near
     a stream, etc.]]
+
+* Why do pilots benefit from knowing the structure of the wind field?
+
+  * A successful flight depends on the pilot's ability to recognize the
+    structure of the local air currents and navigate them in order to achieve
+    their flight goals, which may include optimizing for flight time,
+    distance, or a particular route.
 
 * Why is it important to determine the structure as quickly as possible? Why
   is it important for a pilot to be able to **predict** the structure?
@@ -212,6 +224,9 @@ Predictive Modeling
 
     Consider both the vertical and horizontal components. Consider both
     pre-flight (flight planning) and in-flight scenarios.]]
+
+
+.. Pilots face problems of discovery and use
 
 * How do pilots traditionally discover wind patterns?
 
@@ -292,7 +307,6 @@ Predictive Modeling
     the surrounding area, you could train the model using the values of those
     predictor variables (which are **not** the same thing as observations of
     the wind field itself.]]
-
 
   * Visualizing structure on a graphical map is convenient
 
