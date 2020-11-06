@@ -6,7 +6,6 @@ Canopy Aerodynamics
 * What are aerodynamics?
 
 
-
 Modeling Requirements
 =====================
 
@@ -20,10 +19,20 @@ Modeling Requirements
 
     * Non-uniform wind (due to wing turning, wind gradients, thermals, etc)
 
-  * Viscosity
+    * [[It was important to me that I don't **start** with a simplistic model.
+      If the result is easy to simplify then great, but don't **assume**
+      a simplified model without checking first. This should provide
+      a baseline for judging simplified models.]]
 
-    * Many papers on parafoils provide empirical viscous drag correction
-      factors to the section coefficients.
+  * Supports empirical adjustments (mostly viscous drag correction factors)
+
+  * Avoid external dependencies
+
+    * I'm trying to keep this self-contained, since I wanted to understand
+      what's happening end-to-end. Also let me design it just how I wanted,
+      which also enabled simplified interfaces.
+
+    * Side effect: needs to be feasible to implement given my time constraints
 
   * Computationally efficient/fast
 
@@ -33,6 +42,20 @@ Modeling Requirements
     * Ultimately this method is likely to be replaced with an approximation,
       but it's still nice to work with the "full" model whenever possible.
 
+
+Aerodynamics models
+===================
+
+* [[What are the categories of aerodynamics methods?
+
+  Introduce LLT, VLM, CFD, etc. Go through the requirements and explain why
+  they fail (LLT fails the non-linear geometry, VLM handles non-linear
+  geometry but fails non-linear aerodynamics, CFD is too complicated to
+  implement and too slow). Finish by choosing the NLLT.]]
+
+* [[Section profiles were covered in the previous chapter. The computational
+  methods use the profiles either via their section coefficients, or via the
+  surface geometry they generate.]]
 
 
 

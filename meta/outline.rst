@@ -267,49 +267,7 @@ Discussion
 Canopy aerodynamics
 ===================
 
-.. Meta:
-
-   This is the link between position and the wind.
-
-
-* What are aerodynamics?
-
-* What are the modeling requirements?
-
-  * Physical model
-
-    * Non-linear geometry (straight lifting-line is unacceptable)
-
-    * Non-linear coefficients (don't **start** with a simplistic model; this
-      should provide a baseline for judging simplified models)
-
-    * Enables empirical adjustments to viscous drag (existing literature on
-      paragliders often provide empirical values that I wanted to incorporate)
-
-    * Non-uniform wind (what happens during a turn, when the wingtip enters
-      a thermal, etc)
-
-    * Relaxes the "small AoA" restriction (graceful degradation near stall)
-
-  * Practicalities
-
-    * Simple (relatively easy to implement, no dependence on external tools)
-
-    * Computationally fast (think of this as a rapid prototyping phase)
-
-* [[Section profiles were covered in the previous chapter. The computational
-  methods use the profiles either via their section coefficients, or via the
-  surface geometry they generate.]]
-
-* Phillips' NLLT
-
-* Case study: Barrows' model
-
-  * Describe the model and wind tunnel dataset
-
-  * Compare the raw data to the VLM and the NLLT
-
-* Discussion, pros/cons
+[["Outline" moved into the chapter body]]
 
 
 Paraglider geometry
