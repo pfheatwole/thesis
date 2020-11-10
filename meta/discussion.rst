@@ -871,7 +871,60 @@ Paraglider modeling
 Canopy Geometry
 ===============
 
-* Describe the individual physical components? (geometry, materials, etc)
+* Problem statement: we need a way to estimate the dynamics of existing wings.
+
+  * The model must deal with two things: it must support aerodynamic methods,
+    and it must enable modeling existing wings.
+
+  * For aerodynamics, the common codes rely on a small set of choices:
+
+    * Points on chord lines (lifting-line methods)
+
+    * Points on camber surface (vortex lattice methods)
+
+    * Points on the foil surfaces (general panel methods, like VSAERO?)
+
+    The geometry should support querying points on the chord surface, camber
+    surface, and airfoil surface. That should be sufficient for LLT, VLM,
+    panel codes, and CFD (since you can query the explicit 3D geometry).
+
+    Oh, explicitly calling out that I want to support LLT methods means I have
+    to use "design by wing sections". Saying I want to support empirical
+    adjustments to the viscous drag also implies that I need to use wing
+    sections (it's just not as obvious).
+
+  * The objectives for modeling:
+
+    1. Capable of representing (albeit approximately) existing wings
+
+    2. Intuitive/easy for a user to produce a model of an existing wing by
+       using the most readily-available data (technical specs, technical
+       diagrams, physical wing-in-hand you can measure, or pictures).
+
+* Supporting the aerodynamics methods boils down to providing functions for
+  those three surfaces (chord, camber, and airfoil). Thankfully that's already
+  how I modeled my code, so yay.
+
+  But how should I establish those as requirements without discussing those
+  methods? I want to say "I need to support aerodynamic methods" without
+  discussing the methods themselves. Then again, I haven't introduced "chord
+  surface" etc yet either, so saying "I need to enable queries of points on
+  the camber surface to support VLM methods" is twice undefined. Maybe don't
+  bother discussing the aerodynamic codes yet; focus on making the
+  specifications easy. **The primary goal here is to make it easy to turn
+  rudimentary specs of a real wing into a computer model.**
+
+  Hm, related though: I can't very well motivate "design by wing sections" by
+  saying I need to support viscous drag adjustments. Maybe just say up front
+  "this choice will support the model requirements of the canopy aerodynamics
+  chapter"? Let the aerodynamics chapter state that we need to support
+  empirical adjustments?
+
+* How should I cite the "Paraglider Design Handbook"? Just as a website?
+
+
+Wing sections
+-------------
 
 * I'm not interested in a grand exposition of airfoil considerations. I just
   want to draw attention to the aspects that are important enough to affect my
@@ -879,18 +932,86 @@ Canopy Geometry
   the relevant aerodynamic concepts/terminology (angle of attack, stall point,
   chord, camber, pitching moment, aerodynamic center, etc)
 
-* Geometric definitions of the airfoil: leading edge, trailing edge, chord
-  line, camber line, upper surface, lower surface
+* Important terms: leading edge, trailing edge, chord line, camber line, upper
+  surface, lower surface
 
-* Summary parameters (ref:
-  http://laboratoridenvol.com/paragliderdesign/airfoils.html#4): maximum
-  thickness, position of maximum thickness, max camber, position of max
-  camber, nose radius, trailing edge angle (?)
+* Common parameters: maximum thickness, position of maximum thickness, max
+  camber, position of max camber, nose radius, trailing edge angle (?)
 
-* Aerodynamic behavior and coefficients: lift, drag, and moment curves; stall
-  point; stability; more?
+  ref: http://laboratoridenvol.com/paragliderdesign/airfoils.html#4
 
-* How should I cite the "Paraglider Design Handbook"? Just as a website?
+
+Parametric designs
+------------------
+
+* I need a representative set of dynamics models, and each one needs a model
+  of the canopy geometry. The canopy geometry needs to make it easy to produce
+  approximations of the wings that produced the flight tracks. A parametric
+  model supports that goal: it's a lot easier to use a simplified, parametric
+  representation, especially if the parameters closely match the available
+  specifications or measurements you can get from a wing.
+
+* We don't know what wings produced each flight, so there is a lot of model
+  uncertainty. We can try to account for the model uncertainty by performing
+  flight reconstruction over a representative set of dynamics models.
+
+  How can we produce a representative set of dynamics models? We don't have
+  complete models for all the wings in existence. At best we have a large set
+  of simplified wing specs. Thus, we need a tool that lets us convert wing
+  specifications into approximate models.
+
+  **Summary: we need a representative set of dynamics models, and the best way
+  to do that is to make it as easy as possible to convert existing
+  specifications into wind models.**
+
+* Advantages of parametric designs:
+
+  * Parametric models balance expressibility with simplicity. The parameters
+    are information summaries that ignore less important details.
+
+    We need to create a representative set of wing models, so it's important
+    to make it as easy possible for users to create models of existing wings.
+
+  * Parametric models let you standardize so you can compared models.
+
+  * Parametric models let you place priors over model configurations.
+
+  * Parametric models use fewer parameters, which makes them more amenable to
+    mathematical optimization methods. This is helpful for statistical
+    parameter estimation, or wing performance optimization.
+
+* When it comes to describing geometries, you can either use explicit
+  geometries (an arbitrary mesh) or parametric geometries (use functions that
+  when put together describe the mesh). I'm doing *design by wing section*,
+  which boils down to designing the chord surface and assigning section
+  profiles.
+
+  Interesting that although most designs allow linear interpolation of airfoil
+  geometries, it's trivial to support arbitrary interpolation functions (as
+  long as they're smooth). Exponential, logarithmic, etc, they're just how you
+  determine the transition factor between the two.
+
+* The choice of parametrization is influence by what details you want to be
+  able to represent / capture. The final model will be an approximation of the
+  real wing, so you need to decide up from what details you want to capture
+  (and thus what details you're happy to lose).
+
+
+Chord surface
+-------------
+
+* I didn't invent the notion of a chord surface: I merely gave it a name. And
+  my contribution isn't a "new parametric geometry": I'm contributing
+  a general equation for the surface, and a particular choice of section index
+  and design function parametrization (the DCM is parametrized by Euler
+  angles, section roll being defined by `yz(s)`) for that equation that make
+  it easy to (1) capture the important details of a parafoil canopy, (2)
+  design in mixed flat and inflated geometries, and (3) analyze the
+  aerodynamics using section coefficient data (partly by keeping the y-axes in
+  the yz-plane).
+
+* For notational simplicity, I'm going to drop the explicit section index
+  parameter :math:`s`, so  :math:`LE(s) \to LE`, :math:`r_x(s) \to r_x`, etc.
 
 
 Canopy Aerodynamics
