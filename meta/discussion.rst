@@ -876,7 +876,7 @@ Canopy Geometry
   * The model must deal with two things: it must support aerodynamic methods,
     and it must enable modeling existing wings.
 
-  * For aerodynamics, the common codes rely on a small set of choices:
+  * For aerodynamics, common aerodynamic codes rely on a small set of choices:
 
     * Points on chord lines (lifting-line methods)
 
@@ -922,6 +922,61 @@ Canopy Geometry
 
 * How should I cite the "Paraglider Design Handbook"? Just as a website?
 
+* How do you design a mathematical model that achieves those requirements?
+
+  * [[Through careful decomposition and parametrization. Introduce "wing
+    sections" and how they simplify wing design using a two step process
+    (specify the scale, position, and orientation of sections, then assign
+    section profiles). Introduce the concept of section chords and the chord
+    surface.]]
+
+  * The shape of a parafoil canopy can be defined in many ways. The simplest
+    way is to specify a set of points over the surface to produce an explicit
+    representation of the shape. The issue is that the intricate, non-linear
+    geometry of a parafoil requires a large number of points.
+
+  * Instead of defining the shape with an explicit set of points, the complex
+    shapes of parafoil canopies can usually be decomposed into a simpler set
+    of parametric equations.
+
+  * If a complex shape can be represented with simple parametric equations,
+    then each parameter of the parametric equations tend to be better at
+    capturing structural knowledge than the explicit set of points.
+
+  * Because each parameter communicates more information than an explicit
+    coordinate, fewer parameters are required, which tends to mean much less
+    work is required to specify a design target.
+
+  * The conventional way to decompose a wing is to use *wing sections*. Wing
+    sections make a wing easier to design and easier to analyze.
+
+    [[Discuss designing with chords + profiles versus designing the surfaces
+    directly.]]
+
+  * Instead of designing the 3D shape of a wing directly (ie, as a large set
+    of points), simple wings are traditionally decomposed into 2D wing
+    *sections* :cite:`abbott1959TheoryWingSections` distributed along the
+    span.
+
+    [[I don't like this phrasing: what does "directly" mean? Probably better
+    to talk in terms of **structure**, since I'm thinking in terms of
+    structured vs unstructured shapes; maybe use those terms?]]
+
+  * [[What the advantages of designing with wing sections as opposed to
+    designing arbitrary wing geometries? ie, what are the benefits of the
+    structured approach of "design by wing sections"?]]
+
+  * Designing the wing is then broken into two steps:
+
+    1. Specify the scale, position, and orientation of each section.
+
+    2. Assign a 2D profile to each section, called an *airfoil*, which defines
+       the upper and lower surfaces of the section.
+
+  * There are a variety of conventions for the first step. [[This is where
+    you specify the chord surface. By "variety of conventions" what I mean is
+    "variety of parametrizations", but they're all relatively similar.]]
+
 
 Wing sections
 -------------
@@ -940,29 +995,49 @@ Wing sections
 
   ref: http://laboratoridenvol.com/paragliderdesign/airfoils.html#4
 
+* There are some model constraints if the canopy aerodynamics can be analyzed
+  using section coefficient data. In particular, segments must be able to be
+  well-approximated as a single profile given a width. Things that cause this
+  constraint be violated include:
+
+  * Non-uniform profiles
+
+  * Non-uniform torsion
+
+  * Section y-axes are not parallel to each other (eg, wedge-shaped
+    segments)
+
+  * Section y-axes are not parallel to the segment quarter-chord (eg,
+    "sheared" sections, like with swept wings or vertical sections with
+    non-flat yz-curves)
+
 
 Parametric designs
 ------------------
 
-* I need a representative set of dynamics models, and each one needs a model
-  of the canopy geometry. The canopy geometry needs to make it easy to produce
-  approximations of the wings that produced the flight tracks. A parametric
-  model supports that goal: it's a lot easier to use a simplified, parametric
-  representation, especially if the parameters closely match the available
-  specifications or measurements you can get from a wing.
+* When it comes to describing geometries, you can either use explicit
+  geometries (an arbitrary mesh) or parametric geometries (use functions that
+  when put together describe the mesh).
 
-* We don't know what wings produced each flight, so there is a lot of model
-  uncertainty. We can try to account for the model uncertainty by performing
-  flight reconstruction over a representative set of dynamics models.
+  I claim that I need a parametric paraglider dynamics model. Why?
 
-  How can we produce a representative set of dynamics models? We don't have
-  complete models for all the wings in existence. At best we have a large set
-  of simplified wing specs. Thus, we need a tool that lets us convert wing
-  specifications into approximate models.
+  * Due to model uncertainty, flight reconstruction will can use the correct
+    model; instead, we have to rely on a representative of paraglider dynamics
+    models. Unfortunately, we don't have any paraglider dynamics models, much
+    less a set that covers the range of available wings. At best we have a set
+    of minimal technical specs, so we need a tool that lets us produce wing
+    models from technical specs. **Parametric models with a good choice of
+    parametrization make it easy to model wings from simplified technical
+    specs.**
 
-  **Summary: we need a representative set of dynamics models, and the best way
-  to do that is to make it as easy as possible to convert existing
-  specifications into wind models.**
+  * Explicit geometries are too time consuming to expect users to produce them
+    by hand. I need to produce reasonably accurate models with less effort.
+
+  * (Idealist vision) Parametric models support parameter estimation. Existing
+    data probably won't work, but conceptually it'd be nice to support.
+
+* I'm using the *design by wing section*, which boils down to designing the
+  chord surface and assigning section profiles.
 
 * Advantages of parametric designs:
 
@@ -980,28 +1055,394 @@ Parametric designs
     mathematical optimization methods. This is helpful for statistical
     parameter estimation, or wing performance optimization.
 
-* When it comes to describing geometries, you can either use explicit
-  geometries (an arbitrary mesh) or parametric geometries (use functions that
-  when put together describe the mesh). I'm doing *design by wing section*,
-  which boils down to designing the chord surface and assigning section
-  profiles.
+* Choice of parametrization
 
-  Interesting that although most designs allow linear interpolation of airfoil
+  * Goals of a parametrization:
+
+    * Capable of capturing the most important details (as simple as possible,
+      but no simpler)
+
+    * Intuitive
+
+    * Preferably map easily onto the most readily-available summary values
+      (like span). It needs to make it easy to work with technical specs.
+
+  * When I say a good parametrization should be *intuitive*, I mean that it
+    should match what you notice when you glance at a wing. The arc, the
+    width, and the way the leading edge sweeps backwards are probably the most
+    obvious. Or maybe you notice the trailing edge more; whatever you notice
+    is what I mean by "intuitive".
+
+  * The choice of parametrization is influence by what details you want to be
+    able to represent / capture. The final model will be an approximation of
+    the real wing, so you need to decide up from what details you want to
+    capture (and thus what details you're happy to lose).
+
+* Interesting that although most designs allow linear interpolation of airfoil
   geometries, it's trivial to support arbitrary interpolation functions (as
   long as they're smooth). Exponential, logarithmic, etc, they're just how you
   determine the transition factor between the two.
 
-* The choice of parametrization is influence by what details you want to be
-  able to represent / capture. The final model will be an approximation of the
-  real wing, so you need to decide up from what details you want to capture
-  (and thus what details you're happy to lose).
+* Interesting to note that "design by wing sections" is closely related to
+  common 3D modeling methods. It is similar to *lofting* in the sense that you
+  are generating a solid by interpolating between profiles at each section. It
+  is similar to *sweeping* a profile along a curve, except that the profile
+  (the shape being "swept") can change size (if the wing uses a non-constant
+  chord), shape (if the wing uses a non-uniform profile), and orientation
+  (rotation of the profile about the curve if there is geometric twist).
+
+  Another big difference is the use of separate curves for designing in the
+  `x` and `yz` planes, but you could probably convert this definition into
+  a single curve (eg, compute the final leading edge) and scaling factor (the
+  chord lengths scale the profiles). **This geometry should be straightforward
+  to use as an input to a 3D modeling program.** In fact, FreeCAD and Blender
+  already have Python API's, so this should be pretty easy to use this as
+  a backend for parametric geometries in those programs.]]
+
+
+Section index
+^^^^^^^^^^^^^
+
+[[I need to motivate my choice of section index, choosing `r_y = r_z` (to make
+designing `yz` more intuitive), and using a roll-pitch Tait-Bryan sequence (or
+a pitch-roll "proper" Euler angle sequence?) for the DCMs.]]
+
+* *section index*: a unique identifier for each section.
+
+* What I'm calling a "section index" is often called a "spanwise station" in
+  literature. See "General Aviation Aircraft Design", Eq:9-36 (pg 319/325).
+  I'll probably stick with this since it's more explicit (it's an index, so
+  I'm going to call it that) plus I don't want any mixups between the classic
+  definition of `spanwise station = 2y/b` (especially since that name doesn't
+  say **which** span). Kinda nice that "station" and "section" both start with
+  `s` though.
+
+* My definition of the section index is similar to something used by Abbott,
+  except he used `s = 2 * y / b` whereas I'm using the flat versions.
+
+* Flat coordinates are useful since they can be measured from a wing lying on
+  the ground.
+
+* The arched versions are less convenient when sampling points along the
+  span (as is done in Phillips).
+
+* The traditional choices are the y-coordinate (so :math:`s \defas y`) or the
+  normalized span coordinate (so :math:`s \defas 2 \frac{y}{b}`), but those
+  become unwieldy for non-linear wings. (They are also non-constant if the
+  wing is subject to deformations which change the section y-coordinates.) For
+  parafoil design it's much more convenient to use the flat spanwise
+  coordinate (this simplifies mixed design between the flattened and inflated
+  wing shapes).
+
+  Assuming the semispans are symmetric (reasonable for a parafoil), define:
+
+  .. math::
+
+     s \defas \, 2 \, \frac{y_\mathrm{flat}}{b_\mathrm{flat}}
+
+* I'm using :math:`b_\mathrm{flat} = \mathrm{length}(yz(s))` even though the
+  :math:`yz(s)` might not define the "true" physical span. (The reference
+  points might not be the maximum y-coordinates.)
+
+
+Scale
+^^^^^
+
+[[Interesting stuff about chord lengths goes here. This is about how you
+specify the chord distribution, and not a discussion about wing design (taper,
+aspect ratios, etc).]]
+
+* You can specify chords as either a position and length, or as two
+  positions (typically the leading and trailing edges). `FreeCAD` and
+  `SingleSkin` do it that way; probably more?
+
+  I suspect that the position+length representation lends itself to simpler
+  equations, but it'd be interesting to check. For example, suppose
+  a straight `0.7c` with an elliptical chord; what do the leading and
+  trailing edge functions look like? Do they lose that nice,
+  analytical-function look?
+
+  Of course, the difference is a bit moot: if you have `LE(s)` and `TE(s)`,
+  just set `r_x = 0` and `c(s) = norm(LE(s) - TE(s))`.
+
+
+Position
+^^^^^^^^
+
+[[Interesting stuff on positioning sections goes here. Leading edge, trailing
+edge, quarter-chord, whatever.]]
+
+* What is :math:`yz(s)`? In short, for each section of the wing, pick the
+  point at :math:`r_{yz} \, c` back from the leading edge. Project that
+  point onto the yz-plane. Do this for all sections to produce a curve. The
+  :math:`s` is the normalized length along that curve. The length of that
+  curve also defines :math:`b_\mathrm{flat}`, since it would be the span of
+  the reference line if you "unrolled" the wing so all the z-coordinates are
+  zero.
+
+* Point out that although the "leading edge" and "trailing edge" of the
+  airfoil is defined by the camber line (which in turn defines the chord
+  line), the chord line of the airfoil is ultimately just a way of
+  positioning the profile onto the chord surface. You could choose any
+  arbitrary line, you just need to make sure that whatever line you use to
+  generate the coefficients matches the orientation and scale of the profile
+  you assign to the final wing.
+
+
+Orientation
+^^^^^^^^^^^
+
+* The general equation of the chord surface requires the section DCMs to
+  determine the section x-axes, thus wing design requires DCM design.
+
+* Section DCMs can be decomposed into intuitive design parameters by defining
+  the section orientations as Euler angles. The decomposition also facilitates
+  mixed-design of the flattened and inflated wing geometries. [[How?]]
+
+* Euler angles can be encoded using "intrinsic" or "extrinsic" axes: intrinsic
+  rotations are rotations about the body-fixed axes, extrinsic rotations are
+  about the axes that are fixed in the object being rotated. Intrinsic
+  (body-fixed) rotations are referred to as "proper Euler" angles; extrinsic
+  (object-fixed) rotations are referred to as "Tait-Bryan" angles.
+
+* I've chosen to parametrize the section orientations as an intrinsic
+  pitch-roll sequence, so :math:`\phi` for section dihedral and :math:`\theta`
+  for section torsion.
+
+  Note that this breaks with my earlier work that refers to "section dihedral"
+  as :math:`\Gamma`. I decided to abandon :math:`\Gamma` as the parametrization
+  (how you **specify** section orientation) for several reason:
+
+  1. Section dihedral is a pain to define in an unambiguous way for wings with
+     geometric torsion: do you use the angle between the body y-axis and (a) the
+     section y-axis or (b) the projection of the section y-axis onto the
+     yz-plane?
+
+  2. :math:`\Gamma` already has a conventional definition as **wing** dihedral
+     (overloading it to refer to section dihedral is not ideal)
+
+  3. I've been trying to always use right-handed rotations for everything, but
+     the conventional definition of a positive dihedral angle corresponds to
+     a negative right-handed rotation about the +x-axis.
+
+  4. Euler angles already have well established conventions for the angle
+     variables (phi, theta, gamma).
+
+  In short, a formal definition of section dihedral angles might be an
+  interesting concept from the perspective of wing analysis, but for wing
+  design it's not very helpful.
+
+* The way I've designed section roll and pitch correspond to either an
+  intrinsic pitch-roll sequence or an extrinsic roll-pitch sequence. (How do
+  the matrices compare? So far my definition has been using intrinsic angles;
+  should I stick with that? What does the extrinsic pitching rotation matrix
+  look like? Keep in mind, I want to define the roll matrix using `dz/ds` and
+  `dy/ds`.) One advantage is conceptual: assuming the wing starts out flat,
+  you can think of the section torsion as happening first, so pitch-roll is
+  intuitive.
+
+* This DCM parametrization keeps the section y-axes in the yz-plane (ie, it
+  ignores `dx/ds`). Positioning with `x(s)` simply shifts the sections
+  ("shears the chords") into position with no rotation with no rotation about
+  the z-axis. (I'm pretty sure this is a reasonable constraint for most wing
+  designs? Using wing section coefficient data assumes the wing segment can be
+  described by taking a uniform section profile and stretching it by some
+  width; if the sections in the segment have section yaw, then then segment
+  would be a wedge, and the "linear segment" approximation falls apart.)
+
+  Related: https://www.youtube.com/watch?v=w1AuPn_oBnU. I suspect that they
+  aren't reorienting the profiles but are simply reorienting the ribs to
+  minimize cross-flow. Simple concept, you just need to compute the
+  "typical" airflow for a point on the wing and slice the wing along that
+  airfoil (so the ribs won't match the section profiles anymore).
+
+* Using `yz` to define `phi` keeps the sections perpendicular to the segment
+  spans, plus it reduces the number of parameters.
+
+* Might be good to define washin, washout, angle of incidence, mounting angle,
+  etc. There's quite a bit of confusion around those terms, so I'm explicitly
+  trying to avoid using them at all. I'm using the angle relative to the
+  central chord, that's it.
+
+* *geometric torsion*: the section orientation angle produced by
+  a right-handed rotation about the wing y-axis
+
+  Or, the angle from the wing x-axis to the section x-axis, as produced by
+  a right-handed rotation about the wing y-axis
+
+  .. math::
+     :label: section_torsion
+
+     \Theta \defas
+        \arctan \left(
+           \frac
+              {\vec{\hat{x}}_\mathrm{wing} \times \vec{\hat{x}}_\mathrm{section}}
+              {\vec{\hat{x}}_\mathrm{wing} \cdot \vec{\hat{x}}_\mathrm{section}}
+           \cdot \vec{\hat{y}}_\mathrm{wing}
+        \right)
+
+  From the definition of the torsion angle :math:`\Theta` in
+  :eq:`section_torsion` you have the rotation matrices for geometric torsion:
+
+  .. math::
+     :label: section_torsion_matrix
+
+     \mat{\Theta} &\defas \begin{bmatrix}
+        \cos(\theta) & 0 & \sin(\theta)\\
+        0 & 1 & 0\\
+        -\sin(\theta) & 0 & \cos(\theta)
+     \end{bmatrix}
+
+* *section anhedral*: the angle from the wing y-axis to the section y-axis, as
+  produced by a right-handed rotation about the wing x-axis.
+
+  Note that this mathematical definition of the anhedral angle is different
+  from the conventional definition of dihedral angle. The convention for wing
+  dihedral is that the angle is measured as the positive "upwards" angle of
+  the wing. That definition is ambiguous, so this definition uses signed
+  angles and standard right-hand rules.
+
+  [[FIXME: **I need to choose** a standard term: dihedral or anhedral. I think
+  I prefer dihedral simply because it's more common, and if I use `\Gamma` I'd
+  like it to agree with convention. There is the downside that it's
+  a **negated** right-hand rotation about the +x-axis, but if I'm not using
+  `Gamma` to define the section orientations it probably doesn't matter.]]
+
+  .. math::
+     :label: section_dihedral
+
+     \Gamma \defas
+        \arctan \left(
+           \frac
+              {\vec{\hat{y}}_\mathrm{wing} \times \vec{\hat{y}}_\mathrm{section}}
+              {\vec{\hat{y}}_\mathrm{wing} \cdot \vec{\hat{y}}_\mathrm{section}}
+           \cdot \vec{\hat{x}}_\mathrm{wing}
+        \right)
+
+  To use the airfoil data you need the spanwise axis of the wing segments to
+  be parallel to the wing sections that comprise the segment. (At least,
+  I think that's the case: I doubt the airfoil coefficients would be accurate
+  if the sections were slanted relative to the segment span.) You can enforce
+  this parallel alignment by constraining the section dihedral to stay
+  orthogonal to the yz-curve, which is why I define the dihedral with the
+  derivatives of `yz`. If you didn't do that you'd have a sort of shearing of
+  the sections along the segment.
+
+  Oh, I bet this is also related to why lifting-line methods fail for swept
+  wings; part of that is because of spanwise flow, but you also have sections
+  y-axes that don't align with the segment!]]
+
+  From the definition of the dihedral angle :math:`\Gamma` in
+  :eq:`section_dihedral` you have the rotation matrices for section dihedral:
+
+  .. math::
+     :label: section_dihedral_matrix
+
+     \mat{\Gamma} &\defas \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & \cos(\Gamma) & -\sin(\Gamma)\\
+        0 & \sin(\Gamma) & \cos(\Gamma)
+     \end{bmatrix}
+
+  The disadvantage of :eq:`section_dihedral_matrix` is its dependence on the
+  arctangent function in :eq:`section_dihedral`, which is undefined for wing
+  sections that achieve a 90° section dihedral. To avoid the divide by zero,
+  the matrix can be computed using the derivatives of the arc reference
+  curves:
+
+  .. math::
+     :label: section_dihedral_alternative
+
+     \Gamma = \arctan \left( \frac{dz}{dy} \right)
+
+  .. math::
+
+     \begin{aligned}
+     K &= \frac{1}{\sqrt{\left(dy/ds\right)^2 + \left(dz/ds\right)^2}}\\
+     \\
+     \mat{\Gamma} &= \frac{1}{K} \begin{bmatrix}
+        K & 0 & 0\\
+        0 & dy/ds & -dz/ds\\
+        0 & dz/ds & dy/ds
+     \end{bmatrix}
+     \end{aligned}
+
+* Section direction-cosine matrix (DCM):
+
+  .. math::
+     :label: section_DCM
+
+     \mat{C}_{w/s} = \mat{\Gamma} \mat{\Theta}
+
+* Section :math:`x`-axis:
+
+  .. math::
+
+     \vec{\hat{x}} = \mat{\Gamma} \mat{\Theta} \begin{bmatrix}1\\0\\0\end{bmatrix}
+
+* I think this design happened because I wanted the arc (yz-curve) to define
+  the section orientation. The wing starts flat, then the lines pull various
+  sections downwards (and inwards), which is why I start with a flat wing and
+  then rotate it about the global x-axis (not the section x-axes): it was
+  simply easier for me to reason about. Oh, and **to compute the final angle
+  of a section you don't have to integrate over all the section-local
+  angles.**
+
+  Consider what would happen if the yz-curve did not define the section
+  orientation: you would have section profiles sheared along the curve, their
+  y-axes not parallel to the segment span. You are going to get some funky
+  cross-flow due to spanwise pressure gradients (section coefficients assume
+  uniform pressure distributions along the segment span) so the section
+  coefficients are unlikely to be representative of the actual behavior.
+
+  (Hm, **how does this work with wing sweep?** I'm not allowing section yaw,
+  but if the wing is swept then the section y-axes are not parallel to the
+  quarter-chord segment.)
+
+  **If I state up front that I want a simple geometry that's amenable to
+  analysis by wing coefficients, then these choices are well motivated.** Of
+  course, I can't yet define or analyze billowing cells but ah well.
+
+  Aah, okay, I get it now: you start by designing the flat wing. I'm assuming
+  that when the wing is flat the only thing you design is `c(s)`, `x(s)`, and
+  `theta(s)`: the wing is flat, so that rotation is naturally about the wing
+  (global) y-axis. You then use the line geometry to pull down on the sections,
+  and I assume that pulling down will produce a bending, not a shearing, of the
+  wing segments; also, the lines don't know (or care) about the section x-axes,
+  they which is why dihedral is rotation about the global x-axis. It's all
+  about the sequence of events.
+
+* The choice of parametrization of the section orientation arises from the
+  intuitive sequence of wing design. You start by laying out the wing sections
+  of the flat wing; the section y-axes start parallel to the body y-axis, and
+  geometric torsion leaves them that way. You then use the line geometry to
+  pull down on the sections to produce the yz-curve; the lines are assumed to
+  pull straight down without distorting the section profiles, which means
+  bending the cells, not shearing them.
+
+  These assumptions are probably a bit strong for "real" wing design. In
+  particular, the assumption that the section y-axes all start parallel to the
+  body y-axis. Assuming no relative yaw is also suspect; just because it makes
+  analysis with section coefficients more difficult doesn't mean wing
+  designers don't do it.
 
 
 Chord surface
 -------------
 
-* I didn't invent the notion of a chord surface: I merely gave it a name. And
-  my contribution isn't a "new parametric geometry": I'm contributing
+* Existing parametrizations of chord surfaces are either awkward (you can do
+  what you need, but it's to fiddly), limited (you can't produce your desired
+  design), or incomplete (eg, the PDH left a lot of the steps/equations
+  undefined). Fixing those problems is what what motivated my work on the
+  generalized form. I then showed that different definitions of the general
+  parameters can "recover" those existing parametrizations. I finished with
+  a set of simplified parameter definitions that make it easy to define
+  parafoils.
+
+* I didn't invent the notion of a chord surface: I merely gave it a name (I
+  think I'm using unique terminology here).
+
+  And my contribution isn't a "new parametric geometry": I'm contributing
   a general equation for the surface, and a particular choice of section index
   and design function parametrization (the DCM is parametrized by Euler
   angles, section roll being defined by `yz(s)`) for that equation that make
@@ -1014,12 +1455,119 @@ Chord surface
   parameter :math:`s`, so  :math:`LE(s) \to LE`, :math:`r_x(s) \to r_x`, etc.
 
 
+Existing parametrizations
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* **My design is very closely related** to the one in "Paraglider Design
+  Handbook", except he requires explicit rotation points and he doesn't
+  appear to allow different reference points for `x` and `yz`.
+
+* Benedetti :cite:`benedetti2012ParaglidersFlightDynamics` uses fixed `r_x
+  = r_yz = 0.25`.
+
+* What about others, like MachUpX, XFOIL, and AVL
+
+* :cite:`lingard1995RamairParachuteDesign` [[Is this correct? Where/what are
+  his design curves?]]
+
+
+General parametrization
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* Present the general form of the leading edge derived in
+  :ref:`derivations:General parametrization of a chord surface`
+
+* Should I acknowledge that parametric surfaces usually use `u` and `v` for
+  the parameters?
+
+* Explain how the general equation establishes a standard set of parameters
+  and design functions. The choice of parameters and design functions is
+  intended to make it easy for a designer to communicate their design.
+
+* Discuss the parameters (`-1 <= s <= 1` and `0 <= r <= 1`; at least,
+  I think those are the parameters? They are the arguments of the design
+  functions.)
+
+* Discuss the design functions (`x(s)`, `C_w2s(s)`, etc)
+
+  **Those parameters can themselves be parametric functions** of some
+  (arbitrary) choice of section index (eg, an elliptical arc). Discuss
+  explicit vs parametric design curves (expressiveness versus number of
+  parameters, essentially).
+
+  Explain that some "functions" can be scalars, like `r_x(s) = 0`
+
+  Note that at this point that although the design curves are parametrized
+  by the section index it has only been defined as an arbitrary parameter
+  that uniquely identifies a section (ie, the general form of the equation
+  acknowledges that some index must exist, but leaves its definition
+  unspecified).
+
+* Show how the general equation eliminates the limitations of the
+  conventional definitions. (Able to specify design targets directly, able
+  to design each dimension independently, etc.)
+
+* I never really thought about it, but if my generalized form "recovers"
+  existing parametrizations, then **an implementation of the general
+  parametrization should be compatible with specifications from those existing
+  parametrizations**. You just need an "adapter" model. You should be able to
+  handle geometries from XFOIL, AVL, etc!
+
+
+Simplified parametrization for parafoils
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* The general form eliminates the limitations of existing parametrizations,
+  but it's a bit unwieldy. Now introduce my simplified parametrization for
+  designing parafoils. It makes some reasonable assumptions about parafoils
+  that lets it eliminate a few parameters, and use intuitive specs to define
+  those more general parameters.
+
+  This is where I choose a definition of the section index, set `r_y = r_z
+  = r_yz`, parametrize `C_w/s` using Euler angles, etc. Conceptually you can
+  start with a unit square, then specify the chord lengths, then specify the
+  flat span, then the torsion, then `x(s)`, then `yz(s)`, and never have to
+  worry about messing up the previous steps.
+
+* The general form depends on the section x-axes (specified as DCMs). I don't
+  care how you produce them. The simplified model lets you specify the DCMs
+  using more conveniently by splitting the torsion and "section dihedral".
+
+* This chapter started by outlining the important details of a canopy
+  geometry. I then introduced a general parametrization which uses a set of
+  functions which make it intuitive to specify those important details. **The
+  problem is, it's TOO general**: it's possible to design layouts that you
+  can't reasonably analyze using section coefficient data. Thankfully, you can
+  avoid that problem by constraining/simplifying the parametrization a bit,
+  which leaves the designer with six "design functions". They're still general
+  functions, possibly with their own parameters, and so could be constants or
+  linear interpolators or whatever. Finish by showing some examples of section
+  layouts using those six functions.
+
+* **I should include a table describing the simplified parameters for defining
+  a chord surface.** Make it an easy reference/summary. It should match the
+  six function plots in all of my examples, and appear before those examples
+  to make it super clear.
+
+* I need analyze the canopy aerodynamics by using section coefficient data,
+  which affects my choice of parametrization.
+
+  To keep the sections perpendicular to the segment span I set `r_y = `r_z`
+  and use the derivatives of `yz` to define the section roll angle. (Not sure
+  I'm actually required to set `r_y = r_z` for this to work, but it's more
+  intuitive, and I prefer simpler designs.) [[**Does this belong here?** Or
+  should it go in the "Orientation" subsection when I'm choosing the
+  parametrization of the DCM?]]
+
+
 Canopy Aerodynamics
 ===================
 
 * Discuss the methods for estimating the aerodynamic forces on a wing. What
   are their pros/cons? Why did I choose Phillips? Does my geometry make it
   easy to use CFD methods?
+
+* In `lingard1995RamairParachuteDesign` he uses a linear aerodynamics model.
 
 * Make sure to highlight the usefulness of having a full non-linear dynamics
   model (versus simple linear models such as *stability derivatives*). **Hit
