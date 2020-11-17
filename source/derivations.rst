@@ -12,10 +12,14 @@ a `ParagliderWing`) position and orient the chord surface as they like; don't
 pollute this definition with constraints like "the origin is the central
 leading edge".]]
 
-The first step of designing a wing using *sections* is to define a function
-that returns points on the section chords as a function of some arbitrary
-*section index* and some ratio :math:`0 \le r \le 1` that specifies the
-position on the chord.
+
+[[The first step of designing a wing using *wing sections* is to specify the
+position, scale, and orientation of each section. Doing that produces
+a surface from the section chords, which I'm calling a *chord surface*.]]
+
+Mathematically, that means defining a function that returns points on the
+section chords as a function of some arbitrary *section index* and some ratio
+:math:`0 \le r \le 1` that specifies the position on the chord.
 
 Because the section leading edge will be used as the origin for the section
 profiles, it is intuitive to start by defining the leading edge as
@@ -28,6 +32,12 @@ canopy origin.
 The chord surface is produced by specifying the position, scale, and
 orientation of each section. For the position of a section, you can use any
 reference point :math:`\mathrm{RP}` in the coordinate system of that section.
+
+**I hate `RP`. I'm already using `R` by itself, and later I refer to a point
+`P`. Stick to single variables.
+
+Also, should I change `pc` to `r` for positions on the chord? Or `t`, since
+that's the "standard" parametric variable?**
 
 .. math::
 
@@ -54,6 +64,12 @@ in which case the reference point is a function of the chord ratio :math:`r`
 such that :math:`\vec{r}_{\mathrm{LE}/\mathrm{RP}}^s = r\, c\, \hat{x}^s_s`,
 where :math:`\hat{x}^s_s = \begin{bmatrix}1 & 0 & 0\end{bmatrix}^T` is the
 section x-axis in the section coordinate system.
+
+**FIXME: is \hat{x} just `<1, 0, 0>`, or `<-1, 0, 0>`, or something? So `r
+\cdot \hat{x}` is a point some distance along the unit chord? If so, I could
+generalize this and just just `c \cdot f(r)` for arbitrary curves in the
+airfoil coordinate system, like the camber curve or airfoil coordinates. No
+need to keep all these separate.**
 
 .. math::
 
@@ -98,7 +114,7 @@ dimensions, is then:
          + \mat{R} \mat{C}_{w/s} c\, \hat{x}^s_s
 
 And the position of some point :math:`P` at a point :math:`0 \le p \le 1` on
-the section chords:
+the section chords: **[[am I switching from `r` to `p` now?]]**
 
 .. math::
 
@@ -139,7 +155,10 @@ then the structure is easier to see:
       \left\langle x_r, y_r, z_r \right\rangle
       + \mat{K} \hat{x}_s^w
 
-Or, using separate equations instead of matrix math:
+Or, using separate equations instead of matrix math (FIXME: awkward, I'm
+switching from using the `s` subscript to indicate the section x-hat to using
+the subscript to reference the x, y, and z components of the section x-hat but
+in the wing coordinate system):
 
 .. math::
 

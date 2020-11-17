@@ -1000,9 +1000,9 @@ Wing sections
   well-approximated as a single profile given a width. Things that cause this
   constraint be violated include:
 
-  * Non-uniform profiles
+  * Non-uniform profiles along the segment (need smaller segments)
 
-  * Non-uniform torsion
+  * Non-uniform torsion (again, need smaller segments)
 
   * Section y-axes are not parallel to each other (eg, wedge-shaped
     segments)
@@ -1560,6 +1560,65 @@ Simplified parametrization for parafoils
   parametrization of the DCM?]]
 
 
+Discussion
+----------
+
+Distortions
+^^^^^^^^^^^
+
+* Should I discuss cells, billowing, distortion, etc, in the paper? I'm not
+  working on / implementing these, so they can probably go in the
+  "Limitations" section (whatever that turns out to be)
+
+* There are are two types of distortion to a canopy:
+
+  1. *Static* distortions
+
+     Theoretically you could pre-compute these and incorporate them into the
+     rigid-body model. Things like cell billowing (which changes the section
+     profiles and "compresses" the cell and wing widths)
+
+  2. *Dynamic* distortions
+
+     My model (currently) assumes a rigid body model, so I'm not modeling
+     dynamic scenarios like weight shift, riser control, accelerator-induced
+     section "flattening", wing collapse, wing tip flapping, etc.
+
+* References:
+
+  * Babinksy (:cite:`babinsky1999AerodynamicPerformanceParagliders`) discusses
+    the effect of billowing on flow separation, and
+    :cite:`babinsky1999AerodynamicImprovementsParaglider` discusses using
+    stiffeners to reduce the impact
+
+  * Kulhanek (:cite:`kulhanek2019IdentificationDegradationAerodynamic`) has
+    brief discussion of these impacts
+
+  * Belloc (:cite:`belloc2016InfluenceAirInlet`) discusses the effects of air
+    intakes, and suggests some modeling choices
+
+  * There are a bunch of papers on *fluid-structure interaction* modeling.
+
+  * Altmann (:cite:`altmann2009NumericalSimulationParafoil`) discusses the
+    overall impact of cell billowing on glide performance, and has a great
+    discussion of how design choices (cell structure, ribs, etc) can mitigate
+    the problem; in future papers
+    (:cite:`altmann2015FluidStructureInteractionAnalysis`,
+    :cite:`altmann2019FluidStructureInteractionAnalysis`) he discusses
+    implementation details. Fogell
+    (:cite:`fogell2014FluidstructureInteractionSimulations`,
+    :cite:`fogell2017FluidStructureInteractionSimulation`,
+    :cite:`fogell2017FluidStructureInteractionSimulations`) has a lot to say
+    on FSI, including some critique of the applicability of Altmann's method
+    to parachutes.
+
+    Another recent paper well worth reviewing (good discussions and great
+    references list) is :cite:`lolies2019NumericalMethodsEfficient`, which is
+    co-authored by Bruce Goldsmith! Neat. One of their big ideas seems to be
+    using "mass-spring systems" from computer animation applications for
+    paraglider cloth simulations.
+
+
 Canopy Aerodynamics
 ===================
 
@@ -1714,6 +1773,10 @@ Paraglider Geometry
 
 * I started with designs from :cite:`benedetti2012ParaglidersFlightDynamics`,
   and applied extensive modifications to support the needs of my thesis.
+
+* Did I ever investigate / discuss the effect of riser width? In real wings
+  that has a pretty big effect on weight shift control, but for weight shift
+  control I'm only modeling the shift in the center of mass.
 
 
 Paraglider Dynamics

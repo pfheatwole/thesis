@@ -4,7 +4,17 @@ Canopy Geometry
 
 .. Meta:
 
-   FIXME: summarize this chapter
+   A paraglider dynamics model requires the aerodynamics and inertial
+   properties of the canopy, which can be estimated from the canopy geometry.
+
+   This chapter discusses how to design a wing geometry using wing sections.
+   First you specify the position, scale, and orientation of each section,
+   then you assign each section a profile.
+
+   This chapter introduces the general equation for selecting points on
+   section surfaces (chords, camber lines, or profiles), discusses why the
+   general equation is unwieldy/inconvenient, then introduces
+   a reparametrization that's more convenient for designing parafoil canopies.
 
 * What is a canopy?
 
@@ -44,6 +54,49 @@ Canopy Geometry
     [[Discuss the deficiencies of linear theories: discrepancies as alpha and
     beta increase, inability to handle turns, etc.]]
 
+* [[Ultimately, this project requires a model that returns points on the
+  section surfaces (chords, camber lines, and profiles).]]
+
+
+.. Roadmap
+
+This chapter will proceed as follows:
+
+* Discuss the geometry and some of the modeling considerations.
+
+* Briefly consider explicit geometries, highlight their limitations, and
+  respond with the advantages of parametric geometries.
+
+* Introduce the standard parametric approach for wing designs: *wing sections*
+
+* Introduce the general equation for points on section surfaces
+
+  [[Leaves the choice of section index undefined, uses the section leading
+  edges as both the section origins and as the section reference points,
+  doesn't specify how you produce the DCMs, etc.]]
+
+* Establish why it is inconvenient to design a parafoil canopy by defining the
+  variables directly. It's more convenient to define them in terms of *design
+  parameters* that capture the structure of the canopy.
+
+* Briefly consider existing parametrizations and highlight their limitations.
+
+  [[Using the section y-coordinate for the section index, etc.]]
+
+* Introduce my novel parametrization for specifying the position and
+  orientation of the sections.
+
+  [[Chooses a definition of the section index, sets `r_y = r_z`, defines the
+  section DCM using `dz/dy` and `\theta` (so you design `theta(s)` and `yz(s)`
+  instead of specifying the section DCM directly).]]
+
+* Provide examples using my parametrization for parafoils.
+
+* Discussion
+
+
+Paraglider Canopies
+===================
 
 .. Describe the physical system (geometry, structure, materials, etc)
 
@@ -97,6 +150,15 @@ Canopy Geometry
        Note that this refers to the angle, and is the same regardless of any
        particular rotation point.
 
+* [[Highlight why canopy geometries are tricky to model?]]
+
+
+Canopy Geometry Modeling
+========================
+
+
+Functionality
+-------------
 
 .. Define the functional goals of the canopy model
 
@@ -199,10 +261,17 @@ Canopy Geometry
   * As simple as possible (intuitive to use, "frugal" in number of parameters)
 
 
+Parametrization
+---------------
+
 .. Parametric models (motivation, importance of choosing a good
    parametrization, existing parametrizations and their limitations)
 
 * [[Define *explicit geometry*]]
+
+  [[In a sense, explicit geometries are "infinite parametric" since you can
+  add as much detail to the mesh as you want. Individual "parameters" (the
+  points) don't capture any structure by themselves.]]
 
 * [[Modeling with explicit geometries is too expensive (time consuming to
   produce, require too much information about the wing, difficult to analyze
@@ -222,21 +291,6 @@ Canopy Geometry
     geometries. (You'd have to invent parameters you can compute for an
     explicit geometry just so you can compare two canopies.)
 
-* [[There is already a standard parametric method for wings: *wing sections*]]
-
-* When designing with wing sections, you decompose the design phase into two
-  components:
-
-  1. The *chord surface*, which specifies the scale, position, and orientation
-     of each section
-
-  2. The *section profile*, which specifies the upper and lower surfaces of
-     the section.
-
-* Section profiles already have a standardized parametrization, but there are
-  a bunch of different ways to specify a chord surface.
-
-
 .. Define the functional goals of the canopy model parametrization
 
 * [[The choice of parametrization affects how useable it is. What would make
@@ -244,6 +298,23 @@ Canopy Geometry
 
 * [[Briefly discuss existing parametrizations, and why they're not ideal]]
 
+
+
+Wing Sections
+=============
+
+.. Introduce designing a wing using "wing sections", conclude with the general
+   equation for points on the section surfaces
+
+* [[There is already a standard parametric method for wings: *wing sections*]]
+
+* When designing with wing sections, you decompose the design phase into two
+  steps:
+
+  1. Specify the scale, position, and orientation of each section
+
+  2. Specify the *profile* of each section, which defines the upper and lower
+     surfaces.
 
 .. figure:: figures/paraglider/geometry/wing_sections2.svg
 
@@ -254,42 +325,8 @@ Canopy Geometry
    profile at specific points along the span.
 
 
-.. Roadmap
-
-* [[There are existing parametrizations of the chord surface, but they were
-  awkward and/or had limited expressiveness. In this chapter I introduce
-  a novel, general parametrization of a chord surface, and a simplified
-  (special case) parametrization that makes it particularly easy to design
-  parafoils.]]
-
-* Chapter goals:
-
-  * Introduce my general parametric form a chord surface
-
-    This leaves the choice of section index undefined, only requires the final
-    form of the section DCMs (doesn't say how you produce them), etc.
-
-  * Choose parameter definitions that make it particularly easy to define
-    parafoil canopies
-
-    Chooses a definition of the section index, sets `r_y = r_z`, defines
-    `\Gamma` and `\Theta`, defines the section DCM using `\Gamma` and `\Theta`
-    (so you design `theta(s)` and `yz(s)` instead of specifying the section
-    DCM directly).
-
-  * Provide examples of parafoils using the simplified parameters
-
-
-Chord Surface
-=============
-
-[[This section introduces a novel parametrization of the chord surface (the
-"general equation"). Discuss conventional parametrizations (previous methods
-of defining the chords), and the limitations of those old methods. Then
-describe what "would" be a convenient workflow, and demonstrate the
-convenience of this choice. In other words, introduce the general equation,
-then introduce definitions of its parameters that make it easy to use to
-define parafoils.]]
+Designing with wing sections
+----------------------------
 
 The first step of designing a wing using sections is to specify the scale,
 position, and orientation of the sections.
@@ -331,33 +368,65 @@ position, and orientation of the sections.
   * Can specify it explicitly using angles, or implicitly by specifying the
     shape of the position curves.
 
-* What is a *chord surface*?
 
-  * Geometrically, a chord surface is the flat surface produced by all the
-    section chords.
+.. Introduce the general equation of points on the section surfaces
 
-  * Mathematically, it is a function that returns points on the section
-    chords.
+The general equation for points `P` on the section surfaces:
 
-  * It encodes the scale, position, and orientation of the wing sections.
+.. math::
 
-  * The first step of designing a wing using wing sections is to specify the
-    section chords.
+   \begin{aligned}
+   \vec{r}_{P/O}^w
+     &= \vec{r}_{LE/O}^w + \vec{r}_{P/LE}^w\\
+     &= \vec{r}_{LE/O}^w + \mat{C}_{w/s} \mat{C}_{s/a} \vec{r}_{P/LE}^a
+   \end{aligned}
 
-* What are the conventional parametrizations of a chord surface?
+Where
 
-  * The purpose of a parametric surface is to decompose the complicated
-    surface into simple design functions. The purpose of "parametric"
-    functions (like an elliptical arc) is the **capture the structure** of the
-    function in as few parameters as possible.
+.. math::
 
-    Note: I feel like "parametric function" is poorly named, unless that's
-    a conventional way to say "specify the values of a function through
-    functions of some parameters instead of specifying the values directly".
+   \mat{C}_{s/a} \defas \begin{bmatrix}
+      -1 & 0 \\
+      0 & 0\\
+      0 & -1
+   \end{bmatrix}
 
-  * Discuss the common ways to describe a chord surface (eg, the section index
-    is typically the section `y` coordinate, fixed reference points, explicit
-    rotation points, etc)
+
+A simplified parametrization for parafoil canopies
+==================================================
+
+[[This section introduces a novel parametrization of the general equation that makes it easier to design parafoil
+canopies. Discuss conventional parametrizations, and the limitations of those
+old methods. Then describe what "would" be a convenient workflow, and
+demonstrate the convenience of this choice.]]
+
+* What do I mean by "parametrize the general equation"?
+
+  [[I'm essentially saying "that set of design parameters is awkward, I want
+  to choose a better set."]]
+
+  The general parameters are able to represent any structure, but they don't
+  encode enough structure. This is a problem because it pushes the work onto
+  the designer. If you can assume more underlying structure you can save the
+  designer from needing to provide that structure themselves. A good choice of
+  parameters lets them focus on the important details.
+
+  The purpose of a parametric surface is to decompose a complicated surface
+  geometry into a set of simple design functions. The purpose of "parametric"
+  functions (like an elliptical arc) is the **capture the structure** of the
+  function, preferably with as few parameters as possible.
+
+  (I feel like "parametric function" is poorly named, unless that's
+  a conventional way to say "specify the values of a function through
+  functions of some parameters instead of specifying the values directly".)
+
+* What are the conventional parametrizations of the general equation?
+
+  * [[Section profiles and scale already have a standardized parametrization,
+    but there are a variety of ways to specify position and orientation.]]
+
+  * They typically use the projected section `y` coordinate for the section
+    index, define fixed reference points, fixed  rotation points, etc
 
 * What are the limitations of conventional parametrizations?
 
@@ -386,10 +455,35 @@ position, and orientation of the sections.
     is coupled to the chord length. Scale should not be coupled to position.
 
 
-.. Introduce my general parametrization of a chord surface
-
 .. Introduce my simplified parametrization for parafoils
 
+It's annoying to design the section leading edges directly. Instead, define it
+using more convenient design parameters:
+
+.. math::
+
+   \vec{r}_{LE/O}^w = \vec{r}_{RP/O}^w + \vec{r}_{LE/RP}^w
+
+Where `RP` are as-yet nebulous "reference points" and :math:`\vec{r}_{RP/O}^w`
+are the design curves (`x(s)` and `yz(s)`, in my case). This lets you choose
+reference points other than the leading edges, and position those points
+explicitly in the wing coordinate system. (Note that the leading edges remain
+the origin of the section coordinate systems.)
+
+In my case I chose to define the reference points using positions on the
+section chords:
+
+.. math::
+
+   \vec{r}_{LE/RP}^w = \mat{R} \mat{C}_{w/s} c\, \hat{x}^s_s
+
+.. math::
+
+   \mat{R} \defas \begin{bmatrix}
+      r_x & 0 & 0\\
+      0 & r_{yz} & 0\\
+      0 & 0 & r_{yz}
+   \end{bmatrix}
 
 
 Examples
@@ -504,6 +598,9 @@ Outline:
 * Show how assigning section profiles to a chord surface generates the upper
   and lower surfaces.
 
+* Derive (or simply present) the function that returns points on the upper and
+  lower surfaces given a chord surface and section profiles
+
 * Discuss how the choice of airfoil effects wing performance
 
 * Discuss how the profile can vary along the span
@@ -513,18 +610,22 @@ Outline:
   Distortions due to billowing, braking, etc. (We're ignoring these, but you
   can use the section indices to deal with them.)
 
-* Derive (or simply present) the function that returns points on the upper and
-  lower surfaces given a chord surface and section profiles
-
 * Show some examples of completed canopies.
 
 
 Airfoils
 --------
 
+[[Should probably write a separate chapter about airfoils: their purpose,
+geometry, coefficients, behavior, etc. I don't like separating those topics,
+but I also want to discuss section coefficients in this chapter. I do need
+some terminology here though, like *chord*, *camber line*, etc.]]
+
 Related work:
 
 * :cite:`abbott1959TheoryWingSections`
+
+* :cite:`bertin2014AerodynamicsEngineers`, Sec:5.2
 
 [[**Key terms and concepts to define in this section**: upper surface, lower
 surface, leading edge, trailing edge, chord line, mean camber line, thickness,
@@ -538,7 +639,8 @@ by assigning each section a cross-sectional geometry called an *airfoil*.
    Airfoils examples.
 
 An airfoil is a 2D profile defined by a camber line, a thickness function, and
-a thickness convention.
+a thickness convention. [[FIXME: This is just one specific way to defining the
+profile curve; you could just as easily provide an explicit set of points.]]
 
 Here's a diagram of the basic airfoil geometric properties:
 
@@ -574,48 +676,6 @@ for estimating the aerodynamic performance of the 3D wing, as discussed in
 
 [[Maybe link forward to :ref:`canopy_aerodynamics:Case Study`, where
 I implement Belloc's wing using this geometry.]]
-
-
-Distortions
------------
-
-**FIXME**: should I discuss cells, billowing, distortion, etc? I'm not working
-on / implementing these, so they can probably go in the "Limitations" section
-(whatever that turns out to be)
-
-References:
-
-* Babinksy (:cite:`babinsky1999AerodynamicPerformanceParagliders`) discusses
-  the effect of billowing on flow separation, and
-  :cite:`babinsky1999AerodynamicImprovementsParaglider` discusses using
-  stiffeners to reduce the impact
-
-* Kulhanek (:cite:`kulhanek2019IdentificationDegradationAerodynamic`) has
-  brief discussion of these impacts
-
-* Belloc (:cite:`belloc2016InfluenceAirInlet`) discusses the effects of air
-  intakes, and suggests some modeling choices
-
-* There are a bunch of papers on *fluid-structure interaction* modeling.
-
-* Altmann (:cite:`altmann2009NumericalSimulationParafoil`) discusses the
-  overall impact of cell billowing on glide performance, and has a great
-  discussion of how design choices (cell structure, ribs, etc) can mitigate
-  the problem; in future papers
-  (:cite:`altmann2015FluidStructureInteractionAnalysis`,
-  :cite:`altmann2019FluidStructureInteractionAnalysis`) he discusses
-  implementation details. Fogell
-  (:cite:`fogell2014FluidstructureInteractionSimulations`,
-  :cite:`fogell2017FluidStructureInteractionSimulation`,
-  :cite:`fogell2017FluidStructureInteractionSimulations`) has a lot to say
-  on FSI, including some critique of the applicability of Altmann's method
-  to parachutes.
-
-  Another recent paper well worth reviewing (good discussions and great
-  references list) is :cite:`lolies2019NumericalMethodsEfficient`, which is
-  co-authored by Bruce Goldsmith! Neat. One of their big ideas seems to be
-  using "mass-spring systems" from computer animation applications for
-  paraglider cloth simulations.
 
 
 Discussion
