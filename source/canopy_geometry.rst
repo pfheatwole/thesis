@@ -430,6 +430,13 @@ Orientation
   * Can specify it explicitly using angles, or implicitly by specifying the
     shape of the position curves.
 
+* [[From PDH: "washin promotes spanwise tension and stability, preventing the
+  wing tips fold unexpectedly".
+
+  It also encourages the wing to stall from the wing tips first; unlike plane
+  wings, you want the middle of the wing to be the last to stall so you don't
+  "taco" the canopy.]]
+
 
 Profile
 -------
@@ -505,6 +512,8 @@ the chord is used to nondimensionalize the airfoil geometry and define the
 General equation of a wing geometry
 ===================================
 
+.. See `notes-2020w47:Canopy parametrizations` for a discussion
+
 .. Introduce the general equation of points on the section surfaces
 
 The general equation for points `P` on the section surfaces (could be the
@@ -540,6 +549,17 @@ Existing parametrizations
    discuss existing parametrizations and why they're not ideal for designing
    parafoil canopy geometries.
 
+* Problems with the general surface equation
+
+  * It's **too** flexible: it allows design layouts that can't be (reasonably)
+    analyzed using section coefficient data, so a designer has to waste time
+    being careful.
+
+  * It's inconvenient: requiring the designer to specify the leading edge
+    isn't always ideal (maybe you're trying to position the quarter-chord, the
+    trailing edge, etc).
+
+* Thankfully, those problems can be mitigated with a better parametrization.
 
 * What do I mean by "parametrize the general equation"?
 
@@ -567,126 +587,21 @@ Existing parametrizations
 
 * What are some existing parametrizations of the general equation?
 
-  * [[section index, position, orientation]]
+  * [[Mostly how they define position and orientation. Assume scale is always
+    an explicit chord length. Not sure about the section index.]]
 
   * [[PDH, Benedetti, MachUpX, XFLR5, AVL, etc. Present them as
     parametrizations of the general equation.]]
-
-  * AVL:
-
-    Section index: `s = 2y/b`. This isn't obvious: they use discrete sections,
-    so there isn't an explicit section index, but spanwise panel spacing is
-    determined according to `y`. I guess you could argue this is a function of
-    the aerodynamic method, but I'd argue that since they're using `y` to
-    specify the segments that that's implicitly they're choice of how they
-    index the sections of each segment. **I suppose if you only allow
-    pointwise section definitions and never deform the geometry (ie,
-    flattening it) then maybe the section index is irrelevant?**
-
-    Position: leading edge for position reference point and rotation point;
-    absolute coordinates for position
-
-    Orientation: Sections spanwise axes are always parallel to yhat (so sweep
-    is a shearing effect). Sections are rolled so they remain perpendicular to
-    the segment yz-curve (my notation), which matches 
-
-    Sections are sheared along `x`, and rotated to remain perpendicular to
-    `yz`. You can specify an intrinsic (body-axes) Euler angle for relative
-    pitch, but it only changes the aerodynamics; the chords themselves (the
-    actual geometry) are always parallel to xhat.
-
-    From `avl_doc.txt`:
-
-      Xle,Yle,Zle =  airfoil's leading edge location
-      Chord       =  the airfoil's chord  (trailing edge is at Xle+Chord,Yle,Zle)
-      Ainc        =  incidence angle, taken as a rotation (+ by RH rule) about the
-                     surface's spanwise axis projected onto the Y-Z plane.
-
-      [...]
-
-      Note that Ainc is used only to modify the flow tangency boundary
-      condition on the airfoil camber line, and does not rotate the geometry
-      of the airfoil section itself.  This approximation is consistent with
-      linearized airfoil theory.
-
-  * XFLR5:
-
-    Section index: `s = 2yflat/bflat`
-
-    Position: confusion here. The program uses `y` but it's really `y_flat`;
-    for example, a panel from `y=0` to `y=1` at `dihedral=45` would end with
-    an actual y-coordinate of root(2). The `x` is an absolute coordinate
-    called `offset`. The `z` is determined by the total change accumulated
-    from the start. You can't specify `z` directly, you can only specify the
-    `dihedral` and wait for `z` to accumulate across the segments. (Yuck.)
-
-    The `z` is like MachUpX then; specify a `dihedral` angle (intrinsic Euler
-    section roll) and a segment "span".
-
-    Orientation: intrinsic Euler pitch-roll sequence. Section pitch angle
-    specified by `twist`, section roll angle is specified by `dihedral`, the
-    initial intrinsic Euler roll angle of each section. Sections are linearly
-    blended into the next segment. The final segment terminates at the exact
-    angle specified for that segment.
-
-  * MachUpX: `s = y`; leading edge for position reference point; absolute
-    coordinates for `y`; explicit section pitch and roll intrinsic Euler
-    angles; the `x` and `z` are calculated by projecting along the specified
-    angle until reaching the next specified `y` (I think? Review)
-
-    Section index: `s = 2 * yflat / bflat`, where `bflat = semispan`
-
-    Position: leading edge. No absolute coordinates, you can only specify
-    direction and distance for each segment. Define `sweep` and `dihedral` to
-    produce a vector direction, and the segment length is the vector
-    magnitude.
-
-    Orientation: `dihedral` determines section roll, `twist` determines
-    section pitch, sweep does not produce section yaw (so it just shears in
-    `x`). Standard intrinsic pitch-roll Euler sequence.
-
-  * Benedetti: `s = y`; quarter-chord for position reference point; absolute
-    coordinates for position; absolute section pitch as intrinsic rotation
-    angle; implicit section roll from `dz/dy`
-
-  * Paraglider Design Handbook:
-
-    Uses a "referral line" for position, and "rotation point" for rotation
-    origins. Both are chord ratios (they lie on the chord).
-
-    Section index: `s = x` (He uses a "right-back-down" coordinate system.)
-
-    Orientation: intrinsic Euler pitch (angle: `Washin`) then intrinsic Euler
-    roll (angle: `beta`) (**same as me!**)
-
-    Positioning is weird: the user specifies both the flat and projected
-    spanwise coordinate for every rib (instead of just defining the flat span
-    and the final position). This wing design seems to rely on some external
-    program computing the positions, `x`, `xp`, `z`, etc: they all depend on
-    how you've curved the wing, but in a sense I think they contain redundant
-    information (so `lep` doesn't have to compute it?). Very odd, and awkward:
-    I hate having to rely on a third-party CAD tool. **Why have rotation
-    angles and whatnot at all if you're just going to require the user to
-    calculate stuff in CAD?**
-
-    In the picture he mentions a "referral line", but I can't find that
-    anywhere in the code. I'm pretty sure this never made it into
-    implementation. Whatever his intent, you can only specify the "rotation
-    point" (but what the does the `z` coordinate designate? The position of
-    the RP?)
-
-
 
 * What are the limitations of existing parametrizations?
 
   * [[The mathematical model is supposed to be flexible and easy to use. I'm
     developing a new parametrization which suggests the conventional choices
-    fail somehow. Section profiles and scale already have a standardized
-    parametrization, but there are a variety of ways to specify position and
+    fail somehow. Section profiles and scale already have standardized
+    parametrizations, but there are a variety of ways to specify position and
     orientation. They typically use the projected section `y` coordinate for
-    the section index, define fixed reference points, fixed  rotation points,
-    etc. Many tools use the section `y` for the section index, but that means
-    changing the geometry changes the index.]]
+    the section index, define fixed reference points for position, fixed
+    rotation points (usually the leading edge), etc.]]
 
   * Some parametrizations only allow the designer to specify `y`, but for
     arched wings like parafoils it can be easier to specify `y_flat`
@@ -715,7 +630,6 @@ Existing parametrizations
     Similarly, if the reference points are at fixed locations on the chord,
     and the goal is to position some other point on the chord, then position
     is coupled to the chord length. Scale should not be coupled to position.
-
 
 
 Optimized parametrization
@@ -770,7 +684,7 @@ section chords:
 Examples of chord surfaces
 ==========================
 
-.. Chord surface of designs made using the "simplified" parametrization.
+.. Chord surface of designs made using the "optimized" parametrization.
 
 
 Example 1
@@ -814,6 +728,8 @@ Words here.
 Example 5
 ---------
 
+[[FIXME: describe the "anhedral" correctly]]
+
 A circular arc with a mean anhedral of 33 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_curves.*
@@ -824,6 +740,8 @@ A circular arc with a mean anhedral of 33 degrees:
 Example 6
 ---------
 
+[[FIXME: describe the "anhedral" correctly]]
+
 A circular arc with a mean anhedral of 44 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_curves.*
@@ -832,6 +750,8 @@ A circular arc with a mean anhedral of 44 degrees:
 
 Example 7
 ---------
+
+[[FIXME: describe the "anhedral" correctly]]
 
 An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
 89 degrees:

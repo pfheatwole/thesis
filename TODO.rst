@@ -1,3 +1,8 @@
+* Review source for mentions of a "chord surface"
+
+* Verify my use of *dihedral* and *anhedral*. At the least I think my use of
+  "mean anhedral" is suspect; probably not even a helpful term.
+
 * Write up an informal description of "this is how a pilot standing on the
   ground would estimate the wind by watching a glider in the air". That
   informal description is the stepping stone to understanding "flight

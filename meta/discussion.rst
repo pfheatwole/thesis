@@ -1059,20 +1059,238 @@ Parametrization
   with a particular choice of parameter definitions that make it easy to
   define parafoils.
 
-* For notational simplicity, I'm going to drop the explicit section index
-  parameter :math:`s`, so  :math:`LE(s) \to LE`, :math:`r_x(s) \to r_x`, etc.
-
-* **My design is very closely related** to the one in "Paraglider Design
-  Handbook", except he requires explicit rotation points and he doesn't
-  appear to allow different reference points for `x` and `yz`.
-
 * Benedetti :cite:`benedetti2012ParaglidersFlightDynamics` uses fixed `r_x
   = r_yz = 0.25`.
 
-* What about others, like MachUpX, XFLR5, XFOIL, and AVL?
+* I never really thought about it, but if the general surface equation can
+  "recover" existing models (given an appropriate parametrization), then **an
+  implementation that targets the general surface equation should be
+  compatible with specifications from those existing parametrizations**. You
+  just need an "adapter" model. You should be able to handle geometries from
+  AVL, XFLR5, etc.
 
-* :cite:`lingard1995RamairParachuteDesign` [[Is this correct? Where/what are
-  his design curves?]]
+* How would I describe the parametrizations MachUpX, XFLR5, AVL, etc? More
+  importantly: should I even try? Probably best to just discuss their choices
+  at a high level without trying to put them into mathematical form. The
+  angle+direction in particular would require calculus (unless you were okay
+  strictly describing them in terms of linear segments)
+
+* :cite:`lingard1995RamairParachuteDesign` [[Parametrization?]]
+
+* You can position wing sections in several ways
+
+  * Absolute coordinates (from the wing root)
+
+  * Relative coordinates (from the previous section)
+
+  * Absolute angle and distance (from the wing root)
+
+  * Relative angle and distance (from the previous section)
+
+  (NB: angles for positioning may be different from angles for orientation)
+
+  **When would angle+distance be preferable?**
+
+  Some parametrizations use a combination for the different position components
+  (like XFLR5 which uses absolute position for `x`, and section-relative
+  angle+distance for `y` and `z`).
+
+
+Section index
+^^^^^^^^^^^^^
+
+* Recall the idea of a *section index*: it's a way to uniquely identify
+  a "spanwise station". Most aerodynamic methods use `s = 2 * y / b`, but for
+  parafoils I found it more convenient to use `s = 2 * y_flat / b_flat`.
+
+  **A section index should not depend on the geometry itself.** The identity
+  of a section "which section" should not change just because the geometry
+  changed. This is important if you ever want to handle distortions (eg, cell
+  compression). 
+
+  It was confusing me earlier today: I was trying to determine what AVL used
+  for the section index, but it describes the geometry using a set of explicit
+  positions (xyz for the LE), so there's no obvious choice. Then I remembered
+  that the section index was supposed to represent some normalized index from
+  0 to 1 (or +/- 1). It can be convenient to use for defining a wing (like
+  I do), but not required.
+
+* Section index enables you to decouple parameters: for example, I don't want
+  to care about `y` at all when defining `x` or `c`. It can also be useful
+  when *querying* the sections; you can define a wing using section indices
+  but query it using `y`, or whatever; the section index can make it easier,
+  however, especially for highly curved wings like a parafoil.
+
+  **Summary: using an abstracted *section index* has advantages both for (1)
+  designing the geometry and (2) querying points on the geometry.**
+
+* Many tools define a geometry just by specifying a set of coordinates and
+  relying on linear interpolation between them. There's no **explicit**
+  "section index" necessary to define the geometry. Nevertheless, the
+  position along the leading edge line will still designate a unique section.
+
+
+Existing parametrizations
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* AVL:
+
+  Section index: `s = 2y/b`. This isn't obvious: they use discrete sections,
+  so there isn't an explicit section index, but spanwise panel spacing is
+  determined according to `y`. I guess you could argue this is a function of
+  the aerodynamic method, but I'd argue that since they're using `y` to
+  specify the segments that that's implicitly they're choice of how they index
+  the sections of each segment. **I suppose if you only allow pointwise
+  section definitions and never deform the geometry (ie, flattening it) then
+  maybe the section index is irrelevant?**
+
+  Position: leading edge for position reference point and rotation point;
+  absolute coordinates for position
+
+  Orientation: Sections spanwise axes are always parallel to yhat (so sweep is
+  a shearing effect). Sections are rolled so they remain perpendicular to the
+  segment yz-curve (my notation), which matches 
+
+  Sections are sheared along `x`, and rotated to remain perpendicular to `yz`.
+  You can specify an intrinsic (body-axes) Euler angle for relative pitch, but
+  it only changes the aerodynamics; the chords themselves (the actual
+  geometry) are always parallel to xhat.
+
+  From `avl_doc.txt`:
+
+    Xle,Yle,Zle =  airfoil's leading edge location
+    Chord       =  the airfoil's chord  (trailing edge is at Xle+Chord,Yle,Zle)
+    Ainc        =  incidence angle, taken as a rotation (+ by RH rule) about the
+                   surface's spanwise axis projected onto the Y-Z plane.
+
+    [...]
+
+    Note that Ainc is used only to modify the flow tangency boundary condition
+    on the airfoil camber line, and does not rotate the geometry of the
+    airfoil section itself. This approximation is consistent with linearized
+    airfoil theory.
+
+* XFLR5:
+
+  Section index: `s = 2yflat/bflat`
+
+  Position: confusion here. The program uses `y` but it's really `y_flat`; for
+  example, a panel from `y=0` to `y=1` at `dihedral=45` would end with an
+  actual y-coordinate of root(2). The `x` is an absolute coordinate called
+  `offset`. The `z` is determined by the total change accumulated from the
+  start. You can't specify `z` directly, you can only specify the `dihedral`
+  and wait for `z` to accumulate across the segments. (Yuck.)
+
+  The `z` is like MachUpX then; specify a `dihedral` angle (intrinsic Euler
+  section roll) and a segment "span".
+
+  Orientation: intrinsic Euler pitch-roll sequence. Section pitch angle
+  specified by `twist`, section roll angle is specified by `dihedral`, the
+  initial intrinsic Euler roll angle of each section. Sections are linearly
+  blended into the next segment. The final segment terminates at the exact
+  angle specified for that segment.
+
+* MachUpX: `s = y`; leading edge for position reference point; absolute
+  coordinates for `y`; explicit section pitch and roll intrinsic Euler angles;
+  the `x` and `z` are calculated by projecting along the specified angle until
+  reaching the next specified `y` (I think? Review)
+
+  Section index: `s = y_flat / semispan` (`y_flat` is implicit)
+
+  Position: leading edge. No absolute coordinates at all, you can only specify
+  direction and distance for each segment. Define `sweep` and `dihedral` to
+  produce a vector direction, and the segment length (segments are specified
+  using normalized section indices, then scaled by `semispan`) is the vector
+  magnitude.
+
+  Orientation: `dihedral` determines section roll, `twist` determines section
+  pitch, sweep does not produce section yaw (so it just shears in `x`).
+  Standard intrinsic pitch-roll Euler sequence.
+
+* Benedetti: `s = y`; quarter-chord for position reference point; absolute
+  coordinates for position; absolute section pitch as intrinsic rotation
+  angle; implicit section roll from `dz/dy`
+
+* Paraglider Design Handbook:
+
+  The site figures show a "referral line" for position, and "rotation point"
+  for rotation origins. Both are chord ratios (they lie on the chord). In the
+  diagram he says they don't need to be the same, but from the code it looks
+  like they always are.
+
+  Also weird: he requires the designer to specify both `y` and `yflat`. He
+  uses back-right-up coordinates, so he calls them `x-rib` and `xp` (for
+  "xprime").
+
+  For torsion, if `kbbb = 0`, then he uses `washin`. If `kbbb = 1`, then
+  `alpham` sets the max washin and uses linear interpolation (he uses `x` for
+  `y_flat`, so its just linear interpolation over the section index). If `kbbb
+  = 2` then you can add an offset `alphac` for the wing root, then he uses
+  linear interpolation out to the tip.
+
+  I think `x-rib` is `y_flat` and `xp` (x-prime) is `y`?
+
+  He uses a "right-back-down" coordinate system. You specify `y_flat` as `x`,
+  and `y` as `x'` (x-prime, or `xp` in the code).
+
+  Section index: `s = 2 * y_flat / b_flat`
+
+  Orientation: intrinsic Euler pitch (angle: `Washin`) then intrinsic Euler
+  roll (angle: `beta`) (**same as me!**)
+
+  Positioning is weird: the user specifies both the flat and projected
+  spanwise coordinate for every rib (instead of just defining the flat span
+  and the final position). This wing design seems to rely on some external
+  program computing the positions, `x`, `xp`, `z`, etc: they all depend on how
+  you've curved the wing, but in a sense I think they contain redundant
+  information (so `lep` doesn't have to compute it?). Very odd, and awkward:
+  I hate having to rely on a third-party CAD tool. **Why have rotation angles
+  and whatnot at all if you're just going to require the user to calculate
+  stuff in CAD?**
+
+  In the picture he mentions a "referral line", but I can't find that anywhere
+  in the code. I'm pretty sure this never made it into implementation.
+  Whatever his intent, you can only specify the "rotation point" (but what the
+  does the `z` coordinate designate? The position of the RP?)
+
+
+My parametrization
+^^^^^^^^^^^^^^^^^^
+
+* My particular parametrization makes some reasonable assumptions about
+  parafoils that lets it eliminate a few parameters, and use intuitive specs
+  to define those more general parameters.
+
+  This is where I choose a definition of the section index, set `r_y = r_z
+  = r_yz`, parametrize `C_w/s` using Euler angles, etc. Conceptually you can
+  start with a unit square, then specify the chord lengths, then specify the
+  flat span, then the torsion, then `x(s)`, then `yz(s)`, and never have to
+  worry about messing up the previous steps.
+
+* I need analyze the canopy aerodynamics by using section coefficient data,
+  which affects my choice of parametrization.
+
+  To keep the sections perpendicular to the segment span I set `r_y = `r_z`
+  and use the derivatives of `yz` to define the section roll angle. (Not sure
+  I'm actually required to set `r_y = r_z` for this to work, but it's more
+  intuitive, and I prefer simpler designs.) [[**Does this belong here?** Or
+  should it go in the "Orientation" subsection when I'm choosing the
+  parametrization of the DCM?]]
+
+* For notational simplicity, I'm going to drop the explicit section index
+  parameter :math:`s`, so  :math:`LE(s) \to LE`, :math:`r_x(s) \to r_x`, etc.
+
+* If I'm using `r_x` etc for the reference points on the chord, then I kind of
+  like using `r` (instead of `pc`) for selecting a point on the chord, since
+  it seems intuitive to consider `r_x - r`, etc; the reference versus the
+  requested. Or maybe `t`, since that's the "standard" variable for parametric
+  curves.
+
+* **My design is very closely related** to the one in "Paraglider Design
+  Handbook", except he requires explicit rotation points and he doesn't appear
+  to allow different reference points for `x` and `yz`. (Also, it doesn't look
+  like the code supports `RP` anyway, despite it appearing in the site
+  diagrams.)
 
 * Should I acknowledge that parametric surfaces usually use `u` and `v` for
   the parameters?
@@ -1096,42 +1314,46 @@ Parametrization
   acknowledges that some index must exist, but leaves its definition
   unspecified).
 
-* I never really thought about it, but if the general surface equation can
-  "recover" existing models (given an appropriate parametrization), then **an
-  implementation that targets the general surface equation should be
-  compatible with specifications from those existing parametrizations**. You
-  just need an "adapter" model. You should be able to handle geometries from
-  XFOIL, AVL, etc!
+* In my canopy geometry definitions, I'm using `\Gamma` for "dihedral", but
+  aren't `\Theta` and `\Gamma` simply the Euler angles? Shouldn't I use
+  standard Euler angle notation? Sure, `\Gamma` is typically use for "wing
+  dihedral", but dihedral is usually the angle between the xy-plane and the
+  vector from the wing root to the wing section, isn't it? If so, then
+  `\Gamma` is misleading.
 
-* My particular parametrization makes some reasonable assumptions about
-  parafoils that lets it eliminate a few parameters, and use intuitive specs
-  to define those more general parameters.
+* Confirm my use of terminology: "dihedral" versus "section roll". How do you
+  differentiate between the angle the vector from the origin to the section
+  makes relative to the y-axis versus the intrinsic Euler roll of the section?
+  XFLR5, MachUpX, and Benedetti use `dihedral` to refer to section roll angle;
+  `jann2003AerodynamicCoefficientsParafoil` refers to *arc anhedral angle* as
+  the angle from root-to-tip.
 
-  This is where I choose a definition of the section index, set `r_y = r_z
-  = r_yz`, parametrize `C_w/s` using Euler angles, etc. Conceptually you can
-  start with a unit square, then specify the chord lengths, then specify the
-  flat span, then the torsion, then `x(s)`, then `yz(s)`, and never have to
-  worry about messing up the previous steps.
+  Summary: **section vs wing (or "arc") anhedral**. Hrm. On the bright side,
+  I can use `theta` and `gamma` for the Euler angles, which just so happen to
+  match the standard notation for torsion and dihedral (well, `Gamma` for
+  dihedral, but ah well; maybe `gamma` for section dihedral isn't such a bad
+  thing; "big" versus "small" for "wing" versus "section" has a nice symmetry
+  to it).
 
-* One problem with the general equation is too general: it's possible to
-  design layouts that you can't reasonably analyze using section coefficient
-  data, so the designer has to waste time being careful. Thankfully, you can
-  mitigate that problem by choosing a better parametrization.
+* **Why is using a reference point on the chords so important?** You could use
+  any reference point relative to the leading edge; what's so special about
+  points on the chord? I feel like there was something related to distortions,
+  or the ability to analyze via section coefficients or something, but I can't
+  remember what.
 
-* **I should include a table describing the simplified parameters for defining
-  a chord surface.** Make it an easy reference/summary. It should match the
-  six function plots in all of my examples, and appear before those examples
-  to make it super clear.
+* Should I rewrite my definition (the equation showing my parametrization) of
+  the LE so it's explicitly proportional to the wing span? In general it
+  doesn't have to be, but for my implementation it is (I think). I'm defining
+  a curve with `yz` etc, but you have to scale it up by `b_flat / 2`.
 
-* I need analyze the canopy aerodynamics by using section coefficient data,
-  which affects my choice of parametrization.
+  Including this explicit scaling factor is (1) more accurate, and (2) might be
+  useful for comparing to other parametrizations (like the one in MachUpX).
 
-  To keep the sections perpendicular to the segment span I set `r_y = `r_z`
-  and use the derivatives of `yz` to define the section roll angle. (Not sure
-  I'm actually required to set `r_y = r_z` for this to work, but it's more
-  intuitive, and I prefer simpler designs.) [[**Does this belong here?** Or
-  should it go in the "Orientation" subsection when I'm choosing the
-  parametrization of the DCM?]]
+* Should my "design curve" plots match the notation in the code?
+
+* **Provide a table of parameter symbols, names, and descriptions.** It should
+  match the six function plots in all of my examples, and appear before those
+  examples to make it super clear.
 
 
 Section index
