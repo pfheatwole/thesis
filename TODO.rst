@@ -1,3 +1,12 @@
+* If the HTML "Navigation" frame gets too long it goes off the screen, and you
+  can't scroll it.
+
+* Add a description of a *direction cosine matrix* to `symbols`? Or maybe the
+  `glossary`?
+
+* Make sure every chapter introduction has a "Roadmap", and that the chapter
+  follows that roadmap.
+
 * Review source for mentions of a "chord surface"
 
 * Verify my use of *dihedral* and *anhedral*. At the least I think my use of

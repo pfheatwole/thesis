@@ -56,10 +56,10 @@ Canopy Geometry
     for small angles of attack, but those simple methods are based on linear
     relationships that do not hold for the highly non-linear geometry of
     a typical parafoil. Also, those simple theories are only applicable to
-    longitudinal models, whereas flight reconstruction requires a dynamics
-    model that can handle turns.
+    longitudinal models, whereas flight reconstruction requires a model that
+    includes turning dynamics.
 
-    [[Discuss the deficiencies of linear theories: discrepancies as alpha and
+    [[Discuss the deficiencies of linear theories? Discrepancies as alpha and
     beta increase, inability to handle turns, etc.]]
 
 * [[Ultimately, this project requires a model that returns points on the
@@ -68,7 +68,9 @@ Canopy Geometry
 
 .. Roadmap
 
-This chapter will proceed as follows:
+This chapter introduces a novel geometry definition that is both flexible and
+particularly intuitive for designing paraglider canopies. It will proceed as
+follows:
 
 * Discuss the geometry and some of the modeling considerations.
 
@@ -79,22 +81,15 @@ This chapter will proceed as follows:
 
 * Introduce the general equation for points on section surfaces
 
-  [[Leaves the choice of section index undefined, uses the section leading
-  edges as both the section origins and as the section reference points,
-  doesn't specify how you produce the DCMs, etc.]]
-
 * Establish why it is inconvenient to design a parafoil canopy by defining the
-  variables directly. It's more convenient to define them in terms of *design
-  parameters* that capture the structure of the canopy.
+  variables of the general surface equation directly. Although they represent
+  the final result, it can be more convenient to define them in terms of
+  *design parameters* that capture the structure of the canopy.
 
 * Briefly consider existing parametrizations and highlight their limitations.
 
 * Introduce my novel parametrization for specifying the position and
   orientation of the sections.
-
-  [[Chooses a definition of the section index, sets `r_y = r_z`, defines the
-  section DCM using `dz/dy` and `\theta` (so you design `theta(s)` and `yz(s)`
-  instead of specifying the section DCM directly).]]
 
 * Provide examples using my parametrization for parafoils.
 
@@ -176,9 +171,13 @@ Functionality
 
   3. Support the queries necessary to use the geometry in aerodynamic methods.
 
-     [[It should not lock the user into one specific method, like LLT, but
-     don't focus on that here. I want to avoid any discussion of aerodynamics
-     if possible.]]
+     In particular, it should return the positions of points on the canopy
+     surfaces: the chord surface, the mean camber surface, and the profile
+     surface.
+
+     [[The main requirement is that it does not lock the user into one
+     specific method, like LLT, but don't focus on that here. I want to avoid
+     any discussion of aerodynamics if possible.]]
 
 * [[Model objectives v2]]:
 
@@ -516,18 +515,46 @@ General equation of a wing geometry
 
 .. Introduce the general equation of points on the section surfaces
 
-The general equation for points `P` on the section surfaces (could be the
-chords, camber lines, or section profiles):
+[[FIXME: define *surface* and their role in aerodynamics here?]]
+
+A *canopy geometry* defines all the surfaces that describe the shape of the
+canopy: the chord surface, the mean camber surface, and the profile surface.
+In general, let any point `P` on any of those surfaces, given with respect to
+the canopy origin `O`, be called :math:`r_{P/O}`.
+
+The *general surface equation* for points :math:`P` on the section surfaces
+(could be the chords, camber lines, or section profiles):
 
 .. math::
+   :label: general_surface_equation
 
    \begin{aligned}
-   \vec{r}_{P/O}^w
-     &= \vec{r}_{LE/O}^w + \vec{r}_{P/LE}^w\\
-     &= \vec{r}_{LE/O}^w + \mat{C}_{w/s} \mat{C}_{s/a} \vec{r}_{P/LE}^a
+   \vec{r}_{P/O}^c &= \vec{r}_{P/LE}^c + \vec{r}_{LE/O}^c\\
+   \vec{r}_{P/LE}^c &= \mat{C}_{c/s} \mat{C}_{s/a} \vec{r}_{P/LE}^a\\
+   \vec{r}_{LE/O}^c &= \;???
    \end{aligned}
 
-Where
+Where :math:`\vec{r}_{P/LE}^a` is some point in the airfoil coordinate system
+(most likely a point on the chord, on the mean camber line, or on the
+profile), :math:`\mat{C}_{c/s}` is the *direction cosine matrix* that
+transforms coordinates from the section (local) coordinate system to the
+canopy (global) coordinate system, and :math:`\mat{C}_{s/a}` transforms
+coordinates from the 2D airfoil coordinate system into the 3D section
+coordinate system (Both `c` and `s` use `frd` coordinates).
+
+[[FIXME: I'm calling this the general **surface** equation, but the points
+don't have to lie on a surface: they're points **anywhere** in the airfoil
+coordinate system (the xz-plane of the section).]]
+
+[[The general equation is the result of designing via wing sections. The whole
+point is that you start by defining the section profiles, then position them
+relative to the canopy origin to produce the final wing. Splitting `r_P/O`
+into `r_P/LE` and `r_LE/O` is the natural (general) result of designing with
+wing sections; I suppose it's sort of a parametrization of the surfaces, but
+that's not the "parametrization" I'll be talking about later. **I need to give
+a more complete definition of the airfoil geometry in terms of `r_P/LE` before
+I introduce the general equation to make it more obvious what those two
+components mean.**]]
 
 .. math::
 
@@ -538,8 +565,9 @@ Where
    \end{bmatrix}
 
 
-* [[The general equation is a pain to work with directly. It's easier to
-  parametrize the variables in terms of more convenient design values.]]
+* The general equation is very expressive, but a bit of a pain to work with
+  directly. It's easier to define the variables in terms of more convenient
+  *design parameters*.
 
 
 Existing parametrizations
@@ -639,6 +667,10 @@ Optimized parametrization
    easier to design parafoil canopies. Start by describing and "ideal"
    design workflow, and demonstrate the convenience of this result.
 
+   Chooses a definition of the section index; defines independent reference
+   points for x, y, and z; sets `r_y = r_z`; defines the section DCM using
+   `dz/dy` and `\theta` (so you design `theta(s)` and `yz(s)` instead of
+   specifying the section DCM directly).
 
 .. Introduce my simplified parametrization for parafoils
 
@@ -647,9 +679,9 @@ using more convenient design parameters:
 
 .. math::
 
-   \vec{r}_{LE/O}^w = \vec{r}_{RP/O}^w + \vec{r}_{LE/RP}^w
+   \vec{r}_{LE/O}^c = \vec{r}_{RP/O}^c + \vec{r}_{LE/RP}^c
 
-Where `RP` are as-yet nebulous "reference points" and :math:`\vec{r}_{RP/O}^w`
+Where `RP` are as-yet nebulous "reference points" and :math:`\vec{r}_{RP/O}^c`
 are the design curves (`x(s)` and `yz(s)`, in my case). This lets you choose
 reference points other than the leading edges, and position those points
 explicitly in the wing coordinate system. (Note that the leading edges remain
@@ -660,7 +692,7 @@ section chords:
 
 .. math::
 
-   \vec{r}_{LE/RP}^w = \mat{R} \mat{C}_{w/s} c\, \hat{x}^s_s
+   \vec{r}_{LE/RP}^c = \mat{R} \mat{C}_{c/s} c\, \hat{x}^s_s
 
 .. math::
 

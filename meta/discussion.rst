@@ -961,6 +961,11 @@ Canopy Geometry
 
 * How should I cite the "Paraglider Design Handbook"? Just as a website?
 
+* Not sure where to put this, but I'm going with a "canopy" coordinate system
+  `c` instead of a "wing" coordinate system, because (1) many sources use `w`
+  for "wind", and (2) the paraglider wing inherits the canopy's coordinate
+  system (the canopy can exist without the wing, not vice versa).
+
 
 Parametric designs
 ------------------
@@ -1262,7 +1267,7 @@ My parametrization
   to define those more general parameters.
 
   This is where I choose a definition of the section index, set `r_y = r_z
-  = r_yz`, parametrize `C_w/s` using Euler angles, etc. Conceptually you can
+  = r_yz`, parametrize `C_c/s` using Euler angles, etc. Conceptually you can
   start with a unit square, then specify the chord lengths, then specify the
   flat span, then the torsion, then `x(s)`, then `yz(s)`, and never have to
   worry about messing up the previous steps.
@@ -1628,7 +1633,7 @@ Orientation
   .. math::
      :label: section_DCM
 
-     \mat{C}_{w/s} = \mat{\Gamma} \mat{\Theta}
+     \mat{C}_{c/s} = \mat{\Gamma} \mat{\Theta}
 
 * Section :math:`x`-axis:
 

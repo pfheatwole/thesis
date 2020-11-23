@@ -26,35 +26,34 @@ profiles, it is intuitive to start by defining the leading edge as
 a parametric curve of the section index.
 
 Dropping the section index parameter for notational simplicity, this means we
-need :math:`\vec{r}_{LE/WO}^w` for each section, where :math:`WO` is the wing
-canopy origin.
+need :math:`\vec{r}_{\mathrm{LE}/\mathrm{O}}^c` for each section, where
+:math:`\mathrm{O}` is the canopy origin.
 
 The chord surface is produced by specifying the position, scale, and
 orientation of each section. For the position of a section, you can use any
 reference point :math:`\mathrm{RP}` in the coordinate system of that section.
 
 **I hate `RP`. I'm already using `R` by itself, and later I refer to a point
-`P`. Stick to single variables.
-
-Also, should I change `pc` to `r` for positions on the chord? Or `t`, since
-that's the "standard" parametric variable?**
+`P`; stick to single variables. Also, should I change `pc` to `r` for
+positions on the chord? Or `t`, since that's the "standard" parametric
+variable?**
 
 .. math::
 
-   \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w =
-      \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
-      + \vec{r}_{\mathrm{LE}/\mathrm{RP}}^w
+   \vec{r}_{\mathrm{LE}/\mathrm{O}}^c =
+     \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+     + \vec{r}_{\mathrm{LE}/\mathrm{RP}}^c
 
 If the leading edge is defined as the origin of the section, then the equation
 simplifies to:
 
 .. math::
 
-   \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w =
-         \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
-         + \mat{C}_{w/s} \vec{r}_{\mathrm{LE}/\mathrm{RP}}^s
+   \vec{r}_{\mathrm{LE}/\mathrm{O}}^c =
+     \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+     + \mat{C}_{c/s} \vec{r}_{\mathrm{LE}/\mathrm{RP}}^s
 
-Where :math:`\mat{C}_{w/s}` is the directed cosine matrix (DCM) of the wing
+Where :math:`\mat{C}_{c/s}` is the directed cosine matrix (DCM) of the wing
 reference frame :math:`\mathcal{F}_w` with respect to the section reference
 frame :math:`\mathcal{F}_s`.
 
@@ -73,16 +72,16 @@ need to keep all these separate.**
 
 .. math::
 
-   \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w =
-         \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
-         + \mat{C}_{w/s} r\, c\, \hat{x}^s_s
+   \vec{r}_{\mathrm{LE}/\mathrm{O}}^c =
+         \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+         + \mat{C}_{c/s} r\, c\, \hat{x}^s_s
 
 
 This equation covers the majority of the choices for chord surface
 parametrizations in common use. Designs that position the chords by specifying
 their leading edge are equivalent to setting :math:`r = 0` and
-:math:`\vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
-= \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w`. Other designs use the quarter-chord
+:math:`\vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+= \vec{r}_{\mathrm{LE}/\mathrm{O}}^c`. Other designs use the quarter-chord
 positions for the reference points, in which case :math:`r = 0.25`.
 
 The problem with these fixed parametrizations is that they only support
@@ -109,9 +108,9 @@ dimensions, is then:
 
 .. math::
 
-   \vec{r}_{\mathrm{LE}/\mathrm{WO}}^w =
-         \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
-         + \mat{R} \mat{C}_{w/s} c\, \hat{x}^s_s
+   \vec{r}_{\mathrm{LE}/\mathrm{O}}^c =
+     \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+     + \mat{R} \mat{C}_{c/s} c\, \hat{x}^s_s
 
 And the position of some point :math:`P` at a point :math:`0 \le p \le 1` on
 the section chords: **[[am I switching from `r` to `p` now?]]**
@@ -119,15 +118,15 @@ the section chords: **[[am I switching from `r` to `p` now?]]**
 .. math::
 
    \begin{aligned}
-   \vec{r}_{P/WO}^w
-      &= \vec{r}_{LE/WO}^w + \vec{r}_{P/LE}^w\\
-      &= \vec{r}_{LE/WO}^w - \vec{r}_{LE/P}^w\\
-      &=
-         \left(
-            \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w
-            + \mat{R} \mat{C}_{w/s} c\, \hat{x}^s_s
-         \right)
-         - p\, \mat{C}_{w/s} c\, \hat{x}^s_s\\
+   \vec{r}_{P/O}^c
+     &= \vec{r}_{LE/O}^c + \vec{r}_{P/LE}^c\\
+     &= \vec{r}_{LE/O}^c - \vec{r}_{LE/P}^c\\
+     &=
+        \left(
+          \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+            + \mat{R} \mat{C}_{c/s} c\, \hat{x}^s_s
+        \right)
+        - p\, \mat{C}_{c/s} c\, \hat{x}^s_s\\
    \end{aligned}
 
 
@@ -137,14 +136,14 @@ a function of the section index :math:`s` and the chord ratio :math:`p`:
 .. math::
    :label: chord_points
 
-   \vec{r}_{P/WO}^w(s, p) =
-      \vec{r}_{\mathrm{RP}/\mathrm{WO}}^w(s)
-      + \left(\mat{R}(s) - p\right) \mat{C}_{w/s} c(s)\, \hat{x}^s_s(s)
+   \vec{r}_{P/O}^c(s, p) =
+      \vec{r}_{\mathrm{RP}/\mathrm{O}}^c(s)
+      + \left(\mat{R}(s) - p\right) \mat{C}_{c/s} c(s)\, \hat{x}^s_s(s)
 
 All the notational baggage can make this equation look more complicated than
 it really is. Suppose the points on the chord are simply :math:`\left\langle
 x, y, z \right\rangle` in wing coordinates, the reference points in wing
-coordinates are :math:`\vec{r}_{RP/WO} = \left\langle x_r, y_r, z_r
+coordinates are :math:`\vec{r}_{RP/O} = \left\langle x_r, y_r, z_r
 \right\rangle`, and :math:`\mat{K}(s) = \left(\mat{R}(s) - p\right) c(s)`,
 then the structure is easier to see:
 
@@ -153,7 +152,7 @@ then the structure is easier to see:
 
    \left\langle x, y, z \right\rangle =
       \left\langle x_r, y_r, z_r \right\rangle
-      + \mat{K} \hat{x}_s^w
+      + \mat{K} \hat{x}_s^c
 
 Or, using separate equations instead of matrix math (FIXME: awkward, I'm
 switching from using the `s` subscript to indicate the section x-hat to using
@@ -180,10 +179,10 @@ Designing a chord surface with these equations requires five steps:
    r_y(s), r_z(s) \right\}`.
 
 4. Define a 3-vector valued function for the section reference point positions
-   in wing coordinates :math:`\vec{r}_{RP/WO}^w(s) = \left\langle x(s), y(s),
+   in wing coordinates :math:`\vec{r}_{RP/O}^c(s) = \left\langle x(s), y(s),
    z(s) \right\rangle`
 
-5. Define the section orientation matrices :math:`\mat{C}_{w/s}(s)`
+5. Define the section orientation matrices :math:`\mat{C}_{c/s}(s)`
 
 [[In :doc:`canopy_geometry` I show a set of choices that work well for
 designing parafoils.]]
