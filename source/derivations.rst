@@ -3,6 +3,106 @@ Derivations
 ***********
 
 
+Parametric wing modeling with airfoils
+======================================
+
+.. Meta: Derive my parametrization of points on the wing surfaces
+
+**FIXME**: choose a good section title
+
+
+1. The goal:
+
+     `r_P/O`
+
+   We need a mesh of points on the surfaces relative to the origin.
+
+2. Parametrize `r_P/O` using wing sections
+
+   First, decompose `r_P/O`. Airfoil geometries define the points relative to
+   the leading edge by convention, so `r_P/O` naturally decomposes this way:
+
+     `r_P/O = r_P/LE + r_LE/O`
+
+   The airfoil geometry defines the points relative to the leading edges:
+
+     `r_P/LE = c * C_c/s @ T_s/a @ r_P/LE^a`
+
+   This form (the result of using wing sections) introduces scale (`c`),
+   position (`r_LE/O`), orientation (`C_c/s`), and "points in the section"
+   (`r_P/LE`).
+
+3. It's often inconvenient to specify position using the leading edge.
+   Instead, parametrize `r_LE/O` LE in terms of an arbitrary reference point:
+
+     `r_LE/O = r_LE/RP + r_RP/O`
+
+   This changes how you specify position. Now you can design with an arbitrary
+   `r_RP/O` instead of `r_LE/O`; you just have to be able to define `r_LE/RP`.
+   (If `r_LE/RP = 0` then you're back to positioning the leading edges again.)
+
+4. Make an "intuitive" choice of reference point using points on the section
+   chords:
+
+     `r_LE/RP = c * R @ C_c/s @ xhat`
+
+   Where:
+
+     `R = diag(r_x, r_y, r_z)`
+
+     `0 <= r_x, r_y, r_z <= 1` (proportions of the chord)
+
+     `xhat = [1, 0, 0]^T` (the chord lies along `xhat`)
+
+   **FIXME**: describe the intuition between separate x, y, and z translations
+
+5. "General" equation:
+
+     `r_P/O = r_P/LE + r_LE/RP + r_RP/O`
+
+     `r_P/O = c * C_c/s @ T_s/a @ r_P/LE + c * R @ C_c/s @ xhat + r_RP/O`
+
+   I say "general" because it'd be a reasonable target for code that
+   implements a general geometry defined in terms of wing sections. Parafoils
+   et al could reasonably defined using this form, using their own internal
+   choices to define these parameters. It'd be nice not to lock a model into
+   a particular parametrization of orientation, or reference point, or
+   whatever. (Then again, it does force the user into using a reference point
+   on the chord, so "general" is probably the wrong name. Also, the second
+   form isn't immediately usable by parametrizations that specify section
+   scale/pitch/yaw by defining the LE and TE as two points.)
+
+   To design a wing, define: `c`, `C_c/s`, `r_P/LE`, `R`, and `r_RP/O`. **This
+   is almost exactly the same amount of work as before, you only need to add
+   `R`.** Minimal extra effort for a lot of convenience.
+
+6. Some choices that work well for parafoils:
+
+     `r_y = r_z`
+
+     `C_c/s = Gamma @ Theta`
+
+     `Gamma = arctan(dz/dy)` (where `dz/dy` comes from `r_RP/O`)
+
+     `Theta = [[cos(theta), 0, sin(theta)], [0, 1, 0], [-sin(theta), 0,
+     cos(theta)]]`
+
+   To define a parafoil you just need to choose: `c`, `r_x`, `r_yz`, `r_RP/O`,
+   `theta`, and an airfoil.
+
+   **FIXME**: write the final version using the actual functions (of section
+   index, fractions of the chord, etc) instead of this generalized "any point
+   P" notation
+
+7. <Examples of completing the definition with parametric functions
+   (elliptical functions, etc) using *design parameters* (span, taper ratio,
+   etc) choices of reference points, etc>
+
+
+**FIXME**: move the parafoil-specific choices and design examples into `Canopy
+Geometry`_
+
+
 General parametrization of a chord surface
 ==========================================
 
