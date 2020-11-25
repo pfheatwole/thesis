@@ -13,11 +13,12 @@ Canopy Geometry
    airfoil to provide the points in a local (airfoil) coordinate system
    establishes a general equation for points on the wing surfaces (chords,
    camber lines, or profiles). The sections must then be scaled, positioned,
-   and oriented. The rest of this chapter focuses on a reparametrization of
-   the general equation that makes it easier to design non-linear wing
-   geometries. The reparametrization (1) enables designing position using
-   points other than the leading edge, and (2) decouples the scale, position,
-   and orientation parameters so they can be designed independently.
+   and oriented, which leads to a general parametrization of the points. The
+   rest of this chapter focuses on a reparametrization of the general equation
+   with advantages for designing non-linear wing geometries. The
+   reparametrization (1) enables designing position using points other than
+   the leading edge, and (2) decouples the scale, position, and orientation
+   parameters so they can be designed independently.
 
    The reparametrization makes it easier to design the overall wing (since
    components are independent) and makes it easier to use simple analytical
@@ -25,6 +26,10 @@ Canopy Geometry
    structure of the shape. [[The designer can choose whatever reference points
    allow for the simplest design parameters; eg, maybe the trailing edge is
    a perfect circle, but the leading edge is complex.]]
+
+   FIXME: this summary needs updating, I'm moving the *derivation* of my
+   general parametrizatoin into :doc:`derivations`_. This chapter merely
+   chooses definitions of those parameters that work well for parafoils.
 
 
 * What is a canopy?
@@ -531,63 +536,119 @@ the chord is used to nondimensionalize the airfoil geometry and define the
 General equation of a wing geometry
 ===================================
 
+.. Introduce the general equation of points in wing sections
+
 .. See `notes-2020w47:Canopy parametrizations` for a discussion
 
-.. Introduce the general equation of points on the section surfaces
+A canopy geometry model defines all the surfaces that describe the shape of
+the canopy: the chord surface, the mean camber surface, and the profile
+surface.
 
-[[FIXME: define *surface* and their role in aerodynamics here?]]
+Choosing to model a wing using wing sections implies that the wing surfaces
+are defined by points in the section coordinate systems. By convention, points
+in the wing sections are defined relative to the section leading edges, so all
+of the canopy surfaces are naturally defined in terms of points relative to
+the section leading edges. [[FIXME: wording.]]
 
-A *canopy geometry* defines all the surfaces that describe the shape of the
-canopy: the chord surface, the mean camber surface, and the profile surface.
-In general, let any point `P` on any of those surfaces, given with respect to
-the canopy origin `O`, be called :math:`r_{P/O}`.
+Let :math:`\mathrm{P}` represent any point in a wing section, and
+:math:`\mathrm{LE}` be the leading edge of that section. In the `notation
+<_common_notation>`_ of this paper, a general equation for the position of
+that point :math:`\mathrm{P}` with respect to the canopy origin
+:math:`\mathrm{O}`, written in terms terms of the canopy coordinate system
+:math:`\mathrm{c}`, is:
 
-The *general surface equation* for points :math:`P` on the section surfaces
-(could be the chords, camber lines, or section profiles):
-
-.. math::
-   :label: general_surface_equation
-
-   \begin{aligned}
-   \vec{r}_{P/O}^c &= \vec{r}_{P/LE}^c + \vec{r}_{LE/O}^c\\
-   \vec{r}_{P/LE}^c &= \mat{C}_{c/s} \mat{C}_{s/a} \vec{r}_{P/LE}^a\\
-   \vec{r}_{LE/O}^c &= \;???
-   \end{aligned}
-
-Where :math:`\vec{r}_{P/LE}^a` is some point in the airfoil coordinate system
-(most likely a point on the chord, on the mean camber line, or on the
-profile), :math:`\mat{C}_{c/s}` is the *direction cosine matrix* that
-transforms coordinates from the section (local) coordinate system to the
-canopy (global) coordinate system, and :math:`\mat{C}_{s/a}` transforms
-coordinates from the 2D airfoil coordinate system into the 3D section
-coordinate system (Both `c` and `s` use `frd` coordinates).
-
-[[FIXME: I'm calling this the general **surface** equation, but the points
-don't have to lie on a surface: they're points **anywhere** in the airfoil
-coordinate system (the xz-plane of the section).]]
-
-[[The general equation is the result of designing via wing sections. The whole
-point is that you start by defining the section profiles, then position them
-relative to the canopy origin to produce the final wing. Splitting `r_P/O`
-into `r_P/LE` and `r_LE/O` is the natural (general) result of designing with
-wing sections; I suppose it's sort of a parametrization of the surfaces, but
-that's not the "parametrization" I'll be talking about later. **I need to give
-a more complete definition of the airfoil geometry in terms of `r_P/LE` before
-I introduce the general equation to make it more obvious what those two
-components mean.**]]
+.. Unparametrized (explicit geometry?) equation
 
 .. math::
 
-   \mat{C}_{s/a} \defas \begin{bmatrix}
+   \vec{r}_{\mathrm{P}/\mathrm{O}}^c = \vec{r}_{P/LE}^c + \vec{r}_{LE/O}^c
+
+[[**This is the unparametrized equation. It's the first step to parametrizing
+with an airfoil and design curves.**]]
+
+The canopy coordinate system is defined by the canopy root section. Because
+a section may be oriented differently than the canopy, points in the section
+coordinate system :math:`\mathrm{s}` must be transformed into the canopy
+coordinate system. Given the *direction cosine matrix* :math:`C_{c/s}` the
+general equation can be written in terms of points in section coordinates:
+
+.. math::
+
+   \vec{r}_{\mathrm{P}/\mathrm{O}}^c =
+     \mat{C}_{c/s} \vec{r}_{P/LE}^s
+     + \vec{r}_{LE/O}^c
+
+Wing section geometry is defined in the 2D airfoil coordinate system. The
+convention for airfoil coordinates places the origin at the leading edge, with
+the x-axis pointing from the leading edge to the trailing edge, and the y-axis
+oriented towards the upper surface. This paper uses a front-right-down
+convention for the 3D section coordinates, so the 2D airfoil coordinates can
+be transformed into 3D section coordinates with a matrix transformation:
+
+.. math::
+
+   \mat{T}_{s/a} \defas \begin{bmatrix}
       -1 & 0 \\
       0 & 0\\
       0 & -1
    \end{bmatrix}
 
+Lastly, by convention, airfoil geometry is normalized to a unit chord, so the
+section geometry defined by the airfoil must be scaled by the section chord
+:math:`c`. Writing the points in terms of scaled airfoil coordinates, the
+general equation then becomes:
 
-* The general equation is very expressive, but a bit of a pain to work with
-  directly. It's easier to define the variables in terms of more convenient
-  *design parameters*.
+.. This is the suboptimal "general" parametrization
+
+.. math::
+
+   \vec{r}_{\mathrm{P}/\mathrm{O}}^c =
+     \mat{C}_{c/s} \mat{T}_{s/a} \, c \, \vec{r}_{P/LE}^a
+     + \vec{r}_{LE/O}^c
+
+In this form it is clear that a complete geometry definition requires
+definitions of four variables:
+
+1. Scale: :math:`c`
+
+2. Position: :math:`\vec{r}_{LE/O}^c`
+
+3. Orientation: :math:`\mat{C}_{c/s}`
+
+4. Profile: :math:`\vec{r}_{P/LE}^a`
+
+
+---------------------------------------------------------------------------
+
+:math:`\mat{C}_{c/s}` is the *direction cosine matrix* that
+transforms coordinates from the section (local) coordinate system to the
+canopy (global) coordinate system, and :math:`\mat{C}_{s/a}` transforms
+coordinates from the 2D airfoil coordinate system into the 3D section
+coordinate system (Both `c` and `s` use `frd` coordinates).
+
+---------------------------------------------------------------------------
+
+* This general equation is very expressive, but a bit of a pain to work with
+  directly. It's often more convenient to define the variables in terms of
+  functions of simple *design parameters*.
+
+* [[The general equation is the result of designing via wing sections. The
+  whole point is that you start by defining the section profiles, then
+  position them relative to the canopy origin to produce the final wing.
+  Splitting `r_P/O` into `r_P/LE` and `r_LE/O` is the natural (general) result
+  of designing with wing sections; I suppose it's sort of a parametrization of
+  the surfaces, but that's not the "parametrization" I'll be talking about
+  later. **I need to give a more complete definition of the airfoil geometry
+  in terms of `r_P/LE` before I introduce the general equation to make it more
+  obvious what those two components mean.**]]
+
+* Should I introduce scale, position, etc **before** the general equation, or
+  should I define the general equation as part of the "design with wing
+  sections" section, and naturally segue from "what the math produced" into
+  a discussion of those four parameters?
+
+  That'd work nicely if I can **clearly** motivate each step of the derivation
+  of the general equation.
 
 
 Existing parametrizations
