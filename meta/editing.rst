@@ -42,6 +42,10 @@ Terminology
 Content
 *******
 
+* This paper, and every chapter in it, should **start with an introduction
+  that gives away the punchline**. Let the reader determine at a glance what
+  the chapter will discuss and the basic conclusions.
+
 
 Trouble Words
 =============
@@ -55,6 +59,10 @@ Trouble Words
 * timestep, time-step, time step
 
 * vario, variometer (allowable abbreviations)
+
+* Prefer "modeling" over "modelling"
+
+* Prefer "thermaling" over "thermalling"
 
 
 Useful Reminders

@@ -1,11 +1,3 @@
-
-A paraglider can be considered a system composed of canopy, lines, harness,
-and pilot. Although nearly every component are highly flexible they tend to
-remain relatively rigid during normal flight. The flight dynamics can be
-greatly simplified by assuming a rigid body model.
-
-
-
 *******************
 Paraglider Dynamics
 *******************
@@ -26,6 +18,31 @@ Paraglider Dynamics
    * - .. image:: figures/paraglider/geometry/foil2.*
      - .. image:: figures/paraglider/geometry/foil2.*
      - .. image:: figures/paraglider/geometry/foil2.*
+
+
+* [[Define *dynamics*.
+
+  What are they? What are they used for? They're what I'll be using to
+  generate flight trajectories.]]
+
+
+Modeling requirements
+=====================
+
+* [[This stage is about what I'm **not** choosing to model as much as it is
+  about what I am.]]
+
+* [[A paraglider can be considered a system composed of canopy, lines,
+  harness, and pilot. Although nearly every component are highly flexible they
+  tend to remain relatively rigid during normal flight. The flight dynamics
+  can be greatly simplified by assuming a rigid body model.]]
+
+* I put a lot of work into non-uniform wind, etc, in the aerodynamics. The
+  dynamics model should be capable of leveraging that flexibility.
+
+* Intuitive (as possible), sufficiently flexible, etc.
+
+* Degrees of freedom? (eg, include relative motion of the harness?)
 
 
 Related Work
@@ -233,3 +250,38 @@ momentum :math:`^e \dot{\vec{p}} = \sum{\vec{F}}` and angular momentum
 :math:`^e \dot{\vec{h}} = \sum \vec{M}` for both bodies.
 
 For the derivation of the mathematical model, see :ref:`derivations:Model 9a`.
+
+
+Discussion
+==========
+
+
+Pros
+----
+
+* Somewhat mitigates the *steady flow* assumption by including apparent mass.
+
+
+Limitations
+-----------
+
+* Inherits the limitations of the aerodynamics method:
+
+  * Assumes section coefficients are representative of the entire wing segment
+    (ignores inter-segment flow effects, etc)
+
+* Rigid-body assumption (none of the canopy, connecting lines, or payload are
+  actually rigid bodies)
+
+* Quasi-steady-state assumption (I'm using steady-state aerodynamics to
+  simulate non-steady conditions by assuming the conditions are changing
+  "slowly enough.") I've included adjustments for apparent mass, but I'm still
+  assuming the steady-state solution is representative of the unsteady
+  solution.
+
+  Consider the fact that the canopy is interacting with the "underlying" wind
+  field, so that the motion of the canopy changes the local wind vectors. This
+  effect should propagate through time, but for my simulator I'm only using
+  the "global" wind field, neglecting any effects of the previous timestep. (I
+  am trying to account for apparent mass, but I don't think that's really the
+  same thing, since that doesn't change the local aerodynamics.)

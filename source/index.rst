@@ -36,7 +36,7 @@ Contents
    :numbered:
 
    introduction
-   formalization
+   flight_reconstruction
    canopy_geometry
    canopy_aerodynamics
    paraglider_geometry
@@ -44,6 +44,8 @@ Contents
    flight_simulation
    case_study
    data_considerations
+   future_work
+   conclusion
    examples
 
 .. toctree::

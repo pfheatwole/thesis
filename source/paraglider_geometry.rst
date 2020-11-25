@@ -2,7 +2,27 @@
 Paraglider Geometry
 *******************
 
-A paraglider is a system of two components: a wing, and a harness.
+A paraglider is a system of two components: a wing (canopy + lines), and
+a payload (harness + pilot).
+
+* [[This chapter is a bit squished since I need to to define both the wing
+  geometry and the payload. They're both pretty simple though so it should be
+  fine? The wing geometry just adds lines to a canopy and specifies the
+  surface materials; I'm not trying to model individual risers, describe
+  parafoil cells, etc. The harness I'm just going to say "here's the basic
+  idea, I'm going to model it as a sphere.]]
+
+
+Modeling requirements
+=====================
+
+* [[Should this go below related work? Makes sense if I specify my
+  requirements up front so I can point out when existing literature fails to
+  satisfy them.]]
+
+* Closely related to :ref:`canopy_geometry:Modeling requirements`; review
+  that.
+
 
 
 Related work
@@ -134,14 +154,14 @@ Good reference images for brake deflections:
 
    Brake deflection, example 1.
 
-   `Photograph <https://commons.wikimedia.org/wiki/File:Paragliding.jpg>`_  by
+   `Photograph <https://commons.wikimedia.org/wiki/File:Paragliding.jpg>`__  by
    Frédéric Bonifas, distributed under a CC-BY-SA 3.0 license.
 
 .. figure:: figures/paraglider/geometry/Wikimedia_ApcoAllegra.jpg
 
    Brake deflection, example 2.
 
-   `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`_ by
+   `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`__ by
    Wikimedia contributor "PiRK" under a CC-BY-SA 3.0 license.
 
 Mathematical Model
@@ -375,3 +395,9 @@ pilot from the lines using attachments to two *risers*. A tensioning strap at
 chest level between the two risers provides pilot safety during violent
 maneuvers, but it also allows the pilot to choose a balance between stability
 and wing responsiveness to weight shift control.
+
+
+Case Study
+==========
+
+[[Use my Hook 3 approximation to show how you might use everything thus far.]]
