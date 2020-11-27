@@ -17,6 +17,9 @@ Parametric wing modeling with airfoils
 
    We need a mesh of points on the surfaces relative to the origin.
 
+
+.. The general parametrization
+
 2. Parametrize `r_P/O` using wing sections
 
    First, decompose `r_P/O`. Airfoil geometries define the points relative to
@@ -31,6 +34,9 @@ Parametric wing modeling with airfoils
    This form (the result of using wing sections) introduces scale (`c`),
    position (`r_LE/O`), orientation (`C_c/s`), and "points in the section"
    (`r_P/LE`).
+
+
+.. My novel parametrization
 
 3. It's often inconvenient to specify position using the leading edge.
    Instead, parametrize `r_LE/O` LE in terms of an arbitrary reference point:

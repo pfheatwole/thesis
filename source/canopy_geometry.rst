@@ -7,79 +7,80 @@ Canopy Geometry
    A paraglider dynamics model requires the aerodynamics and inertial
    properties of the canopy, which can be estimated from the canopy geometry.
 
-   This chapter develops a parametric parafoil canopy geometry. It starts with
-   *wing sections*, which are the starting point for parametrizing a wing
-   geometry (airfoil curves capture the structure of the profiles). Using the
-   airfoil to provide the points in a local (airfoil) coordinate system
-   establishes a general equation for points on the wing surfaces (chords,
-   camber lines, or profiles). The sections must then be scaled, positioned,
-   and oriented, which leads to a general parametrization of the points. The
-   rest of this chapter focuses on a reparametrization of the general equation
-   with advantages for designing non-linear wing geometries. The
-   reparametrization (1) enables designing position using points other than
-   the leading edge, and (2) decouples the scale, position, and orientation
-   parameters so they can be designed independently.
+   This chapter develops a parametric canopy geometry based on wing sections.
+   It uses a set of intuitive design parameters based on the most readily
+   available data: technical specifications and physical measurements. The
+   ability to approximate real wings is important because this model is
+   intended to be used to reconstruct flights from real wings.
 
-   The reparametrization makes it easier to design the overall wing (since
-   components are independent) and makes it easier to use simple analytical
-   definitions based on a small number of *design parameters* that capture the
-   structure of the shape. [[The designer can choose whatever reference points
-   allow for the simplest design parameters; eg, maybe the trailing edge is
-   a perfect circle, but the leading edge is complex.]]
-
-   FIXME: this summary needs updating, I'm moving the *derivation* of my
-   general parametrizatoin into :doc:`derivations`_. This chapter merely
-   chooses definitions of those parameters that work well for parafoils.
+   The chapter starts with *wing sections*, which are the conventional basis
+   for parametric wing models (since airfoil curves capture the structure of
+   the profiles). Defining the section profiles in a local (airfoil)
+   coordinate system establishes a general equation for points on the wing
+   surfaces (chords, camber lines, or profiles). The section profiles require
+   a scale, position, and orientation, which define the fundamental variables
+   of the equation. The rest of the chapter presents a parametrization of
+   those variables optimized for designing non-linear wing geometries. The
+   major advantages of the parametrization are that (1) it enables designing
+   position using points other than the leading edge, and (2) it decouples the
+   scale, position, and orientation parameters so they can be designed
+   independently.
 
 
-* What is a canopy?
+.. What is a canopy?
 
-  * The essential component of gliding flight is the lifting surface.
+* The essential component of gliding flight is the lifting surface.
 
-  * [[Examples of lifting surfaces. Typically symmetric, etc. In this case,
-    we're interested in parafoils, which are simply a way of producing
-    a lifting surface by inflating nylon through the intakes.]]
+* [[Examples of lifting surfaces. Typically symmetric, etc. In this case,
+  we're interested in parafoils, which are simply a way of producing
+  a lifting surface by inflating nylon through the intakes.]]
 
-    .. figure:: figures/paraglider/geometry/Wikimedia_Nova_X-Act.jpg
-       :width: 75%
+  .. figure:: figures/paraglider/geometry/Wikimedia_Nova_X-Act.jpg
+     :width: 75%
 
-       Paraglider side view.
+     Paraglider side view.
 
-       `Photograph <https://www.flickr.com/photos/69401216@N00/2820146477/>`__ by
-       Pascal Vuylsteker, distributed under a CC-BY-SA 2.0 license.
+     `Photograph <https://www.flickr.com/photos/69401216@N00/2820146477/>`__ by
+     Pascal Vuylsteker, distributed under a CC-BY-SA 2.0 license.
 
-* Why does this project need a mathematical model of the canopy geometry?
+.. Why does this project need a mathematical model of the canopy geometry?
 
-  * Flight reconstruction requires a dynamics model of the paraglider that
-    produced the flight data.
+* Flight reconstruction requires a dynamics model of the paraglider that
+  produced the flight data.
 
-  * Paraglider dynamics depend on the aerodynamics and inertial properties of
-    the canopy.
+* Paraglider dynamics depend on the aerodynamics and inertial properties of
+  the canopy.
 
-  * There are elegant models that estimate wing performance based on a small
-    number of summary parameters (lift coefficient, efficiency factor, etc)
-    instead of requiring a complete wing geometry, but they are insufficient
-    for this project:
+* There are elegant models that estimate wing performance based on a small
+  number of summary parameters (lift coefficient, efficiency factor, etc)
+  instead of requiring a complete wing geometry, but they are insufficient
+  for this project:
 
-    * They only apply to wings with straight wings. (Their results do not
-      apply to the highly non-linear geometry of parafoil canopies.)
+  * They only apply to wings with straight wings. (Their results do not
+    apply to the highly non-linear geometry of parafoil canopies.)
 
-    * They only estimate the longitudinal dynamics (straight flight), and
-      cannot be used to simulate turning dynamics or the presence of
-      a crosswind.
+  * They only estimate the longitudinal dynamics (straight flight), and
+    cannot be used to simulate turning dynamics or the presence of
+    a crosswind.
 
-    * They rely on linear aerodynamics that assume small angles of attack.
-      Although canopy behavior is unpredictable near stall due to wing
-      collapse, flight reconstruction requires a dynamics model with graceful
-      degradation at higher angles of attack.
+  * They rely on linear aerodynamics that assume small angles of attack.
+    Although canopy behavior is unpredictable near stall due to wing
+    collapse, flight reconstruction requires a dynamics model with graceful
+    degradation at higher angles of attack.
 
-    * They don't provide inertial properties.
+  * They don't provide inertial properties.
 
-  * Conclusion: the aerodynamics and inertial properties of a canopy must be
-    estimated from a mathematical model of the canopy geometry.
+* Conclusion: the aerodynamics and inertial properties of a canopy must be
+  estimated from a mathematical model of the canopy geometry.
+
+
+.. What are the model requirements?
 
 * To support the variety of aerodynamic methods, the model must be able to
   returns points on the section surfaces (chords, camber lines, and profiles).
+
+
+.. FIXME: random stuff about parametric models?
 
 * The conventional parametric approach to wing design is to use *wing
   sections*, which require specifying the scale, position, orientation, and
@@ -127,7 +128,11 @@ This chapter will proceed as follows:
 Paraglider canopies
 ===================
 
-.. Describe the physical system (geometry, structure, materials, etc)
+.. Describe the physical system (geometry, structure, materials, etc), and the
+   most common technical specifications (span, area, etc). The specs are
+   structural summaries that can guide the choice of model parametrization.
+
+* [[**FIXME**: this section needs a LOT of work.]]
 
 * What are the important aspects of a canopy geometry?
 
@@ -323,11 +328,12 @@ Usability
 
 * [[Advantages of parametric geometries]]
 
-  * Parametric designs try to balance simplicity and expressibility.
-    Parameters "summarize" the structure. A good parametrization lets you
-    focus on high-level design without forcing you into simplistic designs.
-    [[I'm interested in "easy to create, good enough" approximations of real
-    wings, not physically-realistic simulations.]]
+  * Parametric designs try to balance simplicity and expressibility. Parameters
+    "summarize" the structure. A good parametrization lets you focus on
+    high-level design without forcing you into simplistic designs. **The goal
+    is to find simple design parameters that capture the complex structure of
+    the wing.** [[I'm interested in "easy to create, good enough"
+    approximations of real wings, not physically-realistic simulations.]]
 
   * Parametric models let you standardize so you can compared models.
 
@@ -382,7 +388,10 @@ Usability
 Designing with wing sections
 ============================
 
-.. Introduce designing a wing using "wing sections"
+.. Introduce designing a wing using "wing sections". They're the conventional
+   starting point for parametrizing a wing geometry (airfoil curves capture
+   the structure of the section profiles). Defining the surfaces using points
+   in the wing sections sets up the the general form of the parametric model.
 
 * [[There is already a standard parametric method for wings: *wing sections*]]
 
@@ -500,12 +509,6 @@ Related work:
      Distortions due to billowing, braking, etc. (We will be ignoring these,
      but you can use the section indices to deal with them.)
 
-
-The section scale, position, and orientation define the *chord surface* of the
-wing. [[**FIXME**: is a *chord surface* the same thing as a traditional
-*planform*?]] The final step of defining the 3D wing shape is to assign each
-section a cross-sectional profile called an *airfoil*.
-
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
 
    Airfoils examples.
@@ -525,7 +528,7 @@ There are two conventions measuring the airfoil thickness; this convention
 also determines what point is designated the *leading edge*. The leading and
 trailing edge of a wing section are arbitrary points that define the *chord*;
 the chord is used to nondimensionalize the airfoil geometry and define the
-*angle of attack*.
+local *angle of attack*.
 
 .. figure:: figures/paraglider/geometry/airfoil/NACA-6412-thickness-conventions.*
    :name: airfoil_thickness
@@ -540,22 +543,23 @@ General equation of a wing geometry
 
 .. See `notes-2020w47:Canopy parametrizations` for a discussion
 
-A canopy geometry model defines all the surfaces that describe the shape of
-the canopy: the chord surface, the mean camber surface, and the profile
-surface.
+A canopy geometry model defines the shape of a canopy as a collection of
+surfaces: the chord surface, the mean camber surface, and the profile surface.
+[[FIXME: not sure I agree with this statement. Unclear. A shape is just
+a shape. Granted, a canopy geometry must PROVIDE those surfaces.]]
 
-Choosing to model a wing using wing sections implies that the wing surfaces
-are defined by points in the section coordinate systems. By convention, points
-in the wing sections are defined relative to the section leading edges, so all
-of the canopy surfaces are naturally defined in terms of points relative to
-the section leading edges. [[FIXME: wording.]]
+Choosing to model a wing using wing sections means that the wing surfaces are
+defined by airfoils, which are 2D curves that lie in the section coordinate
+systems. By convention, points in the wing sections are defined relative to
+the section leading edges, so all of the canopy surfaces are naturally defined
+in terms of points relative to the section leading edges. [[FIXME: wording.]]
 
 Let :math:`\mathrm{P}` represent any point in a wing section, and
 :math:`\mathrm{LE}` be the leading edge of that section. In the `notation
 <_common_notation>`_ of this paper, a general equation for the position of
 that point :math:`\mathrm{P}` with respect to the canopy origin
-:math:`\mathrm{O}`, written in terms terms of the canopy coordinate system
-:math:`\mathrm{c}`, is:
+:math:`\mathrm{O}`, written in terms of the canopy coordinate system
+:math:`c`, is:
 
 .. Unparametrized (explicit geometry?) equation
 
@@ -563,27 +567,25 @@ that point :math:`\mathrm{P}` with respect to the canopy origin
 
    \vec{r}_{\mathrm{P}/\mathrm{O}}^c = \vec{r}_{P/LE}^c + \vec{r}_{LE/O}^c
 
-[[**This is the unparametrized equation. It's the first step to parametrizing
-with an airfoil and design curves.**]]
-
-The canopy coordinate system is defined by the canopy root section. Because
-a section may be oriented differently than the canopy, points in the section
-coordinate system :math:`\mathrm{s}` must be transformed into the canopy
-coordinate system. Given the *direction cosine matrix* :math:`C_{c/s}` the
-general equation can be written in terms of points in section coordinates:
+In this paper, the canopy coordinate system is defined by the canopy *root*
+(the central section). Points in section (local) coordinate systems
+:math:`s` must be rotated into the canopy (global) coordinate system. Given
+the *direction cosine matrix* :math:`\mat{C}_{c/s}` between the section and
+canopy coordinate systems, the general equation for points relative to the
+canopy origin can be written in terms of points in section coordinates:
 
 .. math::
 
-   \vec{r}_{\mathrm{P}/\mathrm{O}}^c =
-     \mat{C}_{c/s} \vec{r}_{P/LE}^s
-     + \vec{r}_{LE/O}^c
+   \vec{r}_{P/LE}^c = \mat{C}_{c/s} \vec{r}_{P/LE}^s
 
-Wing section geometry is defined in the 2D airfoil coordinate system. The
-convention for airfoil coordinates places the origin at the leading edge, with
-the x-axis pointing from the leading edge to the trailing edge, and the y-axis
-oriented towards the upper surface. This paper uses a front-right-down
-convention for the 3D section coordinates, so the 2D airfoil coordinates can
-be transformed into 3D section coordinates with a matrix transformation:
+Furthermore, because an airfoil is defined in a 2D airfoil coordinate system,
+another transformation is required, from airfoil coordinates to section
+coordinates. The convention for airfoil coordinates places the origin at the
+leading edge, with the x-axis pointing from the leading edge to the trailing
+edge, and the y-axis oriented towards the upper surface. This paper uses
+a front-right-down convention for the 3D section coordinates, so the 2D
+airfoil coordinates can be transformed into 3D section coordinates with
+a matrix transformation:
 
 .. math::
 
@@ -593,12 +595,17 @@ be transformed into 3D section coordinates with a matrix transformation:
       0 & -1
    \end{bmatrix}
 
-Lastly, by convention, airfoil geometry is normalized to a unit chord, so the
-section geometry defined by the airfoil must be scaled by the section chord
-:math:`c`. Writing the points in terms of scaled airfoil coordinates, the
-general equation then becomes:
+Lastly, by convention, airfoil geometries are normalized to a unit chord, so
+the section geometry defined by the airfoil must be scaled by the section
+chord :math:`c`. Writing the points in terms of scaled airfoil coordinates:
+
+.. math::
+
+   \vec{r}_{P/LE}^c = \mat{C}_{c/s} \mat{T}_{s/a} \, c \, \vec{r}_{P/LE}^a
 
 .. This is the suboptimal "general" parametrization
+
+The complete general equation is then:
 
 .. math::
 
@@ -630,7 +637,8 @@ coordinate system (Both `c` and `s` use `frd` coordinates).
 
 * This general equation is very expressive, but a bit of a pain to work with
   directly. It's often more convenient to define the variables in terms of
-  functions of simple *design parameters*.
+  functions of simple *design parameters* that encode the significant
+  structure of the wing.
 
 * [[The general equation is the result of designing via wing sections. The
   whole point is that you start by defining the section profiles, then
