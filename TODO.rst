@@ -33,6 +33,30 @@
   components.
 
 
+Topical
+=======
+
+
+Canopy geometry
+---------------
+
+* How do I argue that my definition of `r_LE/RP` decouples the parameters? You
+  can see in the math that `r_LE/RP` and `r_P/LE` both involve `c` and
+  `C_c/s`, but it won't be obvious that it counteracts the changes to keep the
+  parameters decoupled.
+
+* Where do I define *design parameters* (span, taper, etc)? Should be pretty
+  early on on `Canopy Geometry` when I'm motivating parametric models.
+
+* Finish the derivation of my parametrized wing geometry in `derivations`. The
+  goal is to derive the version that uses `R` (configurable reference points),
+  but keep the parafoil-related material in `Canopy Geometry`.
+
+* Complete the parametric design choices for parafoils in `Canopy Geometry`.
+  The choice to set `r_y = r_z`, how I define `C_c/s`, show some parametric
+  curves (eg, elliptical chord), etc.
+
+
 Content Tasks
 =============
 
@@ -191,6 +215,9 @@ Notation, Math, etc
   masses. **Maybe it's time I put my foot down that I simply like using
   brackets for matrices; it enables visual scanning you can't do otherwise.
   Also, they help reveal mistakes, kind of like physical units in equations.**
+
+* When do you need to specify a reference frame in my mathematical notation?
+  (See `notes-202048:Math` for some thoughts.)
 
 
 Terminology

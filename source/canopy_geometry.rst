@@ -74,13 +74,7 @@ Canopy Geometry
   estimated from a mathematical model of the canopy geometry.
 
 
-.. What are the model requirements?
-
-* To support the variety of aerodynamic methods, the model must be able to
-  returns points on the section surfaces (chords, camber lines, and profiles).
-
-
-.. FIXME: random stuff about parametric models?
+.. The goal of this chapter is a parametric canopy geometry
 
 * The conventional parametric approach to wing design is to use *wing
   sections*, which require specifying the scale, position, orientation, and
@@ -104,10 +98,10 @@ Canopy Geometry
 
   * Their parametrizations are not convenient for defining canopies.
 
-     Fixed reference point for position, use of `y` instead of `y_flat` (or
-     more generally an inability to do mixed-design in flat and projected
-     coordinates; for parafoils it's often easier to think in terms of the
-     flattened wing), `c` and `C_c/s` are coupled with position
+    Fixed reference point for position, use of `y` instead of `y_flat` (or
+    more generally an inability to do mixed-design in flat and projected
+    coordinates; for parafoils it's often easier to think in terms of the
+    flattened wing), `c` and `C_c/s` are coupled with position
 
     [[Hard to discuss this in detail without diving into the math. Maybe just
     declare it here and discuss it later?]]
@@ -233,12 +227,7 @@ Functionality
   3. Support the queries necessary to use the geometry in aerodynamic methods.
 
      In particular, it should return the positions of points on the canopy
-     surfaces: the chord surface, the mean camber surface, and the profile
-     surface.
-
-     [[The main requirement is that it does not lock the user into one
-     specific method, like LLT, but don't focus on that here. I want to avoid
-     any discussion of aerodynamics if possible.]]
+     surfaces (chords, camber lines, and profiles).
 
 * [[Model objectives v2]]:
 
