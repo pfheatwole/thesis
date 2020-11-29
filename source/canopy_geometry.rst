@@ -7,24 +7,24 @@ Canopy Geometry
    A paraglider dynamics model requires the aerodynamics and inertial
    properties of the canopy, which can be estimated from the canopy geometry.
 
-   This chapter develops a parametric canopy geometry based on wing sections.
-   It uses a set of intuitive design parameters based on the most readily
-   available data: technical specifications and physical measurements. The
-   ability to approximate real wings is important because this model is
-   intended to be used to reconstruct flights from real wings.
-
-   The chapter starts with *wing sections*, which are the conventional basis
-   for parametric wing models (since airfoil curves capture the structure of
-   the profiles). Defining the section profiles in a local (airfoil)
-   coordinate system establishes a general equation for points on the wing
-   surfaces (chords, camber lines, or profiles). The section profiles require
-   a scale, position, and orientation, which define the fundamental variables
-   of the equation. The rest of the chapter presents a parametrization of
-   those variables optimized for designing non-linear wing geometries. The
-   major advantages of the parametrization are that (1) it enables designing
-   position using points other than the leading edge, and (2) it decouples the
-   scale, position, and orientation parameters so they can be designed
-   independently.
+   This chapter develops a parametric canopy geometry. It starts with *wing
+   sections*, which are the conventional basis for parametric wing models
+   (since airfoil curves capture the structure of the profiles). Defining the
+   section profiles in a local (airfoil) coordinate system establishes
+   a general equation for points on the wing surfaces (chords, camber lines,
+   or profiles). The section profiles require a scale, position, and
+   orientation, which represent the fundamental design variables of the wing.
+   The rest of the chapter presents a parametrization of those variables
+   optimized for designing non-linear wing geometries. The design parameters
+   are intended to be intuitive, convenient, and to support direct use of the
+   most readily available canopy data: technical specifications and physical
+   measurements. The major advantages of the parametrization over existing
+   parametrizations are that (1) it enables designing position using points
+   other than the leading edge, (2) it decouples the scale, position, and
+   orientation parameters so they can be designed independently, and (3) it
+   makes it easier to utilize the available data. The ability to approximate
+   real wings is important because this model is intended to be used to
+   reconstruct flights from real wings.
 
 
 .. What is a canopy?
