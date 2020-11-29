@@ -18,37 +18,41 @@ Parametric wing modeling with airfoils
    We need a mesh of points on the surfaces relative to the origin.
 
 
-.. The general parametrization
+.. The general equation
 
-2. Parametrize `r_P/O` using wing sections
+#. Decompose `r_P/O` using points in wing sections
 
-   First, decompose `r_P/O`. Airfoil geometries define the points relative to
-   the leading edge by convention, so `r_P/O` naturally decomposes this way:
+   [[It's easier to design section profiles in 2D, so the points are relative
+   to the section. You finish the wing by specifying the pose of the section
+   relative to the canopy. FIXME: explain `r_{P/LE}^a` here.]]
 
-     `r_P/O = r_P/LE + r_LE/O`
+   Airfoil geometries specify the points relative to the leading edge by
+   convention, so `r_P/O` naturally decomposes to:
 
-   The airfoil geometry defines the points relative to the leading edges:
+     `r_{P/O}^c = r_{P/LE}^c + r_{LE/O}^c`
 
-     `r_P/LE = c * C_c/s @ T_s/a @ r_P/LE^a`
+     `r_{P/LE}^c = c * C_c/s @ T_s/a @ r_{P/LE}^a`
 
    This form (the result of using wing sections) introduces scale (`c`),
    position (`r_LE/O`), orientation (`C_c/s`), and "points in the section"
    (`r_P/LE`).
 
+   [[FIXME: I didn't explain where `r_{P/LE}^c` comes from.]]
 
-.. My novel parametrization
 
-3. It's often inconvenient to specify position using the leading edge.
-   Instead, parametrize `r_LE/O` LE in terms of an arbitrary reference point:
+.. An additional decomposition
+
+#. Decompose `r_LE/O` using an arbitrary reference point.
+
+   It's often inconvenient to specify section position using the leading edge.
+   Instead, allow the designer to use an arbitrary reference point `RP`:
 
      `r_LE/O = r_LE/RP + r_RP/O`
 
-   This changes how you specify position. Now you can design with an arbitrary
-   `r_RP/O` instead of `r_LE/O`; you just have to be able to define `r_LE/RP`.
-   (If `r_LE/RP = 0` then you're back to positioning the leading edges again.)
+   This lets a designer specify section position using whatever point is the
+   most convenient.
 
-4. Make an "intuitive" choice of reference point using points on the section
-   chords:
+#. Parametrize the reference point using points on the section chords:
 
      `r_LE/RP = c * R @ C_c/s @ xhat`
 
@@ -60,9 +64,7 @@ Parametric wing modeling with airfoils
 
      `xhat = [1, 0, 0]^T` (the chord lies along `xhat`)
 
-   **FIXME**: describe the intuition between separate x, y, and z translations
-
-5. "General" equation:
+#. The general, partially parametrized, equation:
 
      `r_P/O = r_P/LE + r_LE/RP + r_RP/O`
 
@@ -78,29 +80,28 @@ Parametric wing modeling with airfoils
    form isn't immediately usable by parametrizations that specify section
    scale/pitch/yaw by defining the LE and TE as two points.)
 
-   To design a wing, define: `c`, `C_c/s`, `r_P/LE`, `R`, and `r_RP/O`. **This
+   To design a wing, specify: `c`, `C_c/s`, `r_P/LE`, `R`, and `r_RP/O`. **This
    is almost exactly the same amount of work as before, you only need to add
    `R`.** Minimal extra effort for a lot of convenience.
 
-6. Some choices that work well for parafoils:
+#. Some parameter choices that work well for parafoils:
 
-     `r_y = r_z`
+     Let `r_y = r_z`
 
-     `C_c/s = Gamma @ Theta`
+     Parametrize `C_c/s` using intrinsic Euler roll and pitch angles
 
-     `Gamma = arctan(dz/dy)` (where `dz/dy` comes from `r_RP/O`)
+     Specify the intrinsic section roll angle as `gamma = arctan(dz/dy)` (where
+     `dz/dy` comes from `r_RP/O`). [[FIXME: this avoids section yaw, but
+     I forget: why was that important?]]
 
-     `Theta = [[cos(theta), 0, sin(theta)], [0, 1, 0], [-sin(theta), 0,
-     cos(theta)]]`
-
-   To define a parafoil you just need to choose: `c`, `r_x`, `r_yz`, `r_RP/O`,
-   `theta`, and an airfoil.
+   To specify a parafoil you just need to design: `c`, `r_x`, `r_yz`, `r_RP/O`,
+   `theta`, and the section airfoils.
 
    **FIXME**: write the final version using the actual functions (of section
-   index, fractions of the chord, etc) instead of this generalized "any point
-   P" notation
+   index, fractions of the chord, etc) instead of this generalized notation
+   ("any point P" is not particularly clear)
 
-7. <Examples of completing the definition with parametric functions
+#. <Examples of completing the definition with parametric functions
    (elliptical functions, etc) using *design parameters* (span, taper ratio,
    etc) choices of reference points, etc>
 

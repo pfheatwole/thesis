@@ -1054,6 +1054,46 @@ Wing sections
 Parametrization
 ---------------
 
+* The goal is to design a wing using simplified *design parameters* instead of
+  specifying the surface points directly. A good parametrization imposes
+  structure on the geometry, which has several advantages:
+
+  * Mitigate the excessive flexibility in the general equation (restrict
+    designs to "reasonable" values, or at least designs that can be roughly
+    analyzed using section coefficients)
+
+  * Reduce the workload (parameters are like "summaries")
+
+  * Make wings easier to modify
+
+  * Make wings easier to compare
+
+  * Make it easier to specify design uncertainty (priors)
+
+* What do I mean by "parametrize the general equation"?
+
+  [[I mean "define the variables of the general equation using parametric
+  functions that capture the underlying structure of the canopy."]]
+
+  The general parameters are able to represent any structure, but they don't
+  encode enough structure. This is a problem because it pushes the work onto
+  the designer. If you can assume more underlying structure you can save the
+  designer from needing to provide that structure themselves. A good choice of
+  parameters lets them focus on the important details.
+
+  The purpose of a parametric surface is to decompose a complicated surface
+  geometry into a set of simple design functions. The purpose of "parametric"
+  functions (like an elliptical arc) is the **capture the structure** of the
+  function, preferably with as few parameters as possible.
+
+  [[I feel like "parametric function" is poorly named, unless that's
+  a conventional way to say "specify the values of a function through
+  functions of some parameters instead of specifying the values directly".
+
+  Counterpoint: the "parameter" of a parametric function essentially chooses
+  a particular instantiation of that function. Think of the parameters as
+  choosing some constants that complete the definition of the function.]]
+
 * Existing surface parametrizations are either awkward (you can do what you
   need, but it's to fiddly), limited (you can't use it to express your desired
   design), or incomplete (eg, the PDH left a lot of the equations undefined).
@@ -1103,6 +1143,15 @@ Parametrization
 
 Section index
 ^^^^^^^^^^^^^
+
+* **MY CHOICE OF SECTION INDEX HAS A NAME:** it's the *normalized arc length*
+  of `yz(s)`. It's great because users don't need to care how long it is,
+  the index is always `-1 <= s <= 1`. I don't use the arc length of the 3D
+  position curve because it was much more difficult to imagine the effects.
+  You can't just look at the yz-curve by itself and say "`s = 0.5` should be
+  right about there" because you can't see the "depth" due to the x-component
+  of position. Oh, and you can't use `x` by itself (what's its length?), but
+  `yz` has a length independent of the parametrization.
 
 * Recall the idea of a *section index*: it's a way to uniquely identify
   a "spanwise station". Most aerodynamic methods use `s = 2 * y / b`, but for
@@ -1329,9 +1378,11 @@ My parametrization
 * Confirm my use of terminology: "dihedral" versus "section roll". How do you
   differentiate between the angle the vector from the origin to the section
   makes relative to the y-axis versus the intrinsic Euler roll of the section?
-  XFLR5, MachUpX, and Benedetti use `dihedral` to refer to section roll angle;
-  `jann2003AerodynamicCoefficientsParafoil` refers to *arc anhedral angle* as
-  the angle from root-to-tip.
+  XFLR5, MachUpX, and Benedetti use `dihedral` to refer to **section** roll
+  angle; `jann2003AerodynamicCoefficientsParafoil` refers to *arc anhedral
+  angle* as the angle from root-to-tip. In "General Aviation Aircraft Design"
+  (Gudmundsson; 2013; pg318) he refers to dihedral as the angle made by the
+  vector from the root to the **wingtip**.
 
   Summary: **section vs wing (or "arc") anhedral**. Hrm. On the bright side,
   I can use `theta` and `gamma` for the Euler angles, which just so happen to
@@ -1378,6 +1429,11 @@ a pitch-roll "proper" Euler angle sequence?) for the DCMs.]]
   say **which** span). Kinda nice that "station" and "section" both start with
   `s` though.
 
+* **Major reasons I'm introducing the section index**: the `y` are non-linear
+  relative to `y_flat`, so things like twist produce weird spanwise variations
+  if you use `y`. Also, `y_flat` includes a scaling factor that the normalized
+  `s` does not, so parameters don't depend on the absolute scale of the wing.
+
 * My definition of the section index is similar to something used by Abbott,
   except he used `s = 2 * y / b` whereas I'm using the flat versions.
 
@@ -1405,6 +1461,11 @@ a pitch-roll "proper" Euler angle sequence?) for the DCMs.]]
   :math:`yz(s)` might not define the "true" physical span. (The reference
   points might not be the maximum y-coordinates.)
 
+* I should mention that although I've define the section using the normalized
+  arc length of `yz`, **it doesn't prevent you from using conventional
+  (explicit) definitions**. For example, in Belloc, he doesn't give the
+  section index, but that's okay: I just recompute them from the points.
+
 
 Scale
 ^^^^^
@@ -1412,6 +1473,21 @@ Scale
 [[Interesting stuff about chord lengths goes here. This is about how you
 specify the chord distribution, and not a discussion about wing design (taper,
 aspect ratios, etc).]]
+
+* The *scale* of a section is the scaling factor to produce the section
+  profile from a normalized airfoil curve.
+
+* How do you specify scale?
+
+  * What is a chord?
+
+    The *chord* of a section is the line connecting the leading edge to the
+    trailing edge. The scale of a wing section is determined by the length of
+    the chord.
+
+  * The airfoils are scaled such that the camber line starts at the leading
+    edge and terminates at the trailing edge of the section. (In other words,
+    an airfoil is the section profile normalized by the chord length.)
 
 * You can specify chords as either a position and length, or as two
   positions (typically the leading and trailing edges). `FreeCAD` and
@@ -1433,6 +1509,19 @@ Position
 [[Interesting stuff on positioning sections goes here. Leading edge, trailing
 edge, quarter-chord, whatever.]]
 
+* How do you specify position?
+
+  * The position of a section is the vector from the wing origin to some
+    reference point in the section-local coordinate system.
+
+  * The leading edge of a wing section is the most common section-local origin
+    because airfoils are traditionally defined with the leading edge as the
+    origin. This choice is convenient since the wing section and the airfoil can
+    share a coordinate system.
+
+  * The most common reference point for the position is the leading edge, but
+    other choices are possible.
+
 * What is :math:`yz(s)`? In short, for each section of the wing, pick the
   point at :math:`r_{yz} \, c` back from the leading edge. Project that
   point onto the yz-plane. Do this for all sections to produce a curve. The
@@ -1453,8 +1542,20 @@ edge, quarter-chord, whatever.]]
 Orientation
 ^^^^^^^^^^^
 
-* The general equation of the chord surface requires the section DCMs to
-  determine the section x-axes, thus wing design requires DCM design.
+* How do you specify orientation?
+
+  * The orientation of a section is the orientation of the section's local
+    coordinate system relative to the wing's.
+
+  * Can specify it explicitly using angles, or implicitly by specifying the
+    shape of the position curves.
+
+* [[From PDH: "washin promotes spanwise tension and stability, preventing the
+  wing tips fold unexpectedly".
+
+  It also encourages the wing to stall from the wing tips first; unlike plane
+  wings, you want the middle of the wing to be the last to stall so you don't
+  "taco" the canopy.]]
 
 * Section DCMs can be decomposed into intuitive design parameters by defining
   the section orientations as Euler angles. The decomposition also facilitates

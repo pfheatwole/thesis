@@ -97,6 +97,29 @@ Canopy Geometry
   paraglider canopies.
 
 
+.. MISC?
+
+* Why am I about to develop my own parametric geometry when there are existing
+  tools for that purpose? (MachUpX, AVL, etc)
+
+  * Their parametrizations are not convenient for defining canopies.
+
+     Fixed reference point for position, use of `y` instead of `y_flat` (or
+     more generally an inability to do mixed-design in flat and projected
+     coordinates; for parafoils it's often easier to think in terms of the
+     flattened wing), `c` and `C_c/s` are coupled with position
+
+    [[Hard to discuss this in detail without diving into the math. Maybe just
+    declare it here and discuss it later?]]
+
+  * Dependence on external tools
+
+  * [[Some of this discussion is probably best left until I finish deriving my
+    general parametrization. It may be easier to look backwards and say
+    "existing tools are equivalent to choosing `r_LE/RP = 0`, and here's why
+    that's bad".]]
+
+
 .. Roadmap
 
 This chapter will proceed as follows:
@@ -314,17 +337,14 @@ Usability
 * [[To define a geometry, you can either use an explicit set of points or
   a set of parametric functions that generate the points.]]
 
-* [[Define *explicit geometry*]]
-
-  [[In a sense, explicit geometries are "infinite parametric" since you can
-  add as much detail to the mesh as you want. Individual "parameters" (the
-  points) don't capture any structure by themselves.]]
+* [[Define *explicit geometry*: specifying variable values directly]]
 
 * [[Modeling with explicit geometries is too expensive (time consuming to
   produce, require too much information about the wing, difficult to analyze
   with simple aerodynamics, etc)]]
 
-* [[Define *parametric geometry*]]
+* [[Define *parametric geometry*: specifying variables values using parametric
+  functions]]
 
 * [[Advantages of parametric geometries]]
 
@@ -385,13 +405,23 @@ Usability
     the chord length or how you orient that section.
 
 
-Designing with wing sections
-============================
+Wing design using sections
+==========================
 
 .. Introduce designing a wing using "wing sections". They're the conventional
-   starting point for parametrizing a wing geometry (airfoil curves capture
-   the structure of the section profiles). Defining the surfaces using points
-   in the wing sections sets up the the general form of the parametric model.
+   starting point for parametrizing a wing geometry (airfoil curves capture the
+   structure of the section profiles). Choosing to define the surfaces using
+   points in the wing sections establishes the general form of the parametric
+   model.
+
+.. See `notes-2020w47:Canopy parametrizations` for a discussion
+
+A canopy geometry model defines the shape of a canopy as a collection of
+surfaces: the chord surface, the mean camber surface, and the profile surface.
+[[FIXME: not sure I agree with this statement. Unclear. A shape is just
+a shape. Granted, a canopy geometry must PROVIDE those surfaces.]]
+
+* [[Parametric models are better, so we want a parametric canopy geometry.]]
 
 * [[There is already a standard parametric method for wings: *wing sections*]]
 
@@ -408,8 +438,8 @@ Designing with wing sections
   not clear that "scale, position, orientation" are fundamentally a group.
   **Counterpoint**: Gudmundsson says wing design is about designing two 2D
   components: the *planform* and the *profile*, so I guess his idea of
-  "planform" matches my idea of a chord surface.]]
-
+  "planform" sort of matches my idea of a chord surface, except that the chord
+  surface is more like a 2D manifold in 3D (it's not restricted to a plane).]]
 
 .. figure:: figures/paraglider/geometry/wing_sections2.svg
 
@@ -420,63 +450,12 @@ Designing with wing sections
    profile at specific points along the span.
 
 
-Scale
------
+Section profiles
+----------------
 
-* The *scale* of a section is the scaling factor to produce the section
-  profile from a normalized airfoil curve.
-
-* How do you specify scale?
-
-  * What is a chord?
-
-    The *chord* of a section is the line connecting the leading edge to the
-    trailing edge. The scale of a wing section is determined by the length of
-    the chord.
-
-  * The airfoils are scaled such that the camber line starts at the leading
-    edge and terminates at the trailing edge of the section. (In other words,
-    an airfoil is the section profile normalized by the chord length.)
-
-
-Position
---------
-
-* How do you specify position?
-
-  * The position of a section is the vector from the wing origin to some
-    reference point in the section-local coordinate system.
-
-  * The leading edge of a wing section is the most common section-local origin
-    because airfoils are traditionally defined with the leading edge as the
-    origin. This choice is convenient since the wing section and the airfoil can
-    share a coordinate system.
-
-  * The most common reference point for the position is the leading edge, but
-    other choices are possible.
-
-
-Orientation
------------
-
-* How do you specify orientation?
-
-  * The orientation of a section is the orientation of the section's local
-    coordinate system relative to the wing's.
-
-  * Can specify it explicitly using angles, or implicitly by specifying the
-    shape of the position curves.
-
-* [[From PDH: "washin promotes spanwise tension and stability, preventing the
-  wing tips fold unexpectedly".
-
-  It also encourages the wing to stall from the wing tips first; unlike plane
-  wings, you want the middle of the wing to be the last to stall so you don't
-  "taco" the canopy.]]
-
-
-Profile
--------
+[[I feel like I should discuss these first since they define some of the
+terminology I need, like *chord*. **FIXME**: can you define the geometry
+without defining airfoils yet? Is it better that way?]]
 
 [[Should I write a separate chapter about airfoils? Their purpose, geometry,
 coefficients, behavior, etc. I don't like separating those topics, but I also
@@ -536,17 +515,8 @@ local *angle of attack*.
    Airfoil thickness conventions.
 
 
-General equation of a wing geometry
-===================================
-
-.. Introduce the general equation of points in wing sections
-
-.. See `notes-2020w47:Canopy parametrizations` for a discussion
-
-A canopy geometry model defines the shape of a canopy as a collection of
-surfaces: the chord surface, the mean camber surface, and the profile surface.
-[[FIXME: not sure I agree with this statement. Unclear. A shape is just
-a shape. Granted, a canopy geometry must PROVIDE those surfaces.]]
+General equation
+----------------
 
 Choosing to model a wing using wing sections means that the wing surfaces are
 defined by airfoils, which are 2D curves that lie in the section coordinate
@@ -624,133 +594,14 @@ definitions of four variables:
 
 4. Profile: :math:`\vec{r}_{P/LE}^a`
 
-
----------------------------------------------------------------------------
-
-:math:`\mat{C}_{c/s}` is the *direction cosine matrix* that
-transforms coordinates from the section (local) coordinate system to the
-canopy (global) coordinate system, and :math:`\mat{C}_{s/a}` transforms
-coordinates from the 2D airfoil coordinate system into the 3D section
-coordinate system (Both `c` and `s` use `frd` coordinates).
-
----------------------------------------------------------------------------
-
-* This general equation is very expressive, but a bit of a pain to work with
-  directly. It's often more convenient to define the variables in terms of
-  functions of simple *design parameters* that encode the significant
-  structure of the wing.
-
-* [[The general equation is the result of designing via wing sections. The
-  whole point is that you start by defining the section profiles, then
-  position them relative to the canopy origin to produce the final wing.
-  Splitting `r_P/O` into `r_P/LE` and `r_LE/O` is the natural (general) result
-  of designing with wing sections; I suppose it's sort of a parametrization of
-  the surfaces, but that's not the "parametrization" I'll be talking about
-  later. **I need to give a more complete definition of the airfoil geometry
-  in terms of `r_P/LE` before I introduce the general equation to make it more
-  obvious what those two components mean.**]]
-
-* Should I introduce scale, position, etc **before** the general equation, or
-  should I define the general equation as part of the "design with wing
-  sections" section, and naturally segue from "what the math produced" into
-  a discussion of those four parameters?
-
-  That'd work nicely if I can **clearly** motivate each step of the derivation
-  of the general equation.
+This general equation is very expressive, but a bit of a pain to work with
+directly. It's often more convenient to define the variables in terms of
+functions of simple *design parameters* that encode the significant structure
+of the wing.
 
 
-Existing parametrizations
-=========================
-
-.. There are already tools for designing wings using wing sections. Briefly
-   discuss existing parametrizations and why they're not ideal for designing
-   parafoil canopy geometries.
-
-* Problems with the general surface equation
-
-  * It's **too** flexible: it allows design layouts that can't be (reasonably)
-    analyzed using section coefficient data, so a designer has to waste time
-    being careful.
-
-  * It's inconvenient: requiring the designer to specify the leading edge
-    isn't always ideal (maybe you're trying to position the quarter-chord, the
-    trailing edge, etc).
-
-* Thankfully, those problems can be mitigated with a better parametrization.
-
-* What do I mean by "parametrize the general equation"?
-
-  [[I'm essentially saying "that set of design parameters is awkward, I want
-  to choose a better set."]]
-
-  The general parameters are able to represent any structure, but they don't
-  encode enough structure. This is a problem because it pushes the work onto
-  the designer. If you can assume more underlying structure you can save the
-  designer from needing to provide that structure themselves. A good choice of
-  parameters lets them focus on the important details.
-
-  The purpose of a parametric surface is to decompose a complicated surface
-  geometry into a set of simple design functions. The purpose of "parametric"
-  functions (like an elliptical arc) is the **capture the structure** of the
-  function, preferably with as few parameters as possible.
-
-  (I feel like "parametric function" is poorly named, unless that's
-  a conventional way to say "specify the values of a function through
-  functions of some parameters instead of specifying the values directly".)
-
-
-.. People are already designing wings using sections. Why don't I just use
-   those tools?
-
-* What are some existing parametrizations of the general equation?
-
-  * [[Mostly how they define position and orientation. Assume scale is always
-    an explicit chord length. Not sure about the section index.]]
-
-  * [[PDH, Benedetti, MachUpX, XFLR5, AVL, etc. Present them as
-    parametrizations of the general equation.]]
-
-* What are the limitations of existing parametrizations?
-
-  * [[The mathematical model is supposed to be flexible and easy to use. I'm
-    developing a new parametrization which suggests the conventional choices
-    fail somehow. Section profiles and scale already have standardized
-    parametrizations, but there are a variety of ways to specify position and
-    orientation. They typically use the projected section `y` coordinate for
-    the section index, define fixed reference points for position, fixed
-    rotation points (usually the leading edge), etc.]]
-
-  * Some parametrizations only allow the designer to specify `y`, but for
-    arched wings like parafoils it can be easier to specify `y_flat`
-
-  * MachUpX specifies `x` via a `sweep` angle. That's not so bad, but it
-    **only** supports that way of specifying `x`. It'd be nice if it supported
-    other forms of `x(s)` (or `x(y)`, actually, since it uses `s = y` with
-    a normalized span).
-
-  * Fixed reference points dictate design specification.
-
-    For example, a designer may want to design the trailing edge but the
-    parametrization requires the design to be specified in terms of the
-    leading edge. Forcing the user to specify their design using leading edge
-    coordinates requires the designer to manually convert their design target
-    into leading edge coordinates.
-
-  * Tight coupling between the different dimensions of the design.
-
-    Explicit rotation points are an indirect way of producing a desired
-    design. The design goal is to specify two independent parameters, position
-    and orientation, but because the choice of rotation point affects the
-    final position of points on the chords it means that position is coupled
-    to rotation.
-
-    Similarly, if the reference points are at fixed locations on the chord,
-    and the goal is to position some other point on the chord, then position
-    is coupled to the chord length. Scale should not be coupled to position.
-
-
-Optimized parametrization
-=========================
+Parametric design
+-----------------
 
 .. Introduces a novel parametrization of the general equation that makes it
    easier to design parafoil canopies. Start by describing and "ideal"
@@ -761,10 +612,22 @@ Optimized parametrization
    `dz/dy` and `\theta` (so you design `theta(s)` and `yz(s)` instead of
    specifying the section DCM directly).
 
+
+[[By this point I've introduced wing sections (the conventional starting point
+for parametrizing a wing geometry) which naturally resulted in a general
+equation that specifies the points on the wing surfaces (chords, camber lines,
+or profiles) in terms of points in the wing sections. The general equation is
+defined in terms of four variables: scale, position, orientation, and points.
+Each variable must be defined. Defining each variable explicitly is a pain, so
+we want parametric functions of simple *design parameters* that define the
+variables. The airfoil geometry already parametrized the points, now I need to
+parametrize the others.]]
+
+
 .. Introduce my simplified parametrization for parafoils
 
 It's annoying to design the section leading edges directly. Instead, define it
-using more convenient design parameters:
+using more convenient *design parameters*:
 
 .. math::
 
@@ -800,6 +663,51 @@ section chords:
 
   3. Supports aerodynamic analysis via section coefficient data (partly by
      keeping the y-axes in the yz-plane).
+
+
+* **Oh hey, I just figured out how my choice of reference point works!** Think
+  of `c * C_c/s @ xhat` as a vector of derivatives: how much you would change
+  in x, y, and z as you moved one chord length from the LE to the TE. The
+  vector `c * C_c/s @ xhat` is essentially `<dx/dr, dy/dr, dz/dr>` (where `0
+  <= r <= 1` is the parameter for choosing points along the chord). Applying
+  `diag(r_x, r_y, r_z)` just scales them.
+
+
+EXTRA
+-----
+
+* Problems with the general surface equation
+
+  * It's too flexible: it doesn't impose any restrictions on the values of the
+    variables, meaning it allows design layouts that can't be (reasonably)
+    analyzed using section coefficient data. It forces all the responsibility
+    on the designer to produce a useable wing definition.
+
+  * It's not flexible enough: it requires the designer to use the section
+    leading edges to position the sections. In many cases it is more
+    convenient to position with other points, such as the quarter-chord,
+    trailing edge, etc. [[If a designer wants to define a wing using some
+    other reference point they cannot do it directly; they must specify the
+    shape indirectly by manually calculating the corresponding leading edge
+    position.]]
+
+* [[The general equation is the result of designing via wing sections. The
+  whole point is that you start by defining the section profiles, then
+  position them relative to the canopy origin to produce the final wing.
+  Splitting `r_P/O` into `r_P/LE` and `r_LE/O` is the natural (general) result
+  of designing with wing sections; I suppose it's sort of a parametrization of
+  the surfaces, but that's not the "parametrization" I'll be talking about
+  later. **I need to give a more complete definition of the airfoil geometry
+  in terms of `r_P/LE` before I introduce the general equation to make it more
+  obvious what those two components mean.**]]
+
+* Should I introduce scale, position, etc **before** the general equation, or
+  should I define the general equation as part of the "design with wing
+  sections" section, and naturally segue from "what the math produced" into
+  a discussion of those four parameters?
+
+  That'd work nicely if I can **clearly** motivate each step of the derivation
+  of the general equation.
 
 
 Examples of chord surfaces
