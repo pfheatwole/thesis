@@ -96,22 +96,18 @@ Canopy Geometry
 * Why am I about to develop my own parametric geometry when there are existing
   tools for that purpose? (MachUpX, AVL, etc)
 
-  * Their parametrizations are not convenient for defining canopies.
+  * Primary reason: existing tools don't provide parametric models suitable
+    for designing parafoils; they rely on explicit geometry definitions.
+    I needed to quickly create models of existing wings from simple technical
+    specs, and explicit geometry definitions are not suitable for that. (I
+    think MachUpX provides an API to define the variables as functions, but it
+    doesn't provide a parametric way to **produce** those functions.)
 
-    Fixed reference point for position, use of `y` instead of `y_flat` (or
-    more generally an inability to do mixed-design in flat and projected
-    coordinates; for parafoils it's often easier to think in terms of the
-    flattened wing), `c` and `C_c/s` are coupled with position
-
-    [[Hard to discuss this in detail without diving into the math. Maybe just
-    declare it here and discuss it later?]]
-
-  * Dependence on external tools
-
-  * [[Some of this discussion is probably best left until I finish deriving my
-    general parametrization. It may be easier to look backwards and say
-    "existing tools are equivalent to choosing `r_LE/RP = 0`, and here's why
-    that's bad".]]
+  * Secondary reason: I needed to implement my own aerodynamics anyway.
+    I needed fast and "accurate enough". Linear models are fast but are not
+    suitable for (1) non-linear geometry at (2) high angles of attack. CFD
+    models are accurate, but very slow. (MachUpX didn't exist at the time.)
+    See the discussion in `Canopy Aerodynamics`.
 
 
 .. Roadmap
@@ -333,7 +329,7 @@ Usability
   with simple aerodynamics, etc)]]
 
 * [[Define *parametric geometry*: specifying variables values using parametric
-  functions]]
+  functions which are defined in terms of *design parameters*]]
 
 * [[Advantages of parametric geometries]]
 
@@ -368,7 +364,8 @@ Usability
     * Intuitive
 
     * Preferably map easily onto the most readily-available summary values
-      (like span). It needs to make it easy to work with technical specs.
+      (like span). It needs to make it easy to work with available wing data
+      (technical specs, measurable quantities like flat span, etc).
 
   * When I say a good parametrization should be *intuitive*, I mean that it
     should match what you notice when you glance at a wing. The arc, the
@@ -825,6 +822,29 @@ I implement Belloc's wing using this geometry.]]
 
 Discussion
 ==========
+
+* This project requires a parametric geometry that could model complex wing
+  shapes using simple design parameters. The parametrization must make it
+  convenient to approximate existing paraglider canopies using the limited
+  available data.
+
+  [[If you had highly detailed geometry data you could use that, but since we
+  don't we need to use simple functional forms to approximate that detail.]]
+
+* There are two aspects to a geometry model:
+
+  1. The choice of variables that combine to describe the wing. The choice of
+     variables is the language the designer must use to describe the wing.
+
+  2. Assigning values to those variables
+
+* This chapter started with *wing sections* to derive a general equation
+  typical of existing geometry models. It decompose the position variable to
+  allow positioning via an arbitrary reference point. The decomposition
+  decoupled all the variables, making it easier to design parametric functions
+  for each of them. I concluded with my choice of parametrization, and some
+  examples of canopies using that parametrization.
+
 
 Advantages
 ----------

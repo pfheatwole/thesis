@@ -5,6 +5,33 @@ Canopy Aerodynamics
 
 * What are aerodynamics?
 
+* Why did I write my own aerodynamics code?
+
+  * You could use this parametric model to output design specifications for
+    other tools, but relying on existing tools is problematic:
+
+    1. More complexity (you introduce an external dependency)
+
+    2. Slower (need to call into an external tool)
+
+    3. Most of the freely available tools are not idea for analyzing
+       parafoils. They must handle non-linear geometries. They must provide
+       reasonable performance at significant angles of attack (they can't rely
+       on small angle approximations). They must degrade gracefully near
+       stall. They must support asymmetric wind vectors (thermal updrafts,
+       rotations, etc). They must be able to incorporate empirical adjustments
+       from parafoil literature (viscous drag, mostly).
+
+  * Their parametrizations are not convenient for defining canopies.
+
+    Fixed reference point for position, use of `y` instead of `y_flat` (or
+    more generally an inability to do mixed-design in flat and projected
+    coordinates; for parafoils it's often easier to think in terms of the
+    flattened wing), `c` and `C_c/s` are coupled with position
+
+    [[Wait! I could've defined my own geometry to design the wings then output
+    the geometry in terms of leading edge, so this isn't a strong argument.]]
+
 
 Modeling Requirements
 =====================

@@ -1557,6 +1557,9 @@ Orientation
   wings, you want the middle of the wing to be the last to stall so you don't
   "taco" the canopy.]]
 
+* **VERIFY**: I'm saying `C_c/s` is the DCM for the section. I forget if it's
+  supposed to be transposed from the definition?
+
 * Section DCMs can be decomposed into intuitive design parameters by defining
   the section orientations as Euler angles. The decomposition also facilitates
   mixed-design of the flattened and inflated wing geometries. [[How?]]

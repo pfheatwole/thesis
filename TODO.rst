@@ -219,6 +219,10 @@ Notation, Math, etc
 * When do you need to specify a reference frame in my mathematical notation?
   (See `notes-202048:Math` for some thoughts.)
 
+* I'm getting sick of `\mathrm` for all the points (like
+  `r_{\mathrm{P}/\mathrm{LE}}`). Can I write a latex macro that will wrap them
+  for me?
+
 
 Terminology
 -----------
