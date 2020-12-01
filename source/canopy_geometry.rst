@@ -333,22 +333,39 @@ Usability
 
 * [[Advantages of parametric geometries]]
 
-  * Parametric designs try to balance simplicity and expressibility. Parameters
-    "summarize" the structure. A good parametrization lets you focus on
-    high-level design without forcing you into simplistic designs. **The goal
-    is to find simple design parameters that capture the complex structure of
-    the wing.** [[I'm interested in "easy to create, good enough"
-    approximations of real wings, not physically-realistic simulations.]]
+  * Parametric equations are designed to capture the structural knowledge of
+    the shape. If a complex shape can be represented with parametric
+    equations, then the parameters "summarize" the structure. Each parameter
+    communicates more information than an explicit coordinate, so fewer
+    parameters are required, and less work is required to specify a design.
+
+    Parametric designs try to balance simplicity and expressibility. A good
+    parametrization lets you focus on high-level design without forcing you
+    into simplistic designs. **The goal is to find a set of simple parametric
+    functions that combine to capture the complex structure of the wing.**
+    [[I'm interested in "easy to create, good enough" approximations of real
+    wings, not physically-realistic simulations.]]
 
   * Parametric models let you standardize so you can compared models.
 
-  * Parametric models make it much easier to place priors over model
-    configurations. (You can probably build a metric for explicit geometries,
-    but it would be tough.)
+  * Parametric models use are low-dimensional representations, which makes
+    them more amenable to mathematical optimization methods. This is helpful
+    for statistical parameter estimation, or wing performance optimization.
 
-  * Parametric models use fewer parameters, which makes them more amenable to
-    mathematical optimization methods. This is helpful for statistical
-    parameter estimation, or wing performance optimization.
+  * Parametric models make it much easier to place priors over model
+    configurations. (You can probably build a metric for comparing explicit
+    geometries, but it would be tough.)
+
+    It's important that I reduce the effort to model existing wings because
+    I need a representative set of models to deal with model uncertainty.
+
+    Flight reconstruction requires a model of the wing that produced the
+    flight, but due to model uncertainty the estimate must use an entire
+    distribution over possible wing configurations. [[You'll still probably
+    need to use a "representative set" of models (parameter estimation is
+    likely a pipedream given the available data), but at least parametric
+    models make it MUCH easier to *create* that representative set from the
+    limited available data on existing wings.]]
 
 
 .. Define the functional goals of the canopy model parametrization
@@ -407,7 +424,7 @@ surfaces: the chord surface, the mean camber surface, and the profile surface.
 [[FIXME: not sure I agree with this statement. Unclear. A shape is just
 a shape. Granted, a canopy geometry must PROVIDE those surfaces.]]
 
-* [[Parametric models are better, so we want a parametric canopy geometry.]]
+* [[We should have already established that we want a parametric model.]]
 
 * [[There is already a standard parametric method for wings: *wing sections*]]
 

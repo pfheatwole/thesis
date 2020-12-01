@@ -6,13 +6,6 @@
   Ooh, but "wind vector" typically refers to the horizontal component only.
   Dare I use *air velocity* for 3D local wind?
 
-* I'm assuming that the wind field regression model would capture all the
-  information about the wind field, but does the fact that the pilot chose to
-  core in a particular way contain any information that would not be capture
-  by the wind field estimate? Would there be any "residual information" in the
-  paraglider track once you have the wind field regression model?
-
-
 
 ********
 Chapters
@@ -904,61 +897,6 @@ Canopy Geometry
     coefficient then obviously that also implies that I need to design the
     wing using wing sections.
 
-* How do you design a mathematical model that achieves those requirements?
-
-  * [[Through careful decomposition and parametrization. Introduce "wing
-    sections" and how they simplify wing design using a two step process
-    (specify the scale, position, and orientation of sections, then assign
-    section profiles). Introduce the concept of section chords and the chord
-    surface.]]
-
-  * The shape of a parafoil canopy can be defined in many ways. The simplest
-    way is to specify a set of points over the surface to produce an explicit
-    representation of the shape. The issue is that the intricate, non-linear
-    geometry of a parafoil requires a large number of points.
-
-  * Instead of defining the shape with an explicit set of points, the complex
-    shapes of parafoil canopies can usually be decomposed into a simpler set
-    of parametric equations.
-
-  * If a complex shape can be represented with simple parametric equations,
-    then each parameter of the parametric equations tend to be better at
-    capturing structural knowledge than the explicit set of points.
-
-  * Because each parameter communicates more information than an explicit
-    coordinate, fewer parameters are required, which tends to mean much less
-    work is required to specify a design target.
-
-  * The conventional way to decompose a wing is to use *wing sections*. Wing
-    sections make a wing easier to design and easier to analyze.
-
-    [[Discuss designing with chords + profiles versus designing the surfaces
-    directly.]]
-
-  * Instead of designing the 3D shape of a wing directly (ie, as a large set
-    of points), simple wings are traditionally decomposed into 2D wing
-    *sections* :cite:`abbott1959TheoryWingSections` distributed along the
-    span.
-
-    [[I don't like this phrasing: what does "directly" mean? Probably better
-    to talk in terms of **structure**, since I'm thinking in terms of
-    structured vs unstructured shapes; maybe use those terms?]]
-
-  * [[What the advantages of designing with wing sections as opposed to
-    designing arbitrary wing geometries? ie, what are the benefits of the
-    structured approach of "design by wing sections"?]]
-
-  * Designing the wing is then broken into two steps:
-
-    1. Specify the scale, position, and orientation of each section.
-
-    2. Assign a 2D profile to each section, called an *airfoil*, which defines
-       the upper and lower surfaces of the section.
-
-  * There are a variety of conventions for the first step. [[This is where
-    you specify the chord surface. By "variety of conventions" what I mean is
-    "variety of parametrizations", but they're all relatively similar.]]
-
 * How should I cite the "Paraglider Design Handbook"? Just as a website?
 
 * Not sure where to put this, but I'm going with a "canopy" coordinate system
@@ -969,23 +907,6 @@ Canopy Geometry
 
 Parametric designs
 ------------------
-
-* I claim that I need a parametric paraglider dynamics model. Why?
-
-  * Due to model uncertainty, flight reconstruction will can use the correct
-    model; instead, we have to rely on a representative of paraglider dynamics
-    models. Unfortunately, we don't have any paraglider dynamics models, much
-    less a set that covers the range of available wings. At best we have a set
-    of minimal technical specs, so we need a tool that lets us produce wing
-    models from technical specs. **Parametric models with a good choice of
-    parametrization make it easy to model wings from simplified technical
-    specs.**
-
-  * Explicit geometries are too time consuming to expect users to produce them
-    by hand. I need to produce reasonably accurate models with less effort.
-
-  * (Idealist vision) Parametric models support parameter estimation. Existing
-    data probably won't work, but conceptually it'd be nice to support.
 
 * Interesting that although most designs allow linear interpolation of airfoil
   geometries, it's trivial to support arbitrary interpolation functions (as
@@ -1033,9 +954,6 @@ Wing sections
   * Section y-axes are not parallel to the segment quarter-chord (eg,
     "sheared" sections, like with swept wings or vertical sections with
     non-flat yz-curves)
-
-* Important terms: leading edge, trailing edge, chord line, camber line, upper
-  surface, lower surface
 
 * Common parameters: maximum thickness, position of maximum thickness, max
   camber, position of max camber, nose radius, trailing edge angle (?)
@@ -2829,40 +2747,46 @@ distribution gives an estimate that doesn't make *either* of the modes.
 Pattern Extraction
 ------------------
 
-Key Points:
+* Key Points:
 
-* Each flight is a sample of some subset of a larger wind field that occurred
-  at some point in time and space. Perform a spatial or spatiotemporal
-  regression (kriging) over the noisy wind vector estimates from the flight to
-  build an estimate of the underlying wind field.
+  * Each flight is a sample of some subset of a larger wind field that occurred
+    at some point in time and space. Perform a spatial or spatiotemporal
+    regression (kriging) over the noisy wind vector estimates from the flight to
+    build an estimate of the underlying wind field.
 
-* Each regression model is an observation of a particular configuration of the
-  wind field. The goal is to find patterns in the wind field configurations.
-  Use the set of wind field observations to reveal strongly correlated regions
-  of the wind field that can be used to predict each other.
+  * Each regression model is an observation of a particular configuration of the
+    wind field. The goal is to find patterns in the wind field configurations.
+    Use the set of wind field observations to reveal strongly correlated regions
+    of the wind field that can be used to predict each other.
 
-* A predictive model answers queries by seeing if any of the observed regions
-  are correlated with other locations of the wind field. Finding correlated
-  regions requires that sections of the wind field follow repeatable wind
-  configurations. (eg, "lift over here usually means sink over there", or "a
-  west wind over here means ridge lift over there")
+  * A predictive model answers queries by seeing if any of the observed regions
+    are correlated with other locations of the wind field. Finding correlated
+    regions requires that sections of the wind field follow repeatable wind
+    configurations. (eg, "lift over here usually means sink over there", or "a
+    west wind over here means ridge lift over there")
 
-* Finding correlations between regions requires a large number of pairwise
-  observations of the correlated regions. (ie, you need flights that observe
-  both regions at the same time)
+  * Finding correlations between regions requires a large number of pairwise
+    observations of the correlated regions. (ie, you need flights that observe
+    both regions at the same time)
 
-* The wind field changes over time, so flights need to be aggregated by time
-  (open problem; group they by hour?).
+  * The wind field changes over time, so flights need to be aggregated by time
+    (open problem; group they by hour?).
 
-  How do you handle the spatiotemporal averaging? In terms of time, do you
-  group observations by a sliding 1-hour window, etc? In terms of space, do
-  you use a continuous regression model or do you use a grid?
+    How do you handle the spatiotemporal averaging? In terms of time, do you
+    group observations by a sliding 1-hour window, etc? In terms of space, do
+    you use a continuous regression model or do you use a grid?
 
-* Computing the regression field for a track generates a lot of data, but you
-  can compress the result by discarding information about regions that didn't
-  exceed some "confidence threshold". If you're not confident, don't waste
-  compute time on that region when you're generating the patterns. **Knowledge
-  of structure leads to compression opportunities.**
+  * Computing the regression field for a track generates a lot of data, but you
+    can compress the result by discarding information about regions that didn't
+    exceed some "confidence threshold". If you're not confident, don't waste
+    compute time on that region when you're generating the patterns. **Knowledge
+    of structure leads to compression opportunities.**
+
+* I'm assuming that the wind field regression model would capture all the
+  information about the wind field, but does the fact that the pilot chose to
+  core in a particular way contain any information that would not be capture
+  by the wind field estimate? Would there be any "residual information" in the
+  paraglider track once you have the wind field regression model?
 
 
 Predictive Model Encoding
