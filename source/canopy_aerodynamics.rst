@@ -5,9 +5,16 @@ Canopy Aerodynamics
 
 * What are aerodynamics?
 
+  Broadly speaking, aerodynamics is the study of how forces and moments are
+  produced on an object in response to its motion through air.
+
+* How does this project depend on the canopy aerodynamics?
+
+  [[I think I explained this earlier in the flight reconstruction chapter?]]
+
 * Why did I write my own aerodynamics code?
 
-  * You could use this parametric model to output design specifications for
+  * You could use the parametric model to output design specifications for
     other tools, but relying on existing tools is problematic:
 
     1. More complexity (you introduce an external dependency)
@@ -22,16 +29,6 @@ Canopy Aerodynamics
        rotations, etc). They must be able to incorporate empirical adjustments
        from parafoil literature (viscous drag, mostly).
 
-  * Their parametrizations are not convenient for defining canopies.
-
-    Fixed reference point for position, use of `y` instead of `y_flat` (or
-    more generally an inability to do mixed-design in flat and projected
-    coordinates; for parafoils it's often easier to think in terms of the
-    flattened wing), `c` and `C_c/s` are coupled with position
-
-    [[Wait! I could've defined my own geometry to design the wings then output
-    the geometry in terms of leading edge, so this isn't a strong argument.]]
-
 
 Modeling Requirements
 =====================
@@ -42,24 +39,25 @@ Modeling Requirements
 
   * Supports non-linear aerodynamics
 
-    * Needs graceful degradation at stall
+    * [[Don't just assume linear aerodynamics; confirm it. It was important to
+      me that I don't **start** with a simplistic model. If the result is easy
+      to simplify then great, but don't **assume** a simplified model without
+      checking first. This should provide a baseline for judging simplified
+      models.]]
 
-    * Non-uniform wind (due to wing turning, wind gradients, thermals, etc)
+    * Non-linearities come from a variety of sources: the geometry
+      (particularly the arc?), viscous effects (flow separation is significant
+      for parafoils), non-uniform wind (turning, wind gradients, etc)
 
-    * [[It was important to me that I don't **start** with a simplistic model.
-      If the result is easy to simplify then great, but don't **assume**
-      a simplified model without checking first. This should provide
-      a baseline for judging simplified models.]]
+    * I'm already using a rigid body assumption, so I'm committed to an
+      imperfect model. I accept that I can't handle stall conditions (so
+      flight reconstruction is limited to "average" flight conditions), but
+      the simulator does need graceful degradation when approaching stall
+      conditions.
 
   * Supports empirical adjustments (mostly viscous drag correction factors)
 
-  * Avoid external dependencies
-
-    * I'm trying to keep this self-contained, since I wanted to understand
-      what's happening end-to-end. Also let me design it just how I wanted,
-      which also enabled simplified interfaces.
-
-    * Side effect: needs to be feasible to implement given my time constraints
+    [[These exist in literature. I want to be able to use them.]]
 
   * Computationally efficient/fast
 
@@ -69,21 +67,34 @@ Modeling Requirements
     * Ultimately this method is likely to be replaced with an approximation,
       but it's still nice to work with the "full" model whenever possible.
 
+  * Nice to have: avoid external dependencies
+
+    * I'm trying to keep this self-contained, since I wanted to understand
+      what's happening end-to-end. Also let me design it just how I wanted,
+      which also enabled simplified interfaces.
+
+    * Side effect: needs to be feasible to implement given my time constraints
+
 
 Aerodynamics models
 ===================
 
-* [[What are the categories of aerodynamics methods?
+* [[What categories of aerodynamics methods are available?
 
   Introduce LLT, VLM, CFD, etc. Go through the requirements and explain why
-  they fail (LLT fails the non-linear geometry, VLM handles non-linear
-  geometry but fails non-linear aerodynamics, CFD is too complicated to
-  implement and too slow). Finish by choosing the NLLT.]]
+  they fail (LLT fails with non-linear geometry, VLM handles non-linear
+  geometry but assumes linear aerodynamics, CFD is too complicated to
+  implement and too slow). Only the NLLT met my requirements.]]
 
 * [[Section profiles were covered in the previous chapter. The computational
   methods use the profiles either via their section coefficients, or via the
   surface geometry they generate.]]
 
+* Only the NLLT met my requirements. It's an extension of LLT to account for
+  3D effects. It's computationally efficient, handles non-linear geometry,
+  makes no linearity assumptions, allows for viscous corrections, and is
+  relatively simple to implement (so I can implement my own instead of relying
+  on external dependencies).
 
 
 Phillips' numerical lifting-line
@@ -104,17 +115,6 @@ Phillips' numerical lifting-line
 
   Interesting: useful to keep in mind when validating an implementation by
   comparing it to a full lattice method.
-
-* I'm using airfoil data from XFOIL, which is unreliable post-stall, but I'm
-  including significant post-stall coefficient data anyway to observe how
-  Phillips' method behaves in those regions. It's useful to understand how the
-  method behaves in post-stall regions in the event you have accurate
-  post-stall airfoil data. (ignoring the fact that the 3D wing basically
-  shoots that to heck anyway)
-
-* By using section coefficient data, I'm ignoring cross-flow effects. I'm sure
-  the arc of the wing has a significant effect on the boundary layer, which
-  we're assuming is constant over the entire section.
 
 * Why am I choosing this method? It provides a reasonable tradeoff between
   accuracy and computational efficiency, it seemed easier to implement than
@@ -312,6 +312,51 @@ Improvements
 
 Limitations
 -----------
+
+* Implications of using section coefficients
+
+  * Unlike the section profiles, these are external data. They must be
+    measured in a wind tunnel or computed with an external tool, like XFOIL.
+
+    The coefficients must be estimated for every variation of the profile and
+    flight conditions. Dealing with Reynolds numbers and section deformations
+    quickly becomes unwieldy. Reynolds numbers are more straightforward, since
+    many tools support batch analyses over a range of Reynolds numbers, but
+    profile deformations, like braking or billowing, are more problematic. The
+    distorted profiles must be precomputed and their aerodynamics estimated
+    individually. This precludes continuous deformations, so interpolation is
+    required.
+
+    [[Panel and CFD methods could just use the geometry directly. Neat.]]
+
+    [[Methods like *fluid-structure interactions* seem fundamentally
+    infeasible to anything but CFD aerodynamics.]]
+
+  * They ignore cross-flow effects. I'm sure the arc of the wing has
+    a significant effect on the boundary layer, which we're assuming is
+    constant over the entire section.
+
+  * Section coefficients introduce a steady-state assumption.
+
+    [[In the conclusion of "Specialized System Identification for Parafoil and
+    Payload Systems" (Ward, Costello; 2012), they note that "the simulation is
+    created entirely from steady-state data". This is one of my major
+    assumptions as well. This will effect accuracy during turns and wind
+    fluctuations, and ignores hysteresis effects (boundary layers exhibit
+    "memory" in a sense; the same wind vector can produce a separation bubble
+    or not depending on how that state was achieved).]]
+
+  * Section coefficients are optimistic. They are for idealized geometric
+    shapes (they ignore surface imperfections), and computational methods for
+    estimating them tend to struggle at high angles of attack (where flow
+    separation quickly depends on complicated viscous effects).
+
+    [[I'm using airfoil data from XFOIL, which is unreliable post-stall, but
+    I'm including significant post-stall coefficient data anyway to observe
+    how Phillips' method behaves in those regions. It's useful to understand
+    how the method behaves in post-stall regions in the event you have
+    accurate post-stall airfoil data. (ignoring the fact that the 3D wing
+    basically shoots that to heck anyway)]]
 
 * It uses the Kutta-Joukowski theorem for the section lift. I think the KJ
   theorem assumes uniform fluid velocity, steady-state, and unseparated? Is
