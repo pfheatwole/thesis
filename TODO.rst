@@ -1,3 +1,17 @@
+* If the HTML "Navigation" frame gets too long it goes off the screen, and you
+  can't scroll it.
+
+* Add a description of a *direction cosine matrix* to `symbols`? Or maybe the
+  `glossary`?
+
+* Make sure every chapter introduction has a "Roadmap", and that the chapter
+  follows that roadmap.
+
+* Review source for mentions of a "chord surface"
+
+* Verify my use of *dihedral* and *anhedral*. At the least I think my use of
+  "mean anhedral" is suspect; probably not even a helpful term.
+
 * Write up an informal description of "this is how a pilot standing on the
   ground would estimate the wind by watching a glider in the air". That
   informal description is the stepping stone to understanding "flight
@@ -17,6 +31,30 @@
   reconstruction*, *regression*, etc? It'd be interesting to define all the
   components, then finish the section by defining my project in terms of those
   components.
+
+
+Topical
+=======
+
+
+Canopy geometry
+---------------
+
+* How do I argue that my definition of `r_LE/RP` decouples the parameters? You
+  can see in the math that `r_LE/RP` and `r_P/LE` both involve `c` and
+  `C_c/s`, but it won't be obvious that it counteracts the changes to keep the
+  parameters decoupled.
+
+* Where do I define *design parameters* (span, taper, etc)? Should be pretty
+  early on on `Canopy Geometry` when I'm motivating parametric models.
+
+* Finish the derivation of my parametrized wing geometry in `derivations`. The
+  goal is to derive the version that uses `R` (configurable reference points),
+  but keep the parafoil-related material in `Canopy Geometry`.
+
+* Complete the parametric design choices for parafoils in `Canopy Geometry`.
+  The choice to set `r_y = r_z`, how I define `C_c/s`, show some parametric
+  curves (eg, elliptical chord), etc.
 
 
 Content Tasks
@@ -177,6 +215,13 @@ Notation, Math, etc
   masses. **Maybe it's time I put my foot down that I simply like using
   brackets for matrices; it enables visual scanning you can't do otherwise.
   Also, they help reveal mistakes, kind of like physical units in equations.**
+
+* When do you need to specify a reference frame in my mathematical notation?
+  (See `notes-202048:Math` for some thoughts.)
+
+* I'm getting sick of `\mathrm` for all the points (like
+  `r_{\mathrm{P}/\mathrm{LE}}`). Can I write a latex macro that will wrap them
+  for me?
 
 
 Terminology
