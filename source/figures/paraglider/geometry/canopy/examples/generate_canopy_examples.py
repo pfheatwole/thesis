@@ -356,7 +356,7 @@ if __name__ == "__main__":
     airfoil = gsim.airfoil.Airfoil(None, gsim.airfoil.NACA(23015))
 
     savefig = True  # Save the images to SVG files
-    # savefig = False
+    savefig = False
 
     plot_2d = True  # Show the 2D curves
     # plot_2d = False  # Disable the 2D plots

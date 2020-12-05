@@ -412,6 +412,8 @@ def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
 
 plot_avl = True
 plot_xflr5 = True
+savefig = True  # Save the images to SVG ...
+savefig = False  # ... but don't save by default
 
 # Plot: CL vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "CL", xlim=(-10, 25), ylim=(-0.35, 1.4))
@@ -426,7 +428,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"CL_vs_alpha.svg", dpi=96)
+if savefig:
+    fig.savefig(f"CL_vs_alpha.svg", dpi=96)
 
 # Plot: CD vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "CD", xlim=(-10, 25), ylim=(-0.01, 0.18))
@@ -441,7 +444,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"CD_vs_alpha.svg", dpi=96)
+if savefig:
+    fig.savefig(f"CD_vs_alpha.svg", dpi=96)
 
 # Plot: CY vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "CY", xlim=(-10, 25), ylim=(-0.20, 0.05))
@@ -456,7 +460,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"CY_vs_alpha.svg", dpi=96)
+if savefig:
+    fig.savefig(f"CY_vs_alpha.svg", dpi=96)
 
 # Plot: CL vs CD
 fig, axes = plot4x4("CD", "CL", xlim=(-0.01, 0.18), ylim=(-0.35, 1.4))
@@ -471,7 +476,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower right")
 fig.tight_layout(**pad_args)
-fig.savefig(f"CL_vs_CD.svg", dpi=96)
+if savefig:
+    fig.savefig(f"CL_vs_CD.svg", dpi=96)
 
 # Plot: CL vs Cm
 fig, axes = plot4x4("Cm", "CL", xlim=(-0.6, 0.08), ylim=(-0.35, 1.0))
@@ -486,7 +492,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"CL_vs_Cm.svg", dpi=96)
+if savefig:
+    fig.savefig(f"CL_vs_Cm.svg", dpi=96)
 
 # Plot: Cl vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "Cl", xlim=(-10, 25), ylim=(-0.21, 0.035))
@@ -501,7 +508,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"Cl_vs_alpha.svg", dpi=96)
+if savefig:
+    fig.savefig(f"Cl_vs_alpha.svg", dpi=96)
 
 # Plot: Cm vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "Cm", xlim=(-10, 25), ylim=(-1.25, 0.25))
@@ -516,7 +524,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"Cm_vs_alpha.svg", dpi=96)
+if savefig:
+    fig.savefig(f"Cm_vs_alpha.svg", dpi=96)
 
 # Plot: Cn vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "Cn", xlim=(-10, 25), ylim=(-0.04, 0.24))
@@ -531,7 +540,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"Cn_vs_alpha.svg", dpi=96)
+if savefig:
+    fig.savefig(f"Cn_vs_alpha.svg", dpi=96)
 
 # ---------------------------------------------------------------------------
 
@@ -599,7 +609,8 @@ for alpha in [0, 5, 10, 15]:
     ax.set_title(f"$\\alpha$={alpha}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"CD_vs_beta.svg", dpi=96)
+if savefig:
+    fig.savefig(f"CD_vs_beta.svg", dpi=96)
 
 # Plot: CY vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", r"CY", (-17, 17), (-0.23, 0.23))
@@ -612,7 +623,8 @@ for alpha in [0, 5, 10, 15]:
     ax.set_title(f"$\\alpha$={alpha}°")
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"CY_vs_beta.svg", dpi=96)
+if savefig:
+    fig.savefig(f"CY_vs_beta.svg", dpi=96)
 
 # Plot: CL vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "CL", (-17, 17), (-0.01, 1.05))
@@ -625,7 +637,8 @@ for alpha in [0, 5, 10, 15]:
     ax.set_title(f"$\\alpha$={alpha}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"CL_vs_beta.svg", dpi=96)
+if savefig:
+    fig.savefig(f"CL_vs_beta.svg", dpi=96)
 
 # Plot: Cl (wing rolling coefficient) vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "Cl", (-17, 17), (-0.2, 0.2))
@@ -638,7 +651,8 @@ for alpha in [0, 5, 10, 15]:
     ax.set_title(f"$\\alpha$={alpha}°")
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"Cl_vs_beta.svg", dpi=96)
+if savefig:
+    fig.savefig(f"Cl_vs_beta.svg", dpi=96)
 
 # Plot: Cm (wing pitching coefficient) vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "Cm", (-17, 17), (-0.65, 0.1))
@@ -651,7 +665,8 @@ for alpha in [0, 5, 10, 15]:
     ax.set_title(f"$\\alpha$={alpha}°")
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"Cm_vs_beta.svg", dpi=96)
+if savefig:
+    fig.savefig(f"Cm_vs_beta.svg", dpi=96)
 
 # Plot: Cn (wing yawing coefficient) vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "Cn", (-17, 17), (-0.2, 0.2))
@@ -664,7 +679,8 @@ for alpha in [0, 5, 10, 15]:
     ax.set_title(f"$\\alpha$={alpha}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
-fig.savefig(f"Cn_vs_beta.svg", dpi=96)
+if savefig:
+    fig.savefig(f"Cn_vs_beta.svg", dpi=96)
 
 plt.show()
 
