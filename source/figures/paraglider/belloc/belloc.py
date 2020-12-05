@@ -186,7 +186,7 @@ t_start = time.perf_counter()
 
 for kb, beta in enumerate(betas):
     dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
-    r_LE2R = wing.r_R2LE(0)
+    r_LE2R = -wing.r_R2LE(0)
     r_CP2LE = wing.control_points(0)
     r_CP2R = r_CP2LE + r_LE2R
 
