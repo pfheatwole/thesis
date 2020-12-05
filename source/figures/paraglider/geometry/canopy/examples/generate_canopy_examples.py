@@ -120,7 +120,7 @@ def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=Fa
     ax.plot(c4[0], c4[1], z, "g--", lw=0.8)
 
     # `x` reference curve projection onto the xy-pane
-    xyz = foil.surface_xyz(s, foil._chords.r_x(s), surface="chord").T
+    xyz = foil.surface_xyz(s, foil._layout.r_x(s), surface="chord").T
     ax.plot(xyz[0], xyz[1], z, 'r--', lw=0.8, label="reference lines")
 
     # Quarter-chord projection onto the yz-pane (`x` held fixed)
@@ -128,7 +128,7 @@ def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=Fa
     ax.plot(x, c4[1], c4[2], "g--", lw=0.8, label="quarter-chord")
 
     # `yz` reference curve projection onto the yz-pane
-    xyz = foil.surface_xyz(s, foil._chords.r_yz(s), surface="chord").T
+    xyz = foil.surface_xyz(s, foil._layout.r_yz(s), surface="chord").T
     ax.plot(x, xyz[1], xyz[2], 'r--', lw=0.8)
 
 
@@ -366,9 +366,9 @@ if __name__ == "__main__":
 
     for name, parameters in examples.items():
         print("Current example:", name)
-        chords = gsim.foil.ChordSurface(**parameters)
+        layout = gsim.foil.SectionLayout(**parameters)
         sections = gsim.foil.FoilSections(airfoil)
-        foil = gsim.foil.SimpleFoil(chords=chords, sections=sections, b_flat=2)
+        foil = gsim.foil.SimpleFoil(layout=layout, sections=sections, b_flat=2)
         figs = []
 
         if plot_2d:
@@ -377,26 +377,26 @@ if __name__ == "__main__":
                 fig, axes = plt.subplots(2, 3, figsize=(7, 3), dpi=96)
 
                 configure_2d_axes(axes[0, 0], "$s$", "$c$")
-                axes[0, 0].plot(s, chords.length(s)),
+                axes[0, 0].plot(s, layout.c(s)),
 
                 configure_2d_axes(axes[0, 1], "$s$", "$r_{x}$")
                 axes[0, 1].set_yticks([1])
-                axes[0, 1].plot(s, chords.r_x(s))
+                axes[0, 1].plot(s, layout.r_x(s))
 
                 configure_2d_axes(axes[0, 2], "$s$", "$r_{yz}$")
                 axes[0, 2].set_yticks([1])
-                axes[0, 2].plot(s, chords.r_yz(s))
+                axes[0, 2].plot(s, layout.r_yz(s))
 
                 # FIXME: show yticks? These are radians.
                 configure_2d_axes(axes[1, 0], "$s$", r"$\theta$")
-                axes[1, 0].plot(s, chords.theta(s))
+                axes[1, 0].plot(s, layout.theta(s))
 
                 configure_2d_axes(axes[1, 1], "$s$", "$x$")
-                axes[1, 1].plot(s, chords.x(s))
+                axes[1, 1].plot(s, layout.x(s))
 
                 configure_2d_axes(axes[1, 2], "$y$", "$z$", invert_y=True)
                 axes[1, 2].set_xticklabels([])  # Avoid confusion between s and y
-                axes[1, 2].plot(*chords.yz(s).T)
+                axes[1, 2].plot(*layout.yz(s).T)
 
                 fig.tight_layout()
                 fig.subplots_adjust(hspace=1.0, wspace=0.3)

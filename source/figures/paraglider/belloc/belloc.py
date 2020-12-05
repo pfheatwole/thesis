@@ -104,7 +104,7 @@ arc = InterpolatedArc(s, fy(s), fz(s))
 # Alternatively, use the analytical (non-sampled, smooth curvature) form
 # arc = gsim.foil.elliptical_arc(np.rad2deg(np.arctan(.375/.688)), 89)
 
-chords = gsim.foil.ChordSurface(
+layout = gsim.foil.SectionLayout(
     x=0,
     r_x=0.6,
     yz=arc,
@@ -119,7 +119,7 @@ sections = gsim.foil.FoilSections(
 )
 
 canopy = gsim.foil.SimpleFoil(
-    chords=chords,
+    layout=layout,
     sections=sections,
     b_flat=b_flat,
 )
