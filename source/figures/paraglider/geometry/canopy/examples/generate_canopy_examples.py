@@ -95,13 +95,13 @@ def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=Fa
             coords = foil.surface_xyz(s, sa, "upper", flatten=flatten).T
             ax.plot(coords[0], coords[1], coords[2], c="b", lw=0.25)
         elif geometry == "chords":
-            coords = foil.chord_xyz(s, sa).T
+            coords = foil.surface_xyz(s, sa, surface="chord").T
             ax.plot(coords[0], coords[1], coords[2], c="k", lw=0.5)
 
     s = np.linspace(-1, 1, N_sections)
-    LE = foil.chord_xyz(s, 0, flatten=flatten).T
-    c4 = foil.chord_xyz(s, 0.25, flatten=flatten).T
-    TE = foil.chord_xyz(s, 1, flatten=flatten).T
+    LE = foil.surface_xyz(s, 0, surface="chord", flatten=flatten).T
+    c4 = foil.surface_xyz(s, 0.25, surface="chord", flatten=flatten).T
+    TE = foil.surface_xyz(s, 1, surface="chord", flatten=flatten).T
     ax.plot(LE[0], LE[1], LE[2], "k--", lw=0.8)
     ax.plot(c4[0], c4[1], c4[2], "g--", lw=0.8)
     ax.plot(TE[0], TE[1], TE[2], "k--", lw=0.8)
@@ -120,7 +120,7 @@ def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=Fa
     ax.plot(c4[0], c4[1], z, "g--", lw=0.8)
 
     # `x` reference curve projection onto the xy-pane
-    xyz = foil.chord_xyz(s, foil._chords.r_x(s)).T
+    xyz = foil.surface_xyz(s, foil._chords.r_x(s), surface="chord").T
     ax.plot(xyz[0], xyz[1], z, 'r--', lw=0.8, label="reference lines")
 
     # Quarter-chord projection onto the yz-pane (`x` held fixed)
@@ -128,7 +128,7 @@ def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=Fa
     ax.plot(x, c4[1], c4[2], "g--", lw=0.8, label="quarter-chord")
 
     # `yz` reference curve projection onto the yz-pane
-    xyz = foil.chord_xyz(s, foil._chords.r_yz(s)).T
+    xyz = foil.surface_xyz(s, foil._chords.r_yz(s), surface="chord").T
     ax.plot(x, xyz[1], xyz[2], 'r--', lw=0.8)
 
 
@@ -191,7 +191,6 @@ def plot_3d_foil(foil, geometry="airfoils"):
     ax.set_ylim(1.25, -1.25)
     ax.set_zlim(1.25, -1.25)
 
-
     fig.tight_layout(pad=0)
     return fig
 
@@ -206,8 +205,8 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": 0.5,
-        "torsion": 0,
+        "c": 0.5,
+        "theta": 0,
     }
 
     # Flat, straight taper, no twist
@@ -216,8 +215,8 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": lambda s: 0.5 - 0.25 * abs(s),
-        "torsion": 0,
+        "c": lambda s: 0.5 - 0.25 * abs(s),
+        "theta": 0,
     }
 
     # Flat, elliptical taper, no twist
@@ -226,8 +225,8 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.1),
-        "torsion": 0,
+        "c": gsim.foil.elliptical_chord(root=0.5, tip=0.1),
+        "theta": 0,
     }
 
     # Flat, no taper, twist
@@ -236,8 +235,8 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": 0.5,
-        "torsion": lambda s: np.deg2rad(-25) * s**4,
+        "c": 0.5,
+        "theta": lambda s: np.deg2rad(-25) * s**4,
     }
 
     # Manta rays!
@@ -249,24 +248,24 @@ if __name__ == "__main__":
         "x": lambda s: 0.5 * (1 - s**2),
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
-        "torsion": 0,
+        "c": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
+        "theta": 0,
     }
     examples["manta2"] = {
         "r_x": 0.5,
         "x": lambda s: 0.5 * (1 - s**2),
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
-        "torsion": 0,
+        "c": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
+        "theta": 0,
     }
     examples["manta3"] = {
         "r_x": 1, 
         "x": lambda s: 0.5 * (1 - s**2),
         "r_yz": 0,
         "yz": FlatYZ(),
-        "chord_length": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
-        "torsion": 0,
+        "c": lambda s: 0.5 * (1 - abs(s)) + 1e-3,
+        "theta": 0,
     }
 
     # Elliptical arc
@@ -275,8 +274,8 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 1.00,
         "yz": gsim.foil.elliptical_arc(mean_anhedral=33, tip_anhedral=67),
-        "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
-        "torsion": 0,
+        "c": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
+        "theta": 0,
     }
 
     examples["elliptical2"] = {
@@ -284,8 +283,8 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 1.00,
         "yz": gsim.foil.elliptical_arc(mean_anhedral=44, tip_anhedral=89),
-        "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
-        "torsion": 0,
+        "c": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
+        "theta": 0,
     }
 
     examples["elliptical3"] = {
@@ -293,8 +292,8 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 1.00,
         "yz": gsim.foil.elliptical_arc(mean_anhedral=30, tip_anhedral=89),
-        "chord_length": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
-        "torsion": 0,
+        "c": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
+        "theta": 0,
     }
 
     # -----------------------------------------------------------------------
@@ -347,8 +346,8 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 0.6,
         "yz": arc,
-        "chord_length": fc,
-        "torsion": ftheta,
+        "c": fc,
+        "theta": ftheta,
     }
 
     # -----------------------------------------------------------------------
@@ -378,7 +377,7 @@ if __name__ == "__main__":
                 fig, axes = plt.subplots(2, 3, figsize=(7, 3), dpi=96)
 
                 configure_2d_axes(axes[0, 0], "$s$", "$c$")
-                axes[0, 0].plot(s, chords._chord_length(s)),
+                axes[0, 0].plot(s, chords.length(s)),
 
                 configure_2d_axes(axes[0, 1], "$s$", "$r_{x}$")
                 axes[0, 1].set_yticks([1])
@@ -390,7 +389,7 @@ if __name__ == "__main__":
 
                 # FIXME: show yticks? These are radians.
                 configure_2d_axes(axes[1, 0], "$s$", r"$\theta$")
-                axes[1, 0].plot(s, chords.torsion(s))
+                axes[1, 0].plot(s, chords.theta(s))
 
                 configure_2d_axes(axes[1, 1], "$s$", "$x$")
                 axes[1, 1].plot(s, chords.x(s))
