@@ -20,10 +20,11 @@ Paraglider Dynamics
      - .. image:: figures/paraglider/geometry/foil2.*
 
 
-* [[Define *dynamics*.
+* Define *dynamics*
 
-  What are they? What are they used for? They're what I'll be using to
-  generate flight trajectories.]]
+* What are paraglider dynamics used for?
+
+  [[They're what I'll be using to generate flight trajectories.]]
 
 
 Modeling requirements
@@ -33,16 +34,22 @@ Modeling requirements
   about what I am.]]
 
 * [[A paraglider can be considered a system composed of canopy, lines,
-  harness, and pilot. Although nearly every component are highly flexible they
-  tend to remain relatively rigid during normal flight. The flight dynamics
-  can be greatly simplified by assuming a rigid body model.]]
+  harness, and pilot. Although nearly every component are made from highly
+  flexible materials, they tend to remain relatively rigid during typical
+  flight conditions. The flight dynamics can be greatly simplified by assuming
+  a rigid body model.]]
 
 * I put a lot of work into non-uniform wind, etc, in the aerodynamics. The
   dynamics model should be capable of leveraging that flexibility.
 
-* Intuitive (as possible), sufficiently flexible, etc.
+* Intuitive (as possible), sufficiently flexible, etc. [[FIXME: vague]]
 
 * Degrees of freedom? (eg, include relative motion of the harness?)
+
+* [[Weight shift control is in, riser controls are out]]
+
+  **Does it make sense to have this "modeling requirements" up front if this
+  chapter includes both the wing and the harness?**
 
 
 Related Work
@@ -92,7 +99,6 @@ Related Work
     * :cite:`barrows2002ApparentMassParafoils`
 
 
-
 Reference Point
 ===============
 
@@ -103,7 +109,9 @@ decouples the translational and angular dynamics. For paragliders, however,
 the center of mass is not a fixed point: weight shift, accelerator, and
 atmospheric air density all effect the location of the paraglider center of
 mass. This makes it a poor choice for tracking the vehicle trajectory over
-time.
+time. [[FIXME: the point you use for tracking the vehicle doesn't have to be
+the same point you use for calculating the dynamics; I'm mixing up concepts
+here]]
 
 Selecting a fixed point on the vehicle slightly increases the complexity of
 the dynamics equations, but it simplifies [["stuff"; does it make the 9 DoF
@@ -114,10 +122,54 @@ are the leading edge of the central section, or the midpoint between the two
 risers, which is constant regardless of the width the riser chest strap.
 
 This paper uses the midpoint between the two riser connection points,
-designated :math:`R`, for all dynamics equations. Because the risers are very
-near to where the pilot would place their flight device, this is the most
-representative of the data measured by flight recorders, making it the most
-convenient for comparing real flight data to simulated data.
+designated :math:`R`, for all dynamics equations [[and for the vehicle
+velocity state variable]]. Because the risers are very near to where the
+pilot would place their flight device, this is the most representative of the
+data measured by flight recorders, making it the most convenient for comparing
+real flight data to simulated data.
+
+
+EXTRA model components
+======================
+
+[[This is a scratch section. Not sure where to put the discussion of line and
+harness aerodynamics; they don't warrant their own chapter. Maybe I should
+rename the `canopy_aerodynamics` section? So I'd have:
+
+* `canopy_geometry`: seems complex enough to stand alone
+
+* `paraglider_geometry`: adds lines and harness
+
+* `paraglider_aerodynamics`: aerodynamics for all components. Seems like the
+  canopy aerodynamics are too big for a section, aren't they? It'd put the
+  NLLT in a sub-sub-section, which seems ridiculous.
+
+* `paraglider_dynamics`: chooses a reference point, degrees of freedom, etc,
+  and puts everything together into a dynamics model
+
+]]
+
+
+Suspension lines
+----------------
+
+Aerodynamics:
+
+* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: mentions some
+    papers on line drag coefficients, start here
+
+
+Harness
+-------
+
+* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: uses Virgilio's
+  presentation; I guess I'll do the same. That model treats the harness as
+  a sphere with an isotropic drag coefficient normalized by cross-sectional
+  area. Review the docstring for `harness.py:Spherical`.
+
+* Discuss / choose a weight shift control scheme here? Where I do I explain
+  that I'm modeling it as a simple shift of the harness CM?
+
 
 
 Apparent Mass
@@ -134,6 +186,10 @@ This simple rule is sufficient and effective for determining the behavior of
 isolated objects, but when an object is immersed in a fluid it is longer
 isolated. When an object moves through a fluid there is an exchange of
 momentum, and so the momentum of the fluid must be taken into account as well.
+[[FIXME: poor explanation. The "exchange of momentum" is what produces the
+fluid dynamics, after all. The problem is using aerodynamics coefficients that
+were produced under steady-state conditions to estimate accelerated (unsteady)
+motion.]]
 
 In static scenarios, where the vehicle is not accelerating relative to the
 fluid (ie, changing speed and/or direction), this exchange of momentum is
@@ -151,11 +207,11 @@ vehicle has increased its mass:
 
 This *apparent mass* :math:`m_a` becomes more significant as the density of
 the vehicle approaches the density of the fluid. If the density of the vehicle
-is much greater than the density of the fluid the effect is often ignored, as
-is the case for traditional aircraft, which are much more dense than the
-surrounding air. For lightweight aircraft, however, such as a parafoil, where
-the density of the vehicle is much closer to the density of the air, the
-effect can be significant.
+is much greater than the density of the fluid then the effect is often
+ignored, as is the case for traditional aircraft, which are much more dense
+than the surrounding air. For lightweight aircraft, however, where the density
+of the vehicle is much closer to the density of the air, the effect can be
+significant.
 
 Because apparent mass effects are the result of a volume in motion relative to
 a fluid, its magnitude depends on the direction of the motion relative to the
@@ -250,6 +306,13 @@ momentum :math:`^e \dot{\vec{p}} = \sum{\vec{F}}` and angular momentum
 :math:`^e \dot{\vec{h}} = \sum \vec{M}` for both bodies.
 
 For the derivation of the mathematical model, see :ref:`derivations:Model 9a`.
+
+
+Case study
+==========
+
+[[Move the content from `case_study` here? Or delay the discussion of wing
+polars in that dedicated chapter?]]
 
 
 Discussion

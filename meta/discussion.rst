@@ -1892,19 +1892,6 @@ Paraglider Geometry
   of the motivations for my project is to build a top-down parametric
   paraglider system.
 
-* **Drive home why parametric is so important for my needs.** It makes it
-  easier to model existing wings, which makes the models easier to compare
-  against existing wings. It also makes it easier to implement existing wings,
-  which makes it less expensive to build a database/catalog of models for
-  existing wings. I need a catalog of wings in order to build a distribution
-  over the wing parameters, which is necessary for the flight reconstruction
-  model (which is uncertain about the wind model, thus needs a prior over wing
-  models.) It also increases flexibility: a fixed canopy geometry doesn't
-  allow making the lobe anhedral a function of the accelerator, which has
-  significant effects on aerodynamic performance (eg, modern wings often have
-  their best glide ratios when a small amount of speedbar has been applied,
-  keeping the wing more arced for "hands-up stability").
-
 * I started with designs from :cite:`benedetti2012ParaglidersFlightDynamics`,
   and applied extensive modifications to support the needs of my thesis.
 

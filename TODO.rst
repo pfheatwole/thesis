@@ -1,3 +1,8 @@
+* In `generate_canopy_examples.py`, there's a function `_plot_foil` that
+  appears to duplicate `gsim.plots.plot_foil`. Why does it exist?
+
+* Reconsider using `O` for the origin? Looks like a zero.
+
 * If the HTML "Navigation" frame gets too long it goes off the screen, and you
   can't scroll it.
 
@@ -290,7 +295,8 @@ Formatting
   `~/.anaconda3/envs/science38/lib/python3.8/site-packages/sphinx/templates/latex`
   I'd also need some CSS to fix the HTML tables...
 
-* Check headings for consistent capitalization (title case or sentence case)
+* Check headings for consistent capitalization (title case or sentence case).
+  Leaning towards sentence case.
 
 * Verify against CalPoly formatting
 

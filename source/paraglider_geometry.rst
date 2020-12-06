@@ -2,6 +2,20 @@
 Paraglider Geometry
 *******************
 
+
+
+[[**The descriptions of the wing and harness in this chapter should be serving
+the purposes of creating a model of those components.** The discussion exists
+so we can produce a reasonably accurate model of those components. So, the
+descriptions say what details we're interested in so we can then make a model
+that includes the most important of those details. In other words, say "what
+details are important for my dynamics model?" and let that guide the
+descriptions of the components.]]
+
+
+
+.. Describe the system associated with the "paraglider dynamics".
+
 A paraglider is a system of two components: a wing (canopy + lines), and
 a payload (harness + pilot).
 
@@ -16,13 +30,38 @@ a payload (harness + pilot).
 Modeling requirements
 =====================
 
+* Topics:
+
+  * Paraglider wing
+
+    * How the connecting lines produce the designed canopy shape
+
+    * Braking
+
+    * Accelerator
+
+    * Air intakes
+
+    * Ribs (profiles, v-ribs, etc)
+
+    * Surface materials
+
+  * Harness
+
+  * Composite system
+
+    * Reference point `R`
+
+    * Degrees of freedom
+
+  * More? (This is a scratch outline.)
+
 * [[Should this go below related work? Makes sense if I specify my
   requirements up front so I can point out when existing literature fails to
   satisfy them.]]
 
 * Closely related to :ref:`canopy_geometry:Modeling requirements`; review
   that.
-
 
 
 Related work
@@ -49,9 +88,9 @@ Canopy
 * The canopy geometry in :doc:`canopy_geometry` is an idealized design target
   of the physical parafoil used for a paragliding wing.
 
-* The foil surfaces is produced by stitching together nylon sheets, and the
-  volume is produced by pressurizing the nylon surfaces through the air
-  intakes.
+* The canopy surfaces are produced by stitching together nylon sheets, and the
+  volume is produced by pressurizing the nylon surfaces through air intakes
+  near the leading edge.
 
 * The physical wing needs some extra information beyond the abstract canopy
   geometry in order to use it to estimate the paraglider dynamics:
@@ -75,12 +114,12 @@ Surfaces
 Inertia
 -------
 
-[[This includes contribution from both the real mass (surface materials) and
-the apparent mass. For the real mass calculations, see :ref:`derivations:Area
-and Volume of a Mesh`, and for the apparent mass calculations see
-:ref:`paraglider_dynamics:Apparent Mass`. Those methods are for the geometry,
-and can be scaled by the surface material density and air density to produce
-the final inertia tensors.]]
+[[This includes contribution from the *solid mass* (surface materials), *air
+mass*, and the *apparent mass*. For the *real mass* (solid materials + air)
+calculations, see :ref:`derivations:Area and Volume of a Mesh`, and for the
+apparent mass calculations see :ref:`paraglider_dynamics:Apparent Mass`. Those
+methods are for the geometry, and can be scaled by the surface material
+density and air density to produce the final inertia tensors.]]
 
 
 Line Geometry
@@ -128,10 +167,10 @@ Brakes
 ------
 
 A paraglider is equipped with two handles at the ends of sections of the
-bridle (line geometry) that are connected to the trailing edges of the canopy.
-The pilot can use these controls to deflect the trailing edge downward,
-increasing drag. Symmetric deflections slow the wing down, and asymmetric
-deflections cause the wing to turn.
+*bridle* (line geometry) that are connected to the trailing edges of the
+canopy. The pilot can use these controls to deflect the trailing edge
+downward, increasing drag. Symmetric deflections slow the wing down, and
+asymmetric deflections cause the wing to turn.
 
 Topics:
 
@@ -395,6 +434,10 @@ pilot from the lines using attachments to two *risers*. A tensioning strap at
 chest level between the two risers provides pilot safety during violent
 maneuvers, but it also allows the pilot to choose a balance between stability
 and wing responsiveness to weight shift control.
+
+[[In my case, I'm not modeling the chest width. Probably not a big deal
+because turbulence is such a high frequency signal I'd never be able to
+estimate it from IGC data anyway.]]
 
 
 Case Study

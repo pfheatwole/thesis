@@ -2,7 +2,6 @@
 Canopy Aerodynamics
 *******************
 
-
 * What are aerodynamics?
 
   Broadly speaking, aerodynamics is the study of how forces and moments are
@@ -57,7 +56,33 @@ Modeling Requirements
 
   * Supports empirical adjustments (mostly viscous drag correction factors)
 
-    [[These exist in literature. I want to be able to use them.]]
+    [[These exist in literature. I want to be able to use them.
+
+    Sources:
+
+    * :cite:`kulhanek2019IdentificationDegradationAerodynamic`: the purpose of
+      the paper is to "quantify the amount of aerodynamic drag related to the
+      flexible nature of the wing.
+
+      Uses a coefficient `C_d,f` which "takes into account all the effects
+      related to the flexible nature of the wing, such as deformation of the
+      leading edge, cell opening, skin wrinkling, airfoil and trailing edge
+      thickening, etc." See Fig:12 in particular. **I should review my choices
+      of viscous adjustments.**
+
+    * "Aerodynamic Research of the Airfoils for the Paragliders" (Pohl, 2011):
+      linked by Kulhanek, but I can't find a copy of this one
+
+    * :cite:`ware1969WindtunnelInvestigationRamair`: Provides an estimate of
+      drag due to "surface characteristics". Also provides an estimate of the
+      "air intake drag coefficient", but that's superseded by `babinsky1999`.
+
+    * :cite:`lingard1986AerodynamicsGlidingParachutes`
+
+    * :cite:`babinsky1999AerodynamicPerformanceParagliders`: I'm using his
+      estimate for "air drag due to air intakes".
+
+    ]]
 
   * Computationally efficient/fast
 
@@ -646,7 +671,6 @@ Comments
   **This was always meant to be used in an uncertain environment (stochastic
   simulations). As long as the choice of aerodynamic method is not the
   dominant source of error, I'm fine with it.**
-
 
 
 SCRATCH
