@@ -27,6 +27,31 @@ a payload (harness + pilot).
   idea, I'm going to model it as a sphere.]]
 
 
+.. Roadmap
+
+This chapter will proceed as follows:
+
+* Discuss the physical components (canopy, lines harness)
+
+  [[ie, what are the individual components, their structural materials,
+  notable aspects (and maybe their control inputs?]]
+
+* Discuss the composite system (connections and interactions)
+
+  [[ie, how the components combine to produce a paraglider.]]
+
+  [[Discuss degrees-of-freedom here?]]
+
+* [[Discuss existing paraglider models from literature?]]
+
+* Present an complete definition of an example system, suitable for flight
+  simulation, and discuss its performance
+
+  [[ie, present my Hook3ish example: define the individual components and
+  select a composite model that combines them into a complete system, and
+  present some static analyses (wing polars).]]
+
+
 Modeling requirements
 =====================
 

@@ -12,20 +12,36 @@ Flight Simulation
 
   * The filtering equation needs a transition function
 
-* Define the state variables, representations of orientation, etc
 
-* Highlight that the dynamics so far are stateless. The dynamics take Euler
-  angles as inputs [[edit: no they don't, `Paraglider6a.accelerations` et al
-  take `g` and `v_W2e`, which are already in body frd, so no Euler angles are
-  passed to the dynamics functions.]], but the simulator is free to use
-  whatever orientation encoding it wants for storing the orientation state
-  (Euler angles, quaternions, etc).
+.. Roadmap
 
-* Show some examples, and compare to test cases if possible.
+This chapter proceeds as follows:
+
+* Establish the functionality of the simulator [["requirements" seems
+  unnecessary here: integrating the DE seems pretty clear-cut]]
+
+* Discuss the implementation of the simulator (the dynamics solver)
+
+  * Form of the differential equation (the model dynamics)
+
+  * Inputs to the system (wind and control inputs)
+
+  * Choice of state variables
+
+  * Method of integration
+
+* Provide examples of dynamic simulations, and compare to test cases if
+  possible.
+
+  * Simulated inputs (wind and controls)
+
+  * Interesting scenarios
 
 
 Implementation
 ==============
+
+* Define the state variables, representations of orientation, etc
 
 * Review `test_sim.py:Dynamics6a` and `test_sim.py:Dynamics9a` from
   `glidersim`. Provides the derivatives for use with scipy's RK4 integrator in

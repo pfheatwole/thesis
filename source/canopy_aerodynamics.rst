@@ -29,6 +29,30 @@ Canopy Aerodynamics
        from parafoil literature (viscous drag, mostly).
 
 
+.. Roadmap:
+
+This chapter will proceed as follows:
+
+* Introduce the concepts of numerical aerodynamics
+
+* Establish the modeling requirements in the context of flight reconstruction
+
+* Discuss the difference choices of aerodynamics models in the context of the
+  requirements and make a selection (Phillips)
+
+* Discuss the selected aerodynamic method
+
+* Present tests using the selected method
+
+* Discuss the results
+
+
+Numerical aerodynamics
+======================
+
+FIXME: rethink section title
+
+
 Modeling Requirements
 =====================
 

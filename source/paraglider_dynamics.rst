@@ -27,6 +27,31 @@ Paraglider Dynamics
   [[They're what I'll be using to generate flight trajectories.]]
 
 
+.. Roadmap
+
+* Establish the modeling requirements in the context of flight reconstruction
+
+  [[ie, "I'm interested in considering how a wing responds to non-centered
+  interactions with a thermal, so I need a model that supports asymmetric wind
+  (specifically, horizontal shear)"? Wait, that's part of the aerodynamics.]]
+
+* Discuss existing paraglider models from literature?
+
+* Individual component dynamics
+
+  [[inertia and control systems?]]
+
+  * Wing
+
+  * Harness
+
+* Composite system dynamics
+
+  [[Degrees-of-freedom, connection model, etc?]]
+
+* Demonstrate the polar curves of my Hook3ish? (Feels a bit off here. Hrm.)
+
+
 Modeling requirements
 =====================
 

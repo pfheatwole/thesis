@@ -114,14 +114,14 @@ Canopy Geometry
 
 This chapter will proceed as follows:
 
-* Discuss the canopy geometry and some of the modeling considerations.
+* Discuss the physical system and its modeling considerations.
 
 * Briefly consider explicit geometries, highlight their limitations, and
   respond with the advantages of parametric geometries.
 
 * Introduce the standard parametric approach for wing designs: *wing sections*
 
-* Introduce the general equation for points on section surfaces
+* Introduce a general equation for points on section surfaces
 
 * Establish why it is inconvenient to design a parafoil canopy by defining the
   variables of the general surface equation directly, and why it can be more

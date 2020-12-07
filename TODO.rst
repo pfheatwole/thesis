@@ -1,3 +1,24 @@
+* Make sure every chapter introduction has a "Roadmap", and that the chapter
+  follows that roadmap.
+
+* Make sure all the chapters follow the same structure
+  (`meta/editing:Content:Chapter structure`)
+
+* Outline the content of an IGC file in the `Introduction`, since the absence
+  of wind vector data is what motivates flight reconstruction.
+
+* Review `introduction:SCRATCH`. Might have some useable stuff there.
+
+* Merge `data_considerations` into `future_work`. I should frame my
+  application of sequence alignment as a suggested starting points, which is
+  fine since it's basically untested anyway.
+
+* Review source for mentions of a "chord surface"
+
+* Verify my use of *dihedral* and *anhedral*. At the least I think my use of
+  "mean anhedral" is suspect; probably not even a helpful term.
+
+
 * In `generate_canopy_examples.py`, there's a function `_plot_foil` that
   appears to duplicate `gsim.plots.plot_foil`. Why does it exist?
 
@@ -8,14 +29,6 @@
 
 * Add a description of a *direction cosine matrix* to `symbols`? Or maybe the
   `glossary`?
-
-* Make sure every chapter introduction has a "Roadmap", and that the chapter
-  follows that roadmap.
-
-* Review source for mentions of a "chord surface"
-
-* Verify my use of *dihedral* and *anhedral*. At the least I think my use of
-  "mean anhedral" is suspect; probably not even a helpful term.
 
 * Write up an informal description of "this is how a pilot standing on the
   ground would estimate the wind by watching a glider in the air". That
