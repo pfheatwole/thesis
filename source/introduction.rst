@@ -340,6 +340,8 @@ Predictive Modeling
    other limitations (ie, they fail to adequately address all those problems of
    discovery and use.
 
+* [[Introduce the data (IGC files) here?]]
+
 * Are there existing tools to build predictive models from flight data?
 
   * Paragliding Thermal Map, etc
@@ -449,8 +451,6 @@ Wind field estimation
 
   * The first step is to recover the actual wind vectors instead of using
     paraglider motion as a proxy for the wind vectors.
-
-* Describe the available data
 
 * Are there existing methods for estimating the wind vectors from the available
   data?

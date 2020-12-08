@@ -110,6 +110,9 @@ control the masts, sails, and yards of a sailing vessel"
 Canopy
 ======
 
+[[The "canopy geometry" was only describing the shape, not the physical
+implementation of that shape. Now I need to consider the physical model.]]
+
 * The canopy geometry in :doc:`canopy_geometry` is an idealized design target
   of the physical parafoil used for a paragliding wing.
 

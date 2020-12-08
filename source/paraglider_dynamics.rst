@@ -51,6 +51,8 @@ Paraglider Dynamics
 
 * Demonstrate the polar curves of my Hook3ish? (Feels a bit off here. Hrm.)
 
+* [[**FIXME**: where do I describe the aerodynamic *control points*?]]
+
 
 Modeling requirements
 =====================
@@ -154,51 +156,30 @@ data measured by flight recorders, making it the most convenient for comparing
 real flight data to simulated data.
 
 
-EXTRA model components
-======================
+Canopy
+======
 
-[[This is a scratch section. Not sure where to put the discussion of line and
-harness aerodynamics; they don't warrant their own chapter. Maybe I should
-rename the `canopy_aerodynamics` section? So I'd have:
-
-* `canopy_geometry`: seems complex enough to stand alone
-
-* `paraglider_geometry`: adds lines and harness
-
-* `paraglider_aerodynamics`: aerodynamics for all components. Seems like the
-  canopy aerodynamics are too big for a section, aren't they? It'd put the
-  NLLT in a sub-sub-section, which seems ridiculous.
-
-* `paraglider_dynamics`: chooses a reference point, degrees of freedom, etc,
-  and puts everything together into a dynamics model
-
-]]
+[[This section describes what goes into the dynamics function: velocities,
+gravity, control inputs, inertia, air density, etc.]]
 
 
-Suspension lines
-----------------
-
-Aerodynamics:
-
-* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: mentions some
-    papers on line drag coefficients, start here
-
-
-Harness
+Inertia
 -------
 
-* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: uses Virgilio's
-  presentation; I guess I'll do the same. That model treats the harness as
-  a sphere with an isotropic drag coefficient normalized by cross-sectional
-  area. Review the docstring for `harness.py:Spherical`.
+Solid mass
+^^^^^^^^^^
 
-* Discuss / choose a weight shift control scheme here? Where I do I explain
-  that I'm modeling it as a simple shift of the harness CM?
+[[Inertia matrix of the upper and lower surface materials]]
 
+
+Air mass
+^^^^^^^^
+
+[[Inertia matrix of the enclosed air]]
 
 
 Apparent Mass
-=============
+^^^^^^^^^^^^^
 
 Newton's second law states that the acceleration of an isolated object is
 proportional to the net force applied to that object:
@@ -274,8 +255,73 @@ Some references I need to discuss:
   I think?
 
 
-Six degree-of-freedom dynamics
-==============================
+Suspension lines
+================
+
+* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: mentions some
+    papers on line drag coefficients, start here
+
+* I'm lumping all the line drag into a single point for each half of the wing.
+  I'm assuming isotropic drag because drag due to lines naturally becomes
+  insignificant as alpha increases (when aerodynamic resistance in the
+  z-direction becomes dominated by the canopy)
+
+
+Harness
+=======
+
+* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: uses Virgilio's
+  presentation; I guess I'll do the same. That model treats the harness as
+  a sphere with an isotropic drag coefficient normalized by cross-sectional
+  area. Review the docstring for `harness.py:Spherical`.
+
+
+Inertia
+-------
+
+The harness is modeled as a solid sphere of uniform density. With a total mass
+:math:`m_p`, center of mass :math:`P`, and projected surface area :math:`S_p`,
+the moment of inertia is:
+
+.. math::
+
+   \mat{J}_{p/P} =
+     \begin{bmatrix}
+      J_{xx} & 0 & 0 \\
+      0 & J_{yy} & 0 \\
+      0 & 0 & J_{zz}
+     \end{bmatrix}
+
+where
+
+.. math::
+
+   J_{xx} = J_{yy} = J_{zz} = \frac{2}{5} m_p r_p^2 = \frac{2}{5} \frac{m_p S_p}{\pi}
+
+[[**FIXME**: use `p` subscript for payload? It's what I use in the code]]
+
+
+Controls
+--------
+
+[[Discuss modeling weight shift as a displacement of the harness center of
+mass :math:`P`]]
+
+
+Aerodynamics
+------------
+
+FIXME
+
+
+System models
+=============
+
+[[Models of the composite system]]
+
+
+A six degree-of-freedom model
+-----------------------------
 
 In these models, the paraglider is approximated as a single rigid body.
 With all the components held in a fixed position, the dynamics can be
@@ -295,8 +341,8 @@ way.]]
 For the derivation of the mathematical model, see :ref:`derivations:Model 6a`.
 
 
-Nine degree-of-freedom dynamics
-===============================
+A nine degree-of-freedom model
+------------------------------
 
 The 6-DoF models constrain the relative payload orientation to a fixed
 position. This is reasonably accurate for average flight maneuvers, but it has
@@ -360,6 +406,10 @@ Limitations
 
 * Rigid-body assumption (none of the canopy, connecting lines, or payload are
   actually rigid bodies)
+
+* Violates conservation of momentum since it doesn't account for changes in
+  distributions of mass (due weight shift, accelerator, relative orientation
+  of the payload, etc).
 
 * Quasi-steady-state assumption (I'm using steady-state aerodynamics to
   simulate non-steady conditions by assuming the conditions are changing
