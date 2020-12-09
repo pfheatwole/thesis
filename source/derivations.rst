@@ -797,10 +797,10 @@ package.
 
    \begin{aligned}
    {\vec{p}^b_{b/e}}
-      &= m_b \, \vec{v}^b_{B/e} \\
+      &= m_b \, \vec{v}_{B/e}^b \\
       &= m_b \left(
-            {\vec{v}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
+            {\vec{v}_{R/e}^b}
+            + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
          \right)
    \end{aligned}
 
@@ -809,31 +809,31 @@ package.
    :label: model6a_p_dot
 
    \begin{aligned}
-   {^e \dot{\vec{p}}^b_{b/e}}
+   {^e \dot{\vec{p}}_{b/e}^b}
       &= m_b \left(
             {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times {^e\dot{\vec{r}}^b_{B/R}}
+            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}^b}
+            + {\vec{\omega}_{b/e}^b} \times {^e\dot{\vec{r}}_{B/R}^b}
          \right)
 
       &= m_b \left(
-            {^b\dot{\vec{v}}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}
-            + {^b\dot{\vec{\omega}}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times \left(
-               {\cancelto{0}{^b \dot{\vec{r}}^b_{B/R}}}
-               + {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
+            {^b\dot{\vec{v}}_{R/e}^b}
+            + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
+            + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+            + {\vec{\omega}_{b/e}^b} \times \left(
+               {\cancelto{0}{^b \dot{\vec{r}}_{B/R}^b}}
+               + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
               \right)
          \right)
 
       &= m_b \left(
-            {^b\dot{\vec{v}}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}
-            + {^b\dot{\vec{\omega}}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
+            {^b\dot{\vec{v}}_{R/e}^b}
+            + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
+            + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+            + {\vec{\omega}_{b/e}^b} \times {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
          \right)
 
-      &= {\vec{F}^b_{\textrm{wing,aero}}} + {\vec{F}^b_{\textrm{wing,weight}}}
+      &= {\vec{F}_{\textrm{wing,aero}}^b} + {\vec{F}_{\textrm{wing,weight}}^b}
    \end{aligned}
 
 .. math::
@@ -844,10 +844,10 @@ package.
       &= {^b\dot{\vec{h}}_b}
          + {\vec{\omega}^b_{b/e} \times \vec{h}_b}
 
-      &= {\mat{J^b_B}{^b \dot{\vec{\omega}}^b_{b/e}}}
-         + {\vec{\omega} \times \left( \mat{J^b_B} \vec{\omega}^b_{b/e} \right)}
+      &= {\mat{J}_{b/R}^b{^b \dot{\vec{\omega}}_{b/e}^b}}
+         + {\vec{\omega} \times \left( \mat{J}_{b/R}^b \vec{\omega}_{b/e}^b \right)}
 
-      &= {\vec{M}^b_{\textrm{wing,aero}}} + {\vec{M}^b_{\textrm{wing,weight}}}
+      &= {\vec{M}_{\textrm{wing,aero}}^b} + {\vec{M}_{\textrm{wing,weight}}^b}
    \end{aligned}
 
 
@@ -855,17 +855,19 @@ package.
    :label: model6a_linear_system
 
    \begin{bmatrix}
-      {m_b \mat{I_3}} & {-m_b \crossmat{\vec{r}^b_{B/R}}} & {\mat{0_{3\times3}}} & {\mat{I_3}}\\
-      {\mat{0_{3\times3}}} & {\mat{J^b_B}} & {\mat{0_{3\times3}}} & {-\crossmat{\vec{r}^b_{R/B}}}\\
+      {m_b \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}^b}} & {\mat{0}_{3\times3}} & {\mat{I}_3}\\
+      {\mat{0}_{3\times3}} & {\mat{J}_{b/R}^b} & {\mat{0}_{3\times3}} & {-\crossmat{\vec{r}_{R/B}^b}}\\
    \end{bmatrix}
    \begin{bmatrix}
-      {^b \dot{\vec{v}}^b_{R/e}}\\
-      {^b \dot{\vec{\omega}}^b_{b/e}}\\
+      {^b \dot{\vec{v}}_{R/e}^b}\\
+      {^b \dot{\vec{\omega}}_{b/e}^b}\\
    \end{bmatrix}
    =\begin{bmatrix}
       \vec{B}_1\\
       \vec{B}_2\\
    \end{bmatrix}
+
+[[**FIXME**: doesn't incorporate apparent mass; review the code]]
 
 
 Model 9a
@@ -902,11 +904,11 @@ apparent mass.]]
    :label: model9a_body_p
 
    \begin{aligned}
-   {\vec{p}^b_{b/e}}
-      &= m_b \, \vec{v}^b_{B/e} \\
+   {\vec{p}_{b/e}^b}
+      &= m_b \, \vec{v}_{B/e}^b \\
       &= m_b \left(
-            {\vec{v}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
+            {\vec{v}_{R/e}^b}
+            + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
          \right)
    \end{aligned}
 
@@ -914,7 +916,7 @@ apparent mass.]]
    :label: model9a_body_p_dot
 
    \begin{aligned}
-   {^e \dot{\vec{p}}^b_{b/e}}
+   {^e \dot{\vec{p}}_{b/e}^b}
       &= m_b \left( 
             {^e \dot{\vec{v}}_{R/e}}
             + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}^b_{B/R}}
@@ -922,54 +924,57 @@ apparent mass.]]
          \right)
 
       &= m_b \left(
-            {^b\dot{\vec{v}}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}
-            + {^b\dot{\vec{\omega}}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times \left(
-               {\cancelto{0}{^b \dot{\vec{r}}^b_{B/R}}}
-               + {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
+            {^b\dot{\vec{v}}_{R/e}^b}
+            + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
+            + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+            + {\vec{\omega}_{b/e}^b} \times \left(
+               {\cancelto{0}{^b \dot{\vec{r}}_{B/R}^b}}
+               + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
               \right)
          \right)
 
       &= m_b \left(
-            {^b\dot{\vec{v}}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}
-            + {^b\dot{\vec{\omega}}^b_{b/e}} \times {\vec{r}^b_{B/R}} 
-            + {\vec{\omega}^b_{b/e}} \times {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
+            {^b\dot{\vec{v}}_{R/e}^b}
+            + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
+            + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+            + {\vec{\omega}_{b/e}^b} \times {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
          \right)
 
-      &= {\vec{F}^b_{\textrm{wing,aero}}} + {\vec{F}^b_{\textrm{wing,weight}}} - {\vec{F}^b_R}
+      &= {\vec{F}_{\textrm{wing,aero}}^b} + {\vec{F}_{\textrm{wing,weight}}^b} - {\vec{F}_R^b}
    \end{aligned}
 
 .. math::
    :label: model9a_payload_p_dot
 
    \begin{aligned}
-   {^e \dot{\vec{p}}^p_{p/e}}
-      &= m_p \left( 
-            {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{p/e}} \times {\vec{r}^p_{P/R}}
-            + {\vec{\omega}^p_{p/e}} \times {^e\dot{\vec{r}}^p_{P/R}}
-         \right)
+   {^e \dot{\vec{p}}_{p/e}^p}
+     &= m_p
+       \left(
+         {^e \dot{\vec{v}}_{R/e}}
+         + {^e\dot{\vec{\omega}}_{p/e}} \times {\vec{r}_{P/R}^p}
+         + {\vec{\omega}_{p/e}^p} \times {^e\dot{\vec{r}}_{P/R}^p}
+       \right)
+
+     &= m_p
+       \left(
+         {^p\dot{\vec{v}}_{R/e}^p}
+         + {\vec{\omega}_{p/e}^p} \times {\vec{v}_{R/e}^p}
+         + {^p\dot{\vec{\omega}}_{p/e}^p} \times {\vec{r}_{P/R}^p}
+         + {\vec{\omega}_{p/e}^p} \times
+           \left(
+             {\cancelto{0}{^p \dot{\vec{r}}_{P/R}^p}}
+             + {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}
+           \right)
+       \right)
 
       &= m_p \left(
-            {^p\dot{\vec{v}}^p_{R/e}}
-            + {\vec{\omega}^p_{p/e}} \times {\vec{v}^p_{R/e}}
-            + {^p\dot{\vec{\omega}}^p_{p/e}} \times {\vec{r}^p_{P/R}}
-            + {\vec{\omega}^p_{p/e}} \times \left(
-               {\cancelto{0}{^p \dot{\vec{r}}^p_{P/R}}}
-               + {\vec{\omega}^p_{p/e}} \times {\vec{r}^p_{P/R}}
-              \right)
+            {^p\dot{\vec{v}}_{R/e}^p}
+            + {\vec{\omega}_{p/e}^p} \times {\vec{v}_{R/e}^p}
+            + {^p\dot{\vec{\omega}}_{p/e}^p} \times {\vec{r}_{p/R}^p}
+            + {\vec{\omega}_{p/e}^p} \times {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}
          \right)
 
-      &= m_p \left(
-            {^p\dot{\vec{v}}^p_{R/e}}
-            + {\vec{\omega}^p_{p/e}} \times {\vec{v}^p_{R/e}}
-            + {^p\dot{\vec{\omega}}^p_{p/e}} \times {\vec{r}^p_{p/R}} 
-            + {\vec{\omega}^p_{p/e}} \times {\vec{\omega}^p_{p/e}} \times {\vec{r}^p_{P/R}}
-         \right)
-
-      &= {\vec{F}^p_{\textrm{payload,aero}}} + {\vec{F}^p_{\textrm{payload,weight}}} + {\vec{F}^p_R}
+      &= {\vec{F}_{\textrm{payload,aero}}^p} + {\vec{F}_{\textrm{payload,weight}}^p} + {\vec{F}_R^p}
    \end{aligned}
 
 
@@ -979,15 +984,15 @@ apparent mass.]]
    \begin{aligned}
    {^e \dot{\vec{h}}_b}
       &= {^b\dot{\vec{h}}_b}
-         + {\vec{\omega}^b_{b/e} \times \vec{h}_b}
+         + {\vec{\omega}_{b/e}^b \times \vec{h}_b}
 
-      &= {\mat{J^b_B}{^b \dot{\vec{\omega}}^b_{b/e}}}
-         + {\vec{\omega} \times \left( \mat{J^b_B} \vec{\omega}^b_{b/e} \right)}
+      &= {\mat{J}_{b/R}^b} {^b \dot{\vec{\omega}}_{b/e}^b}
+         + {\vec{\omega} \times \left( \mat{J}_{b/R}^b \vec{\omega}_{b/e}^b \right)}
 
       &= {\vec{M}^b_{\textrm{wing,aero}}}
-         + {\vec{M}^b_{\textrm{wing,weight}}}
-         - {\vec{r}^b_{R/B} \times \vec{F}^b_R}
-         - \vec{M}^b_R
+         + {\vec{M}_{\textrm{wing,weight}}^b}
+         - {\vec{r}_{R/B}^b \times \vec{F}_R^b}
+         - \vec{M}_R^b
    \end{aligned}
 
 
@@ -997,15 +1002,15 @@ apparent mass.]]
    \begin{aligned}
    {^e \dot{\vec{h}}_p}
       &= {^p\dot{\vec{h}}_p}
-         + {\vec{\omega}^p_{p/e} \times \vec{h}_p}
+         + {\vec{\omega}_{p/e}^p \times \vec{h}_p}
 
-      &= {\mat{J^p_P}{^p \dot{\vec{\omega}}^p_{p/e}}}
-         + {\vec{\omega} \times \left( \mat{J^p_P} \vec{\omega}^p_{p/e} \right)}
+      &= {\mat{J}_{p/R}^p}{^p \dot{\vec{\omega}}^p_{p/e}}
+         + {\vec{\omega} \times \left( \mat{J}_{p/R}^p \vec{\omega}^p_{p/e} \right)}
 
       &= {\vec{M}^p_{\textrm{wing,aero}}}
-         + {\vec{M}^p_{\textrm{wing,weight}}}
-         - {\vec{r}^p_{R/P} \times \vec{F}^p_R}
-         - \vec{M}^p_R
+         + {\vec{M}_{\textrm{wing,weight}}^p}
+         - {\vec{r}_{R/P}^p \times \vec{F}_R^p}
+         - \vec{M}_R^p
    \end{aligned}
 
 And finally, the complete system of equations:
@@ -1018,16 +1023,16 @@ mass. Compare to the code implementation.**
    :label: model9a_linear_system
 
    \begin{bmatrix}
-      {m_b \mat{I_3}} & {-m_b \crossmat{\vec{r}^b_{B/R}}} & {\mat{0_{3\times3}}} & {\mat{I_3}}\\
-      {m_p \mat{C_{p/b}}} & {\mat{0_{3\times3}}} & {-m_p \crossmat{\vec{r}^p_{p/R}}} & {-\mat{C_{p/b}}}\\
-      {\mat{0_{3\times3}}} & {\mat{J^b_B}} & {\mat{0_{3\times3}}} & {-\crossmat{\vec{r}^b_{R/B}}}\\
-      {\mat{0_{3\times3}}} & {\mat{0_{3\times3}}} & {\mat{J^p_P}} & {\crossmat{\vec{r}^p_{P/R}} \mat{C_{p/b}}}
+      {m_b \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}^b}} & {\mat{0}_{3\times3}} & {\mat{I}_3}\\
+      {m_p \mat{C}_{p/b}} & {\mat{0}_{3\times3}} & {-m_p \crossmat{\vec{r}_{p/R}^p}} & {-\mat{C}_{p/b}}\\
+      {\mat{0}_{3\times3}} & {\mat{J}_{b/R}^b} & {\mat{0}_{3\times3}} & {-\crossmat{\vec{r}^b_{R/B}}}\\
+      {\mat{0}_{3\times3}} & {\mat{0}_{3\times3}} & {\mat{J}_{p/R}^p} & {\crossmat{\vec{r}_{P/R}^p} \mat{C}_{p/b}}
    \end{bmatrix}
    \begin{bmatrix}
-      {^b \dot{\vec{v}}^b_{R/e}}\\
-      {^b \dot{\vec{\omega}}^b_{b/e}}\\
-      {^b \dot{\vec{\omega}}^b_{p/e}}\\
-      {\vec{F}^b_R}
+      {^b \dot{\vec{v}}_{R/e}^b}\\
+      {^b \dot{\vec{\omega}}_{b/e}^b}\\
+      {^b \dot{\vec{\omega}}_{p/e}^b}\\
+      {\vec{F}_R^b}
    \end{bmatrix}
    =\begin{bmatrix}
       \vec{B}_1\\
@@ -1041,19 +1046,32 @@ where
 .. math::
 
    \begin{aligned}
-      \vec{B}_1 &= {\vec{F}^b_{\textrm{wing,aero}}}
-      + {\vec{F}^b_{\textrm{wing,weight}}}
-      - {m_b \, {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}}
-      - {m_b \, {\vec{\omega}^b_{b/e}} \times {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}}\\
-      \vec{B}_2 &= {\vec{F}^b_{\textrm{p,aero}}}
-      + {\vec{F}^p_{\textrm{p,weight}}}
-      - {m_p \, {\vec{\omega}^p_{b/e}} \times {\vec{v}^p_{R/e}}}
-      - {m_p \, {\vec{\omega}^p_{p/e}} \times {\vec{\omega}^p_{p/e}} \times {\vec{r}^p_{P/R}}}\\
-      \vec{B}_3 &= {\vec{M}^b_{\textrm{wing,aero}}}
-      + {\vec{M}^b_{\textrm{wing,weight}}}
-      - {\vec{M}^b_R}
-      - {\vec{\omega}^b_{b/e} \times \left( {\mat{J^b_B} \vec{\omega}^b_{b/e}} \right)}\\
-      \vec{B}_4 &= {\vec{M}^p_{\textrm{p,aero}}}
-      + {\vec{M}^p_R}
-      - {\vec{\omega}^p_{p/e} \times \left( {\mat{J^p_P} \vec{\omega}^p_{p/e}} \right)}
+     \vec{B}_1 &=
+       {\vec{F}_{\textrm{wing,aero}}^b}
+       + {\vec{F}_{\textrm{wing,weight}}^b}
+       - {m_b \, {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}}
+       - {m_b \, {\vec{\omega}_{b/e}^b} \times {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}}
+
+       - {{\vec{\omega}_{b/e}^b} \times \vec{p}_a}
+       \\
+     \vec{B}_2 &=
+       {\vec{F}_{\textrm{p,aero}}^b}
+       + {\vec{F}_{\textrm{p,weight}}^p}
+       - {m_p \, {\vec{\omega}_{b/e}^p} \times {\vec{v}_{R/e}^p}}
+       - {m_p \, {\vec{\omega}_{p/e}^p} \times {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}}\\
+     \vec{B}_3 &=
+       {\vec{M}_{\textrm{wing,aero}}^b}
+       + {\vec{M}_{\textrm{wing,weight}}^b}
+       - {\vec{M}_R^b}
+       - {m_b \vec{\omega}_{b/e}^b \times \left( {\mat{J}_{b/R}^b} \vec{\omega}_{b/e}^b \right)}\\
+       - {\vec{v}_{R/e}^b} \times \vec{p}_{b/e}^b
+
+       - {\vec{v}_{R/e}^b \times \vec{p}_a}
+       - {\vec{\omega}_{b/e}^b \times \vec{h}_a}
+       + {\vec{v}_{R/e}^b \left( \mat{M}_a \vec{v}_{R/e}^b \right)}
+
+     \vec{B}_4 &=
+       {\vec{M}_{\textrm{p,aero}}^p}
+       + {\vec{M}_R^p}
+       - {m_p \vec{\omega}_{p/e}^p \times \left( {\mat{J}_{p/R}^p} \vec{\omega}_{p/e}^p \right)}
    \end{aligned}
