@@ -807,6 +807,8 @@ angular equations of motion by choosing the glider center of gravity for the
 dynamics reference point to simplify the equations of motion, but does not
 incorporate the apparent mass matrix.]]
 
+In this model, all vectors are in the canopy coordinate system :math:`c`.
+
 An implementation of this model is available as :py:class:`Paraglider6a
 <glidersim:pfh.glidersim.paraglider.Paraglider6a>` in the ``glidersim``
 package.
@@ -815,11 +817,11 @@ package.
    :label: model6a_p
 
    \begin{aligned}
-   {\vec{p}^b_{b/e}}
-      &= m_b \, \vec{v}_{B/e}^b \\
+   {\vec{p}_{b/e}}
+      &= m_b \, \vec{v}_{B/e} \\
       &= m_b \left(
-            {\vec{v}_{R/e}^b}
-            + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+            {\vec{v}_{R/e}}
+            + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
          \right)
    \end{aligned}
 
@@ -828,31 +830,31 @@ package.
    :label: model6a_p_dot
 
    \begin{aligned}
-   {^e \dot{\vec{p}}_{b/e}^b}
+   {^e \dot{\vec{p}}_{b/e}}
       &= m_b \left(
             {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}^b}
-            + {\vec{\omega}_{b/e}^b} \times {^e\dot{\vec{r}}_{B/R}^b}
+            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+            + {\vec{\omega}_{b/e}} \times {^e\dot{\vec{r}}_{B/R}}
          \right)
 
       &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}^b}
-            + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
-            + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
-            + {\vec{\omega}_{b/e}^b} \times \left(
-               {\cancelto{0}{^b \dot{\vec{r}}_{B/R}^b}}
-               + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+            {^b\dot{\vec{v}}_{R/e}}
+            + {\vec{\omega}_{b/e}} \times {\vec{v}_{R/e}}
+            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+            + {\vec{\omega}_{b/e}} \times \left(
+               {\cancelto{0}{^b \dot{\vec{r}}_{B/R}}}
+               + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
               \right)
          \right)
 
       &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}^b}
-            + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
-            + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
-            + {\vec{\omega}_{b/e}^b} \times {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+            {^b\dot{\vec{v}}_{R/e}}
+            + {\vec{\omega}_{b/e}} \times {\vec{v}_{R/e}}
+            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+            + {\vec{\omega}_{b/e}} \times {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
          \right)
 
-      &= {\vec{F}_{\textrm{wing,aero}}^b} + {\vec{F}_{\textrm{wing,weight}}^b}
+      &= {\vec{F}_{\textrm{wing,aero}}} + {\vec{F}_{\textrm{wing,weight}}}
    \end{aligned}
 
 .. math::
@@ -861,12 +863,12 @@ package.
    \begin{aligned}
    {^e \dot{\vec{h}}_{b/e}}
       &= {^b\dot{\vec{h}}_b}
-         + {\vec{\omega}^b_{b/e} \times \vec{h}_b}
+         + {\vec{\omega}_{b/e} \times \vec{h}_b}
 
-      &= {\mat{J}_{b/R}^b{^b \dot{\vec{\omega}}_{b/e}^b}}
-         + {\vec{\omega} \times \left( \mat{J}_{b/R}^b \vec{\omega}_{b/e}^b \right)}
+      &= {\mat{J}_{b/R}{^b \dot{\vec{\omega}}_{b/e}}}
+         + {\vec{\omega} \times \left( \mat{J}_{b/R} \vec{\omega}_{b/e} \right)}
 
-      &= {\vec{M}_{\textrm{wing,aero}}^b} + {\vec{M}_{\textrm{wing,weight}}^b}
+      &= {\vec{M}_{\textrm{wing,aero}}} + {\vec{M}_{\textrm{wing,weight}}}
    \end{aligned}
 
 
@@ -874,19 +876,20 @@ package.
    :label: model6a_linear_system
 
    \begin{bmatrix}
-      {m_b \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}^b}} & {\mat{0}_{3\times3}} & {\mat{I}_3}\\
-      {\mat{0}_{3\times3}} & {\mat{J}_{b/R}^b} & {\mat{0}_{3\times3}} & {-\crossmat{\vec{r}_{R/B}^b}}\\
+      {m_b \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}}} & {\mat{0}_{3\times3}} & {\mat{I}_3}\\
+      {\mat{0}_{3\times3}} & {\mat{J}_{b/R}} & {\mat{0}_{3\times3}} & {-\crossmat{\vec{r}_{R/B}}}\\
    \end{bmatrix}
    \begin{bmatrix}
-      {^b \dot{\vec{v}}_{R/e}^b}\\
-      {^b \dot{\vec{\omega}}_{b/e}^b}\\
+      {^b \dot{\vec{v}}_{R/e}}\\
+      {^b \dot{\vec{\omega}}_{b/e}}\\
    \end{bmatrix}
    =\begin{bmatrix}
       \vec{B}_1\\
       \vec{B}_2\\
    \end{bmatrix}
 
-[[**FIXME**: doesn't incorporate apparent mass; review the code]]
+[[**FIXME**: doesn't incorporate apparent mass or define `B1` and `B2`; review
+and sync with the implementation]]
 
 
 Model 9a
