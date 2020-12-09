@@ -565,10 +565,12 @@ variables? There are upper and lower surfaces.]]
 Apparent Mass of a Parafoil
 ===========================
 
-This section uses Barrows' method for estimating the apparent mass matrix of
-a wing with circular arc anhedral. These terms will be added to the real mass
-of the canopy when running the paraglider dynamics models. For a discussion of
-apparent mass effects, see :ref:`paraglider_dynamics:Apparent Mass`.
+This section presents Barrows' method for estimating the apparent mass matrix
+of a wing with circular arc anhedral. The equations have been adapted to use
+the standard notation of this paper. The terms derived in this section will be
+added to the real mass of the canopy when running the paraglider dynamics
+models. For a discussion of apparent mass effects, see
+:ref:`paraglider_dynamics:Apparent Mass`.
 
 
 Barrows Formulation
@@ -577,13 +579,19 @@ Barrows Formulation
 This section needs to define the terms that will be needed by the dynamics
 models:
 
-* :math:`\mat{A}_{a,R}`: apparent moment of inertia matrix about R
+* :math:`\mat{A}_{a/R}`: apparent inertia matrix with respect to some
+  *reference point* :math:`R`. This matrix is comprised of a translational
+  inertia part :math:`\mat{M}_a` and a rotational inertia part
+  :math:`\mat{J}_{a/R}`.
 
-* :math:`\vec{r}^c_{RC/R}`
+* :math:`\vec{r}_{RC/R}`: roll center with respect to :math:`R`
 
-* :math:`\vec{r}^c_{PC/RC}`
+* :math:`\vec{r}_{PC/RC}`: pitch center with respect to the *roll center*
+  :math:`RC`
 
-Some notes about Barrows development:
+In this section, all vectors are assumed to be in the canopy coordinate system.
+
+Some notes about Barrows' development:
 
 * It assumes the foil is symmetric about the xz-plane (left-right symmetry)
   and about the yz-plane (fore-aft symmetry).
@@ -612,8 +620,8 @@ Some initial definitions:
 .. math::
 
    \begin{aligned}
-   t &= \text{Airfoil thickness.}\\
-   h^* &= \frac{h}{b}\\
+     t   &= \text{Airfoil thickness.} \\
+     h^* &= \frac{h}{b} \\
    \end{aligned}
 
 First, the apparent mass terms for a flat wing of a similar volume, from
@@ -622,13 +630,13 @@ Barrows' equations 34-39:
 .. math::
 
    \begin{aligned}
-   m_{f11} &= k_A \pi \left( t^2 b / 4 \right)\\
-   m_{f22} &= k_B \pi \left( t^2 c / 4 \right)\\
-   m_{f33} &= \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] \pi \left( c^2 b / 4 \right)\\
-   \\
-   I_{f11} &= 0.055 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] b S^2\\
-   I_{f22} &= 0.0308 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] c^3 S\\
-   I_{f33} &= 0.055 b^3 t^2
+     m_{f11} &= k_A \pi \left( t^2 b / 4 \right) \\
+     m_{f22} &= k_B \pi \left( t^2 c / 4 \right) \\
+     m_{f33} &= \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] \pi \left( c^2 b / 4 \right) \\
+     \\
+     I_{f11} &= 0.055 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] b S^2 \\
+     I_{f22} &= 0.0308 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] c^3 S \\
+     I_{f33} &= 0.055 b^3 t^2
    \end{aligned}
 
 Where :math:`k_A` and :math:`k_B` are the "correction factors for
@@ -637,8 +645,8 @@ three-dimensional effects":
 .. math::
 
    \begin{aligned}
-   k_A &= 0.85\\
-   k_B &= 1.0
+     k_A &= 0.85 \\
+     k_B &= 1.0
    \end{aligned}
 
 Assuming the parafoil arc is circular and with no chordwise camber, use Barrows
@@ -649,9 +657,9 @@ arc:
 .. math::
 
    \begin{aligned}
-   z_{PC/C} &= -\frac{r \sin \left(\Theta\right)}{\Theta}\\
-   z_{RC/C} &= -\frac{z_{PC/C} \; m_{f22}}{m_{f22} + I_{f11}/r^2}\\
-   z_{PC/RC} &= z_{PC/C} - z_{RC/C}
+     z_{PC/C}  &= -\frac{r \sin \left( \Theta \right)}{\Theta} \\
+     z_{RC/C}  &= -\frac{z_{PC/C} \; m_{f22}}{m_{f22} + I_{f11}/r^2} \\
+     z_{PC/RC} &= z_{PC/C} - z_{RC/C}
    \end{aligned}
 
 Modifying the apparent mass terms from the flat wing to approximate the terms
@@ -660,45 +668,50 @@ for the arched wing, Barrows equations 51-55:
 .. math::
 
    \begin{aligned}
-   m_{11} &= k_A \left[ 1 + \left(\frac{8}{3}\right){h^*}^2 \right] \pi \left( t^2 b / 4 \right)\\
-   m_{22} &= \frac{r^2 m_{f22} + I_{f11}}{z^2_{PC/C}}\\
-   m_{33} &= m_{f33}\\
-   \\
-   I_{11} &= \frac{z^2_{PC/RC}}{z^2_{PC/C}} r^2 m_{f22} + \frac{z^2_{RC/C}}{z^2_{PC/C}} I_{f11}\\
-   I_{22} &= I_{f22}\\
-   I_{33} &= 0.055 \left( 1 + 8 {h^*}^2 \right) b^3 t^2
+     m_{11} &= k_A \left[ 1 + \left(\frac{8}{3}\right){h^*}^2 \right] \pi \left( t^2 b / 4 \right) \\
+     m_{22} &= \frac{r^2 m_{f22} + I_{f11}}{z^2_{PC/C}} \\
+     m_{33} &= m_{f33} \\
+     \\
+     I_{11} &= \frac{z^2_{PC/RC}}{z^2_{PC/C}} r^2 m_{f22} + \frac{z^2_{RC/C}}{z^2_{PC/C}} I_{f11} \\
+     I_{22} &= I_{f22} \\
+     I_{33} &= 0.055 \left( 1 + 8 {h^*}^2 \right) b^3 t^2
    \end{aligned}
 
-The apparent mass and apparent moment of inertia matrices are then defined in
-Barrows equation 1:
+The apparent inertia and apparent moment of inertia matrices are then defined
+in Barrows equations 1 and 17:
 
 .. math::
 
    \mat{M}_a \defas
-   \begin{bmatrix}
-      m_{11} & 0 & 0\\
-      0 & m_{22} & 0\\
-      0 & 0 & m_{33}
-   \end{bmatrix}
+     \begin{bmatrix}
+       m_{11} & 0      & 0 \\
+       0      & m_{22} & 0 \\
+       0      & 0      & m_{33}
+     \end{bmatrix}
 
 .. math::
 
    \mat{I}_a \defas
-   \begin{bmatrix}
-      I_{11} & 0 & 0\\
-      0 & I_{22} & 0\\
-      0 & 0 & I_{33}
-   \end{bmatrix}
+     \begin{bmatrix}
+       I_{11} & 0      & 0 \\
+       0      & I_{22} & 0 \\
+       0      & 0      & I_{33}
+     \end{bmatrix}
 
 Define two helper matrices:
 
 .. math::
 
-   \mat{S}_2 \defas \begin{bmatrix} 0 & 0 & 0\\0 & 1 & 0\\0 & 0 & 0\end{bmatrix}
+   \mat{S}_2 \defas
+     \begin{bmatrix}
+       0 & 0 & 0 \\
+       0 & 1 & 0 \\
+       0 & 0 & 0
+     \end{bmatrix}
 
 .. math::
 
-   \mat{Q} = \mat{S}_2 \crossmat{\vec{r}^c_{PC/RC}} \mat{M}_a \crossmat{\vec{r}^c_{RC/R}}
+   \mat{Q} = \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} \mat{M}_a \crossmat{\vec{r}_{RC/R}}
 
 Where :math:`\crossmat{\vec{x}}` is the :ref:`cross-product matrix operator
 <crossmat>`.
@@ -708,63 +721,61 @@ part of the apparent inertia matrix:
 
 .. math::
 
-   \mat{J}_{a,R} \defas
-      \mat{I} - \crossmat{\vec{r}^c_{RC/R}} \mat{M}_a \crossmat{\vec{r}^c_{RC/R}}
-      - \crossmat{\vec{r}^c_{PC/RC}} \mat{M}_a \crossmat{\vec{r}^c_{PC/RC}} \mat{S}_2
-      - \mat{Q} - \mat{Q}^T
+   \mat{J}_{a/R} \defas
+      \mat{I}
+      - \crossmat{\vec{r}_{RC/R}} \mat{M}_a \crossmat{\vec{r}_{RC/R}}
+      - \crossmat{\vec{r}_{PC/RC}} \mat{M}_a \crossmat{\vec{r}_{PC/RC}} \mat{S}_2
+      - \mat{Q}
+      - \mat{Q}^T
 
 And the corresponding angular momentum of the apparent mass about :math:`R`,
 using Barrows equation 24:
 
 .. math::
 
-   \vec{h}_{a,R} =
+   \vec{h}_{a/R} =
       \left(
-         \mat{S}_2 \crossmat{\vec{r}^c_{PC/RC}} + \crossmat{\vec{r}^c_{RC/R}}
-      \right) \mat{M}_a \vec{v}^c_R + \mat{J}_{a,R} \omega
+         \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
+      \right) \mat{M}_a \vec{v}_{R/e} + \mat{J}_{a/R} \omega
 
-And finally, the completed moment of inertia matrix about the riser connection
-point :math:`R`, from Barrows equation 27:
+And finally, the completed apparent mass matrix with respect to the riser
+connection point :math:`R`, from Barrows equation 27:
 
 .. math::
 
-   \mat{A}_{a,R} =
-   \begin{bmatrix}
-      \mat{M}_a & -\mat{M}_a \left(
-         \crossmat{\vec{r}^c_{RC/R}} + \crossmat{\vec{r}^c_{PC/RC}} \mat{S}_2
-      \right)\\
-      \left(
-         \mat{S}_2 \crossmat{\vec{r}^c_{PC/RC}}
-         + \crossmat{\vec{r}^c_{RC/R}}
-      \right) \mat{M}_a & \mat{J}_{a,R}
+   \mat{A}_{a/R} =
+     \begin{bmatrix}
+       \mat{M}_a & -\mat{M}_a \left( \crossmat{\vec{r}_{RC/R}} + \crossmat{\vec{r}_{PC/RC}} \mat{S}_2 \right) \\
+       \left( \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}} \right) \mat{M}_a & \mat{J}_{a/R}
    \end{bmatrix}
 
-Plus the vectors necessary to incorporate :math:`\mat{A}_R` into the final
-dynamics:
+Plus the vectors necessary to incorporate :math:`\mat{J}_{a/R}` into the
+final dynamics:
 
 .. math::
 
-   \vec{r}^c_{PC/RC} = \begin{bmatrix} 0 & 0 & z_{PC/RC}\end{bmatrix}
+   \vec{r}_{PC/RC} = \begin{bmatrix} 0 & 0 & z_{PC/RC}\end{bmatrix}
 
 Linear momentum of the apparent mass:
 
 .. math::
 
-   \vec{p}^b_a = \mat{M}_a \cdot \left(
-      \vec{v}^b_{R/e}
-      - \crossmat{\vec{r}^b_{RC/R}} \omega^b_{b/e}
-      - \crossmat{\vec{r}^b_{PC/RC}} \mat{S}_2 \cdot \omega^b_{b/e}
-   \right)
+   \vec{p}_{a/e} =
+     \mat{M}_a \cdot \left(
+       \vec{v}_{R/e}
+       - \crossmat{\vec{r}_{RC/R}} \omega_{b/e}
+       - \crossmat{\vec{r}_{PC/RC}} \mat{S}_2 \cdot \omega_{b/e}
+     \right)
 
 Angular momentum of the apparent mass about :math:`R`:
 
 .. math::
 
-   \vec{h}^b_{a,R} =
-      \left(
-         \mat{S}_2 \cdot \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
-      \right) \cdot \mat{M}_a \cdot \vec{v}^b_{R/e}
-      + \mat{J}_{a,R} \cdot \omega^b_{b/e}
+   \vec{h}_{a/R} =
+     \left(
+       \mat{S}_2 \cdot \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
+     \right) \cdot \mat{M}_a \cdot \vec{v}_{R/e}
+     + \mat{J}_{a/R} \cdot \omega_{b/e}
 
 
 Notes to self
@@ -773,6 +784,14 @@ Notes to self
 * If :ref:`paraglider_dynamics:Reference Point` said this section gives
   reasons that `R` should be in the xz-plane, then make sure this section
   covers that.
+
+* Doesn't Barrows use the *principal axes*? See my comment at the end of the
+  "Introduction" to Barrows' paper about the coordinate axes needing to be
+  parallel to the principal axes. I think the fact that I'm assuming the wing
+  has fore-aft and later symmetry is what allows me to use the canopy axes.
+
+* I'm not crazy about the notation `\mat{A}_{a/R}`, but this matrix isn't like
+  anything else in my paper so for now I'll leave it.
 
 
 Paraglider Models
