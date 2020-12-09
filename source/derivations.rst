@@ -818,11 +818,8 @@ package.
 
    \begin{aligned}
    {\vec{p}_{b/e}}
-      &= m_b \, \vec{v}_{B/e} \\
-      &= m_b \left(
-            {\vec{v}_{R/e}}
-            + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
-         \right)
+     &= m_b \, \vec{v}_{B/e} \\
+     &= m_b \left( {\vec{v}_{R/e}} + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}} \right)
    \end{aligned}
 
 
@@ -830,14 +827,14 @@ package.
    :label: model6a_p_dot
 
    \begin{aligned}
-   {^e \dot{\vec{p}}_{b/e}}
-      &= m_b \left(
+     {^e \dot{\vec{p}}_{b/e}}
+       &= m_b \left(
             {^e \dot{\vec{v}}_{R/e}}
             + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
             + {\vec{\omega}_{b/e}} \times {^e\dot{\vec{r}}_{B/R}}
-         \right)
+          \right)
 
-      &= m_b \left(
+       &= m_b \left(
             {^b\dot{\vec{v}}_{R/e}}
             + {\vec{\omega}_{b/e}} \times {\vec{v}_{R/e}}
             + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
@@ -845,30 +842,29 @@ package.
                {\cancelto{0}{^b \dot{\vec{r}}_{B/R}}}
                + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
               \right)
-         \right)
+          \right)
 
-      &= m_b \left(
+       &= m_b \left(
             {^b\dot{\vec{v}}_{R/e}}
             + {\vec{\omega}_{b/e}} \times {\vec{v}_{R/e}}
             + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
             + {\vec{\omega}_{b/e}} \times {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
-         \right)
+          \right)
 
-      &= {\vec{F}_{\textrm{wing,aero}}} + {\vec{F}_{\textrm{wing,weight}}}
+       &= {\vec{F}_{\textrm{wing,aero}}} + {\vec{F}_{\textrm{wing,weight}}}
    \end{aligned}
 
 .. math::
    :label: model6a_h_dot
 
    \begin{aligned}
-   {^e \dot{\vec{h}}_{b/e}}
-      &= {^b\dot{\vec{h}}_b}
-         + {\vec{\omega}_{b/e} \times \vec{h}_b}
+     {^e \dot{\vec{h}}_{b/e}}
+       &= {^b\dot{\vec{h}}_b} + {\vec{\omega}_{b/e} \times \vec{h}_b}
 
-      &= {\mat{J}_{b/R}{^b \dot{\vec{\omega}}_{b/e}}}
-         + {\vec{\omega} \times \left( \mat{J}_{b/R} \vec{\omega}_{b/e} \right)}
+       &= {\mat{J}_{b/R} \, {^b \dot{\vec{\omega}}_{b/e}}}
+          + {\vec{\omega} \times \left( \mat{J}_{b/R} \, \vec{\omega}_{b/e} \right)}
 
-      &= {\vec{M}_{\textrm{wing,aero}}} + {\vec{M}_{\textrm{wing,weight}}}
+       &= {\vec{M}_{\textrm{wing,aero}}} + {\vec{M}_{\textrm{wing,weight}}}
    \end{aligned}
 
 
@@ -876,17 +872,17 @@ package.
    :label: model6a_linear_system
 
    \begin{bmatrix}
-      {m_b \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}}} & {\mat{0}_{3\times3}} & {\mat{I}_3}\\
-      {\mat{0}_{3\times3}} & {\mat{J}_{b/R}} & {\mat{0}_{3\times3}} & {-\crossmat{\vec{r}_{R/B}}}\\
+     {m_b \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}}} & {\mat{0}_{3\times3}} & {\mat{I}_3} \\
+     {\mat{0}_{3\times3}} & {\mat{J}_{b/R}} & {\mat{0}_{3\times3}} & {-\crossmat{\vec{r}_{R/B}}} \\
    \end{bmatrix}
    \begin{bmatrix}
-      {^b \dot{\vec{v}}_{R/e}}\\
-      {^b \dot{\vec{\omega}}_{b/e}}\\
+     {^b \dot{\vec{v}}_{R/e}} \\
+     {^b \dot{\vec{\omega}}_{b/e}} \\
    \end{bmatrix}
-   =\begin{bmatrix}
-      \vec{B}_1\\
-      \vec{B}_2\\
-   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{B}_1\\
+       \vec{B}_2\\
+     \end{bmatrix}
 
 [[**FIXME**: doesn't incorporate apparent mass or define `B1` and `B2`; review
 and sync with the implementation]]
