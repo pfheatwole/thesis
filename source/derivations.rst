@@ -393,78 +393,83 @@ Area
 
 To compute the mass distribution of the upper and lower surfaces, start by
 computing the dimensionless inertia tensor of the areas then scale them by the
-surface material areal densities.
+surface material areal densities. [[FIXME: what? Reword: we want the total
+area, total area centroid, and dimensionless inertia matrices. We can scale
+those by the upper and lower surface densities to get the actual values.]]
 
-First, cover each surface in a triangulated mesh, so each surface is
-represented by a set of :math:`N` triangles :math:`\left\{ t_n
-\right\}^N_{n=1}`. Each triangle is defined by three points :math:`t_n
-= \left\{ \vec{p_{n,1}}, \vec{p_{n,2}}, \vec{p_{n,3}} \right\}` in canopy
-coordinates which have been ordered to produce a right-handed sequence
-suitable for the surface. These triangles can be used to compute the surface
-areas and enclosed volume of the canopy.
+First, for each of the upper and lower surfaces, cover the surface with
+a triangulated mesh so it is represented by a set of :math:`N` triangles. Each
+triangle is defined by three points :math:`\left\{ \mathrm{P1}, \mathrm{P2},
+\mathrm{P3} \right\}_n` in canopy coordinates. For convenience, define position
+vectors for each of the three points of the nth triangle: :math:`\vec{r}_{i,n}
+\defas \vec{r}_{Pi/O,n}^b`.
 
-For surface areas, each triangular area is easily computed using the vector
-cross-product of two legs of the triangle:
+The area of each triangle is easily computed using the vector cross-product of
+two legs of the triangle:
 
 .. math::
 
-   a_m =
+   a_n =
       \frac{1}{2}
       \rho
       \left\|
-         \left( \vec{p_{m,2}} - \vec{p_{m,1}} \right)
+         \left( \vec{r}_{2,n} - \vec{r}_{1,n} \right)
          \times
-         \left( \vec{p_{m,3}} - \vec{p_{m,2}} \right)
+         \left( \vec{r}_{3,n} - \vec{r}_{2,n} \right)
       \right\|
 
-The total area is the sum of the triangle areas:
+The total area of the surface is the sum of the triangle areas:
 
 .. math::
 
-   A = \sum^M_{m=1} a_m
+   a = \sum^N_{n=1} a_n
 
-The centroid of each triangle:
-
-.. math::
-
-   \vec{c}_m = \frac{1}{3} \sum^3_{i=1} \vec{p_{m,i}}
-
-The centroid of the net surface area:
+The area centroid of each triangle:
 
 .. math::
 
-   \overline{\vec{A}} = \frac{1}{A} \sum^M_{m=1} a_m \vec{c}_m
+   \overline{\vec{a}}_n \defas
+     \frac{1}{3} \left( \vec{r}_{1,n} + \vec{r}_{2,n} + \vec{r}_{3,n} \right)
 
-The covariance matrix of the surface area:
-
-.. math::
-
-   \mat{C}_A = \sum^M_{m=1} a_m \vec{c}_m \vec{c}_m^T
-
-The inertia tensor of the surface area about the origin :math:`O`:
+And the centroid :math:`\mathrm{A}` of the total surface area with respect to
+the canopy origin :math:`\mathrm{O}`:
 
 .. math::
 
-   \mat{J}_{A/O} = \mathrm{trace} \left( \mat{C}_A \right) \vec{I}_3 - \mat{C}_A
+   \vec{r}_{\mathrm{A}/\mathrm{O}}^b = \frac{1}{a} \sum^N_{n=1} a_n \overline{\vec{a}}_n
+
+The covariance matrix of the total surface area:
+
+.. math::
+
+   \mat{\Sigma}_a = \sum^N_{n=1} a_n \overline{\vec{a}}_n \overline{\vec{a}}_n^T
+
+The inertia tensor of the total surface area :math:`a` about the canopy origin
+:math:`\mathrm{O}`:
+
+.. math::
+
+   \mat{J}_{a/\mathrm{O}}^b = \mathrm{trace} \left( \mat{\Sigma}_a \right) \vec{I}_3 - \mat{\Sigma}_a
 
 And tada, there are the three relevant properties for each surface area: the
-total area :math:`A`, the centroid :math:`C`, and the inertia tensor
-:math:`\mat{J}`.
+total area :math:`a`, the area centroid
+:math:`\vec{r}_{\mathrm{A}/\mathrm{O}}`, and the inertia tensor
+:math:`\mat{J}_{a/\mathrm{O}}^b`.
 
 
 Volume
 ------
 
-Now for the volume. For the purposes of computing the inertia properties of
-the enclosed air, it is convenient to neglect the air intakes and treat the
-canopy as a closed volume. Given this simplifying assumption, build another
-surface mesh that covers the total canopy surface as well as the left and
-right wing tip sections. Given a surface triangulation over the closed canopy
-geometry using :math:`N` triangles :math:`\left\{ t_n \right\}^N_{n=1}` as
-before in the area calculations, the volume can be computed as follows:
-
-.. TODO: should t_k be a matrix? That'd make sense when I compute its
-   determinant.
+Now for the volume. For the purposes of computing the inertia properties of the
+enclosed air, it is convenient to neglect the air intakes and treat the canopy
+as a closed volume. Given this simplifying assumption, build another triangular
+mesh that covers the entire canopy surface as well as the left and right wing
+tip sections. For this derivation, it is essential that the points on each
+triangle are ordered such that a right-handed traversal produces a normal
+vector pointing out of the volume. It is also essential that the complete mesh
+does not contain any holes, or the volume may be miscounted. Given a surface
+triangulation over the closed canopy geometry using :math:`N` triangles, the
+volume can be computed as follows.
 
 First, treat each triangle as the face of a tetrahedron that includes the
 origin. The signed volume of the tetrahedron formed by each triangle is given
@@ -475,9 +480,9 @@ by:
    v_n =
       \frac{1}{6}
       \left(
-         \vec{p_{n,1}} \cdot \vec{p_{n,2}}
+         \vec{r}_{1,n} \cdot \vec{r}_{2,n}
       \right)
-      \times \vec{p_{n,3}}
+      \times \vec{r}_{3,n}
 
 Given that the vertices of each triangle were oriented such that they satisfy
 a right-hand rule, the sign of each volume will be positive if the normal
@@ -489,19 +494,22 @@ the simple sum:
 
 .. math::
 
-   V = \sum^N_{n=1} v_n
+   v = \sum^N_{n=1} v_n
 
 For the volume centroid of each tetrahedron:
 
-.. math::
-
-   \overline{\vec{v}}_n = \frac{1}{4} \sum^3_{i=1} \vec{p_{n,i}}
-
-And the centroid of the total volume:
+.. Divide by 4 since this implicitly includes the origin at <0,0,0>
 
 .. math::
 
-   \overline{\vec{V}} = \frac{1}{V} \sum^N_{n=1} \overline{\vec{v}}_n
+   \overline{\vec{v}}_n \defas \frac{1}{4} \sum^3_{i=1} \vec{r}_{i,n}
+
+And the centroid :math:`\mathrm{V}` of the total volume with respect to the
+canopy origin :math:`\mathrm{O}`:
+
+.. math::
+
+   \vec{r}_{\mathrm{V}/\mathrm{O}}^b = \frac{1}{v} \sum^N_{n=1} v_n \overline{\vec{v}}_n
 
 Lastly, calculating the inertia tensor of the volume can be simplified by
 computing the inertia tensor of a prototypical or "canonical" tetrahedron and
@@ -512,7 +520,7 @@ First, given the covariance matrix of the "canonical" tetrahedron:
 
 .. math::
 
-   \mat{\hat{C}} \defas \begin{bmatrix}
+   \mat{\hat{\Sigma}} \defas \begin{bmatrix}
       \frac{1}{60} & \frac{1}{120} & \frac{1}{120}\\
       \frac{1}{120} & \frac{1}{60} & \frac{1}{120}\\
       \frac{1}{120} & \frac{1}{120} & \frac{1}{60}
@@ -526,7 +534,7 @@ Use the points in each triangle to define:
    \mat{T}_n \defas
       \begin{bmatrix}
          | & | & | \\
-         \vec{p_{n,1}} & \vec{p_{n,2}} & \vec{p_{n,3}}\\
+         \vec{r}_{1,n} & \vec{r}_{2,n} & \vec{r}_{3,n}\\
          | & | & | \\
       \end{bmatrix}
 
@@ -534,20 +542,24 @@ The covariance of each tetrahedron volume is then:
 
 .. math::
 
-   \mat{C}_n = \left| \mat{T}_n \right| \mat{T}_n^T \mat{\hat{C}} \mat{T}_n
+   \mat{\Sigma}_n = \left| \mat{T}_n \right| \mat{T}_n^T \mat{\hat{\Sigma}} \mat{T}_n
 
 And the covariance matrix of the complete volume:
 
 .. math::
 
-   \mat{C}_V = \sum^N_{n=1} \mat{C}_n
+   \mat{\Sigma}_v = \sum^N_{n=1} \mat{\Sigma}_n
 
 And at last, the inertia tensor of the volume about the origin :math:`O` can
 be computed directly from the covariance matrix:
 
 .. math::
 
-   \mat{J}_{V/O} = \mathrm{trace} \left( \mat{C}_V \right) \vec{I}_3 - \mat{C}_V
+   \mat{J}_{v/O}^b = \mathrm{trace} \left( \mat{\Sigma}_v \right) \vec{I}_3 - \mat{\Sigma}_v
+
+
+[[FIXME: make a table showing the six variables and their names. Well, nine
+variables? There are upper and lower surfaces.]]
 
 
 Apparent Mass of a Parafoil
