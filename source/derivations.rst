@@ -402,7 +402,7 @@ a triangulated mesh so it is represented by a set of :math:`N` triangles. Each
 triangle is defined by three points :math:`\left\{ \mathrm{P1}, \mathrm{P2},
 \mathrm{P3} \right\}_n` in canopy coordinates. For convenience, define position
 vectors for each of the three points of the nth triangle: :math:`\vec{r}_{i,n}
-\defas \vec{r}_{Pi/O,n}^b`.
+\defas \vec{r}_{Pi/O,n}`.
 
 The area of each triangle is easily computed using the vector cross-product of
 two legs of the triangle:
@@ -436,7 +436,7 @@ the canopy origin :math:`\mathrm{O}`:
 
 .. math::
 
-   \vec{r}_{\mathrm{A}/\mathrm{O}}^b = \frac{1}{a} \sum^N_{n=1} a_n \overline{\vec{a}}_n
+   \vec{r}_{\mathrm{A}/\mathrm{O}} = \frac{1}{a} \sum^N_{n=1} a_n \overline{\vec{a}}_n
 
 The covariance matrix of the total surface area:
 
@@ -449,12 +449,12 @@ The inertia tensor of the total surface area :math:`a` about the canopy origin
 
 .. math::
 
-   \mat{J}_{a/\mathrm{O}}^b = \mathrm{trace} \left( \mat{\Sigma}_a \right) \vec{I}_3 - \mat{\Sigma}_a
+   \mat{J}_{a/\mathrm{O}} = \mathrm{trace} \left( \mat{\Sigma}_a \right) \vec{I}_3 - \mat{\Sigma}_a
 
 And tada, there are the three relevant properties for each surface area: the
 total area :math:`a`, the area centroid
 :math:`\vec{r}_{\mathrm{A}/\mathrm{O}}`, and the inertia tensor
-:math:`\mat{J}_{a/\mathrm{O}}^b`.
+:math:`\mat{J}_{a/\mathrm{O}}`.
 
 
 Volume
@@ -509,7 +509,7 @@ canopy origin :math:`\mathrm{O}`:
 
 .. math::
 
-   \vec{r}_{\mathrm{V}/\mathrm{O}}^b = \frac{1}{v} \sum^N_{n=1} v_n \overline{\vec{v}}_n
+   \vec{r}_{\mathrm{V}/\mathrm{O}} = \frac{1}{v} \sum^N_{n=1} v_n \overline{\vec{v}}_n
 
 Lastly, calculating the inertia tensor of the volume can be simplified by
 computing the inertia tensor of a prototypical or "canonical" tetrahedron and
@@ -555,7 +555,7 @@ be computed directly from the covariance matrix:
 
 .. math::
 
-   \mat{J}_{v/O}^b = \mathrm{trace} \left( \mat{\Sigma}_v \right) \vec{I}_3 - \mat{\Sigma}_v
+   \mat{J}_{v/O} = \mathrm{trace} \left( \mat{\Sigma}_v \right) \vec{I}_3 - \mat{\Sigma}_v
 
 
 [[FIXME: make a table showing the six variables and their names. Well, nine
