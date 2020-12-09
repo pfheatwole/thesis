@@ -23,7 +23,7 @@ Paraglider modeling
   riser control, etc)
 
 
-Flight Reconstruction
+Flight reconstruction
 =====================
 
 
@@ -42,7 +42,7 @@ Data
     (drainage networks, flowfield tools for wind farms), etc
 
 
-Filtering Architecture
+Filtering architecture
 ----------------------
 
 * Are wind vectors independent, or do you try to fit the wind field

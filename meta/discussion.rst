@@ -1772,29 +1772,10 @@ Distortions
 Canopy Aerodynamics
 ===================
 
-* Discuss the methods for estimating the aerodynamic forces on a wing. What
-  are their pros/cons? Why did I choose Phillips? Does my geometry make it
-  easy to use CFD methods?
-
 * In `lingard1995RamairParachuteDesign` he uses a linear aerodynamics model.
 
 * Make sure to highlight the usefulness of having a full non-linear dynamics
-  model (versus simple linear models such as *stability derivatives*). **Hit
-  this hard! Make it blindingly obvious that having access to an accurate
-  non-linear model will support future tasks.**
-
-* I will need to discuss the limitations of the lifting-line methods. For
-  starters, you need to have previously computed the coefficients for the
-  deformed section profile, including when braking, and for the range of
-  Reynolds numbers.
-
-* Steady-state assumption: In the conclusion of "Specialized System
-  Identification for Parafoil and Payload Systems" (Ward, Costello; 2012), they
-  note that "the simulation is created entirely from steady-state data". This
-  is one of my major assumptions as well. This will effect accuracy during
-  turns and wind fluctuations, and ignores hysteresis effects (boundary layers
-  exhibit "memory" in a sense; the same wind vector can produce a separation
-  bubble or not depending on how that state was achieved).
+  model (versus simple linear models such as *stability derivatives*).
 
 
 Validation
@@ -1867,7 +1848,10 @@ References
   this quote was referring to their method using vortex sheets, but in the
   conclusion they also say "For wings with sweep and/or dihedral, the method
   does not produce grid-resolved results which was also found to be the case
-  with the method of Phillips and Snyder."
+  with the method of Phillips and Snyder." [[Also, see `usuaero/MachUpX`
+  commit `93ae2a7`: "Overcame singularity in induced velocities by averaging
+  the effective joint locations, thus forcing continuity in the vortex sheet.
+  Wahoo!" Related?]]
 
 * :cite:`chreim2017ViscousEffectsAssessment` reviewed the effectiveness of
   Phillips' method to flat wings with rectangular, elliptical, and swept
@@ -1907,19 +1891,6 @@ Paraglider Geometry
 * Building a parametric paraglider model requires parametric components. One
   of the motivations for my project is to build a top-down parametric
   paraglider system.
-
-* **Drive home why parametric is so important for my needs.** It makes it
-  easier to model existing wings, which makes the models easier to compare
-  against existing wings. It also makes it easier to implement existing wings,
-  which makes it less expensive to build a database/catalog of models for
-  existing wings. I need a catalog of wings in order to build a distribution
-  over the wing parameters, which is necessary for the flight reconstruction
-  model (which is uncertain about the wind model, thus needs a prior over wing
-  models.) It also increases flexibility: a fixed canopy geometry doesn't
-  allow making the lobe anhedral a function of the accelerator, which has
-  significant effects on aerodynamic performance (eg, modern wings often have
-  their best glide ratios when a small amount of speedbar has been applied,
-  keeping the wing more arced for "hands-up stability").
 
 * I started with designs from :cite:`benedetti2012ParaglidersFlightDynamics`,
   and applied extensive modifications to support the needs of my thesis.

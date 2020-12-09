@@ -20,10 +20,38 @@ Paraglider Dynamics
      - .. image:: figures/paraglider/geometry/foil2.*
 
 
-* [[Define *dynamics*.
+* Define *dynamics*
 
-  What are they? What are they used for? They're what I'll be using to
-  generate flight trajectories.]]
+* What are paraglider dynamics used for?
+
+  [[They're what I'll be using to generate flight trajectories.]]
+
+
+.. Roadmap
+
+* Establish the modeling requirements in the context of flight reconstruction
+
+  [[ie, "I'm interested in considering how a wing responds to non-centered
+  interactions with a thermal, so I need a model that supports asymmetric wind
+  (specifically, horizontal shear)"? Wait, that's part of the aerodynamics.]]
+
+* Discuss existing paraglider models from literature?
+
+* Individual component dynamics
+
+  [[inertia and control systems?]]
+
+  * Wing
+
+  * Harness
+
+* Composite system dynamics
+
+  [[Degrees-of-freedom, connection model, etc?]]
+
+* Demonstrate the polar curves of my Hook3ish? (Feels a bit off here. Hrm.)
+
+* [[**FIXME**: where do I describe the aerodynamic *control points*?]]
 
 
 Modeling requirements
@@ -33,16 +61,22 @@ Modeling requirements
   about what I am.]]
 
 * [[A paraglider can be considered a system composed of canopy, lines,
-  harness, and pilot. Although nearly every component are highly flexible they
-  tend to remain relatively rigid during normal flight. The flight dynamics
-  can be greatly simplified by assuming a rigid body model.]]
+  harness, and pilot. Although nearly every component are made from highly
+  flexible materials, they tend to remain relatively rigid during typical
+  flight conditions. The flight dynamics can be greatly simplified by assuming
+  a rigid body model.]]
 
 * I put a lot of work into non-uniform wind, etc, in the aerodynamics. The
   dynamics model should be capable of leveraging that flexibility.
 
-* Intuitive (as possible), sufficiently flexible, etc.
+* Intuitive (as possible), sufficiently flexible, etc. [[FIXME: vague]]
 
 * Degrees of freedom? (eg, include relative motion of the harness?)
+
+* [[Weight shift control is in, riser controls are out]]
+
+  **Does it make sense to have this "modeling requirements" up front if this
+  chapter includes both the wing and the harness?**
 
 
 Related Work
@@ -92,7 +126,6 @@ Related Work
     * :cite:`barrows2002ApparentMassParafoils`
 
 
-
 Reference Point
 ===============
 
@@ -103,7 +136,9 @@ decouples the translational and angular dynamics. For paragliders, however,
 the center of mass is not a fixed point: weight shift, accelerator, and
 atmospheric air density all effect the location of the paraglider center of
 mass. This makes it a poor choice for tracking the vehicle trajectory over
-time.
+time. [[FIXME: the point you use for tracking the vehicle doesn't have to be
+the same point you use for calculating the dynamics; I'm mixing up concepts
+here]]
 
 Selecting a fixed point on the vehicle slightly increases the complexity of
 the dynamics equations, but it simplifies [["stuff"; does it make the 9 DoF
@@ -114,14 +149,37 @@ are the leading edge of the central section, or the midpoint between the two
 risers, which is constant regardless of the width the riser chest strap.
 
 This paper uses the midpoint between the two riser connection points,
-designated :math:`R`, for all dynamics equations. Because the risers are very
-near to where the pilot would place their flight device, this is the most
-representative of the data measured by flight recorders, making it the most
-convenient for comparing real flight data to simulated data.
+designated :math:`R`, for all dynamics equations [[and for the vehicle
+velocity state variable]]. Because the risers are very near to where the
+pilot would place their flight device, this is the most representative of the
+data measured by flight recorders, making it the most convenient for comparing
+real flight data to simulated data.
+
+
+Canopy
+======
+
+[[This section describes what goes into the dynamics function: velocities,
+gravity, control inputs, inertia, air density, etc.]]
+
+
+Inertia
+-------
+
+Solid mass
+^^^^^^^^^^
+
+[[Inertia matrix of the upper and lower surface materials]]
+
+
+Air mass
+^^^^^^^^
+
+[[Inertia matrix of the enclosed air]]
 
 
 Apparent Mass
-=============
+^^^^^^^^^^^^^
 
 Newton's second law states that the acceleration of an isolated object is
 proportional to the net force applied to that object:
@@ -134,6 +192,10 @@ This simple rule is sufficient and effective for determining the behavior of
 isolated objects, but when an object is immersed in a fluid it is longer
 isolated. When an object moves through a fluid there is an exchange of
 momentum, and so the momentum of the fluid must be taken into account as well.
+[[FIXME: poor explanation. The "exchange of momentum" is what produces the
+fluid dynamics, after all. The problem is using aerodynamics coefficients that
+were produced under steady-state conditions to estimate accelerated (unsteady)
+motion.]]
 
 In static scenarios, where the vehicle is not accelerating relative to the
 fluid (ie, changing speed and/or direction), this exchange of momentum is
@@ -151,11 +213,11 @@ vehicle has increased its mass:
 
 This *apparent mass* :math:`m_a` becomes more significant as the density of
 the vehicle approaches the density of the fluid. If the density of the vehicle
-is much greater than the density of the fluid the effect is often ignored, as
-is the case for traditional aircraft, which are much more dense than the
-surrounding air. For lightweight aircraft, however, such as a parafoil, where
-the density of the vehicle is much closer to the density of the air, the
-effect can be significant.
+is much greater than the density of the fluid then the effect is often
+ignored, as is the case for traditional aircraft, which are much more dense
+than the surrounding air. For lightweight aircraft, however, where the density
+of the vehicle is much closer to the density of the air, the effect can be
+significant.
 
 Because apparent mass effects are the result of a volume in motion relative to
 a fluid, its magnitude depends on the direction of the motion relative to the
@@ -193,8 +255,73 @@ Some references I need to discuss:
   I think?
 
 
-Six degree-of-freedom dynamics
-==============================
+Suspension lines
+================
+
+* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: mentions some
+    papers on line drag coefficients, start here
+
+* I'm lumping all the line drag into a single point for each half of the wing.
+  I'm assuming isotropic drag because drag due to lines naturally becomes
+  insignificant as alpha increases (when aerodynamic resistance in the
+  z-direction becomes dominated by the canopy)
+
+
+Harness
+=======
+
+* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: uses Virgilio's
+  presentation; I guess I'll do the same. That model treats the harness as
+  a sphere with an isotropic drag coefficient normalized by cross-sectional
+  area. Review the docstring for `harness.py:Spherical`.
+
+
+Inertia
+-------
+
+The harness is modeled as a solid sphere of uniform density. With a total mass
+:math:`m_p`, center of mass :math:`P`, and projected surface area :math:`S_p`,
+the moment of inertia is:
+
+.. math::
+
+   \mat{J}_{p/P} =
+     \begin{bmatrix}
+      J_{xx} & 0 & 0 \\
+      0 & J_{yy} & 0 \\
+      0 & 0 & J_{zz}
+     \end{bmatrix}
+
+where
+
+.. math::
+
+   J_{xx} = J_{yy} = J_{zz} = \frac{2}{5} m_p r_p^2 = \frac{2}{5} \frac{m_p S_p}{\pi}
+
+[[**FIXME**: use `p` subscript for payload? It's what I use in the code]]
+
+
+Controls
+--------
+
+[[Discuss modeling weight shift as a displacement of the harness center of
+mass :math:`P`]]
+
+
+Aerodynamics
+------------
+
+FIXME
+
+
+System models
+=============
+
+[[Models of the composite system]]
+
+
+A six degree-of-freedom model
+-----------------------------
 
 In these models, the paraglider is approximated as a single rigid body.
 With all the components held in a fixed position, the dynamics can be
@@ -214,8 +341,8 @@ way.]]
 For the derivation of the mathematical model, see :ref:`derivations:Model 6a`.
 
 
-Nine degree-of-freedom dynamics
-===============================
+A nine degree-of-freedom model
+------------------------------
 
 The 6-DoF models constrain the relative payload orientation to a fixed
 position. This is reasonably accurate for average flight maneuvers, but it has
@@ -252,6 +379,13 @@ momentum :math:`^e \dot{\vec{p}} = \sum{\vec{F}}` and angular momentum
 For the derivation of the mathematical model, see :ref:`derivations:Model 9a`.
 
 
+Case study
+==========
+
+[[Move the content from `case_study` here? Or delay the discussion of wing
+polars in that dedicated chapter?]]
+
+
 Discussion
 ==========
 
@@ -272,6 +406,10 @@ Limitations
 
 * Rigid-body assumption (none of the canopy, connecting lines, or payload are
   actually rigid bodies)
+
+* Violates conservation of momentum since it doesn't account for changes in
+  distributions of mass (due weight shift, accelerator, relative orientation
+  of the payload, etc).
 
 * Quasi-steady-state assumption (I'm using steady-state aerodynamics to
   simulate non-steady conditions by assuming the conditions are changing

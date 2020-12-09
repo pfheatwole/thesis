@@ -42,9 +42,29 @@ Terminology
 Content
 *******
 
+
+Chapter structure
+=================
+
 * This paper, and every chapter in it, should **start with an introduction
   that gives away the punchline**. Let the reader determine at a glance what
   the chapter will discuss and the basic conclusions.
+
+* Each chapter should follow approximately the same structure:
+
+  1. Introduction
+
+     * What is the topic of the chapter?
+
+     * Why does that topic require the upcoming discussion?
+
+     * What is the outcome of this chapter?
+
+     * Roadmap of how the chapter will proceed
+
+  2. Content
+
+  3. Discussion
 
 
 Trouble Words

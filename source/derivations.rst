@@ -106,8 +106,8 @@ Parametric wing modeling with airfoils
    etc) choices of reference points, etc>
 
 
-**FIXME**: move the parafoil-specific choices and design examples into `Canopy
-Geometry`_
+**FIXME**: move the parafoil-specific choices and design examples into
+:doc:`canopy_geometry`.
 
 
 General parametrization of a chord surface
@@ -295,6 +295,85 @@ Designing a chord surface with these equations requires five steps:
 designing parafoils.]]
 
 
+Parametric design curves
+========================
+
+[[Not sure where to put this. I'm using these in the examples, and again in my
+"case study", wherever that ends up. **How important is it that I present the
+mathematical versions?**
+
+For now I think I'll present the basic idea, but refer to the code for the
+complete implementation. These are messy, I should stick them in derivations.
+They're not essential to this paper.]]
+
+[[The `elliptical_chord` and `elliptical_arc` are helper functions that
+generate an `EllipticalArc` object. Should I focus on deriving the
+`EllipticalArc`?]]
+
+
+Elliptical chord
+----------------
+
+An elliptical arc can be describe with three parameters: A, B, and the
+constant. Alternatively, letting the constant be `1` you can think of these
+three parameters as the normalized major axis, normalized minor axis, and
+scale.
+
+The parametric model requires `c(s)`, the chord length as a function of
+section index. If the chord distribution is an elliptical function of section
+index, then the major axis is `s`, which ranges from -1 to +1. That leaves two
+parameters for the designer.
+
+There are two typical options: `<root, tip>` and `<root, taper>`. My
+implementation offers `c = f(s; root, tip)`, where `root` and `tip` are the
+design parameters.
+
+
+Elliptical arc
+--------------
+
+The arc of a wing is the vector-valued function of `<y, z>` coordinates. The
+majority of parafoil arcs can be described with an elliptical function.
+
+Similar to the elliptical chord, an elliptical arc can be defined as
+a function three parameters. Again, the function parameter is `s` with a set
+domain of -1 to +1, leaving two design parameters.
+
+One parametrization is to pair the arc anhedral (the angle from the wing root
+to the wing tip) with the section roll angle at the wing tip. Assuming arc
+anhedral, this choice constrains `2 * anhedral <= tip_roll < 90`.
+
+My implementation offers this as `yz = elliptical_arc = f(s; anhedral,
+tip_roll)`, where `anhedral` and `tip_roll` are the design parameters. If
+`tip_roll` is unspecified a circular arc is assumed (so `tip_roll
+= 2 * anhedral`).
+
+
+Polynomial torsion
+------------------
+
+The most common spanwise geometric torsion is a explicit torsion angles at
+specific section indices with linear interpolation between sections.
+
+For parafoils, it can be more natural to use non-linear curves. A generalized
+interpolator can use a polynomial:
+
+.. math::
+
+   \theta(s) =
+     \begin{cases}
+       0 & s < s_{start} \\
+       T p^\beta & s \ge s_{start}
+     \end{cases}
+
+Where :math:`T` is the maximum torsion at the wingtip, :math:`p = \frac{\lvert
+s \rvert - s_{start}}{1 - s_{start}}`,  the fraction from :math:`s_{start}` to
+the wingtip, and :math:`0 \le s_{start} < 1`.
+
+So :math:`\beta = 1` is linear interpolation from :math:`s_{start} \le \lvert
+s \rvert \le 1`, :math:`\beta = 2` is quadratic, etc.
+
+
 Area and Volume of a Mesh
 =========================
 
@@ -475,8 +554,8 @@ Apparent Mass of a Parafoil
 ===========================
 
 This section uses Barrows' method for estimating the apparent mass matrix of
-a wing with arc anhedral. These terms will be added to the real mass of the
-canopy when running the paraglider dynamics models. For a discussion of
+a wing with circular arc anhedral. These terms will be added to the real mass
+of the canopy when running the paraglider dynamics models. For a discussion of
 apparent mass effects, see :ref:`paraglider_dynamics:Apparent Mass`.
 
 
@@ -497,7 +576,7 @@ Some notes about Barrows development:
 * It assumes the foil is symmetric about the xz-plane (left-right symmetry)
   and about the yz-plane (fore-aft symmetry).
 
-* It assumes the foil arch is circular.
+* It assumes the canopy arc is circular.
 
 * It assumes a constant chord length over the entire span.
 
@@ -550,7 +629,7 @@ three-dimensional effects":
    k_B &= 1.0
    \end{aligned}
 
-Assuming the parafoil arch is circular and not chordwise camber, use Barrows
+Assuming the parafoil arc is circular and with no chordwise camber, use Barrows
 equations 44 and 50 to compute the *pitch center* :math:`PC` and *roll center*
 :math:`RC` as points directly above the *confluence point* :math:`C` of the
 arc:

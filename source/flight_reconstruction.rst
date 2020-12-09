@@ -17,7 +17,28 @@ Flight Reconstruction
   a mathematical model, and teach a computer to do the same estimation
   process.]]
 
-* Chapter objectives
+* [[Chapter objectives]]
+
+
+.. Roadmap
+
+This chapter will proceed as follows:
+
+* Formalize the objective [[estimating the sequence of wind states]]
+
+* Why the problem is difficult [[lack of data]]
+
+* Explain the intuition: the data is the output of a generating process
+
+* Describe using state-space models to describe sequential processes [[the
+  general form of state-space models highlight the need for a dynamics model,
+  which is what provides the link between what we know (the output of the
+  sequential process) to what we want (the sequence of wind vectors)]]
+
+* Flight reconstruction as a *filtering problem*
+
+
+[[**FIXME**: sections start here?
 
 
 * The objective is to use a recorded flight track to estimate the wind vectors

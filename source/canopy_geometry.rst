@@ -114,14 +114,14 @@ Canopy Geometry
 
 This chapter will proceed as follows:
 
-* Discuss the canopy geometry and some of the modeling considerations.
+* Discuss the physical system and its modeling considerations.
 
 * Briefly consider explicit geometries, highlight their limitations, and
   respond with the advantages of parametric geometries.
 
 * Introduce the standard parametric approach for wing designs: *wing sections*
 
-* Introduce the general equation for points on section surfaces
+* Introduce a general equation for points on section surfaces
 
 * Establish why it is inconvenient to design a parafoil canopy by defining the
   variables of the general surface equation directly, and why it can be more
@@ -675,15 +675,75 @@ EXTRA
 Examples of chord surfaces
 ==========================
 
-.. Chord surface of designs made using the "optimized" parametrization.
+.. This section highlights the elegance of the "optimized" parametrization.
+
+These examples are composed from a small collection of simple design curves,
+such as constant functions, polynomials, and parametric functions. For example:
+
+* :math:`r_x(s) = 1`
+
+* :math:`x(s) = 0.5 \cdot \left(1 - \lvert s \rvert \right)`
+
+* :math:`c(s) = elliptical\_chord(root=2, tip=0.5)`
+
+* :math:`yz(s) = elliptical\_arc(anhedral=30, wingtip\_roll=75)`
+
+See :ref:`derivations:Parametric design curves` for the derivation of the
+parametric curves, or the `glidersim` :py:class:`documentation
+<glidersim:pfh.glidersim.foil.EllipticalArc>`.
+
+[[**FIXME**: should I include the parameters of the examples? Or is the point
+to show that simple curves produce complex geometries?]]
+
+[[**FIXME**: embed the video?]]
+
+[[**FIXME**: rename this section. It's about the ease and flexibility of the
+parametrization; the chord surface is just the way I'm visualizing it.]]
 
 
 Example 1
 ---------
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_curves.*
+[[This example should be a complete description, explaining the design curves
+and the plots. The other examples can be less detailed; the curves and result
+should suffice.]]
 
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat1_canopy_chords.*
+[[FIXME: describe the "anhedral" correctly]]
+
+An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
+89 degrees:
+
+.. math::
+
+   \begin{aligned}
+   c(s) &= \mathrm{elliptical\_chord}(root=0.5, tip=0.2)\\
+   \theta(s) &= 0\\
+   r_x(s) &= 0.75\\
+   x(s) &= 0\\
+   r_{yz}(s) &= 1\\
+   yz(s) &= \mathrm{elliptical\_arc}(mean\_anhedral=30, tip\_roll=89)\\
+   \end{aligned}
+
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_chords.*
+
+[[**FIXME**: need to explain the diagrams. The dashed green and red lines in
+particular.]]
+
+[[**FIXME**: good time to explain that if `x` is constant then it's
+irrelevant. One of the more confusing aspects of this geometry is that no
+matter what you define, the central leading edge is always at the origin. Is
+it accurate to say that the `x` and `yz` curves are all about **RELATIVE**
+positioning? They're not exactly displacement vectors, because the final
+positions depend on all the other variables. On the bright side, you don't
+have to care.]]
+
+The code does have the option of letting the design curves use absolute
+positioning, but I'm not sure I want to discuss that here.]]
+
+
 
 
 Example 2
@@ -739,18 +799,6 @@ A circular arc with a mean anhedral of 44 degrees:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_canopy_chords.*
 
-Example 7
----------
-
-[[FIXME: describe the "anhedral" correctly]]
-
-An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
-89 degrees:
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_chords.*
-
 
 Example: The Manta
 ------------------
@@ -794,6 +842,8 @@ for estimating the aerodynamic performance of the 3D wing, as discussed in
 
 [[Maybe link forward to :ref:`canopy_aerodynamics:Case Study`, where
 I implement Belloc's wing using this geometry.]]
+
+[[**FIXME**: merge this section with the other?]]
 
 
 Discussion
