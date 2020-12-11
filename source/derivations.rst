@@ -1192,21 +1192,20 @@ where
        + {\vec{F}_{\textrm{wing,weight}}^b}
        - {m_b \, {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}}
        - {m_b \, {\vec{\omega}_{b/e}^b} \times {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}}
-
        - {{\vec{\omega}_{b/e}^b} \times \vec{p}_a}
-       \\
+
      \vec{B}_2 &=
        {\vec{F}_{\textrm{p,aero}}^b}
        + {\vec{F}_{\textrm{p,weight}}^p}
        - {m_p \, {\vec{\omega}_{b/e}^p} \times {\vec{v}_{R/e}^p}}
-       - {m_p \, {\vec{\omega}_{p/e}^p} \times {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}}\\
+       - {m_p \, {\vec{\omega}_{p/e}^p} \times {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}}
+
      \vec{B}_3 &=
        {\vec{M}_{\textrm{wing,aero}}^b}
        + {\vec{M}_{\textrm{wing,weight}}^b}
        - {\vec{M}_R^b}
-       - {m_b \vec{\omega}_{b/e}^b \times \left( {\mat{J}_{b/R}^b} \vec{\omega}_{b/e}^b \right)}\\
+       - {m_b \vec{\omega}_{b/e}^b \times \left( {\mat{J}_{b/R}^b} \vec{\omega}_{b/e}^b \right)}
        - {\vec{v}_{R/e}^b} \times \vec{p}_{b/e}^b
-
        - {\vec{v}_{R/e}^b \times \vec{p}_a}
        - {\vec{\omega}_{b/e}^b \times \vec{h}_a}
        + {\vec{v}_{R/e}^b \left( \mat{M}_a \vec{v}_{R/e}^b \right)}
