@@ -562,7 +562,7 @@ be computed directly from the covariance matrix:
 variables? There are upper and lower surfaces.]]
 
 
-Apparent Mass of a Parafoil
+Apparent mass of a parafoil
 ===========================
 
 This section presents Barrows' method for estimating the apparent mass matrix
@@ -677,10 +677,11 @@ for the arched wing, Barrows equations 51-55:
      I_{33} &= 0.055 \left( 1 + 8 {h^*}^2 \right) b^3 t^2
    \end{aligned}
 
-The apparent inertia and apparent moment of inertia matrices are then defined
-in Barrows equations 1 and 17:
+The apparent mass and apparent moment of inertia matrices are then defined in
+Barrows equations 1 and 17:
 
 .. math::
+   :label: apparent_mass_matrix
 
    \mat{M}_a \defas
      \begin{bmatrix}
@@ -690,6 +691,7 @@ in Barrows equations 1 and 17:
      \end{bmatrix}
 
 .. math::
+   :label: apparent_moment_of_inertia_matrix
 
    \mat{I}_a \defas
      \begin{bmatrix}
@@ -738,10 +740,11 @@ using Barrows equation 24:
          \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
       \right) \mat{M}_a \vec{v}_{R/e} + \mat{J}_{a/R} \omega
 
-And finally, the completed apparent mass matrix with respect to the riser
+And finally, the completed apparent inertia matrix with respect to the riser
 connection point :math:`R`, from Barrows equation 27:
 
 .. math::
+   :label: apparent_inertia_matrix
 
    \mat{A}_{a/R} =
      \begin{bmatrix}
@@ -759,6 +762,7 @@ final dynamics:
 Linear momentum of the apparent mass:
 
 .. math::
+   :label: apparent_linear_momentum
 
    \vec{p}_{a/e} =
      \mat{M}_a \cdot \left(
@@ -770,6 +774,7 @@ Linear momentum of the apparent mass:
 Angular momentum of the apparent mass about :math:`R`:
 
 .. math::
+   :label: apparent_angular_momentum
 
    \vec{h}_{a/R} =
      \left(
