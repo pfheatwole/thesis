@@ -813,6 +813,12 @@ recompute the apparent inertia matrix whenever `B` changes. In this
 derivation all vectors are in the canopy coordinate system :math:`c`, so the
 vector coordinate systems are implicit in the notation.
 
+The derivation develops the equations of motion by starting with derivatives
+of linear and angular momentum. The derivation is largely based on the
+excellent :cite:`hughes2004SpacecraftAttitudeDynamics`, although this section
+uses this paper's version of Stevens' notation (see :ref:`symbols:Notation and
+Symbols`).
+
 An implementation of this model is available as :py:class:`Paraglider6a
 <glidersim:pfh.glidersim.paraglider.Paraglider6a>` in the ``glidersim``
 package. The ``glidersim`` package also includes :py:class:`Paraglider6b
@@ -1014,43 +1020,36 @@ for by the section pitching coefficients.
 Model 9a
 --------
 
-This design uses the riser connection midpoint `R` as the reference point
-for both the body and the payload, which simplifies incorporating the apparent
-mass matrix.
+[[**FIXME**: this derivation is currently broken and incomplete. Needs to be
+updated to match the implementation, which also includes the apparent mass.]]
 
-Similar derivations:
+Similar to `Model 6a`_, this design uses the riser connection midpoint `R` as
+the reference point for both the body and the payload, which simplifies
+incorporating the apparent mass matrix. However, this model treats the body
+and payload as separate components, connected by a rotational spring-damper
+model that add an additional three degrees-of-freedom. A similar 9DoF
+derivation can be found in :cite:`gorman2012EvaluationMultibodyParafoil`.
 
-* "Spacecraft Attitude Dynamics" (Hughes; 2004):
-  :cite:`hughes2004SpacecraftAttitudeDynamics`. Good development of
-  how to use the derivatives of translational and angular acceleration to
-  develop the equations of motion, and its application to multi-rigid-body
-  dynamics.
-
-* "Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature
-  Wireless Sensors" (Gorman;
-  2012): :cite:`gorman2012EvaluationMultibodyParafoil`
+.. FIXME: why didn't I use that derivation?
 
 An implementation of this model is available as :py:class:`Paraglider9a
 <glidersim:pfh.glidersim.paraglider.Paraglider9a>` in the ``glidersim``
-package.
-
-[[The ``glidersim`` package also includes :py:class:`Paraglider9b
+package. The ``glidersim`` package also includes :py:class:`Paraglider9b
 <glidersim:pfh.glidersim.paraglider.Paraglider9b>`, which uses the centers of
 mass as the reference points for the body and payload dynamics. That choice
 simplifies the derivatives for angular momentum (since it eliminates the
 moment arms), but it makes it more difficult to incorporate the effects of
-apparent mass.]]
+apparent mass.
 
 .. math::
    :label: model9a_body_p
 
    \begin{aligned}
-   {\vec{p}_{b/e}^b}
-      &= m_b \, \vec{v}_{B/e}^b \\
-      &= m_b \left(
-            {\vec{v}_{R/e}^b}
-            + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
-         \right)
+     {\vec{p}_{b/e}^b}
+       &= m_b \, \vec{v}_{B/e}^b \\
+       &= m_b \left(
+            {\vec{v}_{R/e}^b} + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+          \right)
    \end{aligned}
 
 .. math::
@@ -1058,30 +1057,32 @@ apparent mass.]]
 
    \begin{aligned}
    {^e \dot{\vec{p}}_{b/e}^b}
-      &= m_b \left( 
-            {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times {^e\dot{\vec{r}}^b_{B/R}}
-         \right)
+     &= m_b \left(
+          {^e \dot{\vec{v}}_{R/e}}
+          + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}^b_{B/R}}
+          + {\vec{\omega}^b_{b/e}} \times {^e\dot{\vec{r}}^b_{B/R}}
+        \right)
 
-      &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}^b}
-            + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
-            + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
-            + {\vec{\omega}_{b/e}^b} \times \left(
-               {\cancelto{0}{^b \dot{\vec{r}}_{B/R}^b}}
-               + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
-              \right)
-         \right)
+     &= m_b \left(
+          {^b\dot{\vec{v}}_{R/e}^b}
+          + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
+          + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+          + {\vec{\omega}_{b/e}^b} \times \left(
+              {\cancelto{0}{^b \dot{\vec{r}}_{B/R}^b}}
+              + {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+            \right)
+        \right)
 
-      &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}^b}
-            + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
-            + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
-            + {\vec{\omega}_{b/e}^b} \times {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
-         \right)
+     &= m_b \left(
+          {^b\dot{\vec{v}}_{R/e}^b}
+          + {\vec{\omega}_{b/e}^b} \times {\vec{v}_{R/e}^b}
+          + {^b\dot{\vec{\omega}}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+          + {\vec{\omega}_{b/e}^b} \times {\vec{\omega}_{b/e}^b} \times {\vec{r}_{B/R}^b}
+        \right)
 
-      &= {\vec{F}_{\textrm{wing,aero}}^b} + {\vec{F}_{\textrm{wing,weight}}^b} - {\vec{F}_R^b}
+     &= {\vec{F}_{\textrm{wing,aero}}^b}
+        + {\vec{F}_{\textrm{wing,weight}}^b}
+        - {\vec{F}_R^b}
    \end{aligned}
 
 .. math::
@@ -1096,26 +1097,26 @@ apparent mass.]]
          + {\vec{\omega}_{p/e}^p} \times {^e\dot{\vec{r}}_{P/R}^p}
        \right)
 
-     &= m_p
-       \left(
-         {^p\dot{\vec{v}}_{R/e}^p}
-         + {\vec{\omega}_{p/e}^p} \times {\vec{v}_{R/e}^p}
-         + {^p\dot{\vec{\omega}}_{p/e}^p} \times {\vec{r}_{P/R}^p}
-         + {\vec{\omega}_{p/e}^p} \times
-           \left(
-             {\cancelto{0}{^p \dot{\vec{r}}_{P/R}^p}}
-             + {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}
-           \right)
+     &= m_p \left(
+          {^p\dot{\vec{v}}_{R/e}^p}
+          + {\vec{\omega}_{p/e}^p} \times {\vec{v}_{R/e}^p}
+          + {^p\dot{\vec{\omega}}_{p/e}^p} \times {\vec{r}_{P/R}^p}
+          + {\vec{\omega}_{p/e}^p} \times \left(
+              {\cancelto{0}{^p \dot{\vec{r}}_{P/R}^p}}
+              + {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}
+            \right)
        \right)
 
-      &= m_p \left(
-            {^p\dot{\vec{v}}_{R/e}^p}
-            + {\vec{\omega}_{p/e}^p} \times {\vec{v}_{R/e}^p}
-            + {^p\dot{\vec{\omega}}_{p/e}^p} \times {\vec{r}_{p/R}^p}
-            + {\vec{\omega}_{p/e}^p} \times {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}
-         \right)
+     &= m_p \left(
+          {^p\dot{\vec{v}}_{R/e}^p}
+          + {\vec{\omega}_{p/e}^p} \times {\vec{v}_{R/e}^p}
+          + {^p\dot{\vec{\omega}}_{p/e}^p} \times {\vec{r}_{p/R}^p}
+          + {\vec{\omega}_{p/e}^p} \times {\vec{\omega}_{p/e}^p} \times {\vec{r}_{P/R}^p}
+        \right)
 
-      &= {\vec{F}_{\textrm{payload,aero}}^p} + {\vec{F}_{\textrm{payload,weight}}^p} + {\vec{F}_R^p}
+     &= {\vec{F}_{\textrm{payload,aero}}^p}
+        + {\vec{F}_{\textrm{payload,weight}}^p}
+        + {\vec{F}_R^p}
    \end{aligned}
 
 
@@ -1124,16 +1125,16 @@ apparent mass.]]
 
    \begin{aligned}
    {^e \dot{\vec{h}}_b}
-      &= {^b\dot{\vec{h}}_b}
-         + {\vec{\omega}_{b/e}^b \times \vec{h}_b}
+     &= {^b\dot{\vec{h}}_b}
+        + {\vec{\omega}_{b/e}^b \times \vec{h}_b}
 
-      &= {\mat{J}_{b/R}^b} {^b \dot{\vec{\omega}}_{b/e}^b}
-         + {\vec{\omega} \times \left( \mat{J}_{b/R}^b \vec{\omega}_{b/e}^b \right)}
+     &= {\mat{J}_{b/R}^b} {^b \dot{\vec{\omega}}_{b/e}^b}
+        + {\vec{\omega} \times \left( \mat{J}_{b/R}^b \vec{\omega}_{b/e}^b \right)}
 
-      &= {\vec{M}^b_{\textrm{wing,aero}}}
-         + {\vec{M}_{\textrm{wing,weight}}^b}
-         - {\vec{r}_{R/B}^b \times \vec{F}_R^b}
-         - \vec{M}_R^b
+     &= {\vec{M}^b_{\textrm{wing,aero}}}
+        + {\vec{M}_{\textrm{wing,weight}}^b}
+        - {\vec{r}_{R/B}^b \times \vec{F}_R^b}
+        - \vec{M}_R^b
    \end{aligned}
 
 
@@ -1142,44 +1143,40 @@ apparent mass.]]
 
    \begin{aligned}
    {^e \dot{\vec{h}}_p}
-      &= {^p\dot{\vec{h}}_p}
-         + {\vec{\omega}_{p/e}^p \times \vec{h}_p}
+     &= {^p\dot{\vec{h}}_p}
+        + {\vec{\omega}_{p/e}^p \times \vec{h}_p}
 
-      &= {\mat{J}_{p/R}^p}{^p \dot{\vec{\omega}}^p_{p/e}}
-         + {\vec{\omega} \times \left( \mat{J}_{p/R}^p \vec{\omega}^p_{p/e} \right)}
+     &= {\mat{J}_{p/R}^p}{^p \dot{\vec{\omega}}^p_{p/e}}
+        + {\vec{\omega} \times \left( \mat{J}_{p/R}^p \vec{\omega}^p_{p/e} \right)}
 
-      &= {\vec{M}^p_{\textrm{wing,aero}}}
-         + {\vec{M}_{\textrm{wing,weight}}^p}
-         - {\vec{r}_{R/P}^p \times \vec{F}_R^p}
-         - \vec{M}_R^p
+     &= {\vec{M}^p_{\textrm{wing,aero}}}
+        + {\vec{M}_{\textrm{wing,weight}}^p}
+        - {\vec{r}_{R/P}^p \times \vec{F}_R^p}
+        - \vec{M}_R^p
    \end{aligned}
 
 And finally, the complete system of equations:
-
-**FIXME: I think this is the old version that didn't include the apparent
-mass. Compare to the code implementation.**
-
 
 .. math::
    :label: model9a_linear_system
 
    \begin{bmatrix}
-      {m_b \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}^b}} & {\mat{0}_{3\times3}} & {\mat{I}_3}\\
-      {m_p \mat{C}_{p/b}} & {\mat{0}_{3\times3}} & {-m_p \crossmat{\vec{r}_{p/R}^p}} & {-\mat{C}_{p/b}}\\
-      {\mat{0}_{3\times3}} & {\mat{J}_{b/R}^b} & {\mat{0}_{3\times3}} & {-\crossmat{\vec{r}^b_{R/B}}}\\
-      {\mat{0}_{3\times3}} & {\mat{0}_{3\times3}} & {\mat{J}_{p/R}^p} & {\crossmat{\vec{r}_{P/R}^p} \mat{C}_{p/b}}
+     {m_b \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}^b}} & {\mat{0}_{3\times3}} & {\mat{I}_3}\\
+     {m_p \mat{C}_{p/b}} & {\mat{0}_{3\times3}} & {-m_p \crossmat{\vec{r}_{p/R}^p}} & {-\mat{C}_{p/b}}\\
+     {\mat{0}_{3\times3}} & {\mat{J}_{b/R}^b} & {\mat{0}_{3\times3}} & {-\crossmat{\vec{r}^b_{R/B}}}\\
+     {\mat{0}_{3\times3}} & {\mat{0}_{3\times3}} & {\mat{J}_{p/R}^p} & {\crossmat{\vec{r}_{P/R}^p} \mat{C}_{p/b}}
    \end{bmatrix}
    \begin{bmatrix}
-      {^b \dot{\vec{v}}_{R/e}^b}\\
-      {^b \dot{\vec{\omega}}_{b/e}^b}\\
-      {^b \dot{\vec{\omega}}_{p/e}^b}\\
-      {\vec{F}_R^b}
+     {^b \dot{\vec{v}}_{R/e}^b}\\
+     {^b \dot{\vec{\omega}}_{b/e}^b}\\
+     {^b \dot{\vec{\omega}}_{p/e}^b}\\
+     {\vec{F}_R^b}
    \end{bmatrix}
-   =\begin{bmatrix}
-      \vec{B}_1\\
-      \vec{B}_2\\
-      \vec{B}_3\\
-      \vec{B}_4
+   = \begin{bmatrix}
+     \vec{B}_1\\
+     \vec{B}_2\\
+     \vec{B}_3\\
+     \vec{B}_4
    \end{bmatrix}
 
 where
