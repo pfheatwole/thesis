@@ -1252,6 +1252,30 @@ Where:
        - \vec{v}_{R/e}^p \times \vec{p}_{p/e}^p \\
    \end{aligned}
 
-[[**FIXME**: need to describe `f_R` and `g_R`]]
+[[**FIXME**: need to describe `f_R` and `g_R`
+
+The spring-damper connection produces forces and moments shared by the body
+and the payload. There are six variables but only three degrees of freedom.
+Both systems have the riser connection point :math:`R` at a fixed position,
+and the force only exists to maintain the fixed relative positioning.
+
+.. math::
+
+   \vec{g}_R =
+     \begin{bmatrix}
+       \begin{aligned}
+         \kappa_\phi \phi &+ \kappa_\dot{\phi} \dot{\phi} \\
+         \kappa_\theta \theta &+ \kappa_\dot{\theta} \dot{\theta} \\
+         \kappa_\gamma \gamma &+ \kappa_\dot{\gamma} \dot{\gamma} \\
+       \end{aligned}
+     \end{bmatrix}
+
+Where :math:`\vec{\omega}_{p/b}^p = \left< \phi, \theta, \gamma \right>` are
+the angular rates of the payload, :math:`^p \dot{\vec{\omega}}_{p/b}^p
+= \left< \dot{\phi}, \dot{\theta}, \dot{\gamma} \right>` are the angular
+accelerations of the payload, and the :math:`\kappa` are the stiffness and
+dampening coefficients of the spring-damper model.
+
+]]
 
 [[**FIXME**: incorporate apparent inertia]]
