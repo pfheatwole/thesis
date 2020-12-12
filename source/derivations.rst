@@ -916,6 +916,16 @@ Compute the two momentum derivatives:
 
    \end{aligned}
 
+Which uses the useful relation:
+
+.. math::
+
+   m_b \left(
+     \vec{\omega}_{b/e} \times \vec{v}_{R/e}
+     + \vec{\omega}_{b/e} \times \vec{\omega}_{b/e} \times \vec{r}_{B/R}
+   \right) =
+     \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+
 Final equations for the dynamics of the real mass (solid mass plus the
 enclosed air) in terms of :math:`^b \dot{\vec{v}}_{R/e}` and :math:`^b
 \dot{\vec{\omega}}_{b/e}`:
