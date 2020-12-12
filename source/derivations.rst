@@ -842,8 +842,9 @@ reference frame :math:`e`:
    \begin{aligned}
      {\vec{p}_{b/e}}
        &= m_b \, \vec{v}_{B/e} \\
-       &= m_b \left( {\vec{v}_{R/e}}
-          + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}} \right)
+       &= m_b \left(
+            {\vec{v}_{R/e}} + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
+          \right)
    \end{aligned}
 
 .. ref: Stevens Eq:1.7-3 (pg36)
