@@ -302,7 +302,7 @@ Suspension lines
 ================
 
 * :cite:`kulhanek2019IdentificationDegradationAerodynamic`: mentions some
-    papers on line drag coefficients, start here
+  papers on line drag coefficients, start here
 
 * I'm lumping all the line drag into a single point for each half of the wing.
   I'm assuming isotropic drag because drag due to lines naturally becomes
