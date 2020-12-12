@@ -1041,8 +1041,11 @@ Similar to `Model 6a`_, this design uses the riser connection midpoint `R` as
 the reference point for both the body and the payload, which simplifies
 incorporating the apparent mass matrix. However, this model treats the body
 and payload as separate components, connected by a rotational spring-damper
-model that add an additional three degrees-of-freedom. A similar 9DoF
-derivation can be found in :cite:`gorman2012EvaluationMultibodyParafoil`.
+model that add an additional three degrees-of-freedom. A similar 9DoF model
+derivation can be found in :cite:`gorman2012EvaluationMultibodyParafoil`
+(9DoF, but relative roll and pitch are unconstrained) or
+:cite:`slegers2010EffectsCanopypayloadRelative` (8DoF model that allows
+relative pitch and yaw but not relative roll).
 
 .. FIXME: why didn't I use that derivation?
 
