@@ -208,12 +208,12 @@ Derivation
    :label: differential lifting force
 
    dF_i =
-      \frac{1}{2}
-      \rho
-      V_i^2
-      C_{L_i}
-      \left(\alpha_i, \delta_i \right)
-      A_i
+     \frac{1}{2}
+     \rho
+     V_i^2
+     C_{L_i}
+     \left( \alpha_i, \delta_i \right)
+     A_i
 
 Alternative form using explicit norms of vectors instead of using scalars as
 the implicit norms:
@@ -222,11 +222,11 @@ the implicit norms:
    :label: differential lifting force 2
 
    \left\| \vec{\mathrm{d}F}_i \right\| =
-      \frac{1}{2}
-      \rho
-      \left\|\vec{V}_i\right\|^2
-      C_{L_i} \left(\alpha_i, \delta_i \right)
-      A_i
+     \frac{1}{2}
+     \rho
+     \left\| \vec{V}_i \right\| ^2
+     C_{L_i} \left( \alpha_i, \delta_i \right)
+     A_i
 
 The net local velocity at control point :math:`i` is the sum of the freestream
 relative wind at the control point and the induced velocities from all the
@@ -243,29 +243,30 @@ where :math:`\vec{v}_{ji}` are the velocities induced at control point
 .. math::
    :label: induced velocities
 
-   \vec{v}_{ji} = \frac{1}{4\pi}
-   \left[
-      \frac
+   \vec{v}_{ji} =
+     \frac{1}{4\pi}
+     \left[
+       \frac
          {\vec{u}_{\infty} \times \vec{r}_{j_2i}}
          {r_{j_2i} \left( r_{j_2i} - \vec{u}_{\infty} \cdot \vec{r}_{j_2i} \right)}
-      + (1 - \delta_{ji}) \frac
+       + (1 - \delta_{ji}) \frac
          {(r_{j_1i} + r_{j_2i})(\vec{r}_{j_1i} \times \vec{r}_{j_2i})}
          {r_{j_1i}r_{j_2i}(r_{j_1i}r_{j_2i} + \vec{r}_{j_1i} \cdot \vec{r}_{j_2i})}
-      - \frac
+       - \frac
          {\vec{u}_{\infty} \times \vec{r}_{j_1i}}
          {r_{j_1i} \left( r_{j_1i} - \vec{u}_{\infty} \cdot \vec{r}_{j_1i} \right)}
-   \right]
+     \right]
 
 and :math:`\delta_{ji}` is the Kronecker delta function:
 
 .. math::
    :label: kronecker_delta
 
-   \delta_{ji}=
-   \begin{cases}
-      1\quad &i = j\\
-      0\quad &i \neq j
-   \end{cases}
+   \delta_{ji} \defas
+     \begin{cases}
+       1\quad &i = j \\
+       0\quad &i \neq j
+     \end{cases}
 
 Solving for the vector of circulation strengths can be approached as
 a multi-dimensional root-finding problem over :math:`f`, where :math:`f` is
@@ -286,8 +287,8 @@ where
 
    \vec{W}_i = \vec{V}_i \times \mathrm{d} \vec{l}_i
 
-The Jacobian :math:`J_{ij} = \frac{\partial f_{i}}{\partial \Gamma_j}` expands
-to:
+The Jacobian :math:`J_{ij} \defas \frac{\partial f_{i}}{\partial \Gamma_j}`
+expands to:
 
 .. math::
    :label: phillips jacobian
@@ -311,6 +312,7 @@ to:
 with the normal and chordwise wind speeds
 
 .. math::
+   :label: section wind speeds
 
    \begin{aligned}
       V_{a,i} &= \vec{V}_i \cdot \vec{u}_{a,i}\\
