@@ -420,6 +420,9 @@ two legs of the triangle:
 
 The total area of the surface is the sum of the triangle areas:
 
+.. I wasn't crazy about the notation `a = sum(a_n)`, but it is clean  and it
+   matches Hughes (eg, see Eq:9 on page 44 (53), where `p = sum(p_n)`)
+
 .. math::
 
    a = \sum^N_{n=1} a_n
