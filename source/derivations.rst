@@ -1041,6 +1041,90 @@ position and orientation over time with respect to the tangent plane:
 FIXME: verify this explanation]]
 
 
+Model 6b
+--------
+
+Following the same logic as `Model 6a`_, but targeting :math:`^b
+\vec{v}_{B/e}` and using the momentum about the body center of mass :math:`B`
+produces a diagonal system matrix.
+
+
+.. math::
+   :label: model6b_p
+
+   \vec{p}_{b/e} = m_b \, \vec{v}_{B/e}
+
+.. math::
+   :label: model6b_h
+
+   \vec{h}_{b/B} = \mat{J}_{b/R} \cdot \vec{\omega}_{b/e}
+
+
+Computing the inertial derivatives with respect to the body frame:
+
+.. math::
+   :label: model6b_momentum_derivatives1
+
+   \begin{aligned}
+     {^e \dot{\vec{p}}_{b/e}}
+       &= m_b \, {^b \dot{\vec{v}}_{R/e}}
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+     \\
+     {^e \dot{\vec{h}}_{b/B}}
+       &= \mat{J}_{b/B} \cdot {^b \dot{\vec{\omega}}_{b/e}}
+          + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+   \end{aligned}
+
+
+Computing the momentum about the body center of mass simplifies the equation
+for angular momentum:
+
+.. math::
+   :label: model6b_momentum_derivatives2
+
+   \begin{aligned}
+     {^e \dot{\vec{p}}_{b/e}} &= \mat{f}_b \\
+     {^e \dot{\vec{h}}_{b/B}} &= \mat{g}_{b/B}
+   \end{aligned}
+
+Combining :eq:`model6b_momentum_derivatives1` and
+:eq:`model6b_momentum_derivatives2`: and rewriting as a linear system:
+
+.. math::
+   :label: model6b_real_system
+
+   \begin{bmatrix}
+     m_b & 0 \\
+     0 & \mat{J}_{b/B}
+   \end{bmatrix}
+   \begin{bmatrix}
+     {^b \dot{\vec{v}}_{B/e}} \\
+     {^b \dot{\vec{\omega}}_{b/e}}
+   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+       \vec{g}_{b/B} - \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+     \end{bmatrix}
+
+The simulator was designed to integrate :math:`^e \dot{\vec{v}}_{R/e}`, not
+:math:`^e \dot{\vec{v}}_{B/e}`:
+
+.. math::
+
+   \begin{aligned}
+     \vec{v}_{R/e}
+       &= \vec{v}_{B/e} + \vec{r}_{R/B} \times \vec{\omega}_{b/e} \\
+     \\
+     ^b \dot{\vec{v}}_{R/e}
+       &= ^b \dot{\vec{v}}_{B/e}
+          + \vec{r}_{R/B} \times ^b \dot{\vec{\omega}}_{b/e} \\
+     \\
+     ^e \dot{\vec{v}}_{R/e}
+       &= ^b \dot{\vec{v}}_{R/e}
+          + \vec{\omega}_{b/e} \times \vec{V}_{R/e}
+   \end{aligned}
+
+
 Model 9a
 --------
 
