@@ -805,6 +805,13 @@ Notes to self
 Paraglider Models
 =================
 
+[[**FIXME**: preview the models. Model `6a` is the most complete,
+incorporating `A_{a/R}`. Models `6b` and `6c` are simpler but require
+computing `r_{B/R}` before computing `A_{a/B}` (plus `B` is not strictly
+a fixed point since air density changes); they are mostly useful for verifying
+the implementations.]]
+
+
 Model 6a
 --------
 
@@ -1046,8 +1053,9 @@ Model 6b
 
 Following the same logic as `Model 6a`_, but targeting :math:`^b
 \vec{v}_{B/e}` and using the momentum about the body center of mass :math:`B`
-produces a diagonal system matrix.
-
+produces a simpler model with a diagonal system matrix, but at the cost of
+requiring the body center of mass to be determined before computing the
+apparent inertia matrix.
 
 .. math::
    :label: model6b_p
@@ -1058,7 +1066,6 @@ produces a diagonal system matrix.
    :label: model6b_h
 
    \vec{h}_{b/B} = \mat{J}_{b/R} \cdot \vec{\omega}_{b/e}
-
 
 Computing the inertial derivatives with respect to the body frame:
 
@@ -1074,7 +1081,6 @@ Computing the inertial derivatives with respect to the body frame:
        &= \mat{J}_{b/B} \cdot {^b \dot{\vec{\omega}}_{b/e}}
           + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
    \end{aligned}
-
 
 Computing the momentum about the body center of mass simplifies the equation
 for angular momentum:
@@ -1129,9 +1135,9 @@ Model 6c
 --------
 
 Another option is to target :math:`^b \vec{v}_{R/e}` directly, but again using
-the momentum about the body center of mass :math:`B`. Like `Model 6c`_ this
-produces a simpler model, but again at the cost of making it less convenient
-to precompute the apparent inertia matrix.
+the momentum about the body center of mass :math:`B`. Like `Model 6b`_ this
+also produces a simpler dynamics model, but again at the cost of making it
+less convenient to precompute the apparent inertia matrix.
 
 Computing the inertial derivatives with respect to the body frame:
 
