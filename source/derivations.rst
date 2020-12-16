@@ -1125,6 +1125,63 @@ The simulator was designed to integrate :math:`^e \dot{\vec{v}}_{R/e}`, not
    \end{aligned}
 
 
+Model 6c
+--------
+
+Another option is to target :math:`^b \vec{v}_{R/e}` directly, but again using
+the momentum about the body center of mass :math:`B`. Like `Model 6c`_ this
+produces a simpler model, but again at the cost of making it less convenient
+to precompute the apparent inertia matrix.
+
+Computing the inertial derivatives with respect to the body frame:
+
+.. math::
+   :label: model6c_momentum_derivatives1
+
+   \begin{aligned}
+     {^e \dot{\vec{p}}_{b/e}}
+       &= m_b \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + ^b \dot{\vec{\omega}}_{b/e} \times \vec{r}_{B/R}
+          \right)
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+     \\
+     {^e \dot{\vec{h}}_{b/B}}
+       &= \mat{J}_{b/B} \cdot {^b \dot{\vec{\omega}}_{b/e}}
+          + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+   \end{aligned}
+
+Computing the momentum about the body center of mass simplifies the equation
+for angular momentum:
+
+.. math::
+   :label: model6c_momentum_derivatives2
+
+   \begin{aligned}
+     {^e \dot{\vec{p}}_{b/e}} &= \mat{f}_b \\
+     {^e \dot{\vec{h}}_{b/B}} &= \mat{g}_{b/B}
+   \end{aligned}
+
+Combining :eq:`model6c_momentum_derivatives1` and
+:eq:`model6c_momentum_derivatives2`: and rewriting as a linear system:
+
+.. math::
+   :label: model6b_real_system
+
+   \begin{bmatrix}
+     m_b & -m_b \crossmat{\vec{r}_{B/R}} \\
+     0 & \mat{J}_{b/B}
+   \end{bmatrix}
+   \begin{bmatrix}
+     {^b \dot{\vec{v}}_{B/e}} \\
+     {^b \dot{\vec{\omega}}_{b/e}}
+   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+       \vec{g}_{b/B} - \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+     \end{bmatrix}
+
+
 Model 9a
 --------
 
