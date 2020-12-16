@@ -859,76 +859,75 @@ reference frame :math:`e`:
      m_b \, \vec{r}_{B/R} \times \vec{v}_{R/e}
      + \mat{J}_{b/R} \cdot \vec{\omega}_{b/e}
 
-Relate the derivatives of momentum with respect to the inertial frame to the
-net forces and moments:
-
-.. For angular momentum, see Stevens Eq:1.7-1 (pg35)
+Compute the momentum derivatives in the inertial frame :math:`\mathcal{F}_e`
+in terms of derivatives in the body frame :math:`\mathcal{F}_b`:
 
 .. math::
    :label: model6a_momentum_derivatives1
 
    \begin{aligned}
-     {^e \dot{\vec{p}}_{b/e}} &= \mat{f}_{\mathrm{net}} \\
-     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &= \mat{g}_{\mathrm{net}}
+     {^e \dot{\vec{p}}_{b/e}}
+       &= {^b \dot{\vec{p}}_{b/e}}
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+
+       &= m_b \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+            + {\vec{\omega}}_{b/e} \times {\cancelto{0}{^b \dot{\vec{r}_{B/R}}}}
+          \right)
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+
+       &= m_b \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+          \right)
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+
+     \\
+
+     {^e \dot{\vec{h}}_{b/R}}
+       &= {^b\dot{\vec{h}}_{b/R}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
+       &= m_b \left(
+            {\cancelto{0}{^b \dot{\vec{r}_{B/r}}}} \times \vec{v}_{R/e}
+            + \vec{r}_{B/R} \times {^b \dot{\vec{v}_{R/e}}}
+          \right)
+          + {\mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+          + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
+       &= m_b \, \vec{r}_{B/R} \times {^b \dot{\vec{v}_{R/e}}}
+          + {\mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+          + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
    \end{aligned}
 
-Compute the two momentum derivatives:
+Relate the derivatives of momentum with respect to the inertial frame to the
+net force on the body :math:`f_b` and the net moment on the body about the
+reference point :math:`g_{b/R}`:
+
+.. For angular momentum, see Stevens Eq:1.7-1 (pg35)
 
 .. math::
    :label: model6a_momentum_derivatives2
 
    \begin{aligned}
-     {^e \dot{\vec{p}}_{b/e}}
-       &= m_b \left(
-            {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
-            + {\vec{\omega}_{b/e}} \times {^e\dot{\vec{r}}_{B/R}}
-          \right)
-
-       &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}}
-            + {\vec{\omega}_{b/e}} \times {\vec{v}_{R/e}}
-            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
-            + {\vec{\omega}_{b/e}} \times \left(
-               {\cancelto{0}{^b \dot{\vec{r}}_{B/R}}}
-               + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
-              \right)
-          \right)
-
-       &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}}
-            + {\vec{\omega}_{b/e}} \times {\vec{v}_{R/e}}
-            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
-            + {\vec{\omega}_{b/e}} \times {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
-          \right)
-
-       &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}}
-            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
-          \right)
-          + {\vec{\omega}_{b/e}} \times {\vec{p}_{b/e}}
-
-     {^e \dot{\vec{h}}_{b/R}}
-       &= {^b\dot{\vec{h}}_{b/R}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
-
-       &= {\mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
-          + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
-
+     {^e \dot{\vec{p}}_{b/e}} &= \mat{f}_b \\
+     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &= \mat{g}_{b/R}
    \end{aligned}
 
-Which uses the useful relation:
+Where
 
 .. math::
 
-   m_b \left(
-     \vec{\omega}_{b/e} \times \vec{v}_{R/e}
-     + \vec{\omega}_{b/e} \times \vec{\omega}_{b/e} \times \vec{r}_{B/R}
-   \right) =
-     \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+   \begin{aligned}
+     \vec{f}_b &= {\vec{f}_{\textrm{b,aero}}} + {\vec{f}_{\textrm{b,weight}}} \\
+     \vec{g}_{b/R} &= {\vec{g}_{\textrm{b,aero}}} + {\vec{r}_{B/R} \times {\vec{f}_{\textrm{b,weight}}}}
+   \end{aligned}
 
-Final equations for the dynamics of the real mass (solid mass plus the
-enclosed air) in terms of :math:`^b \dot{\vec{v}}_{R/e}` and :math:`^b
-\dot{\vec{\omega}}_{b/e}`:
+Combining :eq:`model6a_momentum_derivatives1` and
+:eq:`model6a_momentum_derivatives2` gives the final equations for the dynamics
+of the real mass (solid mass plus the enclosed air) in terms of :math:`^b
+\dot{\vec{v}}_{R/e}` and :math:`^b \dot{\vec{\omega}}_{b/e}`:
 
 .. math::
    :label: model6a_dynamics_equations
@@ -936,12 +935,12 @@ enclosed air) in terms of :math:`^b \dot{\vec{v}}_{R/e}` and :math:`^b
    \begin{aligned}
       m_b \, {^b \dot{\vec{v}}_{R/e}}
       + m_b \, {^b \dot{\vec{\omega}}_{b/e}} \times \vec{r}_{B/R}
-      &= \vec{f}_{\mathrm{net}}
+      &= \vec{f}_b
          - \vec{\omega}_{b/e} \times \vec{p}_{b/e}
 
       m_b \, \vec{r}_{B/R} \times {^b \dot{\vec{v}}_{R/e}}
       + \mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}
-      &= \vec{g}_{\mathrm{net}} - \vec{\omega}_{b/e} \times \vec{h}_{b/R}
+      &= \vec{g}_{b/R} - \vec{\omega}_{b/e} \times \vec{h}_{b/R}
          - \vec{v}_{R/e} \times \vec{p}_{b/e}
    \end{aligned}
 
@@ -972,15 +971,11 @@ Where:
        \end{bmatrix} \\
      \\
      \vec{B}_1 &=
-       \vec{f}_{\mathrm{net}} - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+       \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
      \vec{B}_2 &=
-       \vec{g}_{\mathrm{net}}
+       \vec{g}_{b/R}
        - \vec{\omega}_{b/e} \times \vec{h}_{b/R}
        - \vec{v}_{R/e} \times \vec{p}_{b/e} \\
-     \vec{f}_{\mathrm{net}} &=
-       {\vec{f}_{\textrm{wing,aero}}} + {\vec{f}_{\textrm{wing,weight}}} \\
-     \vec{g}_{\mathrm{net}} &=
-       {\vec{g}_{\textrm{wing,aero}}} + {\vec{g}_{\textrm{wing,weight}}}
    \end{aligned}
 
 
@@ -1029,6 +1024,21 @@ from :eq:`apparent_mass_matrix`, and :math:`\vec{p}_{a/e}` and
 term :math:`\vec{v}_{R/e} \times \left( \mat{M}_a \vec{v}_{R/e} \right)` is
 necessary to avoid double counting the aerodynamic moment already accounted
 for by the section pitching coefficients.
+
+[[The final step is to compute the derivatives with respect to the inertial
+frame so the simulator can integrate the derivatives to track the paraglider
+position and orientation over time with respect to the tangent plane:
+
+.. math::
+
+   \begin{aligned}
+      {^e \dot{\vec{v}_{R/e}}} &=
+        {^b \dot{\vec{v}_{R/e}}}
+        + \vec{\omega}_{b/e} \times \vec{v}_{R/e} \\
+      {^e \dot{\vec{\omega}_{b/e}}} &= {^b \dot{\vec{\omega}_{b/e}}}
+   \end{aligned}
+
+FIXME: verify this explanation]]
 
 
 Model 9a
