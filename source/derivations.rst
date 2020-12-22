@@ -1172,7 +1172,7 @@ Combining :eq:`model6c_momentum_derivatives1` and
 :eq:`model6c_momentum_derivatives2`: and rewriting as a linear system:
 
 .. math::
-   :label: model6b_real_system
+   :label: model6c_real_system
 
    \begin{bmatrix}
      m_b & -m_b \crossmat{\vec{r}_{B/R}} \\
