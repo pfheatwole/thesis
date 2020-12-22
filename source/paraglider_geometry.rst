@@ -85,7 +85,7 @@ Modeling requirements
   requirements up front so I can point out when existing literature fails to
   satisfy them.]]
 
-* Closely related to :ref:`canopy_geometry:Modeling requirements`; review
+* Closely related to :ref:`canopy_geometry:Modeling considerations`; review
   that.
 
 
