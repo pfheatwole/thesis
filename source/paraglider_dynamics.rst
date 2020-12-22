@@ -169,13 +169,56 @@ Inertia
 Solid mass
 ^^^^^^^^^^
 
-[[Inertia matrix of the upper and lower surface materials]]
+[[Total mass and inertia matrix of the upper and lower surface materials]]
+
+
+Upper and lower surface masses:
+
+.. math::
+   :label: surface_masses
+
+   \begin{aligned}
+     m_{\mathrm{u}} &= \rho_{\mathrm{u}} a_{\mathrm{u}} \\
+     m_{\mathrm{l}} &= \rho_{\mathrm{l}} a_{\mathrm{l}}
+   \end{aligned}
+
+
+Upper and lower surface inertias:
+
+.. math::
+   :label: surface_inertias
+
+   \begin{aligned}
+     \mat{J}_{\mathrm{u}/\mathrm{O}} &= \rho_{\mathrm{u}} \mat{J}_{a_u/\mathrm{O}} \\
+     \mat{J}_{\mathrm{l}/\mathrm{O}} &= \rho_{\mathrm{l}} \mat{J}_{a_l/\mathrm{O}}
+   \end{aligned}
 
 
 Air mass
 ^^^^^^^^
 
-[[Inertia matrix of the enclosed air]]
+[[As the canopy accelerates, the air inside must accelerate at the same rate,
+and so must be included in the inertial calculations of the canopy. (This
+assumes the air is incompressible, which is reasonable at these speeds.)
+Although the canopy is porous, and thus constantly receiving an inflow of air
+through the intakes, the leakage is slow enough that the volume of air can be
+treated as constant.]]
+
+Mass of the enclosed air:
+
+.. math::
+   :label: air_mass
+
+   m_{\mathrm{air}} = \rho_{\mathrm{air}} v
+
+Where :math:`v` is the volume inside the canopy (from `derivations`).
+
+Inertia matrix of the enclosed air:
+
+.. math::
+   :label: air_inertia
+
+   \mat{J}_{\mathrm{air}/O} = \rho_{\mathrm{air}} \mat{J}_{\mathrm{v}/\mathrm{O}}
 
 
 Apparent Mass
@@ -259,7 +302,7 @@ Suspension lines
 ================
 
 * :cite:`kulhanek2019IdentificationDegradationAerodynamic`: mentions some
-    papers on line drag coefficients, start here
+  papers on line drag coefficients, start here
 
 * I'm lumping all the line drag into a single point for each half of the wing.
   I'm assuming isotropic drag because drag due to lines naturally becomes
@@ -423,3 +466,5 @@ Limitations
   the "global" wind field, neglecting any effects of the previous timestep. (I
   am trying to account for apparent mass, but I don't think that's really the
   same thing, since that doesn't change the local aerodynamics.)
+
+* Barrow's method assumes circular arc anhedral.

@@ -393,78 +393,86 @@ Area
 
 To compute the mass distribution of the upper and lower surfaces, start by
 computing the dimensionless inertia tensor of the areas then scale them by the
-surface material areal densities.
+surface material areal densities. [[FIXME: what? Reword: we want the total
+area, total area centroid, and dimensionless inertia matrices. We can scale
+those by the upper and lower surface densities to get the actual values.]]
 
-First, cover each surface in a triangulated mesh, so each surface is
-represented by a set of :math:`N` triangles :math:`\left\{ t_n
-\right\}^N_{n=1}`. Each triangle is defined by three points :math:`t_n
-= \left\{ \vec{p_{n,1}}, \vec{p_{n,2}}, \vec{p_{n,3}} \right\}` in canopy
-coordinates which have been ordered to produce a right-handed sequence
-suitable for the surface. These triangles can be used to compute the surface
-areas and enclosed volume of the canopy.
+First, for each of the upper and lower surfaces, cover the surface with
+a triangulated mesh so it is represented by a set of :math:`N` triangles. Each
+triangle is defined by three points :math:`\left\{ \mathrm{P1}, \mathrm{P2},
+\mathrm{P3} \right\}_n` in canopy coordinates. For convenience, define position
+vectors for each of the three points of the nth triangle: :math:`\vec{r}_{i,n}
+\defas \vec{r}_{Pi/O,n}`.
 
-For surface areas, each triangular area is easily computed using the vector
-cross-product of two legs of the triangle:
+The area of each triangle is easily computed using the vector cross-product of
+two legs of the triangle:
 
 .. math::
 
-   a_m =
+   a_n =
       \frac{1}{2}
       \rho
       \left\|
-         \left( \vec{p_{m,2}} - \vec{p_{m,1}} \right)
+         \left( \vec{r}_{2,n} - \vec{r}_{1,n} \right)
          \times
-         \left( \vec{p_{m,3}} - \vec{p_{m,2}} \right)
+         \left( \vec{r}_{3,n} - \vec{r}_{2,n} \right)
       \right\|
 
-The total area is the sum of the triangle areas:
+The total area of the surface is the sum of the triangle areas:
+
+.. I wasn't crazy about the notation `a = sum(a_n)`, but it is clean  and it
+   matches Hughes (eg, see Eq:9 on page 44 (53), where `p = sum(p_n)`)
 
 .. math::
 
-   A = \sum^M_{m=1} a_m
+   a = \sum^N_{n=1} a_n
 
-The centroid of each triangle:
-
-.. math::
-
-   \vec{c}_m = \frac{1}{3} \sum^3_{i=1} \vec{p_{m,i}}
-
-The centroid of the net surface area:
+The area centroid of each triangle:
 
 .. math::
 
-   \overline{\vec{A}} = \frac{1}{A} \sum^M_{m=1} a_m \vec{c}_m
+   \overline{\vec{a}}_n \defas
+     \frac{1}{3} \left( \vec{r}_{1,n} + \vec{r}_{2,n} + \vec{r}_{3,n} \right)
 
-The covariance matrix of the surface area:
-
-.. math::
-
-   \mat{C}_A = \sum^M_{m=1} a_m \vec{c}_m \vec{c}_m^T
-
-The inertia tensor of the surface area about the origin :math:`O`:
+And the centroid :math:`\mathrm{A}` of the total surface area with respect to
+the canopy origin :math:`\mathrm{O}`:
 
 .. math::
 
-   \mat{J}_{A/O} = \mathrm{trace} \left( \mat{C}_A \right) \vec{I}_3 - \mat{C}_A
+   \vec{r}_{\mathrm{A}/\mathrm{O}} = \frac{1}{a} \sum^N_{n=1} a_n \overline{\vec{a}}_n
+
+The covariance matrix of the total surface area:
+
+.. math::
+
+   \mat{\Sigma}_a = \sum^N_{n=1} a_n \overline{\vec{a}}_n \overline{\vec{a}}_n^T
+
+The inertia tensor of the total surface area :math:`a` about the canopy origin
+:math:`\mathrm{O}`:
+
+.. math::
+
+   \mat{J}_{a/\mathrm{O}} = \mathrm{trace} \left( \mat{\Sigma}_a \right) \vec{I}_3 - \mat{\Sigma}_a
 
 And tada, there are the three relevant properties for each surface area: the
-total area :math:`A`, the centroid :math:`C`, and the inertia tensor
-:math:`\mat{J}`.
+total area :math:`a`, the area centroid
+:math:`\vec{r}_{\mathrm{A}/\mathrm{O}}`, and the inertia tensor
+:math:`\mat{J}_{a/\mathrm{O}}`.
 
 
 Volume
 ------
 
-Now for the volume. For the purposes of computing the inertia properties of
-the enclosed air, it is convenient to neglect the air intakes and treat the
-canopy as a closed volume. Given this simplifying assumption, build another
-surface mesh that covers the total canopy surface as well as the left and
-right wing tip sections. Given a surface triangulation over the closed canopy
-geometry using :math:`N` triangles :math:`\left\{ t_n \right\}^N_{n=1}` as
-before in the area calculations, the volume can be computed as follows:
-
-.. TODO: should t_k be a matrix? That'd make sense when I compute its
-   determinant.
+Now for the volume. For the purposes of computing the inertia properties of the
+enclosed air, it is convenient to neglect the air intakes and treat the canopy
+as a closed volume. Given this simplifying assumption, build another triangular
+mesh that covers the entire canopy surface as well as the left and right wing
+tip sections. For this derivation, it is essential that the points on each
+triangle are ordered such that a right-handed traversal produces a normal
+vector pointing out of the volume. It is also essential that the complete mesh
+does not contain any holes, or the volume may be miscounted. Given a surface
+triangulation over the closed canopy geometry using :math:`N` triangles, the
+volume can be computed as follows.
 
 First, treat each triangle as the face of a tetrahedron that includes the
 origin. The signed volume of the tetrahedron formed by each triangle is given
@@ -475,9 +483,9 @@ by:
    v_n =
       \frac{1}{6}
       \left(
-         \vec{p_{n,1}} \cdot \vec{p_{n,2}}
+         \vec{r}_{1,n} \cdot \vec{r}_{2,n}
       \right)
-      \times \vec{p_{n,3}}
+      \times \vec{r}_{3,n}
 
 Given that the vertices of each triangle were oriented such that they satisfy
 a right-hand rule, the sign of each volume will be positive if the normal
@@ -489,19 +497,22 @@ the simple sum:
 
 .. math::
 
-   V = \sum^N_{n=1} v_n
+   v = \sum^N_{n=1} v_n
 
 For the volume centroid of each tetrahedron:
 
-.. math::
-
-   \overline{\vec{v}}_n = \frac{1}{4} \sum^3_{i=1} \vec{p_{n,i}}
-
-And the centroid of the total volume:
+.. Divide by 4 since this implicitly includes the origin at <0,0,0>
 
 .. math::
 
-   \overline{\vec{V}} = \frac{1}{V} \sum^N_{n=1} \overline{\vec{v}}_n
+   \overline{\vec{v}}_n \defas \frac{1}{4} \sum^3_{i=1} \vec{r}_{i,n}
+
+And the centroid :math:`\mathrm{V}` of the total volume with respect to the
+canopy origin :math:`\mathrm{O}`:
+
+.. math::
+
+   \vec{r}_{\mathrm{V}/\mathrm{O}} = \frac{1}{v} \sum^N_{n=1} v_n \overline{\vec{v}}_n
 
 Lastly, calculating the inertia tensor of the volume can be simplified by
 computing the inertia tensor of a prototypical or "canonical" tetrahedron and
@@ -512,7 +523,7 @@ First, given the covariance matrix of the "canonical" tetrahedron:
 
 .. math::
 
-   \mat{\hat{C}} \defas \begin{bmatrix}
+   \mat{\hat{\Sigma}} \defas \begin{bmatrix}
       \frac{1}{60} & \frac{1}{120} & \frac{1}{120}\\
       \frac{1}{120} & \frac{1}{60} & \frac{1}{120}\\
       \frac{1}{120} & \frac{1}{120} & \frac{1}{60}
@@ -526,7 +537,7 @@ Use the points in each triangle to define:
    \mat{T}_n \defas
       \begin{bmatrix}
          | & | & | \\
-         \vec{p_{n,1}} & \vec{p_{n,2}} & \vec{p_{n,3}}\\
+         \vec{r}_{1,n} & \vec{r}_{2,n} & \vec{r}_{3,n}\\
          | & | & | \\
       \end{bmatrix}
 
@@ -534,29 +545,35 @@ The covariance of each tetrahedron volume is then:
 
 .. math::
 
-   \mat{C}_n = \left| \mat{T}_n \right| \mat{T}_n^T \mat{\hat{C}} \mat{T}_n
+   \mat{\Sigma}_n = \left| \mat{T}_n \right| \mat{T}_n^T \mat{\hat{\Sigma}} \mat{T}_n
 
 And the covariance matrix of the complete volume:
 
 .. math::
 
-   \mat{C}_V = \sum^N_{n=1} \mat{C}_n
+   \mat{\Sigma}_v = \sum^N_{n=1} \mat{\Sigma}_n
 
 And at last, the inertia tensor of the volume about the origin :math:`O` can
 be computed directly from the covariance matrix:
 
 .. math::
 
-   \mat{J}_{V/O} = \mathrm{trace} \left( \mat{C}_V \right) \vec{I}_3 - \mat{C}_V
+   \mat{J}_{v/O} = \mathrm{trace} \left( \mat{\Sigma}_v \right) \vec{I}_3 - \mat{\Sigma}_v
 
 
-Apparent Mass of a Parafoil
+[[FIXME: make a table showing the six variables and their names. Well, nine
+variables? There are upper and lower surfaces.]]
+
+
+Apparent mass of a parafoil
 ===========================
 
-This section uses Barrows' method for estimating the apparent mass matrix of
-a wing with circular arc anhedral. These terms will be added to the real mass
-of the canopy when running the paraglider dynamics models. For a discussion of
-apparent mass effects, see :ref:`paraglider_dynamics:Apparent Mass`.
+This section presents Barrows' method for estimating the apparent mass matrix
+of a wing with circular arc anhedral. The equations have been adapted to use
+the standard notation of this paper. The terms derived in this section will be
+added to the real mass of the canopy when running the paraglider dynamics
+models. For a discussion of apparent mass effects, see
+:ref:`paraglider_dynamics:Apparent Mass`.
 
 
 Barrows Formulation
@@ -565,13 +582,19 @@ Barrows Formulation
 This section needs to define the terms that will be needed by the dynamics
 models:
 
-* :math:`\mat{A}_{a,R}`: apparent moment of inertia matrix about R
+* :math:`\mat{A}_{a/R}`: apparent inertia matrix with respect to some
+  *reference point* :math:`R`. This matrix is comprised of a translational
+  inertia part :math:`\mat{M}_a` and a rotational inertia part
+  :math:`\mat{J}_{a/R}`.
 
-* :math:`\vec{r}^c_{RC/R}`
+* :math:`\vec{r}_{RC/R}`: roll center with respect to :math:`R`
 
-* :math:`\vec{r}^c_{PC/RC}`
+* :math:`\vec{r}_{PC/RC}`: pitch center with respect to the *roll center*
+  :math:`RC`
 
-Some notes about Barrows development:
+In this section, all vectors are assumed to be in the canopy coordinate system.
+
+Some notes about Barrows' development:
 
 * It assumes the foil is symmetric about the xz-plane (left-right symmetry)
   and about the yz-plane (fore-aft symmetry).
@@ -600,8 +623,8 @@ Some initial definitions:
 .. math::
 
    \begin{aligned}
-   t &= \text{Airfoil thickness.}\\
-   h^* &= \frac{h}{b}\\
+     t   &= \text{Airfoil thickness.} \\
+     h^* &= \frac{h}{b} \\
    \end{aligned}
 
 First, the apparent mass terms for a flat wing of a similar volume, from
@@ -610,13 +633,13 @@ Barrows' equations 34-39:
 .. math::
 
    \begin{aligned}
-   m_{f11} &= k_A \pi \left( t^2 b / 4 \right)\\
-   m_{f22} &= k_B \pi \left( t^2 c / 4 \right)\\
-   m_{f33} &= \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] \pi \left( c^2 b / 4 \right)\\
-   \\
-   I_{f11} &= 0.055 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] b S^2\\
-   I_{f22} &= 0.0308 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] c^3 S\\
-   I_{f33} &= 0.055 b^3 t^2
+     m_{f11} &= k_A \pi \left( t^2 b / 4 \right) \\
+     m_{f22} &= k_B \pi \left( t^2 c / 4 \right) \\
+     m_{f33} &= \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] \pi \left( c^2 b / 4 \right) \\
+     \\
+     I_{f11} &= 0.055 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] b S^2 \\
+     I_{f22} &= 0.0308 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] c^3 S \\
+     I_{f33} &= 0.055 b^3 t^2
    \end{aligned}
 
 Where :math:`k_A` and :math:`k_B` are the "correction factors for
@@ -625,8 +648,8 @@ three-dimensional effects":
 .. math::
 
    \begin{aligned}
-   k_A &= 0.85\\
-   k_B &= 1.0
+     k_A &= 0.85 \\
+     k_B &= 1.0
    \end{aligned}
 
 Assuming the parafoil arc is circular and with no chordwise camber, use Barrows
@@ -637,9 +660,9 @@ arc:
 .. math::
 
    \begin{aligned}
-   z_{PC/C} &= -\frac{r \sin \left(\Theta\right)}{\Theta}\\
-   z_{RC/C} &= -\frac{z_{PC/C} \; m_{f22}}{m_{f22} + I_{f11}/r^2}\\
-   z_{PC/RC} &= z_{PC/C} - z_{RC/C}
+     z_{PC/C}  &= -\frac{r \sin \left( \Theta \right)}{\Theta} \\
+     z_{RC/C}  &= -\frac{z_{PC/C} \; m_{f22}}{m_{f22} + I_{f11}/r^2} \\
+     z_{PC/RC} &= z_{PC/C} - z_{RC/C}
    \end{aligned}
 
 Modifying the apparent mass terms from the flat wing to approximate the terms
@@ -648,45 +671,52 @@ for the arched wing, Barrows equations 51-55:
 .. math::
 
    \begin{aligned}
-   m_{11} &= k_A \left[ 1 + \left(\frac{8}{3}\right){h^*}^2 \right] \pi \left( t^2 b / 4 \right)\\
-   m_{22} &= \frac{r^2 m_{f22} + I_{f11}}{z^2_{PC/C}}\\
-   m_{33} &= m_{f33}\\
-   \\
-   I_{11} &= \frac{z^2_{PC/RC}}{z^2_{PC/C}} r^2 m_{f22} + \frac{z^2_{RC/C}}{z^2_{PC/C}} I_{f11}\\
-   I_{22} &= I_{f22}\\
-   I_{33} &= 0.055 \left( 1 + 8 {h^*}^2 \right) b^3 t^2
+     m_{11} &= k_A \left[ 1 + \left(\frac{8}{3}\right){h^*}^2 \right] \pi \left( t^2 b / 4 \right) \\
+     m_{22} &= \frac{r^2 m_{f22} + I_{f11}}{z^2_{PC/C}} \\
+     m_{33} &= m_{f33} \\
+     \\
+     I_{11} &= \frac{z^2_{PC/RC}}{z^2_{PC/C}} r^2 m_{f22} + \frac{z^2_{RC/C}}{z^2_{PC/C}} I_{f11} \\
+     I_{22} &= I_{f22} \\
+     I_{33} &= 0.055 \left( 1 + 8 {h^*}^2 \right) b^3 t^2
    \end{aligned}
 
 The apparent mass and apparent moment of inertia matrices are then defined in
-Barrows equation 1:
+Barrows equations 1 and 17:
 
 .. math::
+   :label: apparent_mass_matrix
 
    \mat{M}_a \defas
-   \begin{bmatrix}
-      m_{11} & 0 & 0\\
-      0 & m_{22} & 0\\
-      0 & 0 & m_{33}
-   \end{bmatrix}
+     \begin{bmatrix}
+       m_{11} & 0      & 0 \\
+       0      & m_{22} & 0 \\
+       0      & 0      & m_{33}
+     \end{bmatrix}
 
 .. math::
+   :label: apparent_moment_of_inertia_matrix
 
    \mat{I}_a \defas
-   \begin{bmatrix}
-      I_{11} & 0 & 0\\
-      0 & I_{22} & 0\\
-      0 & 0 & I_{33}
-   \end{bmatrix}
+     \begin{bmatrix}
+       I_{11} & 0      & 0 \\
+       0      & I_{22} & 0 \\
+       0      & 0      & I_{33}
+     \end{bmatrix}
 
 Define two helper matrices:
 
 .. math::
 
-   \mat{S}_2 \defas \begin{bmatrix} 0 & 0 & 0\\0 & 1 & 0\\0 & 0 & 0\end{bmatrix}
+   \mat{S}_2 \defas
+     \begin{bmatrix}
+       0 & 0 & 0 \\
+       0 & 1 & 0 \\
+       0 & 0 & 0
+     \end{bmatrix}
 
 .. math::
 
-   \mat{Q} = \mat{S}_2 \crossmat{\vec{r}^c_{PC/RC}} \mat{M}_a \crossmat{\vec{r}^c_{RC/R}}
+   \mat{Q} = \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} \mat{M}_a \crossmat{\vec{r}_{RC/R}}
 
 Where :math:`\crossmat{\vec{x}}` is the :ref:`cross-product matrix operator
 <crossmat>`.
@@ -696,63 +726,64 @@ part of the apparent inertia matrix:
 
 .. math::
 
-   \mat{J}_{a,R} \defas
-      \mat{I} - \crossmat{\vec{r}^c_{RC/R}} \mat{M}_a \crossmat{\vec{r}^c_{RC/R}}
-      - \crossmat{\vec{r}^c_{PC/RC}} \mat{M}_a \crossmat{\vec{r}^c_{PC/RC}} \mat{S}_2
-      - \mat{Q} - \mat{Q}^T
+   \mat{J}_{a/R} \defas
+      \mat{I}
+      - \crossmat{\vec{r}_{RC/R}} \mat{M}_a \crossmat{\vec{r}_{RC/R}}
+      - \crossmat{\vec{r}_{PC/RC}} \mat{M}_a \crossmat{\vec{r}_{PC/RC}} \mat{S}_2
+      - \mat{Q}
+      - \mat{Q}^T
 
 And the corresponding angular momentum of the apparent mass about :math:`R`,
 using Barrows equation 24:
 
 .. math::
 
-   \vec{h}_{a,R} =
+   \vec{h}_{a/R} =
       \left(
-         \mat{S}_2 \crossmat{\vec{r}^c_{PC/RC}} + \crossmat{\vec{r}^c_{RC/R}}
-      \right) \mat{M}_a \vec{v}^c_R + \mat{J}_{a,R} \omega
+         \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
+      \right) \mat{M}_a \vec{v}_{R/e} + \mat{J}_{a/R} \omega
 
-And finally, the completed moment of inertia matrix about the riser connection
-point :math:`R`, from Barrows equation 27:
+And finally, the completed apparent inertia matrix with respect to the riser
+connection point :math:`R`, from Barrows equation 27:
 
 .. math::
+   :label: apparent_inertia_matrix
 
-   \mat{A}_{a,R} =
-   \begin{bmatrix}
-      \mat{M}_a & -\mat{M}_a \left(
-         \crossmat{\vec{r}^c_{RC/R}} + \crossmat{\vec{r}^c_{PC/RC}} \mat{S}_2
-      \right)\\
-      \left(
-         \mat{S}_2 \crossmat{\vec{r}^c_{PC/RC}}
-         + \crossmat{\vec{r}^c_{RC/R}}
-      \right) \mat{M}_a & \mat{J}_{a,R}
+   \mat{A}_{a/R} =
+     \begin{bmatrix}
+       \mat{M}_a & -\mat{M}_a \left( \crossmat{\vec{r}_{RC/R}} + \crossmat{\vec{r}_{PC/RC}} \mat{S}_2 \right) \\
+       \left( \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}} \right) \mat{M}_a & \mat{J}_{a/R}
    \end{bmatrix}
 
-Plus the vectors necessary to incorporate :math:`\mat{A}_R` into the final
-dynamics:
+Plus the vectors necessary to incorporate :math:`\mat{J}_{a/R}` into the
+final dynamics:
 
 .. math::
 
-   \vec{r}^c_{PC/RC} = \begin{bmatrix} 0 & 0 & z_{PC/RC}\end{bmatrix}
+   \vec{r}_{PC/RC} = \begin{bmatrix} 0 & 0 & z_{PC/RC}\end{bmatrix}
 
 Linear momentum of the apparent mass:
 
 .. math::
+   :label: apparent_linear_momentum
 
-   \vec{p}^b_a = \mat{M}_a \cdot \left(
-      \vec{v}^b_{R/e}
-      - \crossmat{\vec{r}^b_{RC/R}} \omega^b_{b/e}
-      - \crossmat{\vec{r}^b_{PC/RC}} \mat{S}_2 \cdot \omega^b_{b/e}
-   \right)
+   \vec{p}_{a/e} =
+     \mat{M}_a \cdot \left(
+       \vec{v}_{R/e}
+       - \crossmat{\vec{r}_{RC/R}} \omega_{b/e}
+       - \crossmat{\vec{r}_{PC/RC}} \mat{S}_2 \cdot \omega_{b/e}
+     \right)
 
 Angular momentum of the apparent mass about :math:`R`:
 
 .. math::
+   :label: apparent_angular_momentum
 
-   \vec{h}^b_{a,R} =
-      \left(
-         \mat{S}_2 \cdot \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
-      \right) \cdot \mat{M}_a \cdot \vec{v}^b_{R/e}
-      + \mat{J}_{a,R} \cdot \omega^b_{b/e}
+   \vec{h}_{a/R} =
+     \left(
+       \mat{S}_2 \cdot \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
+     \right) \cdot \mat{M}_a \cdot \vec{v}_{R/e}
+     + \mat{J}_{a/R} \cdot \omega_{b/e}
 
 
 Notes to self
@@ -762,286 +793,674 @@ Notes to self
   reasons that `R` should be in the xz-plane, then make sure this section
   covers that.
 
+* Doesn't Barrows use the *principal axes*? See my comment at the end of the
+  "Introduction" to Barrows' paper about the coordinate axes needing to be
+  parallel to the principal axes. I think the fact that I'm assuming the wing
+  has fore-aft and later symmetry is what allows me to use the canopy axes.
+
+* I'm not crazy about the notation `\mat{A}_{a/R}`, but this matrix isn't like
+  anything else in my paper so for now I'll leave it.
+
 
 Paraglider Models
 =================
 
+[[**FIXME**: preview the models. Model `6a` is the most complete,
+incorporating `A_{a/R}`. Models `6b` and `6c` are simpler but require
+computing `r_{B/R}` before computing `A_{a/B}` (plus `B` is not strictly
+a fixed point since air density changes); they are mostly useful for verifying
+the implementations.]]
+
+
 Model 6a
 --------
 
-This design uses the riser connection point :math:`R` for the dynamics
-reference point, and incorporates the apparent mass matrix. [[The glidersim
-package also includes `Paraglider6b`, which decouples the translational and
-angular equations of motion by choosing the glider center of gravity for the
-dynamics reference point to simplify the equations of motion, but does not
-incorporate the apparent mass matrix.]]
+This section describe a paraglider dynamics model with 6 degrees of freedom.
+It uses a rigid-body assumption, and incorporates the effects of apparent
+mass. The dynamics are computed with respect to the riser midpoint :math:`R`
+instead of the wing center of mass :math:`B` because it avoids needing to
+recompute the apparent inertia matrix whenever `B` changes. In this
+derivation all vectors are in the canopy coordinate system :math:`c`, so the
+vector coordinate systems are implicit in the notation.
+
+The derivation develops the equations of motion by starting with derivatives
+of linear and angular momentum. The derivation is largely based on the
+excellent :cite:`hughes2004SpacecraftAttitudeDynamics`, although this section
+uses this paper's version of Stevens' notation (see :ref:`symbols:Notation and
+Symbols`).
 
 An implementation of this model is available as :py:class:`Paraglider6a
 <glidersim:pfh.glidersim.paraglider.Paraglider6a>` in the ``glidersim``
-package.
+package. The ``glidersim`` package also includes :py:class:`Paraglider6b
+<glidersim:pfh.glidersim.paraglider.Paraglider6b>` and :py:class:`Paraglider6c
+<glidersim:pfh.glidersim.paraglider.Paraglider6c>`, which decouple the
+translational and angular equations of motion by choosing the glider center of
+gravity for the dynamics reference point, but do not incorporate the apparent
+mass matrix.
+
+
+Real mass only
+^^^^^^^^^^^^^^
+
+Start with the equations for the translational and angular momentum of the
+body :math:`b` about the reference point :math:`R` as observed by the inertial
+reference frame :math:`e`:
 
 .. math::
    :label: model6a_p
 
    \begin{aligned}
-   {\vec{p}^b_{b/e}}
-      &= m_b \, \vec{v}^b_{B/e} \\
-      &= m_b \left(
-            {\vec{v}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-         \right)
+     {\vec{p}_{b/e}}
+       &= m_b \, \vec{v}_{B/e} \\
+       &= m_b \left(
+            {\vec{v}_{R/e}} + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
+          \right)
    \end{aligned}
 
+.. ref: Stevens Eq:1.7-3 (pg36)
 
 .. math::
-   :label: model6a_p_dot
+   :label: model6a_h
+
+   \vec{h}_{b/R} =
+     m_b \, \vec{r}_{B/R} \times \vec{v}_{R/e}
+     + \mat{J}_{b/R} \cdot \vec{\omega}_{b/e}
+
+Compute the momentum derivatives in the inertial frame :math:`\mathcal{F}_e`
+in terms of derivatives in the body frame :math:`\mathcal{F}_b`:
+
+.. math::
+   :label: model6a_momentum_derivatives1
 
    \begin{aligned}
-   {^e \dot{\vec{p}}^b_{b/e}}
-      &= m_b \left(
-            {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times {^e\dot{\vec{r}}^b_{B/R}}
-         \right)
+     {^e \dot{\vec{p}}_{b/e}}
+       &= {^b \dot{\vec{p}}_{b/e}}
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
 
-      &= m_b \left(
-            {^b\dot{\vec{v}}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}
-            + {^b\dot{\vec{\omega}}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times \left(
-               {\cancelto{0}{^b \dot{\vec{r}}^b_{B/R}}}
-               + {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-              \right)
-         \right)
+       &= m_b \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+            + {\vec{\omega}}_{b/e} \times {\cancelto{0}{^b \dot{\vec{r}_{B/R}}}}
+          \right)
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
 
-      &= m_b \left(
-            {^b\dot{\vec{v}}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}
-            + {^b\dot{\vec{\omega}}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-         \right)
+       &= m_b \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+          \right)
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
 
-      &= {\vec{F}^b_{\textrm{wing,aero}}} + {\vec{F}^b_{\textrm{wing,weight}}}
+     \\
+
+     {^e \dot{\vec{h}}_{b/R}}
+       &= {^b\dot{\vec{h}}_{b/R}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
+       &= m_b \left(
+            {\cancelto{0}{^b \dot{\vec{r}_{B/r}}}} \times \vec{v}_{R/e}
+            + \vec{r}_{B/R} \times {^b \dot{\vec{v}_{R/e}}}
+          \right)
+          + {\mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+          + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
+       &= m_b \, \vec{r}_{B/R} \times {^b \dot{\vec{v}_{R/e}}}
+          + {\mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+          + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
    \end{aligned}
 
+Relate the derivatives of momentum with respect to the inertial frame to the
+net force on the body :math:`f_b` and the net moment on the body about the
+reference point :math:`g_{b/R}`:
+
+.. For angular momentum, see Stevens Eq:1.7-1 (pg35)
+
 .. math::
-   :label: model6a_h_dot
+   :label: model6a_momentum_derivatives2
 
    \begin{aligned}
-   {^e \dot{\vec{h}}_{b/e}}
-      &= {^b\dot{\vec{h}}_b}
-         + {\vec{\omega}^b_{b/e} \times \vec{h}_b}
+     {^e \dot{\vec{p}}_{b/e}} &=
+       \mat{f}_b \\
+     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &=
+       \mat{g}_{b/R}
+   \end{aligned}
 
-      &= {\mat{J^b_B}{^b \dot{\vec{\omega}}^b_{b/e}}}
-         + {\vec{\omega} \times \left( \mat{J^b_B} \vec{\omega}^b_{b/e} \right)}
+Where
 
-      &= {\vec{M}^b_{\textrm{wing,aero}}} + {\vec{M}^b_{\textrm{wing,weight}}}
+.. math::
+
+   \begin{aligned}
+     \vec{f}_b &=
+       {\vec{f}_{b,\textrm{aero}}}
+       + {\vec{f}_{b,\textrm{weight}}} \\
+     \vec{g}_{b/R} &=
+       {\vec{g}_{b,\textrm{aero}}}
+       + {\vec{r}_{B/R} \times {\vec{f}_{b,\textrm{weight}}}}
+   \end{aligned}
+
+Combining :eq:`model6a_momentum_derivatives1` and
+:eq:`model6a_momentum_derivatives2` gives the final equations for the dynamics
+of the real mass (solid mass plus the enclosed air) in terms of :math:`^b
+\dot{\vec{v}}_{R/e}` and :math:`^b \dot{\vec{\omega}}_{b/e}`.
+
+.. math::
+   :label: model6a_dynamics_equations
+
+   \begin{aligned}
+      m_b \, {^b \dot{\vec{v}}_{R/e}}
+      + m_b \, {^b \dot{\vec{\omega}}_{b/e}} \times \vec{r}_{B/R}
+      &= \vec{f}_b
+         - \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+
+      m_b \, \vec{r}_{B/R} \times {^b \dot{\vec{v}}_{R/e}}
+      + \mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}
+      &= \vec{g}_{b/R} - \vec{\omega}_{b/e} \times \vec{h}_{b/R}
+         - \vec{v}_{R/e} \times \vec{p}_{b/e}
+   \end{aligned}
+
+Rewriting the equations as a linear system:
+
+.. math::
+   :label: model6a_real_system
+
+   \mat{A}_{r/R}
+   \begin{bmatrix}
+     {^b \dot{\vec{v}}_{R/e}} \\
+     {^b \dot{\vec{\omega}}_{b/e}} \\
+   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{b}_1\\
+       \vec{b}_2\\
+     \end{bmatrix}
+
+Where:
+
+.. math::
+
+   \begin{aligned}
+     \mat{A}_{r/R} &=
+       \begin{bmatrix}
+         {m_b \, \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}}} \\
+         {m_b \, \crossmat{\vec{r}_{B/R}}} & {\mat{J}_{b/R}} \\
+       \end{bmatrix} \\
+     \\
+     \vec{b}_1 &=
+       \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+     \vec{b}_2 &=
+       \vec{g}_{b/R}
+       - \vec{\omega}_{b/e} \times \vec{h}_{b/R}
+       - \vec{v}_{R/e} \times \vec{p}_{b/e} \\
    \end{aligned}
 
 
+Real mass + apparent mass
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Writing the dynamics in matrix form not only makes it straightforward to solve
+for the state derivatives, it also makes it easy to incorporate the apparent
+inertia matrix from `Apparent mass of a parafoil`_. Adding the apparent
+inertia into the system matrix and accounting for the translational and
+angular apparent momentum produces:
+
 .. math::
-   :label: model6a_linear_system
+   :label: model6a_complete_system
 
    \begin{bmatrix}
-      {m_b \mat{I_3}} & {-m_b \crossmat{\vec{r}^b_{B/R}}} & {\mat{0_{3\times3}}} & {\mat{I_3}}\\
-      {\mat{0_{3\times3}}} & {\mat{J^b_B}} & {\mat{0_{3\times3}}} & {-\crossmat{\vec{r}^b_{R/B}}}\\
+     \mat{A}_{r/R} + \mat{A}_{a/R}
    \end{bmatrix}
    \begin{bmatrix}
-      {^b \dot{\vec{v}}^b_{R/e}}\\
-      {^b \dot{\vec{\omega}}^b_{b/e}}\\
+     {^b \dot{\vec{v}}_{R/e}} \\
+     {^b \dot{\vec{\omega}}_{b/e}} \\
    \end{bmatrix}
-   =\begin{bmatrix}
-      \vec{B}_1\\
-      \vec{B}_2\\
+   = \begin{bmatrix}
+       \begin{aligned}
+          \vec{b}_3 \\
+          \vec{b}_4
+      \end{aligned}
+     \end{bmatrix}
+
+.. math::
+
+   \begin{aligned}
+     \vec{b}_3 &= \vec{b}_1 - \vec{\omega}_{b/e} \times \vec{p}_{a/e} \\
+     \vec{b}_4 &=
+       \vec{b}_2
+       - {\vec{v}_{R/e} \times \vec{p}_{a/e}}
+       - {\vec{\omega}_{b/e} \times \vec{h}_{a/R}}
+       + {\vec{v}_{R/e} \times \left( \mat{M}_a \cdot \vec{v}_{R/e} \right) }
+   \end{aligned}
+
+Where :math:`\mat{A}_{a/R}` is the apparent inertia matrix from
+:eq:`apparent_inertia_matrix`, :math:`\mat{M}_a` is the apparent mass matrix
+from :eq:`apparent_mass_matrix`, and :math:`\vec{p}_{a/e}` and
+:math:`\vec{h}_{a/R}` are the linear and angular apparent momentums from
+:eq:`apparent_linear_momentum` and :eq:`apparent_angular_momentum`. The extra
+term :math:`\vec{v}_{R/e} \times \left( \mat{M}_a \vec{v}_{R/e} \right)` is
+necessary to avoid double counting the aerodynamic moment already accounted
+for by the section pitching coefficients.
+
+[[The final step is to compute the derivatives with respect to the inertial
+frame so the simulator can integrate the derivatives to track the paraglider
+position and orientation over time with respect to the tangent plane:
+
+.. math::
+
+   \begin{aligned}
+      {^e \dot{\vec{v}_{R/e}}} &=
+        {^b \dot{\vec{v}_{R/e}}}
+        + \vec{\omega}_{b/e} \times \vec{v}_{R/e} \\
+      {^e \dot{\vec{\omega}_{b/e}}} &= {^b \dot{\vec{\omega}_{b/e}}}
+   \end{aligned}
+
+FIXME: verify this explanation]]
+
+
+Model 6b
+--------
+
+Following the same logic as `Model 6a`_, but targeting :math:`^b
+\vec{v}_{B/e}` and using the momentum about the body center of mass :math:`B`
+produces a simpler model with a diagonal system matrix, but at the cost of
+requiring the body center of mass to be determined before computing the
+apparent inertia matrix with respect to that point. For that reason the
+apparent mass is neglected here, although if :math:`B` lies in the xz-plane
+then the method described in `Apparent mass of a parafoil`_ could be used.
+
+The main purpose of this model is for validating model implementations. An
+implementation of this model is available as :py:class:`Paraglider6b
+<glidersim:pfh.glidersim.paraglider.Paraglider6b>` in the ``glidersim``
+package.
+
+.. math::
+   :label: model6b_p
+
+   \vec{p}_{b/e} = m_b \, \vec{v}_{B/e}
+
+.. math::
+   :label: model6b_h
+
+   \vec{h}_{b/B} = \mat{J}_{b/R} \cdot \vec{\omega}_{b/e}
+
+Computing the inertial derivatives with respect to the body frame:
+
+.. math::
+   :label: model6b_momentum_derivatives1
+
+   \begin{aligned}
+     {^e \dot{\vec{p}}_{b/e}}
+       &= m_b \, {^b \dot{\vec{v}}_{B/e}}
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+     \\
+     {^e \dot{\vec{h}}_{b/B}}
+       &= \mat{J}_{b/B} \cdot {^b \dot{\vec{\omega}}_{b/e}}
+          + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+   \end{aligned}
+
+Using the body center of mass as the reference point simplifies the equation
+for angular momentum:
+
+.. math::
+   :label: model6b_momentum_derivatives2
+
+   \begin{aligned}
+     {^e \dot{\vec{p}}_{b/e}} &= \mat{f}_b \\
+     {^e \dot{\vec{h}}_{b/B}} &= \mat{g}_{b/B}
+   \end{aligned}
+
+Combining :eq:`model6b_momentum_derivatives1` and
+:eq:`model6b_momentum_derivatives2`: and rewriting as a linear system:
+
+.. math::
+   :label: model6b_real_system
+
+   \begin{bmatrix}
+     m_b & 0 \\
+     0 & \mat{J}_{b/B}
    \end{bmatrix}
+   \begin{bmatrix}
+     {^b \dot{\vec{v}}_{B/e}} \\
+     {^b \dot{\vec{\omega}}_{b/e}}
+   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+       \vec{g}_{b/B} - \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+     \end{bmatrix}
+
+And finally, because the simulator was designed to integrate :math:`^e
+\dot{\vec{v}}_{R/e}`, not :math:`^e \dot{\vec{v}}_{B/e}`:
+
+.. math::
+
+   \begin{aligned}
+     \vec{v}_{R/e}
+       &= \vec{v}_{B/e} + \vec{r}_{R/B} \times \vec{\omega}_{b/e} \\
+     \\
+     {^b \dot{\vec{v}}_{R/e}}
+       &= {^b \dot{\vec{v}}_{B/e}}
+          + \vec{r}_{R/B} \times {^b \dot{\vec{\omega}}_{b/e}} \\
+     \\
+     {^e \dot{\vec{v}}_{R/e}}
+       &= {^b \dot{\vec{v}}_{R/e}}
+          + \vec{\omega}_{b/e} \times \vec{V}_{R/e}
+   \end{aligned}
+
+
+Model 6c
+--------
+
+Another option is to target :math:`^b \vec{v}_{R/e}` directly, but again using
+the momentum about the body center of mass :math:`B`. Like `Model 6b`_ this
+also produces a simpler dynamics model, but again at the cost of making it
+less convenient to precompute the apparent inertia matrix.
+
+The main purpose of this model is for validating model implementations. An
+implementation of this model is available as :py:class:`Paraglider6c
+<glidersim:pfh.glidersim.paraglider.Paraglider6c>` in the ``glidersim``
+package.
+
+Computing the inertial derivatives with respect to the body frame:
+
+.. math::
+   :label: model6c_momentum_derivatives1
+
+   \begin{aligned}
+     {^e \dot{\vec{p}}_{b/e}}
+       &= m_b \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + {^b \dot{\vec{\omega}}_{b/e}} \times \vec{r}_{B/R}
+          \right)
+          + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+     \\
+     {^e \dot{\vec{h}}_{b/B}}
+       &= \mat{J}_{b/B} \cdot {^b \dot{\vec{\omega}}_{b/e}}
+          + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+   \end{aligned}
+
+Using the body center of mass as the reference point simplifies the equation
+for angular momentum:
+
+.. math::
+   :label: model6c_momentum_derivatives2
+
+   \begin{aligned}
+     {^e \dot{\vec{p}}_{b/e}} &= \mat{f}_b \\
+     {^e \dot{\vec{h}}_{b/B}} &= \mat{g}_{b/B}
+   \end{aligned}
+
+Combining :eq:`model6c_momentum_derivatives1` and
+:eq:`model6c_momentum_derivatives2`: and rewriting as a linear system:
+
+.. math::
+   :label: model6c_real_system
+
+   \begin{bmatrix}
+     m_b & -m_b \crossmat{\vec{r}_{B/R}} \\
+     0 & \mat{J}_{b/B}
+   \end{bmatrix}
+   \begin{bmatrix}
+     {^b \dot{\vec{v}}_{R/e}} \\
+     {^b \dot{\vec{\omega}}_{b/e}}
+   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+       \vec{g}_{b/B} - \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+     \end{bmatrix}
 
 
 Model 9a
 --------
 
-This design uses the riser connection midpoint `R` as the reference point
-for both the body and the payload, which simplifies incorporating the apparent
-mass matrix.
+Similar to `Model 6a`_, this design uses the riser connection midpoint `R` as
+the reference point for both the body and the payload, which simplifies
+incorporating the apparent mass matrix. However, this model treats the body
+and payload as separate components, connected by a rotational spring-damper
+model that adds an additional three degrees-of-freedom. A similar 9DoF model
+derivation can be found in :cite:`gorman2012EvaluationMultibodyParafoil`
+(9DoF, but relative roll and pitch are unconstrained).
 
-Similar derivations:
-
-* "Spacecraft Attitude Dynamics" (Hughes; 2004):
-  :cite:`hughes2004SpacecraftAttitudeDynamics`. Good development of
-  how to use the derivatives of translational and angular acceleration to
-  develop the equations of motion, and its application to multi-rigid-body
-  dynamics.
-
-* "Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature
-  Wireless Sensors" (Gorman;
-  2012): :cite:`gorman2012EvaluationMultibodyParafoil`
+.. FIXME: why didn't I use that derivation?
 
 An implementation of this model is available as :py:class:`Paraglider9a
 <glidersim:pfh.glidersim.paraglider.Paraglider9a>` in the ``glidersim``
-package.
-
-[[The ``glidersim`` package also includes :py:class:`Paraglider9b
+package. The ``glidersim`` package also includes :py:class:`Paraglider9b
 <glidersim:pfh.glidersim.paraglider.Paraglider9b>`, which uses the centers of
 mass as the reference points for the body and payload dynamics. That choice
 simplifies the derivatives for angular momentum (since it eliminates the
 moment arms), but it makes it more difficult to incorporate the effects of
-apparent mass.]]
+apparent mass.
+
+
+Real mass only
+^^^^^^^^^^^^^^
+
+Start with the equations for the translational and angular momentum of the
+body :math:`b` about the reference point :math:`R` as observed by the inertial
+reference frame :math:`e`:
 
 .. math::
    :label: model9a_body_p
 
    \begin{aligned}
-   {\vec{p}^b_{b/e}}
-      &= m_b \, \vec{v}^b_{B/e} \\
-      &= m_b \left(
-            {\vec{v}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-         \right)
+     {\vec{p}_{b/e}}
+       &= m_b \, \vec{v}_{B/e} \\
+       &= m_b \left(
+            {\vec{v}_{R/e}} + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
+          \right)
    \end{aligned}
 
 .. math::
-   :label: model9a_body_p_dot
+   :label: model9a_payload_p
 
    \begin{aligned}
-   {^e \dot{\vec{p}}^b_{b/e}}
-      &= m_b \left( 
-            {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times {^e\dot{\vec{r}}^b_{B/R}}
-         \right)
-
-      &= m_b \left(
-            {^b\dot{\vec{v}}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}
-            + {^b\dot{\vec{\omega}}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-            + {\vec{\omega}^b_{b/e}} \times \left(
-               {\cancelto{0}{^b \dot{\vec{r}}^b_{B/R}}}
-               + {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-              \right)
-         \right)
-
-      &= m_b \left(
-            {^b\dot{\vec{v}}^b_{R/e}}
-            + {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}
-            + {^b\dot{\vec{\omega}}^b_{b/e}} \times {\vec{r}^b_{B/R}} 
-            + {\vec{\omega}^b_{b/e}} \times {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}
-         \right)
-
-      &= {\vec{F}^b_{\textrm{wing,aero}}} + {\vec{F}^b_{\textrm{wing,weight}}} - {\vec{F}^b_R}
+     {\vec{p}_{p/e}}
+       &= m_p \, \vec{v}_{P/e} \\
+       &= m_p \left(
+            {\vec{v}_{R/e}} + {\vec{\omega}_{b/e}} \times {\vec{r}_{P/R}}
+          \right)
    \end{aligned}
 
 .. math::
-   :label: model9a_payload_p_dot
+   :label: model9a_body_h
+
+   \vec{h}_{b/R} =
+     m_b \, \vec{r}_{B/R} \times \vec{v}_{R/e}
+     + \mat{J}_{b/R} \cdot \vec{\omega}_{b/e}
+
+.. math::
+   :label: model9a_payload_h
+
+   \vec{h}_{p/R} =
+     m_p \, \vec{r}_{P/R} \times \vec{v}_{R/e}
+     + \mat{J}_{p/R} \cdot \vec{\omega}_{p/e}
+
+Compute the two momentum derivatives:
+
+.. math::
+   :label: model9a_momentum_derivatives1
 
    \begin{aligned}
-   {^e \dot{\vec{p}}^p_{p/e}}
-      &= m_p \left( 
-            {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{p/e}} \times {\vec{r}^p_{P/R}}
-            + {\vec{\omega}^p_{p/e}} \times {^e\dot{\vec{r}}^p_{P/R}}
-         \right)
+     {^e \dot{\vec{p}}_{b/e}}
+       &= {^b \dot{\vec{p}}_{b/e}} + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
 
-      &= m_p \left(
-            {^p\dot{\vec{v}}^p_{R/e}}
-            + {\vec{\omega}^p_{p/e}} \times {\vec{v}^p_{R/e}}
-            + {^p\dot{\vec{\omega}}^p_{p/e}} \times {\vec{r}^p_{P/R}}
-            + {\vec{\omega}^p_{p/e}} \times \left(
-               {\cancelto{0}{^p \dot{\vec{r}}^p_{P/R}}}
-               + {\vec{\omega}^p_{p/e}} \times {\vec{r}^p_{P/R}}
-              \right)
-         \right)
+       &= m_b \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + {^b \dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+          \right)
+            + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
 
-      &= m_p \left(
-            {^p\dot{\vec{v}}^p_{R/e}}
-            + {\vec{\omega}^p_{p/e}} \times {\vec{v}^p_{R/e}}
-            + {^p\dot{\vec{\omega}}^p_{p/e}} \times {\vec{r}^p_{p/R}} 
-            + {\vec{\omega}^p_{p/e}} \times {\vec{\omega}^p_{p/e}} \times {\vec{r}^p_{P/R}}
-         \right)
+     {^e \dot{\vec{h}}_{b/R}}
+       &= {^b \dot{\vec{h}}_{b/R}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
 
-      &= {\vec{F}^p_{\textrm{payload,aero}}} + {\vec{F}^p_{\textrm{payload,weight}}} + {\vec{F}^p_R}
+       &= m_b \vec{r}_{B/R} \times {^b \vec{\dot{v}}_{R/e}}
+          + {\mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+          + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
+     {^e \dot{\vec{p}}_{p/e}}
+       &= {^p \dot{\vec{p}}_{p/e}} + \vec{\omega}_{p/e} \times \vec{p}_{p/e}
+
+       &= m_p \left(
+            {^p \dot{\vec{v}}_{R/e}}
+            + {^p \dot{\vec{\omega}}_{p/e}} \times {\vec{r}_{P/R}}
+          \right)
+            + \vec{\omega}_{p/e} \times \vec{p}_{p/e}
+
+       &= m_p \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + \vec{\omega}_{b/p} \times \vec{v}_{R/e}
+            + {^p \dot{\vec{\omega}}_{p/e}} \times {\vec{r}_{P/R}}
+          \right)
+            + \vec{\omega}_{p/e} \times \vec{p}_{p/e}
+
+     {^e \dot{\vec{h}}_{p/R}}
+       &= {^p \dot{\vec{h}}_{p/R}} + {\vec{\omega}_{p/e} \times \vec{h}_{p/R}}
+
+       &= m_p \vec{r}_{P/R}
+            \times {^p \dot{\vec{v}_{R/e}}}
+            + \mat{J}_{p/R} \cdot {^p \dot{\vec{\omega}}}_{p/e}
+            + \vec{\omega}_{p/e} \times \vec{h}_{p/R}
+
+       &= m_p \vec{r}_{P/R}
+            \times \left( {^b \dot{\vec{v}_{R/e}}} + \vec{\omega}_{b/p} \times \vec{v}_{R/e} \right)
+            + \mat{J}_{p/R} \cdot {^p \dot{\vec{\omega}}}_{p/e}
+            + \vec{\omega}_{p/e} \times \vec{h}_{p/R}
+
    \end{aligned}
 
+Derivatives of the payload momentums are computed in terms of the body
+velocity derivative in the body frame to allow writing the dynamics as
+a single system of equations. First, compute the net external forces and
+moments:
+
+.. For angular momentum, see Stevens Eq:1.7-1 (pg35)
 
 .. math::
-   :label: model9a_body_h_dot
+   :label: model9a_net_forces
 
    \begin{aligned}
-   {^e \dot{\vec{h}}_b}
-      &= {^b\dot{\vec{h}}_b}
-         + {\vec{\omega}^b_{b/e} \times \vec{h}_b}
-
-      &= {\mat{J^b_B}{^b \dot{\vec{\omega}}^b_{b/e}}}
-         + {\vec{\omega} \times \left( \mat{J^b_B} \vec{\omega}^b_{b/e} \right)}
-
-      &= {\vec{M}^b_{\textrm{wing,aero}}}
-         + {\vec{M}^b_{\textrm{wing,weight}}}
-         - {\vec{r}^b_{R/B} \times \vec{F}^b_R}
-         - \vec{M}^b_R
+     \vec{f}_b &= \vec{f}_{b,\textrm{aero}} + \vec{f}_{b,\textrm{weight}} \\
+     \vec{g}_{b/R} &= \vec{g}_{b,\textrm{aero}} + \vec{g}_{b,\textrm{weight}} \\
+     \vec{f}_p &= \vec{f}_{p,\textrm{aero}} + \vec{f}_{p,\textrm{weight}} \\
+     \vec{g}_{p/R} &= \vec{g}_{p,\textrm{aero}} + \vec{g}_{p,\textrm{weight}}  \\
    \end{aligned}
 
+And equate them to the derivatives of momentum with respect to the inertial
+frame:
 
 .. math::
-   :label: model9a_payload_h_dot
+   :label: model9a_momentum_derivatives2
 
    \begin{aligned}
-   {^e \dot{\vec{h}}_p}
-      &= {^p\dot{\vec{h}}_p}
-         + {\vec{\omega}^p_{p/e} \times \vec{h}_p}
-
-      &= {\mat{J^p_P}{^p \dot{\vec{\omega}}^p_{p/e}}}
-         + {\vec{\omega} \times \left( \mat{J^p_P} \vec{\omega}^p_{p/e} \right)}
-
-      &= {\vec{M}^p_{\textrm{wing,aero}}}
-         + {\vec{M}^p_{\textrm{wing,weight}}}
-         - {\vec{r}^p_{R/P} \times \vec{F}^p_R}
-         - \vec{M}^p_R
+     {^e \dot{\vec{p}}_{b/e}} &=
+       \vec{f}_b - \vec{f}_R \\
+     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &=
+       \vec{g}_{b/R} - \vec{g}_R \\
+     {^e \dot{\vec{p}}_{p/e}} &=
+       \vec{f}_p + \vec{f}_R \\
+     {^e \dot{\vec{h}}_{p/R}} + \vec{v}_{R/e} \times \vec{p}_{p/e} &=
+       \vec{g}_{p/R} + \vec{g}_R \\
    \end{aligned}
 
-And finally, the complete system of equations:
+[[**FIXME**: ambiguous notation? I'm interested in communicating "the moment
+about `R` due to the spring" and "the moment about `R` due to the aerodynamic
+forces", etc]]
 
-**FIXME: I think this is the old version that didn't include the apparent
-mass. Compare to the code implementation.**
+[[**FIXME**: define `g_{b,aero}` etc? Has contributions from both aerodynamic
+moments as well as forces applied on some lever arm to `R`.]]
 
+[[**FIXME**: need to describe `f_R` and `g_R`
+
+The spring-damper connection produces forces and moments shared by the body
+and the payload. There are six variables but only three degrees of freedom.
+Both systems have the riser connection point :math:`R` at a fixed position,
+and the force only exists to maintain the fixed relative positioning.
 
 .. math::
-   :label: model9a_linear_system
+   :label: model9a_spring_moment
 
+   \vec{g}_R =
+     \begin{bmatrix}
+       \begin{aligned}
+         \kappa_{\phi} \phi &+ \kappa_{\dot{\phi}} \dot{\phi} \\
+         \kappa_{\theta} \theta &+ \kappa_{\dot{\theta}} \dot{\theta} \\
+         \kappa_{\gamma} \gamma &+ \kappa_{\dot{\gamma}} \dot{\gamma} \\
+       \end{aligned}
+     \end{bmatrix}
+
+Where :math:`\vec{\omega}_{p/b}^p = \left< \phi, \theta, \gamma \right>` are
+the angular rates of the payload, :math:`^p \dot{\vec{\omega}}_{p/b}^p
+= \left< \dot{\phi}, \dot{\theta}, \dot{\gamma} \right>` are the angular
+accelerations of the payload, and the :math:`\kappa` are the stiffness and
+dampening coefficients of the spring-damper model.]]
+
+Combining equations :eq:`model9a_momentum_derivatives1` and
+:eq:`model9a_momentum_derivatives2` and rewriting as a linear system provides
+the dynamics of the real mass (solid mass plus the enclosed air) in terms of
+:math:`^b \dot{\vec{v}}_{R/e}`, :math:`^b \dot{\vec{\omega}}_{b/e}`, :math:`^b
+\dot{\vec{\omega}}_{p/e}^p`, and :math:`\vec{f}_R^b`:
+
+.. math::
+   :label: model9a_real_system
+
+   \mat{A}_{r/R}
    \begin{bmatrix}
-      {m_b \mat{I_3}} & {-m_b \crossmat{\vec{r}^b_{B/R}}} & {\mat{0_{3\times3}}} & {\mat{I_3}}\\
-      {m_p \mat{C_{p/b}}} & {\mat{0_{3\times3}}} & {-m_p \crossmat{\vec{r}^p_{p/R}}} & {-\mat{C_{p/b}}}\\
-      {\mat{0_{3\times3}}} & {\mat{J^b_B}} & {\mat{0_{3\times3}}} & {-\crossmat{\vec{r}^b_{R/B}}}\\
-      {\mat{0_{3\times3}}} & {\mat{0_{3\times3}}} & {\mat{J^p_P}} & {\crossmat{\vec{r}^p_{P/R}} \mat{C_{p/b}}}
+     {^b \dot{\vec{v}}_{R/e}^b} \\
+     {^b \dot{\vec{\omega}}_{b/e}^b} \\
+     {^p \dot{\vec{\omega}}_{p/e}^p} \\
+     {   \vec{f}_R^b}
    \end{bmatrix}
-   \begin{bmatrix}
-      {^b \dot{\vec{v}}^b_{R/e}}\\
-      {^b \dot{\vec{\omega}}^b_{b/e}}\\
-      {^b \dot{\vec{\omega}}^b_{p/e}}\\
-      {\vec{F}^b_R}
-   \end{bmatrix}
-   =\begin{bmatrix}
-      \vec{B}_1\\
-      \vec{B}_2\\
-      \vec{B}_3\\
-      \vec{B}_4
-   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{b}_1^b \\
+       \vec{b}_2^b \\
+       \vec{b}_3^p \\
+       \vec{b}_4^p
+     \end{bmatrix}
 
-where
+Where:
 
 .. math::
 
+   \mat{A}_{r/R} =
+     \begin{bmatrix}
+       {m_b \, \mat{I}_3}
+         & {-m_b \crossmat{\vec{r}_{B/R}^b}}
+         & {\mat{0}_{3\times3}}
+         & {\mat{I}_3} \\
+       {m_b \, \crossmat{\vec{r}_{B/R}^b}}
+         & {\mat{J}_{b/R}^b}
+         & {\mat{0}_{3\times3}}
+         & {\mat{0}_{3\times3}} \\
+       {m_p \, \mat{C}_{p/b}}
+         & {\mat{0}_{3\times3}}
+         & {-m_p \crossmat{\vec{r}_{P/R}^p}}
+         & {-\mat{C}_{p/b}} \\
+       {m_p \, \crossmat{\vec{r}_{P/R}^p} \mat{C}_{p/b}}
+         & {\mat{0}_{3\times3}}
+         & {\mat{J}_{p/R}^p}
+         & {\mat{0}_{3\times3}}
+     \end{bmatrix}
+
+.. math::
+   :label: model9a_dynamics_RHS
+
    \begin{aligned}
-      \vec{B}_1 &= {\vec{F}^b_{\textrm{wing,aero}}}
-      + {\vec{F}^b_{\textrm{wing,weight}}}
-      - {m_b \, {\vec{\omega}^b_{b/e}} \times {\vec{v}^b_{R/e}}}
-      - {m_b \, {\vec{\omega}^b_{b/e}} \times {\vec{\omega}^b_{b/e}} \times {\vec{r}^b_{B/R}}}\\
-      \vec{B}_2 &= {\vec{F}^b_{\textrm{p,aero}}}
-      + {\vec{F}^p_{\textrm{p,weight}}}
-      - {m_p \, {\vec{\omega}^p_{b/e}} \times {\vec{v}^p_{R/e}}}
-      - {m_p \, {\vec{\omega}^p_{p/e}} \times {\vec{\omega}^p_{p/e}} \times {\vec{r}^p_{P/R}}}\\
-      \vec{B}_3 &= {\vec{M}^b_{\textrm{wing,aero}}}
-      + {\vec{M}^b_{\textrm{wing,weight}}}
-      - {\vec{M}^b_R}
-      - {\vec{\omega}^b_{b/e} \times \left( {\mat{J^b_B} \vec{\omega}^b_{b/e}} \right)}\\
-      \vec{B}_4 &= {\vec{M}^p_{\textrm{p,aero}}}
-      + {\vec{M}^p_R}
-      - {\vec{\omega}^p_{p/e} \times \left( {\mat{J^p_P} \vec{\omega}^p_{p/e}} \right)}
+      \vec{b}_1^b &=
+        \vec{f}_b^b
+        - \vec{\omega}_{b/e}^b \times \vec{p}_{b/e}^b \\
+      \vec{b}_2^b &=
+        \vec{g}_b^b
+        - \vec{g}_R^b
+        - \vec{v}_{R/e}^b \times \vec{p}_{b/e}^b
+        - \vec{\omega}_{b/e}^b \times \vec{h}_{b/R}^b \\
+      \vec{b}_3^p &=
+        \vec{f}_p^p
+        - \vec{\omega}_{p/e}^p \times \vec{p}_{p/e}^p
+        - m_p \vec{\omega}_{b/p}^p \times \vec{v}_{R/e}^p \\
+      \vec{b}_4^p &=
+        \vec{g}_b^p
+        + \vec{g}_R^p
+        - \vec{v}_{R/e}^p \times \vec{p}_{p/e}^p
+        - \vec{\omega}_{p/e}^p \times \vec{h}_{p/R}^p
+        - m_p \vec{r}_{P/R}^p \times \left( \vec{\omega}_{b/p}^p \times \vec{v}_{R/e}^p \right)
    \end{aligned}
+
+
+[[**FIXME**: incorporate apparent inertia]]
