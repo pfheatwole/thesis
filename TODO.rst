@@ -1,48 +1,20 @@
-* Make sure every chapter introduction has a "Roadmap", and that the chapter
-  follows that roadmap.
+Topical
+=======
 
-* Make sure all the chapters follow the same structure
-  (`meta/editing:Content:Chapter structure`)
+
+Introduction
+------------
 
 * Outline the content of an IGC file in the `Introduction`, since the absence
   of wind vector data is what motivates flight reconstruction.
 
 * Review `introduction:SCRATCH`. Might have some useable stuff there.
 
-* Merge `data_considerations` into `future_work`. I should frame my
-  application of sequence alignment as a suggested starting points, which is
-  fine since it's basically untested anyway.
-
-* Review source for mentions of a "chord surface"
-
-* Verify my use of *dihedral* and *anhedral*. At the least I think my use of
-  "mean anhedral" is suspect; probably not even a helpful term.
-
-
-* In `generate_canopy_examples.py`, there's a function `_plot_foil` that
-  appears to duplicate `gsim.plots.plot_foil`. Why does it exist?
-
-* Reconsider using `O` for the origin? Looks like a zero.
-
-* If the HTML "Navigation" frame gets too long it goes off the screen, and you
-  can't scroll it.
-
-* Add a description of a *direction cosine matrix* to `symbols`? Or maybe the
-  `glossary`?
-
 * Write up an informal description of "this is how a pilot standing on the
   ground would estimate the wind by watching a glider in the air". That
   informal description is the stepping stone to understanding "flight
   reconstruction" and how it is possible even though the answers are only
   approximate.
-
-* Create two parallel outlines, informal and formal, for the overall paper:
-  work through developing the idea of "predicting points of the wind field by
-  learning from the past". The informal development should be easy to read by
-  a non-technical reader. It should function as a guide to show that the math
-  isn't as scary as it might seem; the notation is intimidating, but
-  ultimately it's based on logic that the reader already understands.
-
 
 * Should my introduction chapter include a "Taxonomy of Tools" section that
   defines what I mean by *state estimation*, *parameter estimation*, *flight
@@ -51,12 +23,13 @@
   components.
 
 
-Topical
-=======
-
-
 Canopy geometry
 ---------------
+
+* Review source for mentions of a "chord surface"
+
+* Verify my use of *dihedral* and *anhedral*. At the least I think my use of
+  "mean anhedral" is suspect; probably not even a helpful term.
 
 * How do I argue that my definition of `r_LE/RP` decouples the parameters? You
   can see in the math that `r_LE/RP` and `r_P/LE` both involve `c` and
@@ -73,6 +46,82 @@ Canopy geometry
 * Complete the parametric design choices for parafoils in `Canopy Geometry`.
   The choice to set `r_y = r_z`, how I define `C_c/s`, show some parametric
   curves (eg, elliptical chord), etc.
+
+* Reconsider using `O` for the origin? Looks like a zero.
+
+
+Paraglider geometry
+-------------------
+
+* Is "Paraglider Geometry" a good chapter? I need to discuss the physical
+  model somewhere (materials, controls, inertia, etc). The "canopy geometry"
+  was the abstract shape, but I'm not sure that's very helpful for the system.
+
+  The inertia can be the "real mass" inertia since it's the traditional
+  definition. The apparent mass only comes into play during accelerations.
+
+  Actually, I'm not sure if I should choose a control scheme in this chapter.
+  Focus on the physical system, not the dynamics model. Shouldn't be too hard
+  to write enough about each component to make individual sections.
+
+  So conceptually I have two chapters. The first describes the physical
+  objects, and simplified geometric representations of those objects ("the
+  real physical system is complicated, so here's a simplified physical
+  system"). The second describes the control inputs, inertias, and dynamics of
+  those simplified objects and system.
+
+  I was going to put the inertias together with the physical systems, but I'd
+  like to keep definitions of the inertia matrices close to where their used.
+  Also, I could have `Paraglider Dynamics:Canopy:Inertia:<solid+air+apparent>`
+  all together. I'm not crazy about the apparent inertia being in
+  a sub-sub-section, but it's not like I'm creating novel content there
+  anyway; the derivation will probably stay in `derivations` anyway, it's
+  pretty ugly.
+
+  **Should I rename "Paraglider Geometry" to "Paraglider Components" or maybe
+  "Paraglider Systems"?** In my mind, a system implies components working
+  together. I seem to be pushing for "a model/representation of the
+  system, and a model of the dynamic behavior of that system".
+
+
+Paraglider dynamics
+-------------------
+
+* Should I be using "canopy" frame instead of "body" frame? I'm using the
+  canopy for the coordinate system. I mean, it's not the worst idea: I always
+  thought "body" was always an ambiguous term, and "wing" conflicted with
+  "wind". Then again, literature tends to use "body" for the wing frame.
+
+* Review the terms in the apparent mass derivation. "Apparent inertia matrix"
+  etc, get pretty ambiguous. Try to clean it into a translational part,
+  a rotational part, and a complete matrix.
+
+* In my dynamics derivations, I don't appear to be consistent with specifying
+  the coordinate systems; the derivatives in particular (are they the same in
+  all coordinate systems? Surely not). Review which vectors should have them
+  and when it's okay to leave them off.
+
+* Review the inertia equations; I'm using `\overbar{\vec{A}}` for the area
+  centroid? And in the code I have things like `upper_centroid` and
+  `cm_solid`. **Positions vectors should always be in the form** `r_A2B`.
+
+
+Future work
+-----------
+
+* Merge `data_considerations` into `future_work`. I should frame my
+  application of sequence alignment as a suggested starting points, which is
+  fine since it's basically untested anyway.
+
+
+Notation
+--------
+
+* In "Notation and Symbols", give examples of position vectors, velocity
+  vectors, linear momentum, angular momentum, derivatives, etc
+
+* Add a description of a *direction cosine matrix* to `symbols`? Or maybe the
+  `glossary`?
 
 
 Content Tasks
@@ -108,6 +157,14 @@ Content Tasks
 
 Drafting
 --------
+
+* Create two parallel outlines, informal and formal, for the overall paper:
+  work through developing the idea of "predicting points of the wind field by
+  learning from the past". The informal development should be easy to read by
+  a non-technical reader. It should function as a guide to show that the math
+  isn't as scary as it might seem; the notation is intimidating, but
+  ultimately it's based on logic that the reader already understands.
+
 
 #. **Define the concrete "key ideas" for the paper.** These will drive how
    I develop the entire paper, both in structure and content. (Possibly start
@@ -152,6 +209,9 @@ References
 
 Figures
 -------
+
+* In `generate_canopy_examples.py`, there's a function `_plot_foil` that
+  appears to duplicate `gsim.plots.plot_foil`. Why does it exist?
 
 * I need a diagram for the 6 DoF model. I was going to just show the body
   centroid "B", but that makes it less obvious that the 6 DoF supports weight
@@ -260,6 +320,9 @@ Terminology
 Structural
 ----------
 
+* Make sure all the chapters follow the same structure
+  (`meta/editing:Content:Chapter structure`)
+
 * For unnumbered chapters like "Glossary" and "Symbols", I'm using the ``..
   only::`` directive to specify the chapter titles. I have to do that because
   if I use regular section headings, the latex builder will set them as
@@ -365,6 +428,10 @@ HTML
 * Add a document title below the sidebar logo?
 
 * The footer (copyright and license) doesn't show on mobile
+
+* If the HTML "Navigation" frame gets too long it goes off the screen, and you
+  can't scroll it.
+
 
 
 Scripts
