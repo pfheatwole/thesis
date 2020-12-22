@@ -1121,12 +1121,12 @@ The simulator was designed to integrate :math:`^e \dot{\vec{v}}_{R/e}`, not
      \vec{v}_{R/e}
        &= \vec{v}_{B/e} + \vec{r}_{R/B} \times \vec{\omega}_{b/e} \\
      \\
-     ^b \dot{\vec{v}}_{R/e}
-       &= ^b \dot{\vec{v}}_{B/e}
-          + \vec{r}_{R/B} \times ^b \dot{\vec{\omega}}_{b/e} \\
+     {^b \dot{\vec{v}}_{R/e}}
+       &= {^b \dot{\vec{v}}_{B/e}}
+          + \vec{r}_{R/B} \times {^b \dot{\vec{\omega}}_{b/e}} \\
      \\
-     ^e \dot{\vec{v}}_{R/e}
-       &= ^b \dot{\vec{v}}_{R/e}
+     {^e \dot{\vec{v}}_{R/e}}
+       &= {^b \dot{\vec{v}}_{R/e}}
           + \vec{\omega}_{b/e} \times \vec{V}_{R/e}
    \end{aligned}
 
@@ -1148,7 +1148,7 @@ Computing the inertial derivatives with respect to the body frame:
      {^e \dot{\vec{p}}_{b/e}}
        &= m_b \left(
             {^b \dot{\vec{v}}_{R/e}}
-            + ^b \dot{\vec{\omega}}_{b/e} \times \vec{r}_{B/R}
+            + {^b \dot{\vec{\omega}}_{b/e}} \times \vec{r}_{B/R}
           \right)
           + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
      \\
