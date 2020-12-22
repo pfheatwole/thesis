@@ -1191,18 +1191,13 @@ Combining :eq:`model6c_momentum_derivatives1` and
 Model 9a
 --------
 
-[[**FIXME**: this derivation is currently broken and incomplete. Needs to be
-updated to match the implementation, which also includes the apparent mass.]]
-
 Similar to `Model 6a`_, this design uses the riser connection midpoint `R` as
 the reference point for both the body and the payload, which simplifies
 incorporating the apparent mass matrix. However, this model treats the body
 and payload as separate components, connected by a rotational spring-damper
-model that add an additional three degrees-of-freedom. A similar 9DoF model
+model that adds an additional three degrees-of-freedom. A similar 9DoF model
 derivation can be found in :cite:`gorman2012EvaluationMultibodyParafoil`
-(9DoF, but relative roll and pitch are unconstrained) or
-:cite:`slegers2010EffectsCanopypayloadRelative` (8DoF model that allows
-relative pitch and yaw but not relative roll).
+(9DoF, but relative roll and pitch are unconstrained).
 
 .. FIXME: why didn't I use that derivation?
 
@@ -1245,7 +1240,6 @@ reference frame :math:`e`:
           \right)
    \end{aligned}
 
-
 .. math::
    :label: model9a_body_h
 
@@ -1260,154 +1254,95 @@ reference frame :math:`e`:
      m_p \, \vec{r}_{P/R} \times \vec{v}_{R/e}
      + \mat{J}_{p/R} \cdot \vec{\omega}_{p/e}
 
-Relate the derivatives of momentum with respect to the inertial frame to the
-net forces and moments:
-
-.. For angular momentum, see Stevens Eq:1.7-1 (pg35)
+Compute the two momentum derivatives:
 
 .. math::
    :label: model9a_momentum_derivatives1
 
    \begin{aligned}
-     {^e \dot{\vec{p}}_{b/e}} &= \mat{f}_b^b \\
-     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &= \mat{g}_b^b - \vec{g}_R^b \\
-     {^e \dot{\vec{p}}_{p/e}} &= \mat{f}_p^p \\
-     {^e \dot{\vec{h}}_{p/R}} + \vec{v}_{R/e} \times \vec{p}_{p/e} &= \mat{g}_p^p + \vec{g}_R^p \\
-     \\
-     \vec{f}_b^b &= \vec{f}_{\textrm{wing,aero}}^b + \vec{f}_{\textrm{wing,weight}} \\
-     \vec{g}_b^b &= \vec{g}_{\textrm{wing,Cm}}^b + \vec{g}_{\textrm{wing,f}}^b \\
-     \vec{f}_p^p &= \vec{f}_{\textrm{payload,aero}}^p + \vec{f}_{\textrm{payload,weight}} \\
-     \vec{g}_p^p &= \vec{g}_{\textrm{payload,Cm}}^p + \vec{g}_{\textrm{payload,f}}^p \\
+     {^e \dot{\vec{p}}_{b/e}}
+       &= {^b \dot{\vec{p}}_{b/e}} + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+
+       &= m_b \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + {^b \dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
+          \right)
+            + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+
+     {^e \dot{\vec{h}}_{b/R}}
+       &= {^b \dot{\vec{h}}_{b/R}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
+       &= m_b \vec{r}_{B/R} \times {^b \vec{\dot{v}}_{R/e}}
+          + {\mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+          + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
+
+     {^e \dot{\vec{p}}_{p/e}}
+       &= {^p \dot{\vec{p}}_{p/e}} + \vec{\omega}_{p/e} \times \vec{p}_{p/e}
+
+       &= m_p \left(
+            {^p \dot{\vec{v}}_{R/e}}
+            + {^p \dot{\vec{\omega}}_{p/e}} \times {\vec{r}_{P/R}}
+          \right)
+            + \vec{\omega}_{p/e} \times \vec{p}_{p/e}
+
+       &= m_p \left(
+            {^b \dot{\vec{v}}_{R/e}}
+            + \vec{\omega}_{b/p} \times \vec{v}_{R/e}
+            + {^p \dot{\vec{\omega}}_{p/e}} \times {\vec{r}_{P/R}}
+          \right)
+            + \vec{\omega}_{p/e} \times \vec{p}_{p/e}
+
+     {^e \dot{\vec{h}}_{p/R}}
+       &= {^p \dot{\vec{h}}_{p/R}} + {\vec{\omega}_{p/e} \times \vec{h}_{p/R}}
+
+       &= m_p \vec{r}_{P/R}
+            \times {^p \dot{\vec{v}_{R/e}}}
+            + \mat{J}_{p/R} \cdot {^p \dot{\vec{\omega}}}_{p/e}
+            + \vec{\omega}_{p/e} \times \vec{h}_{p/R}
+
+       &= m_p \vec{r}_{P/R}
+            \times \left( {^b \dot{\vec{v}_{R/e}}} + \vec{\omega}_{b/p} \times \vec{v}_{R/e} \right)
+            + \mat{J}_{p/R} \cdot {^p \dot{\vec{\omega}}}_{p/e}
+            + \vec{\omega}_{p/e} \times \vec{h}_{p/R}
+
    \end{aligned}
 
-[[Where :math:`\vec{f}_{\textrm{wing,aero}}` and
-:math:`\vec{f}_{\textrm{payload,aero}}` may have contributions from both
-aerodynamic moments as aerodynamic forces applied at some lever arm.]]
+Derivatives of the payload momentums are computed in terms of the body
+velocity derivative in the body frame to allow writing the dynamics as
+a single system of equations. First, compute the net external forces and
+moments:
 
-Compute the two momentum derivatives:
+.. For angular momentum, see Stevens Eq:1.7-1 (pg35)
+
+.. math::
+   :label: model9a_net_forces
+
+   \begin{aligned}
+     \vec{f}_b &= \vec{f}_{b,\textrm{aero}} + \vec{f}_{b,\textrm{weight}} \\
+     \vec{g}_{b/R} &= \vec{g}_{b,\textrm{aero}} + \vec{g}_{b,\textrm{weight}} \\
+     \vec{f}_p &= \vec{f}_{p,\textrm{aero}} + \vec{f}_{p,\textrm{weight}} \\
+     \vec{g}_{p/R} &= \vec{g}_{p,\textrm{aero}} + \vec{g}_{p,\textrm{weight}}  \\
+   \end{aligned}
+
+And equate them to the derivatives of momentum with respect to the inertial
+frame:
 
 .. math::
    :label: model9a_momentum_derivatives2
 
    \begin{aligned}
-     {^e \dot{\vec{p}}_{b/e}}
-       &= m_b \left(
-            {^e \dot{\vec{v}}_{R/e}}
-            + {^e\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
-            + {\vec{\omega}_{b/e}} \times {^e\dot{\vec{r}}_{B/R}}
-          \right)
-
-       &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}}
-            + {\vec{\omega}_{b/e}} \times {\vec{v}_{R/e}}
-            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
-            + {\vec{\omega}_{b/e}} \times \left(
-               {\cancelto{0}{^b \dot{\vec{r}}_{B/R}}}
-               + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
-              \right)
-          \right)
-
-       &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}}
-            + {\vec{\omega}_{b/e}} \times {\vec{v}_{R/e}}
-            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
-            + {\vec{\omega}_{b/e}} \times {\vec{\omega}_{b/e}} \times {\vec{r}_{B/R}}
-          \right)
-
-       &= m_b \left(
-            {^b\dot{\vec{v}}_{R/e}}
-            + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/R}}
-          \right)
-          + {\vec{\omega}_{b/e}} \times {\vec{p}_{b/e}}
-
-     {^e \dot{\vec{h}}_{b/R}}
-       &= {^b\dot{\vec{h}}_{b/R}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
-
-       &= {\mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
-          + {\vec{\omega}_{b/e} \times \vec{h}_{b/R}}
-
+     {^e \dot{\vec{p}}_{b/e}} &= \vec{f}_b - \vec{f}_R \\
+     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &= \vec{g}_{b/R} - \vec{g}_R \\
+     {^e \dot{\vec{p}}_{p/e}} &= \vec{f}_p + \vec{f}_R \\
+     {^e \dot{\vec{h}}_{p/R}} + \vec{v}_{R/e} \times \vec{p}_{p/e} &= \vec{g}_{p/R} + \vec{g}_R \\
    \end{aligned}
 
-The momentum derivatives for the payload follow the same derivation. Final
-equations for the dynamics of the real mass (solid mass plus the enclosed air)
-in terms of :math:`^b \dot{\vec{v}}_{R/e}`, :math:`^b
-\dot{\vec{\omega}}_{b/e}`, :math:`^b \dot{\vec{\omega}}_{p/e}^p`, and
-:math:`\vec{f}_R^b`:
+[[**FIXME**: ambiguous notation? I'm interested in communicating "the moment
+about `R` due to the spring" and "the moment about `R` due to the aerodynamic
+forces", etc]]
 
-[[**FIXME**: verify, derivative wrt `b`? If so, I should show those
-derivatives as well, that's not obvious.]]
-
-.. math::
-   :label: model9a_dynamics_equations
-
-   \begin{aligned}
-      m_b \, {^b \dot{\vec{v}}_{R/e}}
-      + m_b \, {^b \dot{\vec{\omega}}_{b/e}} \times \vec{r}_{B/R}
-      &= \vec{f}_{\mathrm{net}}
-         - \vec{\omega}_{b/e} \times \vec{p}_{b/e}
-
-      m_b \, \vec{r}_{B/R} \times {^b \dot{\vec{v}}_{R/e}}
-      + \mat{J}_{b/R} \cdot {^b \dot{\vec{\omega}}_{b/e}}
-      &= \vec{g}_{\mathrm{net}} - \vec{\omega}_{b/e} \times \vec{h}_{b/R}
-         - \vec{v}_{R/e} \times \vec{p}_{b/e}
-   \end{aligned}
-
-[[**FIXME**: these are the model6a dynamics]]
-
-Rewriting the equations as a linear system:
-
-.. math::
-   :label: model9a_real_system
-
-   \mat{A}_{r/R}
-   \begin{bmatrix}
-     {^b \dot{\vec{v}}_{R/e}^b} \\
-     {^b \dot{\vec{\omega}}_{b/e}^b} \\
-     {^b \dot{\vec{\omega}}_{p/e}^p} \\
-     {^b \vec{f}_R^b}
-   \end{bmatrix}
-   = \begin{bmatrix}
-       \vec{B}_1 \\
-       \vec{B}_2 \\
-       \vec{B}_3 \\
-       \vec{B}_4
-     \end{bmatrix}
-
-Where:
-
-.. math::
-
-   \begin{aligned}
-     \mat{A}_{r/R} &=
-       \begin{bmatrix}
-         {m_b \, \mat{I}_3} & {-m_b \crossmat{\vec{r}_{B/R}^b}} & {\mat{0}_{3\times3}} & {\mat{I}_3} \\
-         {m_b \, \crossmat{\vec{r}_{B/R}^b}} & {\mat{J}_{b/R}^b} & {\mat{0}_{3\times3}} & {\mat{0}_{3\times3}} \\
-         {m_p \, \mat{C}_{p/b}} & {\mat{0}_{3\times3}} & {-m_p \crossmat{\vec{r}_{P/R}^p}} & {-\mat{C}_{p/b}} \\
-         {m_p \, \crossmat{\vec{r}_{P/R}^p}} \mat{C}_{p/b} & {\mat{0}_{3\times3}} & {\mat{J}_{p/R}^p} & {\mat{0}_{3\times3}} \\
-       \end{bmatrix} \\
-     \\
-     \vec{B}_1 &=
-       \vec{f}_b^b
-       - \vec{\omega}_{b/e}^b \times \vec{p}_{b/e}^b \\
-     \vec{B}_2 &=
-       \vec{g}_b^b
-       - \vec{g}_R^b
-       - m_b \, \left( \vec{\omega}_{b/e}^b \times \vec{r}_{B/R}^b \right) \times \vec{v}_{R/e}^b
-       - m_b \, \vec{r}_{B/R}^b \times \left( \vec{\omega}_{b/e}^b \times \vec{v}_{R/e}^b \right)
-       - \vec{\omega}_{b/e}^b \times \left( \mat{J}_{b/R}^b \cdot \vec{\omega}_{b/e}^b \right)
-       - \vec{v}_{R/e}^b \times \vec{p}_{b/e} \\
-     \vec{B}_3 &=
-       \vec{f}_p^p
-       - m_p \mat{C}_{p/b} \cdot \left( \vec{\omega}_{b/e}^b \times \vec{v}_{R/e}^b \right)
-       - m_p \, \vec{\omega}_{p/e}^p \times \left( \vec{\omega}_{p/e}^p \times \vec{r}_{P/R}^p \right) \\
-     \vec{B}_4 &=
-       \vec{g}_{p}^p
-       + \vec{g}_R^p
-       - m_p \, \left( \vec{\omega}_{p/e}^p \times \vec{r}_{P/R}^p \right) \times \vec{v}_{R/e}^p
-       - m_p \, \vec{r}_{P/R}^p \times \mat{C}_{p/b} \cdot \left( \vec{\omega}_{b/e}^b \times \vec{v}_{R/e}^b \right)
-       - \vec{\omega}_{p/e}^p \times \left( \mat{J}_p^p \cdot \vec{\omega}_{p/e}^p \right)
-       - \vec{v}_{R/e}^p \times \vec{p}_{p/e}^p \\
-   \end{aligned}
+[[**FIXME**: define `g_{b,aero}` etc? Has contributions from both aerodynamic
+moments as well as forces applied on some lever arm to `R`.]]
 
 [[**FIXME**: need to describe `f_R` and `g_R`
 
@@ -1417,13 +1352,14 @@ Both systems have the riser connection point :math:`R` at a fixed position,
 and the force only exists to maintain the fixed relative positioning.
 
 .. math::
+   :label: model9a_spring_moment
 
    \vec{g}_R =
      \begin{bmatrix}
        \begin{aligned}
-         \kappa_\phi \phi &+ \kappa_\dot{\phi} \dot{\phi} \\
-         \kappa_\theta \theta &+ \kappa_\dot{\theta} \dot{\theta} \\
-         \kappa_\gamma \gamma &+ \kappa_\dot{\gamma} \dot{\gamma} \\
+         \kappa_{\phi} \phi &+ \kappa_{\dot{\phi}} \dot{\phi} \\
+         \kappa_{\theta} \theta &+ \kappa_{\dot{\theta}} \dot{\theta} \\
+         \kappa_{\gamma} \gamma &+ \kappa_{\dot{\gamma}} \dot{\gamma} \\
        \end{aligned}
      \end{bmatrix}
 
@@ -1434,5 +1370,77 @@ accelerations of the payload, and the :math:`\kappa` are the stiffness and
 dampening coefficients of the spring-damper model.
 
 ]]
+
+Combining equations :eq:`model9a_momentum_derivatives1` and
+:eq:`model9a_momentum_derivatives2` and rewriting as a linear system provides
+the dynamics of the real mass (solid mass plus the enclosed air) in terms of
+:math:`^b \dot{\vec{v}}_{R/e}`, :math:`^b \dot{\vec{\omega}}_{b/e}`, :math:`^b
+\dot{\vec{\omega}}_{p/e}^p`, and :math:`\vec{f}_R^b`:
+
+.. math::
+   :label: model9a_real_system
+
+   \mat{A}_{r/R}
+   \begin{bmatrix}
+     {^b \dot{\vec{v}}_{R/e}^b} \\
+     {^b \dot{\vec{\omega}}_{b/e}^b} \\
+     {^p \dot{\vec{\omega}}_{p/e}^p} \\
+     {   \vec{f}_R^b}
+   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{b}_1^b \\
+       \vec{b}_2^b \\
+       \vec{b}_3^p \\
+       \vec{b}_4^p
+     \end{bmatrix}
+
+Where:
+
+.. math::
+
+   \mat{A}_{r/R} =
+     \begin{bmatrix}
+       {m_b \, \mat{I}_3}
+         & {-m_b \crossmat{\vec{r}_{B/R}^b}}
+         & {\mat{0}_{3\times3}}
+         & {\mat{I}_3} \\
+       {m_b \, \crossmat{\vec{r}_{B/R}^b}}
+         & {\mat{J}_{b/R}^b}
+         & {\mat{0}_{3\times3}}
+         & {\mat{0}_{3\times3}} \\
+       {m_p \, \mat{C}_{p/b}}
+         & {\mat{0}_{3\times3}}
+         & {-m_p \crossmat{\vec{r}_{P/R}^p}}
+         & {-\mat{C}_{p/b}} \\
+       {m_p \, \crossmat{\vec{r}_{P/R}^p} \mat{C}_{p/b}}
+         & {\mat{0}_{3\times3}}
+         & {\mat{J}_{p/R}^p}
+         & {\mat{0}_{3\times3}}
+     \end{bmatrix}
+
+.. math::
+   :label: model9a_dynamics_RHS
+
+   \begin{aligned}
+      \vec{b}_1^b &=
+        \vec{f}_b^b
+        - \vec{\omega}_{b/e}^b \times \vec{p}_{b/e}^b \\
+      \vec{b}_2^b &=
+        \vec{g}_b^b
+        - \vec{g}_R^b
+        - \vec{v}_{R/e}^b \times \vec{p}_{b/e}^b
+        - \vec{\omega}_{b/e}^b \times \vec{h}_{b/R}^b \\
+      \vec{b}_3^p &=
+        \vec{f}_p^p
+        - \vec{\omega}_{p/e}^p \times \vec{p}_{p/e}^p
+        - m_p \vec{\omega}_{b/p}^p \times \vec{v}_{R/e}^p \\
+      \vec{b}_4^p &=
+        \vec{g}_b^p
+        + \vec{g}_R^p
+        - \vec{v}_{R/e}^p \times \vec{p}_{p/e}^p
+        - \vec{\omega}_{p/e}^p \times \vec{h}_{p/R}^p
+        - m_p \vec{r}_{P/R}^p \times \left( \vec{\omega}_{b/p}^p \times \vec{v}_{R/e}^p \right)
+   \end{aligned}
+
 
 [[**FIXME**: incorporate apparent inertia]]
