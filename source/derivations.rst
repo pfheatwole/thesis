@@ -918,8 +918,10 @@ reference point :math:`g_{b/R}`:
    :label: model6a_momentum_derivatives2
 
    \begin{aligned}
-     {^e \dot{\vec{p}}_{b/e}} &= \mat{f}_b \\
-     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &= \mat{g}_{b/R}
+     {^e \dot{\vec{p}}_{b/e}} &=
+       \mat{f}_b \\
+     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &=
+       \mat{g}_{b/R}
    \end{aligned}
 
 Where
@@ -927,14 +929,18 @@ Where
 .. math::
 
    \begin{aligned}
-     \vec{f}_b &= {\vec{f}_{\textrm{b,aero}}} + {\vec{f}_{\textrm{b,weight}}} \\
-     \vec{g}_{b/R} &= {\vec{g}_{\textrm{b,aero}}} + {\vec{r}_{B/R} \times {\vec{f}_{\textrm{b,weight}}}}
+     \vec{f}_b &=
+       {\vec{f}_{b,\textrm{aero}}}
+       + {\vec{f}_{b,\textrm{weight}}} \\
+     \vec{g}_{b/R} &=
+       {\vec{g}_{b,\textrm{aero}}}
+       + {\vec{r}_{B/R} \times {\vec{f}_{b,\textrm{weight}}}}
    \end{aligned}
 
 Combining :eq:`model6a_momentum_derivatives1` and
 :eq:`model6a_momentum_derivatives2` gives the final equations for the dynamics
 of the real mass (solid mass plus the enclosed air) in terms of :math:`^b
-\dot{\vec{v}}_{R/e}` and :math:`^b \dot{\vec{\omega}}_{b/e}`:
+\dot{\vec{v}}_{R/e}` and :math:`^b \dot{\vec{\omega}}_{b/e}`.
 
 .. math::
    :label: model6a_dynamics_equations
@@ -1055,7 +1061,14 @@ Following the same logic as `Model 6a`_, but targeting :math:`^b
 \vec{v}_{B/e}` and using the momentum about the body center of mass :math:`B`
 produces a simpler model with a diagonal system matrix, but at the cost of
 requiring the body center of mass to be determined before computing the
-apparent inertia matrix.
+apparent inertia matrix with respect to that point. For that reason the
+apparent mass is neglected here, although if :math:`B` lies in the xz-plane
+then the method described in `Apparent mass of a parafoil`_ could be used.
+
+The main purpose of this model is for validating model implementations. An
+implementation of this model is available as :py:class:`Paraglider6b
+<glidersim:pfh.glidersim.paraglider.Paraglider6b>` in the ``glidersim``
+package.
 
 .. math::
    :label: model6b_p
@@ -1074,7 +1087,7 @@ Computing the inertial derivatives with respect to the body frame:
 
    \begin{aligned}
      {^e \dot{\vec{p}}_{b/e}}
-       &= m_b \, {^b \dot{\vec{v}}_{R/e}}
+       &= m_b \, {^b \dot{\vec{v}}_{B/e}}
           + \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
      \\
      {^e \dot{\vec{h}}_{b/B}}
@@ -1082,7 +1095,7 @@ Computing the inertial derivatives with respect to the body frame:
           + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
    \end{aligned}
 
-Computing the momentum about the body center of mass simplifies the equation
+Using the body center of mass as the reference point simplifies the equation
 for angular momentum:
 
 .. math::
@@ -1112,8 +1125,8 @@ Combining :eq:`model6b_momentum_derivatives1` and
        \vec{g}_{b/B} - \vec{\omega}_{b/e} \times \vec{h}_{b/B}
      \end{bmatrix}
 
-The simulator was designed to integrate :math:`^e \dot{\vec{v}}_{R/e}`, not
-:math:`^e \dot{\vec{v}}_{B/e}`:
+And finally, because the simulator was designed to integrate :math:`^e
+\dot{\vec{v}}_{R/e}`, not :math:`^e \dot{\vec{v}}_{B/e}`:
 
 .. math::
 
@@ -1139,6 +1152,11 @@ the momentum about the body center of mass :math:`B`. Like `Model 6b`_ this
 also produces a simpler dynamics model, but again at the cost of making it
 less convenient to precompute the apparent inertia matrix.
 
+The main purpose of this model is for validating model implementations. An
+implementation of this model is available as :py:class:`Paraglider6c
+<glidersim:pfh.glidersim.paraglider.Paraglider6c>` in the ``glidersim``
+package.
+
 Computing the inertial derivatives with respect to the body frame:
 
 .. math::
@@ -1157,7 +1175,7 @@ Computing the inertial derivatives with respect to the body frame:
           + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
    \end{aligned}
 
-Computing the momentum about the body center of mass simplifies the equation
+Using the body center of mass as the reference point simplifies the equation
 for angular momentum:
 
 .. math::
@@ -1179,7 +1197,7 @@ Combining :eq:`model6c_momentum_derivatives1` and
      0 & \mat{J}_{b/B}
    \end{bmatrix}
    \begin{bmatrix}
-     {^b \dot{\vec{v}}_{B/e}} \\
+     {^b \dot{\vec{v}}_{R/e}} \\
      {^b \dot{\vec{\omega}}_{b/e}}
    \end{bmatrix}
    = \begin{bmatrix}
@@ -1331,10 +1349,14 @@ frame:
    :label: model9a_momentum_derivatives2
 
    \begin{aligned}
-     {^e \dot{\vec{p}}_{b/e}} &= \vec{f}_b - \vec{f}_R \\
-     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &= \vec{g}_{b/R} - \vec{g}_R \\
-     {^e \dot{\vec{p}}_{p/e}} &= \vec{f}_p + \vec{f}_R \\
-     {^e \dot{\vec{h}}_{p/R}} + \vec{v}_{R/e} \times \vec{p}_{p/e} &= \vec{g}_{p/R} + \vec{g}_R \\
+     {^e \dot{\vec{p}}_{b/e}} &=
+       \vec{f}_b - \vec{f}_R \\
+     {^e \dot{\vec{h}}_{b/R}} + \vec{v}_{R/e} \times \vec{p}_{b/e} &=
+       \vec{g}_{b/R} - \vec{g}_R \\
+     {^e \dot{\vec{p}}_{p/e}} &=
+       \vec{f}_p + \vec{f}_R \\
+     {^e \dot{\vec{h}}_{p/R}} + \vec{v}_{R/e} \times \vec{p}_{p/e} &=
+       \vec{g}_{p/R} + \vec{g}_R \\
    \end{aligned}
 
 [[**FIXME**: ambiguous notation? I'm interested in communicating "the moment
@@ -1367,9 +1389,7 @@ Where :math:`\vec{\omega}_{p/b}^p = \left< \phi, \theta, \gamma \right>` are
 the angular rates of the payload, :math:`^p \dot{\vec{\omega}}_{p/b}^p
 = \left< \dot{\phi}, \dot{\theta}, \dot{\gamma} \right>` are the angular
 accelerations of the payload, and the :math:`\kappa` are the stiffness and
-dampening coefficients of the spring-damper model.
-
-]]
+dampening coefficients of the spring-damper model.]]
 
 Combining equations :eq:`model9a_momentum_derivatives1` and
 :eq:`model9a_momentum_derivatives2` and rewriting as a linear system provides
