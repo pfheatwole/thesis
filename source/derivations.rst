@@ -962,8 +962,8 @@ Rewriting the equations as a linear system:
      {^b \dot{\vec{\omega}}_{b/e}} \\
    \end{bmatrix}
    = \begin{bmatrix}
-       \vec{B}_1\\
-       \vec{B}_2\\
+       \vec{b}_1\\
+       \vec{b}_2\\
      \end{bmatrix}
 
 Where:
@@ -977,9 +977,9 @@ Where:
          {m_b \, \crossmat{\vec{r}_{B/R}}} & {\mat{J}_{b/R}} \\
        \end{bmatrix} \\
      \\
-     \vec{B}_1 &=
+     \vec{b}_1 &=
        \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
-     \vec{B}_2 &=
+     \vec{b}_2 &=
        \vec{g}_{b/R}
        - \vec{\omega}_{b/e} \times \vec{h}_{b/R}
        - \vec{v}_{R/e} \times \vec{p}_{b/e} \\
@@ -1007,17 +1007,17 @@ angular apparent momentum produces:
    \end{bmatrix}
    = \begin{bmatrix}
        \begin{aligned}
-          \vec{B}_3 \\
-          \vec{B}_4
+          \vec{b}_3 \\
+          \vec{b}_4
       \end{aligned}
      \end{bmatrix}
 
 .. math::
 
    \begin{aligned}
-     \vec{B}_3 &= \vec{B_1} - \vec{\omega}_{b/e} \times \vec{p}_{a/e} \\
-     \vec{B}_4 &=
-       \vec{B_2}
+     \vec{b}_3 &= \vec{b}_1 - \vec{\omega}_{b/e} \times \vec{p}_{a/e} \\
+     \vec{b}_4 &=
+       \vec{b}_2
        - {\vec{v}_{R/e} \times \vec{p}_{a/e}}
        - {\vec{\omega}_{b/e} \times \vec{h}_{a/R}}
        + {\vec{v}_{R/e} \times \left( \mat{M}_a \cdot \vec{v}_{R/e} \right) }
