@@ -1,0 +1,75 @@
+{
+    "cited": {
+        "canopy_aerodynamics": [
+            "kulhanek2019IdentificationDegradationAerodynamic",
+            "ware1969WindtunnelInvestigationRamair",
+            "lingard1986AerodynamicsGlidingParachutes",
+            "babinsky1999AerodynamicPerformanceParagliders",
+            "chreim2018ChangesModernLiftingLine",
+            "reid2020GeneralApproachLiftingLine",
+            "belloc2015WindTunnelInvestigation",
+            "barlow1999LowSpeedWindTunnel",
+            "gonzalez1993PrandtlTheoryApplied",
+            "abbott1959TheoryWingSections"
+        ],
+        "canopy_geometry": [
+            "abbott1959TheoryWingSections",
+            "bertin2014AerodynamicsEngineers"
+        ],
+        "case_study": [
+            "wild2009AirworthinessRequirementsHanggliders"
+        ],
+        "derivations": [
+            "blow2004HowFindInertia",
+            "zhang2001EfficientFeatureExtraction",
+            "hughes2004SpacecraftAttitudeDynamics",
+            "gorman2012EvaluationMultibodyParafoil",
+            "slegers2010EffectsCanopypayloadRelative"
+        ],
+        "examples": [
+            "bencatel2013AtmosphericFlowField"
+        ],
+        "flight_simulation": [
+            "slegers2003AspectsControlParafoil"
+        ],
+        "introduction": [
+            "bencatel2013AtmosphericFlowField",
+            "li2003SurveyManeuveringTarget",
+            "li2005SurveyManeuveringTarget",
+            "ultsch2010DataMiningDistinguish",
+            "vonkanel2010ParaglidingNetSensorNetwork",
+            "vonkanel2011IkarusLargescaleParticipatory",
+            "wirz2011RealtimeDetectionRecommendation",
+            "kampoon2014WindFieldEstimation",
+            "mulder1999NonlinearAircraftFlight",
+            "davey2016BayesianMethodsSearch",
+            "borobia2018FlightPathReconstructionFlight",
+            "menezes2018EvaluationStochasticModeldependent",
+            "lawrance2011PathPlanningAutonomous",
+            "lawrance2011AutonomousExplorationWind",
+            "lawrance2009WindEnergyBased"
+        ],
+        "paraglider_dynamics": [
+            "gonzalez1993PrandtlTheoryApplied",
+            "belloc2015WindTunnelInvestigation",
+            "kulhanek2019IdentificationDegradationAerodynamic",
+            "belloc2016InfluenceAirInlet",
+            "babinsky1999AerodynamicPerformanceParagliders",
+            "lolies2019NumericalMethodsEfficient",
+            "gorman2012EvaluationMultibodyParafoil",
+            "ward2014ParafoilControlUsing",
+            "lissaman1993ApparentMassEffects",
+            "thomasson2000EquationsMotionVehicle",
+            "barrows2002ApparentMassParafoils"
+        ],
+        "paraglider_geometry": [
+            "benedetti2012ParaglidersFlightDynamics",
+            "iosilevskii1995CenterGravityMinimal",
+            "altmann2015FluidStructureInteractionAnalysis",
+            "lolies2019NumericalMethodsEfficient"
+        ],
+        "symbols": [
+            "stevens2015AircraftControlSimulation"
+        ]
+    }
+}
