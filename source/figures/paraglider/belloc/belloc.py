@@ -186,9 +186,9 @@ t_start = time.perf_counter()
 
 for kb, beta in enumerate(betas):
     dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
-    r_LE2R = -wing.r_R2LE(0)
+    r_LE2RM = -wing.r_RM2LE(0)
     r_CP2LE = wing.control_points(0)
-    r_CP2R = r_CP2LE + r_LE2R
+    r_CP2RM = r_CP2LE + r_LE2RM
 
     # Some figures will look for samples at alpha = [0, 5, 10, 15], so make
     # sure to include those test points.
@@ -216,7 +216,7 @@ for kb, beta in enumerate(betas):
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
-        M += np.cross(r_CP2R, dF).sum(axis=0)  # Add the moment due to forces
+        M += np.cross(r_CP2RM, dF).sum(axis=0)  # Add the moment due to forces
 
         dFs.append(dF)
         dMs.append(dM)
@@ -257,7 +257,7 @@ for kb, beta in enumerate(betas):
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
-        M += np.cross(r_CP2R, dF).sum(axis=0)  # Add the moment due to forces
+        M += np.cross(r_CP2RM, dF).sum(axis=0)  # Add the moment due to forces
 
         dFs.append(dF)
         dMs.append(dM)
