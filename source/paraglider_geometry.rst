@@ -75,7 +75,7 @@ Modeling requirements
 
   * Composite system
 
-    * Reference point `R`
+    * Reference point `R` (I chose the riser midpoint `RM`)
 
     * Degrees of freedom
 
@@ -159,7 +159,7 @@ Related work:
 
 For real wings, the line geometry is a major factor in wing performance, but
 the subject is complex. For this project I'm not modeling the entire bridle.
-Instead, I'm using explicit placements of the riser midpoint :math:`R` and
+Instead, I'm using explicit placements of the riser midpoint :math:`RM` and
 aggregated values for the line drag.
 
 Also, because I'm not modeling the entire geometry, I must also approximate
@@ -188,7 +188,7 @@ lengths might be affected by the accelerator input.]]
 Riser Position
 --------------
 
-[[Discuss riser position `R` as a function of the accelerator.]]
+[[Discuss riser position `RM` as a function of the accelerator.]]
 
 
 Brakes
@@ -340,26 +340,26 @@ Mathematical Model
 
 For notational simplicity, define :math:`\overline{A}` and
 :math:`\overline{C}` be the lengths of the lines connecting them to the riser
-midpoint :math:`R`:
+midpoint :math:`RM`:
 
 .. math::
 
    \begin{aligned}
-   \overline{A} &= \left\| \vec{r}_{A/R} \right\|\\
-   \overline{C} &= \left\| \vec{r}_{C/R} \right\|\\
+   \overline{A} &= \left\| \vec{r}_{A/RM} \right\|\\
+   \overline{C} &= \left\| \vec{r}_{C/RM} \right\|\\
    \end{aligned}
 
 The default lengths of the lines is defined by two pairs of design parameters.
-First, the default position of the riser midpoint :math:`R` is defined with
-:math:`\kappa_x` and :math:`\kappa_z`; this is the position of :math:`R` when
+First, the default position of the riser midpoint :math:`RM` is defined with
+:math:`\kappa_x` and :math:`\kappa_z`; this is the position of :math:`RM` when
 :math:`\delta_a = 0`. Second, two connection points on the canopy are defined
 with :math:`\kappa_A` and :math:`\kappa_C`; connecting lines from these points
-are the physical means by which :math:`R` is positioned underneath the canopy.
-The :math:`A` lines connect near the front of the wing, and are variable
-length; the pilot can use the *accelerator* to shorten the lengths of these
-lines. The :math:`C` lines connect towards the rear of the canopy, and are
-fixed length. Geometrically, shortening :math:`\overline{A}` will move
-:math:`R` forward while rotating the :math:`C` lines. Aerodynamically,
+are the physical means by which :math:`RM` is positioned underneath the
+canopy. The :math:`A` lines connect near the front of the wing, and are
+variable length; the pilot can use the *accelerator* to shorten the lengths of
+these lines. The :math:`C` lines connect towards the rear of the canopy, and
+are fixed length. Geometrically, shortening :math:`\overline{A}` will move
+:math:`RM` forward while rotating the :math:`C` lines. Aerodynamically,
 shortening :math:`\overline{A}` effectively rotates the canopy pitch down,
 decreasing the global angle of incidence of the canopy; decreasing the angle
 of incidence decreases lift, and the wing must accelerate to reestablish
@@ -384,7 +384,7 @@ derivation and allows a wing design to scale naturally with the canopy.
 
 The goal is to use the physical geometry, where the risers position is
 determined by :math:`\overline{A}` and :math:`\overline{C}`, to define the
-position of :math:`R` a function of :math:`\delta_a`. The first step is to
+position of :math:`RM` a function of :math:`\delta_a`. The first step is to
 determine the default line lengths by setting :math:`\delta_a = 0` and
 applying the Pythagorean theorem:
 
@@ -403,9 +403,9 @@ In the general case, the line lengths are functions of :math:`\delta_a`:
    :label: accelerator_geometry_line_lengths
 
    \begin{aligned}
-   \overline{A}(\delta_a)^2 &= R_z^2 + \left( R_x - \kappa_A \right) ^2\\
+   \overline{A}(\delta_a)^2 &= {RM}_z^2 + \left( {RM}_x - \kappa_A \right) ^2\\
    \\
-   \overline{C}(\delta_a)^2 &= R_z^2 + \left( \kappa_C - R_x \right) ^2 = \overline{C_0}^2
+   \overline{C}(\delta_a)^2 &= {RM}_z^2 + \left( \kappa_C - {RM}_x \right) ^2 = \overline{C_0}^2
    \end{aligned}
 
 Where :math:`\overline{C} \equiv \overline{C_0}` due to the physical
@@ -416,40 +416,40 @@ Subtract the two equations in :eq:`accelerator_geometry_line_lengths`:
 .. math::
 
    \overline{A}(\delta_a)^2 - \overline{C_0}^2 =
-      \left( R_x - \kappa_A \right) ^2 - \left( \kappa_C - R_x \right) ^2
+      \left( {RM}_x - \kappa_A \right) ^2 - \left( \kappa_C - {RM}_x \right) ^2
 
-Finally, substitute :eq:`accelerator_length_A` and solve for :math:`R_x` and
-:math:`R_z` as functions of :math:`\delta_a`:
+Finally, substitute :eq:`accelerator_length_A` and solve for :math:`{RM}_x`
+and :math:`{RM}_z` as functions of :math:`\delta_a`:
 
 .. math::
    :label: accelerator_R_xz
 
    \begin{aligned}
-   R_x(\delta_a) &=
+   {RM}_x(\delta_a) &=
       \frac
          {\left( \overline{A_0} - \delta_a \kappa_a \right) ^2
           - \overline{C_0}^2 - \kappa_A^2 + \kappa_C^2}
          {2 \left( \kappa_C - \kappa_A \right)}\\
    \\
-   R_z(\delta_a) &=
-      \sqrt{\overline{C_0}^2 - \left( \kappa_C - R_x(\delta_a) \right) ^2 }\\
+   {RM}_z(\delta_a) &=
+      \sqrt{\overline{C_0}^2 - \left( \kappa_C - {RM}_x(\delta_a) \right) ^2 }\\
    \end{aligned}
 
-The final position of :math:`R` with respect to the leading edge (which is
+The final position of :math:`RM` with respect to the leading edge (which is
 also the origin of the canopy coordinate system), scaled by the length of the
 central chord :math:`c_0` of the wing, is then:
 
 .. math::
    :label: accelerator_R
 
-   \vec{r}_{R/LE}^b(\delta_a) =
-      c_0 \cdot \left\langle -R_x(\delta_a), 0, R_z(\delta_a) \right\rangle
+   \vec{r}_{RM/LE}^b(\delta_a) =
+      c_0 \cdot \left\langle -{RM}_x(\delta_a), 0, {RM}_z(\delta_a) \right\rangle
 
-Where :math:`R_x` was negated since the wing x-axis is positive forward.
+Where :math:`{RM}_x` was negated since the wing x-axis is positive forward.
 
 [[Maybe now is a good time to talk about how the wing/body coordinate system
 is a simple translation of the canopy coordinate system, so
-:math:`\vec{r}_{LE/R}^b = - \vec{r}_{R/LE}^c`, but are vectors in the two
+:math:`\vec{r}_{LE/RM}^b = - \vec{r}_{RM/LE}^c`, but are vectors in the two
 coordinate systems actually the same values? As in :math:`\vec{r}_{A/B}^b
 = \vec{r}_{A/B}^c` for all A and B?]]
 
