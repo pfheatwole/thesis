@@ -346,9 +346,6 @@ if __name__ == "__main__":
 
     # -----------------------------------------------------------------------
 
-    # Use a common airfoil
-    airfoil = gsim.airfoil.Airfoil(None, gsim.airfoil.NACA(23015))
-
     savefig = True  # Save the images to SVG files
     savefig = False
 
@@ -361,7 +358,7 @@ if __name__ == "__main__":
     for name, parameters in examples.items():
         print("Current example:", name)
         layout = gsim.foil.SectionLayout(**parameters)
-        sections = gsim.foil.FoilSections(airfoil)
+        sections = gsim.foil.FoilSections(gsim.airfoil.NACA(23015))
         foil = gsim.foil.SimpleFoil(layout=layout, sections=sections, b_flat=2)
         figs = []
 

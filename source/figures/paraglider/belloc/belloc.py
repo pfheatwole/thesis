@@ -67,12 +67,6 @@ ftheta = scipy.interpolate.interp1d(s_xyz, theta)
 # ---------------------------------------------------------------------------
 # Build the canopy and wing
 
-airfoil = gsim.airfoil.Airfoil(
-    gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
-    gsim.airfoil.NACA(23015, convention="vertical"),
-)
-
-
 class InterpolatedArc:
     """Interface to use a PchipInterpolator for the arc."""
 
@@ -106,7 +100,8 @@ layout = gsim.foil.SectionLayout(
 )
 
 sections = gsim.foil.FoilSections(
-    airfoil=airfoil,
+    profiles=gsim.airfoil.NACA(23015, convention="vertical"),
+    coefficients=gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
     intakes=None,
 )
 
