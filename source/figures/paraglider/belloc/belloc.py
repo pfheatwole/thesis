@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt  # noqa: F401
 
 import numpy as np
 
-import pandas as pd
-
 import pfh.glidersim as gsim
 
 import scipy.interpolate
@@ -297,7 +295,10 @@ for beta in betas:
     avl[beta] = {field: avl[beta][field] for field in avl[beta].dtype.fields}
 
 for beta in sorted(plotted_betas.intersection(betas)):
-    belloc[beta] = pd.read_csv(f"windtunnel/beta{beta:02}.csv")  # Belloc's raw wind tunnel data
+    filename = f"windtunnel/beta{beta:02}.csv"  # Belloc's raw wind tunnel data
+    names = np.loadtxt(filename, max_rows=1, dtype=str, delimiter=',')
+    data = np.genfromtxt(filename, skip_header=1, names=list(names), delimiter=',')
+    belloc[beta] = data
     xflr5[beta] = np.genfromtxt(
         f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}-Inviscid.txt",
         skip_header=7,
@@ -596,7 +597,12 @@ for beta in betas:
         avl2[alpha]["Cm"].append(avl[beta]["Cm"][ix][0])
         avl2[alpha]["Cn"].append(avl[beta]["Cn"][ix][0])
 
-belloc2 = {a: pd.read_csv(f"windtunnel/alpha{a:02}v40.csv") for a in [0, 5, 10, 15]}
+belloc2 = {}
+for alpha in [0, 5, 10, 15]:
+    filename = f"windtunnel/alpha{alpha:02}v40.csv"
+    names = np.loadtxt(filename, max_rows=1, dtype=str, delimiter=',')
+    data = np.genfromtxt(filename, skip_header=1, names=list(names), delimiter=',')
+    belloc2[alpha] = data
 
 # Plot: CD vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "CD", (-17, 17), (-0.01, 0.18))
