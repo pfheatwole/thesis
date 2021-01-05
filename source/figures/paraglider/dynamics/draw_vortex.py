@@ -16,13 +16,9 @@
 # https://github.com/matplotlib/matplotlib/issues/17172#issuecomment-617546105
 
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
 import numpy as np
-
 import pfh.glidersim as gsim
-
-from IPython import embed
 
 N = 1000
 num_turns = 8

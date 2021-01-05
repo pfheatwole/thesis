@@ -1,23 +1,17 @@
-from IPython import embed  # noqa: F401
-
 from cycler import cycler
+from matplotlib.collections import PolyCollection
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401; for `projection='3d'`
-from matplotlib.collections import PolyCollection
-
 import numpy as np
-
-import scipy
-
 import pfh.glidersim as gsim
-from pfh.glidersim.airfoil import Airfoil, NACA  # noqa: F401
 from pfh.glidersim.foil import (  # noqa: F401
-    FlatYZ,
-    SimpleFoil,
-    PolynomialTorsion as PT,
-    elliptical_chord,
     elliptical_arc,
+    elliptical_chord,
+    FlatYZ,
+    PolynomialTorsion as PT,
+    SimpleFoil,
 )
+import scipy
 
 
 # Style for the 2D curves

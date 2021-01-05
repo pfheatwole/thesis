@@ -5,16 +5,10 @@ Paraglider Reference Wing", H. Belloc, 2015
 
 import time
 
-from IPython import embed
-
 import matplotlib.pyplot as plt  # noqa: F401
-
 import numpy as np
-
 import pfh.glidersim as gsim
-
 import scipy.interpolate
-from scipy.interpolate import PchipInterpolator as Pchip
 
 
 # ---------------------------------------------------------------------------
@@ -156,7 +150,7 @@ wing = gsim.paraglider_wing.ParagliderWing(
 # print("\nFinished defining the complete wing. Pausing for review.\n")
 # gsim.plots.plot_foil(canopy, N_sections=121)
 # gsim.plots.plot_foil_topdown(canopy, N_sections=13)  # Belloc Fig:2
-# embed()
+# breakpoint()
 # 1/0
 
 # ---------------------------------------------------------------------------
@@ -690,4 +684,4 @@ if savefig:
 
 plt.show()
 
-embed()
+# breakpoint()
