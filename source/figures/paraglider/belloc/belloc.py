@@ -294,14 +294,18 @@ for beta in sorted(plotted_betas.intersection(betas)):
         names=True,
     )
 
-# Compute the force coefficients in wind axes for the AVL dataset
-for beta in betas:
-    # Transform body -> wind axes. (See "Flight Vehicle Aerodynamics", Drela,
-    # 2014, Eq:6.7, page 125). Notice that Drela uses back-right-up instead of
-    # front-right-down coordinates, so the CX and CZ terms are negated.
-    alpha_rad = np.deg2rad(avl[beta]["alpha"])
+
+def compute_C_w2b(alpha, beta):
+    """
+    Compute the DCM to transform vectors from body axes into wind axes.
+
+    See "Flight Vehicle Aerodynamics", Drela, 2014, Eq:6.7, page 125. Notice
+    that Drela uses back-right-up instead of front-right-down coordinates, so
+    the CX and CZ terms are negated here.
+    """
+    alpha_rad = np.deg2rad(alpha)
     beta_rad = np.deg2rad(beta)
-    k = len(avl[beta]["alpha"])
+    k = len(alpha)
     sa, sb = np.sin(alpha_rad), np.full(k, np.sin(beta_rad))
     ca, cb = np.cos(alpha_rad), np.full(k, np.cos(beta_rad))
     C_w2b = np.array([
@@ -309,9 +313,14 @@ for beta in betas:
         [-ca * sb, cb, -sa * sb],
         [sa, np.zeros(k), -ca]
     ])
+    return C_w2b
+
+
+# Compute the force coefficients in wind axes for the AVL dataset
+for beta in betas:
     CXa, CYa, CZa = np.einsum(
         "ijk,kj->ik",
-        C_w2b,
+        compute_C_w2b(avl[beta]["alpha"], beta),
         np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]]
     )
     avl[beta].update({"CXa": CXa, "CYa": CYa, "CZa": CZa})
@@ -321,26 +330,12 @@ for beta in betas:
 S = canopy.S_flat
 q = 0.5 * rho_air * v_mag**2
 for beta in betas:
-
-    # Transform body -> wind axes. (See "Flight Vehicle Aerodynamics", Drela,
-    # 2014, Eq:6.7, page 125). Notice that Drela uses back-right-up instead of
-    # front-right-down coordinates, so the CX and CZ terms are negated.
-    alpha_rad = np.deg2rad(nllt[beta]["alpha"])
-    beta_rad = np.deg2rad(beta)
-    k = len(nllt[beta]["alpha"])
-    sa, sb = np.sin(alpha_rad), np.full(k, np.sin(beta_rad))
-    ca, cb = np.cos(alpha_rad), np.full(k, np.cos(beta_rad))
-    C_w2b = np.array([
-        [-ca * cb, -sb, -sa * cb],
-        [-ca * sb, cb, -sa * sb],
-        [sa, np.zeros(k), -ca]
-    ])
-
     # Body axes
     CX, CY, CZ = nllt[beta]["F"].T / (q * S)
     Cl, Cm, Cn = nllt[beta]["M"].T / (q * S * cc)
 
     # Wind axes
+    C_w2b = compute_C_w2b(nllt[beta]["alpha"], beta)
     CXa, CYa, CZa = np.einsum("ijk,kj->ik", C_w2b, nllt[beta]["F"] / (q * S))
     Cla, Cma, Cna = np.einsum("ijk,kj->ik", C_w2b, nllt[beta]["M"] / (q * S * cc))
 
