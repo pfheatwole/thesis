@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "pfh.thesis"
+version = "0.0.1"
+description = "'Paraglider Flight Reconstruction' thesis source."
+authors = ["Peter Heatwole <pfheatwole@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7,<3.9"
+Sphinx = "^3.4.3"
+sphinx-rtd-theme = "^0.5.1"
+sphinxcontrib-bibtex = "^2.1.4"
+sphinxcontrib-svg2pdfconverter = "^1.1.1"
+# "pfh.glidersim" = "^0.5.0,<0.6"
+"pfh.glidersim" = { path = "/home/peter/model/work/glidersim", develop = true }
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+flake8 = "^3.8.4"
+flake8-black = "^0.2.1"
+flake8-bugbear = "^20.11.1"
+flake8-commas = "^2.0.0"
+flake8-docstrings = "^1.5.0"
+flake8-import-order = "^0.18.1"
+flake8-rst-docstrings = "^0.0.14"
+
+# [[tool.poetry.source]]
+# name = "local"
+# url = "http://127.0.0.1:9000"
+# secondary = true
