@@ -1,2 +1,5 @@
 build
 source/figures/paraglider/belloc
+
+# pyenv
+.python-version
