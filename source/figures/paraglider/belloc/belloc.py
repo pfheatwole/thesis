@@ -311,7 +311,7 @@ def compute_C_w2b(alpha, beta):
     C_w2b = np.array([
         [-ca * cb, -sb, -sa * cb],
         [-ca * sb, cb, -sa * sb],
-        [sa, np.zeros(k), -ca]
+        [sa, np.zeros(k), -ca],
     ])
     return C_w2b
 
@@ -321,7 +321,7 @@ for beta in betas:
     CXa, CYa, CZa = np.einsum(
         "ijk,kj->ik",
         compute_C_w2b(avl[beta]["alpha"], beta),
-        np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]]
+        np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]],
     )
     avl[beta].update({"CXa": CXa, "CYa": CYa, "CZa": CZa})
 
@@ -355,7 +355,7 @@ for beta in betas:
         "Cma": Cma,
         "Cna": Cna,
 
-        "Cm_c4": Cm_c4
+        "Cm_c4": Cm_c4,
     })
 
 
