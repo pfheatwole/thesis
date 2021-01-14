@@ -354,17 +354,53 @@ Improvements
   gradient is unreliable. This can be faster (it doesn't rely on fixed step
   sizes), and it naturally handles conditions near stall.
 
-  [[Discuss the issues with assuming that (1) the section coefficient data is
-  accurate near stall, which is highly questionable when using simulated data,
-  and (2) the assumption that the sections will independently behave as
-  predicted by their individual coefficients (which is almost definitely
-  wrong, since the sections interact.]]
+* [[Use a reference solution for sequential estimates. If the reference fails,
+  solve a different problem somewhere between the target and the reference,
+  and solve for that; if the analysis succeeds, use that solution as the new
+  reference.
+
+  As with all methods based on gradient descent, the Newton iterations require
+  a starting point. In this case, the method requires an initial value for the
+  circulation distribution :math:`\Gamma(s)`. The original paper suggested
+  solving a linearized version of the equations, but only when analyzing wings
+  with no sweep or dihedral. For the geometry of a typical parafoil, the
+  non-linear equations must be used.
+
+  In general, if no other information is available, a reasonable starting
+  point is to assume an elliptical distribution. However, an elliptical
+  circulation is a poor approximation as the wind deviates from uniform,
+  head-on freestream. During the course of a typical flight, it is common to
+  encounter significant angles of attack and sideslip, making an elliptical
+  distribution a poor starting point. Suboptimal starting points produce large
+  residual errors that tend to push naive Newton iterations to jump into
+  unrecoverable states. At best, poor starting points require very small step
+  sizes to avoid diverging, and if using fixed step sizes this will cause all
+  solutions to be unnecessarily slow.
+
+  FIXME: finish this discussion]]
+
+* [[Lifting-line methods typically use a single Reynolds number for all
+  sections based on a single profile, but for wings with significant taper the
+  wing tips can be at significantly lower Reynolds numbers than the wing root.
+  My implementation uses Reynolds numbers when looking up the section
+  coefficients.]]
+
+* My method chooses control points that are spaced linearly in :math:`s`, the
+  section index. This keeps the spacing regular regardless of the shape of the
+  :math:`yz` design curve.
 
 
 Limitations
 -----------
 
 * Implications of using section coefficients
+
+  * Assumes the section coefficient data is accurate. This is particularly
+    questionable near stall, especially when using simulated airfoil data.
+
+  * Assumes the sections will behave independently, as predicted by their
+    individual coefficients (which is almost definitely wrong, since the
+    sections interact).
 
   * Unlike the section profiles, these are external data. They must be
     measured in a wind tunnel or computed with an external tool, like XFOIL.
