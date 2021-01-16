@@ -1,23 +1,17 @@
-from IPython import embed  # noqa: F401
-
 from cycler import cycler
+from matplotlib.collections import PolyCollection
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401; for `projection='3d'`
-from matplotlib.collections import PolyCollection
-
 import numpy as np
-
-import scipy
-
 import pfh.glidersim as gsim
-from pfh.glidersim.airfoil import Airfoil, NACA  # noqa: F401
 from pfh.glidersim.foil import (  # noqa: F401
-    FlatYZ,
-    SimpleFoil,
-    PolynomialTorsion as PT,
-    elliptical_chord,
     elliptical_arc,
+    elliptical_chord,
+    FlatYZ,
+    PolynomialTorsion as PT,
+    SimpleFoil,
 )
+import scipy
 
 
 # Style for the 2D curves
@@ -352,9 +346,6 @@ if __name__ == "__main__":
 
     # -----------------------------------------------------------------------
 
-    # Use a common airfoil
-    airfoil = gsim.airfoil.Airfoil(None, gsim.airfoil.NACA(23015))
-
     savefig = True  # Save the images to SVG files
     savefig = False
 
@@ -367,7 +358,7 @@ if __name__ == "__main__":
     for name, parameters in examples.items():
         print("Current example:", name)
         layout = gsim.foil.SectionLayout(**parameters)
-        sections = gsim.foil.FoilSections(airfoil)
+        sections = gsim.foil.FoilSections(gsim.airfoil.NACA(23015))
         foil = gsim.foil.SimpleFoil(layout=layout, sections=sections, b_flat=2)
         figs = []
 

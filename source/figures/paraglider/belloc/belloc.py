@@ -5,18 +5,10 @@ Paraglider Reference Wing", H. Belloc, 2015
 
 import time
 
-from IPython import embed
-
 import matplotlib.pyplot as plt  # noqa: F401
-
 import numpy as np
-
-import pandas as pd
-
 import pfh.glidersim as gsim
-
 import scipy.interpolate
-from scipy.interpolate import PchipInterpolator as Pchip
 
 
 # ---------------------------------------------------------------------------
@@ -26,11 +18,11 @@ from scipy.interpolate import PchipInterpolator as Pchip
 h = 3 / 8  # Arch height (vertical deflection from wing root to tips) [m]
 cc = 2.8 / 8  # Central chord [m]
 b = 11.00 / 8  # Projected span [m]
-S = 25.08 / (8**2)  # Projected area [m^2]
+S = 25.08 / (8 ** 2)  # Projected area [m^2]
 AR = 4.82  # Projected aspect ratio
 
 b_flat = 13.64 / 8  # Flattened span [m]
-S_flat = 28.56 / (8**2)  # Flattened area [m^2]
+S_flat = 28.56 / (8 ** 2)  # Flattened area [m^2]
 AR_flat = 6.52  # Flattened aspect ratio
 
 # Table 2: Coordinates along the 0.6c line for the 1/8 model in [m]
@@ -75,12 +67,6 @@ ftheta = scipy.interpolate.interp1d(s_xyz, theta)
 # ---------------------------------------------------------------------------
 # Build the canopy and wing
 
-airfoil = gsim.airfoil.Airfoil(
-    gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
-    gsim.airfoil.NACA(23015, convention="vertical"),
-)
-
-
 class InterpolatedArc:
     """Interface to use a PchipInterpolator for the arc."""
 
@@ -114,7 +100,8 @@ layout = gsim.foil.SectionLayout(
 )
 
 sections = gsim.foil.FoilSections(
-    airfoil=airfoil,
+    profiles=gsim.airfoil.NACA(23015, convention="vertical"),
+    coefficients=gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
     intakes=None,
 )
 
@@ -158,7 +145,7 @@ wing = gsim.paraglider_wing.ParagliderWing(
 # print("\nFinished defining the complete wing. Pausing for review.\n")
 # gsim.plots.plot_foil(canopy, N_sections=121)
 # gsim.plots.plot_foil_topdown(canopy, N_sections=13)  # Belloc Fig:2
-# embed()
+# breakpoint()
 # 1/0
 
 # ---------------------------------------------------------------------------
@@ -184,11 +171,11 @@ nllt = {}  # Coefficients for Phillips' NLLT, keyed by `beta`
 print("\nRunning tests...")
 t_start = time.perf_counter()
 
-for kb, beta in enumerate(betas):
+for _kb, beta in enumerate(betas):
     dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
-    r_LE2R = -wing.r_R2LE(0)
+    r_LE2RM = -wing.r_RM2LE(0)
     r_CP2LE = wing.control_points(0)
-    r_CP2R = r_CP2LE + r_LE2R
+    r_CP2RM = r_CP2LE + r_LE2RM
 
     # Some figures will look for samples at alpha = [0, 5, 10, 15], so make
     # sure to include those test points.
@@ -216,7 +203,7 @@ for kb, beta in enumerate(betas):
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
-        M += np.cross(r_CP2R, dF).sum(axis=0)  # Add the moment due to forces
+        M += np.cross(r_CP2RM, dF).sum(axis=0)  # Add the moment due to forces
 
         dFs.append(dF)
         dMs.append(dM)
@@ -225,7 +212,7 @@ for kb, beta in enumerate(betas):
         Mc4s.append(dM.sum(axis=0))
         solutions.append(ref)
 
-    alphas_down = alphas_down[:ka+1]  # Truncate when convergence failed
+    alphas_down = alphas_down[:ka + 1]  # Truncate when convergence failed
 
     # Reverse the order
     dFs = dFs[::-1]
@@ -257,7 +244,7 @@ for kb, beta in enumerate(betas):
 
         F = dF.sum(axis=0)
         M = dM.sum(axis=0)  # Moment due to section `Cm`
-        M += np.cross(r_CP2R, dF).sum(axis=0)  # Add the moment due to forces
+        M += np.cross(r_CP2RM, dF).sum(axis=0)  # Add the moment due to forces
 
         dFs.append(dF)
         dMs.append(dM)
@@ -266,7 +253,7 @@ for kb, beta in enumerate(betas):
         Mc4s.append(dM.sum(axis=0))
         solutions.append(ref)
 
-    alphas_up = alphas_up[:ka+1]  # Truncate when convergence failed
+    alphas_up = alphas_up[:ka + 1]  # Truncate when convergence failed
 
     nllt[beta] = {
         "alpha": np.r_[alphas_down, alphas_up],  # Converged `alpha`
@@ -297,32 +284,44 @@ for beta in betas:
     avl[beta] = {field: avl[beta][field] for field in avl[beta].dtype.fields}
 
 for beta in sorted(plotted_betas.intersection(betas)):
-    belloc[beta] = pd.read_csv(f"windtunnel/beta{beta:02}.csv")  # Belloc's raw wind tunnel data
+    filename = f"windtunnel/beta{beta:02}.csv"  # Belloc's raw wind tunnel data
+    names = np.loadtxt(filename, max_rows=1, dtype=str, delimiter=',')
+    data = np.genfromtxt(filename, skip_header=1, names=list(names), delimiter=',')
+    belloc[beta] = data
     xflr5[beta] = np.genfromtxt(
         f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}-Inviscid.txt",
         skip_header=7,
         names=True,
     )
 
-# Compute the force coefficients in wind axes for the AVL dataset
-for beta in betas:
-    # Transform body -> wind axes. (See "Flight Vehicle Aerodynamics", Drela,
-    # 2014, Eq:6.7, page 125). Notice that Drela uses back-right-up instead of
-    # front-right-down coordinates, so the CX and CZ terms are negated.
-    alpha_rad = np.deg2rad(avl[beta]["alpha"])
+
+def compute_C_w2b(alpha, beta):
+    """
+    Compute the DCM to transform vectors from body axes into wind axes.
+
+    See "Flight Vehicle Aerodynamics", Drela, 2014, Eq:6.7, page 125. Notice
+    that Drela uses back-right-up instead of front-right-down coordinates, so
+    the CX and CZ terms are negated here.
+    """
+    alpha_rad = np.deg2rad(alpha)
     beta_rad = np.deg2rad(beta)
-    k = len(avl[beta]["alpha"])
+    k = len(alpha)
     sa, sb = np.sin(alpha_rad), np.full(k, np.sin(beta_rad))
     ca, cb = np.cos(alpha_rad), np.full(k, np.cos(beta_rad))
     C_w2b = np.array([
         [-ca * cb, -sb, -sa * cb],
         [-ca * sb, cb, -sa * sb],
-        [sa, np.zeros(k), -ca]
+        [sa, np.zeros(k), -ca],
     ])
+    return C_w2b
+
+
+# Compute the force coefficients in wind axes for the AVL dataset
+for beta in betas:
     CXa, CYa, CZa = np.einsum(
         "ijk,kj->ik",
-        C_w2b,
-        np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]]
+        compute_C_w2b(avl[beta]["alpha"], beta),
+        np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]],
     )
     avl[beta].update({"CXa": CXa, "CYa": CYa, "CZa": CZa})
 
@@ -331,26 +330,12 @@ for beta in betas:
 S = canopy.S_flat
 q = 0.5 * rho_air * v_mag**2
 for beta in betas:
-
-    # Transform body -> wind axes. (See "Flight Vehicle Aerodynamics", Drela,
-    # 2014, Eq:6.7, page 125). Notice that Drela uses back-right-up instead of
-    # front-right-down coordinates, so the CX and CZ terms are negated.
-    alpha_rad = np.deg2rad(nllt[beta]["alpha"])
-    beta_rad = np.deg2rad(beta)
-    k = len(nllt[beta]["alpha"])
-    sa, sb = np.sin(alpha_rad), np.full(k, np.sin(beta_rad))
-    ca, cb = np.cos(alpha_rad), np.full(k, np.cos(beta_rad))
-    C_w2b = np.array([
-        [-ca * cb, -sb, -sa * cb],
-        [-ca * sb, cb, -sa * sb],
-        [sa, np.zeros(k), -ca]
-    ])
-
     # Body axes
     CX, CY, CZ = nllt[beta]["F"].T / (q * S)
     Cl, Cm, Cn = nllt[beta]["M"].T / (q * S * cc)
 
     # Wind axes
+    C_w2b = compute_C_w2b(nllt[beta]["alpha"], beta)
     CXa, CYa, CZa = np.einsum("ijk,kj->ik", C_w2b, nllt[beta]["F"] / (q * S))
     Cla, Cma, Cna = np.einsum("ijk,kj->ik", C_w2b, nllt[beta]["M"] / (q * S * cc))
 
@@ -370,7 +355,7 @@ for beta in betas:
         "Cma": Cma,
         "Cna": Cna,
 
-        "Cm_c4": Cm_c4
+        "Cm_c4": Cm_c4,
     })
 
 
@@ -384,6 +369,7 @@ nllt_args = {"c": "r", "linestyle": "--", "linewidth": 1, "label": "NLLT"}
 avl_args = {"c": "b", "linestyle": "--", "linewidth": 0.75, "label": "AVL"}
 xflr5_args = {"c": "g", "linestyle": "--", "linewidth": 1, "label": "XFLR5"}
 pad_args = {"h_pad": 1.75, "w_pad": 1}
+
 
 def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
     args = {
@@ -429,7 +415,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"CL_vs_alpha.svg", dpi=96)
+    fig.savefig("CL_vs_alpha.svg", dpi=96)
 
 # Plot: CD vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "CD", xlim=(-10, 25), ylim=(-0.01, 0.18))
@@ -445,7 +431,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"CD_vs_alpha.svg", dpi=96)
+    fig.savefig("CD_vs_alpha.svg", dpi=96)
 
 # Plot: CY vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "CY", xlim=(-10, 25), ylim=(-0.20, 0.05))
@@ -461,7 +447,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"CY_vs_alpha.svg", dpi=96)
+    fig.savefig("CY_vs_alpha.svg", dpi=96)
 
 # Plot: CL vs CD
 fig, axes = plot4x4("CD", "CL", xlim=(-0.01, 0.18), ylim=(-0.35, 1.4))
@@ -477,7 +463,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
 axes[0, 0].legend(loc="lower right")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"CL_vs_CD.svg", dpi=96)
+    fig.savefig("CL_vs_CD.svg", dpi=96)
 
 # Plot: CL vs Cm
 fig, axes = plot4x4("Cm", "CL", xlim=(-0.6, 0.08), ylim=(-0.35, 1.0))
@@ -493,7 +479,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"CL_vs_Cm.svg", dpi=96)
+    fig.savefig("CL_vs_Cm.svg", dpi=96)
 
 # Plot: Cl vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "Cl", xlim=(-10, 25), ylim=(-0.21, 0.035))
@@ -509,7 +495,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"Cl_vs_alpha.svg", dpi=96)
+    fig.savefig("Cl_vs_alpha.svg", dpi=96)
 
 # Plot: Cm vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "Cm", xlim=(-10, 25), ylim=(-1.25, 0.25))
@@ -525,7 +511,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"Cm_vs_alpha.svg", dpi=96)
+    fig.savefig("Cm_vs_alpha.svg", dpi=96)
 
 # Plot: Cn vs alpha
 fig, axes = plot4x4("$\\alpha$ [deg]", "Cn", xlim=(-10, 25), ylim=(-0.04, 0.24))
@@ -541,7 +527,7 @@ for beta in sorted(plotted_betas.intersection(betas)):
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"Cn_vs_alpha.svg", dpi=96)
+    fig.savefig("Cn_vs_alpha.svg", dpi=96)
 
 # ---------------------------------------------------------------------------
 
@@ -596,7 +582,12 @@ for beta in betas:
         avl2[alpha]["Cm"].append(avl[beta]["Cm"][ix][0])
         avl2[alpha]["Cn"].append(avl[beta]["Cn"][ix][0])
 
-belloc2 = {a: pd.read_csv(f"windtunnel/alpha{a:02}v40.csv") for a in [0, 5, 10, 15]}
+belloc2 = {}
+for alpha in [0, 5, 10, 15]:
+    filename = f"windtunnel/alpha{alpha:02}v40.csv"
+    names = np.loadtxt(filename, max_rows=1, dtype=str, delimiter=',')
+    data = np.genfromtxt(filename, skip_header=1, names=list(names), delimiter=',')
+    belloc2[alpha] = data
 
 # Plot: CD vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "CD", (-17, 17), (-0.01, 0.18))
@@ -610,7 +601,7 @@ for alpha in [0, 5, 10, 15]:
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"CD_vs_beta.svg", dpi=96)
+    fig.savefig("CD_vs_beta.svg", dpi=96)
 
 # Plot: CY vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", r"CY", (-17, 17), (-0.23, 0.23))
@@ -624,7 +615,7 @@ for alpha in [0, 5, 10, 15]:
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"CY_vs_beta.svg", dpi=96)
+    fig.savefig("CY_vs_beta.svg", dpi=96)
 
 # Plot: CL vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "CL", (-17, 17), (-0.01, 1.05))
@@ -638,7 +629,7 @@ for alpha in [0, 5, 10, 15]:
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"CL_vs_beta.svg", dpi=96)
+    fig.savefig("CL_vs_beta.svg", dpi=96)
 
 # Plot: Cl (wing rolling coefficient) vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "Cl", (-17, 17), (-0.2, 0.2))
@@ -652,7 +643,7 @@ for alpha in [0, 5, 10, 15]:
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"Cl_vs_beta.svg", dpi=96)
+    fig.savefig("Cl_vs_beta.svg", dpi=96)
 
 # Plot: Cm (wing pitching coefficient) vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "Cm", (-17, 17), (-0.65, 0.1))
@@ -666,7 +657,7 @@ for alpha in [0, 5, 10, 15]:
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"Cm_vs_beta.svg", dpi=96)
+    fig.savefig("Cm_vs_beta.svg", dpi=96)
 
 # Plot: Cn (wing yawing coefficient) vs beta
 fig, axes = plot4x4(r"$\beta$ [deg]", "Cn", (-17, 17), (-0.2, 0.2))
@@ -680,8 +671,8 @@ for alpha in [0, 5, 10, 15]:
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
 if savefig:
-    fig.savefig(f"Cn_vs_beta.svg", dpi=96)
+    fig.savefig("Cn_vs_beta.svg", dpi=96)
 
 plt.show()
 
-embed()
+# breakpoint()

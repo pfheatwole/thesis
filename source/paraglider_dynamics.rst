@@ -142,18 +142,18 @@ here]]
 
 Selecting a fixed point on the vehicle slightly increases the complexity of
 the dynamics equations, but it simplifies [["stuff"; does it make the 9 DoF
-less complicated since the hinge is now through `R`?]]. For reasons to be
+less complicated since the hinge is now through `RM`?]]. For reasons to be
 discussed in `Apparent Mass`_, the dynamics are simplified if reference is
 a point in the xz-plane of the wing. The most natural choices in that plane
 are the leading edge of the central section, or the midpoint between the two
 risers, which is constant regardless of the width the riser chest strap.
 
 This paper uses the midpoint between the two riser connection points,
-designated :math:`R`, for all dynamics equations [[and for the vehicle
-velocity state variable]]. Because the risers are very near to where the
-pilot would place their flight device, this is the most representative of the
-data measured by flight recorders, making it the most convenient for comparing
-real flight data to simulated data.
+designated :math:`RM`, for all dynamics equations [[and for the vehicle
+velocity state variable]]. Because the risers are very near to where the pilot
+would place their flight device, this is the most representative of the data
+measured by flight recorders, making it the most convenient for comparing real
+flight data to simulated data.
 
 
 Canopy
@@ -408,7 +408,7 @@ This section develops a model with nine degrees of freedom: six for the
 orientations of the body and payload, three for the velocity of the connection
 point, and three for the internal force between the two components. The body
 and payload are modeled as two rigid bodies connected at the riser midpoint
-:math:`R`, with the connection modeled as a spring-damper system.
+:math:`RM`, with the connection modeled as a spring-damper system.
 
 .. figure:: figures/paraglider/dynamics/paraglider_fbd_9dof.*
    :name: paraglider_fbd_9dof
