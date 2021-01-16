@@ -53,6 +53,29 @@ Canopy geometry
 Paraglider geometry
 -------------------
 
+* I'll need to explain why I rejected using a *rigging angle* in favor of
+  positioning `RM` explicitly. I didn't like the rigging angle because that
+  suggested you could set the pitch angle of the wing, but in reality you only
+  have partial control. The pitch angle is a function of many things, such as
+  air density, airspeed, brake deflections, etc.
+
+  The primary reference on the topic is probably from the X-38 project. See
+  `iacomini1999InvestigationLargeScale`.
+
+  Oh, and I wanted to use canopy frd as the body axes. The rigging angle is
+  a built-in pitching offset. For me, `gamma = alpha + theta`, but for
+  Iacomini it's `gamma = alpha + theta' + theta_R`, so his `theta' = theta
+  - theta_R`.
+
+  Wait, so is the rigging angle measured from a reference line through the
+  central quarter-chord? Oof, if the definition of the rigging angle depends
+  on `c4` then that's another complaint against rigging angles Yuck.
+
+  Anyway, **how might I calculate them for my wings?** Would be cool to
+  compute the "effective rigging angle" from wings defined using my
+  parametrization.
+
+
 * Is "Paraglider Geometry" a good chapter? I need to discuss the physical
   model somewhere (materials, controls, inertia, etc). The "canopy geometry"
   was the abstract shape, but I'm not sure that's very helpful for the system.
@@ -87,6 +110,9 @@ Paraglider geometry
 Paraglider dynamics
 -------------------
 
+* What is `CMT1` etc in Belloc's wind tunnel data? Why did I use it? Is it in
+  the body axes? Why do I compute `Cla` for NLLT but not for AVL?
+
 * Should I be using "canopy" frame instead of "body" frame? I'm using the
   canopy for the coordinate system. I mean, it's not the worst idea: I always
   thought "body" was always an ambiguous term, and "wing" conflicted with
@@ -104,6 +130,22 @@ Paraglider dynamics
 * Review the inertia equations; I'm using `\overbar{\vec{A}}` for the area
   centroid? And in the code I have things like `upper_centroid` and
   `cm_solid`. **Positions vectors should always be in the form** `r_A2B`.
+
+
+Simulation scenarios
+--------------------
+
+* Checkout the `lateral_gust` scenarios. With full accelerator the glider
+  largely ignores the gust, but with symmetric brakes it really struggles.
+  I was using a 10mph gust that ramps up over 1sec and lasts for 3sec for the
+  accelerator, but the symmetric brake condition simply can't handle it: the
+  aerodynamics fail to converge.
+
+* Create a set of top-down figure-8s with 6a, 9a with M_R=0, and 9a with some
+  yaw restoring force. Plot the xy coordinates on top of each other to show
+  how the yaw force affects the track. Conceptually, you'd expect the actual
+  track to be somewhere in between 6a (infinite yaw resistance) and 9a with
+  M_R=0 (zero yaw resistance).
 
 
 Future work
