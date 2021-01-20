@@ -4,12 +4,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401; for `projection='3d'`
 import numpy as np
 import pfh.glidersim as gsim
-from pfh.glidersim.foil import (  # noqa: F401
+from pfh.glidersim.foil_layout import (  # noqa: F401
     elliptical_arc,
     elliptical_chord,
     FlatYZ,
     PolynomialTorsion as PT,
-    SimpleFoil,
 )
 import scipy
 
@@ -100,7 +99,7 @@ def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=Fa
     ax.plot(c4[0], c4[1], c4[2], "g--", lw=0.8)
     ax.plot(TE[0], TE[1], TE[2], "k--", lw=0.8)
 
-    gsim.plots._set_axes_equal(ax)
+    gsim.extras.plots._set_axes_equal(ax)
 
     # Plot projections of the quarter-chord
     xlim = ax.get_xlim3d()
@@ -128,9 +127,9 @@ def _plot_foil(foil, N_sections=21, N_points=50, geometry="airfoils", flatten=Fa
 
 def plot_3d_foil(foil, geometry="airfoils"):
     # Make it big; removing the whitespace greatly reduces the final size
-    fig, ax = gsim.plots._create_3d_axes(figsize=(10, 10), dpi=96)
+    fig, ax = gsim.extras.plots._create_3d_axes(figsize=(10, 10), dpi=96)
     # ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=-135)
-    # gsim.plots.plot_foil(foil, N_sections=31, flatten=False, ax=ax)
+    # gsim.extras.plots.plot_foil(foil, N_sections=31, flatten=False, ax=ax)
     ax.view_init(elev=90 - np.rad2deg(np.arctan(np.sqrt(2))), azim=45)
     _plot_foil(foil, N_sections=31, geometry=geometry, flatten=False, ax=ax)
 
@@ -219,7 +218,7 @@ if __name__ == "__main__":
         "x": 0,
         "r_yz": 0,
         "yz": FlatYZ(),
-        "c": gsim.foil.elliptical_chord(root=0.5, tip=0.1),
+        "c": elliptical_chord(root=0.5, tip=0.1),
         "theta": 0,
     }
 
@@ -267,8 +266,8 @@ if __name__ == "__main__":
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_arc(mean_anhedral=33, tip_anhedral=67),
-        "c": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
+        "yz": elliptical_arc(mean_anhedral=33, tip_anhedral=67),
+        "c": elliptical_chord(root=0.5, tip=0.2),
         "theta": 0,
     }
 
@@ -276,8 +275,8 @@ if __name__ == "__main__":
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_arc(mean_anhedral=44, tip_anhedral=89),
-        "c": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
+        "yz": elliptical_arc(mean_anhedral=44, tip_anhedral=89),
+        "c": elliptical_chord(root=0.5, tip=0.2),
         "theta": 0,
     }
 
@@ -285,8 +284,8 @@ if __name__ == "__main__":
         "r_x": 0.75,
         "x": 0,
         "r_yz": 1.00,
-        "yz": gsim.foil.elliptical_arc(mean_anhedral=30, tip_anhedral=89),
-        "c": gsim.foil.elliptical_chord(root=0.5, tip=0.2),
+        "yz": elliptical_arc(mean_anhedral=30, tip_anhedral=89),
+        "c": elliptical_chord(root=0.5, tip=0.2),
         "theta": 0,
     }
 
@@ -357,8 +356,8 @@ if __name__ == "__main__":
 
     for name, parameters in examples.items():
         print("Current example:", name)
-        layout = gsim.foil.SectionLayout(**parameters)
-        sections = gsim.foil.FoilSections(gsim.airfoil.NACA(23015))
+        layout = gsim.foil_layout.SectionLayout(**parameters)
+        sections = gsim.foil_sections.FoilSections(gsim.airfoil.NACA(23015))
         foil = gsim.foil.SimpleFoil(layout=layout, sections=sections, b_flat=2)
         figs = []
 

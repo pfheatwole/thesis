@@ -82,7 +82,7 @@ def main():
 
     # 3D Plot: Position over time
     points = gsim.extras.simulation.sample_paraglider_positions(model, states, times)
-    gsim.plots.plot_3d_simulation_path(**points, show=False)
+    gsim.extras.plots.plot_3d_simulation_path(**points, show=False)
 
     # Plot: orientation (note: `omega_b2e` != `Theta_b2e_dot`)
     Theta_b2e = gsim.orientation.quaternion_to_euler(states["q_b2e"])

@@ -90,7 +90,7 @@ arc = InterpolatedArc(s, fy(s), fz(s))
 # Alternatively, use the analytical (non-sampled, smooth curvature) form
 # arc = gsim.foil.elliptical_arc(np.rad2deg(np.arctan(.375/.688)), 89)
 
-layout = gsim.foil.SectionLayout(
+layout = gsim.foil_layout.FoilLayout(
     x=0,
     r_x=0.6,
     yz=arc,
@@ -99,7 +99,7 @@ layout = gsim.foil.SectionLayout(
     theta=ftheta,
 )
 
-sections = gsim.foil.FoilSections(
+sections = gsim.foil_sections.FoilSections(
     profiles=gsim.airfoil.NACA(23015, convention="vertical"),
     coefficients=gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
     intakes=None,
@@ -109,6 +109,8 @@ canopy = gsim.foil.SimpleFoil(
     layout=layout,
     sections=sections,
     b_flat=b_flat,
+    aerodynamics_method=gsim.foil_aerodynamics.Phillips,
+    aerodynamics_config={"v_ref_mag": 40, "K": 11},
 )
 
 print()
@@ -119,7 +121,7 @@ print(f"    Projected AR> Expected: {AR:.4f},   Actual: {canopy.AR:.4f}")
 print(f"    Flattened AR> Expected: {AR_flat:.4f},   Actual: {canopy.AR_flat:.4f}")
 print()
 
-lines = gsim.line_geometry.SimpleLineGeometry(
+lines = gsim.paraglider_wing.SimpleLineGeometry(
     kappa_x=0.0875 / 0.350,  # 25% back from the leading edge
     kappa_z=1.0 / 0.350,  # 1m below the central chord
     kappa_A=0.08,  # unused
@@ -139,7 +141,6 @@ wing = gsim.paraglider_wing.ParagliderWing(
     canopy=canopy,
     rho_upper=0,  # Neglect gravitational forces
     rho_lower=0,
-    force_estimator=gsim.foil.Phillips(canopy, 40, K=11),
 )
 
 # print("\nFinished defining the complete wing. Pausing for review.\n")
@@ -194,10 +195,10 @@ for _kb, beta in enumerate(betas):
         v_W2b *= -v_mag  # The Reynolds numbers are a function of the magnitude
 
         try:
-            dF, dM, ref = wing.forces_and_moments(
+            dF, dM, ref = wing.aerodynamics(
                 0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
-        except gsim.foil.ForceEstimator.ConvergenceError:
+        except gsim.foil_aerodynamics.FoilAerodynamics.ConvergenceError:
             ka -= 1
             break
 
@@ -235,10 +236,10 @@ for _kb, beta in enumerate(betas):
         v_W2b *= -v_mag  # The Reynolds numbers are a function of the magnitude
 
         try:
-            dF, dM, ref = wing.forces_and_moments(
+            dF, dM, ref = wing.aerodynamics(
                 0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
-        except gsim.foil.ForceEstimator.ConvergenceError:
+        except gsim.foil_aerodynamics.FoilAerodynamics.ConvergenceError:
             ka -= 1
             break
 

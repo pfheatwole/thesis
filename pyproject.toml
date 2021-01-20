@@ -10,7 +10,7 @@ Sphinx = "^3.4.3"
 sphinx-rtd-theme = "^0.5.1"
 sphinxcontrib-bibtex = "^2.1.4"
 sphinxcontrib-svg2pdfconverter = "^1.1.1"
-# "pfh.glidersim" = "^0.6.0,<0.7"
+# "pfh.glidersim" = "^0.7.0,<0.8"
 "pfh.glidersim" = { path = "/home/peter/model/work/glidersim", develop = true }
 
 [tool.poetry.dev-dependencies]

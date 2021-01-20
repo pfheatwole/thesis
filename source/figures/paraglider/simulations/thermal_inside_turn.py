@@ -89,7 +89,7 @@ def main():
 
     # 3D Plot: Position over time
     # points = gsim.extras.simulation.sample_paraglider_positions(model, states, times)
-    # gsim.plots.plot_3d_simulation_path(**points, show=False)
+    # gsim.extras.plots.plot_3d_simulation_path(**points, show=False)
 
     # xy-plot
     fig, ax = plt.subplots()
