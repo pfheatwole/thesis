@@ -1,3 +1,6 @@
+* Add a `README.rst` and explain `requirements`, running scripts, etc
+
+
 Topical
 =======
 

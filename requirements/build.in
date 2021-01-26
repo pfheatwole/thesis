@@ -1,0 +1,4 @@
+Sphinx >= 3.4.3
+sphinx-rtd-theme >= 0.5.1
+sphinxcontrib-bibtex >= 2.1.4
+sphinxcontrib-svg2pdfconverter >= 1.1.1
