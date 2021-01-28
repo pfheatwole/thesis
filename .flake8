@@ -7,12 +7,10 @@
 
 ignore =
   E203,  # whitespace before `:`
-  E501,  # maximum line length
   W503,  # line break before binary operator
 
 select =
   B,  # bugbear defaults
-  B9,  # bugbear's more "opionated" warnings
   BLK,  # black formatting compatibility
   C8,  # commas
   D,  # docstrings
@@ -23,15 +21,11 @@ select =
   W,  # pycodestyle warnings
   W504,  # newline after binary operator
 
-# Configure: bugbear
-# Rely B950 to encourage a length of 88
-max-line-length = 80
-
 # Configure flake8-docstrings
 docstring-convention = numpy
 
 # Configure: flake8-import=order
-import-order-style = google
+import-order-style = smarkets
 
 # Configure flake8-rst-docstrings
 rst-roles =
