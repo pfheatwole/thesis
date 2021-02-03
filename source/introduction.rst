@@ -36,7 +36,7 @@ route. Because a glider is constantly spending energy to counteract the force
 of gravity, the pilot must recognize the wind patterns as quickly as possible
 to minimize energy loss. Experienced pilots assess the nearby air currents by
 observing vegetation, birds, or other pilots, but they can also leverage
-knowledge gained from previous flights: although local wind configurations are
+knowledge gained from previous flights; although local wind configurations are
 difficult to predict in detail, they can exhibit recurring patterns. By
 learning those patterns a pilot can assess the current wind conditions more
 quickly and more accurately, and can prioritize flying to areas that are
@@ -101,8 +101,8 @@ Paragliding
 Paragliding is a recreational flying activity that uses a lightweight,
 flexible wing for non-powered flight. The pilot is strapped into a harness
 suspended from the wing by a network of thin connecting lines. The pilot
-controls the wing by manipulating the lines and shifting their weight side to
-side in the harness.
+controls the wing by manipulating the lines and shifting their weight inside
+the harness.
 
 There are a variety of reasons that people choose to fly. Some flights begin
 with an explicit goal: maximum flight time, maximum distance, maximum
@@ -140,13 +140,13 @@ Wind fields
 
 A *wind field* refers to the detailed variations of local air currents at each
 point in a region. Each point in the wind field has specific *wind velocity*,
-also known as a *wind vector*. In this paper the terms are considered
-interchangeable, but in aeronautics literature the term *wind vector* often
-refers to only the lateral motion of the air (comprised of wind speed and
-horizontal wind direction).
+also known as a *wind vector*. It is important to note that in this paper the
+terms are considered interchangeable, but in aeronautics literature the term
+*wind vector* often refers to only the lateral motion of the air (comprised of
+wind speed and horizontal wind direction).
 
 
-.. Where do they occur?
+.. What wind fields are paragliding pilots interested in? Where do they occur?
 
 * [[Define *atmospheric boundary layer* here? It's where paragliding occurs.]]
 
@@ -191,27 +191,28 @@ lift while avoiding sink, make sure they can reach the LZ, etc.]]
 .. How do pilots estimate the structure of the wind field? Why is it important
    for a pilot to be able to **predict** wind field structure?
 
-The direct way to determine a wind field is doing is to explore. The problem
-is that a wing remains airborne by constantly exchanging its momentum with the
-air, which means it is constantly spending energy; exploration takes time, and
-time has a significant energy cost. Pilots can't afford to explore at random;
-they need strategies for efficient path planning that will focus their
+The direct way to learn the structure of a wind field is to explore. The
+problem is that a wing remains airborne by constantly exchanging its momentum
+with the air, which means it is constantly spending energy; exploration takes
+time, and time has a significant energy cost. Pilots can't afford to explore at
+random; they need strategies for efficient path planning that will focus their
 exploration on promising regions. If their strategy fails, they can be left
-without sufficient altitude to continue their flight, or they can be trapped
-by a headwind that prevents them from reaching their destination (regardless
-of their altitude).
+without sufficient altitude to continue their flight, or they can be trapped by
+a headwind that prevents them from reaching their destination (regardless of
+their altitude).
 
-Efficient path planning minimizes energy expenditure. Pilots with greater
-energy budgets are more likely to achieve their flight goals, but efficient
-flight planning through an environment depends on accurate knowledge of that
-environment. And so, pilots look for extra information to guide their flight
-planning. [[FIXME: reword.]]
+In general, much of the skill in piloting a gliding aircraft is in maintaining
+the glider's energy budget. Efficient path planning is the key to to minimizing
+energy expenditure, but planning a path through an environment depends on
+accurate knowledge of that environment. And so, pilots are constantly looking
+for information about the structure of the wind field. [[FIXME: reword.]]
 
-For example, dust, debris, and insects can be caught in stronger air currents,
-providing information from a distance. Soaring birds, such as hawks and
-vultures, are excellent navigators of the wind field; even other pilots can
-provide a hint as to the conditions elsewhere. Also, although pilots are
-typically focused on the wind conditions at higher altitudes, useful
+One direct source of information is to observe other objects responding to the
+wind field. For example, dust, debris, and insects can be caught in stronger
+air currents, providing information from a distance. Soaring birds, such as
+hawks and vultures, are excellent navigators of the wind field; even other
+pilots can provide a hint as to the conditions elsewhere. Also, although pilots
+are typically focused on the wind conditions at higher altitudes, useful
 information can be gained by observing behavior closer to the ground, such as
 vegetation and ripples on water. Anything that interacts with the wind can be
 a potential source of information. [[FIXME: reword.]]
@@ -220,17 +221,18 @@ a potential source of information. [[FIXME: reword.]]
 [[Topography heuristics (surface sun exposure, ridge orientation to the wind,
 likely thermal triggers, etc)
 
-Another valuable source of information is the local topography. Paragliding
-pilots rely heavily on understanding how the solid objects in the environment
-affect the wind field. If the ground surface is uneven, then regions with more
-sun exposure will tend to produce warmer air that can rise in thermal
-convection. The orientation of the ground (or other objects such as trees and
-buildings) relative to surface winds can produce orographic lift; many popular
-flying sites utilize the lift generated when an onshore breeze collides with
-a coastal bluff. Under some conditions the warm air near the surface can
-respond to so-called *thermal triggers* that function like a wick; by
-disturbing the equilibrium conditions at the surface they can initiate pockets
-or columns of rising air that pilots can use to increase their energy budget.]]
+Another valuable, albeit indirect, source of information is the local
+topography. Paragliding pilots rely heavily on understanding how the solid
+objects in the environment affect the wind field. If the ground surface is
+uneven, then regions with more sun exposure will tend to produce warmer air
+that can rise in thermal convection. The orientation of the ground (or other
+objects such as trees and buildings) relative to surface winds can produce
+orographic lift; many popular flying sites utilize the lift generated when an
+onshore breeze collides with a coastal bluff. Under some conditions the warm
+air near the surface can respond to so-called *thermal triggers* that function
+like a wick; by disturbing the equilibrium conditions at the surface they can
+initiate pockets or columns of rising air that pilots can use to increase their
+energy budget.]]
 
 
 [[Meteorological forecasts (weather forecasts, `RASP
@@ -432,8 +434,13 @@ Because flight data does not include the actual wind vectors, existing tools
 rely on *heuristics*: approximation methods that rely on the wind field
 containing features with some explicit structure that can be detected based on
 particular patterns of the paraglider motion. For example, thermal detectors
-may require a minimum sink rate, or total altitude gained; horizontal wind
-estimators may require that the glider was circling at a fixed airspeed, etc.
+may require a minimum sink rate or total altitude gained, and they are forced
+to make strong assumptions about the state and parameters of the glider (such
+as average sink rate). Horizontal wind estimators may require that the glider
+was circling at a fixed airspeed. Other methods may try to fit the vertical
+and horizontal components simultaneously; for example, one method assumes
+a circling glider is accurately coring a thermal that is inclined with respect
+to the wind, so fitting a thermal model.
 
 To avoid false positives, heuristic-based feature detectors typically introduce
 constraints on the motion such as minimum duration, minimum number of cycles,
@@ -441,6 +448,11 @@ etc. Given a interval, the output is assumed to be representative of the wind
 field over the entire interval. The result is a sort of "average structure"
 that tends to "smooth out" the regions they fit. Subtleties in the wind field
 are lost.
+
+[[FIXME: probably a good place to mention that, over a short time span, you
+can't tell the difference between headwind+lift versus braking?]]
+
+[[FIXME: discuss energy-based methods?]]
 
 Ultimately, each heuristic can only detect an explicit feature, and only if the
 motion of the paraglider matches a predefined motion signature; the rest of the
@@ -464,19 +476,21 @@ for wind vectors. If the wind field itself was available, feature detectors
 could target its structure directly.
 
 
-Wind field estimation
-=====================
+Wind field reconstruction
+=========================
 
 .. To improve the ability to detect structure in the wind field, we need
    better estimates of the wind field itself. (We need estimates that don't
-   rely on particular paraglider motion signatures.)
+   rely on particular paraglider motion signatures; ie, don't use paraglider
+   motion as a proxy for what we're really interested in: the wind.)
 
-.. FIXME Should this section be called "Wind field reconstruction"? Estimation
-   is a bit vague; "reconstruction" tends to communicate past-tense.
+.. What is *wind field reconstruction*?
 
-* What is *wind field estimation*?
+[[Define *wind field reconstruction*: estimating the continuous wind field
+that was present during a flight]]
 
-* How would wind field estimation help?
+
+* How would wind field reconstruction help pattern discovery?
 
   * [[Establish the performance criteria of a wind field estimator]]
 
