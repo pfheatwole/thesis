@@ -239,7 +239,12 @@ or columns of rising air that pilots can use to increase their energy budget.]]
 <http://www.paraglidingmaps.com>`__)
 
 
-[[Conclude that *wind patterns* are particularly valuable.
+[[Conclude that *wind patterns* are particularly valuable. All the listed
+causes, like meteorological models, etc, are only useful if you have the
+correct causal model; if your causal model is wrong, its predictions are wrong.
+Wind patterns are particularly nice because they're so simple. They're also
+unique in that they represent what actually **DID** happen; they're not merely
+suggestive of what **might** happen, given particular assumptions.]]
 
 
 
@@ -261,63 +266,65 @@ Wind field patterns
    Discuss wind patterns, their importance, and how they're learned
 
 
+Pilots are able to determine the structure of a wind field more *efficiently*
+(both in terms of time and energy) and more *accurately* when they can base
+their expectations on known patterns. The motivating objective of this paper is
+to help pilots extract valuable information about wind patterns from sets of
+paragliding flight records.
+
+
 .. What are *wind patterns*?
 
-In this paper, a *wind pattern* is any **recurring structure** in a wind
-field. The term "structure" refers to any observable order, and does not imply
-any particular configuration; uniform flows, shear, orographic lift, thermal
-sources and sinks, etc, and any combinations of those, can all be considered
-as structured configurations. The term "recurring" refers to the fact that
-some regions of a wind field can exhibit the same structure at different
-times.
+In this paper, a *wind pattern* is any **recurring structure** in a wind field.
+The term "structure" refers to any observable order, and does not imply any
+particular configuration; uniform flows, shear, orographic lift, thermal
+sources and sinks, etc, and any combinations of those, can all be considered as
+structured configurations. The term "recurring" refers to the fact that some
+regions of a wind field can exhibit the same structure at different times.
 
 
 .. Why are wind patterns so **particularly** valuable to pilots?
 
 Wind patterns are beneficial to wind estimation in two ways. First, if some
 region of a wind field exhibits recurring structure, then pilots can use that
-to predict the structure without needing to spend energy exploring that area.
-Second, once a pilot has begun traversing some region, historical patterns can
-provide additional perspective that can help a pilot correctly interpret the
-wind they encounter.
-
-The motivating objective of this paper is to help pilots determine the
-structure of wind fields *efficiently* (both in terms of time and energy) and
-*accurately*. It can be notoriously difficult to correctly interpret the
-sensations a wing exerts on the connecting lines and harness; pilots may be
-able to determine the wind field more efficiently and more accurately if they
-were able to compare it to previously observed wind fields.
+to predict its structure without needing to spend glider energy exploring that
+area. Second, once a pilot has begun traversing some region, historical
+patterns can provide additional perspective that can help a pilot correctly
+interpret the wind they encounter.
 
 [[Consider both the vertical and horizontal components. Consider both
 pre-flight (flight planning) and in-flight scenarios.]]
 
 
-.. Pilots face problems of discovery and use
+.. What challenges are involved?
 
-* Pilots who want to take advantage of wind patterns face challenges with both
-  their *discovery* and their *use*.
-
-
-* How do pilots traditionally *discover* wind patterns?
-
-  * By flying in the same region repeatedly.
-
-  * By sharing observations with other pilots.
-
-* What are the challenges related to wind pattern *discovery*?
+Pilots who want to take advantage of wind patterns face a variety of challenges
+that can be broadly classified as problems of *discovery* and problems of
+*use*.
 
 
-* How do pilots traditionally make *use* of learned wind patterns?
+.. What are problems of *discovery*?
 
-* What are the challenges related to wind pattern *use*?
+Traditionally, pilots discover wind patterns by flying in the same region
+repeatedly, and by sharing their observations with other pilots.
+
+[[FIXME: what are the limitations of these "traditional" methods]]
 
 
-* How can flight data help address those challenges?
+.. What are problems of *use*?
 
-  * [[Discover patterns using flight data (to address the problems of
-    discovery) and encode them in a predictive model that can interpret the
-    current conditions and display suitable patterns graphically (to address
-    the problems of use)]]
+* [[Pilots have to memorize the patterns, when they're applicable, etc.]]
+
+
+.. How can flight data help address those challenges?
+
+[[If wind field structure can be determined from flight data, it would enable
+the creation of tools to address the problems of discovery and use.]]
+
+[[ie, if you can discover patterns automatically using flight data it would
+address the problems of discovery; once you know the patterns you can encode
+them in a predictive model that can condition on the current wind field display
+suitable patterns graphically, which would address the problems of use]]
 
 
 .. Step 1: address "problems of discovery"
@@ -411,64 +418,50 @@ pre-flight (flight planning) and in-flight scenarios.]]
 
 * [[Introduce the data (IGC files) here?]]
 
-* Are there existing tools to build predictive models from flight data?
 
-  * Paragliding Thermal Map, etc
+.. Are there existing tools to extract wind field structure from flight data?
 
-* What are the limitations of existing predictive models?
+* Paragliding Thermal Map, etc
 
-  * Limited in *what* they can detect (and thus in what they can predict)
-
-  * Limited in *how* they predict (condition only on day+time, not state)
-
-    [[Current predictive models have no estimate of the underlying wind field,
-    so they can't condition predictions based on the state of the wind field.
-    Instead, they can only condition on crude measurements like the season or
-    time of day, which can result in simplistic predictions that are simple
-    "average" configurations averaged over arbitrary time intervals.
-
-    In a sense, the model is marginalizing over the unspecified inputs.
-    Existing models don't take observations of the wind field into account, so
-    they're effectively marginalizing over **all possible conditions** to
-    produce an average. (Or something like that.)]]
-
-* [[How well do they address the problems of *discovery* and *use*?]]
+* [[FIXME: what about prediction? PTM does let you filter by time of year.]]
 
 
+.. How do they work?
 
-* [[Explain the limitations of existing tools]]
+Because flight data does not include the actual wind vectors, existing tools
+rely on *heuristics*: approximation methods that rely on the wind field
+containing features with some explicit structure that can be detected based on
+particular patterns of the paraglider motion. For example, thermal detectors
+may require a minimum sink rate, or total altitude gained; horizontal wind
+estimators may require that the glider was circling at a fixed airspeed, etc.
 
-  * They use *heuristics*: approximation methods that rely on the wind
-    field containing features with some explicit structure that can be
-    detected based on particular patterns of the paraglider motion.
+To avoid false positives, heuristic-based feature detectors typically introduce
+constraints on the motion such as minimum duration, minimum number of cycles,
+etc. Given a interval, the output is assumed to be representative of the wind
+field over the entire interval. The result is a sort of "average structure"
+that tends to "smooth out" the regions they fit. Subtleties in the wind field
+are lost.
 
-    Thermal detectors may require a minimum sink rate, or total altitude
-    gained; horizontal wind estimators may require that the glider was
-    circling at a fixed airspeed, etc.
+Ultimately, each heuristic can only detect an explicit feature, and only if the
+motion of the paraglider matches a predefined motion signature; the rest of the
+data is discarded, which also discards valuable information.
 
-  * Each heuristic can only detect its explicit (predefined and crude)
-    features, and only if the motion of the paraglider matches the motion
-    signature. The rest of the data is discarded, which also discards valuable
-    information.
+[[FIXME: plus, that kind of output is hard to use to condition a predictive
+model. You'd either have to run a similar feature detector in-flight (which is
+likely to be VERY noisy) or you have to convert those features into something
+that can be more easily related to the kind of data available in-flight (eg,
+convert a thermal "feature" into an average sink rate or something).]]
 
-  * To avoid false positives, heuristics typically introduce constraints on
-    the motion such as minimum duration, minimum number of cycles, etc.
 
-    Given the interval, the heuristic produces an output that is assumed to be
-    a representative summary of the entire interval. The output is a sort of
-    "averaged structure" that is assumed to be representative of the wind
-    field over the entire interval.
+.. How well do they address the problems of *discovery* and *use*?
 
-    As a result, they tend to "smooth out" the regions they fit. Subtleties in
-    the wind field are lost.
-
-    [[FIXME: I don't like this phrasing, but it'll do for now.]]
-
-  * For prediction: without an estimate of the wind field the models can't
-    condition predictions on observations of the wind field.
-
-* [[Conclusion: existing methods are inadequate. We could improve the feature
-  (structure) detectors if we had better estimates of the wind field itself.]]
+These restrictions limit both *what* heuristic-based tools can detect (and
+thus in what they can predict), as well as *how* their outputs can be used to
+make predictions. As a result, these tools are generally inadequate for
+addressing the problems of discovery and use. The underlying cause of these
+restrictions is that the tools have to rely on paraglider motion as a proxy
+for wind vectors. If the wind field itself was available, feature detectors
+could target its structure directly.
 
 
 Wind field estimation
