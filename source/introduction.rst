@@ -432,15 +432,15 @@ suitable patterns graphically, which would address the problems of use]]
 
 Because flight data does not include the actual wind vectors, existing tools
 rely on *heuristics*: approximation methods that rely on the wind field
-containing features with some explicit structure that can be detected based on
-particular patterns of the paraglider motion. For example, thermal detectors
+containing features with some predefined structure that can be detected based
+on specific patterns of the paraglider motion. For example, thermal detectors
 may require a minimum sink rate or total altitude gained, and they are forced
 to make strong assumptions about the state and parameters of the glider (such
 as average sink rate). Horizontal wind estimators may require that the glider
-was circling at a fixed airspeed. Other methods may try to fit the vertical
-and horizontal components simultaneously; for example, one method assumes
+was circling at a fixed airspeed. Other methods may try to fit the vertical and
+horizontal components simultaneously; for example, one method assumes
 a circling glider is accurately coring a thermal that is inclined with respect
-to the wind, so fitting a thermal model.
+to the wind, so fitting a thermal model. [[FIXME: edit]]
 
 To avoid false positives, heuristic-based feature detectors typically introduce
 constraints on the motion such as minimum duration, minimum number of cycles,
@@ -486,23 +486,38 @@ Wind field reconstruction
 
 .. What is *wind field reconstruction*?
 
-[[Define *wind field reconstruction*: estimating the continuous wind field
-that was present during a flight]]
+In this paper, *wind field reconstruction* refers to the process of estimating
+the continuous wind filed that was present during a flight.
 
 
-* How would wind field reconstruction help pattern discovery?
+.. How would wind field reconstruction help pattern discovery?
 
-  * [[Establish the performance criteria of a wind field estimator]]
+The purpose of reconstructing the wind field is to enable tools to analyze the
+wind field structure directly instead of relying on paraglider motion as
+a proxy. 
 
-  * Don't rely on specific motion patterns
+  * [[Is this where I establish the performance criteria of a wind field
+    estimator?]]
 
-  * Don't depend on explicit wind structure (ie, don't limit the estimator to
+  * Don't require specific motion patterns; allow arbitrary glider paths. This
+    is also important because we need to use **all** the data! Don't throw
+    away information just because an interval doesn't fit some predefined
+    motion signature.
+
+  * Don't require explicit wind structure (ie, don't limit the estimator to
     structure that adheres to an explicit model, like a linearized thermal.
     You can *summarize* regions of the wind field using that sort of
     structure, but that should not be fundamental to *estimating* the wind
     field.)
 
-  * Provide uncertainty quantification (heuristics are like point estimates)
+  * Provide uncertainty quantification (heuristics are like point estimates).
+
+    You could technically add uncertainty quantification to heuristic-based
+    detectors, but what would those probability distributions be? (What's the
+    prior over the existence of a feature at a particular point? What's prior
+    over the explicit glider path? Etc.) It's easier to place vague priors
+    over the wind field and paraglider dynamics than to place them over
+    individual features.
 
   * Make existing methods more reliable. It's easier to extract features
     directly from the wind field instead of relying on hard-coded patterns in
@@ -517,7 +532,15 @@ that was present during a flight]]
       venturi, dangerous blowback areas, expected wind velocity (useful for
       planning distances)
 
-  * Enable conditional predictions based on the state of the wind field.
+    * It's a lot easier to summarize spatially-distributed structure if you
+      have the actual wind field instead of having to code up some motion
+      signature to detect it. Stay as general as possible when estimating the
+      vectors.
+
+* How would wind field reconstruction help pattern use?
+
+  * Predictions can be conditioned on the actual state of the wind field
+    instead of the presence/absence of detected features.
 
     With access to the causal wind field, a predictive model can condition its
     predictions on the state of the wind field, so on-line predictions can try
@@ -525,47 +548,69 @@ that was present during a flight]]
     useful if they can condition on observations of the current (or
     forecasted) wind field.**
 
-* How do you estimate the wind field from flight data?
+    [[FIXME: you could technically condition patterns based on whether other
+    patterns were detected; I don't think this changes that. The more
+    important part is probably that feature detection is more reliable, thus
+    conditioning based on feature detection is more reliable.
 
-  * The first step is to recover the actual wind vectors instead of using
-    paraglider motion as a proxy for the wind vectors.
+    Maybe it'd be better to argue that making it easier to produce structure
+    summaries you'd have more opportunities for conditioning variables.]]
 
-* Are there existing methods for estimating the wind vectors from the available
+
+* How do you estimate the continuous wind field from position-only flight
   data?
 
-  * Yes, but those are *model-free* (data-driven methods) that rely on the
-    heuristics we discussed earlier.
+  * The first step is to recover the wind vectors at discrete points.
 
-  * For the vertical, there are methods for estimating thermals (but they make
-    strong assumptions about the state and parameters of the glider).
+* Are there existing methods for estimating wind vectors from position-only
+  flight data?
 
-    [[Might be a good place to mention that, over a short time span, you can't
-    tell the difference between headwind+lift versus braking.]]
+  Yes, but they rely on the same type of heuristics that were discussed
+  earlier, with the same limitations.
 
-  * For the horizontal, you can try to fit a thermal and compute the drift (but
-    that involves a lot of strong assumptions). Same thing for the *circle
-    method*.
+  They typically rely on a moving-average approach; for example, the circling
+  method is essentially an average over a time interval. Moving-average
+  methods require long intervals to reduce estimate noise, but as a result the
+  estimates are over-smoothed (and that's assuming the constant-airspeed
+  assumption held over that interval).
 
-* [[How can we produce such an estimator? (This is OLD, not sure where to put it.)]]
 
-  * Existing models can't be easily extended to satisfy the criteria. Conclude
-    that model-free methods are inadequate; model-based methods are required
-    to produce "better" estimates of the wind field (ie, we need full *flight
-    reconstruction*).
+* Why do heuristic-based methods fail?
 
-  * Heuristics are *model-free* methods, which rely on **coincidental**
-    relationships between the particular motion sequence and the feature being
-    detected. Using a *model-based* method enables introducing **causal**
-    relationships: causal dynamics introduce "more" information and are able
-    to extract more information from the data.
+  * The reason heuristics fail is largely because they are trying to deal with
+    insufficient information in the data.
 
-* Conclusion: a *model-based* approach is required.
+* How can we deal with this lack of information?
+
+  The heuristics mentioned so far are *model-free* methods that rely on
+  **coincidental** relationships between the particular motion sequence and
+  the feature being detected. In contrast, *model-based* methods rely on
+  **causal** relationships: causal dynamics introduce additional information
+  about the system dynamics which can then be used to extract more information
+  from the data.
+
+  In this case, the causal relationship between the wind and the paraglider
+  motion is provided by the canopy aerodynamics.
+
+
+* To summarize, better wind field pattern detection requires better wind field
+  estimates. [[FIXME: incomplete thought.]]
 
 * In particular, we need to model the paraglider dynamics. The canopy
   aerodynamics provide the link between the paraglider motion and the wind
   field. But, because the paraglider only interacts with points in the wind
   field, the relationship only provides information about the local wind
   vectors.
+
+* [[Conclusion: the goal is to estimate the continuous wind field from
+  position-only flight data, but we don't have a relationship to do that
+  directly. What we do know (partially) is the paraglider dynamics, so we need
+  to start by targeting the sequence of wind vectors encountered at discrete
+  points in the wind field.
+
+  Unfortunately, the paraglider dynamics depend on more unknowns that just the
+  wind, so reconstructing the wind vectors amounts to reconstructing the
+  complete state trajectory.]]
 
 
 .. Restatement of the response
