@@ -494,7 +494,7 @@ the continuous wind filed that was present during a flight.
 
 The purpose of reconstructing the wind field is to enable tools to analyze the
 wind field structure directly instead of relying on paraglider motion as
-a proxy. 
+a proxy.
 
   * [[Is this where I establish the performance criteria of a wind field
     estimator?]]
@@ -606,11 +606,7 @@ a proxy.
   position-only flight data, but we don't have a relationship to do that
   directly. What we do know (partially) is the paraglider dynamics, so we need
   to start by targeting the sequence of wind vectors encountered at discrete
-  points in the wind field.
-
-  Unfortunately, the paraglider dynamics depend on more unknowns that just the
-  wind, so reconstructing the wind vectors amounts to reconstructing the
-  complete state trajectory.]]
+  points in the wind field.]]
 
 
 .. Restatement of the response
@@ -621,19 +617,127 @@ a proxy.
 Flight reconstruction
 =====================
 
-.. So, the problem is "flight reconstruction" to enable building better tools
-   for solving the problems of discovering and using wind patterns. What are
-   the contributions of this paper towards solving the problem of flight
-   reconstruction?
+.. This section establishes the intuition behind reconstructing the complete
+   state trajectory of a flight from a time series of positions. The goal is
+   to recover the wind vectors, but since they are related to position through
+   the paraglider dynamics, the complete state must be reconstructed together.
+   Having the wind vectors would enable a continuous regression model over the
+   wind field, or possibly enable structure detection given the vectors
+   themselves. It concludes by motivating :math:`\dot{x} = f(x, u)`, which is
+   what the `pfh.glidersim` Python package is designed to provide.
 
-* [[We don't have a relationship to estimate the continuous wind field
-  directly from a position sequence. We have to start by estimating wind
-  vectors at discrete points using the **changes** in position.]]
 
-* [[FIXME: move the "Flight Reconstruction" chapter into this section]]
+.. Formalize the objective (estimating the sequence of wind states)
 
-* [[The main purpose of this section is to motivate :math:`\dot{x} = f(x, u)`,
-  which is what ``glidersim`` provides.]]
+[[Recap: the objective is to use a recorded flight track to estimate the wind
+vectors encountered during that flight.]]
+
+
+.. Consider why the problem is difficult (lack of data)
+
+* This task is difficult because the data does not contain direct observations
+  of the wind vectors. The only data is position and time. There are few
+  external sources of additional data for a flight that occurred in the past,
+  so most additional information must from the structure encoded in the
+  relationships between variables. In this case, the relationship is *causal*:
+  the data are observations of an effect (paraglider motion), and we wish to
+  infer the cause (wind vectors). [[We want to determine the conditions that
+  produced the sequence of position measurements.]]
+
+* [[Define *inverse problem*. Give a few examples? Discuss why they are hard
+  and how they can fail?]]
+
+* Solving an inverse problem requires a mathematical relationship between the
+  observations (the data) and the target. That relationship introduces more
+  information by imposing additional structure not present in the data alone.
+
+
+
+.. Develop the intuition: position is the output of a data-generating process
+
+[[Describe a pilot standing on the ground, looking up at a paraglider. They
+can use their knowledge of paraglider performance to ballpark the wind
+conditions up near the paraglider. We need to encode that knowledge in
+a mathematical model, and teach a computer to do the same estimation
+process.]]
+
+* The key insight is that the data was produced by some *data-generating
+  process*. A mathematical model of the *data-generating process* provides
+  a relationship that can be used to solve the inverse problem.
+
+* The model encodes the relationships between all the variables involved in
+  producing the positions. It allows the designer to express their subject
+  knowledge of how the data and the target are related.
+
+* In this case, the data are a sequence of position measurements over time.
+  The positions are a record of the paraglider's motion, which is determined
+  by the paraglider dynamics. The paraglider dynamics are the result of
+  interactions with gravity and wind. The interactions with the wind are
+  described by the canopy aerodynamics.
+
+  [[You could **describe** the motion with kinematics, but kinematics are not
+  causal relationships. You can't use them to infer anything about the
+  environment.]]
+
+* There is flexibility in designing the paraglider dynamics model, but for our
+  current problem it must incorporate the canopy aerodynamics in some way,
+  since the aerodynamics are what define the relationship between the state of
+  the wind field and the paraglider motion. To estimate the wind vectors from
+  the flight data, we must model the data-generating process with a paraglider
+  dynamics model that incorporates the canopy aerodynamics.
+
+
+.. State-space models of sequential processes
+
+[[Explain using state-space models to describe sequential processes. The
+general form of state-space models is enough to necessitate a dynamics model,
+which is what provides the link between what we know (the output of the
+sequential process) to what we want (the sequence of wind vectors)]]
+
+* Given a suitable model of the paraglider dynamics, we can define a model of
+  the data-generating process. In this case the data is a sequence, and the
+  natural representation of a sequential process is the *state-space model*.
+
+* [[Define a state-space model for the position data-generating process using
+  the paraglider dynamics only. Assume wind and control inputs are known.]]
+
+* We now have a complete model of the data-generating process, and it can be
+  used to solve the inverse problem.
+
+  [[Well, the form at least is complete: the paraglider dynamics depend on the
+  control inputs and the wind vectors, which do not appear in the model. The
+  model must have definitions for all variables involved. The discussion of
+  unknown inputs should get pushed back into "Future Work".]]
+
+
+.. Flight reconstruction as a filtering problem
+
+* [[Present *flight reconstruction* as a *filtering problem*, which will
+  introduce the recursive filtering equation. The filtering equation needs
+  a *transition function* (which for a continuous-time model appears as
+  a differential equation). **This is where I motivate :math:`\dot{x} = f(x,
+  u)`, which is what `glidersim` provides: a parametric model to produce the
+  :math:`\dot{x}`.** ]]
+
+
+
+MISC:
+
+* This paper only provides the paraglider dynamics. The rest must be dealt
+  with in the "Future Work" section.
+
+* [[I should at least preview how you use the recursive filtering equation to
+  solve the filtering problem? If you can't invert the dynamics you have to
+  rely on sequential state estimation via forward simulation.
+
+  Solving a filtering problem requires a filtering architecture, which is
+  beyond the scope of this paper, although I'll probably mention it in the
+  "Future Work" chapter. ]]
+
+* [[The purpose of this section is to develop the intuition and to conclude by
+  motivating :math:`\dot{x} = f(x, u)`, which is what ``glidersim`` provides.
+  In other words, ``glidersim`` _is_ my response to the problem of wind field
+  estimation.]]
 
 
 Roadmap

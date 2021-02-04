@@ -36,7 +36,6 @@ Contents
    :numbered:
 
    introduction
-   flight_reconstruction
    canopy_geometry
    canopy_aerodynamics
    paraglider_geometry
