@@ -20,7 +20,7 @@ Parametric wing modeling with airfoils
 
 .. The general equation
 
-#. Decompose `r_P/O` using points in wing sections
+2. Decompose `r_P/O` using points in wing sections
 
    [[It's easier to design section profiles in 2D, so the points are relative
    to the section. You finish the wing by specifying the pose of the section
@@ -42,7 +42,7 @@ Parametric wing modeling with airfoils
 
 .. An additional decomposition
 
-#. Decompose `r_LE/O` using an arbitrary reference point.
+3. Decompose `r_LE/O` using an arbitrary reference point.
 
    It's often inconvenient to specify section position using the leading edge.
    Instead, allow the designer to use an arbitrary reference point `RP`:
@@ -52,7 +52,7 @@ Parametric wing modeling with airfoils
    This lets a designer specify section position using whatever point is the
    most convenient.
 
-#. Parametrize the reference point using points on the section chords:
+4. Parametrize the reference point using points on the section chords:
 
      `r_LE/RP = c * R @ C_c/s @ xhat`
 
@@ -64,7 +64,7 @@ Parametric wing modeling with airfoils
 
      `xhat = [1, 0, 0]^T` (the chord lies along `xhat`)
 
-#. The general, partially parametrized, equation:
+5. The general, partially parametrized, equation:
 
      `r_P/O = r_P/LE + r_LE/RP + r_RP/O`
 
@@ -84,7 +84,7 @@ Parametric wing modeling with airfoils
    is almost exactly the same amount of work as before, you only need to add
    `R`.** Minimal extra effort for a lot of convenience.
 
-#. Some parameter choices that work well for parafoils:
+6. Some parameter choices that work well for parafoils:
 
      Let `r_y = r_z`
 
@@ -101,7 +101,7 @@ Parametric wing modeling with airfoils
    index, fractions of the chord, etc) instead of this generalized notation
    ("any point P" is not particularly clear)
 
-#. <Examples of completing the definition with parametric functions
+7. <Examples of completing the definition with parametric functions
    (elliptical functions, etc) using *design parameters* (span, taper ratio,
    etc) choices of reference points, etc>
 
