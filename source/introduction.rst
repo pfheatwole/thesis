@@ -726,14 +726,14 @@ Roadmap
    rely on having a model of the state dynamics, which motivates the bulk of
    this text: designing and implementing a parametric paraglider model.
 
-The purpose of this project is to develop and implement a parametric
-paraglider dynamics model suitable for paraglider flight reconstruction. The
-modeling process begins in :doc:`canopy_geometry`, which develops a novel
-parametric geometry specifically tailored for the non-linear details of
-typical paraglider wings. :doc:`canopy_aerodynamics` establishes some basic
-performance criteria for selecting an aerodynamic method suitable for
-analyzing paraglider motion, and presents an adaptation of a non-linear
-lifting line method that meets those criteria.
+This project designs and implements a parametric paraglider dynamics model
+suitable for paraglider flight reconstruction. The modeling process begins in
+:doc:`canopy_geometry`, which develops a novel parametric geometry
+specifically tailored for the non-linear details of typical paraglider wings.
+:doc:`canopy_aerodynamics` establishes some basic performance criteria for
+selecting an aerodynamic method suitable for analyzing paraglider motion, and
+presents an adaptation of a non-linear lifting line method that meets those
+criteria.
 
 Given a geometric and aerodynamic model of the paraglider canopy,
 :doc:`paraglider_geometry` models the remainder of the paraglider as a rigid
@@ -748,7 +748,6 @@ an example that uses the parametric model to approximate a physical paraglider
 wing, compare static performance analyses to expected results, and demonstrate
 several dynamic scenarios to highlight the flexibility of the model.
 
-In closing, [[:doc:`data_considerations` and]] :doc:`future_work` briefly
-surveys the remaining steps to solving the flight reconstruction problem,
-extracting wind field patterns from sets of recorded flights, and encoding
-those patterns into a predictive model.
+In closing, :doc:`future_work` briefly surveys the remaining steps to solving
+the flight reconstruction problem, extracting wind field patterns from sets of
+recorded flights, and encoding those patterns into a predictive model.
