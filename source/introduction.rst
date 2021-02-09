@@ -15,11 +15,11 @@ Introduction
 
    3. The difficulty: not enough data
 
-   4. The approach: introduce more information via flight dynamics
+   4. The solution: introduce more information via flight dynamics
 
-   5. The focus: building a dynamics model for the particle filter
+   5. The work: building a dynamics model for a particle filter
 
-   6. The outcomes: a fully parametric paraglider model
+   6. The result: a fully parametric paraglider model
 
 
 .. Intro to the Intro
@@ -154,18 +154,19 @@ the term *wind vector* often refers to only the lateral motion of the air
 .. What causes wind fields in the ABL?
 
 Wind fields are caused by large-scale air flows interacting with local
-features, such as topography, vegetation, solar exposure, etc.
+features, such as topography, surface materials, vegetation, solar exposure,
+etc.
 
-* [[Discuss lapse rates, prevailing winds, thermal convection, mountain
-    waves, etc? Global structure combines with topography to produce the local
-    structure, so it may be useful to start here.]]
+* [[Discuss lapse rates, prevailing winds, thermal convection, mountain waves,
+  etc? Global structure combines with topography to produce the local
+  structure, so it may be useful to start here.]]
 
 * [[These contributing factors determine the structure of the wind field.]]
 
 
 .. What are some examples of structure in a wind field?
 
-FIXME: keep?
+[[FIXME: keep?]]
 
 
 .. What aspects of wind field structure are relevant to paraglider pilots?
@@ -183,10 +184,10 @@ FIXME: keep?
 .. Why is it important for a pilot to determine wind field structure quickly?
 
 Much of the skill in piloting a gliding aircraft is in maintaining the
-glider's energy budget. Efficient path planning is the key to to minimizing
-energy expenditure, but planning a path through an environment depends on
-accurate knowledge of that environment. And so, pilots are constantly looking
-for information about the structure of the wind field. [[FIXME: reword.]]
+glider's energy budget, which requires careful aircraft control and efficient
+path planning. Because planning a path through an environment depends on
+accurate knowledge of that environment, pilots are constantly looking for
+information about the structure of the wind field.
 
 [[Vertical wind directly impacts energy budgets. Horizontal wind determines
 where they can go and how time/energy it costs to get there. They need to find
@@ -198,12 +199,12 @@ lift while avoiding sink, make sure they can reach the LZ, etc.]]
 The direct way to learn the structure of a wind field is to explore. The
 problem is that a wing remains airborne by constantly exchanging its momentum
 with the air, which means it is constantly spending energy; exploration takes
-time, and time has a significant energy cost. Pilots can't afford to explore at
-random; they need strategies for efficient path planning that will focus their
-exploration on promising regions. If their strategy fails, they can be left
-without sufficient altitude to continue their flight, or they can be blocked
-by a headwind that prevents them from reaching their destination (regardless
-of their altitude).
+time, and time has a significant energy cost. Pilots cannot afford to explore
+at random; they need strategies for efficient path planning that will focus
+their exploration on promising regions. If their strategy fails, they can be
+left without sufficient altitude to continue their flight, or they can be
+blocked by a headwind that prevents them from reaching their destination
+(regardless of their altitude).
 
 Another direct source of information is to observe other objects interacting
 with the wind field. For example, dust, debris, and insects can be caught in
@@ -219,34 +220,25 @@ information. [[FIXME: reword.]]
 
 .. How can pilots predict the structure of the wind field?
 
-[[Topography heuristics (surface sun exposure, ridge orientation to the wind,
-likely thermal triggers, etc)
-
 Another valuable, albeit indirect, source of information is the local
 topography. Paragliding pilots rely heavily on understanding how the
-environment affect the wind field. Regions with more sun exposure will tend to
-produce warmer air that can rise in thermal convection. The orientation of the
-ground (or other objects such as trees and buildings) relative to surface
-winds can produce orographic lift; many popular flying sites utilize the lift
-generated when an onshore breeze collides with a coastal bluff. Under some
-conditions the warm air near the surface can respond to so-called *thermal
-triggers* that function like a wick; by disturbing the equilibrium conditions
-at the surface the trigger can initiate bubbles or columns of rising air that
-pilots can use to increase their energy budget.]]
+environment affects the wind field. Regions with more sun exposure will tend
+to produce warmer air that can rise through thermal convection. The
+orientation of the ground (or other objects such as trees and buildings)
+relative to surface winds can produce useful updrafts; many popular flying
+sites use the lift generated when an onshore breeze collides with a coastal
+bluff. Under some conditions warm air near the surface can respond to
+so-called *thermal triggers* that function like a wick; by disturbing the
+equilibrium conditions at the surface the trigger can initiate bubbles or
+columns of rising air that pilots can use to increase their energy budget.
 
 [[Meteorological forecasts (weather forecasts, `RASP
 <http://www.drjack.info/twiki/bin/view/RASPop/WebHome>`__ `soaringmeteoGFS
 <http://soaringmeteo.org/GFSw/googleMap.html>`__, `Paragliding Maps
 <http://www.paraglidingmaps.com>`__)
 
-[[Conclusion: *wind patterns* are particularly valuable.
-
-All the listed causes, like meteorological models, etc, are only useful if you
-have the correct causal model; if your causal model is wrong, its predictions
-are wrong. Wind patterns are particularly nice because they're so simple; they
-can say what without caring about the why (although they're useful in that way
-too). They're also unique in that they represent what actually **DID** happen;
-they're not merely suggestive of what might happen **in theory**.]]
+Although there are many methods to help a pilot predict the local wind field,
+there is one that is particularly effective: local *wind patterns*.
 
 
 .. Restatement of the problem (and significance)
@@ -267,26 +259,27 @@ Wind field patterns
    Discuss wind patterns, their importance, and how they're learned
 
 
-Pilots are able to determine the structure of a wind field more *efficiently*
-(both in terms of time and energy) and more *accurately* when they can base
-their expectations on known patterns. The motivating objective of this paper is
-to help pilots extract valuable information about wind patterns from sets of
-paragliding flight records.
-
-
 .. What are *wind patterns*?
 
-In this paper, a *wind pattern* is any **recurring structure** in a wind field.
-The term "structure" refers to any observable order, and does not imply any
-particular configuration; uniform flows, shear, orographic lift, thermal
-sources and sinks, etc, and any combinations of those, can all be considered as
-structured configurations. The term "recurring" refers to the fact that some
-regions of a wind field can exhibit the same structure at different times.
+In this paper, a *wind pattern* is any **recurring structure** in a wind
+field. The term "structure" refers to any recognizable order, and does not
+imply any particular configuration; uniform flows, shear, orographic lift,
+thermal sources and sinks, etc, and any combinations of those, can all be
+considered structured configurations. The term "recurring" refers to the fact
+that some regions of a wind field can exhibit the same structure at different
+times.
 
 
 .. Why are wind patterns so **particularly** valuable to pilots?
 
-Wind patterns are beneficial to wind estimation in two ways. First, if some
+The reason local wind patterns are so particularly valuable is that they help
+pilots determine the structure of a wind field more *efficiently* (both in
+terms of time and energy) and more *accurately* when they can base their
+expectations on known patterns. [[The motivating objective of this paper is to
+help pilots extract valuable information about wind patterns from sets of
+paragliding flight records.  FIXME: this doesn't belong here...]]
+
+Wind patterns are useful for both prediction and estimation. First, if some
 region of a wind field exhibits recurring structure, then pilots can use that
 to predict its structure without needing to spend glider energy exploring that
 area. Second, once a pilot has begun traversing some region, historical
@@ -295,6 +288,12 @@ interpret the wind they encounter.
 
 [[Consider both the vertical and horizontal components. Consider both
 pre-flight (flight planning) and in-flight scenarios.]]
+
+[[Another advantage of wind patterns is that they are practical: they focus on
+what did happen, not what might happen in theory. All the other means of
+predicting the wind field, like meteorological models, etc, are only useful if
+the theory is able to produce an accurate causal model; if a causal model is
+wrong, its predictions are wrong.]]
 
 
 .. What challenges are involved?
@@ -406,7 +405,8 @@ suitable patterns graphically, which would address the problems of use]]
     predictor variables (which are **not** the same thing as observations of
     the wind field itself.]]
 
-  * Visualizing structure on a graphical map is convenient
+  * Visualizing structure on a graphical map is convenient.
+    :cite:`wirz2011RealtimeDetectionRecommendation`
 
   * A statistical predictive model can provide confidence levels: it
     can quantify the variance in its predictions, since it knows how much
