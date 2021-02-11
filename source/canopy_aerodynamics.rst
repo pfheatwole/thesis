@@ -2,7 +2,7 @@
 Canopy Aerodynamics
 *******************
 
-* What are aerodynamics?
+* What are *aerodynamics*?
 
   Broadly speaking, aerodynamics is the study of how forces and moments are
   produced on an object in response to its motion through air.
@@ -11,14 +11,16 @@ Canopy Aerodynamics
 
   [[I think I explained this earlier in the flight reconstruction chapter?]]
 
-* Why did I write my own aerodynamics code?
+* Why did I implement my own aerodynamics code?
 
   * You could use the parametric model to output design specifications for
-    other tools, but relying on existing tools is problematic:
+    other aerodynamic analysis tools, but relying on existing tools is
+    problematic:
 
     1. More complexity (you introduce an external dependency)
 
-    2. Slower (need to call into an external tool)
+    2. Slower (most tools don't provide an API, and it would be too expensive
+       for the simulator to call out to an external tool every iteration)
 
     3. Most of the freely available tools are not idea for analyzing
        parafoils. They must handle non-linear geometries. They must provide
@@ -132,8 +134,11 @@ Aerodynamics models
 
   Introduce LLT, VLM, CFD, etc. Go through the requirements and explain why
   they fail (LLT fails with non-linear geometry, VLM handles non-linear
-  geometry but assumes linear aerodynamics, CFD is too complicated to
-  implement and too slow). Only the NLLT met my requirements.]]
+  geometry but assumes linear aerodynamics (and neglects thickness, which can
+  be significant for parafoils), CFD is too complicated to implement and too
+  slow). Only the NLLT met my requirements.
+
+  Also, a great reference: :cite:`drela2014FlightVehicleAerodynamics`]]
 
 * [[Section profiles were covered in the previous chapter. The computational
   methods use the profiles either via their section coefficients, or via the
@@ -141,9 +146,9 @@ Aerodynamics models
 
 * Only the NLLT met my requirements. It's an extension of LLT to account for
   3D effects. It's computationally efficient, handles non-linear geometry,
-  makes no linearity assumptions, allows for viscous corrections, and is
-  relatively simple to implement (so I can implement my own instead of relying
-  on external dependencies).
+  does not assume constant or linear aerodynamic coefficients, allows for
+  viscous corrections, and is relatively simple to implement (so I can
+  implement my own instead of relying on external dependencies).
 
 
 Phillips' numerical lifting-line
@@ -797,7 +802,11 @@ Section Coefficients
   computational methods use the profiles either via their section
   coefficients, or via the surface geometry they generate.]]
 
-* Related work: :cite:`abbott1959TheoryWingSections`
+* Related work:
+
+  * :cite:`abbott1959TheoryWingSections`
+
+  * :cite:`drela2014FlightVehicleAerodynamics`
 
 * Instead of solving the boundary layer conditions for the full 3D wing, it is
   common to treat the lifting surface as a collection of finite segments taken
@@ -808,9 +817,10 @@ Section Coefficients
 
 Limitations of using "design by wing sections":
 
-* This method assumes straight, uniformly shaped wing segments. For
-  a continuously curved wing, this approximation will never be correct,
-  although the approximation improves as the number of segments increases.
+* This method represents the wing using straight, constant-profile wing
+  segments. For a continuously curved wing, this approximation will never be
+  correct, although the approximation improves as the number of segments
+  increases.
 
 * The "wing sections" modeling assumption: treats the wing as a composite of
   segments from infinitely long wings (ie, it assumes 2D coefficients are
