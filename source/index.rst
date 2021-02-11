@@ -36,14 +36,12 @@ Contents
    :numbered:
 
    introduction
-   flight_reconstruction
    canopy_geometry
    canopy_aerodynamics
    paraglider_geometry
    paraglider_dynamics
    flight_simulation
    case_study
-   data_considerations
    future_work
    conclusion
    examples

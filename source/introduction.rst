@@ -15,145 +15,230 @@ Introduction
 
    3. The difficulty: not enough data
 
-   4. The approach: introduce more information via flight dynamics
+   4. The solution: introduce more information via flight dynamics
 
-   5. The focus: building a dynamics model for the particle filter
+   5. The work: building a dynamics model for a particle filter
 
-   6. The outcomes: a fully parametric paraglider model
-
-
-Intro to the Intro
-==================
-
-[[**FIXME: these paragraphs are outdated (and too long). Rewrite.**]]
+   6. The result: a fully parametric paraglider model
 
 
-.. Establishing a research territory (Context):
+.. Intro to the Intro
+
+.. Establishing a research territory (Context): wind patterns help pilots
 
 Paragliding is a recreational flying activity that uses a lightweight,
-flexible wing for non-powered flight. Because a paraglider is a non-powered
-aircraft its motion is entirely dictated by interactions with gravity and
-wind, which means paragliding pilots are totally dependent on the local air
-currents to achieve their flight goals. As with all lifting surfaces, the
-aerodynamics of a paragliding wing depend on the relative velocity between the
-wing and the air, not the relative velocity between the wing and the ground.
-If the air is ascending it allows the pilot to slow their descent, or even
-gain altitude; conversely, sinking air will cause the wing to descend more
-quickly. The horizontal component of the wind determines the speed the glider
-can fly in a given direction. A successful flight depends on the pilot's
-ability to recognize the structure of the local air currents and navigate them
-in order to achieve their flight goals, which may include optimizing for
-flight time, distance, or a particular route. Because a glider is constantly
-spending energy to counteract the force of gravity, the pilot must recognize
-the wind patterns as quickly as possible to minimize energy loss. [[Awkward;
-I'm trying to say "time has an energy cost"]] Experienced pilots assess the
-nearby air currents by observing vegetation, birds, or other pilots, but they
-can also leverage knowledge gained from previous flights: although local wind
-configurations are difficult to predict, they can exhibit recurring patterns.
-By learning those patterns a pilot can assess the current wind conditions more
-quickly and with better odds of success, and can prioritize flying to areas
-that are likely to support their flight goals.
+flexible wing for non-powered flight. Because paragliders lack a motor, their
+motion is entirely dictated by interactions with gravity and wind.
+A successful flight depends on the pilot's ability to recognize the structure
+of the local air currents and navigate them in order to achieve their flight
+goals, which may include optimizing for flight time, distance, or a particular
+route. Because a glider is constantly spending energy to counteract the force
+of gravity, the pilot must recognize the wind patterns as quickly as possible
+to minimize energy loss. Experienced pilots assess the nearby air currents by
+observing vegetation, birds, or other pilots, but they can also leverage
+knowledge gained from previous flights; although local wind configurations are
+difficult to predict in detail, they can exhibit recurring patterns. By
+learning those patterns a pilot can assess the current wind conditions more
+quickly and more accurately, and can prioritize flying to areas that are
+likely to support their flight goals.
 
 
-.. Establishing a niche (Problem and Significance):
+.. Establishing a niche (Problem and Significance): learn patterns from data
 
 Traditionally, wind patterns are discovered by pilots with a large amount of
 flight time in a particular area, and are shared directly from one pilot to
 another. For the pilot community to learn reliable patterns, individual pilots
-must first recognize them and then be able to communicate them with precision.
-An appealing alternative would be to aggregate recorded flight data from many
-pilots over many flights, detect the wind patterns automatically from those
-flights, and build a graphical map to communicate the features of the wind
-field visually instead of relying on verbal descriptions. In support of this
-idea, there already exist large databases with millions of recorded flights
-spanning several decades. These databases continue to grow as pilots record
-and share their flights for personal and competition purposes. The difficulty
-with this option is that common flight devices only record a tiny amount of
-the information available to a pilot: in fact, the average flight record can
-only be expected to include a time series of positions. There is typically no
-information regarding the orientation, velocity, acceleration, pilot control
-inputs (brakes, accelerator, etc), or the weather conditions. Even the details
-of the aircraft are unknown. The question then becomes whether there is enough
-information in position-only time series data to recover the wind vectors that
-were present during a flight.
+must first recognize a pattern and then be able to communicate it with
+precision. An appealing alternative would be to aggregate recorded flight data
+from many pilots over many flights, detect any wind patterns automatically
+from those flights, and build a graphical map to communicate the features of
+the wind field visually instead of relying on verbal descriptions. In support
+of this idea, there already exist large databases with millions of recorded
+flights spanning several decades. These databases continue to grow as pilots
+record and share their flights for personal and competitive purposes. The
+difficulty with using those records is that most flight devices only record
+a tiny amount of the information available to a pilot; in fact, the average
+flight record can only be expected to include a time series of positions.
+There is typically no information regarding the orientation, velocity,
+acceleration, pilot control inputs (brakes, accelerator, etc), or the weather
+conditions. Even the details of the aircraft are unknown, although some do
+record the wing make and model. The question then becomes whether there is
+enough information in position-only time series data to recover the wind
+vectors that were present during a flight.
 
 
-.. Occupying the niche (Response):
+.. Occupying the niche (Response): developing a paraglider dynamics model to
+   enable flight reconstruction
 
-This thesis investigates the procedures necessary to produce a predictive
-model for wind fields using position-only time series flight data from
-a paraglider. The primary contribution of this project is a parametric
-paraglider dynamics model for simulating paraglider flight tracks for a given
-wind field and pilot control sequence. It discusses how the dynamics model
-enables simulation-based filtering methods to perform statistical flight
-reconstruction, and the requirements for a flight recording to be suitable for
-flight reconstruction. Lastly, it discusses the requirements for assembling
-a predictive model suitable for in-flight wind field estimation.
-
+This thesis considers the procedures necessary to estimate wind field
+structure from position-only time series flight data. The first step is to
+formulate the goal in mathematical terms, which will determine the underlying
+structure of the problem, and what information would be required to solve it.
+It concludes that a robust solution would require a dynamics model of the
+paraglider that produced the flight record, and so those dynamics are the
+focus of this thesis. The primary output of this project is the design and
+implementation of a parametric paraglider dynamics model and simulator for
+generating flight tracks from a given wind field and pilot control sequence.
+The paper will discuss how the dynamics model enables simulation-based
+filtering methods to perform statistical flight reconstruction, [[and
+concludes with a discussion of the remaining work?]]
 
 
 .. Context
 
    "Provides the full context in a way that flows from the opening."
 
-
 Paragliding
 ===========
 
 .. Introduce paragliding as a sport
 
-* What is paragliding?
-
-  * Paragliding is a recreational flying activity that uses a lightweight,
-    flexible wing for non-powered flight.
-
-* What equipment is involved? (Describe the system.)
-
-* What are the common goals of paragliding flights?
-
-  * Flight time, distance, or a particular route (eg, triangles).
-
-* How do those goals depend on the wind?
-
-  * [[A paraglider is a non-powered aircraft, so its motion is determined by
-    how it interacts with gravity and the air. A pilot can steer the glider
-    through the air, but the air is already moving relative to the ground, so
-    the wind determines how the paraglider moves relative to the ground.
-
-    If the air is ascending a pilot can slow their descent, or even gain
-    altitude; conversely, sinking air will cause the wing to descend more
-    quickly. The horizontal component of the wind dictates the ground speed of
-    the glider in a given direction, which determines what regions of the air
-    the pilot can access, and what landing zones they can reach.
-
-    As a result, pilots must understand the structure of the wind field in
-    order to plan their flight path and achieve their flight goals.]]
+.. FIXME : merge this section into "Wind fields"?
 
 
-Wind Fields
+.. What is paragliding?
+
+Paragliding is a recreational flying activity that uses a lightweight,
+flexible wing for non-powered flight. The pilot is strapped into a harness
+suspended from the wing by a network of thin connecting lines. The wing is
+controlled by manipulating the lines and shifting the pilot's weight inside
+the harness.
+
+There are a variety of reasons that people choose to fly. Some flights begin
+with an explicit goal: maximum flight time, maximum distance, maximum
+altitude, or perhaps to follow some particular route. Some pilots compete
+against other pilots in organized events, some compete against their own
+personal records, and some just want to relax and see where the wind takes
+them. Regardless of the goal, there is one underlying concern that is common
+to every pilot: how to deal with the constraints of gliding flight.
+
+
+.. How does gliding flight depend on the wind?
+
+A paraglider is a non-powered aircraft, so its motion is determined by how
+it interacts with gravity and the air. A pilot can steer the glider through
+the air, but they cannot control how the air is moving relative to the ground.
+Ultimately, it is the wind that limits how a paraglider is able to move
+relative to the ground.
+
+As with all lifting surfaces, the aerodynamics of a paragliding wing depend on
+the relative velocity between the wing and the air, not the relative velocity
+between the wing and the ground; the wing will accelerate until an equilibrium
+state is achieved. If the air is ascending a pilot can slow their descent, or
+even gain altitude; conversely, sinking air will cause the wing to descend
+more quickly. The horizontal component of the wind dictates the ground speed
+of the glider in a given direction, which determines what regions of the air
+the pilot can access, and what landing zones they can reach. As a result,
+pilots must understand the structure of the wind field in order to plan their
+flight path and achieve their flight goals.
+
+
+Wind fields
 ===========
 
-.. Discuss wind field structure relevant to paraglider pilots
+.. What is a wind field?
 
-* [[Define *wind field*. Specifically, wind is the motion of air relative to
-  the ground. Define *wind vector* here as well?]]
+A *wind field* refers to the detailed variations of local air currents at each
+point in a region. Each point in the wind field has a specific *wind
+velocity*, also known as a *wind vector*. It is important to note that in this
+paper the terms are considered interchangeable, but in aeronautics literature
+the term *wind vector* often refers to only the lateral motion of the air
+(comprised of wind speed and horizontal wind direction).
 
-* Define *atmospheric boundary layer*
 
-  * [[Discuss lapse rates, prevailing winds, thermal convection, mountain
-    waves, etc? Global structure combines with topology to produce the local
-    structure, so it may be useful to start here.]]
+.. What wind fields are paragliding pilots interested in? Where do they occur?
 
-* What are some examples of structure in a wind field?
+* [[Define *atmospheric boundary layer* here? It's where paragliding occurs.]]
 
-  * [[Thermal lift and sink, orographic lift, shear (including venturi), etc.
 
-    Describe the local wind field as a composite of basic features? Shear,
-    updrafts, and gusts. See :cite:`bencatel2013AtmosphericFlowField`
+.. What causes wind fields in the ABL?
 
-    Prioritize wind field information that is important to pilots. For
-    example, house thermals, finding lift along a ridge, avoiding sink near
-    a stream, etc.]]
+Wind fields are caused by large-scale air flows interacting with local
+features, such as topography, surface materials, vegetation, solar exposure,
+etc.
+
+* [[Discuss lapse rates, prevailing winds, thermal convection, mountain waves,
+  etc? Global structure combines with topography to produce the local
+  structure, so it may be useful to start here.]]
+
+* [[These contributing factors determine the structure of the wind field.]]
+
+
+.. What are some examples of structure in a wind field?
+
+[[FIXME: keep?]]
+
+
+.. What aspects of wind field structure are relevant to paraglider pilots?
+
+* [[Thermal lift and sink, orographic lift, shear (including venturi), etc.
+
+  Describe the local wind field as a composite of basic features? Shear,
+  updrafts, and gusts. See :cite:`bencatel2013AtmosphericFlowField`
+
+  Prioritize wind field information that is important to pilots. For example,
+  house thermals, finding lift along a ridge, avoiding sink near a stream,
+  etc.]]
+
+
+.. Why is it important for a pilot to determine wind field structure quickly?
+
+Much of the skill in piloting a gliding aircraft is in maintaining the
+glider's energy budget, which requires careful aircraft control and efficient
+path planning. Because planning a path through an environment depends on
+accurate knowledge of that environment, pilots are constantly looking for
+information about the structure of the wind field.
+
+[[Vertical wind directly impacts energy budgets. Horizontal wind determines
+where they can go and how time/energy it costs to get there. They need to find
+lift while avoiding sink, make sure they can reach the LZ, etc.]]
+
+
+.. How do pilots estimate the structure of the wind field?
+
+The direct way to learn the structure of a wind field is to explore. The
+problem is that a wing remains airborne by constantly exchanging its momentum
+with the air, which means it is constantly spending energy; exploration takes
+time, and time has a significant energy cost. Pilots cannot afford to explore
+at random; they need strategies for efficient path planning that will focus
+their exploration on promising regions. If their strategy fails, they can be
+left without sufficient altitude to continue their flight, or they can be
+blocked by a headwind that prevents them from reaching their destination
+(regardless of their altitude).
+
+Another direct source of information is to observe other objects interacting
+with the wind field. For example, dust, debris, and insects can be caught in
+air currents, providing information from a distance. Soaring birds, such as
+hawks and vultures, are excellent navigators of the wind field, and can
+indicate lifting air; even other pilots can provide a hint as to the
+conditions elsewhere. Also, although pilots are typically focused on the wind
+conditions at higher altitudes, useful information can be gained by observing
+behavior closer to the ground, such as vegetation and ripples on water.
+Anything that interacts with the wind can be a potential source of
+information. [[FIXME: reword.]]
+
+
+.. How can pilots predict the structure of the wind field?
+
+Another valuable, albeit indirect, source of information is the local
+topography. Paragliding pilots rely heavily on understanding how the
+environment affects the wind field. Regions with more sun exposure will tend
+to produce warmer air that can rise through thermal convection. The
+orientation of the ground (or other objects such as trees and buildings)
+relative to surface winds can produce useful updrafts; many popular flying
+sites use the lift generated when an onshore breeze collides with a coastal
+bluff. Under some conditions warm air near the surface can respond to
+so-called *thermal triggers* that function like a wick; by disturbing the
+equilibrium conditions at the surface the trigger can initiate bubbles or
+columns of rising air that pilots can use to increase their energy budget.
+
+[[Meteorological forecasts (weather forecasts, `RASP
+<http://www.drjack.info/twiki/bin/view/RASPop/WebHome>`__ `soaringmeteoGFS
+<http://soaringmeteo.org/GFSw/googleMap.html>`__, `Paragliding Maps
+<http://www.paraglidingmaps.com>`__)
+
+Although there are many methods to help a pilot predict the local wind field,
+there is one that is particularly effective: local *wind patterns*.
 
 
 .. Restatement of the problem (and significance)
@@ -161,103 +246,101 @@ Wind Fields
    "Restate the problem and significance in light of the more thoroughly
    detailed context."
 
-Predictive Modeling
+Wind field patterns
 ===================
 
-.. This section establishes that its easier to estimate, and even predict, the
+.. This section establishes that it is easier to estimate and predict the
    structure of a wind field if you have knowledge of recurring structure.
    There are problems in discovering and using that knowledge which can
    benefit from building predictive models from flight data. Unfortunately the
    flight data doesn't contain observations of the wind field, so this section
    concludes by motivating wind field estimation.
 
-
-.. Motivate predictive modeling
-
-* Why is it important to determine the structure as quickly as possible? Why
-  is it important for a pilot to be able to **predict** the structure?
-
-  * It takes a constant exchange of momentum between the wing and the air to
-    keep the paraglider airborne, so time has an energy cost.
-
-  * Efficient path planning minimizes energy expenditure.
-
-  * Pilots with better path planning are more likely to achieve their flight
-    goals.
-
-* How do pilots estimate the structure of the current wind field?
-
-  * Exploration
-
-  * Observing local features, such as dust, vegetation, birds, and ripples on
-    water
-
-  * Topology heuristics (surface sun exposure, ridge orientation to the wind,
-    likely thermal triggers, etc)
-
-  * Meteorological forecasts (weather forecasts, `RASP
-    <http://www.drjack.info/twiki/bin/view/RASPop/WebHome>`__ `soaringmeteoGFS
-    <http://soaringmeteo.org/GFSw/googleMap.html>`__, `Paragliding Maps
-    <http://www.paraglidingmaps.com>`__)
-
-  * Local *wind patterns* (word of mouth, `Paragliding Thermal Maps
-    <http://thermal.kk7.ch>`__)
+   Discuss wind patterns, their importance, and how they're learned
 
 
-.. Discuss wind patterns, their importance, and how they're learned
+.. What are *wind patterns*?
 
-* What are *wind patterns*?
-
-  * In this paper, a *wind pattern* is any **recurring structure** in a wind
-    field.
-
-    [[By "structure" I don't mean it needs to fit some predetermined model
-    "structure", like shear lines, ridge lift, thermal sources/sinks, etc.
-    I simply mean subsets of the wind field with configurations that are
-    predictable based on historical patterns.]]
-
-* Why are wind patterns so **particularly** valuable?
-
-  * [[If a wind field has recurring structure, then pilots can use that to
-    predict the structure before/without exploring that area.
-
-    The primary goal is to help pilots determine the structure of wind fields
-    *efficiently* (both in terms of time and energy) and *accurately*.  Pilots
-    would be able to determine the wind field more efficiently and more
-    accurately if they were able to compare it to previously observed wind
-    fields.
-
-    Consider both the vertical and horizontal components. Consider both
-    pre-flight (flight planning) and in-flight scenarios.]]
+In this paper, a *wind pattern* is any **recurring structure** in a wind
+field. The term "structure" refers to any recognizable order, and does not
+imply any particular configuration; uniform flows, shear, orographic lift,
+thermal sources and sinks, etc, and any combinations of those, can all be
+considered structured configurations. The term "recurring" refers to the fact
+that some regions of a wind field can exhibit the same structure at different
+times.
 
 
-.. Pilots face problems of discovery and use
+.. Why are wind patterns so **particularly** valuable to pilots?
 
-* Pilots who want to make use of wind patterns face two problems: *discovery*
-  and *use*.
+The reason local wind patterns are so particularly valuable is that they help
+pilots determine the structure of a wind field more *efficiently* (both in
+terms of time and energy) and more *accurately* when they can base their
+expectations on known patterns. [[The motivating objective of this paper is to
+help pilots extract valuable information about wind patterns from sets of
+paragliding flight records.  FIXME: this doesn't belong here...]]
 
-* How do pilots traditionally *discover* wind patterns?
+Wind patterns are useful for both prediction and estimation. First, if some
+region of a wind field exhibits recurring structure, then pilots can use that
+to predict its structure without needing to spend glider energy exploring that
+area. Second, once a pilot has begun traversing some region, historical
+patterns can provide additional perspective that can help a pilot correctly
+interpret the wind they encounter.
 
-  * By flying in the same region repeatedly.
+[[Consider both the vertical and horizontal components. Consider both
+pre-flight (flight planning) and in-flight scenarios.]]
 
-  * By sharing observations with other pilots.
+[[Another advantage of wind patterns is that they are practical: they focus on
+what did happen, not what might happen in theory. All the other means of
+predicting the wind field, like meteorological models, etc, are only useful if
+the theory is able to produce an accurate causal model; if a causal model is
+wrong, its predictions are wrong.]]
 
-* How do pilots traditionally make *use* of learned wind patterns?
 
-* What are the challenges involved? [[problems of discovery and use]]
+.. What challenges are involved?
 
-* Can we address those challenges by analyzing recorded flight data?
+Pilots who want to take advantage of wind patterns face a variety of challenges
+that can be broadly classified as problems of *discovery* and problems of
+*use*.
 
-  * [[Discover patterns using flight data (to address the problems of
-    discovery) and encode them in a predictive model (to address the problems
-    of use)]]
+
+.. What are problems of *discovery*?
+
+Traditionally, pilots discover wind patterns by flying in the same region
+repeatedly, and by sharing their observations with other pilots.
+
+[[FIXME: what are the limitations of these "traditional" methods]]
+
+
+.. What are problems of *use*?
+
+* [[Pilots have to memorize the patterns, when they're applicable, etc.]]
+
+
+.. Can flight data be used to address those challenges?
+
+   **THE DRIVING QUESTION OF THIS PAPER.**
+
+[[If wind field structure can be determined from flight data, it would enable
+the creation of tools to address the problems of discovery and use.]]
+
+[[ie, if you can discover patterns automatically using flight data it would
+address the problems of discovery; once you know the patterns you can encode
+them in a predictive model that can condition on the current wind field display
+suitable patterns graphically, which would address the problems of use]]
 
 
 .. Step 1: address "problems of discovery"
 
 * What are the advantages of pattern discovery from recorded flights?
 
-  * Automate pattern discovery [[Some trends may be subtle or infrequent.]]
+  * Automate pattern discovery [[ie, it's convenient? Also, some patterns may
+    be subtle; they may involve conditions that humans won't typically pick up
+    on (especially ones involving negatives, like "if there is NOT lift over
+    here, they may be lift over there")]]
+
+  * More opportunities to find patterns in flights that are spread out over
+    longer time periods. Some trends may be infrequent, and pilot
+    memories fade.
 
   * Utilize all recorded flights from all pilots instead of requiring multiple
     flights by the same pilot. [[If a pilot only encountered a particular wind
@@ -271,7 +354,9 @@ Predictive Modeling
     opportunities for detecting useful patterns.
 
   * Quantifying/encoding the patterns in mathematical form would enable the
-    creation of a *predictive model*.
+    creation of a *predictive model*, which can then address problems of use.
+    [[This is hard to follow; explain how simply producing a list of patterns
+    is different from making predictions by conditioning on current state.]]
 
 
 .. Step 2: address "problems of use"
@@ -320,7 +405,8 @@ Predictive Modeling
     predictor variables (which are **not** the same thing as observations of
     the wind field itself.]]
 
-  * Visualizing structure on a graphical map is convenient
+  * Visualizing structure on a graphical map is convenient.
+    :cite:`wirz2011RealtimeDetectionRecommendation`
 
   * A statistical predictive model can provide confidence levels: it
     can quantify the variance in its predictions, since it knows how much
@@ -329,165 +415,172 @@ Predictive Modeling
     experiences; memories are faulty.]]
 
 
+[[FIXME: discussion here.
+
+Conclusion: before you can estimate **recurring** structure, you need to be
+able to estimate the structure for the individual flights from the flight
+data.]]
+
+
+Wind field reconstruction
+=========================
+
 .. We've established that learning patterns and predictive models from flight
-   data would be a good thing. Now review existing tools, consider how
-   successful they are, and consider the source of their limitations.
+   data would be a good thing, but first we need to able to reconstruct the
+   wind fields from individual flights. This section should review existing
+   tools, consider how successful they are, and consider the source of their
+   limitations.
 
-   The fundamental problem with existing tools is they can't estimate the
-   underlying wind field, so they have to rely on heuristics.
+   The fundamental problem with existing tools is they have to rely on
+   heuristics (non-causal relationships that try to estimate wind field
+   structure directly from paraglider position). This limitation means they
+   fail to adequately address all those problems of discovery and use.
 
-   The problem then is how to overcome those limitations? Well, but they have
-   other limitations (ie, they fail to adequately address all those problems of
-   discovery and use.
+
+.. What is *wind field reconstruction*?
+
+In this paper, *wind field reconstruction* refers to the process of estimating
+the structure of regions of the wind field that was present during a flight.
+
 
 * [[Introduce the data (IGC files) here?]]
 
-* Are there existing tools to build predictive models from flight data?
 
-  * Paragliding Thermal Map, etc
+.. Are there existing tools to extract wind field structure from flight data?
 
-* What are the limitations of existing predictive models?
+* Paragliding Thermal Map, etc
 
-  * Limited in *what* they can detect (and thus in what they can predict)
-
-  * Limited in *how* they predict (condition only on day+time, not state)
-
-    [[Current predictive models have no estimate of the underlying wind field,
-    so they can't condition predictions based on the state of the wind field.
-    Instead, they can only condition on crude measurements like the season or
-    time of day, which can result in simplistic predictions that are simple
-    "average" configurations averaged over arbitrary time intervals.
-
-    In a sense, the model is marginalizing over the unspecified inputs.
-    Existing models don't take observations of the wind field into account, so
-    they're effectively marginalizing over **all possible conditions** to
-    produce an average. (Or something like that.)]]
-
-* [[How well do they address the problems of *discovery* and *use*?]]
+* [[FIXME: what about prediction? "Paragliding Thermal Map" does let you
+  filter by time of year.]]
 
 
+.. How do they work?
 
-* [[Explain the limitations of existing tools]]
+Because flight data does not include the actual wind vectors, existing tools
+rely on *heuristics*: approximation methods that rely on the wind field
+containing features with some predefined structure that can be detected based
+on specific patterns of the paraglider motion. For example, thermal detectors
+may require a minimum sink rate or total altitude gained, and they are forced
+to make strong assumptions about the state and parameters of the glider (such
+as average sink rate). Horizontal wind estimators may require that the glider
+was circling at a fixed airspeed. Other methods may try to fit the vertical and
+horizontal components simultaneously; for example, one method assumes
+a circling glider is accurately coring a thermal that is inclined with respect
+to the wind, so fitting a thermal model. [[FIXME: edit]]
 
-  * They use *heuristics*: approximation methods that rely on the wind
-    field containing features with some explicit structure that can be
-    detected based on particular patterns of the paraglider motion.
+To avoid false positives, heuristic-based feature detectors typically introduce
+constraints on the motion such as minimum duration, minimum number of cycles,
+etc. Given a interval, the output is assumed to be representative of the wind
+field over the entire interval. The result is a sort of "average structure"
+that tends to "smooth out" the regions they fit. Subtleties in the wind field
+are lost.
 
-    Thermal detectors may require a minimum sink rate, or total altitude
-    gained; horizontal wind estimators may require that the glider was
-    circling at a fixed airspeed, etc.
+[[FIXME: probably a good place to mention that, over a short time span, you
+can't tell the difference between headwind+lift versus braking?]]
 
-  * Each heuristic can only detect its explicit (predefined and crude)
-    features, and only if the motion of the paraglider matches the motion
-    signature. The rest of the data is discarded, which also discards valuable
-    information.
+[[FIXME: discuss energy-based methods?]]
 
-  * To avoid false positives, heuristics typically introduce constraints on
-    the motion such as minimum duration, minimum number of cycles, etc.
+Ultimately, each heuristic can only detect an explicit feature, and only if the
+motion of the paraglider matches a predefined motion signature; the rest of the
+data is discarded, which also discards valuable information.
 
-    Given the interval, the heuristic produces an output that is assumed to be
-    a representative summary of the entire interval. The output is a sort of
-    "averaged structure" that is assumed to be representative of the wind
-    field over the entire interval.
-
-    As a result, they tend to "smooth out" the regions they fit. Subtleties in
-    the wind field are lost.
-
-    [[FIXME: I don't like this phrasing, but it'll do for now.]]
-
-  * For prediction: without an estimate of the wind field the models can't
-    condition predictions on observations of the wind field.
-
-* [[Conclusion: existing methods are inadequate. We could improve the feature
-  (structure) detectors if we had better estimates of the wind field itself.]]
+[[FIXME: plus, that kind of output is hard to use to condition a predictive
+model. You'd either have to run a similar feature detector in-flight (which is
+likely to be VERY noisy) or you have to convert those features into something
+that can be more easily related to the kind of data available in-flight (eg,
+convert a thermal "feature" into an average sink rate or something).]]
 
 
+.. What are their limitations?
 
-Wind field estimation
-=====================
+[[Existing tools use heuristics that rely on coincidental instead of causal
+relationships. Indirect relationships are the cause of awkward hacks/filters
+like "require the paraglider to be circling" or "sink rate must be at least
+1m/s". Direct relationships avoid those.]]
 
-.. To improve the ability to detect structure in the wind field, we need
-   better estimates of the wind field itself. (We need estimates that don't
-   rely on particular paraglider motion signatures.)
+The heuristics impose some limitations:
 
-* What is *wind field estimation*?
+* They can only detect specific kinds of structure. They cannot determine the
+  wind field structure in general.
 
-* How would wind field estimation help?
+* They rely on specific paraglider motion patterns. They do this because they
+  don't have a direct relationship between paraglider motion and wind field
+  structure, so they have to rely on heuristics.
 
-  * [[Establish the performance criteria of a wind field estimator]]
 
-  * Don't rely on specific motion patterns
+.. How well do existing tools address the problems of *discovery* and *use*?
 
-  * Don't depend on explicit wind structure (ie, don't limit the estimator to
+These restrictions limit both *what* structure heuristic-based tools can
+detect (and thus in what structure they can predict), as well as *how* their
+outputs can be used to make predictions. As a result, these tools are
+generally inadequate for addressing the problems of discovery and use.
+
+
+.. How can the limitations of heuristics be avoided?
+
+[[Instead of trying to estimate wind features directly from paraglider motion,
+the goal should be to break the process into multiple steps that use
+**direct** relationships: paraglider motion is directly related to wind
+vectors, wind vectors are directly related to the (continuous) wind field, and
+the wind field contains the structure that contains the wind features.]]
+
+The underlying cause of these restrictions is that the tools have to rely on
+paraglider motion as a proxy for wind vectors. If the wind field itself was
+available, feature detectors could target its structure directly instead of
+relying on paraglider motion as a proxy.
+
+* Why would wind vector estimation improve wind field reconstruction?
+
+  * Don't require explicit motion patterns. The entire sequence of positions
+    contains information about the wind field; don't throw some of it away
+    just because an interval doesn't fit some predefined motion signature.
+
+  * Don't require explicit wind structure (ie, don't limit the estimator to
     structure that adheres to an explicit model, like a linearized thermal.
     You can *summarize* regions of the wind field using that sort of
     structure, but that should not be fundamental to *estimating* the wind
     field.)
 
-  * Provide uncertainty quantification (heuristics are like point estimates)
+* Are there existing methods for estimating wind vectors from position-only
+  flight data?
 
-  * Make existing methods more reliable. It's easier to extract features
-    directly from the wind field instead of relying on hard-coded patterns in
-    the paraglider's motion.
+  Yes, but they rely on the same type of heuristics that were discussed
+  earlier, with the same limitations.
 
-  * Enable spatially-distributed structure
+  They typically rely on a moving-average approach; for example, the circling
+  method is essentially an average over a time interval. Moving-average
+  methods require long intervals to reduce estimate noise, but as a result the
+  estimates are over-smoothed (and that's assuming the constant-airspeed
+  assumption held over that interval).
 
-    * Point predictions can be useful summaries of the wind field, but they
-      can't capture a lot of interesting structure.
 
-    * Pilots are interested in **everything** related to wind velocity: shear,
-      venturi, dangerous blowback areas, expected wind velocity (useful for
-      planning distances)
+* CATCH-ALL COLLECTION
 
-  * Enable conditional predictions based on the state of the wind field.
+  The existing methods fail because they don't have enough information
+  (because they don't impose enough structure). They rely on indirect
+  relationships and questionably strong assumptions.
 
-    With access to the causal wind field, a predictive model can condition its
-    predictions on the state of the wind field, so on-line predictions can try
-    to match the current state of the world. **Predictive models are MUCH more
-    useful if they can condition on observations of the current (or
-    forecasted) wind field.**
+  The heuristics mentioned so far are *model-free* methods that rely on
+  **coincidental** relationships between the particular motion sequence and
+  the feature being detected. In contrast, *model-based* methods rely on
+  **causal** relationships: causal dynamics introduce additional information
+  about the system dynamics which can then be used to extract more information
+  from the data.
 
-* How do you estimate the wind field from flight data?
+  Better wind vector estimation requires a direct, causal relationship between
+  wind vectors and paraglider position.
 
-  * The first step is to recover the actual wind vectors instead of using
-    paraglider motion as a proxy for the wind vectors.
-
-* Are there existing methods for estimating the wind vectors from the available
-  data?
-
-  * Yes, but those are *model-free* (data-driven methods) that rely on the
-    heuristics we discussed earlier.
-
-  * For the vertical, there are methods for estimating thermals (but they make
-    strong assumptions about the state and parameters of the glider).
-
-    [[Might be a good place to mention that, over a short time span, you can't
-    tell the difference between headwind+lift versus braking.]]
-
-  * For the horizontal, you can try to fit a thermal and compute the drift (but
-    that involves a lot of strong assumptions). Same thing for the *circle
-    method*.
-
-* [[How can we produce such an estimator? (This is OLD, not sure where to put it.)]]
-
-  * Existing models can't be easily extended to satisfy the criteria. Conclude
-    that model-free methods are inadequate; model-based methods are required
-    to produce "better" estimates of the wind field (ie, we need full *flight
-    reconstruction*).
-
-  * Heuristics are *model-free* methods, which rely on **coincidental**
-    relationships between the particular motion sequence and the feature being
-    detected. Using a *model-based* method enables introducing **causal**
-    relationships: causal dynamics introduce "more" information and are able
-    to extract more information from the data.
-
-* Conclusion: a *model-based* approach is required.
-
-* In particular, we need to model the paraglider dynamics. The canopy
+  In particular, we need to model the paraglider dynamics. The canopy
   aerodynamics provide the link between the paraglider motion and the wind
   field. But, because the paraglider only interacts with points in the wind
   field, the relationship only provides information about the local wind
   vectors.
+
+  [[Conclusion: the goal is to estimate the continuous wind field from
+  position-only flight data, but we don't have a relationship to do that
+  directly. What we do know (partially) is the paraglider dynamics, so we need
+  to start by targeting the sequence of wind vectors encountered at discrete
+  points in the wind field.]]
 
 
 .. Restatement of the response
@@ -495,33 +588,130 @@ Wind field estimation
    "Leverage the detail presented in the full context to elaborate on the
    details of the response."
 
-Flight Reconstruction
+Flight reconstruction
 =====================
 
-.. So, the problem is "flight reconstruction" to enable building better tools
-   for solving the problems of discovering and using wind patterns. What are
-   the contributions of this paper towards solving the problem of flight
-   reconstruction?
+.. This section establishes the intuition behind reconstructing the complete
+   state trajectory of a flight from a time series of positions. The goal is
+   to recover the wind vectors, but since they are related to position through
+   the paraglider dynamics, the complete state must be reconstructed together.
+   Having the wind vectors would enable a continuous regression model over the
+   wind field, or possibly enable structure detection given the vectors
+   themselves. It concludes by motivating :math:`\dot{x} = f(x, u)`, which is
+   what the `pfh.glidersim` Python package is designed to provide.
 
-* [[We don't have a relationship to estimate the total wind field directly
-  from a position sequence. We have to start by estimating **local** wind
-  vectors using the **changes** in position.]]
 
-* [[Define *flight reconstruction*?]]
+.. Formalize the objective (estimating the sequence of wind states)
 
-* [[Describe some of the requirements for a "good" model. Foreshadow the
-  overarching need for uncertainty management in all steps.]]
+[[Recap: the objective is to use a recorded flight track to estimate the wind
+vectors encountered during that flight.]]
 
-* The goals of this paper:
 
-  * Define *flight reconstruction*, and establish that it requires a parametric
-    paraglider model
+.. Consider why the problem is difficult (lack of data)
 
-  * Provide a parametric dynamics model suitable for recovering the wind
-    vectors
+* This task is difficult because the data does not contain direct observations
+  of the wind vectors. The only data is position and time. There are few
+  external sources of additional data for a flight that occurred in the past,
+  so most additional information must from the structure encoded in the
+  relationships between variables. In this case, the relationship is *causal*:
+  the data are observations of an effect (paraglider motion), and we wish to
+  infer the cause (wind vectors). [[We want to determine the conditions that
+  produced the sequence of position measurements.]]
 
-  * Survey the remaining work (for flight reconstruction and producing wind
-    field regression models)
+* [[Define *inverse problem*. Give a few examples? Discuss why they are hard
+  and how they can fail?]]
+
+* Solving an inverse problem requires a mathematical relationship between the
+  observations (the data) and the target. That relationship introduces more
+  information by imposing additional structure not present in the data alone.
+
+
+
+.. Develop the intuition: position is the output of a data-generating process
+
+[[Describe a pilot standing on the ground, looking up at a paraglider. They
+can use their knowledge of paraglider performance to ballpark the wind
+conditions up near the paraglider. We need to encode that knowledge in
+a mathematical model, and teach a computer to do the same estimation
+process.]]
+
+* The key insight is that the data was produced by some *data-generating
+  process*. A mathematical model of the *data-generating process* provides
+  a relationship that can be used to solve the inverse problem.
+
+* The model encodes the relationships between all the variables involved in
+  producing the positions. It allows the designer to express their subject
+  knowledge of how the data and the target are related.
+
+* In this case, the data are a sequence of position measurements over time.
+  The positions are a record of the paraglider's motion, which is determined
+  by the paraglider dynamics. The paraglider dynamics are the result of
+  interactions with gravity and wind. The interactions with the wind are
+  described by the canopy aerodynamics.
+
+  [[You could **describe** the motion with kinematics, but kinematics are not
+  causal relationships. You can't use them to infer anything about the
+  environment.]]
+
+* There is flexibility in designing the paraglider dynamics model, but for our
+  current problem it must incorporate the canopy aerodynamics in some way,
+  since the aerodynamics are what define the relationship between the state of
+  the wind field and the paraglider motion. To estimate the wind vectors from
+  the flight data, we must model the data-generating process with a paraglider
+  dynamics model that incorporates the canopy aerodynamics.
+
+
+.. State-space models of sequential processes
+
+[[Explain using state-space models to describe sequential processes. The
+general form of state-space models is enough to necessitate a dynamics model,
+which is what provides the link between what we know (the output of the
+sequential process) to what we want (the sequence of wind vectors)]]
+
+* Given a suitable model of the paraglider dynamics, we can define a model of
+  the data-generating process. In this case the data is a sequence, and the
+  natural representation of a sequential process is the *state-space model*.
+
+* [[Define a state-space model for the position data-generating process using
+  the paraglider dynamics only. Assume wind and control inputs are known.]]
+
+* We now have a complete model of the data-generating process, and it can be
+  used to solve the inverse problem.
+
+  [[Well, the form at least is complete: the paraglider dynamics depend on the
+  control inputs and the wind vectors, which do not appear in the model. The
+  model must have definitions for all variables involved. The discussion of
+  unknown inputs should get pushed back into "Future Work".]]
+
+
+.. Flight reconstruction as a filtering problem
+
+* [[Present *flight reconstruction* as a *filtering problem*, which will
+  introduce the recursive filtering equation. The filtering equation needs
+  a *transition function* (which for a continuous-time model appears as
+  a differential equation). **This is where I motivate :math:`\dot{x} = f(x,
+  u)`, which is what `glidersim` provides: a parametric model to produce the
+  :math:`\dot{x}`.** ]]
+
+
+
+MISC:
+
+* This paper only provides the paraglider dynamics. The rest must be dealt
+  with in the "Future Work" section.
+
+* [[I should at least preview how you use the recursive filtering equation to
+  solve the filtering problem? If you can't invert the dynamics you have to
+  rely on sequential state estimation via forward simulation.
+
+  Solving a filtering problem requires a filtering architecture, which is
+  beyond the scope of this paper, although I'll probably mention it in the
+  "Future Work" chapter. ]]
+
+* [[The purpose of this section is to develop the intuition and to conclude by
+  motivating :math:`\dot{x} = f(x, u)`, which is what ``glidersim`` provides.
+  In other words, ``glidersim`` _is_ my response to the problem of wind field
+  estimation.]]
 
 
 Roadmap
@@ -529,340 +719,28 @@ Roadmap
 
 .. "Brief indication of how the thesis will proceed."
 
-Upcoming chapters:
-
-* Formalize the "restatement of the problem" in probabilistic terms. The math
-  will produce a set of terms, each of which are their own topic. For example,
-  the *underdetermined system* problem is the impetus for *simulation-based
-  flight reconstruction*, which segues into particle filtering, which in turn
-  will necessitate the parametric model. (The focus of this project.)
-
-* Review the available data. Primary sources are IGC files, but could also
-  suggest augmenting that with atmospheric equations, digital elevation
-  models, radiosondes, RASP, etc. Those might fit well in my discussion about
-  "adding information" to make up for the dearth of data; maybe put it under
-  a "brain storm information we can add" prior to the mathematical
-  formalization.
-
-  Probably need to put this chapter earlier than the chapter on particle
-  filtering. The limitations of the data is what motivates simulation-based
-  filtering. Or maybe it's small enough to put this in the introduction?
-
-  [[Update 2020-09-26: on second thought, maybe not. Start with the simplest
-  possible problem statement: I have time-series of position, nothing more.
-  I can dig into the data more later on when I'm discussing filter design.
-  I'll already be discussing sensor noise, etc.]]
-
-* [[Summarize the contribution of this work]]
-
-
-
-SCRATCH: My Deliverables
-========================
-
-* Derivations are in an appendix
-
-* Implementations of the paraglider geometry and dynamics are available in
-  Python
-
-* Everything is under open licensing: code is MIT, writeup is CC-BY
-
-
-* Math
-
-  * Parametric paraglider geometry
-
-* Code
-
-  * Paraglider dynamics models
-
-  * Simple wind models (for testing the model and generating test flights)
-
-  * A simulator
-
-  * IGC parsing code
-
-  * Rudimentary GMSPPF?  (Stretch goal!!!)
-
-* Explain why I'm implementing everything in Python.
-
-  * Approachable syntax
-
-  * Good cross-domain language
-
-  * Free (unlike matlab)
-
-  * Numerical libraries (numpy, scipy)
-
-  * Large library ecosystem (s2sphere, sklearn, databases, PyMC3, pandas, etc)
-
-  * Easy integration into tools w/ native support (Blender, FreeCAD, QGIS)
-
-
-SCRATCH
-=======
-
-*  People are already predicting aspects of the wind field structure from
-   data (eg, thermal maps). **This is to do is qualitatively different from
-   conditioning on things like "month". This section must communicate that.**
-
-   I must contrast my approach with existing methods that "learn from flight
-   data", like the thermal maps. Those are *model-free* methods
-   (kinematic-based filtering), I'm focusing on *model-based* methods.
-
-   (Related: "data driven" vs "model driven", from "Probabilistic forecasting
-   and Bayesian data assimilation" (Reich, Cotter; 2015). Also, page 549 of
-   "Statistical Rethinking" (McElreath; 2020), which is discussing the problem
-   of using noisy data to predict future data (like simple ARMA models do,
-   thus propagating measurement error into the prediction.)
-
-   Another difference: I think the flight-based maps average over all flights
-   (possibly segmented by month/season). I'm interested in a predictive model
-   that can condition the prediction based on current conditions; for that you
-   need individual patterns, not a simple average.
-
-* What are the difficulties of recovering wind fields from a paragliding
-  flight record? Is it even possible?
-
-  * The flight tracks are position-only time series. No record of the
-    paraglider model, pilot inputs, wind vectors, etc.
-
-* My intermediate objective is *model-based* filtering to estimate the
-  underlying wind field. (*Model-based* methods can dramatically outperform
-  *model-free* methods such as kinematics-only Kalman filters).
-
-  Model-free methods like "paragliding thermal map" tend to just show
-  "pilots found lift near the ridge, and sink over bodies of water".
-  Interesting, but ultimately **not very informative**, because that
-  information is already encoded in heuristics that pilot's already know: lift
-  along ridges, sink over bodies of water.
-
-  Worse, they neglect the fact that a paraglider can be ascending in sink
-  (under weird conditions), or descending in lift. This makes the "data" far
-  noisy; you could fix this by averaging if you had a ton of observations, but
-  you don't: each observation is precious.
-
-* Interesting: you can think of the methods that are simple averages over
-  a time interval as a prior for the wind field during that interval. I'm just
-  wanting to take it further and condition that prior (to get the posterior).
-  I think that's kinda what he means on page 171 (182) of "Probabilistic
-  forecasting and Bayesian data assimilation" when he mentions "model-based
-  forecast uncertainties taking the role of prior distributions"
-
-* Existing predictive models (thermal maps) use the paraglider motion as
-  a proxy for the wind vector. Because of ambiguity in the horizontal motion,
-  they ignore it and only use the vertical component. The result is a map that
-  simply shows the average vertical velocity, which doesn't necessarily
-  correspond to the actual wind field. (I think "Paragliding Thermal Maps"
-  tries to "locate" the thermal trigger, which might explain why it assumes
-  ridges are always awesome.)
-
-
-* The fact that the solution involves a distribution over all possible
-  solutions highlights the fact that the question is not "can I produce an
-  estimate of the wind vectors?" to "can I produce a **useful** estimate of
-  the wind vectors?"
-
-  For example, if no information at all is given, a wind speed estimate of
-  "between 0 and 150 mph" is likely to be correct, but it is not useful. If
-  a pilot is told that a paraglider is currently flying, then with no
-  further information they can still make reasonable assumptions about the
-  maximum wind speed, since paragliding wings have relatively small
-  operating ranges. If you told them the pilot's position at two points
-  close in time, they can make an even better guess of the wind speed and
-  a very rough guess about the wind direction. Intuitively, this is an
-  "eliminate the impossible" approach: by assuming some reasonable limits on
-  the wind speed and wing performance you can improve the precision of the
-  estimate.
-
-  The key frame of mind for this project is that the question is not "can you
-  produce an estimate the wind from position-only data?", but rather "how
-  **how good** of an estimate of wind is possible from position-only data?" An
-  estimate doesn't need to be especially precise in order to be useful to
-  a pilot who is trying to understand the local wind patterns.
-
-* The fundamental idea of this project is to augment a tiny amount of flight
-  data with a large amount of system knowledge. Related to this idea is
-  *model-free* vs *model-based* methods: if you have information about the
-  target, use it. This project has many components, and each component needs
-  a model; conceptually you can start with *model-free* methods for everything
-  and replace them with *model-based* ones. (I'm not sure if kinematics-only
-  models would fall under model-free or not...)
-
-  From :cite:`li2003SurveyManeuveringTarget`: "a good *model-based* tracking
-  algorithm will greatly outperform any *model-free* tracking algorithm if the
-  underlying model turns out to be a good one". (See also
-  :cite:`li2005SurveyManeuveringTarget` for more discussion of this notion?)
-
-
-My "Response" to this problem
------------------------------
-
-1. Develop an informal intuition of how this would work. Start by painting
-   a picture of a pilot watching another glider in the sky. Discuss how they
-   use their intuition of wing performance to guess the wind condition. If
-   a human can approximate the wind from position-only data, then
-   a mathematical model could too.
-
-#. Establish the requirements of the solution in order for it to be considered
-   a success.
-
-   * How to communicate uncertainty of the solution. Point-estimates by
-     themselves are worthless; just because the model produces a number
-     doesn't mean you should trust it.
-
-#. Discuss the available data. This determines the set of possible solutions
-   (ie, it constrains the feasible set of filter designs).
-
-   * Time series of position, approximate air density?
-
-   * The raw data is stored in IGC files, which must be parsed and sanitized.
-     Parsing is straightforward, since the data follows a well-defined format.
-     Sanitizing the data is more difficult: erratic timestamps, pressure
-     altitude biases, and unknown sensor characteristics all present their own
-     sets of concerns. Due to time constraints, data parsing and sanitization
-     will not be handled in this thesis.
-
-#. Discuss the difficulties of learning wind patterns from the available data.
-   Don't discuss how to mitigate them yet; just refine the requirements of the
-   response.
-
-   * Observations of position are noisy.
-
-   * No observations of the wind vectors, pilot inputs, or topography.
-
-   * No knowledge of wing parameters or sensor characteristics.
-
-#. Preview the strategies for overcoming the difficulties (preferably in the
-   same order they were presented, if possible)
-
-   * Managing uncertainty through Bayesian statistics
-
-     *Bayesian statistics* is a theoretical framework that interprets
-     statements of *probability* as statements of ignorance; probability
-     represents the *degree of belief* in some outcome. It uses the rules of
-     probability to relate uncertain quantities and to quantify the "state of
-     ignorance" of the result.
-
-     You don't produce "best guess" point-estimates, you produce an entire
-     distribution over all possible values. The question is not "can I produce
-     **an** estimate?" but rather "can I produce a **useful** estimate?" You
-     can always produce an answer, but it's only useful if the probability
-     mass is spread over a useably small range of outcomes.
-
-   * Dealing with the underdetermined system via simulation-based methods
-
-     * Producing the distribution over possible outcomes requires first
-       producing the set of possible outcomes and then assigning weights
-       (probabilities) to each outcomes. Generating the outcomes requires
-       a relationship between the data (the flight track) and the outcomes
-       (the wind vectors). The relationship between the paraglider position
-       and the wind is provided by the paraglider dynamics.
-
-     * A difficulty with this approach is that the paraglider dynamics rely on
-       not only the wind vectors, but also on the wing dynamics, orientation,
-       and pilot controls. Because those values were not recorded, they are
-       not present in the observational data, which means this *inverse
-       problem* must deal with a highly underdetermined system of equations.
-       In the terminology of statistics, this means the wind vectors are not
-       *identifiable*: there are many different flight scenarios that could
-       explain the observed data. The wind cannot be determined without
-       knowledge the wing behavior and control inputs, which means that
-       *simulation-based filtering* methods are required.
-
-       [[What about PVA approaches that ignore the relative wind, such as
-       Michael von Kaenel's thesis?]]
-
-       [[Useful paragraph, but it doesn't explain how you solve it. This is
-       basically arguing (again) that you need a distribution over outcomes,
-       but that wasn't suppose to be the point of this paragraph. It was
-       supposed to be about highlight the fact that you utilize the
-       relationship between the flight track and the wind vectors you need
-       more information, and that information comes from simulations. You
-       don't care about the simulations themselves (they're nuisance
-       parameters), you just care about getting that sweet distribution over
-       the wind vectors.]]
-
-     * The essence of simulation-based methods is to explore the possible true
-       state by utilizing a large set of guesses, called *proposals*. Each
-       proposal is a possible value of the current state, and each proposal
-       receives a score, called a *weight*, according to how well they explain
-       the observations. Although there is no closed form probability
-       distribution for these guesses, by making a large number of guesses you
-       can arrive at an empirical probability distribution over solutions of
-       the system state at each point in time. The precise state of the system
-       is still unknown, but the set of possible solutions may be bounded
-       enough to be useful.
-
-     * Given a complete set of dynamics (for the wing, pilot controls, and
-       wind), you can generate simulated flight trajectories.
-
-   * Approximating the missing dynamics through a parametric model (enables
-     parameter estimation or empirical approximations of wing models)
-
-     * The great difficulty with model simulations is that they require
-       equations that encode the model dynamics. Aerodynamics are non-trivial
-       in even the most simple applications, and paragliders are particularly
-       challenging aircraft to analyze due to their curvature and flexibility.
-       In addition to the aerodynamics, the paraglider models themselves are
-       uncertain, since the wing specifications are generally unknown for any
-       given recorded flight; instead of a single, exactly-defined model, you
-       need a parametric model that can be configured to match the unknown
-       wing. Because the wing configuration is unknown, this estimation
-       problem must be applied to not only the system state, but to the model
-       parameters as well (also known as a *dual estimation problem*).
-
-
-Related Works
--------------
-
-[[This seems too broad to put up front; I do love papers with these sections,
-but I suspect it'd get unwieldy very fast if I put this discussion here.]]
-
-
-* Wind estimation
-
-  * Offline wind estimation / Learning from flight databases
-
-    * :cite:`ultsch2010DataMiningDistinguish`
-
-    * :cite:`vonkanel2010ParaglidingNetSensorNetwork`
-
-  * Online wind estimation
-
-    * :cite:`vonkanel2011IkarusLargescaleParticipatory`
-
-    * :cite:`wirz2011RealtimeDetectionRecommendation`
-
-    * :cite:`kampoon2014WindFieldEstimation`
-
-* State estimation
-
-  * :cite:`mulder1999NonlinearAircraftFlight`
-
-* Applications of a predictive wind model
-
-  * Flight reconstruction
-
-    * Malaysian Airlines Flight 370, "Bayesian Methods in the search for
-      MH370" (:cite:`davey2016BayesianMethodsSearch`)
-
-    * Flight reconstruction of a tethered glider:
-      :cite:`borobia2018FlightPathReconstructionFlight` (is this actually
-      flight **path** reconstruction?)
-
-  * Path planning during a flight
-
-    * :cite:`menezes2018EvaluationStochasticModeldependent`: flight planning
-      with environmental estimates. Might have some useful overlap for how
-      I frame the tasks of this paper.
-
-    * :cite:`lawrance2011PathPlanningAutonomous`
-
-    * :cite:`lawrance2011AutonomousExplorationWind`
-
-    * :cite:`lawrance2009WindEnergyBased`
-
-  * Input estimation
-
-    * :cite:`kampoon2014WindFieldEstimation`
+This project designs and implements a parametric paraglider dynamics model
+suitable for paraglider flight reconstruction. The modeling process begins in
+:doc:`canopy_geometry`, which develops a novel parametric geometry
+specifically tailored for the non-linear details of typical paraglider wings.
+:doc:`canopy_aerodynamics` establishes some basic performance criteria for
+selecting an aerodynamic method suitable for analyzing paraglider motion, and
+presents an adaptation of a non-linear lifting line method that meets those
+criteria.
+
+Given a geometric and aerodynamic model of the paraglider canopy,
+:doc:`paraglider_geometry` models the remainder of the paraglider as a rigid
+body system, and :doc:`paraglider_dynamics` develops several dynamics models
+for paraglider motion. The final step that enables the dynamics model to
+produce flight simulations is to choose a suitable set of state variables, and
+link the state dynamics to the paraglider dynamics; :doc:`flight_simulation`
+suggests one possible choice, and presents the resulting dynamics function.
+
+To conclude the primary contributions of this paper, :doc:`case_study` presents
+an example that uses the parametric model to approximate a physical paraglider
+wing, compare static performance analyses to expected results, and demonstrate
+several dynamic scenarios to highlight the flexibility of the model.
+
+In closing, :doc:`future_work` briefly surveys the remaining steps to solving
+the flight reconstruction problem, extracting wind field patterns from sets of
+recorded flights, and encoding those patterns into a predictive model.

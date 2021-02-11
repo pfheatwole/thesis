@@ -27,8 +27,16 @@ Flight reconstruction
 =====================
 
 
-Data
-----
+Data sanitization
+-----------------
+
+* [[Survey the content of an IGC file?]]
+
+* The raw data is stored in IGC files, which must be parsed and sanitized.
+  Parsing is straightforward, since the data follows a well-defined format.
+  Sanitizing the data is more difficult: erratic timestamps, pressure altitude
+  biases, and unknown sensor characteristics all present their own sets of
+  concerns.
 
 * Characterizing sensor noise (GPS, variometer)
 
@@ -40,6 +48,166 @@ Data
 
   * Topography (eg, a DEM), meteorology (eg, RASP, TherMap), related fields
     (drainage networks, flowfield tools for wind farms), etc
+
+* Should I discuss the error between the GNSS and pressure altitude to segue
+  into atmospheric parameter estimation? I like the idea of surveying the data
+  first: a "first pass" look at the data. Acknowledge the questions and issues
+  in the introduction
+
+
+Atmospheric Parameters
+----------------------
+
+The IGC files record altitude using two different measurements: one from the
+GNSS device, one from barometric pressure. The GNSS altitude is an estimate of
+the current geometric altitude. The pressure altitude is the altitude at which
+the atmospheric pressure would match the currently observed conditions under
+international standard atmospheric (:term:`ISA`) conditions.
+
+You can use the relationship between pressure and altitude to estimate the
+current atmospheric parameters:
+
+.. math::
+   :label: pressure_to_altitude
+
+   h = \frac{T_0}{L} \cdot \left( 1 - {\left( \frac{p}{P_0} \right)}^\frac{LR}{Mg} \right)
+
+Because the pressure altitude converts pressure to altitude while assuming ISA
+conditions, non-ISA conditions will produce a variometer bias
+:math:`\epsilon_v = z_\textrm{GNSS} - z_\textrm{vario}`. The bias can be
+positive or negative, depending on atmospheric conditions. In general, if the
+air temperatures are higher than 19°C (ISA temperature) the pressure altitude
+will be lower than GNSS altitude, but alignment also depends on atmospheric
+pressure and lapse rate.
+
+.. figure:: figures/data/vario_gnss_bias.*
+
+   GNSS versus pressure altitude.
+
+Because the relationship between pressure and altitude in
+:eq:`pressure_to_altitude` is non-linear, the bias is a function of altitude.
+The relationship is an exponential (FIXME: I think this claim is valid?) so
+fitting an exponential bias should work, but a more robust solution is to fit
+the atmospheric parameters themselves.
+
+The parameter estimation problem is more difficult because the GNSS and
+variometer measurements are often out of alignment. GNSS tracks commonly
+experience a time delay that depends on the device and atmospheric conditions.
+
+.. figure:: figures/data/vario_bias_with_sequence_alignment.png
+   :width: 90%
+
+   Variometer bias as a function of altitude.
+
+First with the raw sequences, which exhibits variable bias depending on GNSS
+delay (exacerbated in regions of rapid ascent or descent), and again after
+performing sequence alignment.
+
+
+Parameter Estimation
+^^^^^^^^^^^^^^^^^^^^
+
+.. FIXME: should I use the `align*` or `aligned` environment?
+
+.. math::
+   :label: stochastic_pressure_to_altitude
+
+   \begin{aligned}
+   h &\sim \mathcal{N}(\mu_h, 2)                                                          &\mathrm{m}\\[1.0ex]
+   \mu_h &= \frac{T_0}{L} \cdot \left( 1 - {\left( \frac{p}{P_0} \right)}^{LR/Mg} \right) &\mathrm{m}\\[1.0ex]
+   T_0 &\sim \mathcal{N}(288.15, 10)                                                      &\mathrm{K}\\[1.0ex]
+   L &\sim \mathcal{N}(0.0065, 0.003)                                                     &\mathrm{K \cdot m^{-1}}\\[1.0ex]
+   P_0 &\sim \mathcal{N}(1013.25, 15)                                                     &\mathrm{hPa}\\[1.0ex]
+   R &\equiv 8.3144598                                                                    &\mathrm{J \cdot K^{-1} \cdot mol^{-1}} \\[1.0ex]
+   M &\equiv 0.0289644                                                                    &\mathrm{kg \cdot mol^{-1}}\\[1.0ex]
+   g &\equiv 9.80665                                                                      &\mathrm{kg \cdot m \cdot s^{-2}}
+   \end{aligned}
+
+
+In :eq:`pressure_to_altitude` I do stuff.
+
+TODOs:
+
+* Use the Turkey tracks to show how the bias is a function of altitude
+
+* Plot the priors
+
+* Plot the posterior for several of the Greece tracks and observe that
+  although they are very precise (small posterior variance) they don't agree
+  with each other (suggesting some devices may have systematic biases/errors?)
+
+
+Using probability and simulation to deal with missing data
+----------------------------------------------------------
+
+[[Yoinked from the eliminated "Flight reconstruction" chapter]]
+
+* Unfortunately, the paraglider dynamics depend on more unknowns that just the
+  wind, so reconstructing the wind vectors amounts to reconstructing the
+  complete state trajectory.
+
+  The system as-is is indeterminate: with no constraints on the value of the
+  control inputs and wind vectors there are no constraints on the paraglider
+  state. The "answer" could be anything.
+
+  The underlying problem is uncertainty: uncertain variable values, uncertain
+  model dynamics, and uncertain measurements. Logical reasoning in
+  indeterminate systems requires probability theory. Instead of seeking
+  **exact** answers, the "solution" to the inverse problem is to estimate
+  entire probability distributions over **all** possible answers.
+
+  The question is no longer "can we compute the answer" but "how well can we
+  constrain the range of plausible answers". There might not be enough
+  information to constrain the wind vectors; hard to tell at this point.
+
+  Should I introduce underdetermined systems, and discuss stochastic equations
+  as underdetermined systems?]]
+
+* "The idea of using the math of probability to represent and manipulate
+  uncertainty is commonly referred to as *Bayesian statistics*"
+  (`schon2018ProbabilisticLearningNonlinear`). Bayesian statistics is
+  a framework for reasoning through conditional probability.
+
+* At this point it can be helpful to rewrite our problem statement in
+  probabilistic terms.
+
+* Our original goal of estimating the wind vectors given the observed data is
+  equivalent to saying we need to estimate the probability distribution over
+  wind vectors given the data, written as :math:`p\left( wind \given data
+  \right)`.
+
+* This distribution by itself is intractable, which is what motivated our need
+  to model the *data-generating process*. We introduced the paraglider
+  dynamics in order to establish the relationship between position and wind,
+  but those dynamics depend on more than just the wind vectors: they also
+  depend on the pilot control inputs, air density, and the design of the wing
+  itself. Thus, solving this inverse problem means we need to estimate more
+  than just the wind vectors: we need estimates for the entire set of inputs.
+
+* Those additional quantities are commonly referred to as *nuisance
+  variables*, since they are not (explicitly) of interest to our problem,
+  nevertheless they are necessary to compute our goal.
+
+* [[find :math:`p \left( wind \given data \right)` by estimating the full
+  joint pdf then marginalizing the *nuisance variables*]]
+
+* We can't estimate the full joint pdf directly since it's also intractable,
+  but thankfully the process model satisfies the *Markov property*. *Markov
+  processes* are intuitive to represent as a state-space model. State-space
+  models can be used to decompose the joint pdf into independent factors which
+  a be estimated recursively to build up the full joint distribution.
+
+* The objective now is to use the state-space model to build up the full joint
+  distribution so we can marginalize the nuisance variables in order to
+  compute :math:`p \left( wind \given data \right)`.
+
+* [[The state-space model is a system of equations. In theory, we would like
+  to invert them (solve for the unknown), but that's not possible here (too
+  many unknowns, too complicated, etc). What's more, even if we knew the wind
+  vectors and control inputs, the inverse probably doesn't even exist: it's
+  pretty unlikely that this is a 1:1 function. Instead, we must be content
+  with using the *forward dynamics* to generate a weighted set (a
+  distribution) of possible solutions.]]
 
 
 Filtering architecture
