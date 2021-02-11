@@ -2,16 +2,8 @@
 Paraglider Geometry
 *******************
 
-
-
-[[**The descriptions of the wing and harness in this chapter should be serving
-the purposes of creating a model of those components.** The discussion exists
-so we can produce a reasonably accurate model of those components. So, the
-descriptions say what details we're interested in so we can then make a model
-that includes the most important of those details. In other words, say "what
-details are important for my dynamics model?" and let that guide the
-descriptions of the components.]]
-
+.. The discussions in this chapter should focus on the details that are
+   important to the dynamics models.
 
 
 .. Describe the system associated with the "paraglider dynamics".
