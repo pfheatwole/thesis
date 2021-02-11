@@ -558,7 +558,7 @@ relying on paraglider motion as a proxy.
 
   The existing methods fail because they don't have enough information
   (because they don't impose enough structure). They rely on indirect
-  relationships
+  relationships and questionably strong assumptions.
 
   The heuristics mentioned so far are *model-free* methods that rely on
   **coincidental** relationships between the particular motion sequence and
@@ -718,13 +718,6 @@ Roadmap
 =======
 
 .. "Brief indication of how the thesis will proceed."
-
-
-.. OUTDATED: As the first main chapter, :doc:`flight_reconstruction`
-   formalizes the problem of wind field estimation in probabilistic terms by
-   defining it as a :term:`filtering problem`. Solutions to filtering problems
-   rely on having a model of the state dynamics, which motivates the bulk of
-   this text: designing and implementing a parametric paraglider model.
 
 This project designs and implements a parametric paraglider dynamics model
 suitable for paraglider flight reconstruction. The modeling process begins in
