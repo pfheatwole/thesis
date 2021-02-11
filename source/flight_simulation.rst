@@ -60,14 +60,9 @@ Implementation
 
 * Define the state variables, representations of orientation, etc
 
-* Review `test_sim.py:Dynamics6a` and `test_sim.py:Dynamics9a` from
-  `glidersim`. Provides the derivatives for use with scipy's RK4 integrator in
-  `model.dynamics`. Each model chooses a set of state variables and call
-  signature to `glider.accelerations`.
-
-* Most of the state dynamics come directly from `glider.accelerations`, except
-  for `q_b2e` (the orientation quaternion), which uses a formula from Stevens
-  for the quaternion derivative based on `omega`.
+* Review `Dynamics6a` and `Dynamics9a` from `glidersim`. They define the state
+  variables and link them to the `glider.accelerations` to provides the state
+  derivatives.
 
 * This simulator assumes the wind and controls are available as a function of
   time. That's not the case for flight reconstruction, where you **pass** the
@@ -83,27 +78,3 @@ Implementation
 * [[Should I highlight that the dynamics implementations are stateless? Makes
   development easier, you can use a single instance for all the particles,
   etc. Should probably go in a discussion of the implementation itself.]]
-
-
-Demonstrations
-==============
-
-* [[I need a wing for this, so I'll probably introduce my Hook3ish in
-  `paraglider_dynamics:Case Study` (or whatever I call it). That section will
-  provide the wing polars (*static*, steady-state analysis) and show some
-  *dynamic* simulations here to further critique the model performance.]]
-
-
-Input sequences
----------------
-
-* Need to discuss my example, deterministic, wind and control functions
-  (`LateralGust`, `linear_control`, etc), then show some example sequences and
-  the resulting paraglider track.
-
-
-Test cases
-----------
-
-* :cite:`slegers2003AspectsControlParafoil`: "roll steering" vs "skid
-  steering"

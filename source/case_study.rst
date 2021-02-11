@@ -2,9 +2,15 @@
 Case Study
 **********
 
-[[This is where I plan to show (1) how to use the software to implement a real
-wing, (2) generate some performance curves for that wing, (3) compare it to
-expectations.]]
+Goals of this chapter:
+
+1. Demonstrate using the parametric model to implement a real wing
+
+#. [[Introduce gridded coefficients?]]
+
+#. Generate some polar curves for the wing and compare them to expectations
+
+#. Demonstrate some test scenarios
 
 
 Design
@@ -46,3 +52,9 @@ Dynamic Analysis
   the wing to rise) enough to regain tension, so the wing is certainly going
   to behave in ways not modeled by my equations. Good to point out.
 
+
+Test cases
+----------
+
+* :cite:`slegers2003AspectsControlParafoil`: "roll steering" vs "skid
+  steering"
