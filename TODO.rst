@@ -1,4 +1,9 @@
+* Add `latexcodec` to requirements?
+
 * Add a `README.rst` and explain `requirements`, running scripts, etc
+
+* Use `pip-compile --generate-hashes`? See
+  https://pip.pypa.io/en/latest/user_guide/#hash-checking-mode
 
 
 Topical
@@ -78,6 +83,10 @@ Paraglider geometry
   compute the "effective rigging angle" from wings defined using my
   parametrization.
 
+  One big takeaway from `iacomini1999InvestigationLargeScale`: good parafoil
+  performance requires keeping the angle of attack in what they call the
+  *alpha corridor*: too steep and it stalls, too shallow and the leading edge
+  can collapse.
 
 * Is "Paraglider Geometry" a good chapter? I need to discuss the physical
   model somewhere (materials, controls, inertia, etc). The "canopy geometry"
@@ -137,6 +146,17 @@ Paraglider dynamics
 
 Simulation scenarios
 --------------------
+
+* In `iacomini1999InvestigationLargeScale` they talk a lot about the problems
+  they had with parafoil *surge*, particularly during deployment. For their
+  purposes, they defined surge as "the transition of the parafoil from
+  a falling object to a flying object". I should create some scenarios that
+  simulate wing surge, such as if you entered a sinking bubble (eg, instantly
+  add +0.5ms vertical wind down so the wing has to rapidly equilibrate).
+
+* How should I discuss the sensations of angular accelerations? During a turn
+  you have constant angular velocities, thus constant centrifugal forces. The
+  angular **accelerations** are more akin to a falling sensation.
 
 * Checkout the `lateral_gust` scenarios. With full accelerator the glider
   largely ignores the gust, but with symmetric brakes it really struggles.
