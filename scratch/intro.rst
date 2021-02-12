@@ -328,6 +328,30 @@ SCRATCH
 Flight Reconstruction
 *********************
 
+* [[Should I preview how to use the recursive filtering equation to solve the
+  filtering problem? If you can't invert the dynamics you have to rely on
+  sequential state estimation via forward simulation.
+
+  Solving a filtering problem requires a filtering architecture, which is
+  beyond the scope of this paper, although I'll probably mention it in the
+  "Future Work" chapter. ]]
+
+
+* This paper only provides a parametric paraglider dynamics model. The rest of
+  the flight reconstruction problem is left as "Future Work".
+
+  There's a lot left to do (choosing a filtering architecture, designing
+  proposal distributions, cleaning the data, etc), but the starting point is
+  the dynamics model of the data-generating process, and that's what this
+  paper provides.
+
+  Importantly, the dynamics model is parametrized by the glider design.
+  Because we don't know what glider is being flown, we need to simulate
+  a variety of wing configurations. You can do that statistically as part of
+  the filtering process (*parameter estimation*), but more likely we'll need
+  to generate an empirical distribution over the wing parameters (a
+  "representative set of wings") and draw simulations from that instead.
+
 
 Subtask breakdown
 =================
@@ -866,3 +890,91 @@ OLD OUTLINE 4
 
 * Thus, the data-generating process must incorporate a paraglider dynamics
   model that includes a causal aerodynamics model.
+
+
+***************************
+Parametric paraglider model
+***************************
+
+
+* If the dynamics model is uncertain, flight reconstruction would require an
+  **entire distribution** of dynamics models (the statistical model places
+  a distribution over dynamics model parameters).
+
+  Alternatively, because flight reconstruction is only approximate anyway it
+  may be able to use an empirical distribution (a *representative set*) of
+  wing models instead of complete parameter estimation. The parametric model
+  should make it as easy a possible to create that set of wings.
+
+* The goal is not manufacture-ready accuracy, but rather to quickly create
+  approximations that are **accurate enough to be useful**. [It should be
+  accurate enough that the missing details are not the dominant source of
+  error during flight reconstruction.
+
+[[Explain that the geometry determines the dynamics, so we can create
+a parametric dynamics model by building it from a parametric geometry model.
+
+**FIXME**: why just a parametric geometry model? There are other parameters,
+such as surface materials, payload weight, etc.]]
+
+
+What are the model criteria?
+
+* Intuitive (easy to produce the desired design)
+
+* The modeling process should be time efficient (it shouldn't take a lot of
+  time to get a reasonable approximation)
+
+* Information efficient (get good results with minimal specification data)
+
+* We have very little data, so the process should utilize the minimal
+  technical specs that are available.
+
+* Doesn't assume the aerodynamics are linear. Linearity has not be
+  demonstrated to be an acceptable trade-off, so the aerodynamics method must
+  not rely on the linearity assumption.
+
+* Uses open source tools and libraries
+
+
+Why build everything from scratch? Why not extend existing models found in
+academic literature? Because they don't meet the criteria:
+
+* Most parafoil literature don't use recreational wings, but those are the
+  wings that created the data.
+
+* Most models from literature use constant aerodynamics; they are not
+  parametric (or not parametric enough), so I can't modify them to match
+  existing recreational wings.
+
+* Most literature use linearized models. The accuracy of those models is
+  unknown
+
+
+Why not build one using existing tools (for the geometry and aerodynamics)?
+
+[[Existing tools for specifying a wing geometry rely on explicit designs. They
+can represent a parafoil, given enough points, but they are unsuitable for
+**creating** the wing geometries. We need a simplified parametrization.
+
+We also need an aerodynamics method that can estimate the parafoil
+aerodynamics given the non-linear geometry, running at higher than normal
+angles of attack, able to incorporate viscous corrections from literature,
+etc.]]
+
+
+.. Anything else?
+
+Bonus criteria:
+
+* The modeling process should keep in mind that it's not just wing designers
+  that are interested in paraglider performance. When I started I had
+  questions about paraglider performance, and answers were hard to come by.
+  (In a way, I am the primary audience of this paper: I wanted to learn how
+  paragliders behave, and I did.)
+
+* I've seen many discussions online about wing behavior; it would be useful if
+  the model could be used to simulated specific scenarios of interest.
+
+  For example, how does a wing react to an indirect thermal interaction? That
+  would require aerodynamics that don't assume symmetric wind across the wing.

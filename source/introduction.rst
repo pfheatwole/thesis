@@ -878,23 +878,45 @@ Conclusion
 [[Need a segue into the next section.]]
 
 
-MISC:
+Parametric paraglider modeling
+==============================
 
-* This paper only provides the paraglider dynamics. The rest must be dealt
-  with in the "Future Work" section.
+.. This section sets up the entire paper!
 
-* [[I should at least preview how you use the recursive filtering equation to
-  solve the filtering problem? If you can't invert the dynamics you have to
-  rely on sequential state estimation via forward simulation.
+   Flight reconstruction needs a dynamics model. They're not in the flight
+   records, so they must be estimated. This project develops a parametric
+   paraglider model to make it easiser to approximate existing wings. The
+   parameters are chosen to make it as easy as possible to incorporate what
+   little data is available (technical specs from wing manuals).
 
-  Solving a filtering problem requires a filtering architecture, which is
-  beyond the scope of this paper, although I'll probably mention it in the
-  "Future Work" chapter. ]]
 
-* [[The purpose of this section is to develop the intuition and to conclude by
-  motivating :math:`\dot{x} = f(x, u)`, which is what ``glidersim`` provides.
-  In other words, ``glidersim`` _is_ my response to the problem of wind field
-  estimation.]]
+The section `Model the data-generating process`_ explained why flight
+reconstruction requires a dynamics model of the paraglider that produced the
+data. This requirement presents several major problems:
+
+1. The flight record does not provide the dynamics model that created the
+   data, so one must be created.
+
+2. Creating a high-fidelity dynamics model from detailed wing specifications
+   is expensive.
+
+3. Detailed specifications are not available for commercial paraglider wings;
+   only summary technical specifications are known.
+
+4. Most flight records don't even record what wing produced the data. Flight
+   reconstruction must treat the dynamics model as a random variable.
+
+Regardless of whether the wing model is known for an individual flight,
+reconstructing an entire set of flight records will almost certainly require
+many different paraglider wings. This project acknowledges the need to to
+produce a large number of dynamics models from minimal specification
+information.
+
+[[FIXME: finish motivating the creation of a **parametric** dynamics model.
+Discuss what parameters would make sense here. The canopy aerodynamics can be
+estimated from the canopy geometry; we have some basic shape information from
+technical specs, so we would like a paraglider model parametrized by that data
+(or as closely as possible).]]
 
 
 Roadmap
