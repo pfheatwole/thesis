@@ -79,9 +79,11 @@ paraglider that produced the flight record, and so those dynamics are the
 focus of this thesis. The primary output of this project is the design and
 implementation of a parametric paraglider dynamics model and simulator for
 generating flight tracks from a given wind field and pilot control sequence.
-The paper will discuss how the dynamics model enables simulation-based
-filtering methods to perform statistical flight reconstruction, [[and
-concludes with a discussion of the remaining work?]]
+[[**Specifically, I'm interested in creating dynamics models from bare-bones
+knowledge of the paraglider system: wing, harness, etc.**]] The paper will
+discuss how the dynamics model enables simulation-based filtering methods to
+perform statistical flight reconstruction, [[and concludes with a discussion
+of the remaining work?]]
 
 
 .. Context
@@ -911,6 +913,13 @@ reconstructing an entire set of flight records will almost certainly require
 many different paraglider wings. This project acknowledges the need to to
 produce a large number of dynamics models from minimal specification
 information.
+
+[[Because we only have minimal technical specs, we'll need to "fill in" the
+missing information with some reasonable design choices. For the canopy this
+takes the form of parametric functions; for the harness we'll make assumptions
+about the mass distribution and drag coefficient; etc. We'll also make
+assumptions about how the components are connected (rigid body model, 6 and
+9 DoF models, etc).]]
 
 [[FIXME: finish motivating the creation of a **parametric** dynamics model.
 Discuss what parameters would make sense here. The canopy aerodynamics can be
