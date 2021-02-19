@@ -138,15 +138,20 @@ atmospheric air density all effect the location of the paraglider center of
 mass. This makes it a poor choice for tracking the vehicle trajectory over
 time. [[FIXME: the point you use for tracking the vehicle doesn't have to be
 the same point you use for calculating the dynamics; I'm mixing up concepts
-here]]
+here]] [[Also, paragliders are sensitive to apparent mass, which don't have
+a single "center"; there is no point that minimizes all of the terms in the
+apparent inertia matrix, and there is no point that decouples the
+translational and rotational terms of the apparent inertia matrix. The system
+matrix cannot be diagonalize.]]
 
-Selecting a fixed point on the vehicle slightly increases the complexity of
-the dynamics equations, but it simplifies [["stuff"; does it make the 9 DoF
-less complicated since the hinge is now through `RM`?]]. For reasons to be
-discussed in `Apparent Mass`_, the dynamics are simplified if reference is
-a point in the xz-plane of the wing. The most natural choices in that plane
-are the leading edge of the central section, or the midpoint between the two
-risers, which is constant regardless of the width the riser chest strap.
+[[Selecting a fixed point on the vehicle slightly increases the complexity of
+the dynamics equations, but it simplifies "stuff"; does it make the 9 DoF less
+complicated since the hinge is now through `RM`? Not sure what this section is
+trying to say.]]. For reasons to be discussed in `Apparent Mass`_, the
+dynamics are simplified if the reference point lies in the xz-plane of the
+wing. The most natural choices in that plane are the leading edge of the
+central section, or the midpoint between the two risers, which is constant
+regardless of the width the riser chest strap.
 
 This paper uses the midpoint between the two riser connection points,
 designated :math:`RM`, for all dynamics equations [[and for the vehicle
@@ -199,7 +204,8 @@ Air mass
 
 [[As the canopy accelerates, the air inside must accelerate at the same rate,
 and so must be included in the inertial calculations of the canopy. (This
-assumes the air is incompressible, which is reasonable at these speeds.)
+assumes the air is incompressible, which is reasonable at these speeds, and
+neglects surface porosity, so the enclosed air travels with the wing.)
 Although the canopy is porous, and thus constantly receiving an inflow of air
 through the intakes, the leakage is slow enough that the volume of air can be
 treated as constant.]]
