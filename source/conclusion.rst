@@ -28,6 +28,10 @@ convince them the paper is worth reading.]]
 
     * Easy integration into tools w/ native support (Blender, FreeCAD, QGIS)
 
+      * Generate a simulation directly inside Blender
+
+      * Design a wing and estimate it's polar curve inside FreeCAD
+
 * Developed entirely using freely available tools (XFLR5, AVL, etc) and open
   source libraries (numpy, scipy, matplotlib, etc)
 
