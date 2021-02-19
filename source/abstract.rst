@@ -31,3 +31,11 @@ For example, the stages of the proposed processing pipeline; the paraglider
 model; statistical learning methods for the model; simulated-based filtering
 for the wind. How am I making clear advances towards immediate success, or
 towards preparing future research for success?]]
+
+
+[[Update: the **motivation** of this paper is extracting wind patterns from
+a set of flight records, but the **subject** of the paper is a parametric
+paraglider dynamics model designed to approximate wings using only a minimal
+amount of technical specification data.
+
+This abstract needs a rewrite.]]
