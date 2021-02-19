@@ -75,6 +75,8 @@ Implementation
   use whatever orientation encoding it wants for storing the orientation state
   (Euler angles, quaternions, etc).]]
 
+  :cite:`sola2017QuaternionKinematicsErrorstate`
+
 * [[Should I highlight that the dynamics implementations are stateless? Makes
   development easier, you can use a single instance for all the particles,
   etc. Should probably go in a discussion of the implementation itself.]]
