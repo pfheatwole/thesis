@@ -10,6 +10,44 @@ Future Work
    * Maybe call these *resources*; they're incomplete, but still useful.
 
 
+To summarize, what are the approximate steps to go from a database of flight
+tracks to a predictive model?
+
+
+#. Flight reconstruction
+
+#. Wind field reconstruction (continuous wind field regression or maybe a set
+   of structured features)
+
+#. Wind feature detection in individual tracks
+
+#. Detecting correlations (between wind features, time, temperature, etc)
+
+#. Encoding correlated features in a predictive model
+
+
+Other:
+
+* Data cleaning, sanitization
+
+* Create a representative set of paraglider dynamics models
+
+* Proposal design (wind vector dynamics, control input dynamics)
+
+* Defining "wind features"; could be anything from an unstructured
+  point-estimate of the average horizontal wind in some surface to the
+  presence of more structured feature like a thermal.
+
+* Filtering architecture (GMSPPF might be a good starting point?)
+
+* Faster paraglider dynamics models; the NLLT is almost surely too slow;
+  coefficient lookup alone is killer. Given the number of simulations that
+  will likely be required for reasonable flight reconstruction accuracy,
+  I suspect that using the non-linear model to generate linear or
+  piecewise-linear models will be essential.
+
+
+
 Paraglider modeling
 ===================
 
