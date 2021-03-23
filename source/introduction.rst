@@ -925,7 +925,8 @@ assumptions about how the components are connected (rigid body model, 6 and
 Discuss what parameters would make sense here. The canopy aerodynamics can be
 estimated from the canopy geometry; we have some basic shape information from
 technical specs, so we would like a paraglider model parametrized by that data
-(or as closely as possible).]]
+(or as closely as possible). The canopy geometry can also be used to estimate
+the inertial properties if you know the surface densities.]]
 
 
 Roadmap
