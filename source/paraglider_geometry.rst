@@ -459,6 +459,9 @@ and wing responsiveness to weight shift control.
 because turbulence is such a high frequency signal I'd never be able to
 estimate it from IGC data anyway.]]
 
+* See :cite:`wild2009AirworthinessRequirementsHanggliders`, pg26 for
+  a discussion of harness dimensions
+
 
 Case Study
 ==========
