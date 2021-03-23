@@ -53,6 +53,10 @@ Dynamic Analysis
   to behave in ways not modeled by my equations. Good to point out.
 
 
+* See :cite:`wild2009AirworthinessRequirementsHanggliders` Sec:4.1 (pg28) for
+  the DHV maneuvers for wing classification
+
+
 Test cases
 ----------
 
