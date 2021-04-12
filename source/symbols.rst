@@ -39,8 +39,11 @@ Notation and Symbols
    * - :math:`\left| \mat{X} \right|`
      - determinant of a matrix
    * - :math:`\mat{C_{B/A}}`
-     - an orthogonal matrix that transforms vectors from bases :math:`A` into
-       :math:`B`
+     - the directed cosine matrix that transforms vectors from coordinate
+       system :math:`A` into coordinate system :math:`B`
+   * - :math:`\vec{q}_{B/A}`
+     - a quaternion that encodes the relative orientation between coordinate
+       system :math:`A` and coordinate system :math:`B`
 
    * - :math:`f(\cdot)`, :math:`func(\cdot)`, etc
      - functions, where ``f``, ``func``, can be any identifier

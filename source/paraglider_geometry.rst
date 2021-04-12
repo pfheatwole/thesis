@@ -463,7 +463,7 @@ estimate it from IGC data anyway.]]
   a discussion of harness dimensions
 
 
-Case Study
+Discussion
 ==========
 
-[[Use my Hook 3 approximation to show how you might use everything thus far.]]
+[[Refer to `case_study` for an example.]]

@@ -1,3 +1,29 @@
+* The "parametric canopy" geometry section needs to avoid parametrizing the
+  design curves. For example, it can develop the general equation in terms of
+  section DCMs without saying how those DCMs are created; it's only later that
+  I say "lets create `C_c/s` by using `dz/dy` for the section roll and `theta`
+  for the section pitch."
+
+  **Keep these two things separate**:
+
+  1. The generalized wing geometry model
+
+  2. The specific parametrization of that model for parafoil canopies
+
+* Washin and washout have multiple purposes:
+
+  * Control the spanwise tension (lateral) and loading (vertical)
+
+  * Allow the designer to encourage more favorable stall patterns.
+    (Specifically, a paraglider should start stalling the wing tip first.)
+
+* "Wing tapering reduces the wing-root bending moments, since the inboard
+  portion of the wing carries more of the wing's lift than the tip."
+
+* You can affect the circulation distribution (and thus the induced drag) by
+  manipulating the wing twist.
+
+
 Overview
 ========
 

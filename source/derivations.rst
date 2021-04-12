@@ -791,7 +791,7 @@ Angular momentum of the apparent mass about :math:`R`:
 Notes to self
 -------------
 
-* If :ref:`paraglider_dynamics:Reference Point` said this section gives
+* If :ref:`paraglider_dynamics:Reference point` said this section gives
   reasons that `R` should be in the xz-plane, then make sure this section
   covers that.
 

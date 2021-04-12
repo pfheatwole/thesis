@@ -64,6 +64,11 @@ Paraglider modeling
 Flight reconstruction
 =====================
 
+* Regarding the "glider model estimation" problem, see
+  :cite:`ward2012SpecializedSystemIdentification`. The major difference is
+  they have access to the wing being identified, and can fly explicit
+  maneuvers and record extra sensor information. Very, very different task.
+
 
 Data sanitization
 -----------------

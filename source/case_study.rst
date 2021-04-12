@@ -2,9 +2,20 @@
 Case Study
 **********
 
+.. This chapter ties everything together. I'd like to generate some tracks
+   from a specific wing (a Niviuk Hook 3, size 23), but I only have some basic
+   technical specs. I need to work through what I know (my educated guesses
+   for what I don't know), and some analysis of the resulting model.
+
+
 Goals of this chapter:
 
 1. Demonstrate using the parametric model to implement a real wing
+
+   [[This section should highlight how a reasonable approximation can be
+   produced from the minimal wing data like flat and inflated span, taper,
+   etc. Show what data I had, what assumptions I used to fill in the blanks,
+   and how well the result matched the target.]]
 
 #. [[Introduce gridded coefficients?]]
 
@@ -13,52 +24,273 @@ Goals of this chapter:
 #. Demonstrate some test scenarios
 
 
-Design
-======
+* Wing data is available from three primary sources:
 
-* TODO: Use my Hook3ish to demonstrate how to approximate a real-world wing
-  using the components I've defined.
+  1. Technical specifications and user manuals
 
+  2. Pictures
 
-Static Analysis
-===============
-
-* Show the polar curves. Consider if they are reasonable.
-
-* Discuss limits, like unknown airfoil, unknown true line positions, lack of
-  a proper `LineGeometry` (so brake deflections and arc changes when
-  accelerator is applied are both unknown), no cell billowing, etc etc.
-
-* TODO: Compare the real versus apparent mass matrices. Consider the relative
-  magnitudes and the likely effects from accounting for apparent inertia.
+  3. Physical measurements
 
 
-Dynamic Analysis
-================
+* There's a basic workflow:
 
-* TODO: What are the sink rates during a hard turn? What are the sink rates
-  during a hard turn? See the DHV ratings guide,
-  :cite:`wild2009AirworthinessRequirementsHanggliders`
+  1. Fit the flattened chord surface right
 
-* TODO: Consider it's response to "exiting accelerated flight". In Sec:4.5.1
-  of the DHV ratings guide "Airworthiness requirements for hanggliders and
-  paragliders", they measure how the wing respond to "exiting accelerated
-  flight". According to that, it sounds like wings dive **forward** when the
-  accelerator is abruptly released. For my current Hook3ish, the wing
-  experiences **backwards** pitch. Is this because I'm neglecting changes to
-  the canopy geometry? Or is it symptomatic of the fact that I assume the
-  lines stay taught? Conceptually, when you quickly release the speedbar, the
-  A lines will quickly extend; it takes some time for the harness to drop (or
-  the wing to rise) enough to regain tension, so the wing is certainly going
-  to behave in ways not modeled by my equations. Good to point out.
+  2. Fit the arc
+
+  3. Canopy adjustments (twist)
+
+  4. Assign section profiles (airfoils)
+
+  5. Surface materials (upper, lower, ribs) for computing the inertia
+
+  6. Lines (harness position, accelerator function, brake deflection
+     distribution, line drag)
+
+  7. Harness
 
 
-* See :cite:`wild2009AirworthinessRequirementsHanggliders` Sec:4.1 (pg28) for
-  the DHV maneuvers for wing classification
+Model
+=====
+
+This section demonstrates one possible workflow to create an approximate model
+of a real wing from basic technical specs. Many detailed components, such as
+the harness, line geometry, are replaced with simplified models.
+
+The simplified models are provided as part of the `glidersim` package.
 
 
-Test cases
-----------
+Basic technical specs
+---------------------
 
-* :cite:`slegers2003AspectsControlParafoil`: "roll steering" vs "skid
-  steering"
+[[What data did I have? What did I use?]]
+
+From the manual:
+
+.. list-table:: Wing data
+   :header-rows: 1
+
+   * - Property
+     - Value
+     - Unit
+   * - Root chord
+     - 2.58
+     - m
+   * - Tip chord
+     - 0.52
+     - m
+   * - Standard mean chord
+     - 2.06
+     - m
+   * - Flat area
+     - 23
+     - m\ :sup:`2`
+   * - Flat span
+     - 11.15
+     - m
+   * - Flat aspect ratio
+     - 5.40
+     - --
+   * - Projected area
+     - 19.55
+     - m\ :sup:`2`
+   * - Projected span
+     - 8.84
+     - m
+   * - Projected aspect ratio
+     - 4.00
+     - --
+   * - Number of cells
+     - 52
+     - --
+   * - Total line length
+     - 218
+     - m
+   * - Central line length
+     - 6.8
+     - m
+   * - Accelerator line length
+     - 0.15
+     - m
+   * - Solid mass
+     - 4.7
+     - kg
+   * - In-flight weight limit
+     - 85
+     - kg
+
+
+Canopy
+------
+
+[[The simplest place to start modeling the canopy is the chord length
+distribution. In this case the specs only give the root, tip, and mean chord
+lengths, but paragliding wings commonly use truncated elliptic functions
+because they encourage elliptic lift distributions (thus reducing induced
+drag). Fitting an elliptic function to the root and tip lengths and computing
+the mean average chord length of the resulting function confirms the elliptic
+assumption.
+
+[[Also, confirm the flat area.]]
+
+The next step is to choose the :math:`R_{yz}` parameter. Although this
+parameter can technically be a function of the section index, many wings can
+be described with a constant value. This value can be estimated by considering
+pictures of the inflated wing, but since flattened drawings are commonly
+available in technical manuals they are typically more convenient.
+(Admittedly, such drawings are not always to scale, and so should be used with
+caution.) For this wing, a small amount of trial and error suggests
+:math:`R_{yz} = 0.7`.
+
+.. figure:: figures/paraglider/simulations/Hook3_topdown.jpg
+   :name: Hook3_topdown
+
+   Top-down outline of flattened canopy
+
+   The black outline is the boundary of the model's flattened chord surface.
+   The colored background is taken from the user manual for the wing.
+
+As seen in :numref:`Hook3_topdown`, the elliptical chord assumption with
+:math:`R_{yz} = 0.7` gives a close match to the drawing in the manual.
+
+[[Compare the areas given what I have so far?]]
+
+The next step is to model the arc. For this wing, photos of the wing suggest
+that a circular arc segment is reasonable. There are several ways to fit an
+arc segment, such as the width to height ratios, or visual estimation of the
+arc angle, but since the specs included both the flattened and projected
+areas, it can be easier to simply increase the arc angle until the projected
+area of the model matches the expected value.
+
+[[In my case I adjusted `mean_anhedral` until the projected values are roughly
+correct.]]
+
+[[Choose an airfoil]]
+
+* Why did I choose the 24018? Belloc used the 23015, but
+  :cite:`lingard1995RamairParachuteDesign` says that many older designs used
+  a Clark-Y with 18% thickness. I chose the 24018 as a sort of clumsy
+  compromise. He also mentions that newer gliders have "benefited from glider
+  technology and use a range of low-speed section" like the LS(1)-0417 (which
+  was also chosen by :cite:`becker2017ExperimentalStudyParaglider`). I should
+  have probably used the LS(1)-0417 but oh well.
+
+* Air intakes? I never did measure them.
+
+
+
+Wing
+----
+
+[[Line geometry: position of the A and C connection points, total line
+length]]
+
+
+
+[[Assumed brake distribution]]
+
+* **The "assume a brake deflection" step is super handwavy.** I didn't have
+  time to model the actual line geometries, so I just fudged it. Not a major
+  problem, but call it out when discussing reasons why I'm not comparing this
+  to actual flight data (goes together with the other uncertainties, like
+  unknown airfoil).
+
+.. figure:: figures/paraglider/simulations/Hook3_rear_view.jpg
+   :name: Hook3_rear_view
+
+   Rear-view of an inflated wing
+
+[[From this picture you can see that the brake deflection doesn't start until
+some distance from the root. The brake lines are hard to see, but their
+deflections are intuitive. The result is that instead of using a true line
+geometry, you can get away with an approximate deflection distribution using
+a simple cubic function with a few carefully chosen end points.]]
+
+
+[[surface materials, ribs net mass]]
+
+
+[[My mass calculations neglect the extra mass due to things like the riser
+straps, carabiners, and internal v-ribs and straps, so I'm underestimating the
+mass, but I'm also assuming the vertical ribs are solid (no ports) so that
+makes up for a bit of the missing mass]]
+
+
+Harness
+-------
+
+[[The specs say the wing can carry a maximum total weight (including the wing
+mass itself) of 85kg. The wing is roughly 5kg, so a 75kg payload is
+reasonable. I'm not modeling ]]
+
+[[Total payload mass, radius of spherical approximation, etc]]
+
+* I've been using 75kg, so the in-flight weight is ~80kg, well within limits.
+
+[[FIXME: should I move the spherical harness model here? It's never set well
+with me to have it in `Paraglider Dynamics`; that section feels scatterbrained
+/ mistitled.]]
+
+
+Static performance
+==================
+
+.. Steady-state, longitudinal-only analyses
+
+* Show the polar curves. Consider if they are reasonable. [[Which model? 9a?]]
+
+* [[Use this section to really highlight the limitations/assumptions of the
+  model? Unknown airfoil, unknown true line positions, lack of a proper
+  `LineGeometry` (so brake deflections and arc changes when accelerator is
+  applied are both unknown), no cell billowing, etc etc.
+
+  Seems like a good place to point out "this is overestimating lift and
+  underestimating drag, as expected."]]
+
+
+Dynamic performance
+===================
+
+.. Informative flight scenarios
+
+* Steady-state turn rate and radius size
+
+* Control input impulses (on/off of symmetric brake, asymmetric brake,
+  accelerator, weight shift)
+
+* Sink rates during a hard turn. (See the DHV ratings guide)
+
+* Response to "exiting accelerated flight".
+
+  According to Sec:4.5.1 of the DHV ratings guide, it sounds like wings dive
+  **forward** when the accelerator is abruptly released. For my current
+  Hook3ish, the wing experiences **backwards** pitch. Is this because I'm
+  neglecting changes to the canopy geometry? Or is it symptomatic of the fact
+  that I assume the lines stay taught? Conceptually, when you quickly release
+  the speedbar, the A lines will quickly extend; it takes some time for the
+  harness to drop (or the wing to rise) enough to regain tension, so the wing
+  is certainly going to behave in ways not modeled by my equations. Good to
+  point out.
+
+* Does it exhibit "roll steering" vs "skid steering"? Or maybe the arc is too
+  round for that effect. See :cite:`slegers2003AspectsControlParafoil`.
+
+* The importance of apparent mass. Start by comparing the real versus apparent
+  mass matrices; consider the relative magnitudes and the likely effects from
+  accounting for apparent inertia. Then show some scenarios where the effects
+  are noticeable.
+
+* For more ideas, see :cite:`wild2009AirworthinessRequirementsHanggliders`
+  Sec:4.1 (pg28) for the DHV maneuvers for wing classification
+
+  Also, :cite:`lingard1995RamairParachuteDesign` Sec:7 and Sec:8.]]
+
+
+Discussion
+==========
+
+* Everything related to the airfoils is sketchy. The choice of airfoil,
+  modeling their deflected geometries, modeling the deflection distribution,
+  etc. Tons of uncertainty here. Just stick a big red flag in it and say "hey,
+  if you want to solve this problem, here's a big sticking point."

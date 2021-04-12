@@ -31,10 +31,6 @@ Paraglider Dynamics
 
 * Establish the modeling requirements in the context of flight reconstruction
 
-  [[ie, "I'm interested in considering how a wing responds to non-centered
-  interactions with a thermal, so I need a model that supports asymmetric wind
-  (specifically, horizontal shear)"? Wait, that's part of the aerodynamics.]]
-
 * Discuss existing paraglider models from literature?
 
 * Individual component dynamics
@@ -126,41 +122,6 @@ Related Work
     * :cite:`barrows2002ApparentMassParafoils`
 
 
-Reference Point
-===============
-
-Before developing the components of the dynamics models, it is helpful to
-choose a common reference point for the translational dynamics. [[Why?]]
-Traditionally, aircraft models choose the system center of mass, because it
-decouples the translational and angular dynamics. For paragliders, however,
-the center of mass is not a fixed point: weight shift, accelerator, and
-atmospheric air density all effect the location of the paraglider center of
-mass. This makes it a poor choice for tracking the vehicle trajectory over
-time. [[FIXME: the point you use for tracking the vehicle doesn't have to be
-the same point you use for calculating the dynamics; I'm mixing up concepts
-here]] [[Also, paragliders are sensitive to apparent mass, which don't have
-a single "center"; there is no point that minimizes all of the terms in the
-apparent inertia matrix, and there is no point that decouples the
-translational and rotational terms of the apparent inertia matrix. The system
-matrix cannot be diagonalize.]]
-
-[[Selecting a fixed point on the vehicle slightly increases the complexity of
-the dynamics equations, but it simplifies "stuff"; does it make the 9 DoF less
-complicated since the hinge is now through `RM`? Not sure what this section is
-trying to say.]]. For reasons to be discussed in `Apparent Mass`_, the
-dynamics are simplified if the reference point lies in the xz-plane of the
-wing. The most natural choices in that plane are the leading edge of the
-central section, or the midpoint between the two risers, which is constant
-regardless of the width the riser chest strap.
-
-This paper uses the midpoint between the two riser connection points,
-designated :math:`RM`, for all dynamics equations [[and for the vehicle
-velocity state variable]]. Because the risers are very near to where the pilot
-would place their flight device, this is the most representative of the data
-measured by flight recorders, making it the most convenient for comparing real
-flight data to simulated data.
-
-
 Canopy
 ======
 
@@ -198,6 +159,9 @@ Upper and lower surface inertias:
      \mat{J}_{\mathrm{l}/\mathrm{O}} &= \rho_{\mathrm{l}} \mat{J}_{a_l/\mathrm{O}}
    \end{aligned}
 
+Where the :math:`a` and :math:`\mat{J}` are the areas and areal inertias for
+the canopy surfaces (from :ref:`derivations:Area`).
+
 
 Air mass
 ^^^^^^^^
@@ -217,14 +181,15 @@ Mass of the enclosed air:
 
    m_{\mathrm{air}} = \rho_{\mathrm{air}} v
 
-Where :math:`v` is the volume inside the canopy (from `derivations`).
-
 Inertia matrix of the enclosed air:
 
 .. math::
    :label: air_inertia
 
    \mat{J}_{\mathrm{air}/O} = \rho_{\mathrm{air}} \mat{J}_{\mathrm{v}/\mathrm{O}}
+
+Where :math:`v` and :math:`\mat{J}_\mathrm{v}` are the volume and volume
+inertia for the inside the canopy (from :ref:`derivations:Volume`).
 
 
 Apparent Mass
@@ -263,18 +228,30 @@ vehicle has increased its mass:
 This *apparent mass* :math:`m_a` becomes more significant as the density of
 the vehicle approaches the density of the fluid. If the density of the vehicle
 is much greater than the density of the fluid then the effect is often
-ignored, as is the case for traditional aircraft, which are much more dense
-than the surrounding air. For lightweight aircraft, however, where the density
-of the vehicle is much closer to the density of the air, the effect can be
-significant.
+ignored, but for lightweight aircraft the effect can be significant.
 
 Because apparent mass effects are the result of a volume in motion relative to
 a fluid, its magnitude depends on the direction of the motion relative to the
 volume. Unlike the inertia due to real mass, apparent inertia is anisotropic,
-and the diagonal terms of the apparent mass matrix are independent.
+and the diagonal terms of the apparent mass matrix are independent. [[FIXME:
+it's related to this projected surface area; that's probably not obvious.]]
 
-For a derivation of a method for estimating the apparent mass matrix of
-a parafoil, see :ref:`derivations:Apparent Mass of a Parafoil`.
+An exact calculation of the apparent mass for an arbitrary geometry with
+respect to an arbitrary reference point is not trivial. For a classic
+discussion of the topic, see :cite:`lamb1945Hydrodynamics`. A more recent
+reference discussing apparent mass in the context of parafoils is
+:cite:`lissaman1993ApparentMassEffects`, which used an ellipsoid model to
+establish a parametric form commonly used in parafoil-payload literature. An
+updated derivation in :cite:`barrows2002ApparentMassParafoils` added
+corrections to the ellipsoid model.
+
+This paper uses the method from :cite:`barrows2002ApparentMassParafoils`. For
+a replication of that method for estimating the apparent mass matrix of
+a parafoil, but given in the notation of this paper, see
+:ref:`derivations:Apparent Mass of a Parafoil`. For the purpose of defining
+a dynamics model incorporating apparent mass, the relevant detail from that
+derivation is that the reference point for the dynamics must lie in the
+xz-plane of the canopy.
 
 
 Notes to self
@@ -290,19 +267,6 @@ Notes to self
 
   It's not a big deal, but careful how you word it.
 
-Some references I need to discuss:
-
-* :cite:`lissaman1993ApparentMassEffects`: outlined a simple method for
-  estimating the apparent mass of parafoils.
-
-* :cite:`barrows2002ApparentMassParafoils`: added corrections to the equations
-  from Lissaman. Provides the setup for a linear system 6 DoF model that I used
-  as the basis for `Model6a`.
-
-* :cite:`thomasson2000EquationsMotionVehicle`: The equations in Lissaman and
-  Barrows assume irrotational flows. This paper also considers rotational flow?
-  I think?
-
 
 Suspension lines
 ================
@@ -310,10 +274,17 @@ Suspension lines
 * :cite:`kulhanek2019IdentificationDegradationAerodynamic`: mentions some
   papers on line drag coefficients, start here
 
+* I'm not including explicit models for the bridle. The canopy geometry
+  assumes the existence of a bridle that will produce the specified shape. At
+  most, I've added control points and drag coefficients for the lines. Turns
+  out it has a significant (ie, not massive but still noticeable) impact on
+  sensitive things like the glide ratio.
+
 * I'm lumping all the line drag into a single point for each half of the wing.
   I'm assuming isotropic drag because drag due to lines naturally becomes
   insignificant as alpha increases (when aerodynamic resistance in the
-  z-direction becomes dominated by the canopy)
+  z-direction becomes dominated by the canopy anyway), and the wing can't
+  operate at a particularly high angle of attack anyway.
 
 
 Harness
@@ -369,8 +340,47 @@ System models
 [[Models of the composite system]]
 
 
-A six degree-of-freedom model
------------------------------
+Reference point
+---------------
+
+One of the first steps in developing an aircraft dynamics model is to choose
+a reference point for the translational dynamics. A common choice is the
+system center of mass because it decouples the translational and angular
+dynamics. For paragliders, however, the center of mass is not a fixed point
+because it is not a strictly rigid body system: weight shift, accelerator, and
+atmospheric air density all effect the location of the paraglider center of
+mass. Also, paragliders are sensitive to apparent mass, which don't have
+a single "center"; that is, there is no point that minimizes all of the terms
+in the apparent inertia matrix, and there is no point that decouples the
+translational and rotational terms of the apparent inertia matrix. Because the
+system matrix cannot be diagonalized there is no advantage in choosing the
+center of mass. Instead, the reference point can be chosen such that it
+simplifies other calculations.
+
+.. Note that the point you use for computing the dynamics can be different
+   from the point you use for tracking the glider trajectory over the Earth.
+
+As mentioned in `Apparent Mass`_, estimating the apparent mass of the canopy
+is simplified if the reference point lies in the xz-plane of the wing. The
+most natural choices in that plane are the leading edge of the central
+section, or the midpoint between the two risers connections, which is constant
+regardless of the width the riser chest strap.
+
+This paper chooses the midpoint between the two riser connections, designated
+:math:`RM`, for all dynamics equations because it is also the most natural
+choice for the vehicle velocity state variable in the simulator. The reason is
+that because the riser midpoint is likely to be near to where a pilot would
+place their flight device, it is also the most representative of the data
+measured by flight recorders, making it the most convenient point for
+comparing real flight data to simulated data.
+
+Another advantage is that the riser midpoint is typically very close to the
+glider center of mass, which makes it easy to visualize the glider motion when
+developing the models.
+
+
+A six degrees-of-freedom model
+------------------------------
 
 In these models, the paraglider is approximated as a single rigid body.
 With all the components held in a fixed position, the dynamics can be
@@ -390,8 +400,8 @@ way.]]
 For the derivation of the mathematical model, see :ref:`derivations:Model 6a`.
 
 
-A nine degree-of-freedom model
-------------------------------
+A nine degrees-of-freedom model
+-------------------------------
 
 The 6-DoF models constrain the relative payload orientation to a fixed
 position. This is reasonably accurate for average flight maneuvers, but it has
@@ -408,13 +418,13 @@ into two components, a body and a payload, and permit relative orientations
 between the two components. The body includes the lines, canopy, and enclosed
 air. The payload includes the harness and pilot.
 
-[[Discuss the 7-, 8-, and 9-DoF models from literature]]
+[[Discuss the 7-, 8-, and 9-DoF models from literature?]]
 
 This section develops a model with nine degrees of freedom: six for the
-orientations of the body and payload, three for the velocity of the connection
-point, and three for the internal force between the two components. The body
-and payload are modeled as two rigid bodies connected at the riser midpoint
-:math:`RM`, with the connection modeled as a spring-damper system.
+orientations of the body and payload, and three for the velocity of the
+connection point shared by the body and payload. The body and payload are
+modeled as two rigid bodies connected at the riser midpoint :math:`RM`, with
+the connection modeled as a spring-damper system.
 
 .. figure:: figures/paraglider/dynamics/paraglider_fbd_9dof.*
    :name: paraglider_fbd_9dof
@@ -426,13 +436,6 @@ momentum :math:`^e \dot{\vec{p}} = \sum{\vec{F}}` and angular momentum
 :math:`^e \dot{\vec{h}} = \sum \vec{M}` for both bodies.
 
 For the derivation of the mathematical model, see :ref:`derivations:Model 9a`.
-
-
-Case study
-==========
-
-[[Move the content from `case_study` here? Or delay the discussion of wing
-polars in that dedicated chapter?]]
 
 
 Discussion
@@ -456,15 +459,16 @@ Limitations
 * Rigid-body assumption (none of the canopy, connecting lines, or payload are
   actually rigid bodies)
 
-* Violates conservation of momentum since it doesn't account for changes in
-  distributions of mass (due weight shift, accelerator, relative orientation
-  of the payload, etc).
+* Violates conservation of momentum since it doesn't account for accelerations
+  due to redistributions of mass (due weight shift and the accelerator).
 
 * Quasi-steady-state assumption (I'm using steady-state aerodynamics to
   simulate non-steady conditions by assuming the conditions are changing
   "slowly enough.") I've included adjustments for apparent mass, but I'm still
   assuming the steady-state solution is representative of the unsteady
-  solution.
+  solution. Also, my equations for the apparent mass themselves are under
+  a steady-state assumption; see :cite:`thomasson2000EquationsMotionVehicle`
+  for a discussion of apparent mass in unsteady flows.
 
   Consider the fact that the canopy is interacting with the "underlying" wind
   field, so that the motion of the canopy changes the local wind vectors. This
@@ -473,4 +477,5 @@ Limitations
   am trying to account for apparent mass, but I don't think that's really the
   same thing, since that doesn't change the local aerodynamics.)
 
-* Barrow's method assumes circular arc anhedral.
+* Barrow's method has several assumptions (circular arc anhedral, spanwise
+  uniform thickness, etc) that are wrong for real wings.

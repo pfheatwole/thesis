@@ -1,9 +1,14 @@
-* Add `latexcodec` to requirements?
+* Review and complete the outlines for each chapter. Make sure the overarching
+  "plot" is cohesive before diving back into the details. (If my "map" is
+  messy then I'll keep getting lost. Too much backtracking right now; I bounce
+  all over.)
 
-* Add a `README.rst` and explain `requirements`, running scripts, etc
+* **Merge my canopy geometry derivations.** I have three of them at this
+  point: a partial in `canopy_geometry`, and two partials in `derivations`.
 
-* Use `pip-compile --generate-hashes`? See
-  https://pip.pypa.io/en/latest/user_guide/#hash-checking-mode
+* Copy the Hook3 specs into `case_study`
+
+* Add at least one simple scenario (simulation into `.svg` plus discussion).
 
 
 Topical
@@ -478,8 +483,19 @@ Bibliography
   appendices?
 
 
+Development
+===========
+
+* Add `latexcodec` to requirements?
+
+* Add a `README.rst` and explain `requirements`, running scripts, etc
+
+* Use `pip-compile --generate-hashes`? See
+  https://pip.pypa.io/en/latest/user_guide/#hash-checking-mode
+
+
 Sphinx
-======
+------
 
 * Re-run ``sphinx-quickstart`` and see how the new ``conf.py`` defaults
   compare to my current version (from July 2017)
@@ -488,7 +504,7 @@ Sphinx
 
 
 HTML
-----
+^^^^
 
 * Add a document title below the sidebar logo?
 
@@ -496,7 +512,6 @@ HTML
 
 * If the HTML "Navigation" frame gets too long it goes off the screen, and you
   can't scroll it.
-
 
 
 Scripts

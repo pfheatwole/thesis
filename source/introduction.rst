@@ -199,20 +199,20 @@ lift while avoiding sink, make sure they can reach the LZ, etc.]]
 .. How do pilots estimate the structure of the wind field?
 
 The direct way to learn the structure of a wind field is to explore. The
-problem is that a wing remains airborne by constantly exchanging its momentum
-with the air, which means it is constantly spending energy; exploration takes
-time, and time has a significant energy cost. Pilots cannot afford to explore
-at random; they need strategies for efficient path planning that will focus
-their exploration on promising regions. If their strategy fails, they can be
-left without sufficient altitude to continue their flight, or they can be
-blocked by a headwind that prevents them from reaching their destination
+problem is that exploration takes time, and time has a significant energy
+cost; a wing remains airborne by constantly exchanging its momentum with the
+air, which means it is constantly spending energy. Pilots cannot afford to
+explore at random; they need strategies for efficient path planning that will
+focus their exploration on promising regions. If their strategy fails, they
+can be left without sufficient altitude to continue their flight, or they can
+be blocked by a headwind that prevents them from reaching their destination
 (regardless of their altitude).
 
 Another direct source of information is to observe other objects interacting
 with the wind field. For example, dust, debris, and insects can be caught in
-air currents, providing information from a distance. Soaring birds, such as
-hawks and vultures, are excellent navigators of the wind field, and can
-indicate lifting air; even other pilots can provide a hint as to the
+air currents, so their motion can provide information from a distance. Soaring
+birds, such as hawks and vultures, are excellent navigators of the wind field,
+and can indicate lifting air; even other pilots can provide a hint as to the
 conditions elsewhere. Also, although pilots are typically focused on the wind
 conditions at higher altitudes, useful information can be gained by observing
 behavior closer to the ground, such as vegetation and ripples on water.
@@ -277,9 +277,7 @@ times.
 The reason local wind patterns are so particularly valuable is that they help
 pilots determine the structure of a wind field more *efficiently* (both in
 terms of time and energy) and more *accurately* when they can base their
-expectations on known patterns. [[The motivating objective of this paper is to
-help pilots extract valuable information about wind patterns from sets of
-paragliding flight records.  FIXME: this doesn't belong here...]]
+expectations on known patterns.
 
 Wind patterns are useful for both prediction and estimation. First, if some
 region of a wind field exhibits recurring structure, then pilots can use that
@@ -900,7 +898,8 @@ data. This requirement presents several major problems:
    data, so one must be created.
 
 2. Creating a high-fidelity dynamics model from detailed wing specifications
-   is expensive.
+   is expensive. [[FIXME: eliminate this? "Its expensive, but that's
+   irrelevant since we don't know it anyway."]]
 
 3. Detailed specifications are not available for commercial paraglider wings;
    only summary technical specifications are known.
