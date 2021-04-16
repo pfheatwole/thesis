@@ -943,12 +943,12 @@ presents an adaptation of a non-linear lifting line method that meets those
 criteria.
 
 Given a geometric and aerodynamic model of the paraglider canopy,
-:doc:`paraglider_geometry` models the remainder of the paraglider as a rigid
-body system, and :doc:`paraglider_dynamics` develops several dynamics models
-for paraglider motion. The final step that enables the dynamics model to
-produce flight simulations is to choose a suitable set of state variables, and
-link the state dynamics to the paraglider dynamics; :doc:`flight_simulation`
-suggests one possible choice, and presents the resulting dynamics function.
+:doc:`paraglider_model` models the remainder of the paraglider as a rigid body
+system and develops several dynamics models for paraglider motion. The final
+step that enables the dynamics model to produce flight simulations is to
+choose a suitable set of state variables, and link the state dynamics to the
+paraglider dynamics; :doc:`flight_simulation` suggests one possible choice,
+and presents the resulting dynamics function.
 
 To conclude the primary contributions of this paper, :doc:`case_study` presents
 an example that uses the parametric model to approximate a physical paraglider

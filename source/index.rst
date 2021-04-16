@@ -38,8 +38,7 @@ Contents
    introduction
    canopy_geometry
    canopy_aerodynamics
-   paraglider_geometry
-   paraglider_dynamics
+   paraglider_model
    flight_simulation
    case_study
    future_work
