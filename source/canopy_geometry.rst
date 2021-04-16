@@ -10,17 +10,31 @@ Canopy Geometry
    (airfoils provide the section profiles, *design curves* provide the scale,
    position, and orientation).
 
+.. This project needs geometry models of commercial parafoil canopies. Because
+   only basic technical specifications are known for commercial wings, they
+   must be augmented with reasonble assumptions based on domain expertise,
+   which is encoded in parametric functions.
+
+   Unfortunately, existing wing geometry tools introduce constraints that
+   force unnecessary complexity into the design curves. Thus, the focus of
+   this chapter is to:
+
+   1. Develop a more flexible geometry model that allows simpler design curves
+
+   2. Develop design curves that can create complete geometry models using
+      only basic technical specs and reasonable assumptions.
 
 .. What is a parafoil canopy?
 
 The essential component of any flying object is the lifting surface.
-A *lifting surface* is the part of an aircraft that produces *lift* by
-interacting with the air. A parafoil canopy is a lifting surface created by
-a partially-open nylon casing which is inflated through air intakes along its
-front. Although a small amount of air does flow through the canopy's surface,
-the majority of the air flows around the canopy's volume. By redirecting the
-airflow downward, the canopy exchanges momentum with the air and produces the
-lifting force that allows the glider to fly.
+A *lifting surface* is any part of an aircraft that produces *lift* when it
+interacts with the air. A parafoil canopy is type of *ram-air parachture*,
+a lifting surface that uses air intakes at the front of the wing to inflate
+a partially-open nylon casing. Although a small amount of air does flow
+through the canopy's surface, the majority of the air flows around the
+canopy's volume. By redirecting the airflow downward, the canopy exchanges
+momentum with the air and produces the lifting force that allows the glider to
+fly.
 
 .. figure:: figures/paraglider/geometry/Wikimedia_Nova_X-Act.jpg
    :width: 75%
@@ -30,15 +44,16 @@ lifting force that allows the glider to fly.
    `Photograph <https://www.flickr.com/photos/69401216@N00/2820146477/>`__ by
    Pascal Vuylsteker, distributed under a CC-BY-SA 2.0 license.
 
+* Manufactured from flexible materials such as ripstop nylon, they rely on
+  internal structures to control the shape of the inflated volume, and
+  variable-length suspension lines to control the shape of the arc.
+
+
 
 .. Why does this project need to model the canopy geometry?
 
 A paraglider dynamics model requires the inertial properties and aerodynamics
 of the canopy, which can be estimated from the canopy's shape.
-
-[[The user manual for a wing usually includes basic properties such as the
-total mass of the wing, the areal densities of its surface materials, etc, but
-not the mass and volume distributions, aerodynamics, etc.]]
 
 
 .. Why not use existing wing modeling tools?
@@ -58,7 +73,7 @@ complexity is forced into the design curves.
 
 This chapter develops a wing specification model that greatly simplifies
 creating paraglider canopy models from basic technical specs. It develops the
-geometry as a two-part process:
+parametric geometry as a two-part process:
 
 1. Develop a novel, generalized wing model that eliminates the constraints of
    existing tools, enabling simpler design curves.
@@ -85,100 +100,89 @@ paraglider canopies.
    4. Introduce parametric modeling using *wing sections*.
 
    5. Review the limitations of existing wing modeling tools (stemming from
-      how they specify position and orientation), and develop the generalized
-      equation that mitigates those limitations (the extra flexibility will
-      make it a lot easier to produce the design curves).
+      how they specify position and orientation)
 
-   6. Develop the *design curves*: parametric functions that capture the general
-      structure of parafoil canopies using basic parameters that can be estimated
-      from the available information (or from reasonable assumptions).
+   6. Develop a more flexible geometry model
 
-   7. Show some examples using the design curves
+      1. Derive a general equation equation that mitigates the limitations.
 
-   8. Discussion
+         The limitations of existing methods are due to constraints that
+         appear by assuming specific wing shapes. Generalizing the geometry
+         eliminates the constraints and adds extra flexibility that makes it
+         a lot easier to specify the geometry using simple design curves.
 
+      2. Parametrize the general equation.
 
-Paraglider canopies
-===================
+         Explicitly defining the variables in the raw equation is unwieldy;
+         parametrizing the pieces, such as assuming the sections are
+         perpendicular to the yz-curve and that the geometric torsion is
+         a simple scalar function of section index
 
-.. Describe the physical system (geometry, structure, materials, etc), and the
-   most common technical specifications (span, area, etc). The specs are
-   structural summaries that can guide the choice of model parametrization.
+      3. Define the parameters with *design curves*: parametric functions that
+         encode the underlying structure of parafoil canopies using basic
+         parameters that can be estimated from the available information (or
+         from reasonable assumptions).
 
-* [[**FIXME**: this section needs a LOT of work.]]
+         These functions rely on domain expertise to "fill in the gaps" of the
+         sparse technical data. For example, an elliptical chord distribution
+         that only requires the root and tip lengths, or an elliptical
+         yz-curve that only needs two (or even one) parameter by assuming an
+         elliptical (or circular) arc.
 
-  [[Basic idea: "a paraglider canopy is a type of parafoil. In some contexts
-  parafoils are referred to as *ram-air parachutes* because of their use of
-  air intakes at the front of the wing to pressurize the volume of the wing.
-  The majority of the wing material is dedicated to the upper and lower
-  surfaces of the canopy, as well as internal ribs and straps that enforce the
-  structure of the inflated wing. In a real parafoil the internal ribs of
-  a parafoil would segment the canopy into a set of *cells* that distort the
-  canopy when inflated, but this chapter will neglect that additional
-  complexity and focus on the idealized design target.
+   7. Show some examples using the new geometry model
 
-  The primary characteristics of a parafoil canopy geometry are its surface
-  area, span, and arc. Those summary characteristics capture the majority of
-  the technical specifications from which we need to recreate/approximate the
-  complete geometry. (etc etc)
+   8. Demonstrate using the model to recreate a parafoil from literature.
 
-  **Wait!!** Careful not to conflate the characteristics with the summary
-  specs. For example, the arc is the characteristic, but it's usually not
-  reported. For example, with my Hook3 I had to just guess, although I guess
-  you could figure it out from the line geometry.
-
-  **FIXME**: start the chapter with a picture of a canopy and describe it by
-  calling out the most important features (including the cells). Give
-  a complete description of a real canopy, then say which of those
-  characteristics I intend to model (eg, that I will model the planform, arc,
-  and twist, but neglect the internal structure).]]
+   9. Discussion
 
 
-* What are the important aspects of a canopy geometry?
+Parafoil specifications
+=======================
 
-  * [[These details are important because they are the basis for recognizing
-    the underlying structure of the wing, and thus they are the basis for
-    parametric representations. The goal of a "good" parametrization is to let
-    you use these "aspects" to produce a mathematical model.]]
+.. This section elaborates on the details we need to model (chord
+   distribution, etc), what data we know (span, area, etc), and what is
+   required to produce a complete model from that minimal data.
 
-  * [[What details of a canopy's shape are required (or at least useful) for
-    defining a model that satisfies the needs of this project?
 
-    These are not necessarily the variables you would choose to parametrize
-    the geometry; they might simply be helpful for discussing/understanding
-    the shape of a canopy. For example, anhedral is ambiguous, so I'm using
-    Euler roll angles for section "anhedral". These are here to establish the
-    details of the shape and thus the flexibility required by the
-    parametrization.
+.. The introduction explained that I don't have complete specifications for
+   existing wings, and thus need to "fill in the blanks" with parametric
+   design curves that use what little information I do know. I also claimed
+   that existing tools make it difficult to use intuitive/efficient design
+   curves, so I have to start by creating a more flexible geometry. So this
+   chapter is about two things: 1) creating a flexible geometry so that 2)
+   I can produce good design curves that make it easy to use the minimally
+   available data.
 
-    Related: "General aviation aircraft design" (Gudmundsson; 2013),
-    chapter 9: "Anatomy of a wing"]]
+   So this section should explain/detail that missing geometry information?
 
-  * *flat* versus *projected* values
+   Does this chapter introduce the design curves? I guess it must since I have
+   example chord surfaces.
 
-  * *flat span*, *flat area*, *flat aspect ratio*
+.. This section must:
 
-  * *projected span*, *projected area*, *projected aspect ratio*
+   1. Draw attention to the geometry that must be modeled
 
-  * There are also a variety of standard terms I will avoid due to ambiguity:
-    *planform*, *mean aerodynamic chord*, maybe more? For *planform*, most
-    texts assume the wing is flat and so the projected area is essentially
-    equal to the flat area, and thus differentiating the two is largely
-    neglected in standard aerodynamic works. The mean aerodynamic chord is
-    a convenient metric for comparing flat wings and for simplifying some
-    equations, but for wings with significant arc anhedral I'm not sure how
-    beneficial this term really is; it's a mistake to compare wings based on
-    the MAC alone, so I'd rather avoid any mistaken comparisons.
+   2. Introduce the most readily available specification data
 
-  * *dihedral*, *anhedral*: not sure how to define this for a wing. It's
-    traditionally defined for flat wings, as `arctan(z/y)` of the section
-    position, but that's pretty unhelpful for a paraglider. It also doesn't
-    differentiate between `arctan(z/y)` and `arctan(dz/dy)` of a section. Still,
-    discussing curvature leads nicely into a discussion of the *arc*, so
-    whatever.
+   3. Establish that 
+
+   1. Explain the complexity of parafoils that warrants a new geometry model
+
+   2. Explain how design curves allow domain expertise to supplement the data
+
+
+.. Describe the system we need to model
+
+* [[Another image of a canopy, or refer to the one from the intro?]]
+
+* [[Call attention to the important details:
 
   * *arc* :cite:`lolies2019NumericalMethodsEfficient` (also known as the
     "lobe" :cite:`casellasParagliderDesignHandbook`)
+
+  * Nonlinear leading edge (the wings are not straight)
+
+  * Variable chord lengths
 
   * *geometric torsion*: relative pitch angle of a section
 
@@ -189,11 +193,59 @@ Paraglider canopies
        Note that this refers to the angle, and is the same regardless of any
        particular rotation point.
 
-* [[Highlight why canopy geometries are tricky to model?]]
+  * Cells
+
+* [[These details are important because they are the basis for recognizing the
+  underlying structure of the wing, and thus they are intuitive starting
+  points for parametrizing representations. However, don't confuse these these
+  characteristics with how you **represent** them (eg, arc versus dihedral
+  angle).]]
+
+
+.. Describe the quantitative information we can reasonably attain
+
+* [[Parafoil canopies are typically described using terminology from classical
+  wing design: surface area, span, and aspect ratio.
+
+  Define the difference between *flat* and *projected* values.]]
+
+
+.. Discuss the difficulty of modeling a parafoil from such limited data
+
+* [[The user manual for a wing usually includes basic properties such as the
+  total mass of the wing, the areal densities of its surface materials, etc,
+  but not the mass and volume distributions, aerodynamics, etc.]]
+
+
+* [[These specifications are are structural summaries, and are not sufficient
+  to create a wing model. Creating a model from such sparse information will
+  rely on many simplifications. Explain which details are important to this
+  paper, and which will be ignored. **The rest of this chapter is interested in
+  using what little we know to build the approximate model.**
+
+  These are not necessarily the variables you would choose to parametrize the
+  geometry; they might simply be helpful for discussing/understanding the shape
+  of a canopy. For example, "anhedral" is ambiguous, so I'm using Euler roll
+  angles for section "anhedral". These are here to establish the details of the
+  shape and thus the flexibility required by the parametrization.
+
+  Related: "General aviation aircraft design" (Gudmundsson; 2013), chapter 9:
+  "Anatomy of a wing"]]
 
 
 Modeling considerations
 =======================
+
+* [[This section must establish which aspects of the geometry are worth
+  modeling (what parts of the canopy will be modeled and which will be
+  ignored). Unfortunately that question is tied to the aerodynamics method.
+
+  For example, I'm choosing to neglect cell distortions, which is technically
+  a big deal, but developing an aerodynamic method that accounts for cell
+  billowing is time prohibitive. Should I simply punt that discussion into the
+  aerodynamics section? Like "this geometry neglects details such as cell
+  distortions. See 'canopy_aerodynamics:Limitations' for a discussion." ?]]
+
 
 .. Functionality
 
@@ -715,36 +767,60 @@ EXTRA
   of the general equation.
 
 
-Examples of chord surfaces
-==========================
+Example foils
+=============
 
 .. This section highlights the elegance of the "optimized" parametrization.
 
-These examples are composed from a small collection of simple design curves,
-such as constant functions, polynomials, and parametric functions. For example:
-
-* :math:`r_x(s) = 1`
-
-* :math:`x(s) = 0.5 \cdot \left(1 - \lvert s \rvert \right)`
-
-* :math:`c(s) = elliptical\_chord(root=2, tip=0.5)`
-
-* :math:`yz(s) = elliptical\_arc(anhedral=30, wingtip\_roll=75)`
-
-See :ref:`derivations:Parametric design curves` for the derivation of the
-parametric curves, or the `glidersim` :py:class:`documentation
+These examples are composed from a small collection of simple design
+curves, such as constant functions, polynomials, and parametric functions.
+See :ref:`derivations:Parametric design curves` for a derivation of some
+parametric curves; for usage information of their implementations, see the
+`glidersim` documentation, such as :py:class:`documentation
 <glidersim:pfh.glidersim.foil.EllipticalArc>`.
 
-[[**FIXME**: should I include the parameters of the examples? Or is the point
-to show that simple curves produce complex geometries?]]
+All examples are generated programmatically. For details of the parameters
+used in each example, the source is available in [[FIXME: link to
+source]].
 
-[[**FIXME**: embed the video?]]
+For the profile surfaces, all examples are using a NACA 23015 airfoil.
 
-[[**FIXME**: rename this section. It's about the ease and flexibility of the
-parametrization; the chord surface is just the way I'm visualizing it.]]
+[[**FIXME**: embed the video in the HTML build]]
 
 
 Example 1
+---------
+
+Straight wing with a linear chord distribution and no twist.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy_chords.*
+
+
+Example 2
+---------
+
+Straight wing with an elliptical chord distribution and no twist.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy_chords.*
+
+
+Example 3
+---------
+
+Wings with geometric torsion (or "twist") typically use relatively small
+angles that can be difficult to visualize. Exaggerating the angles with
+extreme torsion makes it easier to see the relationship.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_chords.*
+
+
+Example 4
 ---------
 
 [[This example should be a complete description, explaining the design curves
@@ -772,81 +848,28 @@ An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_chords.*
 
+.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_airfoils.*
+
 [[**FIXME**: need to explain the diagrams. The dashed green and red lines in
 particular.]]
 
-[[**FIXME**: good time to explain that if `x` is constant then it's
-irrelevant. One of the more confusing aspects of this geometry is that no
-matter what you define, the central leading edge is always at the origin. Is
-it accurate to say that the `x` and `yz` curves are all about **RELATIVE**
-positioning? They're not exactly displacement vectors, because the final
-positions depend on all the other variables. On the bright side, you don't
-have to care.]]
+[[**FIXME**: good time to explain that if `x` is constant then it's irrelevant.
+One of the more confusing aspects of this geometry is that no matter what you
+define, the central leading edge is always at the origin. Is it accurate to say
+that the `x` and `yz` curves are all about **RELATIVE** positioning? They're
+not exactly displacement vectors, because the final positions depend on all the
+other variables. On the bright side, you don't have to care.]]
 
 The code does have the option of letting the design curves use absolute
 positioning, but I'm not sure I want to discuss that here.]]
 
 
-
-
-Example 2
----------
-
-Words here.
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy_chords.*
-
-
-Example 3
----------
-
-Words here.
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy_chords.*
-
-
-Example 4
----------
-
-Words here.
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_chords.*
-
-
-Example 5
----------
-
-[[FIXME: describe the "anhedral" correctly]]
-
-A circular arc with a mean anhedral of 33 degrees:
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy_chords.*
-
-
-Example 6
----------
-
-[[FIXME: describe the "anhedral" correctly]]
-
-A circular arc with a mean anhedral of 44 degrees:
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical2_canopy_chords.*
-
-
 Example: The Manta
 ------------------
 
-The "manta ray" is a great demo for `r_x`.
+The effect of changing the reference positions can be surprising. A great
+example is a "manta ray" design that changes nothing but the constant value of
+:math:`r_x`.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_curves.*
 
@@ -868,19 +891,9 @@ The "manta ray" is a great demo for `r_x`.
 
    "Manta ray" with :math:`r_x = 1.0`
 
-
-
-Examples of completed wings
-===========================
-
-.. The chord surfaces specified the scale, position, and orientation. Now
-   assign the section profiles.
-
-Assigning a NACA 23015 airfoil to some of the example chord surfaces:
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_airfoils.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical1_canopy_airfoils.*
+These examples clearly demonstrate the power of wing design using extremely
+simple parametric curves. Four of the six design "curves" are merely constants,
+and yet they enable significantly nonlinear designs in an intuitive way.
 
 
 Case study

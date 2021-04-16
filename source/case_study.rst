@@ -2,15 +2,10 @@
 Case Study
 **********
 
-.. This chapter ties everything together. I'd like to generate some tracks
-   from a specific wing (a Niviuk Hook 3, size 23), but I only have some basic
-   technical specs. I need to work through what I know (my educated guesses
-   for what I don't know), and some analysis of the resulting model.
-
-
 Goals of this chapter:
 
-1. Demonstrate using the parametric model to implement a real wing
+1. Demonstrate how to use the parametric geometry to model a real wing from
+   basic technical specs.
 
    [[This section should highlight how a reasonable approximation can be
    produced from the minimal wing data like flat and inflated span, taper,
@@ -61,8 +56,8 @@ the harness, line geometry, are replaced with simplified models.
 The simplified models are provided as part of the `glidersim` package.
 
 
-Basic technical specs
----------------------
+Technical specs
+---------------
 
 [[What data did I have? What did I use?]]
 
@@ -124,6 +119,27 @@ From the manual:
 Canopy
 ------
 
+Developing a canopy model has four basic steps:
+
+1. Design the section layout
+
+2. Assign section profiles
+
+3. Specify the upper and lower surface extends to define air intakes
+
+4. Specify the materials to enable computing the resulting real and air mass
+   inertia matrices.
+
+
+Foil layout
+^^^^^^^^^^^
+
+[[Introduce my choice of design curves]]
+
+
+Chord length
+~~~~~~~~~~~~
+
 [[The simplest place to start modeling the canopy is the chord length
 distribution. In this case the specs only give the root, tip, and mean chord
 lengths, but paragliding wings commonly use truncated elliptic functions
@@ -132,16 +148,21 @@ drag). Fitting an elliptic function to the root and tip lengths and computing
 the mean average chord length of the resulting function confirms the elliptic
 assumption.
 
-[[Also, confirm the flat area.]]
 
-The next step is to choose the :math:`R_{yz}` parameter. Although this
+[[Also, confirm the flat area at this point.]]
+
+
+Longitudinal positioning
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+[[The next step is to choose the :math:`r_x` parameter. Although this
 parameter can technically be a function of the section index, many wings can
 be described with a constant value. This value can be estimated by considering
 pictures of the inflated wing, but since flattened drawings are commonly
 available in technical manuals they are typically more convenient.
 (Admittedly, such drawings are not always to scale, and so should be used with
-caution.) For this wing, a small amount of trial and error suggests
-:math:`R_{yz} = 0.7`.
+caution.) For this wing, a small amount of trial and error using a top-down
+view from the wing user manual suggests :math:`r_x = 0.7`.]]
 
 .. figure:: figures/paraglider/simulations/Hook3_topdown.jpg
    :name: Hook3_topdown
@@ -152,9 +173,13 @@ caution.) For this wing, a small amount of trial and error suggests
    The colored background is taken from the user manual for the wing.
 
 As seen in :numref:`Hook3_topdown`, the elliptical chord assumption with
-:math:`R_{yz} = 0.7` gives a close match to the drawing in the manual.
+:math:`r_x = 0.7` gives a close match to the drawing in the manual.
 
 [[Compare the areas given what I have so far?]]
+
+
+Arc
+~~~
 
 The next step is to model the arc. For this wing, photos of the wing suggest
 that a circular arc segment is reasonable. There are several ways to fit an
@@ -163,8 +188,27 @@ arc angle, but since the specs included both the flattened and projected
 areas, it can be easier to simply increase the arc angle until the projected
 area of the model matches the expected value.
 
+
+[[FIXME: show a few examples: a circular arc and an elliptical arc. Just
+enough to show the mean and tip dihedral angles I use in `glidersim`.]]
+
+[[FIXME: how did I choose `r_yz`?]]
+
+[[Show the rear-view picture and the resulting model?]]
+
 [[In my case I adjusted `mean_anhedral` until the projected values are roughly
 correct.]]
+
+
+Geometric torsion
+~~~~~~~~~~~~~~~~~
+
+[[This is a guess. Paragliders can be expected to have positive torsion, but
+the distribution is unknown to me.]]
+
+
+Section profiles
+^^^^^^^^^^^^^^^^
 
 [[Choose an airfoil]]
 
@@ -176,17 +220,43 @@ correct.]]
   was also chosen by :cite:`becker2017ExperimentalStudyParaglider`). I should
   have probably used the LS(1)-0417 but oh well.
 
-* Air intakes? I never did measure them.
+[[FIXME: modified profiles for brake deflections]]
+
+[[FIXME: section coefficients]]
 
 
+Air intakes
+^^^^^^^^^^^
 
-Wing
-----
-
-[[Line geometry: position of the A and C connection points, total line
-length]]
+[[Air intakes via upper/lower surface separation? I never measured them.]]
 
 
+Materials
+^^^^^^^^^
+
+FIXME
+
+
+Suspension lines
+----------------
+
+[[In a physically accurate model a complete specification of the line geometry
+would define the accelerator function and brake deflections. Instead, this
+model uses approximations for both, separately. After all, the paraglider
+dynamics don't care HOW you define the functions, just that they're
+available.]]
+
+[[FIXME: what about the total line length and drag?]]
+
+
+Accelerator
+^^^^^^^^^^^
+
+[[Position of the A and C connection points, accelerator geometry]]
+
+
+Brake deflections
+^^^^^^^^^^^^^^^^^
 
 [[Assumed brake distribution]]
 
@@ -207,14 +277,13 @@ deflections are intuitive. The result is that instead of using a true line
 geometry, you can get away with an approximate deflection distribution using
 a simple cubic function with a few carefully chosen end points.]]
 
-
 [[surface materials, ribs net mass]]
-
 
 [[My mass calculations neglect the extra mass due to things like the riser
 straps, carabiners, and internal v-ribs and straps, so I'm underestimating the
 mass, but I'm also assuming the vertical ribs are solid (no ports) so that
 makes up for a bit of the missing mass]]
+
 
 
 Harness

@@ -1,11 +1,3 @@
-* When I talk about "graceful degradation", I should probably explain it in
-  the sense of "the wing tips tend to start stalling first, but their
-  contributions are relatively minor overall, so inaccuracies in the wing tip
-  forces does not contribute a large error to the overall force estimate and
-  should not preclude the method from providing functional, albeit degraded,
-  accuracy."
-
-
 *******************
 Canopy Aerodynamics
 *******************
@@ -29,37 +21,26 @@ glider, which come from Earth's gravity and the air.]]
 
 .. How do you determine the canopy aerodynamics?
 
-* Ideally you'd just measure them experimentally, but for this project we have
+* [[Theoretical (predict) vs experimental (measure) approaches to determining
+  wing performance.]]
+
+  Ideally you'd just measure them experimentally, but for this project we have
   to use theoretical methods.
 
 * *Computational aerodynamics* produce numerical solutions to the governing
-  equations.
+  equations. They combine a model of the wing geometry with a set of boundary
+  conditions to solve for the flow field around the wing.
 
-* We need to choose a suitable aerodynamics method and acquire an
+* There are many different methods. Each one comes with a different set of
+  assumptions. Their designs involve tradeoffs that limit their applicability
+  to different situations.
+
+* Conclusion: we need to choose a suitable aerodynamics method and acquire an
   implementation.
 
-
-.. Why did this project implement its own aerodynamics code?
-
-[[FIXME: ultimately the "why implement my own" boils down to which method
-I chose. Start by choosing the method that satisfied the performance criteria,
-point out that an implementation wasn't available, and that's that.]]
-
-You could use the parametric model to output design specifications for other
-aerodynamic analysis tools, but relying on existing tools is problematic:
-
-1. Most of the freely available tools are not idea for analyzing parafoils.
-   They must handle non-linear geometries. They must provide reasonable
-   performance at significant angles of attack (they can't rely on small angle
-   approximations). They must degrade gracefully near stall. They must support
-   asymmetric wind vectors (thermal updrafts, rotations, etc). They must be
-   able to incorporate empirical adjustments from parafoil literature (viscous
-   drag, mostly).
-
-2. Slower (most tools don't provide an API, and it would be too expensive for
-   the simulator to call out to an external tool every iteration)
-
-3. More complexity (you introduce an external dependency)
+* [[There are existing methods in literature, but I need to define my
+  performance criteria before claiming they are inadequate. This might be
+  a good spot to acknowledge their existence, but defer their discussion.]]
 
 
 .. Roadmap:
@@ -80,19 +61,16 @@ This chapter will proceed as follows:
 * Discussion
 
 
-Computational aerodynamics
-==========================
-
-* [[Theoretical (predict) vs experimental (measure) approaches to determining
-  wing performance.]]
-
-* [[For the theoretical approaches, compare analytical vs numerical
-  (computational) solutions to the governing equations.
-  :cite:`cummings2015AppliedComputationalAerodynamics`]]
-
-
-Modeling Requirements
+Modeling requirements
 =====================
+
+.. Establish the performance criteria for this project. I need an aerodynamics
+   method that can handle the unusual geometry of a paraglider canopy under
+   expected flight conditions.
+
+* [[Define the variety of "typical flight conditions" in the context of this
+  paper. Wind gradients, wing rotation, etc: the aerodynamics method must be
+  able to handle it.]]
 
 * [[What modeling fidelity do I need?]]
 
@@ -114,6 +92,13 @@ Modeling Requirements
 
     * Require graceful degradation near stall
 
+      [[When I talk about "graceful degradation", I should probably explain it
+      in the sense of "the wing tips tend to start stalling first, but their
+      contributions are relatively minor overall, so inaccuracies in the wing
+      tip forces does not contribute a large error to the overall force
+      estimate and should not preclude the method from providing functional,
+      albeit degraded, accuracy."]]
+
     * [[Non-linearities come from a variety of sources: the geometry
       (particularly the arc?), viscosity (boundary layer effects are
       significant for parafoils), non-uniform wind (turning, wind gradients,
@@ -132,7 +117,9 @@ Modeling Requirements
   * Supports viscous effects and empirical adjustments (mostly viscous drag
     correction factors)
 
-    [[These exist in literature. I want to be able to use them.
+    [[These exist in literature. I want to be able to use them. Can
+    incorporate them either by adding them directly to the drag coefficient
+    (as I do for Phillips method), or via strip theory.
 
     Sources:
 
@@ -186,6 +173,8 @@ verification.]]
 Aerodynamics models
 ===================
 
+.. Survey the available models and the tradeoffs they involve.
+
 * [[What categories of aerodynamics methods are available?
 
   Introduce LLT, VLM, CFD, etc. Go through the requirements and explain why
@@ -194,11 +183,28 @@ Aerodynamics models
   be significant for parafoils), CFD is too complicated to implement and too
   slow). Only the NLLT met my requirements.
 
+  [[For the theoretical approaches, compare analytical vs numerical
+  (computational) solutions to the governing equations.
+  :cite:`cummings2015AppliedComputationalAerodynamics`]]
+
   Also, a great reference: :cite:`drela2014FlightVehicleAerodynamics`]]
+
+* [[What kinds of assumptions do they make? (viscosity, spanwise flow, flow
+  separation, linear coefficients, uniform wind, etc)]]
 
 * [[Section profiles were covered in the previous chapter. The computational
   methods use the profiles either via their section coefficients, or via the
   surface geometry they generate.]]
+
+
+.. Critique the models in the context of this project
+
+* [[Some of these are used in literature to estimate the performance of
+  parafoils. Explain why methods that work for other papers do not meet the
+  performance criteria for **this** project.]]
+
+
+.. Select an appropriate model for this project
 
 * Only the NLLT met my requirements. It's an extension of LLT to account for
   3D effects. It's computationally efficient, handles non-linear geometry,
@@ -209,6 +215,9 @@ Aerodynamics models
 
 Phillips' numerical lifting-line
 ================================
+
+.. Explain the method, review its design, describe my improvements, and
+   discuss my implementation.
 
 * **Phillips' original derivation assumes uniform flow** for Eq:5, but I'm
   using the non-uniform version from Hunsaker-Snyder Eq:5. Hunsaker mentions
@@ -416,9 +425,10 @@ Improvements
   sizes), and it naturally handles conditions near stall.
 
 * [[Use a reference solution for sequential estimates. If the reference fails,
-  solve a different problem somewhere between the target and the reference,
-  and solve for that; if the analysis succeeds, use that solution as the new
-  reference.
+  solve a different, more relaxed, problem somewhere between the target
+  conditions (with an unknown solution) and the reference conditions (with
+  a known solution), and solve for that; if the analysis succeeds, use that
+  solution as the new reference.
 
   As with all methods based on gradient descent, the Newton iterations require
   a starting point. In this case, the method requires an initial value for the
@@ -613,12 +623,15 @@ Limitations
   on the 3D wing.
 
 * This is a steady-state (non-accelerated) solution; in particular, it doesn't
-  include corrections for apparent mass. (See
-  :ref:`paraglider_dynamics:Apparent Mass`).
+  include corrections for apparent mass. (See :ref:`paraglider_model:Apparent
+  Mass`).
 
 
 Case study
 ==========
+
+.. Validate the performance of Phillips' method for analyzing a parafoil
+   canopy in steady-state conditions.
 
 [[Introduce Belloc's wind tunnel data]]
 
@@ -772,4 +785,10 @@ Comments
 Discussion
 ==========
 
-FIXME
+* Phillips' method uses steady-state coefficients and uses a straight-wake
+  assumption. Both are cause for concern when trying to apply this method to
+  unsteady or non-uniform flow conditions (such as turning).
+
+* [[Acknowledge but defer the discussion of unsteady effects until
+  :ref:`paraglider_model:Discussion`? I'll have already discussed apparent
+  mass by that point.]]

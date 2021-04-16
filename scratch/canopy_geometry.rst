@@ -63,6 +63,32 @@ Creating a canopy model from basic spec data is thus broken into two steps:
    define the scale, position, and orientation from basic technical data.
 
 
+Overview 2 (2021-04-15)
+=======================
+
+This project needs a mathematical model of the canopy geometry in order to
+estimate the canopy aerodynamics. The problem is that complete specifications
+of commercial paraglider canopies are not available; manufacturers only
+provide summary specs. To create approximate models from the summary specs
+must be combined with domain expertise to "fill in the blanks" with reasonable
+guesses of the missing information. The domain expertise is encoded in
+parametric functions; the parameters are either the summary specs or other
+relatively available information, and the function encodes the assumed
+structure.
+
+So, we need a geometry model that accepts parametric functions. This is
+a problem because although there are wing modeling tools expect the wing
+geometry to be specified in unnecessarily constrained ways. Those constrains
+force unnecessary complexity into the parametric functions and make it
+difficult to create clean design curves.
+
+To that end, this chapter has two goal. First, it will develop a generalized
+wing model that places fewer constraints on how the wing is specified; this
+flexibility allows significantly simpler parametric design curves. Second, it
+will provide several convenient design curves that capture most of the missing
+structure using reasonable assumptions based on typical canopy design.
+
+
 Rough outline
 =============
 
@@ -241,3 +267,26 @@ Content
   each section explicitly is unwieldy. Instead, it is more convenient to work
   with a set of *design parameters* (span, taper ratio, elliptical function
   parameters, etc) that capture the underlying structure of the model.
+
+
+Geometry specification
+----------------------
+
+* [[There are also a variety of standard terms I will avoid due to ambiguity:
+  *planform*, *mean aerodynamic chord*, maybe more? For *planform*, most texts
+  assume the wing is flat and so the projected area is essentially equal to
+  the flat area, and thus differentiating the two is largely neglected in
+  standard aerodynamic works. The mean aerodynamic chord is a convenient
+  metric for comparing flat wings and for simplifying some equations, but for
+  wings with significant arc anhedral I'm not sure how beneficial this term
+  really is; it's a mistake to compare wings based on the MAC alone, so I'd
+  rather avoid any mistaken comparisons.]]
+
+* Technically, for flat wings curvature in the yz-plane is is described as
+  *dihedral* or *anhedral*: not sure how to define this for a wing. If the
+  wing is straight, then it's traditionally defined as `arctan(z/y)` of the
+  section position, but that's pretty unhelpful for a paraglider. It also
+  doesn't differentiate between `arctan(z/y)` and `arctan(dz/dy)` of
+  a section. Still, discussing curvature leads nicely into a discussion of the
+  *arc*, so whatever.
+

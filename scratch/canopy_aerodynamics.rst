@@ -409,6 +409,32 @@ Limitations of using "design by wing sections":
   airfoils.
 
 
+.. Why did this project implement its own aerodynamics code?
+
+[[FIXME: ultimately the "why implement my own" boils down to which method
+I chose. Start by choosing the method that satisfied the performance criteria,
+point out that an implementation wasn't available, and that's that.]]
+
+You could use the parametric model to output design specifications for other
+aerodynamic analysis tools, but relying on existing tools is problematic:
+
+1. Most of the freely available tools are not ideal for analyzing parafoils.
+   They must handle non-linear geometries. They must provide reasonable
+   performance at significant angles of attack (they can't rely on small angle
+   approximations). They must degrade gracefully near stall. They must support
+   asymmetric wind vectors (thermal updrafts, rotations, etc). They must be
+   able to incorporate empirical adjustments from parafoil literature (viscous
+   drag, mostly).
+
+2. Slower (most tools don't provide an API, and it would be too expensive for
+   the simulator to call out to an external tool every iteration)
+
+3. More complexity (you introduce an external dependency)
+
+[[**Move this to the discussion?**]]
+
+
+
 
 Validation
 ----------

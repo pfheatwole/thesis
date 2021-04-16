@@ -573,7 +573,7 @@ of a wing with circular arc anhedral. The equations have been adapted to use
 the standard notation of this paper. The terms derived in this section will be
 added to the real mass of the canopy when running the paraglider dynamics
 models. For a discussion of apparent mass effects, see
-:ref:`paraglider_dynamics:Apparent Mass`.
+:ref:`paraglider_model:Apparent Mass`.
 
 
 Barrows Formulation
@@ -791,9 +791,8 @@ Angular momentum of the apparent mass about :math:`R`:
 Notes to self
 -------------
 
-* If :ref:`paraglider_dynamics:Reference point` said this section gives
-  reasons that `R` should be in the xz-plane, then make sure this section
-  covers that.
+* If :ref:`paraglider_model:Reference point` said this section gives reasons
+  that `R` should be in the xz-plane, then make sure this section covers that.
 
 * Doesn't Barrows use the *principal axes*? See my comment at the end of the
   "Introduction" to Barrows' paper about the coordinate axes needing to be
