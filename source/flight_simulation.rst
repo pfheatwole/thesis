@@ -123,9 +123,9 @@ Example flight scenarios
 ========================
 
 [[Should these go in "case study"? Each scenario needs a wing, so I'd either
-have to move `case_study` before this chapter or else forward reference it
-here. I'm leaning towards making `case_study` an end-to-end demonstration from
-technical specs to geometry to aerodynamics to flight scenarios.]]
+have to move `demonstration` before this chapter or else forward reference it
+here. I'm leaning towards making `demonstration` an end-to-end demonstration
+from technical specs to geometry to aerodynamics to flight scenarios.]]
 
 
 MISC

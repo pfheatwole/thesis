@@ -1024,7 +1024,7 @@ Discussion
   examples of canopies using that parametrization.
 
 * Reference the :ref:`canopy_aerodynamics:Case study` (Belloc's wing) and
-  :doc:`case_study` (my Hook3ish)
+  :doc:`demonstration` (my Hook3ish)
 
 
 Advantages

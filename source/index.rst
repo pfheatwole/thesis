@@ -40,7 +40,7 @@ Contents
    canopy_aerodynamics
    paraglider_model
    flight_simulation
-   case_study
+   demonstration
    future_work
    conclusion
    examples

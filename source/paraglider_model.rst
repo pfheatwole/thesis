@@ -368,7 +368,7 @@ Controls
 [[Define the control scheme expected by the dynamics model equations.
 Specifically, :math:`\delta_{bl}` and :math:`\delta_{br}`. I'm not going to
 define the brake deflection model here; leave that up to the model designer,
-such as in :doc:`case_study`.]]
+such as in :doc:`demonstration`.]]
 
 
 Notes to self
@@ -892,7 +892,7 @@ For the derivation of the mathematical model, see :ref:`derivations:Model 9a`.
 Discussion
 ==========
 
-[[Refer to `case_study` for an example.]]
+[[Refer to `demonstration` for an example.]]
 
 
 Pros

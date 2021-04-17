@@ -950,10 +950,11 @@ choose a suitable set of state variables, and link the state dynamics to the
 paraglider dynamics; :doc:`flight_simulation` suggests one possible choice,
 and presents the resulting dynamics function.
 
-To conclude the primary contributions of this paper, :doc:`case_study` presents
-an example that uses the parametric model to approximate a physical paraglider
-wing, compare static performance analyses to expected results, and demonstrate
-several dynamic scenarios to highlight the flexibility of the model.
+To conclude the primary contributions of this paper, :doc:`demonstration`
+presents an example that uses the parametric model to approximate a physical
+paraglider wing, compare static performance analyses to expected results, and
+demonstrate several dynamic scenarios to highlight the flexibility of the
+model.
 
 In closing, :doc:`future_work` briefly surveys the remaining steps to solving
 the flight reconstruction problem, extracting wind field patterns from sets of

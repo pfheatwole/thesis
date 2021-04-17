@@ -1,6 +1,6 @@
-**********
-Case Study
-**********
+*************
+Demonstration
+*************
 
 Goals of this chapter:
 
