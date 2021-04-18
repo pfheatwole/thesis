@@ -43,7 +43,6 @@ Contents
    demonstration
    future_work
    conclusion
-   examples
 
 .. toctree::
    :maxdepth: 3

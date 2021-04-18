@@ -2,6 +2,13 @@
 Demonstration
 *************
 
+[[The purpose of this chapter is to demonstrate how to model and simulate
+flights from a real paraglider wing. The modeling process combines basic
+technical specs from a user manual with photographic information and
+reasonable assumptions about paraglider wing design. The simulations
+demonstrate ]]
+
+
 Goals of this chapter:
 
 1. Demonstrate how to use the parametric geometry to model a real wing from

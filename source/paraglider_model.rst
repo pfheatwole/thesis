@@ -1,47 +1,25 @@
-[[I'd prefer to keep the geometry definition "pure"; just assume the
-mathematical models exist. Things like the harness model are ancillary: the
-only reason I'm defining them is to complete the model, but I need to make it
-clear that these are just "here's one way to do that".
+[[This chapter describes the components of a paraglider and provides simple
+mathematical models of each component's inertia information and dynamics
+models. The paraglider system models are expecting some components to have
+control inputs, and the models in this chapter should reflect that.
 
-Also, there's a chicken and egg issue: the paraglider dynamics definition
-specifies the requirements like weight shift, etc. Kind of weird to define the
-components before the full equations, but whatever.]]
+The primary motivation is to define the components needed for the paraglider
+system dynamics model in the flight simulation chapter; model fidelity of each
+individual component is less of a concern (I'm basically saying "here's **one
+way** to model X", which is how I get away with things like spherical
+harnesses, etc).
+
+
+Okay, I like this: this chapter should list the basic components of the
+paraglider system, and provide their inertias and dynamics models. Nice
+symmetry.
+
+]]
 
 
 *******************
 Paraglider Dynamics
 *******************
-
-.. list-table:: Wings
-   :header-rows: 1
-   :align: center
-
-   * - Wing 1
-     - Wing 2
-     - Wing 3
-   * - .. image:: figures/paraglider/geometry/foil2.*
-     - .. image:: figures/paraglider/geometry/foil2.*
-     - .. image:: figures/paraglider/geometry/foil2.*
-   * - .. image:: figures/paraglider/geometry/foil2.*
-     - .. image:: figures/paraglider/geometry/foil2.*
-     - .. image:: figures/paraglider/geometry/foil2.*
-   * - .. image:: figures/paraglider/geometry/foil2.*
-     - .. image:: figures/paraglider/geometry/foil2.*
-     - .. image:: figures/paraglider/geometry/foil2.*
-
-
-.. What are dynamics? What are paraglider dynamics used for?
-
-The *dynamics* of a system describe how the state of the system changes over
-time. A flight simulator needs a model of an aircraft's dynamics to generate
-the flight trajectory produced by a specific flight scenarios.
-
-[[The previous chapters developed a wing geometry that can model the canopy,
-and an aerodynamics method that can estimate the canopy dynamics. The canopy
-dynamics are just one piece of the total paraglider dynamics. This chapter
-develops a complete dynamics model that includes the dynamics of the entire
-system.]]
-
 
 .. Roadmap
 
@@ -50,43 +28,32 @@ system.]]
   [[eg, declaring that I want to model weight shift implies that at least one
   of the components will need a weight shift control in its dynamics]]
 
-* Discuss existing paraglider models from literature?
+* Define the aerodynamic *control points*. (They're part of my "design
+  language" for the components.)
 
-* Individual component dynamics
-
-  [[inertia and control systems?]]
-
-  * Wing
-
-  * Harness
-
-* Composite system dynamics
-
-  [[Degrees-of-freedom, connection model, etc?]]
-
-* Demonstrate the polar curves of my Hook3ish? (Feels a bit off here. Hrm.)
-
-* [[**FIXME**: where do I describe the aerodynamic *control points*?]]
+* Component geometries, inertias, control points, and dynamics (including any
+  control inputs)
 
 
 Modeling requirements
 =====================
 
 * [[This stage is about what I'm **not** choosing to model as much as it is
-  about what I am.]]
+  about what I am.
 
-* [[A paraglider can is a system composed of canopy, lines, harness, and
-  pilot. Although nearly every component are made from highly flexible
-  materials, they tend to remain relatively rigid during typical flight
-  conditions. The flight dynamics can be greatly simplified by assuming
-  a rigid body model.]]
+  I need to start with what the model must do, which opens up the
+  opportunities for simplifying assumptions.
+
+
+]]
+
+* [[A paraglider is a system composed of canopy, lines, harness, and pilot.
+  Although nearly every component are made from highly flexible materials,
+  they tend to remain relatively rigid during typical flight conditions. The
+  flight dynamics can be greatly simplified by assuming a rigid body model.]]
 
 * I put a lot of work into non-uniform wind, etc, in the aerodynamics. The
   dynamics model should be capable of leveraging that flexibility.
-
-* Intuitive (as possible), sufficiently flexible, etc. [[FIXME: vague]]
-
-* Degrees of freedom? (eg, include relative motion of the harness?)
 
 * [[Weight shift control is in, riser controls are out]]
 
@@ -785,120 +752,10 @@ Aerodynamics
 FIXME
 
 
-System models
-=============
-
-[[Models of the composite system]]
-
-
-Reference point
----------------
-
-One of the first steps in developing an aircraft dynamics model is to choose
-a reference point for the translational dynamics. A common choice is the
-system center of mass because it decouples the translational and angular
-dynamics. For paragliders, however, the center of mass is not a fixed point
-because it is not a strictly rigid body system: weight shift, accelerator, and
-atmospheric air density all effect the location of the paraglider center of
-mass. Also, paragliders are sensitive to apparent mass, which don't have
-a single "center"; that is, there is no point that minimizes all of the terms
-in the apparent inertia matrix, and there is no point that decouples the
-translational and rotational terms of the apparent inertia matrix. Because the
-system matrix cannot be diagonalized there is no advantage in choosing the
-center of mass. Instead, the reference point can be chosen such that it
-simplifies other calculations.
-
-.. Note that the point you use for computing the dynamics can be different
-   from the point you use for tracking the glider trajectory over the Earth.
-
-As mentioned in `Apparent Mass`_, estimating the apparent mass of the canopy
-is simplified if the reference point lies in the xz-plane of the wing. The
-most natural choices in that plane are the leading edge of the central
-section, or the midpoint between the two risers connections, which is constant
-regardless of the width the riser chest strap.
-
-This paper chooses the midpoint between the two riser connections, designated
-:math:`RM`, for all dynamics equations because it is also the most natural
-choice for the vehicle velocity state variable in the simulator. The reason is
-that because the riser midpoint is likely to be near to where a pilot would
-place their flight device, it is also the most representative of the data
-measured by flight recorders, making it the most convenient point for
-comparing real flight data to simulated data.
-
-Another advantage is that the riser midpoint is typically very close to the
-glider center of mass, which makes it easy to visualize the glider motion when
-developing the models.
-
-
-A six degrees-of-freedom model
-------------------------------
-
-In these models, the paraglider is approximated as a single rigid body.
-With all the components held in a fixed position, the dynamics can be
-described by solving the system of equations produced by equating the
-derivatives of translational and angular momentum to the sum of forces and
-moments on the rigid body.
-
-[[FIXME: the six and nine DoF introductions should have parallel structure.
-Write one of them, then adapt it for the other so they develop in the same
-way.]]
-
-.. figure:: figures/paraglider/dynamics/paraglider_fbd_6dof.*
-   :name: paraglider_fbd_6dof
-
-   Diagram for a 6-DoF model.
-
-For the derivation of the mathematical model, see :ref:`derivations:Model 6a`.
-
-
-A nine degrees-of-freedom model
--------------------------------
-
-The 6-DoF models constrain the relative payload orientation to a fixed
-position. This is reasonably accurate for average flight maneuvers, but it has
-one significant failing: although the relative roll and twist are typically
-[[negligible]], relative pitch about the riser connections is very common.
-Friction at the riser carabiners adds a damping effect to pitching
-oscillations, but in general the harness is free to pitch as necessary to
-maintain equilibrium. Assuming a fixed pitch angle introduces a incorrect
-pitching moment that disturbs the equilibrium conditions of the wing and
-artificially dampens the pitching dynamics during maneuvers.
-
-To mitigate that issue, models with higher degrees of freedom break the system
-into two components, a body and a payload, and permit relative orientations
-between the two components. The body includes the lines, canopy, and enclosed
-air. The payload includes the harness and pilot.
-
-[[Discuss the 7-, 8-, and 9-DoF models from literature?]]
-
-This section develops a model with nine degrees of freedom: six for the
-orientations of the body and payload, and three for the velocity of the
-connection point shared by the body and payload. The body and payload are
-modeled as two rigid bodies connected at the riser midpoint :math:`RM`, with
-the connection modeled as a spring-damper system.
-
-.. figure:: figures/paraglider/dynamics/paraglider_fbd_9dof.*
-   :name: paraglider_fbd_9dof
-
-   Diagram for a 9-DoF model with internal forces.
-
-The equations of motion are developed by solving for the translational
-momentum :math:`^e \dot{\vec{p}} = \sum{\vec{F}}` and angular momentum
-:math:`^e \dot{\vec{h}} = \sum \vec{M}` for both bodies.
-
-For the derivation of the mathematical model, see :ref:`derivations:Model 9a`.
-
-
 Discussion
 ==========
 
-[[Refer to `demonstration` for an example.]]
-
-
-Pros
-----
-
-* Somewhat mitigates the *steady flow* assumption by including apparent mass.
+[[FIXME: these were here from before the refactor and obviously need review.]]
 
 
 Limitations

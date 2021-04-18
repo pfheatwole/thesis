@@ -94,6 +94,25 @@ Should see a :numref:`wind triangle in (Fig. %s) <wind_triangle>`.
 Note that figure references are different from equations in that they use
 standard reST labels ``.. _label_here`` instead of ``:label:`` options.
 
+Plotting a grid of images is a little weird, but here's one way:
+
+.. list-table:: Wings
+   :header-rows: 1
+   :align: center
+
+   * - Wing 1
+     - Wing 2
+     - Wing 3
+   * - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+   * - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+   * - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+     - .. image:: figures/paraglider/geometry/foil2.*
+
 
 Math
 ====
