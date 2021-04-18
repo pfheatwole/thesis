@@ -623,7 +623,7 @@ Limitations
   on the 3D wing.
 
 * This is a steady-state (non-accelerated) solution; in particular, it doesn't
-  include corrections for apparent mass. (See :ref:`paraglider_model:Apparent
+  include corrections for apparent mass. (See :ref:`paraglider_components:Apparent
   Mass`).
 
 
@@ -790,5 +790,5 @@ Discussion
   unsteady or non-uniform flow conditions (such as turning).
 
 * [[Acknowledge but defer the discussion of unsteady effects until
-  :ref:`paraglider_model:Discussion`? I'll have already discussed apparent
+  :ref:`paraglider_components:Discussion`? I'll have already discussed apparent
   mass by that point.]]

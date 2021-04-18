@@ -17,9 +17,9 @@ symmetry.
 ]]
 
 
-*******************
-Paraglider Dynamics
-*******************
+***************************
+Paraglider component models
+***************************
 
 .. Roadmap
 

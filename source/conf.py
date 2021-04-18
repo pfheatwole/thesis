@@ -57,7 +57,7 @@ rsvg_converter_args = ["-z", str(round(zoom_factor, 2))]
 # autosectionlabel will warn if a section label is reused inside a single
 # document, regardless of section depth. Suppress those manually.
 suppress_warnings = [
-    # 'autosectionlabel.paraglider_model', # Outdated, but keeping it as an example
+    # 'autosectionlabel.paraglider_components', # Outdated, but keeping it as an example
     'autosectionlabel.*',  # Assume I use fully-qualified section references
 ]
 

@@ -26,11 +26,9 @@ Models"? Sure, why not.
 
 
 
-
-*****************
-Flight Simulation
-*****************
-
+************************
+Paraglider system models
+************************
 
 .. What are dynamics? What are paraglider dynamics used for?
 
@@ -133,8 +131,8 @@ This chapter proceeds as follows:
 
 
 
-System models
-=============
+System dynamics
+===============
 
 .. These provide the system dynamics needed to define the state dynamics
 
@@ -161,11 +159,11 @@ simplifies other calculations.
 .. Note that the point you use for computing the dynamics can be different
    from the point you use for tracking the glider trajectory over the Earth.
 
-As mentioned in `Apparent Mass`_, estimating the apparent mass of the canopy
-is simplified if the reference point lies in the xz-plane of the wing. The
-most natural choices in that plane are the leading edge of the central
-section, or the midpoint between the two risers connections, which is constant
-regardless of the width the riser chest strap.
+As mentioned in :ref:`paraglider_components:Apparent mass`, estimating the
+apparent mass of the canopy is simplified if the reference point lies in the
+xz-plane of the wing. The most natural choices in that plane are the leading
+edge of the central section, or the midpoint between the two risers
+connections, which is constant regardless of the width the riser chest strap.
 
 This paper chooses the midpoint between the two riser connections, designated
 :math:`RM`, for all dynamics equations because it is also the most natural
@@ -239,8 +237,8 @@ momentum :math:`^e \dot{\vec{p}} = \sum{\vec{F}}` and angular momentum
 For the derivation of the mathematical model, see :ref:`derivations:Model 9a`.
 
 
-Dynamic simulation
-==================
+State dynamics
+==============
 
 .. Define the state dynamics and integrate them over time to generate flight
    trajectories
@@ -266,8 +264,8 @@ State variables
   :cite:`sola2017QuaternionKinematicsErrorstate`
 
 
-State dynamics
---------------
+State derivatives
+-----------------
 
 [[Need to relate the state dynamics to the paraglider model dynamics. Review
 `Dynamics6a` and `Dynamics9a` from `glidersim`; they choose their own sets of

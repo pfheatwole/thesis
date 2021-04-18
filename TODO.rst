@@ -1,14 +1,24 @@
-* Review and complete the outlines for each chapter. Make sure the overarching
-  "plot" is cohesive before diving back into the details. (If my "map" is
-  messy then I'll keep getting lost. Too much backtracking right now; I bounce
-  all over.)
-
 * **Merge my canopy geometry derivations.** I have three of them at this
   point: a partial in `canopy_geometry`, and two partials in `derivations`.
 
 * Copy the Hook3 specs into `case_study`
 
 * Add at least one simple scenario (simulation into `.svg` plus discussion).
+
+
+Current task
+============
+
+Review the outlines at the beginning of each chapter. I should be able to read
+the chapter outlines and get a coherent, complete (albeit superficial)
+understanding of the entire paper.
+
+I need to make sure the overarching "plot" is cohesive before diving back into
+the details. (If my "map" is messy then I'll keep getting lost. Too much
+backtracking right now; I bounce all over.)
+
+(Once the in-chapter outlines are complete, then review the "Table of
+Contents" to see if it suggests the same flow.)
 
 
 Topical
