@@ -178,6 +178,13 @@ glider center of mass, which makes it easy to visualize the glider motion when
 developing the models.
 
 
+Control inputs
+--------------
+
+[[FIXME: should these have been specified earlier when I was defining the
+component models? Or do the component models forward reference this section?]]
+
+
 A six degrees-of-freedom model
 ------------------------------
 
@@ -244,12 +251,6 @@ State dynamics
    trajectories
 
 
-Inputs
-------
-
-FIXME
-
-
 State variables
 ---------------
 
@@ -283,10 +284,6 @@ Discussion
 ==========
 
 * [[Refer to `demonstration` for examples of different flight scenarios.]]
-
-
-MISC
-====
 
 * This simulator assumes the wind and controls are available as a function of
   time. That's not the case for flight reconstruction, where you **pass** the

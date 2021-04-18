@@ -36,8 +36,8 @@ Contents
    :numbered:
 
    introduction
-   canopy_geometry
-   canopy_aerodynamics
+   foil_geometry
+   foil_aerodynamics
    paraglider_components
    paraglider_systems
    demonstration

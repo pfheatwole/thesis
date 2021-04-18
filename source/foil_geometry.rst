@@ -1,6 +1,22 @@
-***************
-Canopy Geometry
-***************
+* This chapter is motived by this project's need for a parametric geometry for
+  parafoil canopies, but nothing in this chapter is limited to parafoils. It
+  works just as well for normal wings, hang glider wings, etc. Introduce the
+  chapter in the context of parafoil canopies, but eliminate all the other
+  references to "parafoil", "canopy", etc.
+
+  Also, explain why I'm using the more abstract term "foil" instead of "wing";
+  specifically, common uses of the term "paraglider wing" describe much more
+  than just the canopy geometry, so "wing" is overloaded in that context. When
+  a reader sees "foil" they should think "purely geometric shape".
+
+* Combine the "Foil specifications" and "Parametric modeling" into "Modeling
+  requirements"? Seems like that section should work through what I'm trying
+  to model and how the model is specified (parametrically).
+
+
+*************
+Foil geometry
+*************
 
 .. This chapter creates a parametric geometry that can approximate parafoil
    canopies using only basic technical specs. There isn't enough information
@@ -24,30 +40,15 @@ Canopy Geometry
    2. Develop design curves that can create complete geometry models using
       only basic technical specs and reasonable assumptions.
 
+
 .. What is a parafoil canopy?
 
 The essential component of any flying object is the lifting surface.
 A *lifting surface* is any part of an aircraft that produces *lift* when it
-interacts with the air. A parafoil canopy is type of *ram-air parachture*,
-a lifting surface that uses air intakes at the front of the wing to inflate
-a partially-open nylon casing. Although a small amount of air does flow
-through the canopy's surface, the majority of the air flows around the
-canopy's volume. By redirecting the airflow downward, the canopy exchanges
-momentum with the air and produces the lifting force that allows the glider to
-fly.
-
-.. figure:: figures/paraglider/geometry/Wikimedia_Nova_X-Act.jpg
-   :width: 75%
-
-   Paraglider side view.
-
-   `Photograph <https://www.flickr.com/photos/69401216@N00/2820146477/>`__ by
-   Pascal Vuylsteker, distributed under a CC-BY-SA 2.0 license.
-
-* Manufactured from flexible materials such as ripstop nylon, they rely on
-  internal structures to control the shape of the inflated volume, and
-  variable-length suspension lines to control the shape of the arc.
-
+interacts with the air. By redirecting the airflow downward, the lifting
+surface exchanges momentum with the air and produces the lifting force that
+allows the aircraft to fly. The lifting surface for a paraglider is called
+a parafoil *canopy*. [[FIXME: review]]
 
 
 .. Why does this project need to model the canopy geometry?
@@ -136,8 +137,8 @@ paraglider canopies.
    9. Discussion
 
 
-Parafoil specifications
-=======================
+Foil specifications
+===================
 
 .. This section elaborates on the details we need to model (chord
    distribution, etc), what data we know (span, area, etc), and what is
@@ -173,7 +174,23 @@ Parafoil specifications
 
 .. Describe the system we need to model
 
-* [[Another image of a canopy, or refer to the one from the intro?]]
+A parafoil canopy is a type of *ram-air parachute*. It uses air intakes at the
+front of the wing to inflate a partially-open nylon casing. Although a small
+amount of air does flow through the canopy's surface, the majority of the air
+flows around the canopy's volume. [[FIXME: reword]]
+
+.. figure:: figures/paraglider/geometry/Wikimedia_Nova_X-Act.jpg
+   :width: 75%
+
+   Paraglider side view.
+
+   `Photograph <https://www.flickr.com/photos/69401216@N00/2820146477/>`__ by
+   Pascal Vuylsteker, distributed under a CC-BY-SA 2.0 license.
+
+Manufactured from flexible materials such as ripstop nylon, they rely on
+internal structures to control the shape of the inflated volume, and
+variable-length suspension lines to control the shape of the arc.
+
 
 * [[Call attention to the important details:
 
@@ -233,8 +250,8 @@ Parafoil specifications
   "Anatomy of a wing"]]
 
 
-Modeling considerations
-=======================
+Modeling requirements
+=====================
 
 * [[This section must establish which aspects of the geometry are worth
   modeling (what parts of the canopy will be modeled and which will be
@@ -410,8 +427,8 @@ Parametric modeling
     the chord length or how you orient that section.
 
 
-Wing design using sections
-==========================
+Design using sections
+======================
 
 .. Introduce designing a wing using "wing sections". They're the conventional
    starting point for parametrizing a wing geometry (airfoil curves capture the
@@ -428,10 +445,10 @@ positioned, and oriented, and together the 2D profiles produce the 3D wing
 surfaces.]]
 
 
-A canopy geometry model defines the shape of a canopy as a collection of
-surfaces: the chord surface, the mean camber surface, and the profile surface.
-[[FIXME: not sure I agree with this statement. Unclear. A shape is just
-a shape. Granted, a canopy geometry must PROVIDE those surfaces.]]
+A foil geometry model defines the shape of a foil as a collection of surfaces:
+the chord surface, the mean camber surface, and the profile surface. [[FIXME:
+not sure I agree with this statement. Unclear. A shape is just a shape.
+Granted, a foil geometry must PROVIDE those surfaces.]]
 
 * [[We should have already established that we want a parametric model.]]
 
@@ -558,16 +575,16 @@ General equation
 Choosing to model a wing using wing sections means that the wing surfaces are
 defined by airfoils, which are 2D curves that lie in the section-local
 coordinate systems. By convention, points in the wing sections are defined
-relative to the section leading edges, so all of the canopy surfaces are
+relative to the section leading edges, so all of the foil surfaces are
 naturally defined in terms of points relative to the section leading edges.
 [[FIXME: wording.]]
 
 Let :math:`\mathrm{P}` represent any point in a wing section, and
 :math:`\mathrm{LE}` be the leading edge of that section. In the `notation
 <_common_notation>`_ of this paper, a general equation for the position of
-that point :math:`\mathrm{P}` with respect to the canopy origin
-:math:`\mathrm{O}`, written in terms of the canopy coordinate system
-:math:`c`, is:
+that point :math:`\mathrm{P}` with respect to the foil origin
+:math:`\mathrm{O}`, written in terms of the foil coordinate system :math:`c`,
+is:
 
 .. Unparametrized (explicit geometry?) equation
 
@@ -575,14 +592,14 @@ that point :math:`\mathrm{P}` with respect to the canopy origin
 
    \vec{r}_{\mathrm{P}/\mathrm{O}}^c = \vec{r}_{P/LE}^c + \vec{r}_{LE/O}^c
 
-In this paper, the canopy coordinate system is defined by the canopy *root*
-(the central section). [[The canopy coordinate system uses the coordinate
-system of the central section for the xz-plane, and adds a y-axis according to
-the right-hand rule.]] Points in section (local) coordinate systems :math:`s`
-must be rotated into the canopy (global) coordinate system. Given the
-*direction cosine matrix* :math:`\mat{C}_{c/s}` between the section and canopy
-coordinate systems, the general equation for points relative to the canopy
-origin can be written in terms of points in section coordinates:
+In this paper, the foil coordinate system is defined by the foil *root* (the
+central section). [[The foil coordinate system uses the coordinate system of
+the central section for the xz-plane, and adds a y-axis according to the
+right-hand rule.]] Points in section (local) coordinate systems :math:`s` must
+be rotated into the foil (global) coordinate system. Given the *direction
+cosine matrix* :math:`\mat{C}_{c/s}` between the section and foil coordinate
+systems, the general equation for points relative to the foil origin can be
+written in terms of points in section coordinates:
 
 .. math::
 
@@ -679,7 +696,7 @@ now I need to parametrize the others.]]
 It's annoying to design the section leading edges directly. Instead, decompose
 it into two separate vectors: one from the section origin (the section leading
 edge) to some arbitrary *reference point* :math:`RP`, and one from the
-reference point to the canopy origin:
+reference point to the foil origin:
 
 .. math::
 
@@ -708,8 +725,7 @@ section chords:
 
 * Some advantages of this parametrization:
 
-  1. It makes it particularly easy to capture the important details of
-     a parafoil canopy
+  1. It makes it particularly easy to capture the important details of a foil
 
   2. It makes it easier to design in mixed flat and inflated geometries
 
@@ -750,7 +766,7 @@ EXTRA
 
 * [[The general equation is the result of designing via wing sections. The
   whole point is that you start by defining the section profiles, then
-  position them relative to the canopy origin to produce the final wing.
+  position them relative to the foil origin to produce the final wing.
   Splitting `r_P/O` into `r_P/LE` and `r_LE/O` is the natural (general) result
   of designing with wing sections; I suppose it's sort of a parametrization of
   the surfaces, but that's not the "parametrization" I'll be talking about
@@ -767,8 +783,8 @@ EXTRA
   of the general equation.
 
 
-Example foils
-=============
+Examples
+========
 
 .. This section highlights the elegance of the "optimized" parametrization.
 
@@ -788,8 +804,8 @@ For the profile surfaces, all examples are using a NACA 23015 airfoil.
 [[**FIXME**: embed the video in the HTML build]]
 
 
-Example 1
----------
+Delta wing
+----------
 
 Straight wing with a linear chord distribution and no twist.
 
@@ -798,8 +814,8 @@ Straight wing with a linear chord distribution and no twist.
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy_chords.*
 
 
-Example 2
----------
+Elliptical wing
+---------------
 
 Straight wing with an elliptical chord distribution and no twist.
 
@@ -808,8 +824,8 @@ Straight wing with an elliptical chord distribution and no twist.
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy_chords.*
 
 
-Example 3
----------
+Twisted wing
+------------
 
 Wings with geometric torsion (or "twist") typically use relatively small
 angles that can be difficult to visualize. Exaggerating the angles with
@@ -820,8 +836,40 @@ extreme torsion makes it easier to see the relationship.
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_chords.*
 
 
-Example 4
----------
+Manta ray
+----------
+
+The effect of changing the reference positions can be surprising. A great
+example is a "manta ray" inspired design that changes nothing but the constant
+value of :math:`r_x`.
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_canopy_chords.*
+
+   "Manta ray" with :math:`r_x = 0`
+
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_canopy_chords.*
+
+   "Manta ray" with :math:`r_x = 0.5`
+
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_curves.*
+
+.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_canopy_chords.*
+
+   "Manta ray" with :math:`r_x = 1.0`
+
+These examples clearly demonstrate the power of wing design using extremely
+simple parametric curves. Four of the six design "curves" are merely constants,
+and yet they enable significantly nonlinear designs in an intuitive way.
+
+
+Parafoil
+--------
 
 [[This example should be a complete description, explaining the design curves
 and the plots. The other examples can be less detailed; the curves and result
@@ -862,38 +910,6 @@ other variables. On the bright side, you don't have to care.]]
 
 The code does have the option of letting the design curves use absolute
 positioning, but I'm not sure I want to discuss that here.]]
-
-
-Example: The Manta
-------------------
-
-The effect of changing the reference positions can be surprising. A great
-example is a "manta ray" design that changes nothing but the constant value of
-:math:`r_x`.
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_canopy_chords.*
-
-   "Manta ray" with :math:`r_x = 0`
-
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_canopy_chords.*
-
-   "Manta ray" with :math:`r_x = 0.5`
-
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_canopy_chords.*
-
-   "Manta ray" with :math:`r_x = 1.0`
-
-These examples clearly demonstrate the power of wing design using extremely
-simple parametric curves. Four of the six design "curves" are merely constants,
-and yet they enable significantly nonlinear designs in an intuitive way.
 
 
 Case study
@@ -979,7 +995,7 @@ For the section profiles, the model uses a NACA 23015 airfoil.
 
    NACA 23015
 
-Inputting the values to the canopy geometry produces:
+Inputting the values to the parametric foil geometry produces:
 
 .. raw:: latex
 
@@ -1023,7 +1039,7 @@ Discussion
   for each of them. I concluded with my choice of parametrization, and some
   examples of canopies using that parametrization.
 
-* Reference the :ref:`canopy_aerodynamics:Case study` (Belloc's wing) and
+* Reference the :ref:`foil_aerodynamics:Case study` (Belloc's wing) and
   :doc:`demonstration` (my Hook3ish)
 
 

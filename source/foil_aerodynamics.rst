@@ -1,10 +1,10 @@
-*******************
-Canopy Aerodynamics
-*******************
+*****************
+Foil aerodynamics
+*****************
 
-.. The previous chapter produced an approximate canopy geometry model from the
+.. The previous chapter produced an approximate foil geometry model from the
    basic technical specs. This chapter needs to use that geometry to estimate
-   the canopy aerodynamics.
+   a foil's aerodynamics.
 
 
 .. What are *aerodynamics*?
@@ -13,13 +13,13 @@ Aerodynamics describe the forces and moments produced when an object moves
 through air.
 
 
-.. Why does this project need the canopy aerodynamics?
+.. Why does this project need the foil aerodynamics?
 
 [[The paraglider dynamics model needs all the forces and moments of the
 glider, which come from Earth's gravity and the air.]]
 
 
-.. How do you determine the canopy aerodynamics?
+.. How do you determine the foil aerodynamics?
 
 * [[Theoretical (predict) vs experimental (measure) approaches to determining
   wing performance.]]
@@ -170,8 +170,8 @@ assuming everything is linear, constant Reynolds number, etc etc, without
 verification.]]
 
 
-Aerodynamics models
-===================
+Model selection
+===============
 
 .. Survey the available models and the tradeoffs they involve.
 
@@ -633,7 +633,10 @@ Case study
 .. Validate the performance of Phillips' method for analyzing a parafoil
    canopy in steady-state conditions.
 
-[[Introduce Belloc's wind tunnel data]]
+[[This section continues the discussion in :ref:`foil_geometry:Case study` by
+checking wind tunnel data against the aerodynamics method developed in this
+chapter.]]
+
 
 * Introduce the test (the model, the test setup, and the data)
 
@@ -653,7 +656,7 @@ Case study
 Every new tool should be validated, and for aerodynamic codes validation often
 involves comparing theoretical models to wind tunnel measurements. For the
 tools proposed in this paper, validation should include demonstrating the
-flexibility of the geometry definition proposed in :doc:`canopy_geometry` and
+flexibility of the geometry definition proposed in :doc:`foil_geometry` and
 the performance of the aerodynamics code proposed in `Phillips' numerical
 lifting-line`_.
 
@@ -662,8 +665,14 @@ An excellent test case for the geometry and aerodynamics is available from
 geometry data and wind tunnel performance.
 
 
-Aerodynamics
-------------
+Wind tunnel data
+----------------
+
+[[Introduce Belloc's wind tunnel data]]
+
+
+Aerodynamics models
+-------------------
 
 [[Compare the wind tunnel data against the NLLT, a traditional *vortex lattice
 method* (VLM) in AVL, and an experimental VLM in XFLR5 (which tilts the
@@ -696,7 +705,10 @@ Possibly related to the lift discrepancy:
 
 ]]
 
-Some results:
+
+
+Model performance
+-----------------
 
 .. figure:: figures/paraglider/belloc/CL_vs_alpha.*
 
@@ -750,8 +762,7 @@ It's also informative to consider the effect of sideslip.
    Yawing coefficient vs sideslip.
 
 
-Comments
-^^^^^^^^
+Comments:
 
 * The inviscid solutions agree with the NLLT quite well for small angles of
   attack. I think the deviation occurs when the "thin boundary layer"

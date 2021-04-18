@@ -98,7 +98,7 @@ Modeling requirements
 
 
 
-Related Work
+Related work
 ============
 
 * This paper is specifically about paragliding wings, but in terms of the
@@ -415,7 +415,7 @@ functions of the line geometry. For example, the arc anhedral and chord
 lengths might be affected by the accelerator input.]]
 
 
-Riser Position
+Riser position
 --------------
 
 [[Discuss riser position `RM` as a function of the accelerator.]]
@@ -461,7 +461,7 @@ Good reference images for brake deflections:
    `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`__ by
    Wikimedia contributor "PiRK" under a CC-BY-SA 3.0 license.
 
-Mathematical Model
+Mathematical model
 ^^^^^^^^^^^^^^^^^^
 
 It is computationally prohibitive to solve for the aerodynamic coefficients at
@@ -560,7 +560,7 @@ Accelerator
   wing the tabs are connected to the lower surfaces of the ribs.
 
 
-Mathematical Model
+Mathematical model
 ^^^^^^^^^^^^^^^^^^
 
 .. figure:: figures/paraglider/geometry/accelerator.*
