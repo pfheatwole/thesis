@@ -1,20 +1,9 @@
-[[This chapter describes the components of a paraglider and provides simple
-mathematical models of each component's inertia information and dynamics
-models. The paraglider system models are expecting some components to have
-control inputs, and the models in this chapter should reflect that.
-
-The primary motivation is to define the components needed for the paraglider
-system dynamics model in the flight simulation chapter; model fidelity of each
-individual component is less of a concern (I'm basically saying "here's **one
-way** to model X", which is how I get away with things like spherical
-harnesses, etc).
-
-
-Okay, I like this: this chapter should list the basic components of the
-paraglider system, and provide their inertias and dynamics models. Nice
-symmetry.
-
-]]
+.. This chapter describes the components of a paraglider and provides simple
+   mathematical models of each component's inertia information and dynamics.
+   (These are not intended to be high fidelity models; they are "good enough"
+   demonstrations on how to model each component.) The paraglider system
+   models later on will be expecting some components to have control inputs,
+   so those components models should reflect that.
 
 
 ***************************
@@ -93,8 +82,7 @@ Modeling requirements
   requirements up front so I can point out when existing literature fails to
   satisfy them.]]
 
-* Closely related to :ref:`canopy_geometry:Modeling considerations`; review
-  that.
+* Closely related to :ref:`foil_geometry:Modeling requirements`; review that.
 
 
 
@@ -176,14 +164,12 @@ The canopy dynamics depend on two things:
 
 2. The canopy inertia
 
-The forces and moments were provided by the model in
-:doc:`canopy_aerodynamics`. The inertia can be calculated using the geometry
-in :doc:`canopy_geometry`.
+The forces and moments were provided by the model in :doc:`foil_aerodynamics`.
+The inertia can be calculated using the geometry in :doc:`foil_geometry`.
 
-The canopy geometry in :doc:`canopy_geometry` is a purely geometric
-description of the idealized design target of a physical parafoil canopy, and
-must be combined with density information to calculate the system inertia
-matrices.
+The canopy geometry in :doc:`foil_geometry` is a purely geometric description
+of the idealized design target of a physical parafoil canopy, and must be
+combined with density information to calculate the system inertia matrices.
 
 The canopy inertia depends on contribution from the *solid mass* (surface
 materials), *air mass*, and the *apparent mass*.

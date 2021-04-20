@@ -1,10 +1,9 @@
+.. This chapter estimates a foil's aerodynamics using its geometry.
+
+
 *****************
 Foil aerodynamics
 *****************
-
-.. The previous chapter produced an approximate foil geometry model from the
-   basic technical specs. This chapter needs to use that geometry to estimate
-   a foil's aerodynamics.
 
 
 .. What are *aerodynamics*?

@@ -1,29 +1,20 @@
-This chapter defines two things: the *system dynamics* and the *state
-dynamics*. It builds the *system dynamics* by combining the paraglider
-components into a system model. The paraglider dynamics alone are incomplete
-though, since they only describe how a paraglider's state is evolving; it
-doesn't track it's current state. Thus, the second thing this chapter does is
-choose a set of state variables and define a set of *state dynamics* in terms
-of the *system dynamics*.
+.. This chapter defines two things:
 
-The state dynamics represent the :math:`\dot{x} = f(x, u)` that I alluded to
-in the `introduction`. (Flight reconstruction motivated the need for
-:math:`\dot{x} = f(x, u)`, and the bulk of this paper has been building to
-this point where it provides that function.)
+   1. *system dynamics* combine the paraglider components into a composite
+      system model
 
-Hrm. I may want to rename this chapter. I'm not interested discussing the
-design of the simulator; I just want to provide the `f(x, u)`. True, I did
-implement a simulator, but it's not like there's anything special about that
-implementation.
+   2. *state dynamics* choose a set of state variables and define their
+      dynamics in terms of the *system dynamics*
 
-What about two chapters, "Paraglider Component Models" and "Paraglider System
-Models"? Sure, why not.
+   The state dynamics represent the :math:`\dot{x} = f(x, u)` alluded
+   to in :doc:`introduction`. (Flight reconstruction motivated the need for
+   :math:`\dot{x} = f(x, u)`, and the bulk of this paper has been building to
+   this point where it provides that function.)
 
 
-
-* Discuss equilibrium state calculations? Those can be informative, especially
-  when comparing models.
-
+* FIXME: discuss equilibrium state calculations? Those can be informative,
+  especially when comparing models. Will be easier to discuss once I have an
+  example model, so this might be better deferred until `demonstration`.
 
 
 ************************

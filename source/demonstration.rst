@@ -1,13 +1,14 @@
+.. This chapter demonstrates how to model a paraglider wing and simulate its
+   dynamics. The modeling process combines basic technical specs from a user
+   manual with photographic information and reasonable assumptions about
+   paraglider wing design. The simulations perform static and dynamic
+   performance tests (polar plots and flight maneuvers, respectively) and
+   compare them to expected behaviors.
+
+
 *************
 Demonstration
 *************
-
-[[The purpose of this chapter is to demonstrate how to model and simulate
-flights from a real paraglider wing. The modeling process combines basic
-technical specs from a user manual with photographic information and
-reasonable assumptions about paraglider wing design. The simulations
-demonstrate ]]
-
 
 Goals of this chapter:
 
@@ -141,7 +142,9 @@ Developing a canopy model has four basic steps:
 Foil layout
 ^^^^^^^^^^^
 
-[[Introduce my choice of design curves]]
+[[Introduce my choice of *design curves*: parametric equations that encode the
+structural knowledge necessary to approximate a canopy geometry model from the
+basic technical specs]]
 
 
 Chord length

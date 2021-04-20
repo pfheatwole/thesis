@@ -9,16 +9,13 @@ Suggested next tasks:
 Current task
 ============
 
-Review the outlines at the beginning of each chapter. I should be able to read
-the chapter outlines and get a coherent, complete (albeit superficial)
-understanding of the entire paper.
+Review the introductions to each chapter. I should be able to read the chapter
+introductions and get a coherent, complete (albeit superficial) understanding
+of the entire paper.
 
 I need to make sure the overarching "plot" is cohesive before diving back into
 the details. (If my "map" is messy then I'll keep getting lost. Too much
 backtracking right now; I bounce all over.)
-
-(Once the in-chapter outlines are complete, then review the "Table of
-Contents" to see if it suggests the same flow.)
 
 
 Topical
@@ -31,14 +28,6 @@ Introduction
 * Outline the content of an IGC file in the `Introduction`, since the absence
   of wind vector data is what motivates flight reconstruction.
 
-* Review `introduction:SCRATCH`. Might have some useable stuff there.
-
-* Write up an informal description of "this is how a pilot standing on the
-  ground would estimate the wind by watching a glider in the air". That
-  informal description is the stepping stone to understanding "flight
-  reconstruction" and how it is possible even though the answers are only
-  approximate.
-
 * Should my introduction chapter include a "Taxonomy of Tools" section that
   defines what I mean by *state estimation*, *parameter estimation*, *flight
   reconstruction*, *regression*, etc? It'd be interesting to define all the
@@ -48,8 +37,6 @@ Introduction
 
 Canopy geometry
 ---------------
-
-* Review source for mentions of a "chord surface"
 
 * Verify my use of *dihedral* and *anhedral*. At the least I think my use of
   "mean anhedral" is suspect; probably not even a helpful term.
@@ -150,9 +137,7 @@ Paraglider dynamics
   a rotational part, and a complete matrix.
 
 * In my dynamics derivations, I don't appear to be consistent with specifying
-  the coordinate systems; the derivatives in particular (are they the same in
-  all coordinate systems? Surely not). Review which vectors should have them
-  and when it's okay to leave them off.
+  the coordinate systems; the derivatives in particular.
 
 * Review the inertia equations; I'm using `\overbar{\vec{A}}` for the area
   centroid? And in the code I have things like `upper_centroid` and
@@ -207,31 +192,11 @@ Notation
 Content Tasks
 =============
 
-* Use the wing from Belloc as a case study. How to use my paraglider geometry
-  to define/implement the wing from his description, then compare his wind
-  tunnel performance to the estimate from Phillips method. Discuss likely
-  sources of error. **They key notion is to show how his pointwise measurements
-  can be converted into those six equations that define the paraglider
-  canopy.** I'm not sure if I should define the entire wing plus analysis in
-  a single section, or if this should be a recurring "Case Study" section that
-  spans several chapters: "Paraglider Canopies", "Paraglider Wings", and
-  "Paraglider Dynamics" (or whatever)
-
-* Review the rambling "derivation" of the canopy geometry. In particular,
-  eliminate that old version that used `\hat{x}_a`, it's a distraction.
-
-  In fact, remove most of that content entirely. I'm moving the derivation of
-  the general equation for points on the chord surface into the "Derivations"
-  chapter. **The "Canopy Geometry" chapter should be specifically about (1)
-  observing the important details of a canopy geometry, and (2) choosing
-  a parametrization of the general equation that is most suitable for
-  capturing those design details.**
-
 * Record the momentum derivatives for Barrows in the derivation. It wasn't
   clear from the paper exactly how those worked.
 
 * Sketch a directed graph of the processing pipeline for converting
-  paragliding flight tracks into an in-flight predictive model. (This might be
+  paragliding flight tracks into an in-flight predictive model? (This might be
   helpful for motivating the structure of the paper.)
 
 
@@ -338,14 +303,6 @@ Extras
 Editorial Tasks
 ===============
 
-* I'd like the ability to render sections to a PDF for markup. The PDF should
-  be localized to a specific section to avoid a "too much to chew" situation.
-  Each PDF should reference the git SHA hash; maybe
-  "YYYYMMDD-HHMMSS_SECTION_SHA.pdf". It gets messy since you can't always fix
-  all the issues at once, so you'll end up with a PDF with some fixes
-  corrected and some not. **How do you track when a revision has been
-  completed?**
-
 
 Writing Style
 -------------
@@ -391,7 +348,6 @@ Terminology
 * Should I define a Sphinx role for terms/definitions? There's already
   a `:term:` role that requires they be in a glossary, but using explicit
   asterisk wrappers is a bit fragile.
-
 
 * Review the text for `Gamma` as a reference to section dihedral. I've
   abandoned Gamma in favor of traditional Euler angle parameters.
@@ -495,8 +451,6 @@ Bibliography
 
 Development
 ===========
-
-* Add `latexcodec` to requirements?
 
 * Add a `README.rst` and explain `requirements`, running scripts, etc
 

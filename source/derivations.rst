@@ -107,7 +107,7 @@ Parametric wing modeling with airfoils
 
 
 **FIXME**: move the parafoil-specific choices and design examples into
-:doc:`canopy_geometry`.
+:doc:`foil_geometry`.
 
 
 General parametrization of a chord surface
@@ -291,7 +291,7 @@ Designing a chord surface with these equations requires five steps:
 
 5. Define the section orientation matrices :math:`\mat{C}_{c/s}(s)`
 
-[[In :doc:`canopy_geometry` I show a set of choices that work well for
+[[In :doc:`foil_geometry` I show a set of choices that work well for
 designing parafoils.]]
 
 

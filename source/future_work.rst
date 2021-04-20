@@ -1,3 +1,11 @@
+.. This chapter zooms out to revisit the original problem of learning wind
+   patterns from data.
+
+
+* FIXME: merge with :doc:`conclusion`? Probably best to wait and see how much
+  content appears here. (I do tend to prefer more concise conclusions.)
+
+
 ***********
 Future Work
 ***********

@@ -935,9 +935,9 @@ Roadmap
 
 This project designs and implements a parametric paraglider dynamics model
 suitable for paraglider flight reconstruction. The modeling process begins in
-:doc:`canopy_geometry`, which develops a novel parametric geometry
-specifically tailored for the non-linear details of typical paraglider wings.
-:doc:`canopy_aerodynamics` establishes some basic performance criteria for
+:doc:`foil_geometry`, which develops a novel parametric geometry specifically
+tailored for the non-linear details of typical paraglider wings.
+:doc:`foil_aerodynamics` establishes some basic performance criteria for
 selecting an aerodynamic method suitable for analyzing paraglider motion, and
 presents an adaptation of a non-linear lifting line method that meets those
 criteria.

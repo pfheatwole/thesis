@@ -1,91 +1,96 @@
-* This chapter is motived by this project's need for a parametric geometry for
-  parafoil canopies, but nothing in this chapter is limited to parafoils. It
-  works just as well for normal wings, hang glider wings, etc. Introduce the
-  chapter in the context of parafoil canopies, but eliminate all the other
-  references to "parafoil", "canopy", etc.
+.. This chapter generalizes the typical foil geometry equation to allow
+   arbitrary reference points, relaxing the constraint that the geometry is
+   specified in terms of the leading edge. This additional flexibility allows
+   complex geometries to be described using simple parametric design curves.
+   The parametric design curves encode domain expertise (reasonable
+   assumptions about typical foil design), thus enabling complete parafoil
+   geometries to be specified using only summary technical specifications.
 
-  Also, explain why I'm using the more abstract term "foil" instead of "wing";
-  specifically, common uses of the term "paraglider wing" describe much more
-  than just the canopy geometry, so "wing" is overloaded in that context. When
-  a reader sees "foil" they should think "purely geometric shape".
 
-* Combine the "Foil specifications" and "Parametric modeling" into "Modeling
-  requirements"? Seems like that section should work through what I'm trying
-  to model and how the model is specified (parametrically).
+
+* FIXME: Combine the "Foil specifications" and "Parametric modeling" into
+  "Modeling requirements"? Seems like that section should work through what
+  I'm trying to model and how the model is specified (parametrically).
+
 
 
 *************
 Foil geometry
 *************
 
-.. This chapter creates a parametric geometry that can approximate parafoil
-   canopies using only basic technical specs. There isn't enough information
-   in the specs, so they are augmented with educated guesses for the missing
-   structure. The assumed structure is encoded in parametric functions that
-   define the variables of a generalized geometry model based on wing sections
-   (airfoils provide the section profiles, *design curves* provide the scale,
-   position, and orientation).
-
-.. This project needs geometry models of commercial parafoil canopies. Because
-   only basic technical specifications are known for commercial wings, they
-   must be augmented with reasonble assumptions based on domain expertise,
-   which is encoded in parametric functions.
-
-   Unfortunately, existing wing geometry tools introduce constraints that
-   force unnecessary complexity into the design curves. Thus, the focus of
-   this chapter is to:
-
-   1. Develop a more flexible geometry model that allows simpler design curves
-
-   2. Develop design curves that can create complete geometry models using
-      only basic technical specs and reasonable assumptions.
-
-
-.. What is a parafoil canopy?
+.. What is a foil?
 
 The essential component of any flying object is the lifting surface.
 A *lifting surface* is any part of an aircraft that produces *lift* when it
 interacts with the air. By redirecting the airflow downward, the lifting
 surface exchanges momentum with the air and produces the lifting force that
-allows the aircraft to fly. The lifting surface for a paraglider is called
-a parafoil *canopy*. [[FIXME: review]]
+allows the aircraft to fly.
+
+This paper refers to an arbitrary lifting surface as a *foil* instead of the
+conventional *wing* or *canopy*. This unconventional term was chosen to avoid
+two generalization issues. First, although *wing* is the conventional term for
+the lifting surfaces of non-rotary aircraft, the paragliding community uses
+the term *paraglider wing* to include not only the lifting surface but also
+the supporting structure connected to it, such as suspension lines, risers,
+etc. Second, although *canopy* is the term for the lifting surface of
+a parafoil, the geometry developed in this chapter is not limited to parafoil
+canopies.
 
 
-.. Why does this project need to model the canopy geometry?
+.. Why does this project need to model the foil geometry?
 
-A paraglider dynamics model requires the inertial properties and aerodynamics
-of the canopy, which can be estimated from the canopy's shape.
+An aerodynamics model requires the inertial properties and aerodynamics of the
+foil, which can be estimated from the foil's shape.
 
 
 .. Why not use existing wing modeling tools?
 
-Existing wing modelling programs assume that a complete specification of the wing
-geometry is available, which is not true for commercial paraglider wings. User
-manuals provide valuable summary information, but the majority of the wing
-structure is unspecified. Generating an approximate canopy geometry from basic
-technical specs requires making educated assumptions about the unknown
-structure. Those assumptions are encoded in parametric functions that combine
-domain expertise with the technical data to produce a fully specified model.
+[[Short answer: this project is particularly interested in paraglider
+dynamics, so it needs a foil geometry that allows me to specify a wing using
+basic technical specs; the way to do that is with parametric functions, so **I
+need a foil geometry that makes it easy to design parametric functions to
+describe a parafoil geometry.** **I need a foil geometry that enables creating
+complex foil geometries using simple parametric functions.** Existing tools
+are inflexible, so nonlinear geometries like parafoil canopies cannot be
+described using simple parametric functions.]]
 
-Although some existing tools do accept parametric functions for specific
-design parameters, they impose unnecessary constraints on how the geometry is
-specified. Constraining how the geometry is specified means unnecessary
-complexity is forced into the design curves.
+An accurate model of a foil requires a complete set of specifications, but
+those are unavailable for commercial paraglider wings. User manuals provide
+valuable summary information, but the majority of the wing structure is
+unspecified. Generating an approximate foil geometry from basic technical
+specs requires making educated assumptions about the unknown structure. Those
+assumptions are encoded in parametric functions that combine domain expertise
+with the technical data to produce a fully specified model.
 
-This chapter develops a wing specification model that greatly simplifies
-creating paraglider canopy models from basic technical specs. It develops the
-parametric geometry as a two-part process:
+The trouble with existing methods lies in how the design of the parametric
+functions depend on the variables they are defining; the general geometry
+chooses the variables, which in turn determines the structure of the functions
+that define those variables. Existing foil modeling tools impose unnecessary
+constraints on how the geometry is specified, which forces unnecessary
+complexity into the design curves (the rigidity forces the parametric
+functions to adapt instead of letting the model adapt to the needs of the
+parametric functions).
 
-1. Develop a novel, generalized wing model that eliminates the constraints of
-   existing tools, enabling simpler design curves.
+This chapter develops a generalized foil geometry that relaxes those
+constraints by allowing arbitrary section reference points, which:
 
-2. Develop a set of parametric equations that encode the structural knowledge
-   necessary to approximate a canopy geometry model from the basic technical
-   specs.
+1. It decouples the design curves (so you can change them independently)
+
+2. It lets the designer choose whatever local reference point is the most
+   convenient.
 
 The result is a novel geometry based on wing sections that is both flexible
 and particularly intuitive for designing non-linear wing geometries such as
-paraglider canopies.
+paraglider canopies. In particular, it satisfies the need for creating
+parametric parafoil canopy models from basic technical specifications.
+
+
+**The key thing about this generalized geometry is that it lets you use SIMPLE
+design curves. Saying "arbitrary" suggests that allowing complex curves is
+what's cool, but that's wrong: it's the fact that you can use simple functions
+(constants, linear functions, ellipticals, etc) compose complex (highly
+nonlinear) wings.**
+
 
 
 .. Roadmap
@@ -261,7 +266,7 @@ Modeling requirements
   a big deal, but developing an aerodynamic method that accounts for cell
   billowing is time prohibitive. Should I simply punt that discussion into the
   aerodynamics section? Like "this geometry neglects details such as cell
-  distortions. See 'canopy_aerodynamics:Limitations' for a discussion." ?]]
+  distortions. See 'foil_aerodynamics:Limitations' for a discussion." ?]]
 
 
 .. Functionality
@@ -381,9 +386,9 @@ Parametric modeling
 
   * Building a wing from 2D cross-sections also provides computational
     benefits for estimating the aerodynamic performance of the 3D wing, as
-    discussed in :ref:`canopy_aerodynamics:Section Coefficients`.
+    discussed in :ref:`foil_aerodynamics:Section Coefficients`.
 
-    [[Maybe link forward to :ref:`canopy_aerodynamics:Case Study`, where
+    [[Maybe link forward to :ref:`foil_aerodynamics:Case Study`, where
     I implement Belloc's wing using this parametric geometry.]]
 
 
@@ -813,6 +818,8 @@ Straight wing with a linear chord distribution and no twist.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_canopy_chords.*
 
+   Chord surface of a delta wing planform.
+
 
 Elliptical wing
 ---------------
@@ -822,6 +829,8 @@ Straight wing with an elliptical chord distribution and no twist.
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_curves.*
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_canopy_chords.*
+
+   Chord surface of an elliptical wing planform.
 
 
 Twisted wing
@@ -834,6 +843,8 @@ extreme torsion makes it easier to see the relationship.
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_curves.*
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat4_canopy_chords.*
+
+   Chord surface of a wing with geometric twist.
 
 
 Manta ray
@@ -896,7 +907,11 @@ An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_chords.*
 
+   Chord surface of a simple parafoil.
+
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_airfoils.*
+
+   Profile surface of a simple parafoil.
 
 [[**FIXME**: need to explain the diagrams. The dashed green and red lines in
 particular.]]
@@ -923,8 +938,9 @@ Case study
 
 [[The point is to make it easy to produce target geometries. In particular,
 how well does this geometry map onto actual wings from literature? Introduce
-Belloc's wing, and show how to translate his specs into this
-parametrization.]]
+Belloc's wing, and show how to translate his specs into this parametrization.
+Thankfully, he's using simple linear relationships, so the design curves are
+simple constants and linear interpolators.]]
 
 .. list-table:: Full-scale wing dimensions
    :header-rows: 1
@@ -1003,15 +1019,13 @@ Inputting the values to the parametric foil geometry produces:
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_curves.*
 
-   ChordSurface curves for Belloc's reference paraglider wing.
-
 .. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy_chords.*
 
-   3D chords for Belloc's reference paraglider wing.
+   Chord surface for Belloc's reference paraglider wing.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy_airfoils.*
 
-   3D airfoils for Belloc's reference paraglider wing.
+   Profile surface for Belloc's reference paraglider wing.
 
 
 Discussion
