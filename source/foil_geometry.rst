@@ -311,8 +311,9 @@ Modeling requirements
 
 * Parafoil canopies are relatively complex shapes, and can be time consuming
   to describe in detail. To reduce design effort, the model should provide
-  a concise set of *design parameters* that directly capture the fundamental
-  structure of the wing.
+  a concise set of *design parameters* (span, taper ratio, etc) that directly
+  capture the fundamental structure of the wing. [[the *design curves* are the
+  parametric functions; should define those clearly somewhere]]
 
   One goal of this geometry is to make it as easy as possible to produce
   models of existing wings, which means the choice of parameters should allow
@@ -584,7 +585,8 @@ relative to the section leading edges, so all of the foil surfaces are
 naturally defined in terms of points relative to the section leading edges.
 [[FIXME: wording.]]
 
-Let :math:`\mathrm{P}` represent any point in a wing section, and
+Let :math:`\mathrm{P}` represent any point in a wing section (such as points
+on the section chords, mean camber lines, or profiles), and
 :math:`\mathrm{LE}` be the leading edge of that section. In the `notation
 <_common_notation>`_ of this paper, a general equation for the position of
 that point :math:`\mathrm{P}` with respect to the foil origin
@@ -664,8 +666,9 @@ of the wing.
 
 [[This "general equation" is an explicit, mathematical representation of the
 basic/standard approach to wing modeling used by most tools. It's general, but
-unwieldy. The real magic happens when I decompose `r_LE/O`; that's the part
-that introduces the flexibility that enables simplified parametric functions.
+unwieldy. The real magic happens when I decompose `r_LE/O` so it can be
+specified using an arbitrary reference point; that's the part that introduces
+the flexibility that enables simplified parametric functions.
 
 Important to recognize that my parametrization is simply a convenient way to
 define these general variables; you could use my parametrization in existing
@@ -683,6 +686,15 @@ Parametric design
    points for x, y, and z; sets `r_y = r_z`; defines the section DCM using
    `dz/dy` and `\theta` (so you design `theta(s)` and `yz(s)` instead of
    specifying the section DCM directly).
+
+
+[[FIXME: I think I need two sections: "General equation" and "simplified
+equation". The "general" equation keeps `R = diag(r_x, r_y, r_z)`, doesn't say
+how to specify `C_c/s`, etc. The "simplified" version does things like setting
+`r_y = r_z`, defining `C_c/s` using Euler angles, setting yaw=0,
+roll=arctan(dz/dy), etc. The variables that must be defined to use the
+simplified equation are more convenient for parafoils; that's when this new
+geometry becomes amenable to parametric equations.]]
 
 
 [[By this point I've introduced wing sections (the conventional starting point
@@ -713,8 +725,60 @@ you choose reference points other than the leading edges, and position those
 points explicitly in the wing coordinate system. (Note that the leading edges
 remain the origin of the section coordinate systems.)
 
-In my case I chose to define the reference points using positions on the
-section chords:
+[[Although the reference point can be any point in the section's coordinate
+system, it is convenient to constrain it to be a point on the section chord,
+in which case the reference point is a function of the chord ratio :math:`r`
+such that :math:`\vec{r}_{\mathrm{LE}/\mathrm{RP}}^s = r\, c\, \hat{x}^s_s`,
+where :math:`\hat{x}^s_s = \begin{bmatrix}1 & 0 & 0\end{bmatrix}^T` is the
+section x-axis in the section coordinate system.
+
+.. math::
+
+   \vec{r}_{\mathrm{LE}/\mathrm{O}}^c =
+         \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+         + r\, \mat{C}_{c/s} c\, \hat{x}^s_s
+
+This equation covers the majority of the choices for chord surface
+parametrizations in common use. Designs that position the chords by specifying
+their leading edge are equivalent to setting :math:`r = 0` and
+:math:`\vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+= \vec{r}_{\mathrm{LE}/\mathrm{O}}^c`. Other designs use the quarter-chord
+positions for the reference points, in which case :math:`r = 0.25`.
+
+The problem with these fixed parametrizations is that they only support
+a single reference point for design in all three dimensions. If a designer
+wants to position the quarter-chord (:math:`r = 0.25`) along a circular arch
+and the trailing edge (:math:`r = 1`) along a straight line, then they must
+manually calculate the positions that would achieve that design for a given
+reference point. It is much easier to allow different reference points for
+each dimension.
+
+Define:
+
+.. math::
+
+   \mat{R} \defas \begin{bmatrix}
+      r_x & 0 & 0\\
+      0 & r_y & 0\\
+      0 & 0 & r_z
+   \end{bmatrix}
+
+The final form of the generalized equation for the leading edge, allowing
+independent design curves and reference point for each of the position
+dimensions, is then:
+
+.. math::
+
+   \vec{r}_{\mathrm{LE}/\mathrm{O}}^c =
+     \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+     + \mat{R} \mat{C}_{c/s} c\, \hat{x}^s_s
+
+]]
+
+The downside to a simple scalar `r` is that you have to use the same point
+for specifying the section position in in all three dimensions. It is often
+more convenient to use different reference points for different dimensions of
+the position:
 
 .. math::
 
@@ -728,15 +792,98 @@ section chords:
       0 & 0 & r_{yz}
    \end{bmatrix}
 
-* Some advantages of this parametrization:
+Where:
 
-  1. It makes it particularly easy to capture the important details of a foil
+* `xhat = [1, 0, 0]^T` (the chord lies along `xhat`)
 
-  2. It makes it easier to design in mixed flat and inflated geometries
+* `0 <= r_x, r_y, r_z <= 1` (proportions of the chord)
 
-  3. It's compatible with aerodynamic analysis via section coefficient data
-     (partly by keeping the y-axes in the yz-plane).
+[[FIXME: explain, in general, the `R = diag(r_x, r_y, r_z)`]]
 
+[[The general equation given these choices is then:
+
+.. math::
+
+   \begin{aligned}
+   r_{P/O}^c
+     &= r_{P/LE}^c
+        + r_{LE/RP}^c
+        + r_{RP/O}^c \\
+     &= \mat{C}_{c/s} \mat{T}_{s/a} \vec{r}_{P/LE}^a
+        + \mat{R} \mat{C}_{c/s} c\, \hat{x}^s_s
+        + \vec{r}_{RP/O}^c
+   \end{aligned}
+
+
+I say "general" because it'd be a reasonable target for code that implements
+a general geometry defined in terms of wing sections. Parafoils et al could
+reasonably defined using this form, using their own internal choices to define
+these parameters. It'd be nice not to lock a model into a particular
+parametrization of orientation, or reference point, or whatever. (Then again,
+it does force the user into using a reference point on the chord, so "general"
+is probably the wrong name. Also, the second form isn't immediately usable by
+parametrizations that specify section scale/pitch/yaw by defining the LE and
+TE as two points.)
+
+To design a wing, specify: `c`, `C_c/s`, `r_P/LE`, `R`, and `r_RP/O`. **This
+is almost exactly the same amount of work as before, you only need to add
+`R`.** Minimal extra effort for a lot of convenience.]]
+
+[[FIXME: define `C_c/s` here? I think I need to. Hrm, or actually, I should
+finish the general equation without simplifying it too much, so keep things
+like `R = diag(r_x, r_y, r_z)`. Choosing `r_y = r_z` should be explained
+together with choosing to use `arctan(dz/dy)` to define the section roll
+angle. **Avoid premature simplification. Finish the GENERAL equation, and then
+make choices that make it more convenient for defining parafoils.**
+
+
+Designing a chord surface with these equations requires five steps:
+
+1. Define the *section index* :math:`s`
+
+2. Define a scalar-valued function for the section scaling factors
+   :math:`c(s)`
+
+3. Choose the reference point positions on the chords :math:`\left\{ r_x(s),
+   r_y(s), r_z(s) \right\}`.
+
+4. Define a 3-vector valued function for the section reference point positions
+   in wing coordinates :math:`\vec{r}_{RP/O}^c(s) = \left\langle x(s), y(s),
+   z(s) \right\rangle`
+
+5. Define the section orientation matrices :math:`\mat{C}_{c/s}(s)`
+
+
+
+Namely, some choices that work well for parafoils:
+
+* Let `r_y = r_z`
+
+* Parametrize `C_c/s` using intrinsic Euler angles:
+
+  * Section roll: defined "automatically via `arctan(dz/dy)` (where `dz/dy`
+    comes from `r_RP/O`)
+
+  * Section pitch: defined with an explicit design curve
+
+  * Section yaw: fixed at zero [[FIXME: I remember that maintaining zero-yaw
+    was significant, but I forget why?]]
+
+To specify a parafoil you just need to design: `c`, `r_x`, `r_yz`, `r_RP/O`,
+`theta`, and the section airfoils.
+
+**FIXME**: write the final version using the actual functions (of section
+index, fractions of the chord, etc) instead of this generalized notation ("any
+point P" is not particularly clear)]]
+
+Some advantages of this parametrization:
+
+1. It makes it particularly easy to capture the important details of a foil
+
+2. It makes it easier to design in mixed flat and inflated geometries
+
+3. It's compatible with aerodynamic analysis via section coefficient data
+   (partly by keeping the y-axes in the yz-plane).
 
 * **Oh hey, I just figured out how my choice of reference point works!** Think
   of `c * C_c/s @ xhat` as a vector of derivatives: how much you would change
@@ -786,6 +933,74 @@ EXTRA
 
   That'd work nicely if I can **clearly** motivate each step of the derivation
   of the general equation.
+
+* The origin of the chord surface is defined by the origins of the position
+  functions. Let the user of the chord surface (eg, a `ParagliderWing`)
+  position and orient the chord surface as they like; don't pollute this
+  definition with constraints like "the origin is the central leading edge".
+
+* Note that I've dropped the section index parameter for notational simplicity
+
+* :math:`\mat{C}_{c/s}` is the directed cosine matrix (DCM) of the wing
+  reference frame :math:`\mathcal{F}_w` with respect to the section reference
+  frame :math:`\mathcal{F}_s`.
+
+
+EXTRA 2: points on chords
+-------------------------
+
+[[I've kept this because it tickles my brain in a pleasant way, but should
+probably be removed.]]
+
+Points on the section chords have particularly simple equations. For some
+point :math:`P` at some ratio :math:`0 \le r \le 1` along the section chord:
+
+.. math::
+
+   \begin{aligned}
+   \vec{r}_{P/O}^c
+     &= \vec{r}_{LE/O}^c + \vec{r}_{P/LE}^c\\
+     &= \vec{r}_{LE/O}^c - \vec{r}_{LE/P}^c\\
+     &=
+        \left(
+          \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+            + \mat{R} \mat{C}_{c/s} c\, \hat{x}^s_s
+        \right)
+        - r\, \mat{C}_{c/s} c\, \hat{x}^s_s\\
+   \end{aligned}
+
+Which simplifies to:
+
+.. math::
+   :label: chord_points
+
+   \vec{r}_{P/O}^c =
+      \vec{r}_{\mathrm{RP}/\mathrm{O}}^c
+      + \left(\mat{R} - r\right) \mat{C}_{c/s} c\, \hat{x}^s_s
+
+All the notational baggage can make this equation look more complicated than
+it really is. Suppose the points on the chord are simply :math:`\left\langle
+x, y, z \right\rangle` in canopy coordinates, the reference points in canopy
+coordinates are :math:`\vec{r}_{RP/O} = \left\langle x_r, y_r, z_r
+\right\rangle`, and :math:`\mat{K} = \left(\mat{R} - r\right) c`, then the
+structure is easier to see:
+
+.. math::
+   :label: simplifed_chord_points
+
+   \left\langle x, y, z \right\rangle =
+      \left\langle x_r, y_r, z_r \right\rangle
+      + \mat{K} \hat{x}_s^c
+
+Or, using separate equations instead of matrix math:
+
+.. math::
+
+   \begin{aligned}
+   x &= x_r + (r_x - r) \hat{x}^c_x\\
+   y &= y_r + (r_y - r) \hat{x}^c_y\\
+   z &= z_r + (r_z - r) \hat{x}^c_z
+   \end{aligned}
 
 
 Examples
