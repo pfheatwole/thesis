@@ -191,9 +191,9 @@ by:
    v_n =
       \frac{1}{6}
       \left(
-         \vec{r}_{1,n} \cdot \vec{r}_{2,n}
+         \vec{r}_{1,n} \times \vec{r}_{2,n}
       \right)
-      \times \vec{r}_{3,n}
+      \cdot \vec{r}_{3,n}
 
 Given that the vertices of each triangle were oriented such that they satisfy
 a right-hand rule, the sign of each volume will be positive if the normal
