@@ -88,7 +88,7 @@ s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
 arc = InterpolatedArc(s, fy(s), fz(s))
 
 # Alternatively, use the analytical (non-sampled, smooth curvature) form
-# arc = gsim.foil.elliptical_arc(np.rad2deg(np.arctan(.375/.688)), 89)
+# arc = gsim.foil.EllipticalArc(np.rad2deg(np.arctan(.375/.688)), 89)
 
 layout = gsim.foil_layout.FoilLayout(
     x=0,
