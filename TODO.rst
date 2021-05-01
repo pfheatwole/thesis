@@ -1,8 +1,5 @@
 Suggested next tasks:
 
-* **Merge my canopy geometry derivations.** I have three of them at this
-  point: a partial in `canopy_geometry`, and two partials in `derivations`.
-
 * Add at least one simple scenario (simulation into `.svg` plus discussion).
 
 
