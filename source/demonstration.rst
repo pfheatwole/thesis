@@ -10,22 +10,34 @@
 Demonstration
 *************
 
-Goals of this chapter:
+The previous chapters developed a parametric paraglider model. This chapter
+demonstrates how to estimate the parameters from incomplete specification data
+in order to approximately model a commercially available paraglider wing.
+A major component of the modeling process is how to augment the missing
+information with reasonable assumptions.
 
-1. Demonstrate how to use the parametric geometry to model a real wing from
-   basic technical specs.
+Once the model is complete, it is sanity checked by comparing estimates of its
+longitudinal steady-state aerodynamics over the range of control inputs
+against published performance data, such as minimal sink rate and speed range.
+The chapter concludes with flight simulations using the model in a variety of
+flight scenarios.
 
-   [[This section should highlight how a reasonable approximation can be
-   produced from the minimal wing data like flat and inflated span, taper,
-   etc. Show what data I had, what assumptions I used to fill in the blanks,
-   and how well the result matched the target.]]
 
-#. [[Introduce gridded coefficients?]]
+Model
+=====
 
-#. Generate some polar curves for the wing and compare them to expectations
+This section demonstrates one possible workflow to create an approximate model
+of a real wing from basic technical specs. Many detailed components, such as
+the harness, line geometry, are replaced with simplified models.
 
-#. Demonstrate some test scenarios
+Implementations of the simplified models are provided as part of the
+`glidersim` package.
 
+
+Available data
+--------------
+
+[[What did I have to work with?]]
 
 * Wing data is available from three primary sources:
 
@@ -36,36 +48,14 @@ Goals of this chapter:
   3. Physical measurements
 
 
-* There's a basic workflow:
+Photos
+^^^^^^
 
-  1. Fit the flattened chord surface right
-
-  2. Fit the arc
-
-  3. Canopy adjustments (twist)
-
-  4. Assign section profiles (airfoils)
-
-  5. Surface materials (upper, lower, ribs) for computing the inertia
-
-  6. Lines (harness position, accelerator function, brake deflection
-     distribution, line drag)
-
-  7. Harness
-
-
-Model
-=====
-
-This section demonstrates one possible workflow to create an approximate model
-of a real wing from basic technical specs. Many detailed components, such as
-the harness, line geometry, are replaced with simplified models.
-
-The simplified models are provided as part of the `glidersim` package.
+[[Start with some photos to show what I'm creating?]]
 
 
 Technical specs
----------------
+^^^^^^^^^^^^^^^
 
 [[What data did I have? What did I use?]]
 
@@ -126,6 +116,18 @@ From the manual:
 
 Canopy
 ------
+
+[[This section should highlight how a reasonable approximation can be produced
+from the minimal wing data like flat and inflated span, taper, etc. Show what
+data I had, what assumptions I used to fill in the blanks, and how well the
+result matched the target.]]
+
+[[This model uses two *design curves*: parametric functions rely on domain
+expertise to "fill in the gaps" of the sparse technical data. It assumes an
+elliptical chord distribution (which only requires the root and tip lengths),
+and an elliptical `yz(s)` that only needs two (or even one) parameter by
+assuming an elliptical (or circular) arc. Refer to their
+
 
 Developing a canopy model has four basic steps:
 
@@ -315,9 +317,24 @@ with me to have it in `Paraglider Dynamics`; that section feels scatterbrained
 Static performance
 ==================
 
+
+Equilibrium states
+------------------
+
+[[FIXME: what are they, and how do you compute them? These are the basis for
+the polar curves.]]
+
+
+Polar curves
+------------
+
 .. Steady-state, longitudinal-only analyses
 
-* Show the polar curves. Consider if they are reasonable. [[Which model? 9a?]]
+* [[These curves summarize the equilibrium states over a range of control
+  inputs.]]
+
+* Show the polar curves and consider if they are reasonable. [[Using which
+  model? 9a?]]
 
 * [[Use this section to really highlight the limitations/assumptions of the
   model? Unknown airfoil, unknown true line positions, lack of a proper
@@ -373,3 +390,24 @@ Discussion
   modeling their deflected geometries, modeling the deflection distribution,
   etc. Tons of uncertainty here. Just stick a big red flag in it and say "hey,
   if you want to solve this problem, here's a big sticking point."
+
+
+This chapter suggests a simple workflow:
+
+1. Fit the flattened chord surface (`c(s)`, `x(s)`, `r_x(s)`)
+
+2. Fit the arc (`yz(s), r_yz(s)`)
+
+3. Apply geometric twist (`theta(s)`)
+
+4. Specify section profiles (airfoils) and their coefficients
+
+   [[Introduce gridded coefficients]]
+
+5. Specify material densities (upper, lower, ribs) for computing the inertia
+
+6. Specify a suspension line model (harness position, accelerator function,
+   brake deflection distribution, line drag)
+
+7. Specify a harness model
+
