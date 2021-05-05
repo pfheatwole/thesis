@@ -5,59 +5,23 @@
 Foil aerodynamics
 *****************
 
+Aerodynamics describe the instantaneous forces and moments produced when an
+object moves through air. An aerodynamic model encodes the aerodynamics of
+a foil over the range of flight conditions. In a rigorous modeling process, an
+aerodynamic model is measured experimentally, either in a wind tunnel or
+through flight tests. Alternatively, theoretical methods allow a foil's
+aerodynamics to be predicted from mathematical models that use the foil
+geometry to predict the surrounding flow field. The previous chapter
+introduced a parametric foil geometry explicitly because experimental methods
+are infeasible for this project; physical wing tests are time consuming and
+expensive, assuming a copy of the parafoil could even be acquired. Instead,
+this project must rely on theoretical methods.
 
-.. What are *aerodynamics*?
-
-Aerodynamics describe the forces and moments produced when an object moves
-through air.
-
-
-.. Why does this project need the foil aerodynamics?
-
-[[The paraglider dynamics model needs all the forces and moments of the
-glider, which come from Earth's gravity and the air.]]
-
-
-.. How do you determine the foil aerodynamics?
-
-* [[Theoretical (predict) vs experimental (measure) approaches to determining
-  wing performance.]]
-
-  Ideally you'd just measure them experimentally, but for this project we have
-  to use theoretical methods.
-
-* *Computational aerodynamics* produce numerical solutions to the governing
-  equations. They combine a model of the wing geometry with a set of boundary
-  conditions to solve for the flow field around the wing.
-
-* There are many different methods. Each one comes with a different set of
-  assumptions. Their designs involve tradeoffs that limit their applicability
-  to different situations.
-
-* Conclusion: we need to choose a suitable aerodynamics method and acquire an
-  implementation.
-
-* [[There are existing methods in literature, but I need to define my
-  performance criteria before claiming they are inadequate. This might be
-  a good spot to acknowledge their existence, but defer their discussion.]]
-
-
-.. Roadmap:
-
-This chapter will proceed as follows:
-
-* Introduce computational aerodynamics
-
-* Establish the modeling requirements in the context of flight reconstruction
-
-* Discuss the different categories of aerodynamics models in the context of
-  the requirements and make a selection (Phillips' NLLT)
-
-* Discuss the selected aerodynamic method 
-
-* Present tests using the selected method
-
-* Discussion
+This chapter selects a theoretical method suitable for flight reconstruction
+of a paraglider under typical flight conditions. It refines the method to
+improve its performance in the context of flight simulation, and validates its
+theoretical performance by comparing its predictions against wind tunnel
+measurements from a representative parafoil model from literature.
 
 
 Modeling requirements
@@ -66,6 +30,29 @@ Modeling requirements
 .. Establish the performance criteria for this project. I need an aerodynamics
    method that can handle the unusual geometry of a paraglider canopy under
    expected flight conditions.
+
+
+.. Introduce computational aerodynamics
+
+[[Introduce "governing equations"?]]
+
+[[Discuss analytical methods?]]
+
+[[Theoretical models are built by combining fundamental equations of fluid
+behavior with simplifying assumptions about the flow field (such as whether
+the effects of viscosity can be neglected, whether the airspeed is high enough
+that compressibility effects are significant, etc) and simplifying assumptions
+about the flight dynamics (such as restricting the angle of attack to justify
+a linearized model).]]
+
+*Computational aerodynamics* produce numerical solutions to the governing
+equations by combining a model of the wing geometry with a set of boundary
+conditions and solving for the flow field around the wing. There is a stunning
+array of different methods, each with its own set of assumptions and
+limitations. Each design involves tradeoffs that limit their applicability to
+different situations.
+
+
 
 * [[Define the variety of "typical flight conditions" in the context of this
   paper. Wind gradients, wing rotation, etc: the aerodynamics method must be
@@ -88,6 +75,8 @@ Modeling requirements
 
     * Do not assume a constant Reynolds number (these vary quite a lot due to
       taper, especially at such low airspeeds)
+
+    * Does not assume small angles of attack
 
     * Require graceful degradation near stall
 
