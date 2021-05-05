@@ -890,6 +890,9 @@ Parametric paraglider modeling
    little data is available (technical specs from wing manuals).
 
 
+Specification
+-------------
+
 The section `Model the data-generating process`_ explained why flight
 reconstruction requires a dynamics model of the paraglider that produced the
 data. This requirement presents several major problems:
@@ -926,6 +929,17 @@ estimated from the canopy geometry; we have some basic shape information from
 technical specs, so we would like a paraglider model parametrized by that data
 (or as closely as possible). The canopy geometry can also be used to estimate
 the inertial properties if you know the surface densities.]]
+
+
+Functionality
+-------------
+
+[[The paraglider system model needs to cover the range of flight conditions
+targeted by the flight reconstruction process. That is, I need to declare what
+details of a flight I will and will not attempt to reconstruct. For example,
+I would like to simulate a paraglider turning due to weight shift and braking,
+but I will not be attempting to model riser controls (or any scenario that
+includes canopy deformations).]]
 
 
 Roadmap
