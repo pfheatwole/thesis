@@ -1,7 +1,6 @@
 .. This chapter defines two things:
 
-   1. *system dynamics* combine the paraglider components into a composite
-      system model
+   1. *system dynamics* combine the component models into a system model
 
    2. *state dynamics* choose a set of state variables and define their
       dynamics in terms of the *system dynamics*
@@ -11,10 +10,20 @@
    :math:`\dot{x} = f(x, u)`, and the bulk of this paper has been building to
    this point where it provides that function.)
 
+* [[This chapter combines the component models from
+  :doc:`paraglider_components` to create a dynamics model of the complete
+  paraglider system.]]
 
-* FIXME: discuss equilibrium state calculations? Those can be informative,
-  especially when comparing models. Will be easier to discuss once I have an
-  example model, so this might be better deferred until `demonstration`.
+* [[Although flight simulators are commonly expected to be interactive
+  programs with graphical outputs, the simulator defined in this chapter is
+  only concerned with the numerical outputs, and the input sequences are
+  strictly non-interactive. However, in practice the dynamics model is fast
+  enough that interactive simulations should be possible.]]
+
+* [[This paper does not solve the flight reconstruction problem; it only uses
+  the simulator to generate test flights for validation. At first this is only
+  helpful for superficial checks (do flights "look" correct?), but will
+  eventually be necessary for physical flight validation.]]
 
 
 ************************
@@ -23,70 +32,35 @@ Paraglider system models
 
 .. What are dynamics? What are paraglider dynamics used for?
 
-The *dynamics* of a system describe how the state of the system changes over
-time. A flight simulator needs a model of an aircraft's dynamics to generate
-the flight trajectory produced by a specific flight scenarios.
-
-[[The previous chapters developed a wing geometry that can model the canopy,
-and an aerodynamics method that can estimate the canopy dynamics. The canopy
-dynamics are just one piece of the total paraglider dynamics. This chapter
-develops a complete dynamics model that includes the dynamics of the entire
-system.]]
-
-
-
-* What is *dynamic simulation*?
-
-  From Wikipedia: "*Dynamic simulation* (or dynamic system simulation) is the
-  use of a computer program to model the time-varying behavior of a dynamical
-  system. The systems are typically described by ordinary differential
-  equations or partial differential equations. A simulation run solves the
-  state-equation system to find the behavior of the state variables over
-  a specified period of time. The equation is solved through numerical
-  integration methods to produce the transient behavior of the state
-  variables. Simulation of dynamic systems predicts the values of model-system
-  state variables, as they are determined the past state values. This
-  relationship is found by creating a model of the system."
-
-.. What is a flight simulator?
-
-A flight simulator uses aircraft dynamics to record how a set of state
-variables change over time in response to a sequence of control inputs and
-wind vectors.
-
-[[Although flight simulators are commonly expected to be interactive programs
-with graphical outputs, the simulator defined in this chapter is only
-concerned with the numerical outputs, and the input sequences are strictly
-non-interactive. However, in practice the dynamics model is fast enough that
-interactive simulations should be possible.]]
-
+A *dynamics model* describes how a set of variables change over time.
+A *flight simulator* uses aircraft dynamics to generate a *flight trajectory*:
+a sequence that records how the state of the aircraft evolves over time in
+response to a sequence of control inputs and wind vectors.
 
 .. How does flight simulation relate to the problem of flight reconstruction?
    (ie, why does this paper need a flight simulator?)
 
-[[This paper defines a flight simulator because the *filtering equation* needs
-a transition function. For the purposes of flight reconstruction, the *state
-dynamics model* :math:`\dot{x} = f(x, u)` is the dynamics model provided by
-the flight simulator.]]
+This paper requires a flight simulator because it is fundamental to solving
+the flight reconstruction problem. The introductory section of this paper,
+:ref:`introduction:Solve the inverse problem`, defined *flight reconstruction*
+as an *inverse problem*: given a recorded flight trajectory, we are interested
+in determining the flight conditions that produced that trajectory. It also
+explained that *flight simulation* provides a means to estimating
+a distribution that is likely to contain the answer: by simulating many
+possible flight conditions, it is possible to compare those simulated
+trajectories outcomes against the recorded trajectory.
 
-The introductory section of this paper, :ref:`introduction:Solve the inverse
-problem`, defined *flight reconstruction* as an *inverse problem*: given
-a recorded flight trajectory, we are interested in determining the flight
-conditions that produced that trajectory. It also explained that *flight
-simulation* provides a means to estimating a distribution that is likely to
-contain the answer: by simulating many possible flight conditions, it is
-possible to compare those possible outcomes against the actual outcome.
 
-A paraglider dynamics model makes it possible to simulate and record the
-motion of that paraglider in different flight scenarios.
+[[This chapter needs to start by defining several *system dynamics* models for
+the composite paraglider system, using all of its component models. Then, it
+needs to choose sets of state variables and define the *state dynamics* in
+terms of the *system dynamics*.]]
 
-The flight simulator is the link between the paraglider dynamics model and the
-flight trajectories.
+[[This paper requires a flight simulator because the *filtering equation*
+requires a transition function. For the purposes of flight reconstruction, the
+*state dynamics model* :math:`\dot{x} = f(x, u)` is the dynamics model
+provided by the flight simulator.]]
 
-* [[This paper uses the simulator to generate test flights for validation. At
-  first this is only helpful for superficial checks (do flights "look"
-  correct?), but will eventually be necessary for physical flight
-  validation.]]
 
 
 .. Roadmap
