@@ -1,14 +1,24 @@
-* The "parametric canopy" geometry section needs to avoid parametrizing the
-  design curves. For example, it can develop the general equation in terms of
-  section DCMs without saying how those DCMs are created; it's only later that
-  I say "lets create `C_c/s` by using `dz/dy` for the section roll and `theta`
-  for the section pitch."
+* Although a small amount of air does flow through the canopy's surface, the
+  majority of the air flows around the canopy's volume.
 
-  **Keep these two things separate**:
+* I'm choosing to neglect cell distortions, which is technically
+  a big deal, but developing an aerodynamic method that accounts for cell
+  billowing is time prohibitive. Should I simply punt that discussion into the
+  aerodynamics section? Like "this geometry neglects details such as cell
+  distortions. See 'foil_aerodynamics:Limitations' for a discussion." ?
 
-  1. The generalized wing geometry model
+* Do I like using "O" for the wing origin? It's basically the origin for the
+  entire wing; my only gripe is that I don't like using "O" in math since it
+  looks like a zero. Also, do I need a name for the origin of the chord
+  surface?
 
-  2. The specific parametrization of that model for parafoil canopies
+* Wing origin offset: the chord surface uses it's own coordinate system,
+  with its origin defined by the origins of the reference position curves.
+  For the wing I'm defining origin as the leading edge of the central
+  section. Thus, the chord surface positions an extra translation to get the
+  coordinates in the wing's coordinate system. (If the central section has
+  no geometric torsion then it's simply an x-offset `x(0) + r_x(0) * c(0)`,
+  right?)
 
 * Washin and washout have multiple purposes:
 
@@ -289,4 +299,62 @@ Geometry specification
   doesn't differentiate between `arctan(z/y)` and `arctan(dz/dy)` of
   a section. Still, discussing curvature leads nicely into a discussion of the
   *arc*, so whatever.
+
+
+Points on chords
+----------------
+
+[[I've kept this because it tickles my brain in a pleasant way, but should
+probably be removed.]]
+
+Points on the section chords have particularly simple equations. For some
+point :math:`P` at some ratio :math:`0 \le r \le 1` along the section chord:
+
+.. math::
+
+   \begin{aligned}
+   \vec{r}_{P/O}^f
+     &= \vec{r}_{LE/O}^f + \vec{r}_{P/LE}^f\\
+     &= \vec{r}_{LE/O}^f - \vec{r}_{LE/P}^f\\
+     &=
+        \left(
+          \vec{r}_{\mathrm{RP}/\mathrm{O}}^f
+            + \mat{R} \mat{C}_{f/s} c\, \hat{x}^s_s
+        \right)
+        - r\, \mat{C}_{f/s} c\, \hat{x}^s_s\\
+   \end{aligned}
+
+Which simplifies to:
+
+.. math::
+   :label: chord_points
+
+   \vec{r}_{P/O}^f =
+      \vec{r}_{\mathrm{RP}/\mathrm{O}}^f
+      + \left(\mat{R} - r\right) \mat{C}_{f/s} c\, \hat{x}^s_s
+
+All the notational baggage can make this equation look more complicated than
+it really is. Suppose the points on the chord are simply :math:`\left\langle
+x, y, z \right\rangle` in canopy coordinates, the reference points in canopy
+coordinates are :math:`\vec{r}_{RP/O} = \left\langle x_r, y_r, z_r
+\right\rangle`, and :math:`\mat{K} = \left(\mat{R} - r\right) c`, then the
+structure is easier to see:
+
+.. math::
+   :label: simplifed_chord_points
+
+   \left\langle x, y, z \right\rangle =
+      \left\langle x_r, y_r, z_r \right\rangle
+      + \mat{K} \hat{x}_s^f
+
+Or, using separate equations instead of matrix math:
+
+.. math::
+
+   \begin{aligned}
+   x &= x_r + (r_x - r) \hat{x}^f_x\\
+   y &= y_r + (r_y - r) \hat{x}^f_y\\
+   z &= z_r + (r_z - r) \hat{x}^f_z
+   \end{aligned}
+
 

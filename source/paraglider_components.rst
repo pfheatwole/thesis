@@ -182,6 +182,11 @@ intakes, I need to specify the extents of the upper and lower surfaces.]]
 Inertia
 -------
 
+[[For a parafoil, there are three masses: the *solid mass*, from the
+structural materials, the *air mass*, from the air enclosed in the wing, and
+the *apparent mass*, from the acceleration of the wing relative to the
+surrounding air.]]
+
 [[The "canopy geometry" was only describing the pure geometric shape, not the
 physical implementation of that shape. Now that I'm considering the physical
 model, I need to extend that geometry with physical attributes. I'm not crazy

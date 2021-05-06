@@ -1,10 +1,11 @@
 .. This chapter generalizes the typical foil geometry equation to allow
-   arbitrary reference points, relaxing the constraint that the geometry is
-   specified in terms of the leading edge. This additional flexibility allows
-   complex geometries to be described using simple parametric design curves.
-   The parametric design curves encode domain expertise (reasonable
-   assumptions about typical foil design), thus enabling complete parafoil
-   geometries to be specified using only summary technical specifications.
+   arbitrary reference points for position, relaxing the constraint that the
+   geometry is specified in terms of the leading edge. This additional
+   flexibility allows complex geometries to be described using simple
+   parametric design curves. The parametric design curves encode domain
+   expertise (reasonable assumptions about typical foil design), thus enabling
+   complete parafoil geometries to be specified using only summary technical
+   specifications.
 
 
 *************
@@ -40,11 +41,11 @@ estimated from the foil's shape.
 .. Why not use an existing foil geometry model?
 
 An accurate model of a foil's shape requires a detailed set of specifications,
-but those are unavailable for commercial paraglider wings. User manuals
-provide valuable summary information in the form of basic technical
+but that information is unavailable for commercial paraglider wings. User
+manuals provide valuable summary information in the form of basic technical
 specifications, but the majority of the foil structure is unspecified, so
 completing a model requires making educated assumptions about that unknown
-structure. Those assumptions are encoded in parametric *design curves* that
+structure. Those assumptions can be encoded in parametric *design curves* that
 extend the technical data with domain expertise to produce a fully specified
 model.
 
@@ -52,16 +53,17 @@ model.
 .. The geometry model chooses the variables, which in turn determines the
    structure of the functions that define those variables.
 
-Parafoil canopies have fundamental complexity that must be captured, either in
-the model structure or in the design curves. Unfortunately, existing foil
-geometry models are inflexible, making strong assumptions about how the foil
-is most conveniently defined. The inflexibility of a simplistic geometry model
-forces the remaining complexity into the design curves. This unnecessary
-complexity makes it difficult to describe a parafoil using simple design
-curves: they must not only encode the fundamental structure, they must also
-convert that structure into the variables that define the geometry model.
-Instead of the geometry model adapting to the needs of the design curves, the
-design curves must adapt to the limitations of the geometry model.
+The geometry of a typical parafoil canopy will have fundamental complexity
+that must be captured, either in the model structure or in the design curves.
+Unfortunately, existing foil geometry models are inflexible, making strong
+assumptions about how the foil is most conveniently defined. The inflexibility
+of a simplistic geometry model forces the remaining complexity into the design
+curves. This unnecessary complexity makes it difficult to describe a parafoil
+using simple design curves: they must not only encode the fundamental
+structure, they must also convert that structure into the variables that
+define the geometry model. Instead of the geometry model adapting to the needs
+of the design curves, the design curves must adapt to the limitations of the
+geometry model.
 
 The solution developed in this chapter is to reject the assumption that
 predefined reference points are the most convenient way to position the
@@ -111,14 +113,21 @@ creating parafoil canopy models from basic technical specifications.
 Modeling requirements
 =====================
 
-[[These are the modeling requirements of **THIS PROJECT**. Explain what I'm
-trying to model, typical specifications of such a geometry, the missing
-structure I need to encode in parametric functions. Those needs drive the
-requirements for the geometry model.]]
+.. These are the modeling requirements of THIS PROJECT. Explain what I'm
+   trying to model, typical summary specs of such a geometry, and the missing
+   structure I need to encode in parametric functions. Those needs drive the
+   requirements for the geometry model.
 
-The geometry that results happens to be pleasantly general, and useful in
-other contexts, but this section is explicitly interesting in establishing
-what tool we need to create foil geometry models of parafoils.]]
+   The geometry that results happens to be pleasantly general, and useful in
+   other contexts, but this section is explicitly interesting in establishing
+   what tool we need to create foil geometry models of PARAFOILS.
+
+
+[[FIXME: these sections need work. The section headings are unclear: what
+would a reader expect to find in "Foil model"? I need to cover topics like
+what aspects of a parafoil canopy the model must be able to represent, how you
+specify the geometry (it must encourage parametric specifications), and what
+it must do (return points on the chord/camber/profile surfaces).]]
 
 
 Foil specifications
@@ -135,13 +144,25 @@ Foil specifications
       know) and consider what is required to produce a complete model from
       this minimal data?
 
+   Two step process:
+
+   1. Guide the reader through observing the details of the foil
+
+   2. Introduce the reader to the technical terminology of those details
+
 
 .. Describe the system we need to model
 
-A parafoil canopy is a type of *ram-air parachute*. It uses air intakes at the
-front of the wing to inflate a partially-open nylon casing. Although a small
-amount of air does flow through the canopy's surface, the majority of the air
-flows around the canopy's volume. [[FIXME: reword]]
+A parafoil canopy is a type of *ram-air parachute*, meaning they use air
+pressure over the surface of the foil to inflate the volume through air
+intakes at the leading edge. Manufactured from flexible materials such as
+ripstop nylon, they rely on internal structures and variable-length suspension
+lines to control the shape of the inflated volume.
+
+.. figure:: figures/paraglider/simulations/Hook3_front_view.jpg
+   :width: 75%
+
+   Paraglider front view.
 
 .. figure:: figures/paraglider/geometry/Wikimedia_Nova_X-Act.jpg
    :width: 75%
@@ -151,58 +172,54 @@ flows around the canopy's volume. [[FIXME: reword]]
    `Photograph <https://www.flickr.com/photos/69401216@N00/2820146477/>`__ by
    Pascal Vuylsteker, distributed under a CC-BY-SA 2.0 license.
 
-Manufactured from flexible materials such as ripstop nylon, they rely on
-internal structures to control the shape of the inflated volume, and
-variable-length suspension lines to control the shape of the arc.
+.. Describe the visible characteristics/details of the canopy
 
+   These details capture the visible structure of a parafoil, and thus are
+   intuitive starting points for parametrizing a parafoil, but don't confuse
+   the characteristic with its representation (eg, arc versus dihedral angle).
 
-* [[Call attention to the important details:
+The most striking detail of a parafoil's shape is its characteristic spanwise
+curvature, called the *arc* :cite:`lolies2019NumericalMethodsEfficient` (also
+known as the *lobe* :cite:`casellasParagliderDesignHandbook`); the arc plays
+a major role in wing stability, maneuverability, and efficiency. Another
+important characteristic is the continuously variable tapering of the section
+lengths from the center of the wing out to the tips, which impacts aerodynamic
+efficiency, canopy weight, and stall behavior. A third important detail is how
+the front ("leading") and rear ("trailing") edges are offset in the fore-aft
+direction; due to the arc and variable taper, they do not tend to lie in
+a plane.
 
-  * *arc* :cite:`lolies2019NumericalMethodsEfficient` (also known as the
-    *lobe* :cite:`casellasParagliderDesignHandbook`)
-
-  * Nonlinear leading edge (the wings are not straight)
-
-  * Variable chord lengths
-
-  * *geometric torsion*: relative pitch angle of a section
-
-    .. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
-
-       Geometric torsion.
-
-       Note that this refers to the angle, and is the same regardless of any
-       particular rotation point.
-
-  * Cells
-
-* [[These details are important because they are the basis for recognizing the
-  underlying structure of the wing, and thus they are intuitive starting
-  points for parametrizing representations. However, don't confuse these these
-  characteristics with how you **represent** them (eg, arc versus dihedral
-  angle).]]
+To manufacture a parafoil, nylon panels are stitched together to form upper
+and lower surfaces, whose different curvature and length is fundamental for
+generating aerodynamic lift. The panels are stitched to internal support
+structures calls *ribs*, and the spaces between the ribs are visible as
+a sequence of *cells*. The majority of the cells are open near their leading
+edges, forming the *air intakes*. In addition to these fundamental details,
+commercial wings employ a wide variety of techniques to improve wing
+stability, performance, and reliability, such as partial ribs, diagonal ribs,
+horizontal straps, structural reinforcement rods, etc. Under the deceptively
+simple appearance of a parafoil is a simple dominated by the little details.
 
 
 .. Describe the quantitative information we can reasonably attain
 
-* [[Parafoil canopies are typically described using terminology from classical
-  wing design: surface area, span, and aspect ratio.
-
-  Define the difference between *flat* and *projected* values.]]
+Unfortunately for individuals that wish to create computer models of
+commercial wings, most of these details are proprietary information and are
+not made publicly available. Instead, manufacturers summarize their designs
+using terminology from classical wing design literature. [[Explain surface
+area, span, and aspect ratio, etc. Define the difference between *flat* and
+*projected* values. They also include non-geometric data, such as total mass
+of the wing, areal densities of the materials, etc, but not the mass and
+volume distributions.]]
 
 
 .. Discuss the difficulty of modeling a parafoil from such limited data
 
-* [[The user manual for a wing usually includes basic properties such as the
-  total mass of the wing, the areal densities of its surface materials, etc,
-  but not the mass and volume distributions, aerodynamics, etc.]]
-
-
 * [[These specifications are are structural summaries, and are not sufficient
   to create a wing model. Creating a model from such sparse information will
-  rely on many simplifications. Explain which details are important to this
-  paper, and which will be ignored. **The rest of this chapter is interested in
-  using what little we know to build the approximate model.**
+  rely on assumptions and simplifications. Explain which details are important
+  to this paper, and which will be ignored. **The rest of this chapter is
+  interested in using what little we know to build the approximate model.**
 
   These are not necessarily the variables you would choose to parametrize the
   geometry; they might simply be helpful for discussing/understanding the shape
@@ -232,39 +249,35 @@ Foil model
 
 .. Choose what geometry details to include and which to ignore
 
-* [[This section must establish which aspects of the geometry are worth
-  modeling (what parts of the canopy will be modeled and which will be
-  ignored). Unfortunately that question is tied to the aerodynamics method.
+A detailed model of a paraglider wing would include all its structural
+details. Materials structure models can be combined with aerodynamic models to
+simulate the interactions between the canopy surface deformations and the
+surrounding flow field :cite:`lolies2019NumericalMethodsEfficient`.
+Unfortunately, as discussed earlier, such details are not available. Instead,
+this project must be content to model only the basic structure that can be
+approximate from the available data and record this imprecision and an extra
+source of uncertainty during flight reconstruction.
 
-  For example, I'm choosing to neglect cell distortions, which is technically
-  a big deal, but developing an aerodynamic method that accounts for cell
-  billowing is time prohibitive. Should I simply punt that discussion into the
-  aerodynamics section? Like "this geometry neglects details such as cell
-  distortions. See 'foil_aerodynamics:Limitations' for a discussion." ?]]
+Instead, the models presented in this chapter represent idealized design
+targets of the external canopy surface geometry. It will not model internal
+structures, in-flight deformations, or surface deviations from the idealized
+shape (such as the creases where the surfaces are stitched to the internal
+ribs).
 
 
 .. Functionality
 
-* A geometry model is necessary to estimate the inertial properties and
-  aerodynamics of the wing.
+The purpose of the geometry model is to enable estimates of the inertial
+properties and aerodynamics of the foil. The inertial properties depend on the
+distributions of masses involved in the dynamics which can be estimated using
+points along the foil surface (see :ref:`paraglider_components:Canopy`). The
+aerodynamics can be estimated using a variety of aerodynamics models that
+depend on different aspects of the shape, but in general they all use points
+from either the chord surface, the camber surface, or the profile surface; to
+support the variety of aerodynamic methods, the model should return points on
+any of the three surfaces.
 
-* The inertial properties depend on the distribution of mass. For a parafoil,
-  the masses are the *solid mass*, from the structural materials, the *air
-  mass*, from the air enclosed in the wing, and the *apparent mass*, from the
-  acceleration of the wing relative to the surrounding air.
-
-  This chapter does not deal with how to compute the masses and their
-  inertias, but to support their calculation the model must return points on
-  the profile surface.
-
-  [[**FIXME**: I haven't defined *surface* yet.]]
-
-* Different aerodynamic codes use different aspects of the shape, but in
-  general they all use points from either the chord surface, the camber
-  surface, or the profile surface.
-
-  To support the variety of aerodynamic methods, the model should return
-  points on any of the three surfaces.
+[[FIXME: forward-reference this terminology? See `Wing sections`_]]
 
 
 .. Parametrization
@@ -310,9 +323,8 @@ Foil model
 Parametric modeling
 ===================
 
-.. Parameters are how you specify the design. Motivate parametric models (as
-   opposed to explicit geometries), define "parametrization", and establish
-   the importance of choosing a good parametrization.
+.. This section should motivate parametric vs explicit geometries, define
+   "parametrization", and discuss "good" parametrizations.
 
 * [[To define a geometry, you either specify a set of points explicitly or you
   specify the parameters of parametric functions that generate the points.]]
@@ -423,66 +435,64 @@ Wing sections
    points in the wing sections establishes the general form of the parametric
    model.
 
-.. See `notes-2020w47:Canopy parametrizations` for a discussion
-
-[[The standard way to parametrize a foil geometry is to describe it in terms
-of *wing sections*. Each section is assigned a 2D cross-sectional profile,
-called an *airfoil*, which is scaled, positioned and oriented to produce the
-*section profile*. Together, the set of section profiles produce a continuous
-surface that defines the complete 3D volume.
-
-Related work:
-
-* :cite:`abbott1959TheoryWingSections`
-
-* :cite:`bertin2014AerodynamicsEngineers`, Sec:5.2
+The standard way to parametrize a foil geometry is to describe it in terms of
+*wing sections* (:cite:`abbott1959TheoryWingSections`;
+:cite:`bertin2014AerodynamicsEngineers`, Sec:5.2). The foil is modeled as
+a collection of spanwise (left wingtip to right wingtip) sections. Each
+section is assigned a 2D cross-sectional profile, called an *airfoil*, that is
+perpendicular to the local spanwise axis. Each airfoil is scaled, positioned,
+and oriented to produce the *section profile*. Together, the set of section
+profiles produce a continuous surface that defines the complete 3D volume.
 
 
-.. Define the relevant details of airfoils
+.. Define airfoil terminology
 
-[[Before I can refer to terms like "chord surface", "mean camber surface",
-etc, I need to define "chord, "mean camber line", etc. Define the airfoil
-geometry: leading edge, trailing edge, chord, mean camber line, thickness
-distribution, thickness convention, etc.]]
+   FIXME: rephrase, super awkward
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
 
    Airfoils examples.
 
-An airfoil is defined by a camber line, a thickness function, and a thickness
-convention. [[FIXME: This is just one specific way to defining the profile
-curve; you could just as easily provide an explicit set of points.]]
-
-Here's a diagram of the basic airfoil geometric properties:
+Although airfoils are potentially arbitrary 2D curves, they are typically
+defined by a mean camber line, a thickness distribution, and a thickness
+convention. The exact value of the mean camber line and thickness depends on
+the thickness convention, but in general the mean camber line runs will lie
+halfway between an upper and lower surface whose separation distance is
+specified by the thickness distribution.
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_diagram.*
    :name: airfoil_diagram
 
    Components of an airfoil.
 
-There are two conventions measuring the airfoil thickness; this convention
-also determines what point is designated the *leading edge*. The leading and
-trailing edge of a wing section are arbitrary points that define the *chord*;
-the chord is used to nondimensionalize the airfoil geometry and define the
-local *angle of attack*.
+There are two conventions for measuring the airfoil thickness: perpendicular
+to the chord line (sometimes referred to as the "British" convention), or
+perpendicular to the mean camber line (the "American" convention). The choice
+of thickness convention also determines what point is designated the *leading
+edge*. For the British convention the leading edge is the point where the
+curve is perpendicular to a line from the trailing edge. For the American
+convention, the leading edge is the "leftmost" point with the smallest radius
+(greatest curvature).
+
+.. The choice of convention is irrelevant. The only thing that matters is that
+   you manufacture the wing with the sections scaled and oriented in exactly
+   the same way as they were defined. For example, you could define the chord
+   with any two points on the surface; it would be confusing, and you could
+   end up with a usable range of alpha from, like, 53 to 70 degrees, but as
+   long as you mount the section oriented correctly it's irrelevant. The
+   convention does two things: (1) it disambiguates the orientation of the
+   profile relative to freestream associated with the coefficients, and (2)
+   standardizes the orientation so you can easily swap out different profile
+   definitions.
 
 .. figure:: figures/paraglider/geometry/airfoil/NACA-6412-thickness-conventions.*
    :name: airfoil_thickness
 
    Airfoil thickness conventions.
 
-
-[[**The choice of convention is irrelevant. The only thing that matters is
-that you manufacture the wing with the sections scaled and oriented in exactly
-the same way as they were defined.** For example, you could define the chord
-with any two points on the surface; it would be confusing, and you could end
-up with a usable range of alpha from, like, 53 to 70 degrees, but as long as
-you mount the section oriented correctly it's irrelevant. The convention does
-two things: (1) it disambiguates the orientation of the profile relative to
-freestream associated with the coefficients, and (2) standardizes the
-orientation so you can easily swap out different profile definitions.]]
-
-
+The line between the leading and trailing edge is the *chord*; the chord is
+used to nondimensionalize the airfoil geometry and define the local *angle of
+attack*.
 
 The wing design process is thus decomposed into two steps:
 
@@ -523,14 +533,14 @@ Basic equation
 .. Introduce the basic equation that uses `r_LE/O`
 
 Choosing to model a foil using *wing sections* means that the wing surfaces
-are defined by 2D airfoils.
-
-By convention, airfoil coordinates are defined in an airfoil-local coordinate
-system whose origin is at the leading edge. To create the section profile, the
-airfoil coordinates must be converted into a section-local coordinate system,
-scaled, positioned, and oriented. The natural choice is to share the origin
-between the airfoil and section coordinate systems, and specify the section's
-position using the leading edge.
+are defined by 2D airfoils. By convention, airfoil coordinates are defined in
+an airfoil-local coordinate system where the origin is at the leading edge and
+the airfoil x-axis lies on the chord line. To create the section profile, the
+2D airfoil coordinates must be converted into a 3D section-local coordinate
+system, scaled, positioned, and oriented. The natural choice is to share the
+origin between the airfoil and section coordinate systems, and specify the
+section position using the section leading edge. [[FIXME: now describe how
+that setup allows you compute the positions of points in a section.]]
 
 First, let :math:`\mathrm{P}` represent any point in a wing section (such as
 points on the section chords, mean camber lines, or profiles), and
@@ -650,7 +660,9 @@ you choose reference points other than the leading edges, and position those
 points explicitly in the wing coordinate system. (Note that the leading edges
 remain the origin of the section coordinate systems.)
 
-
+[[What about the origin? I need a `-xyz(s = 0)` sort of term to translate the
+canopy origin to the central leading edge. I'm not requiring that the design
+curves satisfy `xyz(s = 0) = <0, 0, 0>`.]]
 
 
 Simplified model
@@ -1016,11 +1028,20 @@ etc]]
 
 * `phi = 0`
 
-* `theta(s)`
+* `theta(s)`: *geometric torsion*, the relative pitch angle of a section
+
+  .. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
+
+     Geometric torsion.
+
+     Note that this refers to the angle, and is the same regardless of any
+     particular rotation point.
 
 * `gamma = arctan(dz/dy)`
 
 It's nice because now you only have one free parameter instead of three.]]
+
+[[FIXME: define `C_f/s` using these Euler angles.]]
 
 
 Simplified equation
@@ -1031,129 +1052,23 @@ terms of the section index. This summary should be complete and standalone,
 matching my implementation.]]
 
 
-
-EXTRA
------
-
-* Problems with the general surface equation
-
-  * It's too flexible: it doesn't impose any restrictions on the values of the
-    variables, meaning it allows design layouts that can't be (reasonably)
-    analyzed using section coefficient data. It forces all the responsibility
-    on the designer to produce a useable foil definition.
-
-  * It's not flexible enough: it requires the designer to use the section
-    leading edges to position the sections. In many cases it is more
-    convenient to position with other points, such as the quarter-chord,
-    trailing edge, etc. [[If a designer wants to define a foil using some
-    other reference point they cannot do it directly; they must specify the
-    shape indirectly by manually calculating the corresponding leading edge
-    position.]]
-
-* [[The general equation is the result of designing via wing sections. The
-  whole point is that you start by defining the section profiles, then
-  position them relative to the foil origin to produce the final foil.
-  Splitting `r_P/O` into `r_P/LE` and `r_LE/O` is the natural (general) result
-  of designing with wing sections; I suppose it's sort of a parametrization of
-  the surfaces, but that's not the "parametrization" I'll be talking about
-  later. **I need to give a more complete definition of the airfoil geometry
-  in terms of `r_P/LE` before I introduce the general equation to make it more
-  obvious what those two components mean.**]]
-
-* Should I introduce scale, position, etc **before** the general equation, or
-  should I define the general equation as part of the "design with wing
-  sections" section, and naturally segue from "what the math produced" into
-  a discussion of those four parameters?
-
-  That'd work nicely if I can **clearly** motivate each step of the derivation
-  of the general equation.
-
-* The origin of the chord surface is defined by the origins of the position
-  functions. Let the user of the chord surface (eg, a `ParagliderWing`)
-  position and orient the chord surface as they like; don't pollute this
-  definition with constraints like "the origin is the central leading edge".
-
-* Note that I've dropped the section index parameter for notational simplicity
-
-* :math:`\mat{C}_{f/s}` is the directed cosine matrix (DCM) of the foil
-  reference frame :math:`\mathcal{F}_w` with respect to the section reference
-  frame :math:`\mathcal{F}_s`.
-
-
-EXTRA 2: points on chords
--------------------------
-
-[[I've kept this because it tickles my brain in a pleasant way, but should
-probably be removed.]]
-
-Points on the section chords have particularly simple equations. For some
-point :math:`P` at some ratio :math:`0 \le r \le 1` along the section chord:
-
-.. math::
-
-   \begin{aligned}
-   \vec{r}_{P/O}^f
-     &= \vec{r}_{LE/O}^f + \vec{r}_{P/LE}^f\\
-     &= \vec{r}_{LE/O}^f - \vec{r}_{LE/P}^f\\
-     &=
-        \left(
-          \vec{r}_{\mathrm{RP}/\mathrm{O}}^f
-            + \mat{R} \mat{C}_{f/s} c\, \hat{x}^s_s
-        \right)
-        - r\, \mat{C}_{f/s} c\, \hat{x}^s_s\\
-   \end{aligned}
-
-Which simplifies to:
-
-.. math::
-   :label: chord_points
-
-   \vec{r}_{P/O}^f =
-      \vec{r}_{\mathrm{RP}/\mathrm{O}}^f
-      + \left(\mat{R} - r\right) \mat{C}_{f/s} c\, \hat{x}^s_s
-
-All the notational baggage can make this equation look more complicated than
-it really is. Suppose the points on the chord are simply :math:`\left\langle
-x, y, z \right\rangle` in canopy coordinates, the reference points in canopy
-coordinates are :math:`\vec{r}_{RP/O} = \left\langle x_r, y_r, z_r
-\right\rangle`, and :math:`\mat{K} = \left(\mat{R} - r\right) c`, then the
-structure is easier to see:
-
-.. math::
-   :label: simplifed_chord_points
-
-   \left\langle x, y, z \right\rangle =
-      \left\langle x_r, y_r, z_r \right\rangle
-      + \mat{K} \hat{x}_s^f
-
-Or, using separate equations instead of matrix math:
-
-.. math::
-
-   \begin{aligned}
-   x &= x_r + (r_x - r) \hat{x}^f_x\\
-   y &= y_r + (r_y - r) \hat{x}^f_y\\
-   z &= z_r + (r_z - r) \hat{x}^f_z
-   \end{aligned}
-
-
 Examples
 ========
 
-.. This section highlights the elegance of the "optimized" parametrization.
+.. This section highlights the elegance of the "simplified" parametrization.
 
-These examples are composed from a small collection of simple design
-curves, such as constant functions, polynomials, and parametric functions.
-See :ref:`derivations:Parametric design curves` for a derivation of some
-parametric curves; for usage information of their implementations, see the
-`glidersim` documentation, such as :py:class:`documentation
-<glidersim:pfh.glidersim.foil.EllipticalArc>`.
+These examples demonstrate how the simplified model makes it easy to represent
+nonlinear foil geometries using simple parametric functions, such as
+constants, ellipticals, and polynomials. All examples use a NACA
+23015 airfoil for the section profiles. For a discussion of the elliptical
+chord length and arc functions, see :ref:`derivations:Parametric design
+curves`; for their implementations, see the `glidersim` documentation, such as
+:py:class:`documentation <glidersim:pfh.glidersim.foil.EllipticalArc>`. The
+source code to generate each example is available at [[FIXME: link to
+source]], making them useful starting points for working with the model.
 
-All examples are generated programmatically. For details of the parameters
-used in each example, the source is available in [[FIXME: link to
-source]].
-
-For the profile surfaces, all examples are using a NACA 23015 airfoil.
+[[**FIXME**: need to explain the diagrams. The dashed green and red lines in
+particular.]]
 
 [[**FIXME**: embed the video in the HTML build]]
 
@@ -1262,9 +1177,6 @@ An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
 
    Profile surface of a simple parafoil.
 
-[[**FIXME**: need to explain the diagrams. The dashed green and red lines in
-particular.]]
-
 [[**FIXME**: good time to explain that if `x` is constant then it's irrelevant.
 One of the more confusing aspects of this geometry is that no matter what you
 define, the central leading edge is always at the origin. Is it accurate to say
@@ -1285,11 +1197,22 @@ Case study
 
    2. Prepare for the wind tunnel test in the next chapter
 
-[[The point is to make it easy to produce target geometries. In particular,
-how well does this geometry map onto actual wings from literature? Introduce
-Belloc's wing, and show how to translate his specs into this parametrization.
-Thankfully, he's using simple linear relationships, so the design curves are
-simple constants and linear interpolators.]]
+The purpose of the `Expanded model`_ is to increase the freedom of how a foil
+is specified. The examples demonstrated how this freedom can be used to design
+complex foil geometries using simple design curves. Another benefit of this
+freedom is that it is more adaptable to the variety of foil specifications
+used in literature.
+
+Parafoil canopies in particular are not convenient to design using the leading
+edge. The geometry from a 2015 parafoil wind tunnel test
+:cite:`belloc2015WindTunnelInvestigation` makes an excellent case study of
+a foil specification from literature that positions the sections using
+alternative reference points on the section chords. Moreover, the geometry
+satisfies the assumptions of the `Simplified model`_, making an implementation
+of the geometry almost trivial.
+
+First, the paper describes the geometry of the full-scale canopy they wish to
+study:
 
 .. list-table:: Full-scale wing dimensions
    :header-rows: 1
@@ -1322,8 +1245,13 @@ simple constants and linear interpolators.]]
      - 6.52
      - --
 
-The physical model was built at a quarter-scale. Physical dimensions and
-positions were provided for the physical model.
+For the wind tunnel test, a physical model was built at a quarter-scale.
+Physical dimensions and positions were provided for the physical model as
+pointwise data with linear interpolation between each point.
+
+.. FIXME: Should I use these tables or just give the explicit equations?
+   They're messy, but I do like the fact that they highlight the fact that you
+   **can** use pointwise data in a linear interpolator just as easily.
 
 .. csv-table:: Model wing geometry data at panel’s ends
    :header: :math:`i`, :math:`y` [m], :math:`z` [m], :math:`c` [m], :math:`r_x`, :math:`r_{yz}`, :math:`\\theta` [deg]
@@ -1342,17 +1270,19 @@ positions were provided for the physical model.
    11,  0.664, -0.097, 0.137, 0.6, 0.6, 3
    12,  0.688,  0.000, 0.107, 0.6, 0.6, 3
 
-It is important to notice the difference between the section numbers used here
-and the section indices used in the parafoil canopy geometry.
+It is important to notice the difference between the section numbers :math:`i`
+used in the paper and the section indices :math:`s` used in the simplified
+model. The section indices are easily calculated using the normalized linear
+distance along the :math:`\left< y, z \right>` points.
 
-Also, the reference data is defined with the wing tips at :math:`z = 0`,
-whereas the chord surface convention places the canopy origin at the leading
-edge of the central section. This is easily accommodated by the chord surface
-implementation, which simply shifts the origin to suit the final geometry.
-
-.. TODO:: Should I use these tables or just give the explicit equations?
-   They're messy, bu I do like the fact that they highlight the fact that you
-   **can** use pointwise data.
+Another important point is that the reference data is defined with the wing
+tips at :math:`z = 0`, whereas the convention of this paper places the canopy
+origin at the leading edge of the central section. This is easily accommodated
+by subtracting the central :math:`z = -0.375` from all :math:`z`-coordinates.
+(The implementation of the simplified model in ``glidersim`` shifts the origin
+automatically.) [[This is the same issue as for normal parametric functions;
+the origin of the parametric functions is arbitrary; the origin of the canopy
+is a predetermined point.]]
 
 For the section profiles, the model uses a NACA 23015 airfoil.
 
@@ -1360,7 +1290,9 @@ For the section profiles, the model uses a NACA 23015 airfoil.
 
    NACA 23015
 
-Inputting the values to the parametric foil geometry produces:
+Calculating the section indices for each point and building a linear
+interpolator for each component as a function of the section index produces
+a set of piecewise-linear design curves:
 
 .. raw:: latex
 
@@ -1376,17 +1308,16 @@ Inputting the values to the parametric foil geometry produces:
 
    Profile surface for Belloc's reference paraglider wing.
 
+[[FIXME: compute the summary specs and compare; area, span, etc]]
+
 
 Discussion
 ==========
 
 * This project requires a parametric geometry that could model complex wing
-  shapes using simple design parameters. The parametrization must make it
-  convenient to approximate existing paraglider canopies using the limited
+  shapes using simple, parametric design functions. The parametrization must
+  make it convenient to model existing paraglider canopies using the limited
   available data.
-
-  [[If you had highly detailed geometry data you could use that, but since we
-  don't we need to use simple functional forms to approximate that detail.]]
 
 * There are two aspects to a geometry model:
 
@@ -1396,11 +1327,12 @@ Discussion
   2. Assigning values to those variables
 
 * This chapter started with *wing sections* to derive a general equation
-  typical of existing geometry models. It decompose the position variable to
+  typical of existing geometry models. It decomposed the position variable to
   allow positioning via an arbitrary reference point. The decomposition
-  decoupled all the variables, making it easier to design parametric functions
-  for each of them. I concluded with my choice of parametrization, and some
-  examples of canopies using that parametrization.
+  allowed each design variable to be decoupled, making it easier to design
+  them using simple parametric functions. I concluded with a simplified model
+  that eliminated most of the extra complexity of the expanded model, and
+  showed some examples of canopies using that parametrization.
 
 * Reference the :ref:`foil_aerodynamics:Case study` (Belloc's wing) and
   :doc:`demonstration` (my Hook3ish)
@@ -1409,26 +1341,12 @@ Discussion
 Advantages
 ----------
 
-[[Is this a discussion of my parametrization of the chord surface, or of
-parametric functions, or...?]]
-
 * Using arbitrary reference points is great because (1) they decouple the
   parameters (so you can change one without needing to modify the others) and
   (2) they allow the designer to directly target the aspects of the design
   they're interested in (eg, you don't have to specify rotation points)
 
 * The equations are simple, so implementation is simple.
-
-* No constraints on the form of the design parameters. You can use (mostly)
-  arbitrary functions for the curves, like linear interpolators or Bezier
-  curves. This makes it easy to design custom curve shapes, and it makes it
-  easy to recreate a geometry that was specified in points (like in Belloc).
-  You can use Bezier curves if you want. [[This probably isn't unique to this
-  parametrization.]]
-
-* As a generative model, it's easy to integrate into a CAD or 3D modeling
-  program that can choose how to sample from the surface. [[Again, this isn't
-  unique to this parametrization.]]
 
 * Parametric design functions have significant advantages over explicit
   functions (ie, specifying a set of points and using linear interpolation):
@@ -1452,18 +1370,33 @@ parametric functions, or...?]]
 Limitations
 -----------
 
-* This geometry does not impose any constraints on self-intersections.
-  Self-intersections can occur if the chord surface is excessively curved (so
-  the surface intersects itself), or if the thickness of an airfoil causes the
-  inner surface of a radius to overlap. [[These are limitations of the general
-  equation that are inherited by this parametrization. If I allowed section
-  yaw then you'd have this issue for that too.]]
+* Problems with the general surface equation
 
-  I've accepted this limitation with the understanding that the equations are
-  intended to be as simple as possible, and reasonable wing designs are
-  unlikely to be impacted. If these geometric constraints are important for
-  a design then the geometry can be validated as an additional post-processing
-  step instead of polluting these equations.
+  * It's too flexible: it doesn't impose any restrictions on the values of the
+    variables, meaning it allows design layouts that can't be (reasonably)
+    analyzed using section coefficient data. It forces all the responsibility
+    on the designer to produce a useable foil definition. [[This isn't a valid
+    criticism; if someone abused it like that then that's their fault.]]
+
+    It also doesn't impose any constraints on self-intersections.
+    Self-intersections can occur if the chord surface is excessively curved
+    (so the surface intersects itself), or if the thickness of an airfoil
+    causes the inner surface of a radius to overlap. [[These are limitations
+    of the general equation that are inherited by this parametrization. If
+    I allowed section yaw then you'd have this issue for that too.]] I've
+    accepted this limitation with the understanding that the equations are
+    intended to be as simple as possible, and reasonable wing designs are
+    unlikely to be impacted. If these geometric constraints are important for
+    a design then the geometry can be validated as an additional
+    post-processing step instead of polluting these equations.
+
+  * It's not flexible enough: it requires the designer to use the section
+    leading edges to position the sections. In many cases it is more
+    convenient to position with other points, such as the quarter-chord,
+    trailing edge, etc. [[If a designer wants to define a foil using some
+    other reference point they cannot do it directly; they must specify the
+    shape indirectly by manually calculating the corresponding leading edge
+    position.]]
 
 * I'm explicitly disallowing section-yaw (so no wedge-shaped segments), and
   assume that the section y-axes are all parallel to the body y-axis when the
@@ -1477,23 +1410,4 @@ Limitations
   simple mapping between inflated and deflated sections, but I never developed
   a suitable transformation to the section profiles.
 
-* [[My choice of section index assumes a symmetric foil.]]
-
-
-EXTRA
-=====
-
-* Using a chord surface to define a wing:
-
-  * Do I like using "O" for the wing origin? It's basically the origin for the
-    entire wing; my only gripe is that I don't like using "O" in math since it
-    looks like a zero. Also, do I need a name for the origin of the chord
-    surface?
-
-  * Wing origin offset: the chord surface uses it's own coordinate system,
-    with its origin defined by the origins of the reference position curves.
-    For the wing I'm defining origin as the leading edge of the central
-    section. Thus, the chord surface positions an extra translation to get the
-    coordinates in the wing's coordinate system. (If the central section has
-    no geometric torsion then it's simply an x-offset `x(0) + r_x(0) * c(0)`,
-    right?)
+* My choice of section index assumes a symmetric foil.
