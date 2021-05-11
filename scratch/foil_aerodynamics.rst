@@ -63,6 +63,14 @@ BRAINDUMP
   chapter needs to select a suitable method, acquire an implementation of that
   method, and validate its performance.
 
+* I like this comment in Belloc's paper: "Theoretical analysis of arched wings
+  is scarce in the literature, partly because the Prandtl lifting line theory
+  is not applicable to arched wings", then in his conclusion, "using a 3D
+  potential flow code like panel method, vortex lattices method or an adapted
+  numerical lifting line seems to be a sufficient solution to obtain the
+  characteristics of a given wing."
+
+  I hadn't thought about the NLLT as a "3D potential flow code".
 
 * "To calculate the aerodynamic forces acting on an airplane, it is necessary
   to solve the equations governing the flow field about the vehicle."
@@ -451,3 +459,109 @@ Validation
   * The flat wake assumption (no wake rollup) tend to overestimate the vortex
     strengths (and thus lift). See pg29
 
+
+
+Non-linear lift
+---------------
+
+This was going to be a "requirement" for selecting and aerodynamic method for
+a variety of reasons:
+
+* Do not assume a constant lift-slope (applies to both the complete and
+  the individual section coefficients)
+
+* Do not assume brake deflections simply shift the section lift curves
+
+* Does not assume small angles of attack
+
+* Non-linearities come from a variety of sources: the geometry (particularly
+  the arc?), viscosity (boundary layer effects are significant for
+  parafoils), non-uniform wind (turning, wind gradients, etc)
+
+  **Don't just assume linear aerodynamics; confirm it.**
+
+  I'm already using a rigid body assumption, so I'm committed to an
+  imperfect model. I accept that I can't handle stall conditions (so flight
+  reconstruction is limited to "average" flight conditions), but the
+  simulator does need graceful degradation when approaching stall
+  conditions.
+
+Thinking about it, it's probably better to invalidate these (linear) types of
+methods based on other criteria, such as "non-longitudinal", "handles high
+alpha", etc. These sorts of methods are based on assumptions that already
+violate my other requirements (which categorize nicely into "geometry" and
+"flow field").
+
+
+Phillips
+========
+
+* Closely related to :cite:`owens1998WeissingerModelNonlinear`, but I think
+  that's just Weissinger's LL method adjusted to use KJ + section coefficients
+  instead of the PBC (which means the LL may be swept but still lies in
+  a plane). I need Phillips' because it also need dihedral. (I'm not sure this
+  is statement is true, that the Weissinger NLL does not model curvature in
+  `z`; careful saying this though, I need to review the papers.)
+
+* "The lifting-line theory of Phillips and Snyder (2000) is in reality the
+  vortex-lattice method applied using only a single lattice element in the
+  chordwise direction for each spanwise subdivision of the wing."
+  (:cite:`bertin2014AerodynamicsEngineers`, pg 383).
+
+  I disagree, they use different boundary conditions to solve for the vortex
+  strengths: the VLM uses flow tangency at the 0.75c position of each panel,
+  whereas Phillips uses the vortex uses the 3D vortex lifting law together
+  with the section coefficients. If you used a VLM and "paneled" the camber
+  surface using single chord-wise panels (as claimed by Bertin), the VLM would
+  be solving for flow tangency along the chord, which would certainly not work
+  correctly (unlike this method).
+
+* Quote from :cite:`owens1998WeissingerModelNonlinear`:
+
+    "In Weissinger's lifting-line method the flow tangency condition [at the
+    three-quarter chord location] determines the bound vortex strength, but in
+    the Weissinger's NLL method the sectional lift data along with the
+    Kutta-Joukowski theorem determines this quantity."
+
+
+Limitations
+-----------
+
+* I misunderstood the model, so my concern here was wrong, but I'm keeping it
+  for my own benefit:
+
+    The NLLT is essentially a VLM, which is a solution to the *lifting-surface
+    theory* problem, which is "an extension of thin-airfoil theory to 3D".
+    *Thin airfoil theory* assumes the airfoil is "thin", but I'm trying to use
+    airfoils with 15% and 18% thickness! According to "Aerodynamics for
+    Engineers" (pg308), airfoil sections "typically have a maximum thickness
+    of approximately 12% of the chord and a maximum mean camber of
+    approximately 2% of the chord". (I know a NACA 24018 has an 18% thickness,
+    not sure about maximum mean camber; probably more than 2% though.) Makes
+    sense that *surface panel methods* (that have no restriction on thickness)
+    might have some advantages.
+
+* Lifting-line theory ignores chordwise distribution of the load; instead, it
+  is concentrated onto a single *bound vortex* along the *lifting-line*.
+
+
+Straight trailing legs
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+Reliance on the Kutta-Joukowski theorem
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Beware using the *Kutta-Joukowski theorem* for the section lift. I don't think
+the KJ theorem holds for separated flows (like when a section exceeds
+`Cl_max`). Thankfully I'm more interested in graceful degradation near stall,
+not perfection. Still, he says it gives good agreement above stall, but it's
+important to remember he hedges on that point: in his words, "the method could
+conceivably be applied, **with caution**, to account approximately for the
+effects of stall."
+
+[[I don't think I'm going to argue this; I don't understand it well enough. If
+you thought of the separated flow as a different airfoil shape with an
+attached flow; wouldn't KJ still apply then? The question is then whether
+a separated flow is equivalent to an alternative airfoil shape. I don't think
+it is, but I'm tired of thinking about it.]]
