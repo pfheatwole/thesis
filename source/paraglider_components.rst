@@ -4,6 +4,10 @@
    each component.
 
 
+* FIXME: where do I define the aerodynamic *control points*? (They're part of
+  my "design language" for the components.)
+
+
 ***************************
 Paraglider component models
 ***************************
@@ -11,56 +15,39 @@ Paraglider component models
 A paraglider is a system of three components: a canopy, a harness, and
 suspension lines that connect the canopy to the harness. A paraglider dynamics
 model is assembled from the models of its components. Each component model
-must define any inertial properties, relevant control inputs, and forces and
-moments necessary to determine its behavior during a flight.
+must define any inertial properties, relevant control inputs, and forces
+necessary to determine its behavior during a flight.
 
 This chapter presents basic models for each component, favoring simplicity
-whenever possible. It defines all the variables required by a paraglider
-dynamics model using the minimum complexity necessary to achieve satisfactory
-performance (excluding the reference point used to compute the system
-dynamics).
-
-
-.. Roadmap
-
-* Establish the modeling requirements in the context of flight reconstruction
-
-* Define the aerodynamic *control points*. (They're part of my "design
-  language" for the components.)
-
-* Component geometries, inertias, control points, and dynamics (including any
-  control inputs)
-
+whenever possible. [[The biggest simplifications result from the fact that
+:ref:`introduction:Functionality` explicitly stated that the model does not
+need to cover scenarios that involve wing deformations, which allow these
+component models to use rigid body assumptions.]]
 
 
 Modeling requirements
 =====================
 
-* The introduction of this paper established the
-  :ref:`introduction:Functionality` requirements for a paraglider system model
-  to be suitable for flight reconstruction of typical flight scenarios.
-  A system model that meets those requirements must be assembled from equally
-  functional component models.
-
-  [[For example, I declared that I wanted to model scenarios that included
-  weight shift, so at least one of the component models must include a weight
-  shift control in its dynamics.]]
+The introduction of this paper established the
+:ref:`introduction:Functionality` that a paraglider system model must provide
+in order for it to enable flight reconstruction of typical flight scenarios.
+A system model that meets those requirements must be assembled from equally
+functional component models.
 
 
-* [[This section is about what I'm **not** choosing to model as much as it is
-  about what I am. The physical components are complicated, but it's not
-  necessary to model all that complexity to satisfy the model requirements.]]
+[[This section is about what I'm **not** choosing to model as much as it is
+about what I am; the physical components are complicated, but it's not
+necessary to model all that complexity to satisfy the model requirements. For
+example, I declared that I wanted to model scenarios that included weight
+shift, so at least one of the component models must include a weight shift
+control in its dynamics, but because I'm assuming a rigid canopy I will be
+neglecting deformations due to weight shift; thus, weight shift is modeled
+entirely via the harness model. I do want to account for the accelerator, but
+the "rigid canopy" means I will be neglecting "flattening" of the profiles;
+accelerator is modeled entirely via the suspension lines model.]]
 
-* [[I'm not sure if this section is warranted or not. Do the components
-  interact in a way that influences their requirements?
 
-  For example, I'm making a rigid body assumption for the canopy. Does that
-  affect the suspension line model? (I don't have to model how weight shift
-  deformations affect the accelerator.) How does it affect weight shift? (I
-  think it means the effect of weight shift doesn't depend on chest strap
-  width.)
-
-  Hm, it might be a good place to declare the aerodynamic control points.]]
+Misc thoughts:
 
 * Rigid body assumptions
 
@@ -75,32 +62,6 @@ Modeling requirements
 
 * [[Weight shift control is in, riser controls are out]]
 
-
-* Topics:
-
-  * Paraglider wing
-
-    * How the connecting lines produce the designed canopy shape
-
-    * Braking
-
-    * Accelerator
-
-    * Air intakes
-
-    * Ribs (profiles, v-ribs, etc)
-
-    * Surface materials
-
-  * Harness
-
-  * Composite system
-
-    * Reference point `R` (I chose the riser midpoint `RM`)
-
-    * Degrees of freedom
-
-  * More? (This is a scratch outline.)
 
 * [[Should this go below related work? Makes sense if I specify my
   requirements up front so I can point out when existing literature fails to
@@ -118,118 +79,57 @@ Modeling requirements
   using a steady-state method for unsteady scenarios.)
 
 
-Related work
-============
-
-* This paper is specifically about paragliding wings, but in terms of the
-  aerodynamics it is closely related to *parafoil-payload systems* (primarily
-  of interest to the military and aerospace organizations) and *kites* (kite
-  boarding, airborne wind energy systems, etc)
-
-
-* Canopy Aerodynamics
-
-  * Gonzalez 1993, :cite:`gonzalez1993PrandtlTheoryApplied`
-
-  * Belloc, :cite:`belloc2015WindTunnelInvestigation`
-
-  * :cite:`kulhanek2019IdentificationDegradationAerodynamic`
-
-  * :cite:`belloc2015WindTunnelInvestigation`
-
-  * :cite:`belloc2016InfluenceAirInlet`
-
-  * :cite:`babinsky1999AerodynamicPerformanceParagliders`
-
-  * Cells (distortions, etc):
-
-    * :cite:`kulhanek2019IdentificationDegradationAerodynamic`
-
-    * :cite:`lolies2019NumericalMethodsEfficient`
-
-
-* Paraglider Dynamics
-
-  * Babinsky 1999, :cite:`babinsky1999AerodynamicPerformanceParagliders`
-
-  * Slegers, :cite:`gorman2012EvaluationMultibodyParafoil`
-
-  * :cite:`ward2014ParafoilControlUsing`
-
-  * Apparent mass
-
-    * :cite:`lissaman1993ApparentMassEffects`
-
-    * :cite:`thomasson2000EquationsMotionVehicle`
-
-    * :cite:`barrows2002ApparentMassParafoils`
-
-
 Canopy
 ======
 
-[[This section describes what goes into the dynamics function: velocities,
-gravity, control inputs, inertia, air density, etc.]]
+.. This section describes what goes into the dynamics function: velocities,
+   gravity, control inputs, inertia, air density, etc.
 
 
 Surfaces
 --------
 
-[[In order to compute the inertia and additional viscous drag due to the air
-intakes, I need to specify the extents of the upper and lower surfaces.]]
+.. Define the upper and lower surfaces. They are necessary for computing the
+   surface mass, surface inertia, internal volume, and viscous drag due to air
+   intakes.
+
+[[FIXME: review/rewrite]]
+
+The extents of the upper and lower surfaces depend on the design of the air
+intakes. Typically the upper surface of a paraglider wing wraps beyond the
+leading edge of the section profile, and the lower surface covers the region
+from the downstream edge of the air intakes until the trailing edge of the
+sections.
 
 
 Inertia
 -------
 
-[[For a parafoil, there are three masses: the *solid mass*, from the
-structural materials, the *air mass*, from the air enclosed in the wing, and
-the *apparent mass*, from the acceleration of the wing relative to the
-surrounding air.]]
-
-[[The "canopy geometry" was only describing the pure geometric shape, not the
-physical implementation of that shape. Now that I'm considering the physical
-model, I need to extend that geometry with physical attributes. I'm not crazy
-about defining the surfaces, etc, here, but if I'm doing the apparent mass
-here then I might as well do the solid and air masses as well.]]
-
-The canopy dynamics depend on two things:
-
-1. The canopy forces and moments due to the air and gravity
-
-2. The canopy inertia
-
-The forces and moments were provided by the model in :doc:`foil_aerodynamics`.
-The inertia can be calculated using the geometry in :doc:`foil_geometry`.
-
-The canopy geometry in :doc:`foil_geometry` is a purely geometric description
-of the idealized design target of a physical parafoil canopy, and must be
-combined with density information to calculate the system inertia matrices.
-
-The canopy inertia depends on contribution from the *solid mass* (surface
-materials), *air mass*, and the *apparent mass*.
-
-
-.. Define the surfaces and internal volume
-
-The extent of the upper and lower surfaces depends on the design of the air
-intakes. Typically the upper surface of the paraglider wing wraps beyond the
-leading edge of the airfoil until the start of the air intakes. The lower
-surface covers the region from the downstream edge of the air intakes until
-the trailing edge of the sections.
+A dynamics model requires the inertia of an object in order to calculate its
+acceleration. For a parafoil canopy in-flight, the effective inertia is
+produced by a combination of three different masses: a *solid mass*, from the
+structural materials, an *air mass*, from the air enclosed in the wing, and an
+*apparent mass*, from the acceleration of the wing relative to the surrounding
+air. Some texts refer to the combination of the solid and air masses as the
+*real mass* :cite:`barrows2002ApparentMassParafoils`.
 
 
 Solid mass
 ^^^^^^^^^^
 
-[[Total mass and inertia matrix of the upper and lower surface materials]]
+The solid mass is the surface and structural materials that comprise the foil.
+A rigorous model would include the upper and lower surfaces, ribs, half-ribs,
+v-ribs, horizontal straps, tension rods, tabs (line attachment points),
+stitching, etc, but for this section the calculation is restricted to the
+upper and lower surface materials. (See :ref:`demonstration:Model` for
+a discussion of this simplification.)
 
-[[What about the mass of the ribs?]]
-
-Ref: :ref:`derivations:Area and Volume of a Mesh`
-
-
-Upper and lower surface masses:
+Assuming the surface materials are uniform, the inertias of the external
+surface materials can be determined by first calculating the total area
+:math:`a` and areal inertia matrix :math:`\mat{J}` for each surface (using the
+method in :ref:`derivations:Area`), then scaling them by the areal densities
+:math:`\rho` of each surface. The result is the total upper and lower surface
+masses:
 
 .. math::
    :label: surface_masses
@@ -239,8 +139,7 @@ Upper and lower surface masses:
      m_{\mathrm{l}} &= \rho_{\mathrm{l}} a_{\mathrm{l}}
    \end{aligned}
 
-
-Upper and lower surface inertias:
+And the upper and lower surface inertias about the canopy origin :math:`O`:
 
 .. math::
    :label: surface_inertias
@@ -250,40 +149,38 @@ Upper and lower surface inertias:
      \mat{J}_{\mathrm{l}/\mathrm{O}} &= \rho_{\mathrm{l}} \mat{J}_{a_l/\mathrm{O}}
    \end{aligned}
 
-Where the :math:`a` and :math:`\mat{J}` are the areas and areal inertias for
-the canopy surfaces (from :ref:`derivations:Area`).
-
 
 Air mass
 ^^^^^^^^
 
-Ref: :ref:`derivations:Area and Volume of a Mesh`
+Although the weight of the air inside the canopy is cancelled by its buoyancy,
+it still possesses significant mass. When the canopy is accelerated the
+enclosed air is accelerated at the same rate, and must be included in the
+inertial calculations. (This model neglects surface porosity; although the
+canopy is porous, and thus constantly receiving an inflow of air through the
+intakes, the leakage is slow enough that the volume of air can be treated as
+constant.)
 
-
-[[As the canopy accelerates, the air inside must accelerate at the same rate,
-and so must be included in the inertial calculations of the canopy. (This
-assumes the air is incompressible, which is reasonable at these speeds, and
-neglects surface porosity, so the enclosed air travels with the wing.)
-Although the canopy is porous, and thus constantly receiving an inflow of air
-through the intakes, the leakage is slow enough that the volume of air can be
-treated as constant.]]
-
-Mass of the enclosed air:
+Similar to the surface masses, the internal volume and its unscaled inertia
+about the canopy origin is easily computed from the :doc:`foil_geometry` using
+the method in :ref:`derivations:Volume`. Given the internal volume :math:`v`
+and the current air density :math:`\rho_{\mathrm{air}}`, the total mass of the
+enclosed air :math:`m_{\mathrm{air}}` is simply:
 
 .. math::
    :label: air_mass
 
    m_{\mathrm{air}} = \rho_{\mathrm{air}} v
 
-Inertia matrix of the enclosed air:
+Similarly, for the inertia matrix of the enclosed air about the canopy origin
+:math:`O`:
 
 .. math::
    :label: air_inertia
 
    \mat{J}_{\mathrm{air}/O} = \rho_{\mathrm{air}} \mat{J}_{\mathrm{v}/\mathrm{O}}
 
-Where :math:`v` and :math:`\mat{J}_\mathrm{v}` are the volume and volume
-inertia for the inside the canopy (from :ref:`derivations:Volume`).
+.. FIXME: explicitly note that rho is a function of time?
 
 
 Apparent Mass
@@ -305,15 +202,14 @@ fluid dynamics, after all. The problem is using aerodynamics coefficients that
 were produced under steady-state conditions to estimate accelerated (unsteady)
 motion.]]
 
-In static scenarios, where the vehicle is not accelerating relative to the
-fluid (ie, changing speed and/or direction), this exchange of momentum is
-traditionally summarized by coefficients that describe how the forces and
-moments on the wing change with the air velocity. But for unsteady flows, where
-the vehicle is accelerating relative to the fluid, the net force on the vehicle
-can no longer be equated to the product of the vehicle's mass and acceleration.
-Instead, when a net force is applied to an object in a fluid, it will
-accelerate more slowly than the object would have in isolation; it is as if the
-vehicle has increased its mass:
+In static scenarios, where the vehicle is not changing speed or direction
+relative to the fluid, this exchange of momentum can be summarized with
+coefficients that describe how the forces and moments on the wing change with
+the air velocity. But for unsteady flows, where the vehicle is accelerating
+relative to the fluid, the net force on the vehicle is no longer simply the
+product of the vehicle's "real" mass and acceleration. Instead, when a net
+force is applied to an object in a fluid, it will accelerate more slowly than
+the object would have in isolation, as if the vehicle has increased its mass:
 
 .. math::
 
@@ -338,65 +234,117 @@ volume. Unlike the inertia due to real mass, apparent inertia is anisotropic,
 and the diagonal terms of the apparent mass matrix are independent. [[FIXME:
 it's related to this projected surface area; that's probably not obvious.]]
 
-An exact calculation of the apparent mass for an arbitrary geometry with
-respect to an arbitrary reference point is not trivial. For a classic
-discussion of the topic, see :cite:`lamb1945Hydrodynamics`. A more recent
-reference discussing apparent mass in the context of parafoils is
+Calculating the apparent mass of an arbitrary geometry is difficult. For
+a classic discussion of the topic, see :cite:`lamb1945Hydrodynamics`. For
+a more recent discussion of apparent mass in the context of parafoils, see
 :cite:`lissaman1993ApparentMassEffects`, which used an ellipsoid model to
-establish a parametric form commonly used in parafoil-payload literature. An
-updated derivation in :cite:`barrows2002ApparentMassParafoils` added
-corrections to the ellipsoid model.
+establish a parametric form commonly used in parafoil-payload literature
 
-This paper uses the method from :cite:`barrows2002ApparentMassParafoils`. For
-a replication of that method for estimating the apparent mass matrix of
-a parafoil, but given in the notation of this paper, see
-:ref:`derivations:Apparent Mass of a Parafoil`. For the purpose of defining
-a dynamics model incorporating apparent mass, the relevant detail from that
-derivation is that the reference point for the dynamics must lie in the
-xz-plane of the canopy.
+This paper uses an updated method from
+:cite:`barrows2002ApparentMassParafoils` which added corrections to the
+ellipsoid model of :cite:`lissaman1993ApparentMassEffects`. (For a replication
+of the equations in that method but given in the notation of this paper, see
+:ref:`derivations:Apparent mass of a parafoil`.) When using the method to
+define a dynamics model that accounts for the apparent mass, the most
+important detail from that derivation is that the reference point for the
+dynamics must lie in the xz-plane of the canopy. [[FIXME: also, there are
+limitations to the method, such as its strong assumptions that the foil has
+circular arc, uniform thickness, uniform chord length, etc.]]
 
 
 Controls
 --------
 
-[[Define the control scheme expected by the dynamics model equations.
-Specifically, :math:`\delta_{bl}` and :math:`\delta_{br}`. I'm not going to
-define the brake deflection model here; leave that up to the model designer,
-such as in :doc:`demonstration`.]]
+* A parafoil is controlled by downward deflections of its section trailing
+  edges.
+
+* The deflection increases the section drag. Symmetric deflections decrease
+  the foils airspeed, and asymmetric deflections control the foils direction.
+
+* The aerodynamics of the foil depend on the geometry of the deformed
+  profiles.
+
+* Computing the true deflected profile surface of a parafoil would require
+  a significantly more complex model that can compute the 3D foil
+  deformations; something like FSI. Instead, a much simpler approximation is
+  to assume that the deformed profile can be predicted independent of the line
+  geometry.
+
+  Assuming some predetermined shape allows the section coefficients for that
+  shape to be determined separately (either by measurement or something like
+  XFOIL).
+
+* To use the deformed profiles, we need a way to index them. I chose to index
+  them with the deflection angle :math:`\delta_f`.
+
+
+.. Defining the deflection angle for a section
+
+Classic airfoil software, such as XFOIL, are primarily designed for rigid
+wings, and so it is common to define discrete *flaps* using a hinge point at
+some fixed position along the chord:
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_hinge.*
+
+   Deflection angle relative to a fixed hinge point.
+
+This definition is troublesome for a flexible wing, since there is no fixed
+hinge point; the deflection occurs as a variable arc between the trailing edge
+to some point on the chord. A more convenient definition is the total
+deflection angle produced by the trailing edge:
+
+.. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_arc.*
+
+   Deflection angle relative to the leading edge.
+
+This definition moves some of the complexity out of the implementation and
+into how the set of coefficients are defined. Without recording a fixed hinge
+point, the paraglider model can remain oblivious to how the deflection was
+achieved. [[On the plus side, this constraint greatly simplifies the model,
+and sets of coefficients can easily be generated for different deflection
+geometries.]]
+
+
+Misc:
+
+* The canopy deflection angles are unusual in that, although they control the
+  canopy aerodynamics model, they are not inputs to the system model. Instead,
+  they are used indirectly: the system inputs are the left and right
+  `Brakes`_, which the bridle geometry use to determine the deflection
+  distribution along each semispan.
+
+* Simulating a braking wing requires the geometry for the deflected airfoils.
+  The geometry can either be used directly, as would be done by *vortex
+  lattice* or *computational fluid dynamics* methods, or it can be used
+  indirectly, as is done with lifting-line methods. Lifting-line methods use
+  the section coefficients, which means solving for the 2D section
+  coefficients before estimating the 3D section forces and moments.
 
 
 Aerodynamics
 ------------
 
-[[The foil geometry is an idealized "design target". The actual canopy has air
-intakes and brake deflections. I need to explain how those are accounted for
-in the section coefficients. (I can defer showing examples of deflected
-section profiles until :ref:`demonstration:Section profiles`).]]
+[[An aerodynamic model was developed in :doc:`foil_aerodynamics`, but that was
+for an idealized "design target". The actual canopy has air intakes and brake
+deflections. I need to explain how those are accounted for in the section
+coefficients. (I can defer showing examples of deflected section profiles
+until :ref:`demonstration:Section profiles`).]]
 
 
 Suspension lines
 ================
 
-* Primary functions: positioning the harness relative to the canopy, adjusting
-  the harness position in response to accelerator inputs, and determining the
-  brake deflection distribution in response to brake inputs.
+The suspension lines are responsible for controlling the shape of the arc,
+positioning the harness relative to the canopy (as well as adjusting the
+harness position in response to accelerator inputs), and determining the brake
+deflection distribution in response to brake inputs.
 
-* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: mentions some
-  papers on line drag coefficients, start here
+* The network of suspension lines is called the *bridle*.
 
-* I'm not including explicit models for the bridle. The canopy geometry
-  assumes the existence of a bridle that will produce the specified shape. At
-  most, I've added control points and drag coefficients for the lines. Turns
-  out it has a significant (ie, not massive but still noticeable) impact on
-  sensitive things like the glide ratio.
-
-* I'm lumping all the line drag into a single point for each half of the wing.
-  I'm assuming isotropic drag because drag due to lines naturally becomes
-  insignificant as alpha increases (when aerodynamic resistance in the
-  z-direction becomes dominated by the canopy anyway), and the wing can't
-  operate at a particularly high angle of attack anyway.
-
-* :cite:`iosilevskii1995CenterGravityMinimal`
+* I'm not including an explicit model for the bridle. The canopy geometry
+  assumes the existence of a bridle that will produce the specified shape, but
+  since I'm assuming a rigid canopy the only thing that really matters is the
+  harness position.
 
 * :cite:`altmann2015FluidStructureInteractionAnalysis` discusses using
   *fluid-structure interaction* to optimize the line cascading to optimize
@@ -421,6 +369,9 @@ Suspension lines
   * Benedetti :cite:`benedetti2012ParaglidersFlightDynamics` uses the same
     idea for positioning the harness as I do, except he uses relative `x` and
     absolute `z` whereas I use relative for both.
+
+* The lines from the canopy attach together in a *cascade* that terminates at
+  the *risers*.
 
 
 For real wings, the line geometry is a major factor in wing performance, but
@@ -451,7 +402,12 @@ lengths might be affected by the accelerator input.]]
 Riser position
 --------------
 
-[[Discuss riser position `RM` as a function of the accelerator.]]
+* [[Does this need its own section? **Isn't this simply defining the riser
+  midpoint `RM`?** The position is controlled by the `Accelerator`_.]]
+
+* :cite:`iosilevskii1995CenterGravityMinimal` and
+  :cite:`benedetti2012ParaglidersFlightDynamics` discuss how positioning the
+  center of mass impacts glider trim and stability.
 
 
 Controls
@@ -463,102 +419,75 @@ Controls
 Brakes
 ^^^^^^
 
-A paraglider is equipped with two handles at the ends of sections of the
-*bridle* (line geometry) that are connected to the trailing edges of the
-canopy. The pilot can use these controls to deflect the trailing edge
-downward, increasing drag. Symmetric deflections slow the wing down, and
-asymmetric deflections cause the wing to turn.
+Near the risers, two handles are attached to portions of the bridle that
+connect to the trailing edges of each half of the canopy. The pilot can use
+these controls to deflect the trailing edge downward, increasing drag.
+Symmetric deflections slow the wing down, and asymmetric deflections cause the
+wing to turn.
 
-Topics:
 
-* The deflection geometry of individual airfoils
+A parafoil canopy can be manipulated by pulling on any of its many suspension
+lines, but two of the lines in particular are dedicated to slowing the wing or
+controlling its turning motion. [[Trailing edge deformations due to braking
+are the only foil deformations supported by this model.]] Known as the
+*brakes* or *toggles*, these controls induce downward trailing edge
+deflections along the left and right semispans.
 
-* Deflection distribution as a function of section index.
 
-* The geometry of the bridle dictates the deflection distribution.
+For this project, the :ref:`paraglider_systems:System dynamics` models expect
+the suspension line model to compute the trailing edge deflection
+:math:`\delta_f = f(s, \delta_{bl}, \delta_{br})` as a function of independent
+left and right control inputs, :math:`0 \le \left\{ \delta_{bl}, \delta_{br}
+\right\} \le 1`. The deflection distribution produced by the controls along
+each semispan are up to the model designer; see :doc:`demonstration` for an
+example.
 
-* Simulating a braking wing requires the geometry for the deflected airfoils.
-  The geometry can either be used directly, as would be done by *vortex
-  lattice* or *computational fluid dynamics* methods, or it can be used
-  indirectly, as is done with lifting-line methods. Lifting-line methods use
-  the section coefficients, which means solving for the 2D section
-  coefficients before estimating the 3D section forces and moments.
-
-Good reference images for brake deflections:
 
 .. figure:: figures/paraglider/geometry/Wikimedia_Paragliding.jpg
 
-   Brake deflection, example 1.
+   Asymmetric brake deflection.
 
    `Photograph <https://commons.wikimedia.org/wiki/File:Paragliding.jpg>`__  by
    Frédéric Bonifas, distributed under a CC-BY-SA 3.0 license.
 
 .. figure:: figures/paraglider/geometry/Wikimedia_ApcoAllegra.jpg
 
-   Brake deflection, example 2.
+   Symmetric brake deflection.
 
    `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`__ by
    Wikimedia contributor "PiRK" under a CC-BY-SA 3.0 license.
 
 
-Mathematical model
-~~~~~~~~~~~~~~~~~~
 
-It is computationally prohibitive to solve for the aerodynamic coefficients at
-each timestep. Instead, a set of coefficients can be produced for a set of
-deflection angles, and then the aerodynamics method can use linear
-interpolation between the individual coefficient solutions.
+The canopy aerodynamics are a function of the deflection angle `delta_f` at
+each section. They vary along the span of the wing as function of the brakes.
 
-Interpolating between coefficient solutions requires an index; the most
-natural is the deflection angle, :math:`\delta_f`. This means a standard
-definition must be chosen for the *deflection angle*.
-
-Classic airfoil software, such as XFOIL, are primarily designed for rigid
-wings, and so it is common to define flaps using a fixed hinge point at some
-point along the chord:
-
-.. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_hinge.*
-
-   Deflection angle relative to a fixed hinge point.
-
-This definition is troublesome for a flexible wing, since there is no fixed
-hinge point; the deflection occurs as a variable arc between the trailing edge
-to some point on the chord. A more convenient definition is the total
-deflection angle produced by the trailing edge:
-
-.. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_arc.*
-
-   Deflection angle relative to the leading edge.
-
-This definition moves some of the complexity out of the implementation and
-into how the set of coefficients are defined. Without recording a fixed
-hinge point, the paraglider model is oblivious to how the deflection was
-achieved. On the plus side, this constraint greatly simplifies the model,
-and sets of coefficients can easily be generated for different deflection
-geometries without requiring changes to the code.
-
-To lookup the coefficients using the interpolator, the simulator requires
-the deflection angles. That is, it needs a function to produce the
-deflection angle distribution across the wing sections :math:`s` as
-a function of the brakes:
+My simplified model chose to assume the profiles with deflected edges can be
+approximated independently of the actual line geometry. It generates a set of
+profiles with deflected trailing edges for a sequence of deflection angles,
+then interpolates between them. The set of profiles require an index to say
+which profile to use given a particular brake input. I chose the deflection
+angle. Now, I need the line geometry to generate  the deflection angle
+distribution across the wing sections as a function of the brakes:
 
 .. math::
+   :label: deflection angle
 
-   \delta_f = f \left( s, \delta_{Bl}, \delta_{Br} \right)
+   \delta_f = f \left( s, \delta_{bl}, \delta_{br} \right)
 
-Where :math:`s` is the *section index*, :math:`\delta_{Bl}` is the
-percentage of left brake, and :math:`\delta_{Br}` is the percentage of right
-brake.
+Where :math:`s` is the *section index* and :math:`0 \le \delta_{bl},
+\delta_{br} \le 1` is the percentage of left and right brake inputs.
 
 A physically accurate deflection distribution requires a proper line
 geometry for the wing, but because the line geometry was not a focus for
 this project, an approximation is used instead.
 
-For the moment, I've been using a cubic polynomial for the distribution. You
-choose a starting section (where brake deflections begin), a peak section
-(where the deflection is greatest), and a peak value (the magnitude of the
-maximum deflection angle under maximum control input). The
-applicability/accuracy of this crude model depends on the arc anhedral:
+The simplest model with reasonable accuracy is a cubic polynomial. The
+parameters of the model are a starting position (the section index where brake
+deflections begin), a peak position (the section index where the deflection is
+greatest), and a peak value (the magnitude of the maximum deflection angle
+under maximum control input). [[FIXME: this model assumes zero deflection at
+the wing tip?]] The accuracy of this crude model depends on the arc anhedral:
 
 .. figure:: figures/paraglider/geometry/brake_deflections_anhedral23_Bl025_Br1.*
 
@@ -729,55 +658,70 @@ Aerodynamics
 ------------
 
 [[Although small, I can't reasonably neglect the line drag, so I've lumped it
-into two aerodynamic control points.]]
+into two aerodynamic control points, one for each semispan.
+
+I'm assuming isotropic drag because drag due to lines naturally becomes
+insignificant as alpha increases (when aerodynamic resistance in the
+z-direction becomes dominated by the canopy anyway), and the wing can't
+operate at a particularly high angle of attack anyway.
+
+Turns out it has a significant (ie, not massive but still noticeable) impact
+on sensitive things like the glide ratio. I'm using the line drag coefficients
+suggested in :cite:`kulhanek2019IdentificationDegradationAerodynamic`, which
+also mentions some papers on line drag coefficients.]]
 
 
 Harness
 =======
 
-The harness is the seat for the pilot. The bridle suspends the harness and
-pilot from the lines using attachments to two *risers*. A tensioning strap at
-chest level between the two risers provides pilot safety during violent
-maneuvers, but it also allows the pilot to choose a balance between stability
-and wing responsiveness to weight shift control.
+.. What is the harness?
 
-[[In my case, I'm not modeling the chest width. Probably not a big deal
-because turbulence is such a high frequency signal I'd never be able to
-estimate it from IGC data anyway.]]
+* The harness is the seat for the pilot, suspended from the risers.
 
-* This model includes the mass of the pilot. Moving the mass of the pilot is
-  a function of *weight shift* control.
 
-* An accurate geometry of the harness and pilot combination would be complex
-  model accurately, but a simple spherical model can be used to estimate the
-  inertia and dynamics without significant loss of accuracy.
+.. What does it do?
 
-* See :cite:`wild2009AirworthinessRequirementsHanggliders`, pg26 for
-  a discussion of harness dimensions
+* Suspends the pilot from the risers
 
-* :cite:`kulhanek2019IdentificationDegradationAerodynamic`: uses Virgilio's
-  presentation; I guess I'll do the same. That model treats the harness as
-  a sphere with an isotropic drag coefficient normalized by cross-sectional
-  area. Also, to support weight shift I'm making the y-coordinate of the
-  center of mass be a function of :math:`\delta_w`.
+* Safety straps over the legs and chest ensure the pilot cannot fall from the
+  harness in turbulent conditions.
 
-  Review the docstring for `harness.py:Spherical`.
+* A tensioning strap at chest level between the two risers provides pilot
+  safety during violent maneuvers. The chest strap also controls the
+  horizontal riser separation distance, which allows the pilot to adjust the
+  balance between stability (sensitivity to turbulence) and wing
+  responsiveness to weight shift control.
+
+* Provides places (flight deck, pockets) to store gear, devices, etc
+
+* Holds the reserve chute
+
+* Often includes padding or airbag protection in the event of a crash.
+
+
+.. How am I modeling it?
+
+Despite the geometrically chaotic nature of the payload, this project calls
+upon a time-honored solution from physics: it considers the harness as
+a sphere. For this model, the harness and pilot are not considered separately:
+the pilot is accounted for by simply adding their mass to the mass of the
+harness. The harness and pilot are collectively referred to as the *payload*.
 
 
 Inertia
 -------
 
-The harness is modeled as a solid sphere of uniform density. With a total mass
+The payload is modeled as a solid sphere of uniform density. With a total mass
 :math:`m_p`, center of mass :math:`P`, and projected surface area :math:`S_p`,
-the moment of inertia is:
+the moment of inertia about the payload center of mass is:
 
 .. math::
 
    \mat{J}_{p/P} =
      \begin{bmatrix}
-      J_{xx} & 0 & 0 \\
-      0 & J_{yy} & 0 \\
-      0 & 0 & J_{zz}
+       J_{xx} & 0 & 0 \\
+       0 & J_{yy} & 0 \\
+       0 & 0 & J_{zz}
      \end{bmatrix}
 
 where
@@ -786,29 +730,53 @@ where
 
    J_{xx} = J_{yy} = J_{zz} = \frac{2}{5} m_p r_p^2 = \frac{2}{5} \frac{m_p S_p}{\pi}
 
-[[**FIXME**: use `p` subscript for payload? It's what I use in the code]]
-
 
 Controls
 --------
 
-[[Discuss modeling weight shift as a displacement of the harness center of
-mass :math:`P`]]
+Harnesses allow a pilot to shift their weight left and right, causing an
+imbalanced load on each semispan. (For a real wing this maneuver also causes
+a vertical shearing stress along the center of the foil, but due to the rigid
+body assumption this deformation will be neglected.) The weight imbalance
+causes the canopy to roll towards the shifted mass, causing a gentle turn in
+the desired direction. Although the magnitude of the turn is less than can be
+produced by the brakes, this maneuver is more aerodynamically efficient and is
+commonly used.
+
+For a spherical model, *weight shift* control can be modeled as a displacement
+of the payload center of mass :math:`P`. The pilot can only shift a limited
+distance :math:`\kappa_w` in either direction, so a simple choice of control
+variable is :math:`-1 \le \delta_w \le 1`. Assuming the harness is initially
+centered in the canopy xz-plane, the displacement is :math:`\Delta
+y = \delta_w \kappa_w`. The displacement of the center of mass produces
+a moment on the risers that rolls the wing and induces the turn.
 
 
 Aerodynamics
 ------------
 
-FIXME
+Harness drag coefficients were studied experimentally in
+:cite:`virgilio2004StudyAerodynamicEfficiency`. The author measured several
+harness models in a wind tunnel and converted the results into aerodynamic
+coefficients normalized by the cross-sectional area of the sphere. The drag
+coefficient can be used directly, treating it as a constant, or for a more
+sophisticated approach the coefficient can be adjusted to account
+(approximately) for angle of attack and Reynolds number
+:cite:`kulhanek2019IdentificationDegradationAerodynamic`.
+
+One oddity is that the spherical nature of the model implies isotropic drag.
+Although this is clearly a poor assumption for significantly non-spherical
+object, the fact that the wind is rarely more than 15 degrees of the x-axis
+means the such a "naive" drag coefficient will remain fairly accurate over the
+typical range of operation (regardless of the poor geometric accuracy). This
+assumption also has the downside that it will never produce an aerodynamic
+moment about the payload center of mass, but in the absence of experimental
+data on the magnitude of the missing moment, this model continues to ignore
+it.
 
 
 Discussion
 ==========
-
-[[FIXME: these were here from before the refactor and obviously need review.]]
-
-* [[In `glidersim` I'm combining the canopy and suspension lines into a single
-  model, the `ParagliderWing`.]]
 
 
 Limitations
