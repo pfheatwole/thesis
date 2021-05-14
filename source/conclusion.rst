@@ -12,6 +12,9 @@ convince them the paper is worth reading.]]
 
 * Derivations available in appendices.
 
+* Modular system design (doesn't simplify the equations by merging the
+  components; each component is independent, as much as reasonable possible)
+
 * Code available on Github using open source libraries
 
   * Why Python?

@@ -1083,7 +1083,7 @@ Both systems have the riser connection point :math:`RM` at a fixed position,
 and the force only exists to maintain the fixed relative positioning.
 
 .. math::
-   :label: model9a_spring_moment
+   :label: model9a_linear_spring_moment
 
    \vec{g}_{RM} =
      \begin{bmatrix}
@@ -1098,7 +1098,11 @@ Where :math:`\vec{\omega}_{p/b}^p = \left< \phi, \theta, \gamma \right>` are
 the angular rates of the payload, :math:`^p \dot{\vec{\omega}}_{p/b}^p
 = \left< \dot{\phi}, \dot{\theta}, \dot{\gamma} \right>` are the angular
 accelerations of the payload, and the :math:`\kappa` are the stiffness and
-dampening coefficients of the spring-damper model.]]
+dampening coefficients of the spring-damper model.
+
+This is a very simple model. A better model would need to account for the
+coupling between dimensions, and should really be a function of the riser
+strap width.]]
 
 Combining equations :eq:`model9a_momentum_derivatives1` and
 :eq:`model9a_momentum_derivatives2` and rewriting as a linear system provides

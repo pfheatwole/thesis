@@ -33,6 +33,9 @@ the harness, line geometry, are replaced with simplified models.
 Implementations of the simplified models are provided as part of the
 `glidersim` package.
 
+[[FIXME: review how well the resulting model matches the specs (all
+dimensions: lengths, areas, masses, etc)]]
+
 
 Available data
 --------------
