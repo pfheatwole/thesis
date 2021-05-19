@@ -131,9 +131,11 @@ lines = gsim.paraglider_wing.SimpleLineGeometry(
     average_line_diameter=0,
     r_L2LE=[0, 0, 0],
     Cd_lines=0,
-    s_delta_start=0,  # unused
-    s_delta_max=0.75,  # unused
-    delta_max=0,  # unused
+    s_delta_start0=0,  # unused
+    s_delta_start1=0,  # unused
+    s_delta_stop0=1,  # unused
+    s_delta_stop1=1,  # unused
+    delta_d_max=0,  # unused
 )
 
 wing = gsim.paraglider_wing.ParagliderWing(
