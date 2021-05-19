@@ -50,12 +50,16 @@ def right_turn(delta_b0, delta_br, delta_w, px, py, mag):
 def main():
     paragliders = util.build_paragliders(use_apparent_mass=True)
 
+    # Positioning the thermal and causing the solver to fail and retry with
+    # the default solution is VERY sensitive to the parameters of the glider.
+    # Changing just about anything of the glider model (the brake geometry,
+    # for example) will probably require updating these parameters.
     inputs, T = right_turn(
         delta_b0=0.5,
-        delta_br=0.95,
+        delta_br=1.00,
         delta_w=0.5,
-        px=120 + 12,
-        py=50,
+        px=105 + 10,  # Strong updraft on outside wingtip
+        py=43,
         mag=-3,
     )
 
@@ -65,7 +69,7 @@ def main():
     state0 = model.starting_equilibrium()
     gsim.simulator.prettyprint_state(state0, "Initial state:", "")
     t_start = time.perf_counter()
-    dt = 0.10  # Time step for the sequence of `states`
+    dt = 0.02  # Time step for the sequence of `states`
     times, states = gsim.simulator.simulate(model, state0, dt=dt, T=T)
     states_dot = gsim.simulator.recompute_derivatives(model, times, states)
     t_stop = time.perf_counter()
