@@ -59,8 +59,18 @@ if __name__ == "__main__":
     c = wing.canopy.chord_length(s)
     T = wing.canopy.section_orientation(s)  # Section DCMs
 
-    def plot_deflections(delta_bl, delta_br, filename=None):
-        fig, ax = plt.subplots()
+    def plot_deflections(delta_bl, delta_br, save=False):
+        figd, axd = plt.subplots()  # delta_d
+        figf, axf = plt.subplots()  # delta_f
+        figTE, axTE = plt.subplots()  # trailing edge yz
+
+        delta_d = wing.lines.delta_d(s, delta_bl, delta_br)
+        delta_d /= max(delta_d)  # Normalize the magnitudes
+        axd.plot(s, delta_d, linewidth=0.75, c="k")
+        axd.set_ylim(-0.08, 1.08)
+        axd.set_xlabel("Section index $s$")
+        axd.set_ylabel("Normalized deflection distance")
+        axd.grid(True)
 
         delta_f = np.zeros(N)
         points = []
@@ -70,12 +80,11 @@ if __name__ == "__main__":
         p2 = c[:, None] * np.array([-p[:, 0], np.zeros(N), -p[:, 1]]).T
         p3 = np.einsum("ijk,ik->ij", T, p2)
         p4 = xyz + p3
-        ax.plot(
+        axTE.plot(
             p4.T[1], p4.T[2], linestyle="--", linewidth=0.75, c="k", alpha=0.5,
         )
 
         delta_f = wing.delta_f(s, delta_bl, delta_br)
-        # breakpoint()
         points = []
         for d in delta_f:
             points.append(interp.camber_curve(1, d))
@@ -83,15 +92,23 @@ if __name__ == "__main__":
         p2 = c[:, None] * np.array([-p[:, 0], np.zeros(N), -p[:, 1]]).T
         p3 = np.einsum("ijk,ik->ij", T, p2)
         p4 = xyz + p3
-        ax.plot(p4.T[1], p4.T[2], linestyle="--", linewidth=0.75, c="k")
+        axTE.plot(p4.T[1], p4.T[2], linestyle="--", linewidth=0.75, c="k")
+        axTE.set_aspect("equal")
+        axTE.invert_yaxis()
 
-        ax.set_aspect("equal")
-        ax.invert_yaxis()
+        axf.plot(s, np.rad2deg(delta_f), linewidth=0.75, c='k')
+        axf.set_ylim(-1, 14)
+        axf.set_xlabel("Section index $s$")
+        axf.set_ylabel(r"Deflection angle $\delta_f$ [deg]")
+        axf.grid(True)
+
         plt.show()
-        if filename:
-            fig.savefig(filename)
 
-    # plot_deflections(0.25, 0.50, "Hook3_deltad_0.25_0.50.svg")
-    # plot_deflections(1.00, 1.00, "Hook3_deltad_1.00_1.00.svg")
-    plot_deflections(0.25, 0.50)
-    plot_deflections(1.00, 1.00)
+        if save:
+            figd.savefig(f"Hook3_deltad_{delta_bl:.2f}_{delta_br:.2f}.svg")
+            figf.savefig(f"Hook3_deltaf_{delta_bl:.2f}_{delta_br:.2f}.svg")
+            figTE.savefig(f"Hook3_TE_{delta_bl:.2f}_{delta_br:.2f}.svg")
+
+    savefig = False
+    plot_deflections(0.25, 0.50, save=savefig)
+    plot_deflections(1.00, 1.00, save=savefig)
