@@ -1,7 +1,6 @@
-.. This chapter describes the components of a paraglider and provides simple
-   mathematical models of each component. These models favor simplicity over
-   accuracy; they are intended to be "good enough" examples of how to model
-   each component.
+.. This chapter describes the three basic components of a paraglider (canopy,
+   lines, and payload), defines the component inputs, and provides simple
+   mathematical models of each component.
 
 
 * FIXME: where do I define the aerodynamic *control points*? (They're part of
@@ -252,30 +251,28 @@ limitations to the method, such as its strong assumptions that the foil has
 circular arc, uniform thickness, uniform chord length, etc.]]
 
 
+.. _Braking:
+
 Controls
 --------
 
-* A parafoil is controlled by downward deflections of its section trailing
-  edges.
+A parafoil is controlled by downward deflections of its section trailing edges.
+The aerodynamics of a canopy with brake inputs depends on the geometry of the
+deflected airfoils. The geometry can either be used directly, as would be done
+by *vortex lattice* or *computational fluid dynamics* methods, or it can be
+used indirectly via section coefficients, as is done with lifting-line methods.
+This project assumes the canopy is a rigid structure, and does not model how
+the inertial properties change with brake input, but for the aerodynamics it
+uses an :ref:`indirect method <Phillips' numerical lifting-line>` based on
+precomputed section coefficients.
 
-* The deflection increases the section drag. Symmetric deflections decrease
-  the foils airspeed, and asymmetric deflections control the foils direction.
-
-* The aerodynamics of the foil depend on the geometry of the deformed
-  profiles.
-
-* Computing the true deflected profile surface of a parafoil would require
-  a significantly more complex model that can compute the 3D foil
-  deformations; something like FSI. Instead, a much simpler approximation is
-  to assume that the deformed profile can be predicted independent of the line
-  geometry.
-
-  Assuming some predetermined shape allows the section coefficients for that
-  shape to be determined separately (either by measurement or something like
-  XFOIL).
-
-* To use the deformed profiles, we need a way to index them. I chose to index
-  them with the deflection angle :math:`\delta_f`.
+The deformable profiles mean the coefficients must not only be functions of
+angle of attack :math:`\alpha`, they must also account for :ref:`trailing edge
+deflections <paraglider_components:Brakes>` due to the left and right brakes.
+A simplifying assumption is that braking produces a predictable change in the
+profiles that can be described with a single "deflection index" that can be
+computed from the brake inputs. This project indexes the deflected profiles
+using a measure of the trailing edge *deflection angle* :math:`\delta_f`.
 
 
 .. Defining the deflection angle for a section
@@ -297,28 +294,55 @@ deflection angle produced by the trailing edge:
 
    Deflection angle relative to the leading edge.
 
-This definition moves some of the complexity out of the implementation and
-into how the set of coefficients are defined. Without recording a fixed hinge
-point, the paraglider model can remain oblivious to how the deflection was
-achieved. [[On the plus side, this constraint greatly simplifies the model,
-and sets of coefficients can easily be generated for different deflection
-geometries.]]
+.. FIXME: is it safe to say that because the brakes pull nearly perpendicular
+   to the chord that the decrease in brake line length is almost exactly equal
+   to the deflection distance delta_d?
+
+With this definition, the *deflection angle* :math:`\delta_f` is a function of
+the *deflection distance* :math:`\delta_d` (defined by the suspension line
+model) and the *chord length* :math:`c` (defined by the canopy geometry):
+
+.. math::
+   :label: deflection angle
+
+   \delta_f = \arctan \left( \frac{\delta_d}{c} \right)
+
+As a result, the canopy deflection angles are unusual in that, although they
+control the canopy aerodynamics model, they are not inputs to the system model.
+Instead, the paraglider model computes them internally from values provided by
+the canopy and the suspension lines.
 
 
-Misc:
+Discussion/misc:
 
-* The canopy deflection angles are unusual in that, although they control the
-  canopy aerodynamics model, they are not inputs to the system model. Instead,
-  they are used indirectly: the system inputs are the left and right
-  `Brakes`_, which the bridle geometry use to determine the deflection
-  distribution along each semispan.
+* The model does not describe how the profiles change in response to the brake
+  inputs; it requires that the deflected profiles are determined separately.
+  This represents a significant extra step in the design process, but once
+  a set of deformed profiles have been generated they can be reused for each
+  canopy model.
 
-* Simulating a braking wing requires the geometry for the deflected airfoils.
-  The geometry can either be used directly, as would be done by *vortex
-  lattice* or *computational fluid dynamics* methods, or it can be used
-  indirectly, as is done with lifting-line methods. Lifting-line methods use
-  the section coefficients, which means solving for the 2D section
-  coefficients before estimating the 3D section forces and moments.
+* Trailing edge deformations due to braking are the only foil deformations
+  supported by this model, but I'm only applying them to the aerodynamics, not
+  the inertia. The way I'm incorporating them into the aerodynamics is through
+  the section coefficients.
+
+* Assumes that the deformed profiles always take the same shape for a given
+  value of `delta_f`.
+
+* To compute the aerodynamics of the canopy, first generate a set of profiles
+  with deflected trailing edges. Then, generate a set of airfoil coefficients
+  for each profile. During braking, the airfoil coefficients can be queried by
+  interpolating over the set of coefficients.
+
+* Computing the true deflected profile surface of a parafoil would require
+  a significantly more complex model that can compute the 3D foil
+  deformations; something like FSI. Instead, a much simpler approximation is
+  to assume that the deformed profile can be predicted independent of the line
+  geometry.
+
+  Assuming some predetermined shape allows the section coefficients for that
+  shape to be determined separately (either by measurement or something like
+  XFOIL).
 
 
 Aerodynamics
@@ -333,6 +357,15 @@ until :ref:`demonstration:Section profiles`).]]
 
 Suspension lines
 ================
+
+* Parameters:
+
+  Brakes: start0, start1, stop0, stop1, kappa_b
+
+  Accelerator: kappa_A, kappa_C, kappa_x, kappa_z, kappa_a
+
+* Controls: delta_a, delta_b
+
 
 The suspension lines are responsible for controlling the shape of the arc,
 positioning the harness relative to the canopy (as well as adjusting the
@@ -409,39 +442,32 @@ Riser position
   :cite:`benedetti2012ParaglidersFlightDynamics` discuss how positioning the
   center of mass impacts glider trim and stability.
 
+* [[FIXME: I think I should define :math:`\kappa_x`, :math:`\kappa_x`,
+  :math:`\kappa_A`, and :math:`\kappa_C`, here. The accelerator works by
+  **modifying** `\kappa_A`, it doesn't own it.
+
 
 Controls
 --------
 
-[[FIXME]]
+The suspension lines provide two primary methods of controlling the paraglider
+system: through brakes, which change the canopy aerodynamics, and the
+accelerator, which repositions the payload underneath the canopy.
 
 
 Brakes
 ^^^^^^
 
-Near the risers, two handles are attached to portions of the bridle that
-connect to the trailing edges of each half of the canopy. The pilot can use
-these controls to deflect the trailing edge downward, increasing drag.
-Symmetric deflections slow the wing down, and asymmetric deflections cause the
-wing to turn.
+.. The brakes induce the deflection distances `delta_d`, which the
+   ParagliderWing can use to compute the deflection angles `delta_f`
 
 
 A parafoil canopy can be manipulated by pulling on any of its many suspension
 lines, but two of the lines in particular are dedicated to slowing the wing or
-controlling its turning motion. [[Trailing edge deformations due to braking
-are the only foil deformations supported by this model.]] Known as the
-*brakes* or *toggles*, these controls induce downward trailing edge
-deflections along the left and right semispans.
-
-
-For this project, the :ref:`paraglider_systems:System dynamics` models expect
-the suspension line model to compute the trailing edge deflection
-:math:`\delta_f = f(s, \delta_{bl}, \delta_{br})` as a function of independent
-left and right control inputs, :math:`0 \le \left\{ \delta_{bl}, \delta_{br}
-\right\} \le 1`. The deflection distribution produced by the controls along
-each semispan are up to the model designer; see :doc:`demonstration` for an
-example.
-
+controlling its turning motion. Known as the *brakes* or *toggles*, these
+controls induce downward trailing edge deflections along each half of the
+canopy, increasing drag on that side of the wing. Symmetric deflections slow
+the wing down, and asymmetric deflections cause the wing to turn.
 
 .. figure:: figures/paraglider/geometry/Wikimedia_Paragliding.jpg
 
@@ -457,81 +483,125 @@ example.
    `Photograph <https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg>`__ by
    Wikimedia contributor "PiRK" under a CC-BY-SA 3.0 license.
 
+A physically accurate model of the deflection distribution would need to model
+the length and angle of every line in the bridle and how the angles deform
+during braking maneuvers. Because the line geometry was not a focus for this
+project, an approximation is used instead.
 
+First, observe that for a typical elliptical arc, as brakes are progressively
+applied the deflections will start near the middle and radiate towards the
+wing root and tip as the brake magnitude is increased. For small brake inputs
+the deflections are zero near the wing root and tip, but eventually even
+those sections experience deflections.
 
-The canopy aerodynamics are a function of the deflection angle `delta_f` at
-each section. They vary along the span of the wing as function of the brakes.
-
-My simplified model chose to assume the profiles with deflected edges can be
-approximated independently of the actual line geometry. It generates a set of
-profiles with deflected trailing edges for a sequence of deflection angles,
-then interpolates between them. The set of profiles require an index to say
-which profile to use given a particular brake input. I chose the deflection
-angle. Now, I need the line geometry to generate  the deflection angle
-distribution across the wing sections as a function of the brakes:
+To approximate this behavior, start by assuming the deflection distances from
+each individual brake input are symmetric around some peak near the middle of
+each semispan and vary as a quartic function :math:`q(p)`. Define the
+polynomial coefficients such that the function value and slope are zero at
+:math:`p = 0` and :math:`p = 1` and a peak at :math:`p = 0.5`. The result is
+a quartic that is symmetric about :math:`p = 0.5` with a peak magnitude of
+:math:`1`.
 
 .. math::
-   :label: deflection angle
+   :label: quartic braking
 
-   \delta_f = f \left( s, \delta_{bl}, \delta_{br} \right)
+   q(p) =
+     \begin{cases}
+       16p^4 - 32p^3 + 16p^2 &\mbox 0 \le p \le 1 \\
+       0 & \mbox{else}
+     \end{cases}
 
-Where :math:`s` is the *section index* and :math:`0 \le \delta_{bl},
-\delta_{br} \le 1` is the percentage of left and right brake inputs.
+.. figure:: figures/paraglider/geometry/quartic.svg
 
-A physically accurate deflection distribution requires a proper line
-geometry for the wing, but because the line geometry was not a focus for
-this project, an approximation is used instead.
+   Truncated quartic distribution
 
-The simplest model with reasonable accuracy is a cubic polynomial. The
-parameters of the model are a starting position (the section index where brake
-deflections begin), a peak position (the section index where the deflection is
-greatest), and a peak value (the magnitude of the maximum deflection angle
-under maximum control input). [[FIXME: this model assumes zero deflection at
-the wing tip?]] The accuracy of this crude model depends on the arc anhedral:
+Next define two variables for the section indices near the canopy root and tip
+that control the start and stop points of the deflection. Representing the
+start and stop positions as variables allows modeling how the deflection
+distribution changes with the brake inputs. For both :math:`s_\textrm{start}`
+and :math:`s_\textrm{stop}`, define their values when :math:`\delta_{br} = 0`
+and :math:`\delta_{br} = 1`. Then, using linear interpolation as a function of
+brake input:
 
-.. figure:: figures/paraglider/geometry/brake_deflections_anhedral23_Bl025_Br1.*
+.. math::
+   :label: start stop indices
 
-   Cubic brake deflection, example 1.
+   \begin{aligned}
+     s_\textrm{start} &=
+       s_\textrm{start,0}
+       + \left( s_\textrm{start,1} - s_\textrm{start,0} \right) \delta_b\\
+     s_\textrm{stop} &=
+       s_\textrm{stop,0}
+       + \left( s_\textrm{stop,1} - s_\textrm{stop,0} \right) \delta_b
+   \end{aligned}
 
-   Parameters: :math:`\delta_{Bl} = 0.25` and :math:`\delta_{Br} = 1` for
-   a wing with a mean anhedral angle of 23 degrees.
+The start and stop points can be used to map the section indices :math:`s` into
+the domain of the quartic :math:`p`,  such that :math:`s = s_\textrm{start}
+\rightarrow p = 0` and :math:`s = s_\textrm{stop} \rightarrow p = 1`:
 
-.. figure:: figures/paraglider/geometry/brake_deflections_anhedral33_Bl025_Br1.*
+.. math::
+   :label: s2p
 
-   Cubic brake deflection, example 2.
+   p(s) = \frac{s - s_\textrm{start}}{s_\textrm{stop} - s_\textrm{start}}
 
-   Parameters: :math:`\delta_{Bl} = 0.25` and :math:`\delta_{Br} = 1` for
-   a wing with a mean anhedral angle of 33 degrees.
+The quartic output for each brake is unit magnitude, which should be scaled by
+the brake input. Summing the two scaled outputs represent the fraction of
+maximum brake deflection distance over the entire span. The maximum brake
+deflection distance is a constraint set by the suspension line model parameter
+:math:`\kappa_b`, the maximum length that the model will allow the pilot to
+pull the brake line.
 
-**FIXME: these plots were made using the `plot_paraglider_wing` function that
-assumed fixed hinges at 0.8c and the delta is the angle from 0.8c to the TE.
-That visualization will be significantly wrong.**
+Finally, the total brake deflection distance is the sum of contributions from
+left and right brake:
+
+.. math::
+   :label: total brake deflections
+
+   \delta_d(s, \delta_{bl}, \delta_{br}) =
+     \left(
+       \delta_{bl} \cdot q(p(-s)) + \delta_{br} \cdot q(p(s))
+     \right) \cdot \kappa_b
+
+
+Discussion:
+
+* FIXME: elaborate on the design parameter `kappa_b`. There's not really a true
+  limit to how far you can pull the brakes on the physical wing, but for this
+  model there needs to be a functional limit.]]
+
+* [[See :ref:`Braking` for a definition of :math:`\delta_f`]]
+
+* The accuracy of this crude model depends on the arc anhedral.
+
+* Assumes the deflection distance is symmetric.
+
+* :math:`\delta_d = f(s, \delta_{bl}, \delta_{br})` as a function of
+  independent left and right control inputs, :math:`0 \le \left\{ \delta_{bl},
+  \delta_{br} \right\} \le 1`.
+
+* Specifying `kappa_b` is awkward to define in terms of `delta_f_max`
+
+* For an example of a wing using the quartic model, see
+  :ref:`demonstration:Brakes`.
 
 
 Accelerator
 ^^^^^^^^^^^
 
-* Need an informal description first.
+.. Informal description
 
-* Discuss the assumption that the accelerator does not change the arc. Maybe
-  design a test case to show how small amounts of "flattening" change the
-  performance (better glide ratio, more sensitive to weight shift, etc; easy
-  to do, just modify `mean_anhedral` for the Hook3ish and leave `max_anhedral`
-  as-is).
+Paragliders are not powered aircraft, but pilots can increase their airspeed
+by adjusting how the payload is positioned relative to the canopy. The
+*accelerator* or *speed bar* is positioned under the pilot's feet, and by
+pushing out they can shift the riser position :math:`RM` forward and up. The
+canopy pitching angle, angle of attack, and airspeed must adjust to the new
+equilibrium, changing both the airspeed and the glide ratio.
 
-  Just flattening the wing dramatically increases the glide ratio while
-  slowing the wing (which isn't what you want from an accelerator). I'm
-  guessing you could tune `kappa_x` and `kappa_C` to find a sweet balance.
-  Makes sense to optimize for stability at `delta_a = 0` but optimize for
-  performance/stability as accelerator is applied ("hands-up" goes for the
-  accelerator as well as for the brakes).
-
-* I'm using the chord lines as the connection points, but for the physical
-  wing the tabs are connected to the lower surfaces of the ribs.
+The goal is to model how the riser position changes as a function of the
+accelerator control input :math:`0 \le \delta_a \le 1`.
 
 
-Mathematical model
-~~~~~~~~~~~~~~~~~~
+.. Mathematical model
 
 .. figure:: figures/paraglider/geometry/accelerator.*
    :name: accelerator_geometry
@@ -539,7 +609,7 @@ Mathematical model
    Paraglider wing accelerator geometry.
 
 For notational simplicity, define :math:`\overline{A}` and
-:math:`\overline{C}` be the lengths of the lines connecting them to the riser
+:math:`\overline{C}` as the lengths of the lines connecting them to the riser
 midpoint :math:`RM`:
 
 .. math::
@@ -549,21 +619,23 @@ midpoint :math:`RM`:
    \overline{C} &= \left\| \vec{r}_{C/RM} \right\|\\
    \end{aligned}
 
-The default lengths of the lines is defined by two pairs of design parameters.
-First, the default position of the riser midpoint :math:`RM` is defined with
-:math:`\kappa_x` and :math:`\kappa_z`; this is the position of :math:`RM` when
-:math:`\delta_a = 0`. Second, two connection points on the canopy are defined
-with :math:`\kappa_A` and :math:`\kappa_C`; connecting lines from these points
-are the physical means by which :math:`RM` is positioned underneath the
-canopy. The :math:`A` lines connect near the front of the wing, and are
-variable length; the pilot can use the *accelerator* to shorten the lengths of
-these lines. The :math:`C` lines connect towards the rear of the canopy, and
-are fixed length. Geometrically, shortening :math:`\overline{A}` will move
-:math:`RM` forward while rotating the :math:`C` lines. Aerodynamically,
-shortening :math:`\overline{A}` effectively rotates the canopy pitch down,
-decreasing the global angle of incidence of the canopy; decreasing the angle
-of incidence decreases lift, and the wing must accelerate to reestablish
-equilibrium.
+The default lengths of the lines are defined by two pairs of design
+parameters. First, the default position of the riser midpoint :math:`RM` is
+defined with :math:`\kappa_x` and :math:`\kappa_z`; this is the position of
+:math:`RM` when :math:`\delta_a = 0`. Second, two connection points along the
+canopy root chord are defined with :math:`\kappa_A` and :math:`\kappa_C`;
+connecting lines from these points are the physical means by which :math:`RM`
+is positioned underneath the canopy. The :math:`A` lines connect near the
+front of the wing, and are variable length; the pilot can use the
+*accelerator* to shorten the lengths of these lines. The :math:`C` lines
+connect towards the rear of the canopy, and are fixed length.
+
+Geometrically, shortening :math:`\overline{A}` will move :math:`RM` forward
+while rotating the :math:`C` lines. Aerodynamically, shortening
+:math:`\overline{A}` effectively rotates the canopy pitch down about the point
+:math:`C`, decreasing the global angle of incidence of the canopy; decreasing
+the angle of incidence decreases lift, and the wing must accelerate to
+reestablish equilibrium.
 
 A fifth design parameter, the *accelerator length* :math:`\kappa_a`, is
 required to define the maximum length change produced by the accelerator; this
@@ -647,28 +719,32 @@ central chord :math:`c_0` of the wing, is then:
 
 Where :math:`{RM}_x` was negated since the wing x-axis is positive forward.
 
-[[Maybe now is a good time to talk about how the wing/body coordinate system
-is a simple translation of the canopy coordinate system, so
-:math:`\vec{r}_{LE/RM}^b = - \vec{r}_{RM/LE}^c`, but are vectors in the two
-coordinate systems actually the same values? As in :math:`\vec{r}_{A/B}^b
-= \vec{r}_{A/B}^c` for all A and B?]]
+Discussion:
+
+* This model assumes the accelerator does not change the arc or profiles.
+
+* This model uses the chord lines as the connection points, but for the
+  physical wing the tabs are connected to the lower surfaces of the ribs.
 
 
 Aerodynamics
 ------------
 
-[[Although small, I can't reasonably neglect the line drag, so I've lumped it
-into two aerodynamic control points, one for each semispan.
+* Although they are nearly invisible compared to the rest of the wing, line
+  drag has a surprisingly significant impact on overall drag, which is
+  especially important for sensitive characteristics such as glide ratio.
 
-I'm assuming isotropic drag because drag due to lines naturally becomes
-insignificant as alpha increases (when aerodynamic resistance in the
-z-direction becomes dominated by the canopy anyway), and the wing can't
-operate at a particularly high angle of attack anyway.
+* This model does not model the complete line geometry, so it can't compute
+  the true line area distribution. Instead, it lumps the entire length of the
+  lines into two aerodynamic control points, one for each semispan.
 
-Turns out it has a significant (ie, not massive but still noticeable) impact
-on sensitive things like the glide ratio. I'm using the line drag coefficients
-suggested in :cite:`kulhanek2019IdentificationDegradationAerodynamic`, which
-also mentions some papers on line drag coefficients.]]
+* It assumes isotropic drag because the wing can't operate at a particularly
+  high angle of attack anyway. In the small operating range of alpha and beta,
+  the line drag is relatively constant.
+
+* I'm using the line drag coefficients suggested in
+  :cite:`kulhanek2019IdentificationDegradationAerodynamic`, which also
+  mentions some papers on line drag coefficients.
 
 
 Harness
@@ -810,3 +886,7 @@ Limitations
 
 * Barrow's method has several assumptions (circular arc anhedral, spanwise
   uniform thickness, etc) that are wrong for real wings.
+
+* Apparent inertial calculations are definitely wrong when brakes are being
+  applied; they're effectively increasing the thickness in the fore-aft
+  direction.
