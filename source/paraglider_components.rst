@@ -6,6 +6,13 @@
 * FIXME: where do I define the aerodynamic *control points*? (They're part of
   my "design language" for the components.)
 
+* Every paraglider component should probably summarize:
+
+  1. The parameters that define it
+
+  2. The control inputs it provides to the system model
+
+
 
 ***************************
 Paraglider component models
@@ -263,17 +270,15 @@ by *vortex lattice* or *computational fluid dynamics* methods, or it can be
 used indirectly via section coefficients, as is done with lifting-line methods.
 This project assumes the canopy is a rigid structure, and does not model how
 the inertial properties change with brake input, but for the aerodynamics it
-uses an :ref:`indirect method <Phillips' numerical lifting-line>` based on
-precomputed section coefficients.
+uses an :ref:`indirect method <foil_aerodynamics:Phillips' numerical
+lifting-line>` based on precomputed section coefficients.
 
 The deformable profiles mean the coefficients must not only be functions of
 angle of attack :math:`\alpha`, they must also account for :ref:`trailing edge
 deflections <paraglider_components:Brakes>` due to the left and right brakes.
 A simplifying assumption is that braking produces a predictable change in the
 profiles that can be described with a single "deflection index" that can be
-computed from the brake inputs. This project indexes the deflected profiles
-using a measure of the trailing edge *deflection angle* :math:`\delta_f`.
-
+computed from the brake inputs.
 
 .. Defining the deflection angle for a section
 
@@ -287,30 +292,34 @@ some fixed position along the chord:
 
 This definition is troublesome for a flexible wing, since there is no fixed
 hinge point; the deflection occurs as a variable arc between the trailing edge
-to some point on the chord. A more convenient definition is the total
-deflection angle produced by the trailing edge:
+to some point on the chord. In addition, the brake inputs cannot directly set
+the section deflection angles; they only control the downward deflection
+distance. For parafoils, a more natural definition is the vertical edge
+*deflection distance* :math:`\delta_d` of the trailing edge:
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_arc.*
+   :name: airfoil_deflected_arc
 
-   Deflection angle relative to the leading edge.
+   Vertical deflection distance.
 
 .. FIXME: is it safe to say that because the brakes pull nearly perpendicular
    to the chord that the decrease in brake line length is almost exactly equal
    to the deflection distance delta_d?
 
-With this definition, the *deflection angle* :math:`\delta_f` is a function of
+The section profiles and aerodynamic coefficients are then indexed using the
+*normalized deflection distance* :math:`\overline{\delta_d}`, a function of
 the *deflection distance* :math:`\delta_d` (defined by the suspension line
 model) and the *chord length* :math:`c` (defined by the canopy geometry):
 
 .. math::
-   :label: deflection angle
+   :label: normalized deflection distance
 
-   \delta_f = \arctan \left( \frac{\delta_d}{c} \right)
+   \overline{\delta_d} = \frac{\delta_d}{c}
 
-As a result, the canopy deflection angles are unusual in that, although they
-control the canopy aerodynamics model, they are not inputs to the system model.
-Instead, the paraglider model computes them internally from values provided by
-the canopy and the suspension lines.
+The deflection distances are unusual in that, although they control the canopy
+aerodynamics model, they are not inputs to the system model. Instead, the
+paraglider model computes them internally from values provided by the canopy
+and the suspension lines.
 
 
 Discussion/misc:
@@ -327,7 +336,7 @@ Discussion/misc:
   the section coefficients.
 
 * Assumes that the deformed profiles always take the same shape for a given
-  value of `delta_f`.
+  value of `delta_d`.
 
 * To compute the aerodynamics of the canopy, first generate a set of profiles
   with deflected trailing edges. Then, generate a set of airfoil coefficients
@@ -406,6 +415,8 @@ deflection distribution in response to brake inputs.
 * The lines from the canopy attach together in a *cascade* that terminates at
   the *risers*.
 
+* I'm not modeling the stabilo lines.
+
 
 For real wings, the line geometry is a major factor in wing performance, but
 the subject is complex. [[Why? It adds mass, line drag, shapes the wing,
@@ -458,16 +469,13 @@ accelerator, which repositions the payload underneath the canopy.
 Brakes
 ^^^^^^
 
-.. The brakes induce the deflection distances `delta_d`, which the
-   ParagliderWing can use to compute the deflection angles `delta_f`
-
-
 A parafoil canopy can be manipulated by pulling on any of its many suspension
 lines, but two of the lines in particular are dedicated to slowing the wing or
 controlling its turning motion. Known as the *brakes* or *toggles*, these
-controls induce downward trailing edge deflections along each half of the
-canopy, increasing drag on that side of the wing. Symmetric deflections slow
-the wing down, and asymmetric deflections cause the wing to turn.
+controls induce downward trailing edge deflections (see
+:numref:`airfoil_deflected_arc`) along each half of the canopy, increasing
+drag on that side of the wing. Symmetric deflections slow the wing down, and
+asymmetric deflections cause the wing to turn.
 
 .. figure:: figures/paraglider/geometry/Wikimedia_Paragliding.jpg
 
@@ -569,8 +577,6 @@ Discussion:
   limit to how far you can pull the brakes on the physical wing, but for this
   model there needs to be a functional limit.]]
 
-* [[See :ref:`Braking` for a definition of :math:`\delta_f`]]
-
 * The accuracy of this crude model depends on the arc anhedral.
 
 * Assumes the deflection distance is symmetric.
@@ -579,7 +585,8 @@ Discussion:
   independent left and right control inputs, :math:`0 \le \left\{ \delta_{bl},
   \delta_{br} \right\} \le 1`.
 
-* Specifying `kappa_b` is awkward to define in terms of `delta_f_max`
+* Depending on the start and stop values, you might be able to create a model
+  where a section's delta_d actually decreases?
 
 * For an example of a wing using the quartic model, see
   :ref:`demonstration:Brakes`.
