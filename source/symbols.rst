@@ -16,14 +16,13 @@ Notation and Symbols
      - a vector
    * - :math:`x^y`
      - a scalar raised to a power, where :math:`y` is a scalar
-   * - :math:`\vec{x}^C`
-     - a vector in the coordinate system :math:`C`
+   * - :math:`\vec{x}^c`
+     - a vector in the coordinate system :math:`c`
    * - :math:`\vec{x}_{B/A}`
      - a vector from point A to point B (point B with respect to point A)
-   * - :math:`^R \vec{x}`
-     - a vector in reference frame :math:`\mathcal{F}_R`
-   * - :math:`\dot{\vec{x}}`
-     - the derivative of a vector
+   * - :math:`{^r \dot{\vec{x}}}`
+     - the derivative of a vector taken in reference frame
+       :math:`\mathcal{F}_r`
    * - :math:`x_k`
      - a variable at index :math:`k` of a sequence of length :math:`K`
    * - :math:`x^{(n)}`
@@ -38,13 +37,15 @@ Notation and Symbols
      - Euclidean norm of a vector
    * - :math:`\left| \mat{X} \right|`
      - determinant of a matrix
-   * - :math:`\mat{C_{B/A}}`
+   * - :math:`\mat{C}_{b/a}`
      - the directed cosine matrix that transforms vectors from coordinate
-       system :math:`A` into coordinate system :math:`B`
-   * - :math:`\vec{q}_{B/A}`
-     - a quaternion that encodes the relative orientation between coordinate
-       system :math:`A` and coordinate system :math:`B`
-
+       system :math:`a` into coordinate system :math:`b`
+   * - :math:`\vec{q}_{b/a}`
+     - a quaternion that encodes the relative orientation of coordinate system
+       :math:`b` relative to coordinate system :math:`a`
+   * - :math:`\vec{\omega}_{b/a}`
+     - angular velocity vector of frame :math:`\mathcal{F}_b` with respect to frame
+       :math:`\mathcal{F}_a`
    * - :math:`f(\cdot)`, :math:`func(\cdot)`, etc
      - functions, where ``f``, ``func``, can be any identifier
    * - :math:`p(\cdot)`
