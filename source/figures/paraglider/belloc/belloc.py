@@ -99,8 +99,9 @@ layout = gsim.foil_layout.FoilLayout(
     theta=ftheta,
 )
 
+airfoil = gsim.airfoil.NACA(23015, convention="vertical")
 sections = gsim.foil_sections.FoilSections(
-    profiles=gsim.airfoil.NACA(23015, convention="vertical"),
+    profiles=gsim.airfoil.AirfoilGeometryInterpolator({0: airfoil}),
     coefficients=gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
     intakes=None,
 )
@@ -122,10 +123,10 @@ print(f"    Flattened AR> Expected: {AR_flat:.4f},   Actual: {canopy.AR_flat:.4f
 print()
 
 lines = gsim.paraglider_wing.SimpleLineGeometry(
-    kappa_x=0.0875 / 0.350,  # 25% back from the leading edge
-    kappa_z=1.0 / 0.350,  # 1m below the central chord
-    kappa_A=0.08,  # unused
-    kappa_C=0.80,  # unused
+    kappa_x=0.0875,  # 25% back from the leading edge
+    kappa_z=1.0,  # 1m below the central chord
+    kappa_A=0,  # unused
+    kappa_C=1,  # unused
     kappa_a=0,  # unused
     total_line_length=0,  # Neglect line drag
     average_line_diameter=0,
@@ -135,7 +136,7 @@ lines = gsim.paraglider_wing.SimpleLineGeometry(
     s_delta_start1=0,  # unused
     s_delta_stop0=1,  # unused
     s_delta_stop1=1,  # unused
-    delta_d_max=0,  # unused
+    kappa_b=0,  # unused
 )
 
 wing = gsim.paraglider_wing.ParagliderWing(
