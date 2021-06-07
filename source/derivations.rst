@@ -605,7 +605,7 @@ in terms of derivatives in the body frame :math:`\mathcal{F}_b`:
        &= {^b\dot{\vec{h}}_{b/RM}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/RM}}
 
        &= m_b \left(
-            {\cancelto{0}{^b \dot{\vec{r}_{B/r}}}} \times \vec{v}_{RM/e}
+            {\cancelto{0}{^b \dot{\vec{r}_{B/RM}}}} \times \vec{v}_{RM/e}
             + \vec{r}_{B/RM} \times {^b \dot{\vec{v}_{RM/e}}}
           \right)
           + {\mat{J}_{b/RM} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
@@ -747,21 +747,6 @@ term :math:`\vec{v}_{RM/e} \times \left( \mat{M}_a \vec{v}_{RM/e} \right)` is
 necessary to avoid double counting the aerodynamic moment already accounted
 for by the section pitching coefficients.
 
-[[The final step is to compute the derivatives with respect to the inertial
-frame so the simulator can integrate the derivatives to track the paraglider
-position and orientation over time with respect to the tangent plane:
-
-.. math::
-
-   \begin{aligned}
-      {^e \dot{\vec{v}_{RM/e}}} &=
-        {^b \dot{\vec{v}_{RM/e}}}
-        + \vec{\omega}_{b/e} \times \vec{v}_{RM/e} \\
-      {^e \dot{\vec{\omega}_{b/e}}} &= {^b \dot{\vec{\omega}_{b/e}}}
-   \end{aligned}
-
-FIXME: verify this explanation]]
-
 
 Model 6b
 --------
@@ -833,24 +818,6 @@ Combining :eq:`model6b_momentum_derivatives1` and
        \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
        \vec{g}_{b/B} - \vec{\omega}_{b/e} \times \vec{h}_{b/B}
      \end{bmatrix}
-
-And finally, because the simulator was designed to integrate :math:`^e
-\dot{\vec{v}}_{RM/e}`, not :math:`^e \dot{\vec{v}}_{B/e}`:
-
-.. math::
-
-   \begin{aligned}
-     \vec{v}_{RM/e}
-       &= \vec{v}_{B/e} + \vec{r}_{RM/B} \times \vec{\omega}_{b/e} \\
-     \\
-     {^b \dot{\vec{v}}_{RM/e}}
-       &= {^b \dot{\vec{v}}_{B/e}}
-          + \vec{r}_{RM/B} \times {^b \dot{\vec{\omega}}_{b/e}} \\
-     \\
-     {^e \dot{\vec{v}}_{RM/e}}
-       &= {^b \dot{\vec{v}}_{RM/e}}
-          + \vec{\omega}_{b/e} \times \vec{V}_{RM/e}
-   \end{aligned}
 
 
 Model 6c
