@@ -307,29 +307,60 @@ computed from the brake inputs.
 
 .. Defining the deflection angle for a section
 
-Classic airfoil software, such as XFOIL, are primarily designed for rigid
-wings, and so it is common to define discrete *flaps* using a hinge point at
-some fixed position along the chord:
+* The simplest approach is to ignore any deformations to the geometry and
+  model the deflection as a global rotation about some rotation point
+  (typically the quarter-chord position), with the deflection angle measured
+  between the deflected and undeflected chords.
 
-.. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_hinge.*
+.. figure:: figures/paraglider/geometry/airfoil/deflected_airfoil_rotation.*
+   :name: deflection_airfoil_rotation
+
+   Deflection as a rotation.
+
+* By ignoring deformation to the profile geometry this model assumes the shape
+  of the lift curve does not change with brake deflections; deflections
+  effectively translate the lift coefficient. Often combined with a small
+  angle constraint, such as aerodynamic models that assume a linear lift
+  coefficient. The big advantage of this model is that, even if the model
+  doesn't assume linear lift, it allows the model to function with just the
+  coefficients data from the undeflected profile.
+
+* Some models need to account for the physical deformations to the profile.
+
+* Classic airfoil software, such as XFOIL, are primarily designed for rigid
+  wings, and so it is common to define discrete *flaps* using a hinge point at
+  some fixed position along the chord:
+
+.. figure:: figures/paraglider/geometry/airfoil/deflected_airfoil_hinge.*
+   :name: deflection_airfoil_hinge
 
    Deflection angle relative to a fixed hinge point.
 
-This definition is troublesome for a flexible wing, since there is no fixed
-hinge point; the deflection occurs as a variable arc between the trailing edge
-to some point on the chord. In addition, the brake inputs cannot directly set
-the section deflection angles; they only control the downward deflection
-distance. For parafoils, a more natural definition is the vertical edge
-*deflection distance* :math:`\delta_d` of the trailing edge:
+* This definition is troublesome for a flexible wing, since there is no fixed
+  hinge point; the deflection occurs as a variable arc between the trailing
+  edge to some point on the chord.
 
-.. figure:: figures/paraglider/geometry/airfoil/airfoil_deflected_arc.*
-   :name: airfoil_deflected_arc
+* Another caveat for both models that generate deflection angles directly as
+  a function of brake inputs is that it is unclear what the deflection
+  distribution should be, since parafoil brake inputs cannot directly set the
+  section deflection angles; they only control the downward deflection
+  distance.
+
+* For parafoils, a more natural definition is the vertical edge *deflection
+  distance* :math:`\delta_d` of the trailing edge:
+
+.. figure:: figures/paraglider/geometry/airfoil/deflected_airfoil_arc.*
+   :name: deflection_airfoil_arc
 
    Vertical deflection distance.
 
 .. FIXME: is it safe to say that because the brakes pull nearly perpendicular
    to the chord that the decrease in brake line length is almost exactly equal
    to the deflection distance delta_d?
+
+[[Explain how this choice requires pre-defining airfoil geometries as
+a function of `delta_d` only. It assumes that a given deflection distance
+always produces a specific deflected profile.]]
 
 The section profiles and aerodynamic coefficients are then indexed using the
 *normalized deflection distance* :math:`\overline{\delta_d}`, a function of
@@ -543,6 +574,8 @@ a quartic that is symmetric about :math:`p = 0.5` with a peak magnitude of
        16p^4 - 32p^3 + 16p^2 &\mbox 0 \le p \le 1 \\
        0 & \mbox{else}
      \end{cases}
+
+.. FIXME: compress the vertical scale of quartic.svg
 
 .. figure:: figures/paraglider/geometry/quartic.svg
 
