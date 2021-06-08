@@ -551,6 +551,12 @@ problem until convergence is achieved.]]
 [[Related: `Sensitive to initial proposal`_.]]
 
 
+Clamping
+^^^^^^^^
+
+[[Clamping seems to have eliminated the need for "relaxed" solutions?]]
+
+
 Limitations
 -----------
 

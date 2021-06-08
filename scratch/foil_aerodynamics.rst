@@ -36,6 +36,16 @@ Outline
 BRAINDUMP
 =========
 
+* The canopy geometry can either be used directly or indirectly; direct
+  methods, such as a *vortex lattice methods* or *computational fluid
+  dynamics*, generate control points on or around the 3D geometry itself,
+  whereas indirect methods, such as *lifting-line theory*, start by
+  summarizing the geometry with 2D section coefficients. This project uses an
+  :ref:`indirect method <foil_aerodynamics:Phillips' numerical lifting-line>`
+  based on precomputed section coefficients. It assumes the canopy if a rigid
+  structure, and does not model how its inertial properties change with
+  control inputs.
+
 * I need to estimate the aerodynamics **under normal flying conditons**. It
   must handle turning (longitudinal-only models are out), relatively high
   angles of attack (small angle models are out, which includes most linearized
@@ -222,7 +232,7 @@ BRAINDUMP
       angles of attack and sideslip.  These surfaces and their trailing wakes
       are represented as single-layer vortex sheets, discretized into
       horseshoe vortex filaments, whose trailing legs are assumed to be
-      parallel to the x-axis. 
+      parallel to the x-axis.
 
     Also, from `avl_doc.txt`, "Vortex-Lattice Modeling Principles / Unsteady
     Flow":

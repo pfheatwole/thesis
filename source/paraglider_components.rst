@@ -263,15 +263,40 @@ circular arc, uniform thickness, uniform chord length, etc.]]
 Controls
 --------
 
-A parafoil is controlled by downward deflections of its section trailing edges.
-The aerodynamics of a canopy with brake inputs depends on the geometry of the
-deflected airfoils. The geometry can either be used directly, as would be done
-by *vortex lattice* or *computational fluid dynamics* methods, or it can be
-used indirectly via section coefficients, as is done with lifting-line methods.
-This project assumes the canopy is a rigid structure, and does not model how
-the inertial properties change with brake input, but for the aerodynamics it
-uses an :ref:`indirect method <foil_aerodynamics:Phillips' numerical
-lifting-line>` based on precomputed section coefficients.
+* A parafoil is controlled by downward deflections of its section trailing
+  edges. The aerodynamics of a canopy with brake inputs depends on the
+  geometry of the deflected airfoils.
+
+* This project uses an :ref:`aerodynamics method <foil_aerodynamics:Phillips'
+  numerical lifting-line>` that uses the canopy geometry indirectly through
+  precomputed section coefficients.
+
+* The section profiles change with the brake input, so the section profiles and
+  coefficients are a function of the deflections.
+
+
+[[FIXME: this section needs work. Discuss the need for an *airfoil index*,
+explain why the conventional choice for fixed-hinge flaps is `delta_f` is less
+than ideal, and argue that a better choice for parafoils is the deflection
+distance `delta_d`.
+
+"Traditional wings control the flap angle directly, so the control is an
+explicit angle. Parafoils don't use a fixed hinge, so some models use the
+angle between the deflected and undeflected chord. The deflection angle is
+problematic though, because it depends on the chord length; the brakes don't
+set the deflection angle directly, they create it indirectly, so modeling it
+as a direct effect is problematic. A more natural choice is to model the
+vertical deflection distance and normalize it with the section chord to index
+the deflected profile."
+
+
+In other words, the points on the airfoil and the section aerodynamic
+coefficients are a function of some *airfoil index*. I chose
+:math:`\overline{\delta}_d = \frac{\delta_d}{c}`, so :math:`\vec{r}_{P/LE}^a
+\left( \overline{\delta}_d, r \right)`, :math:`Cl \left( \overline{\delta}_d,
+\alpha, Re \right)`, etc.]]
+
+
 
 The deformable profiles mean the coefficients must not only be functions of
 angle of attack :math:`\alpha`, they must also account for :ref:`trailing edge

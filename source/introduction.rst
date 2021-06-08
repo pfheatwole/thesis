@@ -862,9 +862,11 @@ measurements.]]
 * [[Present *flight reconstruction* as a *filtering problem*, which will
   introduce the recursive filtering equation. The filtering equation needs
   a *transition function* (which for a continuous-time model appears as
-  a differential equation). **This is where I motivate :math:`\dot{x} = f(x,
-  u)`, which is what `glidersim` provides: a parametric model to produce the
-  :math:`\dot{x}`.** ]]
+  a differential equation).
+
+  **This is where I motivate** :math:`\dot{\vec{x}} = f(\vec{x}, \vec{u})`,
+  which is what `glidersim` provides: parametric models to produce the
+  :math:`\dot{\vec{x}}`.]]
 
   For the "fundamental recursions", see
   :cite:`kantas2015ParticleMethodsParameter`, Eq:3.1 through Eq:3.3
@@ -883,11 +885,18 @@ Parametric paraglider modeling
 
 .. This section sets up the entire paper!
 
-   Flight reconstruction needs a dynamics model. They're not in the flight
-   records, so they must be estimated. This project develops a parametric
-   paraglider model to make it easiser to approximate existing wings. The
-   parameters are chosen to make it as easy as possible to incorporate what
-   little data is available (technical specs from wing manuals).
+   1. Specification: how you create the model
+
+   2. Functionality: what the model must do
+
+
+The previous section established that flight reconstruction requires
+a dynamics model to predict the aircraft's motion. Unfortunately, paraglider
+flight records do not include a model of the aircraft, so one must be created.
+The model must be capable of simulating commercial paraglider wings under the
+entire range of flight conditions that could have realistically occurred
+during the flight. This intended usage places significant constraints on how
+the model is specified, and what functionality it must provide.
 
 
 Specification
@@ -934,12 +943,62 @@ the inertial properties if you know the surface densities.]]
 Functionality
 -------------
 
-[[The paraglider system model needs to cover the range of flight conditions
-targeted by the flight reconstruction process. That is, I need to declare what
-details of a flight I will and will not attempt to reconstruct. For example,
-I would like to simulate a paraglider turning due to weight shift and braking,
-but I will not be attempting to model riser controls (or any scenario that
-includes canopy deformations).]]
+.. The paraglider system model needs to cover the range of flight conditions
+   targeted by the flight reconstruction process, so I need to declare which
+   details of a flight I will and will not attempt to reconstruct. For
+   example, I would like to simulate a paraglider turning due to weight shift
+   and braking, but I will not be attempting to model riser controls (or ANY
+   scenario that includes non-brake canopy deformations, such as deep stall).
+
+The dynamics model must capture the behavior of the system over the range of
+flight conditions it is required to support. For this project that would
+include any conditions encountered during flight reconstruction.
+
+Due to the severely limited sensor data, flight reconstruction is necessarily
+limited to relatively simple scenarios; it would be unreasonable to expect
+reconstruction of flights involving extreme scenarios such as acrobatic
+maneuvers, deep stalls, and wing collapses. Instead, this project is
+deliberately limiting itself to a model that would enable flight
+reconstruction of paraglider flights under "average" flight conditions.
+
+[[However, despite the limitations, I'd still like to simulated detailed
+scenarios such as time-varying, nonuniform wind fields.]]
+
+.. The point here is that the functional requirements explicitly state that
+   the paraglider system model does not need to cover behaviors involving
+   stall, etc. The result is that relaxing the functionality allows the model
+   to use rigid body assumptions, especially for the canopy and lines. The
+   rigid body assumption is not a requirement for flight reconstruction; it's
+   a useful simplification that the models are allowed to make because we've
+   relaxed the goals of flight reconstruction.
+
+[[Within the constraint of "average" flight conditions, the goal is to recover
+enough information to support wind field reconstruction.]]
+
+
+.. Which conditions, exactly? (ie, behaviors the model must capture?)
+
+The flight conditions describe the inputs to the system, which are either
+control inputs or wind vectors.
+
+* Controls:
+
+  * Include: accelerator, weight shift, asymmetric braking
+
+  * Exclude: riser controls
+
+  * These imply `\dot{f}(x, u)` must be a function of `{delta_bl, delta_br,
+    delta_a, delta_w}` (inside the `u` vector)`.
+
+* Include: non-uniform wind (wind shear, indirect thermal interactions, etc)
+
+* Exclude: acrobatics (extreme flight maneuvers)
+
+* Exclude: deep stall conditions, wing collapses
+
+
+[[What if I suggested some flight scenarios then linked to them implemented in
+`demonstration`?]]
 
 
 Roadmap

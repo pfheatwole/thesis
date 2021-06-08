@@ -6,6 +6,12 @@
    flight maneuvers, respectively) and compare them to expected behaviors.
 
 
+* FIXME: when I plot my final wing, the arc doesn't seem to match the actual
+  wing. Might want to comment on that.
+
+* FIXME: where do I discuss the viscous drag corrections due to air intakes?
+
+
 *************
 Demonstration
 *************
@@ -14,11 +20,10 @@ Modeling a commercial paraglider wing is difficult because the technical data
 is limited to basic summary measurements. A major task of the modeling process
 is how to augment the missing information to create a complete model. To
 address that problem, this paper started by creating a foil geometry with
-enough flexibility to enable complex foil models to be defined using simple
-parametric functions. The parametric functions encode the assumptions of the
-missing structure. Modeling a canopy then becomes a problem of choosing
-suitable parametric functions and estimating the parameters that best describe
-the true geometry.
+enough flexibility to enable complex foil models to be defined using
+parametric functions which encode the assumptions of the missing structure.
+Modeling a canopy then becomes a problem of choosing suitable parametric
+functions and estimating the parameters that best describe the true geometry.
 
 This chapter demonstrates one possible workflow to model a complete paraglider
 system from basic technical specifications using the simplified
@@ -35,27 +40,28 @@ Model
 
 .. Introduce the wing
 
-[[The wing is a Niviuk Hook 3, size 23.]]
+The paraglider wing used in this example is a Niviuk Hook 3, size 23. With
+forgiving flight characteristics targeting advanced beginners (or veteran
+pilots that are happy to forgo some performance in exchange for robust
+handling), this wing is not intended for acrobatics. The limitations of the
+:ref:`aerodynamics method <foil_aerodynamics:Phillips' numerical
+lifting-line>` are not an issue when simulating the majority of flights
+produced by this wing.
 
 .. figure:: figures/paraglider/simulations/Hook3_front_view.jpg
    :name: Hook3_front_view
 
    Front-view of an inflated Niviuk Hook 3
 
-Wing data is available from three primary sources:
+Wing data is available from four primary sources:
 
 1. Technical specifications and user manuals
 
-2. Pictures
+2. Flight test data from certifications and reviews
 
-3. Physical measurements
+3. Pictures and videos
 
-[[FIXME: the specs list the total wing weight at 4.7kg, but the
-upper/lower/rib materials only account for 2.5kg or so. My mass calculations
-neglect the extra mass due to things like the lines, riser straps, carabiners,
-internal v-ribs, horizontal straps, tension rods, etc, so I'm underestimating
-that mass, but I'm also assuming the vertical ribs are solid (no ports) so
-that makes up for a bit of the missing mass]]
+4. Physical measurements
 
 
 Technical specs
@@ -134,6 +140,10 @@ Developing a canopy model has four basic steps:
 
 4. Specify the materials to enable computing the resulting real and air mass
    inertia matrices.
+
+[[The first two steps create the idealized foil geometry model; should they be
+separate? I guess I like the fact that you can get really far just specifying
+the chord surface using measurements; it's a high-confidence task.]]
 
 
 Foil layout
@@ -232,6 +242,14 @@ airfoil.
   was also chosen by :cite:`becker2017ExperimentalStudyParaglider`). I should
   have probably used the LS(1)-0417 but oh well.
 
+.. figure:: figures/paraglider/simulations/braking_NACA24018.*
+
+   Set of NACA 24018 airfoils with trailing edge deflections.
+
+[[Explain why this is an extremely optimistic model of how parafoil sections
+deform with increasing brake inputs. I'd go as far as to say that this is the
+number one source of error in the model.]]
+
 
 Air intakes
 ^^^^^^^^^^^
@@ -241,59 +259,105 @@ Air intakes
 [[How did I choose the variables for the Hook 3? I never measured them, so
 I had to guess by looking at pictures..]]
 
+The Fig:11.4, page 17 of the user manual uses section numbers. Assuming the
+sections are uniform width, the air intakes start at section 22 of 27 ribs,
+which would mean they start at `s = 0.815`, so `s = 0.8` is a pretty good
+guess.
+
 
 Materials
 ^^^^^^^^^
 
 .. Design variables: rho_upper, rho_lower, rho_ribs
 
-[[FIXME: from the manual; see `extras/wings.py` for more
+* FIXME: from the manual; see `extras/wings.py` for more
 
-.. code-block:: python
+  .. code-block:: python
 
-   rho_upper=39 / 1000,  # [kg/m^2]  Porcher 9017 E77A
-   rho_lower=35 / 1000,  # [kg/m^2]  Dominico N20DMF
-   rho_ribs=41 / 1000,  # [kg/m^2] Porcher 9017 E29
+     rho_upper=39 / 1000,  # [kg/m^2]  Porcher 9017 E77A
+     rho_lower=35 / 1000,  # [kg/m^2]  Dominico N20DMF
+     rho_ribs=41 / 1000,  # [kg/m^2] Porcher 9017 E29
 
-]]
+* FIXME: the specs list the total wing weight at 4.7kg, but the
+  upper/lower/rib materials only account for 2.5kg or so. My mass calculations
+  neglect the extra mass due to things like the lines, riser straps,
+  carabiners, internal v-ribs, horizontal straps, tension rods, etc, so I'm
+  underestimating that mass, but I'm also assuming the vertical ribs are solid
+  (no ports) so that makes up for a bit of the missing mass
 
 
 Suspension lines
 ----------------
 
-.. Design variables: kappa_x, kappa_z, kappa_A, kappa_C
 
-   Also: total line length, line diameter, r_L2LE (lumped positions for the
-   line surface area), and Cd_lines
+Riser position
+^^^^^^^^^^^^^^
 
-[[In a physically accurate model a complete specification of the line geometry
-would define the accelerator function, brake deflections, line area
-distribution (for drag), etc. Instead, this model uses approximations for
-everything. Thankfully, the paraglider dynamics don't care HOW you define the
-functions, just that they're available.]]
+.. Design variables: kappa_x, kappa_z, kappa_A, kappa_C, kappa_a
 
-[[FIXME: I think :math:`\kappa_z` is the "Central line length" from the specs
-(normalized by the root chord, IIRC), but what about :math:`\kappa_x`? I think
-I guessed that based on the maximum speed on the polar]]
+[[This demonstration uses the simplified line geometry model. Instead of
+modeling the complete set of lines, it focuses on producing the effects of the
+bridle with as few parameters as possible.]]
 
-[[FIXME: how should I estimate :math:`\kappa_A` and :math:`\kappa_C`? Guess
-them from the line layout diagram from the user manual, or measure the
-physical wing?]]
+.. kappa_A and kappa_C
 
-[[FIXME: how should I specify the total line length and lumped position?
-I really hate `r_L2LE`; should it just assume two points at `<0.5c, +/- 0.25
-b/2, 0.25 z_RM>`? I haven't assigned these proper variable names yet; leave it
-that way?
-
-Also, the line drag coefficient assumes the lines are the same diameter
-everywhere, which is clearly wrong. The lines getter smaller as you go up the
-cascade.]]
+* FIXME: how should I estimate :math:`\kappa_A` and :math:`\kappa_C`? Guess
+  them from the line layout diagram from the user manual, or measure the
+  physical wing?
 
 
-Accelerator
-^^^^^^^^^^^
 
-.. Design variables: kappa_a
+.. kappa_x
+
+* Line lengths from pg8 of the Hook 3 technical specifications:
+
+  Neglecting the riser length of `0.470m`, the total lengths of the lines from
+  the risers to the tabs:
+
+  .. code-block::
+
+    2A1   = 3.994
+    A1    = 1.958
+    a1    = 0.361
+    Total = 6.313
+
+    2C1   = 4.720
+    C1    = 1.253
+    c1    = 0.308
+    Total = 6.281
+
+  If you neglected the differences in the cascades for the As and Cs, the
+  riser should be virtually centered between the two, which would mean if
+  `kappa_A = 0.11` and `kappa_C = 0.59` then `kappa_x = 0.35`. However, the Cs
+  first cascade is higher, thus larger angles, so the total length of the Cs
+  will be "too long" (the more you deviate from a straight line, the longer
+  the length to reach the destination).
+
+  A few crude guesses suggest the `kappa_x = 0.5` isn't terrible.
+
+  Using the lengths of the As and Cs is difficult, because `kappa_x` is very
+  sensitive to small differences. For the Hook3, if they were the same length
+  then `kappa_x = 0.35`, but if `kappa_x = 0.5` (a large difference in
+  horizontal position) then the `C = 0.9898 * A`: scarcely more than 1%
+  difference!
+
+  Is using the nominal glide speed a better measure? I wonder how much
+  `kappa_x/kappa_z` affects stability... Is `kappa_x` important?
+
+  Maybe tune `kappa_x` to maximize the glide ratio? That happens at `kappa_x
+  = 0.5c`. Of course it's common for the optimum glide ratio to occur when
+  speedbar is applied, but whatever. Let's assume this wing was optimized for
+  best glide at trim.
+
+
+.. kappa_z
+
+* FIXME: I think :math:`\kappa_z` is the "Central line length" from the specs
+  (normalized by the root chord, IIRC), but what about :math:`\kappa_x`?
+  I think I guessed that based on the maximum speed on the polar
+
+
+.. kappa_a
 
 [[From the specs, the accelerator line length :math:`\kappa_a = 0.15`]]
 
@@ -301,7 +365,9 @@ Accelerator
 Brakes
 ^^^^^^
 
-.. Design variables: s_delta_start0/1, s_delta_stop0/1, s_delta_f_max
+.. Design variables: s_delta_start0/1, s_delta_stop0/1, kappa_b
+
+   Alternative: explain calculating kappa_b from a constraint on delta_d_max
 
 
 .. Deflection angle distribution and braking profiles
@@ -310,8 +376,9 @@ The true deflection angle distribution depends on the true line lengths and
 cascade angles, but since the simple model does not include those the
 deflection angles must be assumed/guessed.
 
-[[In :ref:`paraglider_components:Brakes` I suggested a cubic polynomial. You
-can guesstimate the parameters by looking at a rear-view photo of a wing.]]
+[[Estimate the parameters of the quartic model in
+:ref:`paraglider_components:Brakes` by looking at a rear-view photo of
+a wing.]]
 
 .. figure:: figures/paraglider/simulations/Hook3_rear_view.jpg
    :name: Hook3_rear_view
@@ -329,13 +396,43 @@ but call it out when discussing reasons why I'm not comparing this to actual
 flight data (goes together with the other uncertainties, like unknown
 airfoil).]]
 
+
+.. figure:: figures/paraglider/simulations/Hook3_TE_0.25_0.50.*
+
+   Quartic brake deflections, :math:`\delta_{bl} = 0.25` and :math:`\delta_{br}
+   = 0.5`
+
+.. figure:: figures/paraglider/simulations/Hook3_TE_1.00_1.00.*
+
+   Quartic brake deflections, :math:`\delta_{bl} = 1.00` and
+   :math:`\delta_{br} = 1.0`
+
+
 [[FIXME: explain how I generated some VERY idealized deformed profiles to
 implement deflected trailing edges]]
 
 [[FIXME: explain using XFOIL to get the section coefficients.]]
 
 
-Harness
+Line drag
+^^^^^^^^^
+
+.. Design variables: total line length, line diameter, r_L2LE (lumped
+   positions for the line surface area), and Cd_lines
+
+* FIXME: how should I specify the total line length and lumped position for
+  the line drag? I really hate `r_L2LE`; should it just assume two points at
+  `<0.5c, +/- 0.25 b/2, 0.25 z_RM>`? I haven't assigned these proper variable
+  names yet; leave it that way?
+
+  Also, the line drag coefficient assumes the lines are the same diameter
+  everywhere, which is clearly wrong. The lines getter smaller as you go up
+  the cascade.
+
+
+
+
+Payload
 -------
 
 .. Design variables: m_p, z_riser, S_p, C_d,p, kappa_w
@@ -383,6 +480,39 @@ Polar curves
   Seems like a good place to point out "this is overestimating lift and
   underestimating drag, as expected."]]
 
+* `hook 3 perfils.pdf`:
+
+  * min/min sink (50% brakes)/max glide (0% brakes)/max accelerator
+
+    24/35/40/54 km/h
+
+  * Best glide: 9.5 (with pod harness)
+
+
+* `2013-01-23_hook3_23_en`:
+
+  * Minimum speed `<25km/h`
+
+  * Symmetric control travel `>60cm` (my model has `kappa_b = 0.46cm`)
+
+    That means I'm modeling **at most** 77% of the travel they got during the
+    test. No wonder their "steeply banked turn" is so extreme. What would my
+    polar look like if you extrapolated it that far, I wonder?
+
+  * Pitch stability upon exiting accelerated flight: dive forward angle on
+    exit less than 30 degrees (my model pitches backwards about 20, then
+    forward to -7, so I think this is good)
+
+  * Sink rate after to steeply banked turns `>14m/s` (I think I'm WAY off
+    here, possibly due to my very limited brake range. And man, that's
+    `31mph`; that is a PLUMMET.)
+
+    Holy cow, later in "Behavior exiting a steep spiral" they recorded
+    a `19m/s` sink rate for the 85kg! Clearly I am unable to model a spiral.
+
+
+
+
 
 Dynamic performance
 ===================
@@ -390,6 +520,13 @@ Dynamic performance
 .. Informative flight scenarios
 
 * Steady-state turn rate and radius size
+
+  Apply 100% brake and observe steady state to really highlight how limited
+  this model is for actual flight conditions.
+
+  The roll and pitch angles for the 6a are 14.3 and 0.47; that's practically
+  a flat turn! For the 9a it's more like 9.5 and 1.7, still nowhere CLOSE to
+  a spiral or "steep bank angle".
 
 * Control input impulses (on/off of symmetric brake, asymmetric brake,
   accelerator, weight shift)
@@ -421,8 +558,23 @@ Dynamic performance
 
   Also, :cite:`lingard1995RamairParachuteDesign` Sec:7 and Sec:8.]]
 
-* Compare the apparent inertia to the real inertia
+* Compare the apparent inertia to the real inertia.
 
+  Under what conditions? It depends on the current velocity. Maybe compare the
+  real mass, apparent mass at hands-up equilibrium, apparent mass during
+  a turn, etc. The point is to **highlight the magnitude of the effect**.
+
+* In `2013-01-23_hook3_23_en` they have the sink rate after two "steeply
+  banked" turns is `>14m/s`. For my model, full brakes and weight shift only
+  get it to `1.397m/s`. Wow, optimistic much? Granted, I'm severely limiting
+  the brake travel and am using VERY optimistic airfoil data.
+
+* They say the wing dives **forward** "less than 30deg" upon exiting
+  accelerated flight? My model says that rapidly letting off accelerator
+  should see a positive pitch (backwards), not forwards. Sure, after pitching
+  backwards it then pitches forwards to `-7deg`, but still, odd.
+
+* How does geometric torsion affect the off-center thermal scenario?
 
 Discussion
 ==========

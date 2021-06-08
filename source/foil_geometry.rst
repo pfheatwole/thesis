@@ -451,14 +451,13 @@ profiles produce a continuous surface that defines the complete 3D volume.
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_examples.*
 
-   Airfoils examples.
+   Airfoils.
 
-Although airfoils are potentially arbitrary 2D curves, they are typically
-defined by a mean camber line, a thickness distribution, and a thickness
-convention. The exact value of the mean camber line and thickness depends on
-the thickness convention, but in general the mean camber line runs will lie
-halfway between an upper and lower surface whose separation distance is
-specified by the thickness distribution.
+Airfoils are typically defined by a mean camber line, a thickness
+distribution, and a thickness convention. The exact value of the mean camber
+line and thickness depends on the thickness convention, but in general the
+mean camber line runs will lie halfway between an upper and lower surface
+whose separation distance is specified by the thickness distribution.
 
 .. figure:: figures/paraglider/geometry/airfoil/airfoil_diagram.*
    :name: airfoil_diagram
