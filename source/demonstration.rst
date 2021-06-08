@@ -48,7 +48,7 @@ handling), this wing is not intended for acrobatics. The limitations of the
 lifting-line>` are not an issue when simulating the majority of flights
 produced by this wing.
 
-.. figure:: figures/paraglider/simulations/Hook3_front_view.jpg
+.. figure:: figures/paraglider/demonstration/Hook3_front_view.jpg
    :name: Hook3_front_view
 
    Front-view of an inflated Niviuk Hook 3
@@ -180,7 +180,7 @@ to scale, and so should be used with caution.) For this wing, a small amount
 of trial and error using a top-down view from the wing user manual suggests
 :math:`r_x = 0.7`.]]
 
-.. figure:: figures/paraglider/simulations/Hook3_topdown.jpg
+.. figure:: figures/paraglider/demonstration/Hook3_topdown.jpg
    :name: Hook3_topdown
 
    Top-down outline of flattened canopy
@@ -242,7 +242,7 @@ airfoil.
   was also chosen by :cite:`becker2017ExperimentalStudyParaglider`). I should
   have probably used the LS(1)-0417 but oh well.
 
-.. figure:: figures/paraglider/simulations/braking_NACA24018.*
+.. figure:: figures/paraglider/demonstration/braking_NACA24018.*
 
    Set of NACA 24018 airfoils with trailing edge deflections.
 
@@ -380,7 +380,7 @@ deflection angles must be assumed/guessed.
 :ref:`paraglider_components:Brakes` by looking at a rear-view photo of
 a wing.]]
 
-.. figure:: figures/paraglider/simulations/Hook3_rear_view.jpg
+.. figure:: figures/paraglider/demonstration/Hook3_rear_view.jpg
    :name: Hook3_rear_view
 
    Rear-view of an inflated Hook 3 with symmetric brake deflections
@@ -397,12 +397,12 @@ flight data (goes together with the other uncertainties, like unknown
 airfoil).]]
 
 
-.. figure:: figures/paraglider/simulations/Hook3_TE_0.25_0.50.*
+.. figure:: figures/paraglider/demonstration/Hook3_TE_0.25_0.50.*
 
    Quartic brake deflections, :math:`\delta_{bl} = 0.25` and :math:`\delta_{br}
    = 0.5`
 
-.. figure:: figures/paraglider/simulations/Hook3_TE_1.00_1.00.*
+.. figure:: figures/paraglider/demonstration/Hook3_TE_1.00_1.00.*
 
    Quartic brake deflections, :math:`\delta_{bl} = 1.00` and
    :math:`\delta_{br} = 1.0`

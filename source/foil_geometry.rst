@@ -159,7 +159,7 @@ intakes at the leading edge. Manufactured from flexible materials such as
 ripstop nylon, they rely on internal structures and variable-length suspension
 lines to control the shape of the inflated volume.
 
-.. figure:: figures/paraglider/simulations/Hook3_front_view.jpg
+.. figure:: figures/paraglider/demonstration/Hook3_front_view.jpg
    :width: 75%
 
    Paraglider front view.
