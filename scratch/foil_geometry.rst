@@ -1,17 +1,3 @@
-* Although a small amount of air does flow through the canopy's surface, the
-  majority of the air flows around the canopy's volume.
-
-* I'm choosing to neglect cell distortions, which is technically
-  a big deal, but developing an aerodynamic method that accounts for cell
-  billowing is time prohibitive. Should I simply punt that discussion into the
-  aerodynamics section? Like "this geometry neglects details such as cell
-  distortions. See 'foil_aerodynamics:Limitations' for a discussion." ?
-
-* Do I like using "O" for the wing origin? It's basically the origin for the
-  entire wing; my only gripe is that I don't like using "O" in math since it
-  looks like a zero. Also, do I need a name for the origin of the chord
-  surface?
-
 * Wing origin offset: the chord surface uses it's own coordinate system,
   with its origin defined by the origins of the reference position curves.
   For the wing I'm defining origin as the leading edge of the central
@@ -20,61 +6,51 @@
   no geometric torsion then it's simply an x-offset `x(0) + r_x(0) * c(0)`,
   right?)
 
-* Washin and washout have multiple purposes:
-
-  * Control the spanwise tension (lateral) and loading (vertical)
-
-  * Allow the designer to encourage more favorable stall patterns.
-    (Specifically, a paraglider should start stalling the wing tip first.)
-
-* "Wing tapering reduces the wing-root bending moments, since the inboard
-  portion of the wing carries more of the wing's lift than the tip."
-
-* You can affect the circulation distribution (and thus the induced drag) by
-  manipulating the wing twist.
+* The aerodynamics can be estimated using a variety of aerodynamics models
+  that depend on different aspects of the shape, but in general they all use
+  points from either the chord surface, the camber surface, or the profile
+  surface; to support the variety of aerodynamic methods, the model should
+  return points on any of the three surfaces.
 
 
-Overview
-========
-
-The goal of this chapter is to create a canopy model from very basic technical
-specs. The approach is to augment the specs with educated guesses about the
-missing structure. The section profiles are defined by airfoils; the section
-scales, positions, and orientations are defined by parametric functions. The
-parametric functions should incorporate the available specs to produce the
-completed geometry.
-
-There are existing wing modeling tools that use wing sections, but most of
-them (XFLR5, AVL, etc) assume you know the geometry as a set of explicit
-points and perform linear interpolation between them; such tools are not
-suitable for **generating** a wing geometry. This project needs to generate
-the points using parametric function. There are modeling tools that can use
-parametric functions (MachUpX, more?), but they use fixed choices for the
-section reference points; this lack of flexibility pushes the structural
-complexity into the parametric functions which makes them unnecessarily
-complicated. So, this chapter starts by developing a novel geometry that
-decouples the design curves and allows for much simpler parametric functions.
-
-Creating a canopy model from basic spec data is thus broken into two steps:
-
-1. Design a generalized geometry (which defines the points on the section
-   surfaces) that decouples section scale, position, and orientation
-
-   [[I kept struggling with this part; my tendency is to say "design
-   a geometry that allows arbitrary functions instead of explicit points", but
-   that's irrelevant: you could just evaluate those arbitrary functions to get
-   the explicit points, in which case AVL et al could model it just fine.
-
-   **The whole point is here is that we don't know the explicit points, so we
-   need to create parametric functions that encode our assumptions, and those
-   parametric functions have MUCH simpler forms if they are all decoupled.**]]
-
-2. Design a set of a parametric functions that encode the domain knowledge to
-   define the scale, position, and orientation from basic technical data.
 
 
-Overview 2 (2021-04-15)
-=======================
+
+
+.. Describe the visible characteristics/details of the canopy
+
+   These details capture the visible structure of a parafoil, and thus are
+   intuitive starting points for parametrizing a parafoil, but don't confuse
+   the characteristic with its representation (eg, arc versus dihedral angle).
+
+The most striking detail of a parafoil's shape is its characteristic spanwise
+curvature, called the *arc* :cite:`lolies2019NumericalMethodsEfficient` (also
+known as the *lobe* :cite:`casellasParagliderDesignHandbook`); the arc plays
+a major role in wing stability, maneuverability, and efficiency. Another
+important characteristic is the continuously variable tapering of the section
+lengths from the center of the wing out to the tips, which impacts aerodynamic
+efficiency, canopy weight, and stall behavior. A third important detail is how
+the front ("leading") and rear ("trailing") edges are offset in the fore-aft
+direction.
+
+To manufacture a parafoil, nylon panels are stitched together to form upper
+and lower surfaces, whose different curvature and length is fundamental for
+generating aerodynamic lift. The panels are stitched to internal support
+structures calls *ribs*, and the spaces between the ribs are visible as
+a sequence of *cells*. The majority of the cells are open near their leading
+edges, forming the *air intakes*. In addition to these fundamental details,
+commercial wings employ a wide variety of techniques to improve wing
+stability, performance, and reliability, such as partial ribs, diagonal ribs,
+horizontal straps, structural reinforcement rods, etc. The deceptively simple
+appearance of a parafoil belies a sophisticated aircraft dominated by subtle
+details.
+
+
+
+
+
+Introduction
+============
 
 This project needs a mathematical model of the canopy geometry in order to
 estimate the canopy aerodynamics. The problem is that complete specifications
@@ -99,111 +75,267 @@ will provide several convenient design curves that capture most of the missing
 structure using reasonable assumptions based on typical canopy design.
 
 
-Rough outline
-=============
+* What are the limitations of existing wing modeling tools that accept
+  functions to define the geometry?
 
-* What is a parafoil canopy?
+  * MachUpX: requires position to be specified using the leading edge (I think),
+    defines positions using lengths (not absolute coordinates, so you have to
+    integrate), has a funky definition for orientation, etc. 
 
-* Why does this project need a model of the canopy?
+  * Paraglider Design Handbook: IIRC this accepts a reference point, but it's
+    the same for all dimensions? (Besides, the source is not written to be used
+    by external programs, so its Fortran is hard to understand and extend.)
 
-  To estimate the inertial properties and aerodynamics.
+  * Benedetti's dissertation: uses the quarter-chord (besides, his source isn't
+    available anyway)
 
-* Why not use existing wing modeling tools?
-
-  Most of them assume the wing geometry is already available as a set of
-  points. For parafoils, we don't know the geometry: we need to **create** it
-  using parametric functions, so we need a wing geometry that accepts
-  functions to specify the design.
-
-* Why not use existing wing modeling tools that accept functions?
-
-  Although there are existing tools that accept functions instead of points,
-  they include some unfortunate limitations. In particular, they use fixed
-  reference points, which has the effect of coupling the design curves.
-  Coupling structure between curves means they have to be designed
-  simultaneously; redesigning one requires redesigning the others.
-
-* Conclusion: we need a generalized geometry that accepts decoupled *design
-  curves* to specify the complete geometry. This chapter starts by developing
-  a generalized geometry model that decouples the design curves, then it
-  presents some parametric functions that can combine the basic spec data with
-  structural assumptions that complete the geometry definition.
+* There are existing wing modeling tools that use wing sections, but most of
+  them (XFLR5, AVL, etc) assume you know the geometry as a set of explicit
+  points and perform linear interpolation between them; such tools are not
+  suitable for **generating** a wing geometry. **This project needs to
+  generate the points from the summary specs using parametric functions.**
+  There are modeling tools that can use parametric functions (MachUpX, more?),
+  but they use fixed choices for the section reference points; this lack of
+  flexibility pushes the structural complexity into the parametric functions
+  which makes them unnecessarily complicated. So, this chapter develops
+  a novel geometry that decouples the design curves and allows for much
+  simpler parametric functions.
 
 
-.. Parafoil canopies
+
+
+Modeling requirements
+=====================
 
 * Review what we need to model: describe the physical system
-
-
-.. General equation
-
-* To make it easier to design the parametric functions, we start by creating
-  a generalized geometry in terms of scale, position, and orientation.
-
-* Introduce the general equation
-
-* This is my general model with fully decoupled parameters
-
-* It computes points anywhere in each section coordinate system (typically the
-  points will be on the chord, camber line, or profile).
-
-
-.. Available data
 
 * Review what we know: the basic technical specs
 
 * Consider what structure we don't know: we'll have to model that somehow
 
+* For this project, an approximate geometry is sufficient. It is not intended
+  for detailed wing design, so it does not (currently) model details such as
+  internal structure, cells, etc. It is intended to maximize simplicity while
+  still being "accurate enough".
 
-.. Design curves
+* I'm choosing to neglect cell distortions, which is technically
+  a big deal, but developing an aerodynamic method that accounts for cell
+  billowing is time prohibitive. Should I simply punt that discussion into the
+  aerodynamics section? Like "this geometry neglects details such as cell
+  distortions. See 'foil_aerodynamics:Limitations' for a discussion." ?
+
+
+
+Parametric modeling with wing sections
+======================================
+
+.. Explicit vs parametric geometries
+
+[[For wing models, explicit geometries are also less convenient to analyze,
+since they are difficult to decompose.]]
+
+
+
+.. Advantages of parametric geometries
+
+Parametric models offer a variety of advantages:
+
+* They can be generated small small amounts of data. [[This is the most
+  important feature for this project, since I only have basic summary data.]]
+
+* They are low-dimensional representations, which makes them more amenable to
+  mathematical optimization methods. This is helpful for wing performance
+  optimization and statistical parameter estimation.
+
+* They make it much easier to place statistical priors over model
+  configurations. [[You can probably build a metric for comparing explicit
+  geometries, but it would be tough.]]
+
+  It's important that I reduce the effort to model existing wings because
+  I need a representative set of models to deal with model uncertainty.
+
+  Flight reconstruction requires a model of the wing that produced the
+  flight, but due to model uncertainty the estimate must use an entire
+  distribution over possible wing configurations. [[You'll still probably
+  need to use a "representative set" of models (parameter estimation is
+  likely a pipedream given the available data), but at least parametric
+  models make it MUCH easier to *create* that representative set from the
+  limited available data on existing wings.]]
+
+
+
+.. Define the functional goals of the canopy model parametrization
+
+* [[Define *parametrization*]]
+
+* [[Some parametrizations are better than others.]]
+
+* Parametric designs try to balance simplicity and expressibility. A good
+  parametrization lets you focus on high-level design without forcing you
+  into simplistic designs. **The goal is to find a set of simple parametric
+  functions that combine to capture the complex structure of the wing.**
+
+* [[The choice of parametrization affects how useable it is. What would make
+  a good parametrization?]]
+
+  * Some goals of a parametrization:
+
+    * Capable of capturing the most important details (as simple as possible,
+      but no simpler)
+
+    * Intuitive
+
+    * Preferably map easily onto the most readily-available summary values
+      (like span). It needs to make it easy to work with available wing data
+      (technical specs, measurable quantities like flat span, etc).
+
+  * When I say a good parametrization should be *intuitive*, I mean that it
+    should match what you notice when you glance at a wing. The arc, the
+    width, and the way the leading edge sweeps backwards are probably the most
+    obvious. Or maybe you notice the trailing edge more; whatever you notice
+    is what I mean by "intuitive".
+
+  * The choice of parametrization is influence by what details you want to be
+    able to represent / capture. The final model will be an approximation of
+    the real wing, so you need to decide up from what details you want to
+    capture (and thus what details you're happy to lose).
+
+  * You should be able to specify the design target directly. If you want
+    to position a particular part of the wing at a particular position, you
+    should be able to say that explicitly without needing to translate (eg, if
+    you want to position the trailing edge you shouldn't be required to
+    describe it in terms of the chord length, orientation, and leading edge
+    position).
+
+  * Design parameters should be independent. You shouldn't need to change one
+    to satisfy another. This is directly related to the idea of "specifying
+    each target directly". How you position a section should be independent of
+    the chord length or how you orient that section.
+
+
+.. Wing sections
+
+[[In addition to design convenience, building a wing from 2D cross-sections
+also provides computational benefits for estimating the aerodynamic
+performance of the 3D wing, as discussed in :ref:`foil_aerodynamics:Section
+Coefficients`.]]
+
+Advantages of designing with *wing sections*:
+
+1. They hide a lot of the geometric complexity.
+
+2. They enable analyzing the 2D sections independently from the 3D wing. It's
+   not a perfect match, but you have a lot of control over the final 3D
+   aerodynamics by choosing the 2D profiles.
+
+3. You can precompute the section coefficients, thus saving a ton of time when
+   solving the 3D flow field (especially if viscous effects are included).
+
+
+
+Basic model
+===========
+
+* The conventional parametric approach to wing design is to use *wing
+  sections*, which require specifying the scale, position, orientation, and
+  profile of cross-sectional areas along the wing span. For the non-linear
+  geometry of a parafoil canopy, specifying the scale/position/orientation for
+  each section explicitly is unwieldy. Instead, it is more convenient to work
+  with a set of *design parameters* (span, taper ratio, elliptical function
+  parameters, etc) that capture the underlying structure of the model.
+
+
+
+Expanded model
+==============
+
+* The advantage of the expanded model are:
+
+  1. It allows specifying position using points other than the leading edge.
+
+  2. It decouples the scale, position, and orientation parameters, which
+     allows them to be designed independently.
+
+  3. Because the parameters are decoupled, the generalized model makes it
+     easier to design simple parametric functions that can incorporate the
+     available data.
+
+* What's cool about my *general equation* is how it parametrizes the surface.
+  It doesn't require you to specify any particular point (leading edge,
+  quarter chord, etc): you can define the sections using whatever is the most
+  convenient. **Arbitrary reference points fully decouple the design curves;
+  that's what makes this so cool.** Splitting out structure into the choice of
+  reference point lets you choose much simpler design curves. Many realistic
+  wings can be created using mostly constant design "curves"; that's really
+  cool!]]
+
+
+
+Simplified model
+================
+
+
+
+Design curves
+=============
 
 * This section designs some parametric functions that define the position,
-  scale, and orientation variables of the general equation. For simplicity,
-  I'm them *design curves*.
+  scale, and orientation variables of the general equation..
 
 * The *design curves* encode the structure of the canopy geometry.
-
-* The basic specs are missing a lot of information, so this section needs to
-  design parametric functions that can combine what little data we know with
-  some educated guess to "fill in" the missing structure and produce
-  a complete geometry.
 
 * First, consider what data is available. There are several sources:
 
   1. Technical specs
 
-  2. Pictures
+  2. Technical reviews
 
-  3. Physical measurements
+  3. Pictures and video
 
-  The design curves should make it easy to utilize these sources.
+  4. Physical measurements
+
+  The design curves must make it easy to utilize these sources.
 
 * Present some convenient definitions: elliptical chords, etc
 
+* [[There are also a variety of standard terms I will avoid due to ambiguity:
+  *planform*, *mean aerodynamic chord*, maybe more? For *planform*, most texts
+  assume the wing is flat and so the projected area is essentially equal to
+  the flat area, and thus differentiating the two is largely neglected in
+  standard aerodynamic works. The mean aerodynamic chord is a convenient
+  metric for comparing flat wings and for simplifying some equations, but for
+  wings with significant arc anhedral I'm not sure how beneficial this term
+  really is; it's a mistake to compare wings based on the MAC alone, so I'd
+  rather avoid any mistaken comparisons.]]
 
-.. Examples
+* Technically, for flat wings curvature in the yz-plane is is described as
+  *dihedral* or *anhedral*: not sure how to define this for a wing. If the
+  wing is straight, then it's traditionally defined as `arctan(z/y)` of the
+  section position, but that's pretty unhelpful for a paraglider. It also
+  doesn't differentiate between `arctan(z/y)` and `arctan(dz/dy)` of
+  a section. Still, discussing curvature leads nicely into a discussion of the
+  *arc*, so whatever.
+
+
+Examples
+========
 
 * Show how the design curves produce completed canopies
 
+* Should I provide the parameters of the design curves? Might be nice to
+  highlight their simplicity.
 
-Content
-=======
 
-* We need a model of the canopy geometry to determine the inertial properties
-  and the aerodynamics (forces and moments)
 
-  The *inertial properties* of a wing refer to quantities like the total mass
+MISC
+====
+
+* The *inertial properties* of a wing refer to quantities like the total mass
   (which determines the wing's translational accelerations), the distribution
   of mass (which determine the wing's angular accelerations), volume, etc.
 
   The *aerodynamics* describe the forces and moments that are exerted on the
   object when it interacts with moving air.
-
-
-* For this project, an approximate geometry is sufficient. It is not intended
-  for detailed wing design, so it does not (currently) model details such as
-  internal structure, cells, etc. It is intended to maximize simplicity while
-  still being "accurate enough".
 
 * Why does this project need a **complete** mathematical model?
 
@@ -229,76 +361,22 @@ Content
   * Conclusion: a complete mathematical model of the canopy geometry is required
     to estimate the aerodynamics and inertial properties of a paraglider.
 
-* Calling into external aerodynamics programs is too slow; we will need to use
-  a library. I didn't find a suitable aerodynamics library, so I was going to
-  need to create my own. If I'm using my own aerodynamics code, I'll need
-  a geometry model to query the shape. Most existing geometry implementations
-  are built into specific programs
 
-* The advantage of the generalized model are:
+Foil design
+-----------
 
-  1. It allows specifying position using points other than the leading edge.
+* Washin and washout have multiple purposes:
 
-  2. It decouples the scale, position, and orientation parameters, which
-     allows them to be designed independently.
+  * Control the spanwise tension (lateral) and loading (vertical)
 
-  3. Because the parameters are decoupled, the generalized model makes it
-     easier to design simple parametric functions that can incorporate the
-     available data.
+  * Allow the designer to encourage more favorable stall patterns.
+    (Specifically, a paraglider should start stalling the wing tip first.)
 
-* What are the limitations of existing wing modeling tools that accept
-  functions to define the geometry?
+* "Wing tapering reduces the wing-root bending moments, since the inboard
+  portion of the wing carries more of the wing's lift than the tip."
 
-  * MachUpX: requires position to be specified using the leading edge (I think),
-    defines positions using lengths (not absolute coordinates, so you have to
-    integrate), has a funky definition for orientation, etc. 
-
-  * Paraglider Design Handbook: IIRC this accepts a reference point, but it's
-    the same for all dimensions? (Besides, the source is not written to be used
-    by external programs, so its Fortran is hard to understand and extend.)
-
-  * Benedetti's dissertation: uses the quarter-chord (besides, his source isn't
-    available anyway)
-
-
-* What's cool about my *general equation* is how it parametrizes the surface.
-  It doesn't require you to specify any particular point (leading edge,
-  quarter chord, etc): you can define the sections using whatever is the most
-  convenient. **Arbitrary reference points fully decouple the design curves;
-  that's what makes this so cool.** Splitting out structure into the choice of
-  reference point lets you choose much simpler design curves. Many realistic
-  wings can be created using mostly constant design "curves"; that's really
-  cool!]]
-
-* The conventional parametric approach to wing design is to use *wing
-  sections*, which require specifying the scale, position, orientation, and
-  profile of cross-sectional areas along the wing span. For the non-linear
-  geometry of a parafoil canopy, specifying the scale/position/orientation for
-  each section explicitly is unwieldy. Instead, it is more convenient to work
-  with a set of *design parameters* (span, taper ratio, elliptical function
-  parameters, etc) that capture the underlying structure of the model.
-
-
-Geometry specification
-----------------------
-
-* [[There are also a variety of standard terms I will avoid due to ambiguity:
-  *planform*, *mean aerodynamic chord*, maybe more? For *planform*, most texts
-  assume the wing is flat and so the projected area is essentially equal to
-  the flat area, and thus differentiating the two is largely neglected in
-  standard aerodynamic works. The mean aerodynamic chord is a convenient
-  metric for comparing flat wings and for simplifying some equations, but for
-  wings with significant arc anhedral I'm not sure how beneficial this term
-  really is; it's a mistake to compare wings based on the MAC alone, so I'd
-  rather avoid any mistaken comparisons.]]
-
-* Technically, for flat wings curvature in the yz-plane is is described as
-  *dihedral* or *anhedral*: not sure how to define this for a wing. If the
-  wing is straight, then it's traditionally defined as `arctan(z/y)` of the
-  section position, but that's pretty unhelpful for a paraglider. It also
-  doesn't differentiate between `arctan(z/y)` and `arctan(dz/dy)` of
-  a section. Still, discussing curvature leads nicely into a discussion of the
-  *arc*, so whatever.
+* You can affect the circulation distribution (and thus the induced drag) by
+  manipulating the wing twist.
 
 
 Points on chords
@@ -356,5 +434,3 @@ Or, using separate equations instead of matrix math:
    y &= y_r + (r_y - r) \hat{x}^f_y\\
    z &= z_r + (r_z - r) \hat{x}^f_z
    \end{aligned}
-
-

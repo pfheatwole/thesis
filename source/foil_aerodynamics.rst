@@ -5,17 +5,17 @@
 Foil aerodynamics
 *****************
 
-For the purposes of this chapter, *aerodynamics* describe the instantaneous
+For the purposes of this chapter, *aerodynamics* refer to the instantaneous
 forces and moments produced when an object moves through air, and an
-*aerodynamic model* encodes the aerodynamics of a foil over the range of
+*aerodynamic model* estimates the aerodynamics of a foil over the range of
 flight conditions. In a rigorous modeling process, an aerodynamic model is
 measured experimentally, either in a wind tunnel or with flight tests.
 Alternatively, theoretical methods allow a foil's aerodynamics to be predicted
 from mathematical models that use the foil geometry to predict the surrounding
 flow field. The previous chapter introduced a parametric foil geometry
 explicitly because experimental methods are infeasible for this project;
-experimental wing tests are time consuming and expensive, assuming a physical
-parafoil could even be acquired. Instead, this project must rely on
+experimental wing tests are time consuming and expensive (assuming a physical
+parafoil could even be acquired). Instead, this project must rely on
 theoretical methods.
 
 This chapter selects a theoretical method suitable for flight reconstruction
@@ -255,8 +255,9 @@ Phillips' numerical lifting-line
   * Computationally fast
 
 * Beware: there are two uses of the acronym NLLT: the `N` can either stand for
-  "nonlinear" or "numerical". For example, Weissinger's "nonlinear LLT" versus
-  Phillips "numerical LLT".
+  "nonlinear" (since it works with nonlinear lifting lines) or "numerical"
+  (since it uses a numerical solution instead an analytical solution). For
+  example, Weissinger's "nonlinear LLT" versus Phillips "numerical LLT".
 
 
 Derivation
@@ -551,10 +552,61 @@ problem until convergence is achieved.]]
 [[Related: `Sensitive to initial proposal`_.]]
 
 
-Clamping
-^^^^^^^^
+Clamping section coefficients
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[[Clamping seems to have eliminated the need for "relaxed" solutions?]]
+[[One significant issue with the method is due to the fact that it places the
+control points directly on the lifting line. This relies on the induced
+velocities of neighboring segments to mostly cancel, an assumption which is
+violated at the wing tips. (See `Unstable at high resolution`_.)]]
+
+[[Assume the large alpha is fictitious, so lacking the coefficient data at
+such a high alpha is not a good reason for the simulation to abort. Instead,
+assume the true alpha is close to the maximum alpha supported by the
+coefficient data, and clamp `Cl` and `Cl_alpha` to their values at that
+maximum alpha. However, in case the true alpha really does need to be that
+large, only clamp segments at the wingtips; if neighboring segments inboard of
+the wingtip are experiencing legitimate large alpha, let the method fail.
+
+**The point is not to create good guesses of the true value, the point is to
+limit the magnitude of the error.**
+
+Justifications: if the outer segment is small, then 1) its contribution to
+the error is expected to be small (I'm neglecting interactions produced by the
+circulation at the true alpha), and 2) you wouldn't expect an extreme change
+in alpha from the wingtip to its neighbor, so if its neighbor is in the valid
+range you can expect that the wingtip alpha is (relatively) close.
+
+
+Summary:
+
+1. It's deliberately crude. I don't expect this to ever be a "good" solution,
+   so I'm not wasting time trying to make it "good".
+
+   This is explicitly a "crude but good enough" means to an end.
+
+#. The section coefficients assume minimal spanwise flow, which is already
+   massively violated, which means I already expect the wing tip values to be
+   borderline useless anyway.
+
+#. Limiting the effect to the last 5% of the wing doesn't also means I'm
+   accepting error in much less than 5% of the total aerodynamic
+   contributions. The area of that wingtip segment is very small, so the
+   effect of the error is assumed to be small. (The `Cl` post-stall won't
+   suddenly drop to zero, after all; it'll stay somewhere in the vicinity.)
+
+#. The wingtip alpha produced by Phillips is already broken anyway, even if
+   you had good coefficients at such high alpha.
+
+
+* A caveat of my implementation is that it only clamps `alpha_max`, assuming
+  the fictitious alpha are always positive at the wing tips. For a rigid wing
+  at a very negative alpha the fictitious alpha would be negative, but I'm
+  neglecting that scenario since such a negative alpha would induced a frontal
+  collapse anyway, at which point the model would already be totally broken.
+
+* FIXME: clamping seems to have eliminated the need for "relaxed" solutions?
+  Should I retain that section? Not sure I ever trigger it anymore.
 
 
 Limitations
@@ -813,6 +865,11 @@ as the number of control points is increased (the grid is refined). Recall the
 and "locating the control points away from the bound vortex is still the only
 way to have a general formulation that doesn't behave badly as the
 discretization is refined".
+
+[[The reason the effect becomes more significant as the number of segments is
+increased can be seen in :eq:`induced velocities`. As distance between the
+segments is reduced, the denominators decrease, the induced velocities, and
+the "imbalance" at the wing tip increases. (I think.)]]
 
 See also :cite:`chreim2018ChangesModernLiftingLine`, pg3: long discussion of
 the PBC, and later on he notes "the circulation distribution becomes

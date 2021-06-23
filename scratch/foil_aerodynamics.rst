@@ -36,6 +36,9 @@ Outline
 BRAINDUMP
 =========
 
+* Although a small amount of air does flow through the canopy's surface, the
+  majority of the air flows around the canopy's volume.
+
 * The canopy geometry can either be used directly or indirectly; direct
   methods, such as a *vortex lattice methods* or *computational fluid
   dynamics*, generate control points on or around the 3D geometry itself,

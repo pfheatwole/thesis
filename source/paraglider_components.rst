@@ -308,14 +308,16 @@ computed from the brake inputs.
 .. Defining the deflection angle for a section
 
 * The simplest approach is to ignore any deformations to the geometry and
-  model the deflection as a global rotation about some rotation point
-  (typically the quarter-chord position), with the deflection angle measured
-  between the deflected and undeflected chords.
+  model the deflection as a global rotation about some rotation point , with
+  the deflection angle measured between the deflected and undeflected chords.
+  [[The rotation point is often implicit; for example, lifting-line models
+  that assume a fixed quarter-chord are implicitly rotating about the
+  quarter-chord position.]]
 
 .. figure:: figures/paraglider/geometry/airfoil/deflected_airfoil_rotation.*
-   :name: deflection_airfoil_rotation
+   :name: deflected_airfoil_rotation
 
-   Deflection as a rotation.
+   Deflection as a rotation of the entire profile.
 
 * By ignoring deformation to the profile geometry this model assumes the shape
   of the lift curve does not change with brake deflections; deflections
@@ -332,9 +334,9 @@ computed from the brake inputs.
   some fixed position along the chord:
 
 .. figure:: figures/paraglider/geometry/airfoil/deflected_airfoil_hinge.*
-   :name: deflection_airfoil_hinge
+   :name: deflected_airfoil_hinge
 
-   Deflection angle relative to a fixed hinge point.
+   Deflection as a rotation of a rigid flap about a fixed hinge point.
 
 * This definition is troublesome for a flexible wing, since there is no fixed
   hinge point; the deflection occurs as a variable arc between the trailing
@@ -350,9 +352,9 @@ computed from the brake inputs.
   distance* :math:`\delta_d` of the trailing edge:
 
 .. figure:: figures/paraglider/geometry/airfoil/deflected_airfoil_arc.*
-   :name: deflection_airfoil_arc
+   :name: deflected_airfoil_arc
 
-   Vertical deflection distance.
+   Deflection as a vertical displacement of the trailing edge.
 
 .. FIXME: is it safe to say that because the brakes pull nearly perpendicular
    to the chord that the decrease in brake line length is almost exactly equal
@@ -529,7 +531,7 @@ A parafoil canopy can be manipulated by pulling on any of its many suspension
 lines, but two of the lines in particular are dedicated to slowing the wing or
 controlling its turning motion. Known as the *brakes* or *toggles*, these
 controls induce downward trailing edge deflections (see
-:numref:`airfoil_deflected_arc`) along each half of the canopy, increasing
+:numref:`deflected_airfoil_arc`) along each half of the canopy, increasing
 drag on that side of the wing. Symmetric deflections slow the wing down, and
 asymmetric deflections cause the wing to turn.
 

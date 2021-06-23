@@ -896,74 +896,31 @@ OLD OUTLINE 4
 Parametric paraglider model
 ***************************
 
-
-* If the dynamics model is uncertain, flight reconstruction would require an
-  **entire distribution** of dynamics models (the statistical model places
-  a distribution over dynamics model parameters).
-
-  Alternatively, because flight reconstruction is only approximate anyway it
-  may be able to use an empirical distribution (a *representative set*) of
-  wing models instead of complete parameter estimation. The parametric model
-  should make it as easy a possible to create that set of wings.
-
-* The goal is not manufacture-ready accuracy, but rather to quickly create
-  approximations that are **accurate enough to be useful**. [It should be
-  accurate enough that the missing details are not the dominant source of
-  error during flight reconstruction.
-
-[[Explain that the geometry determines the dynamics, so we can create
+Explain that the geometry determines the dynamics, so we can create
 a parametric dynamics model by building it from a parametric geometry model.
 
-**FIXME**: why just a parametric geometry model? There are other parameters,
-such as surface materials, payload weight, etc.]]
 
-
-What are the model criteria?
+What are the physical model criteria?
 
 * Intuitive (easy to produce the desired design)
 
-* The modeling process should be time efficient (it shouldn't take a lot of
-  time to get a reasonable approximation)
+* Time efficient (it shouldn't take a lot of time to get a reasonable
+  approximation)
 
 * Information efficient (get good results with minimal specification data)
 
-* We have very little data, so the process should utilize the minimal
-  technical specs that are available.
+
+What are the dynamics model criteria?
 
 * Doesn't assume the aerodynamics are linear. Linearity has not be
   demonstrated to be an acceptable trade-off, so the aerodynamics method must
   not rely on the linearity assumption.
 
+
+
+
 * Uses open source tools and libraries
 
-
-Why build everything from scratch? Why not extend existing models found in
-academic literature? Because they don't meet the criteria:
-
-* Most parafoil literature don't use recreational wings, but those are the
-  wings that created the data.
-
-* Most models from literature use constant aerodynamics; they are not
-  parametric (or not parametric enough), so I can't modify them to match
-  existing recreational wings.
-
-* Most literature use linearized models. The accuracy of those models is
-  unknown
-
-
-Why not build one using existing tools (for the geometry and aerodynamics)?
-
-[[Existing tools for specifying a wing geometry rely on explicit designs. They
-can represent a parafoil, given enough points, but they are unsuitable for
-**creating** the wing geometries. We need a simplified parametrization.
-
-We also need an aerodynamics method that can estimate the parafoil
-aerodynamics given the non-linear geometry, running at higher than normal
-angles of attack, able to incorporate viscous corrections from literature,
-etc.]]
-
-
-.. Anything else?
 
 Bonus criteria:
 

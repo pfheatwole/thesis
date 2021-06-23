@@ -140,47 +140,47 @@ Wind fields
 
 .. What is a wind field?
 
-A *wind field* refers to the detailed variations of local air currents at each
-point in a region. Each point in the wind field has a specific *wind
+A *wind field* defines the detailed variations of local air currents
+throughout some region. Each point in the wind field has a specific *wind
 velocity*, also known as a *wind vector*. It is important to note that in this
 paper the terms are considered interchangeable, but in aeronautics literature
-the term *wind vector* often refers to only the lateral motion of the air
-(comprised of wind speed and horizontal wind direction).
+the term *wind vector* often refers to only the lateral motion of the air (the
+horizontal wind speed and direction).
 
 
 .. What wind fields are paragliding pilots interested in? Where do they occur?
+   What is special about the ABL?
 
-* [[Define *atmospheric boundary layer* here? It's where paragliding occurs.]]
-
-
-.. What causes wind fields in the ABL?
-
-Wind fields are caused by large-scale air flows interacting with local
-features, such as topography, surface materials, vegetation, solar exposure,
-etc.
-
-* [[Discuss lapse rates, prevailing winds, thermal convection, mountain waves,
-  etc? Global structure combines with topography to produce the local
-  structure, so it may be useful to start here.]]
-
-* [[These contributing factors determine the structure of the wind field.]]
+The wind fields that are relevant to paragliding pilots occur in the lowest
+portion of the atmosphere: the *atmospheric boundary layer* (ABL). The ABL is
+in direct contact with the Earth's surface, whose variations produce
+significant instability in the surrounding wind field. In particular,
+paragliding is restricted to the very lowest region of the ABL; most countries
+limit free-flight activities to a maximum altitude of approximately 5,500
+m (18,000 ft), which means gliders are restricted to the most volatile region
+of the ABL.
 
 
-.. What are some examples of structure in a wind field?
+.. What factors contribute to the (volatile) structure of a wind field?
 
-[[FIXME: keep?]]
+   FIXME : discuss surface heating, thermal convection, lapse rates,
+   topography, vegetation, mountain waves, etc. Global structure combines with
+   topography to produce the local structure.
 
 
-.. What aspects of wind field structure are relevant to paraglider pilots?
+.. What are some examples of identifiable structures in a wind field that are
+   relevant to paraglider pilots?
 
-* [[Thermal lift and sink, orographic lift, shear (including venturi), etc.
+* Although the small-scale detail and stochastic nature of wind fields make
+  precise mapping impossible, pilots routinely identify larger-scale features
+  that summarize specific characteristics of local regions.
 
-  Describe the local wind field as a composite of basic features? Shear,
-  updrafts, and gusts. See :cite:`bencatel2013AtmosphericFlowField`
+* [[Describe the local wind field as a composite of basic features: thermal
+  lift and sink, orographic lift, shear (including venturi), etc. See
+  :cite:`bencatel2013AtmosphericFlowField`
 
-  Prioritize wind field information that is important to pilots. For example,
-  house thermals, finding lift along a ridge, avoiding sink near a stream,
-  etc.]]
+  Prioritize wind field structure that is important to pilots. For example,
+  house thermals, ridge lift, sink over water, etc.]]
 
 
 .. Why is it important for a pilot to determine wind field structure quickly?
@@ -264,9 +264,9 @@ Wind field patterns
 .. What are *wind patterns*?
 
 In this paper, a *wind pattern* is any **recurring structure** in a wind
-field. The term "structure" refers to any recognizable order, and does not
+field. The term "structure" refers to any identifiable order, and does not
 imply any particular configuration; uniform flows, shear, orographic lift,
-thermal sources and sinks, etc, and any combinations of those, can all be
+convective sources and sinks, etc, and any combinations of those, can all be
 considered structured configurations. The term "recurring" refers to the fact
 that some regions of a wind field can exhibit the same structure at different
 times.
@@ -274,17 +274,17 @@ times.
 
 .. Why are wind patterns so **particularly** valuable to pilots?
 
-The reason local wind patterns are so particularly valuable is that they help
-pilots determine the structure of a wind field more *efficiently* (both in
-terms of time and energy) and more *accurately* when they can base their
-expectations on known patterns.
-
-Wind patterns are useful for both prediction and estimation. First, if some
-region of a wind field exhibits recurring structure, then pilots can use that
-to predict its structure without needing to spend glider energy exploring that
-area. Second, once a pilot has begun traversing some region, historical
-patterns can provide additional perspective that can help a pilot correctly
-interpret the wind they encounter.
+[[Pilots need to predict the wind field structure before they visit a region,
+and estimate its structure once they arrive.]] Knowledge of local wind
+patterns is particularly valuable in both scenarios. First, if some region of
+a wind field exhibits recurring structure, then pilots can use that to predict
+its structure without spending glider energy exploring that area. Second, once
+a pilot has begun traversing some region, historical patterns provide
+additional perspective that can help a pilot correctly interpret the wind they
+encounter. Ultimately, knowledge of wind patterns help pilots determine the
+structure of a wind field more *efficiently* (both in terms of time and
+energy) and more *accurately* when they can base their expectations on known
+patterns.
 
 [[Consider both the vertical and horizontal components. Consider both
 pre-flight (flight planning) and in-flight scenarios.]]
@@ -296,37 +296,34 @@ the theory is able to produce an accurate causal model; if a causal model is
 wrong, its predictions are wrong.]]
 
 
-.. What challenges are involved?
+.. What challenges prevent pilots from taking advantage of wind patterns?
 
-Pilots who want to take advantage of wind patterns face a variety of challenges
-that can be broadly classified as problems of *discovery* and problems of
-*use*.
-
-
-.. What are problems of *discovery*?
-
-Traditionally, pilots discover wind patterns by flying in the same region
-repeatedly, and by sharing their observations with other pilots.
-
-[[FIXME: what are the limitations of these "traditional" methods]]
-
-
-.. What are problems of *use*?
-
-* [[Pilots have to memorize the patterns, when they're applicable, etc.]]
+Pilots who want to take advantage of wind patterns face a variety of
+challenges that can be broadly classified as problems of *discovery* and
+problems of *use*. Traditionally, pilots discover wind patterns by flying in
+the same region repeatedly, and by sharing their observations with other
+pilots. This means that individual pilots must accurately identify, record,
+and recall the data that may form a pattern; in practice, the volume of detail
+encountered during a flight means that pilots tend to recall only the most
+significant details. Similarly, when the data is spread between pilots, it
+must be accurately and thoroughly communicated, but in practice only
+large-scale summaries are shared between pilots, and the majority of the
+detail is lost. Given what data remains, if the evidence of recurring
+structure is strong enough, the pilots may be able to identify any patterns.
+Once a pattern has been discovered, each pilot must be able to recall the
+pattern and under what conditions it occurs.
 
 
 .. Can flight data be used to address those challenges?
 
    **THE DRIVING QUESTION OF THIS PAPER.**
 
-[[If wind field structure can be determined from flight data, it would enable
-the creation of tools to address the problems of discovery and use.]]
-
-[[ie, if you can discover patterns automatically using flight data it would
-address the problems of discovery; once you know the patterns you can encode
-them in a predictive model that can condition on the current wind field display
-suitable patterns graphically, which would address the problems of use]]
+These problems of identifying, recording, recalling, and combining data into
+patterns are not [[well suited]] to pilots whose time and attention is already
+dedicated to the more physical aspects of flying. As an alternative, if wind
+field structure can be determined from individual data records, it would
+enable the creation of automated tools to address the problems of discovery
+and use.
 
 
 .. Step 1: address "problems of discovery"
@@ -673,7 +670,7 @@ Then, rewrite the intuitive steps in formal terms:
 
 1. Identify the *data-generating process*.
 
-2. Model of the *data-generating process*.
+2. Model the *data-generating process*.
 
 3. Generate a set of *proposals*.
 
@@ -879,6 +876,13 @@ Conclusion
 
 [[Need a segue into the next section.]]
 
+[[FIXME: in previous iterations I started with the target being the joint
+probability over the sequence of wind vectors given the sequence of states,
+`p(w|x)`, declared it as intractable, then used the Markov property to
+motivate sequential estimation. Does that still deserver a mention? In the
+current write-up I effectively took a short-cut by starting with the informal
+description and translating it into probabilistic terms.]]
+
 
 Parametric paraglider modeling
 ==============================
@@ -891,54 +895,33 @@ Parametric paraglider modeling
 
 
 The previous section established that flight reconstruction requires
-a dynamics model to predict the aircraft's motion. Unfortunately, paraglider
-flight records do not include a model of the aircraft, so one must be created.
-The model must be capable of simulating commercial paraglider wings under the
-entire range of flight conditions that could have realistically occurred
-during the flight. This intended usage places significant constraints on how
-the model is specified, and what functionality it must provide.
+a dynamics model of the aircraft that produced the data. Unfortunately,
+paraglider flight records do not include a model of the aircraft, so one must
+be created. The model must be capable of simulating commercial paraglider
+wings under the entire range of flight conditions that could have
+realistically occurred during the flight. This intended application
+significantly constrains how the model must be specified and places demanding
+requirements on the functionality it must provide.
 
 
-Specification
--------------
+.. Specification: parametric modeling, choice of parameters
 
-The section `Model the data-generating process`_ explained why flight
-reconstruction requires a dynamics model of the paraglider that produced the
-data. This requirement presents several major problems:
+The physical model must be able to capture the essential details of the
+physical system given the available data. This is not trivial for commercial
+paraglider wings, because the available data is severely limited:
+manufacturers only provide summary measurements, such as total surface area,
+span, and number of cells, as well as information necessary for repairs, such
+as the suspension line geometry. Because the official specifications are so
+limited, they must be augmented with domain expertise to "fill in" the missing
+structure. Parametric models replace explicit specification data with
+parametric functions that encode the assumptions of the unknown structure. The
+parameters summarize the structure, simplifying the specification in order to
+reduce the time and data required to create a model. As a result, it is vital
+that the parameters of the model can be inferred from the available data.
 
-1. The flight record does not provide the dynamics model that created the
-   data, so one must be created.
-
-2. Creating a high-fidelity dynamics model from detailed wing specifications
-   is expensive. [[FIXME: eliminate this? "Its expensive, but that's
-   irrelevant since we don't know it anyway."]]
-
-3. Detailed specifications are not available for commercial paraglider wings;
-   only summary technical specifications are known.
-
-4. Most flight records don't even record what wing produced the data. Flight
-   reconstruction must treat the dynamics model as a random variable.
-
-Regardless of whether the wing model is known for an individual flight,
-reconstructing an entire set of flight records will almost certainly require
-many different paraglider wings. This project acknowledges the need to to
-produce a large number of dynamics models from minimal specification
-information.
-
-[[Because we only have minimal technical specs, we'll need to "fill in" the
-missing information with some reasonable design choices. For the canopy this
-takes the form of parametric functions; for the harness we'll make assumptions
-about the mass distribution and drag coefficient; etc. We'll also make
-assumptions about how the components are connected (rigid body model, 6 and
-9 DoF models, etc).]]
-
-[[FIXME: finish motivating the creation of a **parametric** dynamics model.
-Discuss what parameters would make sense here. The canopy aerodynamics can be
-estimated from the canopy geometry; we have some basic shape information from
-technical specs, so we would like a paraglider model parametrized by that data
-(or as closely as possible). The canopy geometry can also be used to estimate
-the inertial properties if you know the surface densities.]]
-
+.. FIXME: mention the variety of data sources? Official manufacturers
+   specifications, physical measurements, photos and videos of the wing,
+   safety specification reports, etc
 
 Functionality
 -------------
@@ -950,9 +933,9 @@ Functionality
    and braking, but I will not be attempting to model riser controls (or ANY
    scenario that includes non-brake canopy deformations, such as deep stall).
 
-The dynamics model must capture the behavior of the system over the range of
-flight conditions it is required to support. For this project that would
-include any conditions encountered during flight reconstruction.
+The dynamics model must be able to capture the behavior of the system over the
+range of flight conditions it is required to support. For this project that
+would include any conditions encountered during flight reconstruction.
 
 Due to the severely limited sensor data, flight reconstruction is necessarily
 limited to relatively simple scenarios; it would be unreasonable to expect
@@ -987,8 +970,9 @@ control inputs or wind vectors.
 
   * Exclude: riser controls
 
-  * These imply `\dot{f}(x, u)` must be a function of `{delta_bl, delta_br,
-    delta_a, delta_w}` (inside the `u` vector)`.
+  * These motivate the state dynamics :math:`\dot{\vec{x}} = f(\vec{x},
+    \vec{u})`, where :math:`\vec{u} = \left< \delta_{bl}, \delta_{br},
+    \delta_a, \delta_w \right>`.
 
 * Include: non-uniform wind (wind shear, indirect thermal interactions, etc)
 
@@ -1010,22 +994,19 @@ This project designs and implements a parametric paraglider dynamics model
 suitable for paraglider flight reconstruction. The modeling process begins in
 :doc:`foil_geometry`, which develops a novel parametric geometry specifically
 tailored for the non-linear details of typical paraglider wings.
-:doc:`foil_aerodynamics` establishes some basic performance criteria for
-selecting an aerodynamic method suitable for analyzing paraglider motion, and
-presents an adaptation of a non-linear lifting line method that meets those
-criteria.
+:doc:`foil_aerodynamics` establishes basic performance criteria for selecting
+an aerodynamics method suitable for analyzing paraglider motion, and presents
+an adaptation of a non-linear lifting line method that meets those criteria.
 
 Given a geometric and aerodynamic model of the paraglider canopy,
 :doc:`paraglider_components` models the remainder of the paraglider
 components, and :doc:`paraglider_systems` combine the components into complete
-system dynamics models (under a rigid body assumption). The final step that
-enables the dynamics model to produce flight simulations is to choose
-a suitable set of state variables, and link the state dynamics to the
-paraglider dynamics; :doc:`paraglider_systems` suggests one possible choice,
-and presents the resulting dynamics function.
+system dynamics models. The final step that enables a dynamics model to
+produce a flight simulation is to choose a suitable set of state variables,
+and link the state dynamics to the paraglider dynamics.
 
 To conclude the primary contributions of this paper, :doc:`demonstration`
-presents an example that uses the parametric model to approximate a physical
+presents an example that uses the parametric model to approximate a commercial
 paraglider wing, compare static performance analyses to expected results, and
 demonstrate several dynamic scenarios to highlight the flexibility of the
 model.
