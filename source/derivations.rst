@@ -287,6 +287,8 @@ models. For a discussion of apparent mass effects, see
 Barrows Formulation
 -------------------
 
+:cite:`barrows2002ApparentMassParafoils`
+
 This section needs to define the terms that will be needed by the dynamics
 models:
 
@@ -1143,4 +1145,54 @@ Where:
    \end{aligned}
 
 
-[[**FIXME**: incorporate apparent inertia]]
+Real mass + apparent mass
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As with the 6-DoF system, the effects of apparent mass on the canopy can be
+accounted for by adding the apparent inertia matrix from `Apparent mass of
+a parafoil`_ to the components of the system matrix associated with the
+translational and angular acceleration of the body and accounting for the
+translational and angular apparent momentum:
+
+.. math::
+   :label: model9a_complete_system
+
+   \left(
+     \mat{A}_{r/RM}
+     + \begin{bmatrix}
+         \mat{A}_{a/RM} & \mat{0}_{6\times6} \\
+         \mat{0}_{6\times6} & \mat{0}_{6\times6}
+       \end{bmatrix}
+   \right)
+   \begin{bmatrix}
+     {^b \dot{\vec{v}}_{RM/e}^b} \\
+     {^b \dot{\vec{\omega}}_{b/e}^b} \\
+     {^p \dot{\vec{\omega}}_{p/e}^p} \\
+     {   \vec{f}_{RM}^b}
+   \end{bmatrix}
+   = \begin{bmatrix}
+       \vec{b}_5^b \\
+       \vec{b}_6^b \\
+       \vec{b}_3^p \\
+       \vec{b}_4^p
+     \end{bmatrix}
+
+.. math::
+
+   \begin{aligned}
+     \vec{b}_5^b &= \vec{b}_1^b - \vec{\omega}_{b/e} \times \vec{p}_{a/e} \\
+     \vec{b}_6^b &=
+       \vec{b}_2^b
+       - {\vec{v}_{RM/e} \times \vec{p}_{a/e}}
+       - {\vec{\omega}_{b/e} \times \vec{h}_{a/RM}}
+       + {\vec{v}_{RM/e} \times \left( \mat{M}_a \cdot \vec{v}_{RM/e} \right) }
+   \end{aligned}
+
+Where :math:`\mat{A}_{a/RM}` is the apparent inertia matrix from
+:eq:`apparent_inertia_matrix`, :math:`\mat{M}_a` is the apparent mass matrix
+from :eq:`apparent_mass_matrix`, and :math:`\vec{p}_{a/e}` and
+:math:`\vec{h}_{a/RM}` are the linear and angular apparent momentums from
+:eq:`apparent_linear_momentum` and :eq:`apparent_angular_momentum`. The extra
+term :math:`\vec{v}_{RM/e} \times \left( \mat{M}_a \vec{v}_{RM/e} \right)` in
+:math:`\vec{b}_6^b` is necessary to avoid double counting the aerodynamic
+moment already accounted for by the section pitching coefficients.
