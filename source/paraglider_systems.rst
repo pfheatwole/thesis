@@ -15,78 +15,81 @@
 Paraglider system models
 ************************
 
-.. What are dynamics? What are paraglider dynamics used for?
-
-A *dynamics model* describes how a set of variables change over time.
-A *flight simulator* uses a dynamics model of an aircraft to generate a *state
-trajectory*: a record of how the state of the aircraft evolves over time.
-
 
 .. How does flight simulation relate to the problem of flight reconstruction?
    (ie, why does this paper need a flight simulator?)
 
-This project requires a flight simulator because it is fundamental to solving
-the flight reconstruction problem. An :ref:`introductory section
-<introduction:Solve the inverse problem>` of this paper defined *flight
-reconstruction* as an *inverse problem*: given a recorded flight trajectory,
-determine the flight conditions that produced that trajectory. It also
-explained that *flight simulation* provides a means to estimating
-a statistical distribution over the possible answers: by simulating many
-possible flight conditions, it is possible to compare those simulated
-trajectories to the recorded trajectory and estimate which scenarios are
-probable and which are not.
-
-This chapter starts by combining the individual :doc:`component models
+A *flight simulator* uses an aircraft's *state dynamics* to generate a *state
+trajectory*: a record of how the state of the aircraft evolved over time. This
+chapter develops several state dynamics models suitable for paraglider flight
+simulation. It starts by combining the individual :doc:`component models
 <paraglider_components>` into composite *system dynamics* models. Then, for
 each system model, it chooses a set of state variables :math:`\vec{x}` and
 defines the *state dynamics* :math:`\dot{\vec{x}} = f(\vec{x}, \vec{u})` in
-terms of the *system dynamics*. The state dynamics provide the transition
-function that was motivated in :ref:`introduction <introduction:Solve the
-inverse problem>`.
+terms of the *system dynamics*. [[The state dynamics provide the *transition
+function* :eq:`state-transition` that was motivated in :ref:`introduction
+<introduction:Model the data-generating process>`.]]
+
+[[This project requires a flight simulator because it is fundamental to
+solving the flight reconstruction problem. An :ref:`introductory section
+<introduction:Solve the inverse problem>` of this paper defined *flight
+reconstruction* as an *inverse problem*: given a recorded flight trajectory,
+the goal is to determine the flight conditions that produced that trajectory.
+It also explained that *flight simulation* provides a way to estimate
+a statistical distribution over the possible answers: simulate many possible
+flight conditions, compare each simulated trajectory to the recorded
+trajectory, and combine them into an estimate of which scenarios are probable
+and which are not.]] [[FIXME: remove references to flight reconstruction?]]
 
 
 System dynamics
 ===============
 
-.. These provide the system dynamics needed to define the state dynamics
+In this paper, a *system dynamics* model is any set of derivatives that
+captures all the relevant motion of an aircraft in response to some set of
+conditions. They are treated separately from the `State dynamics`_ because
+they are independent of the representation of *state*; for example, they do
+not depend on the aircraft's absolute position or orientation, or how those
+vectors are encoded.
 
-* A composite system model combines all of the component models.
+.. Why does this section develop its own sytem model?
 
-* The models for the canopy and suspension lines are both based on rigid body
-  assumptions, and together can be considered a single, rigid component.
+[[Despite the variety of existing models in literature, none were adequate for
+flight reconstruction.]]
 
-
-.. Model differentiators
-
-[[Discuss models from literature and how they differ]]:
-
-* What control inputs does it support?
-
-* Does it support non-uniform wind?
-
-* What are its simplifying assumptions? (linearized dynamics, constant air
-  density, uniform section profiles, etc)
-
-* Does it account for apparent mass?
-
-* Does it allow relative motion between the body and payload?
-
-  Arguably the largest differentiator between system models is how they
-  characterize the connection between the risers and the payload. Allowances
-  for relative rotation and translation between the body and payload are
-  typically referred to as the *degrees-of-freedom* (DoF) of the model. Models
-  that do not allow the payload to move relative to the body have 6-DoF: three
-  translation, and three rotational. Each dimension of relative translation or
-  rotation add an extra degree of freedom. Parafoil-payload literature provide
-  models from 6- to 10-DoF.
+[[Because this paper is dedicated to developing system models capable of
+enabling :ref:`introduction:Flight reconstruction`, it must satisfy the needs
+of that application. The concrete requirements of any particular flight
+reconstruction method will depend on the statistical filtering architecture,
+but in anticipation of those needs the introductory chapter established
+baseline target :ref:`introduction:Functionality`.]]
 
 
-.. Terminology: "body"
+[[Some of the functionality was handled in the component models. Some of it
+needs to be handled in the system models: degrees of freedom, apparent mass,
+etc. **Do I really need to explicitly call back to Functionality here?**]]
 
-[[The models in this chapter use somewhat peculiar terminology.]] The
-paraglider community typically refers to the combination of canopy and lines
-as a *paraglider wing*, but in this chapter the group of components that
-includes the canopy will be referred to as the paraglider *body*. Despite its
+
+.. Developing a system dynamics model
+
+The previous chapters developed a set of :doc:`component models
+<paraglider_components>` for a paraglider, each with their own inertial
+properties and dynamics equations. The system dynamics are a composite model
+that connect all of those component models.
+
+The first step is to define the nature of those connections. The simplest (and
+most common) basis for parafoils is to start with a *rigid body* assumption:
+the canopy and suspension lines are treated as a single, pseudo-rigid
+component. The only deformations allowed are the ones produced by the control
+inputs (brakes and accelerator).
+
+
+.. Terminology: "body" and "payload" aircraft coordinate systems
+
+[[The models in this chapter use nonstandard terminology.]] The paraglider
+community typically refers to the combination of canopy and lines as
+a *paraglider wing*, but in this chapter the group of components that includes
+the canopy will be referred to as the paraglider *body*. Despite its
 ambiguity, the "body" convention improves consistency with existing
 parafoil-payload literature (which in turn inherited the term from
 conventional aeronautics literature). Some texts prefer the term *parafoil*,
@@ -94,9 +97,6 @@ but having the same prefix :math:`p` for both *parafoil* and *payload* makes
 subscripting the variables unnecessarily difficult. Similarly, using "wing"
 would be preferred in this context, but subscripting with :math:`w` causes
 conflicts when discussing wind vectors.
-
-
-.. Aircraft coordinate systems
 
 In models where the payload orientation is fixed, there is only the body
 coordinate system. In models that allow relative motion, there are two
@@ -120,43 +120,12 @@ Misc:
   however they want (Euler angles, quaternions, etc).
 
 
-Reference point
----------------
-
-Each dynamics model must choose a reference point about which the moments and
-angular inertia are calculated. A common choice is the center of real mass
-because it decouples the translational and angular dynamics of isolated
-objects. For a paraglider, however, this is not possible: paragliders are
-sensitive to apparent mass, which depends on the direction of motion, so there
-is no "center" that decouples the translational and rotational terms of the
-apparent inertia matrix. Because the system matrix cannot be diagonalized
-there is no advantage in choosing the center of real mass. Instead, the
-reference point can be chosen such that it simplifies other calculations.
-
-.. Note that the reference point for the dynamics can be different from the
-   point for tracking the glider position
-
-The :ref:`method <paraglider_components:Apparent mass>` to calculate the
-apparent inertia matrix requires that the reference point lies in the
-:math:`xz`-plane of the canopy. The most natural choices in that plane are the
-leading edge of the central section, or the midpoint between the two risers.
-The models in this paper use the :ref:`riser midpoint
-<paraglider_components:Riser position>` :math:`RM` for all dynamics equations
-because it is also the most natural choice for the vehicle velocity state
-variable in the simulator.
-
-[[FIXME: wrong, I chose `RM` because the body and payload can calculate its
-position in their own coordinates without caring about the relative position
-or orientation of the body and payload. It simplifies the 9-DoF, and using it
-for the 6-DoF let me reuse a bunch of work / encouraged consistency.]]
-
-
 System inputs
 -------------
 
-The inputs to the system model :math:`\vec{u}` are the control inputs for each
-component, the vector of wind velocities for each control point
-:math:`\vec{v}_{W/e}`, and the gravity vector :math:`\vec{g}`.
+The inputs :math:`\vec{u}` to the system model are the control inputs for each
+component, the [[set of]] of wind velocities :math:`\vec{v}_{W/e}` for each
+control point, and the gravity vector :math:`\vec{g}`.
 
 .. math::
    :label: system inputs
@@ -171,20 +140,58 @@ component, the vector of wind velocities for each control point
        \vec{g},
      \right\}
 
-Note that the deflection angles :math:`\delta_f(s)` used by the :ref:`canopy
-model <paraglider_components:Canopy>` are computed internally by the system
-model; they are not system inputs.
+Note that the deflection distances :math:`\delta_d(s)` used by the
+:ref:`canopy model <paraglider_components:Canopy>` are computed internally by
+the system model; they are not system inputs.
 
 [[FIXME: should `v_W/e` be a matrix? It's an array of vectors, one for each
 aerodynamic control point.]]
 
 
-Six degrees-of-freedom
-----------------------
+Reference point
+---------------
 
-* [[FIXME: if I have separate sections for the 6- and 9-DoF they should have
-  parallel structure. Write one of them, then adapt it for the other so they
-  develop in the same way.]]
+Each dynamics model must choose a reference point about which the moments and
+angular inertia are calculated. A common choice for conventional aircraft is
+the center of real mass because it decouples the translational and angular
+dynamics of isolated objects. For a paraglider, however, this is not possible:
+paragliders are sensitive to apparent mass, which depends on the direction of
+motion, so there is no "center" that decouples the translational and
+rotational terms of the apparent inertia matrix. Because the system matrix
+cannot be diagonalized there is no advantage in choosing the center of real
+mass. Instead, the reference point can be chosen such that it simplifies other
+calculations.
+
+.. Note that the reference point for the dynamics can be different from the
+   point for tracking the glider position
+
+The :ref:`method <paraglider_components:Apparent mass>` to calculate the
+apparent inertia matrix requires that the reference point lies in the
+:math:`xz`-plane of the canopy. Two natural choices in that plane are the
+leading edge of the central section, or the midpoint between the two risers.
+The models in this paper use the :ref:`riser midpoint
+<paraglider_components:Riser position>` :math:`RM` for all dynamics equations
+because the body and payload can calculate its position in their own
+coordinate systems without depending on the relative position or orientation
+of the payload with respect to the body. (This choice simplifies the equations
+for the :ref:`9-DoF model <derivations:Model 9a>` while maintaining
+consistency with the :ref:`6-DoF model <derivations:Model 9a>`.)
+
+
+Degrees-of-freedom
+------------------
+
+Arguably the most obvious differentiator between system models is how they
+characterize the connection between the risers and the payload. Allowances for
+relative rotation and translation between the body and payload are typically
+referred to as the *degrees-of-freedom* (DoF) of the model. Models that do not
+allow the payload to move relative to the body have 6-DoF: three
+translational, and three rotational. Each dimension of relative translation or
+rotation add an extra degree of freedom. Parafoil-payload literature provide
+models from 6 to 10 degrees of freedom.
+
+
+.. 6-DoF model
 
 * In the 6-DoF models, the body and payload are connected as a single rigid
   body, with no relative motion between them.
@@ -203,34 +210,35 @@ Six degrees-of-freedom
   :ref:`derivations:Model 6c` have the advantage of simplicity.
 
 
-The 6-DoF dynamics provide the derivatives for position and orientation of the
-body relative to the Earth frame :math:`\mathcal{F}_e`:
+[[ref: :eq:`model6a_complete_system`]]
 
-* :math:`\vec{v}_{RM/e} = {^e \dot{\vec{r}}_{RM/O}}`
+The outputs of the 6-DoF dynamics model are two vector derivatives describing
+the motion of the body relative to the earth frame :math:`\mathcal{F}_e` taken
+with respect to the body frame :math:`\mathcal{F}_b`:
 
-  (Linear acceleration of the riser midpoint :math:`RM`)
+.. math::
+   :label: model6a_system_derivatives
 
-* :math:`\alpha_{b/e} = {^e \dot{\vec{\omega}}_{b/e}}`
+   \begin{aligned}
+     {^b \dot{\vec{v}}_{RM/e}} \qquad & \textrm{translational acceleration of the riser midpoint} \, RM \\
+     {^b \dot{\vec{\omega}}_{b/e}} \qquad & \textrm{angular acceleration of the body} \\
+   \end{aligned}
 
-  (Angular acceleration of the body)
+[[Notice, the current values of the variables are the :math:`\vec{x}
+= \left\{\vec{v}_{RM/e}, \vec{\omega}_{b/e} \right\}`]]
 
 
-Nine degrees-of-freedom
------------------------
-
-[[FIXME: do I even need separate sections for the 6 and 9, or should I just
-explain what they are, what derivatives they provide, and leave everything
-else to their individual derivations?]]
+.. 9-DoF model
 
 The 6-DoF models constrain the relative payload orientation to a fixed
 position. This is reasonably accurate for average flight maneuvers, but it has
 one significant failing: although the relative roll and twist are typically
 [[negligible]], relative pitch about the riser connections is very common,
-even during static glides. Friction at the riser carabiners dampens pitching
-oscillations, but the harness is free to pitch as necessary to maintain
-equilibrium. Assuming a fixed pitch angle introduces a nonexistent pitching
-moment that disturbs the equilibrium conditions of the wing and artificially
-dampens the pitching dynamics during maneuvers.
+even during static glides. Friction at the riser carabiners [[and aerodynamic
+drag]] dampen pitching oscillations, but the harness is free to pitch as
+necessary to maintain equilibrium. Assuming a fixed pitch angle introduces
+a nonexistent pitching moment that disturbs the equilibrium conditions of the
+wing and artificially dampens the pitching dynamics during maneuvers.
 
 To mitigate that issue, models with higher degrees of freedom break the system
 into two components, a body and a payload, and permit relative orientations
@@ -269,7 +277,22 @@ the connection modeled as a spring-damper system.
   due to weight shift anyway.]]
 
 * In addition to the derivatives provided by the 6-DoF models, the 9-DoF
-  models add :math:`\alpha_{p/e}` (angular acceleration of the payload)
+  models add the angular acceleration of the payload
+
+[[ref: :eq:`model9a_complete_system`]]
+
+The outputs of the 9-DoF dynamics model are two vector derivatives taken with
+respect to the body frame :math:`\mathcal{F}_b`, and one with respect to the
+payload frame :math:`\mathcal{F}_p`:
+
+.. math::
+   :label: model9a_system_derivatives
+
+   \begin{aligned}
+     {^b \dot{\vec{v}}_{RM/e}} \qquad &\textrm{translational acceleration of the riser midpoint} \, RM \\
+     {^b \dot{\vec{\omega}}_{b/e}} \qquad & \textrm{angular acceleration of the body} \\
+     {^p \dot{\vec{\omega}}_{p/e}} \qquad & \textrm{angular acceleration of the payload} \\
+   \end{aligned}
 
 
 State dynamics
@@ -314,7 +337,7 @@ angular velocity of the payload.
 To track the position of the glider, the state models must choose a reference
 point. It does not have to be the same :ref:`reference point
 <paraglider_systems:Reference point>` used to calculate the system dynamics,
-but as it turns out, the riser midpoint :math:`RM` is a also good choice for
+but as it turns out, the riser midpoint :math:`RM` is also good choice for
 tracking the glider position. Because the riser midpoint is close to where
 a pilot would likely mount their flight recorder, it is likely to be
 representative of the data in a flight track, which makes it the most
@@ -355,34 +378,32 @@ Table:2).]]
 
 .. Summary
 
-* The 6-DoF models record the trajectory of four vectors:
+The 6-DoF models record the trajectory of four vectors:
 
-  * Position relative to the origin :math:`O` of the tangent plane:
-    :math:`\vec{r}_{RM/O}`
+.. math::
+   :label: model6a_state_variables
 
-  * Velocity of the riser midpoint :math:`RM`: :math:`\vec{v}_{RM/e} = {^e
-    \dot{\vec{r}}_{RM/O}}`
-
-  * Orientation of the body to the tangent plane: :math:`\vec{q}_{b/tp}`
-
-  * Angular velocity of the body: :math:`\vec{\omega}_{b/e}`
-
-  The 9-DoF models record two additional vectors:
-
-  * Orientation of the payload to the tangent plane: :math:`\vec{q}_{p/tp}`
-
-  * Angular velocity of the payload: :math:`\vec{\omega}_{p/e}`
-
-  **FIXME**: poor phrasing. The quaternion has 4 "variables", but only three
-  degrees of freedom since the vector has unit norm... Should I refer to each
-  vector as a variable, and say things like "4 state variables with a total of
-  12 components"?
+   \begin{aligned}
+     {\vec{r}}_{RM/O} \qquad & \textrm{absolute position of the riser midpoint} \, RM \\
+     {\vec{v}}_{RM/e} \qquad & \textrm{translational velocity of the riser midpoint} \, RM \\
+     {\vec{q}}_{b/tp} \qquad & \textrm{orientation of the body to the tangent plane} \\
+     {\vec{\omega}}_{b/e} \qquad & \textrm{angular velocity of the body} \\
+   \end{aligned}
 
 
-* FIXME: I need a table or pair of equations that list the derivatives
-  returned by the 6-DoF and 9-DoF models. They should be `:label:` ed so I can
-  cross-reference them in the next section.
+The 9-DoF models record two additional vectors for the payload:
 
+.. math::
+   :label: model9a_state_variables
+
+   \begin{aligned}
+     {\vec{r}}_{RM/O} \qquad & \textrm{absolute position of the riser midpoint} \, RM \\
+     {\vec{v}}_{RM/e} \qquad & \textrm{translational velocity of the riser midpoint} \, RM \\
+     {\vec{q}}_{b/tp} \qquad & \textrm{orientation of the body to the tangent plane} \\
+     {\vec{q}}_{p/tp} \qquad & \textrm{orientation of the payload to the tangent plane} \\
+     {\vec{\omega}}_{b/e} \qquad & \textrm{angular velocity of the body} \\
+     {\vec{\omega}}_{p/e} \qquad & \textrm{angular velocity of the payload} \\
+   \end{aligned}
 
 
 State derivatives
@@ -444,8 +465,8 @@ for the body, or :math:`\vec{\omega}_{p/e}^p` for the payload):
 
 
 The complete set of state dynamics equation for the 6-DoF models in terms of
-the state variables :eq:`6dof_state_variables` and system derivatives
-:eq:`model6a_real_system`:
+the system derivatives :eq:`model6a_system_derivatives` and state variables
+:eq:`model6a_state_variables` :
 
 .. math::
    :label: 6dof_state_dynamics
@@ -458,15 +479,15 @@ the state variables :eq:`6dof_state_variables` and system derivatives
          {^b \dot{\vec{v}}_{RM/e}^b} + \vec{\omega}_{b/e}^b \times {\vec{v}_{RM/e}^b}
        \right)
      \\
-     {^e \dot{\vec{q}}_{b/tp}} &= \frac{1}{2} \mat{\Omega}_{b/e} \cdot \vec{q}_{b/e}
+     {^e \dot{\vec{q}}_{b/tp}} &= \frac{1}{2} \mat{\Omega}_{b/tp} \cdot \vec{q}_{b/tp}
      \\
      {^e \dot{\vec{\omega}}_{b/e}^b} &= {^b \dot{\vec{\omega}}_{b/e}}
    \end{aligned}
 
 
 The complete set of state dynamics equation for the 9-DoF models in terms of
-the state variables :eq:`9dof_state_variables` and system derivatives
-:eq:`model9a_real_system`:
+the system derivatives :eq:`model9a_system_derivatives` and state variables
+:eq:`model9a_state_variables` :
 
 .. math::
    :label: 9dof_state_dynamics
@@ -479,9 +500,9 @@ the state variables :eq:`9dof_state_variables` and system derivatives
          {^b \dot{\vec{v}}_{RM/e}^b} + \vec{\omega}_{b/e}^b \times {\vec{v}_{RM/e}^b}
        \right)
      \\
-     {^e \dot{\vec{q}}_{b/tp}} &= \frac{1}{2} \mat{\Omega}_{b/e} \cdot \vec{q}_{b/tp}
+     {^e \dot{\vec{q}}_{b/tp}} &= \frac{1}{2} \mat{\Omega}_{b/tp} \cdot \vec{q}_{b/tp}
      \\
-     {^e \dot{\vec{q}}_{p/tp}} &= \frac{1}{2} \mat{\Omega}_{p/e} \cdot \vec{q}_{p/tp}
+     {^e \dot{\vec{q}}_{p/tp}} &= \frac{1}{2} \mat{\Omega}_{p/tp} \cdot \vec{q}_{p/tp}
      \\
      {^e \dot{\vec{\omega}}_{b/e}^b} &= {^b \dot{\vec{\omega}}_{b/e}^b}
      \\
