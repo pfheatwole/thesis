@@ -3,89 +3,86 @@ Derivations
 ***********
 
 
-Parametric design curves
-========================
+.. Parametric design curves
+   ========================
 
-[[Not sure where to put this. I'm using these in the examples, and again in my
-"case study", wherever that ends up. **How important is it that I present the
-mathematical versions?**
+   [[Not sure where to put this. I'm using these in the examples, and again in my
+   "case study", wherever that ends up. **How important is it that I present the
+   mathematical versions?** For now I think I'll present the basic ideas, but
+   refer to the code for the complete implementation.]]
 
-For now I think I'll present the basic idea, but refer to the code for the
-complete implementation. These are messy, I should stick them in derivations.
-They're not essential to this paper.]]
-
-[[The `elliptical_chord` and `elliptical_arc` are helper functions that
-generate an `EllipticalArc` object. Should I focus on deriving the
-`EllipticalArc`?]]
+   [[The `elliptical_chord` and `elliptical_arc` are helper functions that
+   generate an `EllipticalArc` object. Should I focus on deriving the
+   `EllipticalArc`?]]
 
 
-Elliptical chord
-----------------
+   Elliptical chord
+   ----------------
 
-An elliptical arc can be describe with three parameters: A, B, and the
-constant. Alternatively, letting the constant be `1` you can think of these
-three parameters as the normalized major axis, normalized minor axis, and
-scale.
+   An elliptical arc can be describe with three parameters: A, B, and the
+   constant. Alternatively, letting the constant be `1` you can think of these
+   three parameters as the normalized major axis, normalized minor axis, and
+   scale.
 
-The parametric model requires `c(s)`, the chord length as a function of
-section index. If the chord distribution is an elliptical function of section
-index, then the major axis is `s`, which ranges from -1 to +1. That leaves two
-parameters for the designer.
+   The parametric model requires `c(s)`, the chord length as a function of
+   section index. If the chord distribution is an elliptical function of section
+   index, then the major axis is `s`, which ranges from -1 to +1. That leaves two
+   parameters for the designer.
 
-There are two typical options: `<root, tip>` and `<root, taper>`. My
-implementation offers `c = f(s; root, tip)`, where `root` and `tip` are the
-design parameters.
-
-
-Elliptical arc
---------------
-
-The arc of a wing is the vector-valued function of `<y, z>` coordinates. The
-majority of parafoil arcs can be described with an elliptical function.
-
-Similar to the elliptical chord, an elliptical arc can be defined as
-a function three parameters. Again, the function parameter is `s` with a set
-domain of -1 to +1, leaving two design parameters.
-
-One parametrization is to pair the arc anhedral (the angle from the wing root
-to the wing tip) with the section roll angle at the wing tip. Assuming arc
-anhedral, this choice constrains `2 * anhedral <= tip_roll < 90`.
-
-My implementation offers this as `yz = elliptical_arc = f(s; anhedral,
-tip_roll)`, where `anhedral` and `tip_roll` are the design parameters. If
-`tip_roll` is unspecified a circular arc is assumed (so `tip_roll
-= 2 * anhedral`).
+   There are two typical options: `<root, tip>` and `<root, taper>`. My
+   implementation offers `c = f(s; root, tip)`, where `root` and `tip` are the
+   design parameters.
 
 
-Polynomial torsion
-------------------
+   Elliptical arc
+   --------------
 
-The most common spanwise geometric torsion is a explicit torsion angles at
-specific section indices with linear interpolation between sections.
+   The arc of a wing is the vector-valued function of `<y, z>` coordinates. The
+   majority of parafoil arcs can be described with an elliptical function.
 
-For parafoils, it can be more natural to use non-linear curves. A generalized
-interpolator can use a polynomial:
+   Similar to the elliptical chord, an elliptical arc can be defined as
+   a function three parameters. Again, the function parameter is `s` with a set
+   domain of -1 to +1, leaving two design parameters.
 
-.. math::
+   One parametrization is to pair the arc anhedral (the angle from the wing root
+   to the wing tip) with the section roll angle at the wing tip. Assuming arc
+   anhedral, this choice constrains `2 * anhedral <= tip_roll < 90`.
 
-   \theta(s) =
-     \begin{cases}
-       0 & s < s_{start} \\
-       T p^\beta & s \ge s_{start}
-     \end{cases}
+   My implementation offers this as `yz = elliptical_arc = f(s; anhedral,
+   tip_roll)`, where `anhedral` and `tip_roll` are the design parameters. If
+   `tip_roll` is unspecified a circular arc is assumed (so `tip_roll
+   = 2 * anhedral`).
 
-Where :math:`T` is the maximum torsion at the wingtip, :math:`p = \frac{\lvert
-s \rvert - s_{start}}{1 - s_{start}}`,  the fraction from :math:`s_{start}` to
-the wingtip, and :math:`0 \le s_{start} < 1`.
 
-So :math:`\beta = 1` is linear interpolation from :math:`s_{start} \le \lvert
-s \rvert \le 1`, :math:`\beta = 2` is quadratic, etc.
+   Polynomial torsion
+   ------------------
+
+   The most common spanwise geometric torsion is a explicit torsion angles at
+   specific section indices with linear interpolation between sections.
+
+   For parafoils, it can be more natural to use non-linear curves. A generalized
+   interpolator can use a polynomial:
+
+   .. math::
+
+      \theta(s) =
+        \begin{cases}
+          0 & s < s_{start} \\
+          T p^\beta & s \ge s_{start}
+        \end{cases}
+
+   Where :math:`T` is the maximum torsion at the wingtip, :math:`p = \frac{\lvert
+   s \rvert - s_{start}}{1 - s_{start}}`,  the fraction from :math:`s_{start}` to
+   the wingtip, and :math:`0 \le s_{start} < 1`.
+
+   So :math:`\beta = 1` is linear interpolation from :math:`s_{start} \le \lvert
+   s \rvert \le 1`, :math:`\beta = 2` is quadratic, etc.
 
 
 Area and Volume of a Mesh
 =========================
 
-The paraglider dynamics requires the inertial properties of the canopy surface
+The paraglider dynamics require the inertial properties of the canopy surface
 areas and volume. These include the magnitudes (total mass or volume),
 centroids, and inertia tensors. All of these quantities can be computed using
 a triangular surface mesh over the canopy surfaces.
@@ -162,8 +159,8 @@ The inertia tensor of the total surface area :math:`a` about the canopy origin
 
    \mat{J}_{a/\mathrm{O}} = \mathrm{trace} \left( \mat{\Sigma}_a \right) \vec{I}_3 - \mat{\Sigma}_a
 
-And tada, there are the three relevant properties for each surface area: the
-total area :math:`a`, the area centroid
+And tada, we've computed the three relevant properties for each surface area:
+the total area :math:`a`, the area centroid
 :math:`\vec{r}_{\mathrm{A}/\mathrm{O}}`, and the inertia tensor
 :math:`\mat{J}_{a/\mathrm{O}}`.
 
@@ -269,28 +266,24 @@ be computed directly from the covariance matrix:
    \mat{J}_{v/O} = \mathrm{trace} \left( \mat{\Sigma}_v \right) \vec{I}_3 - \mat{\Sigma}_v
 
 
-[[FIXME: make a table showing the six variables and their names. Well, nine
-variables? There are upper and lower surfaces.]]
+.. FIXME: make a table showing the six variables and their names. Well, nine
+   variables? There are upper and lower surfaces.
 
 
 Apparent mass of a parafoil
 ===========================
 
-This section presents Barrows' method for estimating the apparent mass matrix
-of a wing with circular arc anhedral. The equations have been adapted to use
-the standard notation of this paper. The terms derived in this section will be
-added to the real mass of the canopy when running the paraglider dynamics
-models. For a discussion of apparent mass effects, see
-:ref:`paraglider_components:Apparent Mass`.
+This section presents Barrows' method :cite:`barrows2002ApparentMassParafoils`
+for estimating the apparent mass matrix of a wing with circular arc anhedral.
+(For a discussion of apparent mass effects, see
+:ref:`paraglider_components:Apparent Mass`.) The equations have been adapted
+to use the standard notation of this paper.
 
-
-Barrows Formulation
--------------------
-
-:cite:`barrows2002ApparentMassParafoils`
-
-This section needs to define the terms that will be needed by the dynamics
-models:
+The purpose of the equations is estimate several terms that allow the
+paraglider system dynamics model to calculate the apparent inertia matrix with
+respect to the dynamics reference point, so the apparent mass can be taken
+into account when calculating the canopy acceleration. The necessary terms
+are:
 
 * :math:`\mat{A}_{a/R}`: apparent inertia matrix with respect to some
   *reference point* :math:`R`. This matrix is comprised of a translational
@@ -301,8 +294,6 @@ models:
 
 * :math:`\vec{r}_{PC/RC}`: pitch center with respect to the *roll center*
   :math:`RC`
-
-In this section, all vectors are assumed to be in the canopy coordinate system.
 
 Some notes about Barrows' development:
 
@@ -498,29 +489,30 @@ Angular momentum of the apparent mass about :math:`R`:
      + \mat{J}_{a/R} \cdot \omega_{b/e}
 
 
-Notes to self
--------------
+.. Notes to self
 
-* If :ref:`paraglider_systems:Reference point` said this section gives reasons
-  that `R` should be in the xz-plane, then make sure this section covers that.
+   * If :ref:`paraglider_systems:Reference point` said this section gives
+     reasons that `R` should be in the xz-plane, then make sure this section
+     covers that.
 
-* Doesn't Barrows use the *principal axes*? See my comment at the end of the
-  "Introduction" to Barrows' paper about the coordinate axes needing to be
-  parallel to the principal axes. I think the fact that I'm assuming the wing
-  has fore-aft and later symmetry is what allows me to use the canopy axes.
+   * Doesn't Barrows use the *principal axes*? See my comment at the end of
+     the "Introduction" to Barrows' paper about the coordinate axes needing to
+     be parallel to the principal axes. I think the fact that I'm assuming the
+     wing has fore-aft and later symmetry is what allows me to use the canopy
+     axes.
 
-* I'm not crazy about the notation `\mat{A}_{a/R}`, but this matrix isn't like
-  anything else in my paper so for now I'll leave it.
+   * I'm not crazy about the notation `\mat{A}_{a/R}`, but this matrix isn't
+     like anything else in my paper so for now I'll leave it.
 
 
 Paraglider Models
 =================
 
-[[**FIXME**: preview the models. Model `6a` is the most complete,
-incorporating `A_{a/R}`. Models `6b` and `6c` are simpler but require
-computing `r_{B/R}` before computing `A_{a/B}` (plus `B` is not strictly
-a fixed point since air density changes); they are mostly useful for verifying
-the implementations.]]
+[[**FIXME**: preview the models. Model `6a` is the most complete, and accounts
+for apparent mass. Models `6b` and `6c` are simpler but require computing the
+body center of mass :math:`r_{B/RM}` before computing :math:`A_{a/B}` (plus
+:math:`B` is not strictly a fixed point since air density changes); they are
+mostly useful for verifying the implementations.]]
 
 
 Model 6a
@@ -740,14 +732,14 @@ angular apparent momentum produces:
        + {\vec{v}_{RM/e} \times \left( \mat{M}_a \cdot \vec{v}_{RM/e} \right) }
    \end{aligned}
 
-Where :math:`\mat{A}_{a/RM}` is the apparent inertia matrix from
+Where :math:`\mat{A}_{a/RM}` is the apparent inertia matrix of the canopy from
 :eq:`apparent_inertia_matrix`, :math:`\mat{M}_a` is the apparent mass matrix
 from :eq:`apparent_mass_matrix`, and :math:`\vec{p}_{a/e}` and
 :math:`\vec{h}_{a/RM}` are the linear and angular apparent momentums from
 :eq:`apparent_linear_momentum` and :eq:`apparent_angular_momentum`. The extra
-term :math:`\vec{v}_{RM/e} \times \left( \mat{M}_a \vec{v}_{RM/e} \right)` is
-necessary to avoid double counting the aerodynamic moment already accounted
-for by the section pitching coefficients.
+term :math:`\vec{v}_{RM/e} \times \left( \mat{M}_a \vec{v}_{RM/e} \right)` in
+:math:`\vec{b}_4` is necessary to avoid double counting the aerodynamic moment
+already accounted for by the section pitching coefficients.
 
 
 Model 6b
@@ -895,15 +887,22 @@ model that adds an additional three degrees-of-freedom. A similar 9DoF model
 derivation can be found in :cite:`gorman2012EvaluationMultibodyParafoil`
 (9DoF, but relative roll and pitch are unconstrained).
 
-.. FIXME: why didn't I use that derivation?
+.. Why didn't I use that derivation? Like most papers, it used used implicit
+   vector notation and skips significant steps of the derivation, making
+   validation difficult. Also, it merged the individual components of the
+   apparent matrices from Lissaman and Brown's method for computing apparent
+   mass :cite:`lissaman1993ApparentMassEffects`. This derivation uses explicit
+   vector notation to avoid mistakes (particularly when taking derivatives)
+   and significantly simplifies the inclusion of the apparent inertia matrix
+   from Barrow's method :cite:`barrows2002ApparentMassParafoils`.
 
 An implementation of this model is available as :py:class:`Paraglider9a
 <glidersim:pfh.glidersim.paraglider.Paraglider9a>` in the ``glidersim``
 package. The ``glidersim`` package also includes :py:class:`Paraglider9b
 <glidersim:pfh.glidersim.paraglider.Paraglider9b>`, which uses the centers of
-mass as the reference points for the body and payload dynamics. That choice
+mass as the reference points for the body and payload dynamics; that choice
 simplifies the derivatives for angular momentum (since it eliminates the
-moment arms), but it makes it more difficult to incorporate the effects of
+moment arms), but makes it less convenient to incorporate the effects of
 apparent mass.
 
 
@@ -1188,7 +1187,7 @@ translational and angular apparent momentum:
        + {\vec{v}_{RM/e} \times \left( \mat{M}_a \cdot \vec{v}_{RM/e} \right) }
    \end{aligned}
 
-Where :math:`\mat{A}_{a/RM}` is the apparent inertia matrix from
+Where :math:`\mat{A}_{a/RM}` is the apparent inertia matrix of the canopy from
 :eq:`apparent_inertia_matrix`, :math:`\mat{M}_a` is the apparent mass matrix
 from :eq:`apparent_mass_matrix`, and :math:`\vec{p}_{a/e}` and
 :math:`\vec{h}_{a/RM}` are the linear and angular apparent momentums from
