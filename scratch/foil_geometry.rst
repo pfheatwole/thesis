@@ -13,8 +13,16 @@
   return points on any of the three surfaces.
 
 
+* First the *expanded model* gave more variables to work with, then
+  *parametric model* parametrized a few of those variables (`C_f/s` and
+  `r_LE/RP`). It's up to the designer how to define scale, position, and theta
+  variables.
 
+  In practice, you can get very far with constants, piecewise linear
+  functions, quadratics, and elliptical functions. The "Examples" are wings
+  defined using those simple forms.
 
+  I don't think I need an entire "Design functions" section to explain those.
 
 
 .. Describe the visible characteristics/details of the canopy
@@ -271,8 +279,20 @@ Expanded model
 
 
 
-Simplified model
+Parametric model
 ================
+
+
+
+* Some advantages of this parametrization:
+
+  1. It makes it particularly easy to capture the important details of a foil
+
+  2. It makes it easier to design in mixed flat and inflated geometries
+
+  3. It's compatible with aerodynamic analysis via section coefficient data
+     (partly by keeping the y-axes in the yz-plane).
+
 
 
 
@@ -315,6 +335,179 @@ Design curves
   doesn't differentiate between `arctan(z/y)` and `arctan(dz/dy)` of
   a section. Still, discussing curvature leads nicely into a discussion of the
   *arc*, so whatever.
+
+
+Parametrization
+---------------
+
+* My geometry assumes that sections are always perpendicular to the yz-curve.
+  This means that if you flatten the foil, the sections will be perpendicular
+  to `yhat`. It also means that section yaw is always zero.
+
+* The `r_yz(s)` chooses which points on each section will be positioned by
+  `yz(s)`.
+
+* Making `r_y = r_z` maintains their proportionality. You can draw the
+  projection of `yz` directly on the `yz` plane. Very intuitive for wing
+  design.
+
+* This parametrization does not use fixed "rotation points". It simply shifts
+  the sections to satisfy their `x(s)` and `yz(s)` positions.
+
+  That said, it can be convenient to conceptualize the `r_yz(s)` as pseudo
+  rotation points when building up the wing starting from flat sections. When
+  you apply geometric torsion to sections of a flattened foil, the section
+  will rotate about `r_yz(s)` then translate forward or backwards to satisfy
+  `x(s)`.
+
+* If you flatten `yz(s)`, all the sections will be vertical (no section roll),
+  and the `r_yz(s)` points will lie in the plane `z = 0`.
+
+  [[Is this useful for estimating `r_yz(s)` for a flattened paraglider wing?]]
+
+* The `yz(s)` curve passes through `r_yz(s)`. By itself it is not enough to
+  determine the physical wing span; you need the complete geometry.
+
+* I should point that the "flattening" concept is an approximation that
+  ignores the fact that it'll change the surface areas of the upper and lower
+  surfaces.
+
+* Defining the section index as the linear distance along `yz(s)` (and
+  ignoring `x(s)`) makes it easier to make use of measurements from the
+  flattened foil.
+
+
+Other notes:
+
+* The parametrization of a particular shape is not unique. There are many
+  possible ways to describe the same geometry. For example, you could have one
+  specification that uses `r_yz = 0`, and another that uses `r_yz = 1`. The
+  goal is that you can look at an existing wing and find an approximation, not
+  that you can determine the "true" specification.
+
+* Under my simplified parametrization, if `torsion = 0` then `r_yz(s)` is not
+  unique; any point will do. If torsion is not uniformly zero, then the
+  `r_yz(s)` will be whatever point on the chord where `arctan(dz/dy)` is
+  perpendicular to that section, and will determine the `yz(s)`. (I think.)
+
+  This does mean it's less convenient than I'd hoped to model existing wings,
+  but it'll still get you pretty darn close. In theory if you could stretch
+  the wing out and consider the plane through `z = 0` you should be able to
+  estimate `r_yz(s)`, but that'd be a pain; probably easiest to just split the
+  difference and assume `r_yz = 0.5`; the torsion is usually rather small so
+  I doubt the error will be massive. Then again, changing `r_yz` would have
+  the effect of scaling the geometry, so it might be best to assume `r_yz = 0`
+  if you'll be using `b` and `b_flat` (since the `b` probably corresponds to
+  the actual furthest point on each section, which for positive torsion will
+  be at the leading edges).
+
+* The definition of the section index is part of the parametrization; it's not
+  a fundamental part of the geometry. Just as the parametrization is not
+  unique, neither is the section index.
+
+* Under the "no section-relative yaw" assumption, the `r_yz(s)` curve for
+  a wing will be where the chord surface intersects the plane `z = 0`
+
+  Think about how the geometry works. Start with flat wing (rectangular,
+  tapered, whatever). Now specify `r_yz(s)`: those are going to dictate the
+  rotation points. (**In fact, the `r_yz` ARE the rotation points if you're
+  building up the wing starting with a flat chord surface.**) Now specify
+  `theta(s)`: the sections rotate about the `r_yz` points, so **those points
+  stay in the original plane**. When you apply `yz(s)` all you're doing is
+  moving those `r_yz(s)` points in y and z; flattening `yz` simply returns
+  them to that original plane. (But remember that when rotating the section it
+  may be shifted forwards/backwards to satisfy `x(s)`.)
+
+  What's cool about this is that because the flattened `yz` curve lies in
+  a plane, the curve itself is just a straight line. You can determine the
+  section index just by measuring the spanwise position directly; you don't
+  need to care about what `r_yz` actually is. Right? (Besides, geometric
+  torsion is usually limited to just a few degrees, so the error of getting
+  `r_yz` wrong should be insignificant anyway.)
+
+
+  But wait: if the parametrizations are not unique (ie, you can define the
+  same geometry with different `yz(s)`) then how can I say that if you flatten
+  the wing then the `r_yz(s)` lie in `z = 0`? The key is that **when you
+  flatten the wing you're flattening the specific `yz(s)`**. If you defined
+  the same shape using a different `yz(s)` and flattened that, you'd get
+  a different `r_yz(s)` curve, but still through `z = 0`.
+
+  Important to note that the `z = 0` here is in the Euclidean space defined by
+  the parametrization; it's not the same coordinate system used by the canopy.
+  The canopy coordinate system is define as having it's origin at the central
+  leading edge with the same orientation as the central section, regardless of
+  where the surface's coordinates in the codomain of the parametric
+  functions.)
+
+* I'll need to carefully describe the difference between the canopy coordinate
+  system and the codomain of the parametric functions. You can describe the
+  shape however is most convenient, but **whatever you choose, the canopy
+  coordinate system won't change**: it will be translated and oriented such
+  that the leading edge is the origin and the axes are aligned with the
+  central section: if you tried to add geometric twist to the central section,
+  you'd just be rotating the wing in the parametric codomain, with no effect
+  on the canopy coordinate system (unless you chose to explicitly disable the
+  reorientation).
+
+  **Start of the discussion of my parametrization by expilcitly declaring the
+  intent that the geometry model should carry the complexity so the parametric
+  functions can be simple.** For example, declaring that the geometry model
+  will translate and orient the shape specified by the parametric functions
+  means the parametric functions can assume simple mathematical forms; they
+  only need to care about **relative** positions, not absolute ones. In that
+  sense I guess the choice of parametrization simplifies the design of the
+  parametric function in two ways: 1) decoupling the curves and 2) eliminating
+  the need to specify absolute values. (And don't forget, when it comes to
+  designing the curves, I'm interested in both mathematical simplicity as well
+  as ease of use / intuitiveness.)
+
+* When discussing the error of getting `r_yz` wrong when measuring a wing
+  (it's not like you can actually slice the wing with a geometric plane),
+  point out that geometric torsion is typically limited to just a few degrees.
+
+* I should review the assumptions of linear spacing in `s` when discussing my
+  implementation of Phillips' method
+
+
+
+Design curves (OLD)
+===================
+
+.. This section must introduce summary specifications (span, flat span, area,
+   etc) and consider the structure that can be inferred from that data
+   (elliptical chord, elliptical arc, etc). Must also consider reasonable
+   guesses for unknowns such as airfoils, geometric torsion, etc.
+
+   Then, provide some parametric design curves that define the variables using
+   the data and assumptions.
+
+
+.. Describe the quantitative information we can reasonably attain
+
+Unfortunately for individuals that wish to create computer models of
+commercial wings, most of these details are proprietary information and are
+not made publicly available. Instead, manufacturers summarize their designs
+using terminology from classical wing design literature.
+
+[[FIXME: Explain surface area, span, and aspect ratio, etc. Define the
+difference between *flat* and *projected* values. They also include
+non-geometric data, such as total mass of the wing, areal densities of the
+materials, etc, but not the mass and volume distributions.]]
+
+
+.. Discuss the difficulty of modeling a parafoil from such limited data
+
+[[These specifications are structural summaries, and are not sufficient to
+create a wing model. Creating a model from such sparse information will rely
+on assumptions and simplifications. Explain which details are important to
+this paper, and which will be ignored. **The rest of this chapter is
+interested in using what little we know to build the approximate model.**
+
+Related: "General aviation aircraft design" (Gudmundsson; 2013), chapter 9:
+"Anatomy of a wing"]]
+
+
 
 
 Examples
