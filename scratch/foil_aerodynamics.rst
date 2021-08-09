@@ -362,6 +362,381 @@ What are some considerations regarding the choice of aerodynamics method?
   (Support rapid design iterations; let a designer "play" with the design.)
 
 
+Introduction
+============
+
+* I've eliminated the particle filter, so from the get-go it's wrong to think
+  about this as "solving" that part of the flight reconstruction problem. The
+  goal of this model is basically 1) to support the development of
+  a high-fidelity paraglider flight simulator (with the understanding that
+  this specific model is likely too slow), and 2) to provide a reference model
+  that can be used to develop simpler models.
+
+
+Modeling considerations
+=======================
+
+* High-level goals of the aerodynamic model:
+
+  * Accuracy (should provide a reference for evaluating simpler models)
+
+  * Speed (fast enough to generate simulations directly)
+
+  * Simplicity (should be useable with minimal tweaking)
+
+* I'm only targeting the idealized foil geometry, not the physical parafoil,
+  so I'm ignoring details like cell billowing, wrinkling, etc.
+
+* At this stage it is common in literature to simplify the model as
+  aggressively as possible to produce a simple and fast aerodynamics model,
+  but without flight tests it is impossible to validate those simplifications.
+  Instead, this chapter favors more rigorous requirements in order to
+  determine which characteristics of the geometry and flow-field may be safely
+  ignored. In practice a lot of these "requirements" turn out to be overkill,
+  but the focus in this paper is to start by **verifying** which terms matter
+  and which don't.
+
+  [[**FIXME**: this is confusing. I'm not doing flight tests so I am also
+  guilty of not validating the simplifications. Then again, I guess you could
+  argue that by building a model that accounts (albeit approximately) for
+  Reynolds number, you could then use that same model with a fixed Re and see
+  how it affects performance, so in that sense **you can see which factors are
+  significant in the context of this model**. I should rewrite to clarify that
+  point.]]
+
+* I was fed up with papers just assuming everything is linear, constant
+  Reynolds number, no apparent mass, etc etc, without verification.
+
+
+
+Geometry
+--------
+
+* Section position
+
+  * Sweep (arbitrary position curvature in :math:`xy`)
+
+  * Arc anhedral (position curvature in :math:`yz`; cannot assume a straight
+    or circular :cite:`gonzalez1993PrandtlTheoryApplied` lifting-line)
+
+* Section orientation
+
+  * Roll (lift vectors may have a :math:`y`-component)
+
+  * Twist (aka *geometric torsion*, section chords may not be parallel to the
+    global :math:`x`-axis)
+
+* Section scale
+
+  * Taper (arbitrary chord length variation along the span
+
+* Section profile
+
+  * Airfoils vary along the span
+
+  * Profiles are relatively thick (affects lift slope, especially at high
+    alpha)
+
+  * Some sections include open air intakes at the leading edge (increased
+    viscous drag; representative coefficients available in literature)
+
+  * Cell deformations (profiles billow and wrinkle between the ribs)
+
+  * Trailing edge deflections during braking (flow separation likely)
+
+
+
+Flow-field
+----------
+
+.. What are "typical flight conditions" for a paraglider?
+
+Aerodynamic models are characterized by their treatment of flow-field effects
+such as viscosity, compressibility, thermal conductivity, etc. Constraining
+the range of flight conditions can justify simpler aerodynamic models by
+[[downplaying]] the significance of specific flow-field characteristics.
+
+
+Typical flight conditions:
+
+* Wind shear (horizontal shear, thermals, ridge lift)
+
+* Moderate wing rotation rates (non-acrobatic 360 are usually around ~10s)
+
+* Relatively high angles of attack
+
+  The method is not expected to handle stall conditions, but it should
+  demonstrate graceful degradation near stall.
+
+  [[When I talk about "graceful degradation", I should probably explain it in
+  the sense of "the wing tips tend to start stalling first, but their
+  contributions are relatively minor overall, so inaccuracies in the wing tip
+  forces does not contribute a large error to the overall force estimate and
+  should not preclude the method from providing functional, albeit degraded,
+  accuracy."]]
+
+
+
+.. What characteristics of the flow-field surrounding a parafoil should be
+   taken into account when selecting a theoretical aerodynamics method?
+
+Important characteristics of the flow-field:
+
+* Relatively low Reynolds numbers (viscosity doesn't dominate, but it might be
+  significant, especially at the wing tips due to taper)
+
+* Variable Reynolds number (paraglider speeds are quite low and experience
+  a relatively large change in range; the effect is even more significant due
+  to taper, especially at such low airspeeds)
+
+* Viscosity and empirical viscous corrections
+
+  [[These exist in literature. I want to be able to use them. Can
+  incorporate them either by adding them directly to the drag coefficient
+  (as I do for Phillips method), or via strip theory.
+
+  Sources:
+
+  * :cite:`kulhanek2019IdentificationDegradationAerodynamic`: the purpose of
+    the paper is to "quantify the amount of aerodynamic drag related to the
+    flexible nature of the wing.
+
+    Uses a coefficient `C_d,f` which "takes into account all the effects
+    related to the flexible nature of the wing, such as deformation of the
+    leading edge, cell opening, skin wrinkling, airfoil and trailing edge
+    thickening, etc." See Fig:12 in particular. **I should review my choices
+    of viscous adjustments.**
+
+  * "Aerodynamic Research of the Airfoils for the Paragliders" (Pohl, 2011):
+    linked by Kulhanek, but I can't find a copy of this one
+
+  * :cite:`ware1969WindtunnelInvestigationRamair`: Provides an estimate of
+    drag due to "surface characteristics". Also provides an estimate of the
+    "air intake drag coefficient", but that's superseded by `babinsky1999`.
+
+  * :cite:`lingard1986AerodynamicsGlidingParachutes`
+
+  * :cite:`babinsky1999AerodynamicPerformanceParagliders`: I'm using his
+    estimate for "air drag due to air intakes".
+
+* Non-uniform wind. This is important for two reasons:
+
+  1. Non-longitudinal (turning) maneuvers
+
+  2. Wind gradients (shear, thermals, etc)
+
+
+Negligible characteristics:
+
+* Compressibility
+
+
+Implementation
+--------------
+
+The final step in selecting a suitable aerodynamics model is to consider the
+details of its implementation: availability, usability, functionality,
+accuracy, computational runtime, etc. For this project, the key implementation
+requirements are:
+
+* Availability:
+
+  * Free
+
+  * Open source
+
+  * Permissive license
+
+* Usability:
+
+  * Requires minimal manual configuration (some aerodynamics models require
+    extensive hands-on configuration for every geometry and flow scenario;
+    this project is more interested in a model that can reliability simulate
+    computer designs automatically)
+
+* Functionality:
+
+  * Must be able to suitable to iterated solutions (to generate state
+    trajectories)
+
+* Accuracy
+
+
+
+In addition to the theoretical considerations of geometry and flow-field
+modeling, the implementation itself has several criteria:
+
+* An open-source implementation must be available, or else the method must
+  be feasible to implement for this project.
+
+* Computationally efficient/fast
+
+  * The underlying goal of this paper is flight reconstruction, and
+    a particle filter would need to generate a huge number of simulations,
+    so the aerodynamics must be fast.
+
+  * Ultimately this method will likely be replaced with an faster approximate
+    model, but it's nice to work with the "full" model whenever possible.
+
+* Nice to have: avoid external dependencies
+
+  * I'm trying to keep this self-contained, since I wanted to understand
+    what's happening end-to-end. Also let me design it just how I wanted,
+    which also enabled simplified interfaces.
+
+
+Model selection (OLD)
+=====================
+
+.. The aerodynamics method must be capable of modeling a paraglider canopy
+   under typical flight conditions.
+
+[[Given the performance requirements, select an appropriate method.]]
+
+
+.. Introduce computational aerodynamics
+
+Early theoretical aerodynamics predate the modern computing era, and were
+forced to prioritize simplifying assumptions that would enable analytical
+solutions of the governing equations; those assumptions placed heavy
+restrictions on what geometries could be analyzed and what characteristics of
+the flow-field must be neglected. Despite their elegance, analytical methods
+such as Prandtl's *lifting-line theory* are inadequate for analyzing the
+nonlinear geometry of a parafoil.
+
+In contrast, modern *computational aerodynamics*
+:cite:`cummings2015AppliedComputationalAerodynamics` rely on digital computers
+to solve the equations numerically, relaxing the need for analytical
+solutions. As a result, modern methods can analyze significantly more complex
+foil geometries over the entire set of flow-field characteristics.
+
+
+.. Survey the available models
+
+* [[Introduce LLT, VLM, panel methods, CFD, etc. Go through the requirements
+  and explain why they fail (LLT fails with non-linear geometry, VLM handles
+  non-linear geometry but assumes linear aerodynamics and neglects thickness,
+  which can be significant for parafoils, CFD is too slow). Only the NLLT met
+  my requirements.]]
+
+* [[Section profiles were covered in the previous chapter. The computational
+  methods use the profiles either via their section coefficients, or via the
+  surface geometry they generate.]]
+
+
+.. Critique the models according to my modeling requirements
+
+* [[What simplifying assumptions do they make regarding the geometry? What
+  simplifying assumptions do they make regarding the flow-field (viscosity,
+  compressibility, etc)?
+
+  **Should I discuss these separately?** For example, does it make sense to
+  declare that the LLT assumes the wing is straight without the context that
+  it models the flow-field using a variable-strength vortex filament? Not sure
+  how to broach this discussion.]]
+
+* [[What are their limitations? (spanwise flow, flow separation, linear
+  coefficients, uniform wind, etc)]]
+
+* [[Some of these models are already being used in literature to estimate the
+  performance of parafoils. Explain why methods that "work" for other papers
+  do not meet the performance criteria for **this** project.]]
+
+
+.. Select an appropriate model for this project
+
+* Only the NLLT met my requirements (except no open source implementations
+  were available at the time).
+
+
+
+Model selection
+===============
+
+* I need to motivate my choice of the NLLT. I can either:
+
+  1. Establishing the criteria and invalidating aerodynamics methods
+
+     (ie, say what geometric and flow-field conditions are important, then
+     survey the available models)
+
+  2. Present aerodynamic methods and progressively invalidate them
+
+     (survey the available models, then selectively present geometric or
+     flow-field considerations that reject them)
+
+  Easy way to decide? If you start with the methods and explain each of them in
+  detail, you can end up with multiple reasons to reject each method. If you
+  start with the geometric and flow-field conditions, you only need one reason
+  to reject each aerodynamic method. It's just simpler.
+
+* I didn't want to just assume linear lift, I wanted to DEMONSTRATE linear
+  lift (or its absence). Also, parafoils use relatively thick airfoils, so
+  assuming thin airfoils (ala the VLM) bothered me. It also allows accounts
+  (approximately) for viscous effects (changes the lift slope, induces stall,
+  adds pressure drag due to flow separation, and enables viscous drag
+  corrections)
+
+* Outline:
+
+  * How do theoretical aerodynamics models work?
+
+  * What details of paraglider geometry and flight conditions make paraglider
+    aerodynamics difficult to model?
+
+    (informal overview of details, progressively "invalidating" models until
+    I conclude by selecting the NLLT; maybe up to this point I'm invalidating
+    models by highlighting what they do wrong, then summarize what the NLLT does
+    right?)
+
+* Good references of different aerodynamic models:
+
+  * :cite:`drela2014FlightVehicleAerodynamics`
+
+  * :cite:`bertin2014AerodynamicsEngineers`
+
+  * :cite:`anderson2017FundamentalsAerodynamics`
+
+
+Geometry
+--------
+
+* Compatible with nonlinear geometries (sweep, arc anhedral, section roll,
+  section twist)
+
+* Variable section profiles (do not assume uniform airfoils along the span)
+
+* Relatively thick airfoils
+
+* Curved trailing edge (large effective angle of attack)
+
+
+Flow field
+----------
+
+* Enables viscous corrections factors to section drag coefficients (surface
+  effects, air intakes)
+
+* Reasonable performance at relatively high angles of attack, with graceful
+  degradation near stall
+
+* Accounts for Reynolds number (due to low airspeed and wing taper the
+  Reynolds numbers can vary from 150k to 3M)
+
+* Claiming "small angle of attack" flight conditions implies assumptions about
+  the geometry (since alpha is measured relative to some reference line); it
+  can really be translated as "within a small deviation from a known direction
+  such that the flow remains attached".
+
+
+Flight simulation
+-----------------
+
+* Compatible with non-uniform wind fields (wind shear, wing rotation)
+
+* Computationally efficient (flight simulation requires iterated solutions)
+
+
 Modeling concerns
 =================
 
@@ -536,6 +911,25 @@ Phillips
     the Weissinger's NLL method the sectional lift data along with the
     Kutta-Joukowski theorem determines this quantity."
 
+* There are two uses of the acronym NLLT: the `N` can either stand for
+  "nonlinear" (since it works with nonlinear lifting lines) or "numerical"
+  (since it uses a numerical solution instead an analytical solution). For
+  example, Weissinger's "nonlinear LLT" versus Phillips "numerical LLT". 
+
+
+* Section coefficients can be measured experimentally or computed using
+  viscous theoretical models.
+
+* Inviscid methods cannot model flow separation, but paragliders often fly
+  relatively close to the stall condition. That said, I'm not trying to
+  accurately handle stall conditions, I just need graceful degradation.]]
+
+* Could incorporate viscous drag corrections by building a strip model using
+  section lift coefficients calculated with a panel method wouldn't be awful,
+  but in this case there's no need.
+
+
+
 
 Limitations
 -----------
@@ -561,6 +955,141 @@ Limitations
 Straight trailing legs
 ^^^^^^^^^^^^^^^^^^^^^^
 
+* :cite:`bertin2014AerodynamicsEngineers` pg390: "In a **rigorous**
+  theoretical analysis, the vortex lattice panels are located on the mean
+  camber surface of the wing, and, **when the trailing vortices leave the
+  wing, they follow a curved path.**" The *straight-wake assumption* is one of
+  the linearizations used by most vortex lattice methods (of which Phillips
+  can be considered to belong).
+
+* Is this the same thing as assuming the trailing sheet is flat? The XFLR5
+  docs mention inaccuracy due to ignoring sheet roll-up. I imagine that
+  applies here too.
+
+* I think this is closely related to the `No unsteady effects`_  limitation.
+  In `avl_doc.txt` they discuss unsteady flow in the same paragraph as the
+  need for rotation rates to be small enough that relative flow angles are
+  small.
+
+  Consider how **Phillips derivation assumes all the trailing vortices are
+  aligned with `u_inf`**. Now imagine what would happen if you tried to
+  replace `u_inf` with the local flow directions `u_rel,i`. The two trailing
+  legs emanating from each shared node would point in different directions,
+  meaning there would be a dramatic discontinuity in the underlying vortex
+  sheet (I think); I suspect that would be a nonsense physical model.
+
+  What if the trailing legs were aligned with the wind vectors at the nodes?
+  The trailing legs of each horseshoe vortex would not (in general) be
+  parallel. What happens if the trailing legs of a horseshoe vortex are not
+  parallel? Well, (I think) non-parallel trailing legs imply force exist
+  **inside** the flow field, which (I think) means there are accelerations
+  inside the flow field (momentum exchange between parcels of air) which (I
+  think) violates the whole "steady-state flow field" assumption. --- Oh, and
+  another point: 
+
+  Also, consider the trajectory of those straight trailing legs back towards
+  their notion of "infinity"; conceptually, the global flow field is the
+  result of the "local flow field" interactions, but I have no idea how
+  non-aligned trailing vortices would work. I suspect that straight trailing
+  legs are simply bad models for the shed vorticity from a rotating wing.]]
+
+* One difference between Phillips and common vortex lattice methods is many
+  (most?) common VLM implementations align the trailing legs with the wing
+  central chord, whereas Phillips aligns it with freestream (Phillips
+  acknowledges the error is only about 1%, but it's simple to do so why not?)
+
+  Related: the wind vectors might not be parallel either. Technically any
+  gradient with a rotational component would mean each control point should
+  expect a different "straight-wake" direction, even if the wing was flying
+  straight.
+
+* "quasi-steady flow", ala Drela; see also Drela pg133 where he's setting up
+  the AIC matrix; he includes rotation rates there, so I'm going to claim that
+  this method is similar: technically wrong, but reasonably accurate within
+  the limits of the "quasi-steady state" assumption. Also, this is probably
+  more stable because Drela aligns the trailing vortices with x-hat (See
+  Eq:6.33, pg132), whereas I'm at least aligning it with the central
+  freestream, so... yay?
+
+* Related but minor issue: this model can't model a spin (backwards airflow on
+  one wingtip)
+
+
+Reliance on section coefficients
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Unlike the section profiles, these are external data. They must be
+  measured in a wind tunnel or computed with an external tool, like XFOIL.
+
+  The coefficients must be estimated for every variation of the profile and
+  flight conditions. Dealing with Reynolds numbers and section deformations
+  quickly becomes unwieldy. Reynolds numbers are more straightforward, since
+  many tools support batch analyses over a range of Reynolds numbers, but
+  profile deformations, like braking or billowing, are more problematic. The
+  distorted profiles must be precomputed and their aerodynamics estimated
+  individually. This precludes continuous deformations, so interpolation is
+  required.
+
+  [[This doesn't seem like a major problem, to be honest, since the
+  flowfield around billowing cells seems very unlikely to be nicely
+  summarized by 2D coefficient data. You'll have all sorts of separation
+  bubbles going on. For the same reason, I doubt surface panel methods would
+  work for paragliders either; I doubt boundary conditions like flow
+  tangency are reasonable models down in the valleys between billowing
+  cells. My gut says you should pursue NLLT solutions for initial design
+  work then switch to *fluid-structure interactions* (see
+  :cite:`lolies2019NumericalMethodsEfficient`) to refine the design.]]
+
+* They ignore cross-flow effects. I'm sure the arc of the wing has
+  a significant effect on the boundary layer, which we're assuming is
+  constant over the entire section.
+
+* Precomputed 2D section coefficients introduce a steady-state assumption.
+
+  [[In the conclusion of "Specialized System Identification for Parafoil and
+  Payload Systems" (Ward, Costello; 2012), they note that "the simulation is
+  created entirely from steady-state data". This is one of my major
+  assumptions as well. This will effect accuracy during turns and wind
+  fluctuations, and ignores hysteresis effects (boundary layers exhibit
+  "memory" in a sense; the same wind vector can produce a separation bubble
+  or not depending on how that state was achieved).]]
+
+  [[ref: "Flight Vehicle Aerodynamics", Ch:7]]
+
+  [[I am accounting for **some** of the unsteady effects by introducing
+  *apparent mass*.]]
+
+* Section coefficients are optimistic. They are for idealized geometric
+  shapes (they ignore surface imperfections), and computational methods for
+  estimating them tend to struggle at high angles of attack (where flow
+  separation quickly depends on complicated viscous effects).
+
+  [[I'm using airfoil data from XFOIL, which is unreliable post-stall, but
+  I'm including significant post-stall coefficient data anyway to observe
+  how Phillips' method behaves in those regions. It's useful to understand
+  how the method behaves in post-stall regions in the event you have
+  accurate post-stall airfoil data. (ignoring the fact that the 3D wing
+  basically shoots that to heck anyway)]]
+
+* Viscous effects such as flow separation and viscous drag are notoriously
+  difficult to model accurately. In my case, I'm using the viscous-inviscid
+  coupling method from XFOIL and assuming its estimates are representative of
+  the flow field surrounding the 3D wing segments. In practice, XFOIL is only
+  able to predict small amounts of flow separation, and tends to be produce
+  optimistic estimates of the viscous drag.
+
+
+Sensitive to initial proposal
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* [[Extra]]: Alternative solutions can create discontinuities/jumps in the
+  solutions. I chose to ignore this issue in favor of robustness; aborting
+  a simulation is not ideal, and in practice the discontinuities do not create
+  significant deviations in the overall trajectory.
+
+  See `demonstration:Bonk` for an example.
+
+
 
 Reliance on the Kutta-Joukowski theorem
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -578,3 +1107,16 @@ you thought of the separated flow as a different airfoil shape with an
 attached flow; wouldn't KJ still apply then? The question is then whether
 a separated flow is equivalent to an alternative airfoil shape. I don't think
 it is, but I'm tired of thinking about it.]]
+
+
+Spanwise flow
+^^^^^^^^^^^^^
+
+Drela, Chapter 4.9, "3D boundary layers"
+
+4.9.1 Streamwise and crossflow profiles
+4.9.2 Infinite swept wing
+4.9.3 Crossflow gradient effects
+
+Crossflow convergence -> BL gets thicker
+Crossflow divergence -> BL gets thinner
