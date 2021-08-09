@@ -40,3 +40,12 @@ convince them the paper is worth reading.]]
 
 * The entire work is under permissive licensing: code is MIT, text and figures
   are CC-BY
+
+
+Misc
+----
+
+* This paper does not solve the flight reconstruction problem; it only uses
+  the simulator to generate test flights for validation. At first this is only
+  helpful for superficial checks (do flights "look" correct?), but will
+  eventually be necessary for physical flight validation.
