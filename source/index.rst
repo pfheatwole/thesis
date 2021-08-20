@@ -41,9 +41,7 @@ Contents
    paraglider_components
    paraglider_systems
    demonstration
-   future_work
    conclusion
-   examples
 
 .. toctree::
    :maxdepth: 3
@@ -62,4 +60,3 @@ Contents
 
    symbols
    derivations
-   appendix
