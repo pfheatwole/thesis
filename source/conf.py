@@ -87,7 +87,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = "Parametric Paraglider Modeling for Statistical Flight Reconstruction: Preliminary Work"
+project = "Parametric Paraglider Modeling"
 copyright = "2021, Peter Frank Heatwole"
 author = 'Peter Frank Heatwole'
 
