@@ -3,6 +3,97 @@ Introduction
 ************
 
 
+Scratch 2021-08-21
+==================
+
+**I need an introduction that previews what I did, and why it's important.**
+
+
+What's wrong with my current introduction? It overemphasizes the details of
+flight reconstruction. Flight reconstruction is part of the "solution" step to
+the problem of estimating wind vectors from position data, but that's it.
+
+
+Recall, three steps to an intro:
+
+1. The context
+
+   I want to estimate wind vectors from flight tracks, but they only record
+   position data.
+
+2. The problem and its significance
+
+   I need a causal model to link the position data to wind vectors. That
+   causal model takes the form of a paraglider dynamics model. (At this point
+   I can link to an appendix discussing flight reconstruction. I can mention
+   the MH370 paper here, or later on in that flight reconstruction appendix.)
+
+   So, the "problem" is that I need a **distribution** of paraglider dynamics
+   models, which would be a significant because it would enable flight
+   reconstruction.
+
+3. The response
+
+   So key details of my response:
+
+   * The dynamics models must be capable of representing "typical flight
+     conditions"
+
+     * In terms of physical model, that means it must support the most common
+       control inputs.
+
+     * In terms of aerodynamics that means wing rotation, indirect thermal
+       interactions, relatively high angles of attack, etc
+
+   * Need to generate MANY models, either programmatically or from minimal
+     specification data
+
+
+
+
+* What did I do? I created a causal paraglider model for flight simulation.
+
+* Why do you need a causal model? For flight reconstruction.
+
+* What is flight reconstruction? In this case, it means inferring
+  a distribution over unobserved variables.
+
+* What's wrong with existing causal models?
+
+  * Simplistic aerodynamics (linear models, no concept of stall)
+
+  * Longitudinal models only (don't support wing rotation)
+
+  * Assume uniform wind (can't detect indirect thermal interactions)
+
+  * Limited control inputs (at best they support left and right brakes; I also
+    need accelerator and weight shift, those are too common to ignore)
+
+  * "They assume the dynamics are already known." Such as? Like, they assume
+    the complete wing aerodynamic coefficients are known?
+
+* So, given those limitations, what did I want?
+
+  * Non-linear aerodynamics 
+
+  * Non-uniform wind (what happens when a paraglider interacts indirectly with
+    a thermal)
+
+  * Graceful degradation near stall
+
+* I don't need a model of a single wing. I need a model of many wings. They're
+  time consuming to create, so the creation process should be streamlined.
+  Especially given the limited amounts of data available.
+
+  I wanted to **make it easy to produce paraglider models from minimal data
+  that achieve my performance goals**.
+
+  The approach I chose was *parametric modeling*.
+
+
+
+
+
 Introduction overview
 =====================
 
@@ -351,6 +442,12 @@ Flight Reconstruction
   the filtering process (*parameter estimation*), but more likely we'll need
   to generate an empirical distribution over the wing parameters (a
   "representative set of wings") and draw simulations from that instead.
+
+* When designing the state-space model system dynamics, maybe refer to
+  :cite:`mcelreath2020StatisticalRethinking`? Great discussion of this in
+  Sec:16.2.4. Also in Sec:16.4 he discusses "geocentric" models, such as ARMA,
+  which might be useful. Kinematic models explain *what* happens, not *why*;
+  my model must understand the why (the aerodynamics).
 
 
 Subtask breakdown
@@ -896,42 +993,34 @@ OLD OUTLINE 4
 Parametric paraglider model
 ***************************
 
-Explain that the geometry determines the dynamics, so we can create
-a parametric dynamics model by building it from a parametric geometry model.
+* What are the physical model criteria?
+
+  * Intuitive (easy to produce the desired design)
+
+  * Time efficient (it shouldn't take a lot of time to get a reasonable
+    approximation)
+
+  * Information efficient (get good results with minimal specification data)
 
 
-What are the physical model criteria?
+* What are the dynamics model criteria?
 
-* Intuitive (easy to produce the desired design)
+  * Doesn't assume the aerodynamics are linear. Linearity has not be
+    demonstrated to be an acceptable trade-off, so the aerodynamics method
+    must not rely on the linearity assumption.
 
-* Time efficient (it shouldn't take a lot of time to get a reasonable
-  approximation)
+  * Uses open source tools and libraries
 
-* Information efficient (get good results with minimal specification data)
+  Bonus criteria:
 
+  * The modeling process should keep in mind that it's not just wing designers
+    that are interested in paraglider performance. When I started I had
+    questions about paraglider performance, and answers were hard to come by.
+    (In a way, I am the primary audience of this paper: I wanted to learn how
+    paragliders behave, and I did.)
 
-What are the dynamics model criteria?
+  * I've seen many discussions online about wing behavior; it would be useful if
+    the model could be used to simulated specific scenarios of interest.
 
-* Doesn't assume the aerodynamics are linear. Linearity has not be
-  demonstrated to be an acceptable trade-off, so the aerodynamics method must
-  not rely on the linearity assumption.
-
-
-
-
-* Uses open source tools and libraries
-
-
-Bonus criteria:
-
-* The modeling process should keep in mind that it's not just wing designers
-  that are interested in paraglider performance. When I started I had
-  questions about paraglider performance, and answers were hard to come by.
-  (In a way, I am the primary audience of this paper: I wanted to learn how
-  paragliders behave, and I did.)
-
-* I've seen many discussions online about wing behavior; it would be useful if
-  the model could be used to simulated specific scenarios of interest.
-
-  For example, how does a wing react to an indirect thermal interaction? That
-  would require aerodynamics that don't assume symmetric wind across the wing.
+    For example, how does a wing react to an indirect thermal interaction? That
+    would require aerodynamics that don't assume symmetric wind across the wing.

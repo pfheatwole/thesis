@@ -61,8 +61,8 @@ a tiny amount of the information available to a pilot; in fact, the average
 flight record can only be expected to include a time series of positions.
 There is typically no information regarding the orientation, velocity,
 acceleration, pilot control inputs (brakes, accelerator, etc), or the weather
-conditions. Even the details of the aircraft are unknown, although some do
-record the wing make and model. The question then becomes whether there is
+conditions. Even the details of the aircraft are unknown, although some tracks
+do record the wing make and model. The question then becomes whether there is
 enough information in position-only time series data to recover the wind
 vectors that were present during a flight.
 
@@ -649,172 +649,215 @@ and the conclusion is replaced with a probability distribution.
 First, the intuitive strategy of the pilot standing on the ground as
 a sequence of steps:
 
-1. Recognize that the motion of a paraglider is the result of how the
-   paraglider is interacting with the wind, given the particular wing model,
-   the type of harness, and the pilot's inputs to the wing.
+1. Learn how a paraglider's motion depends on its interactions with the wind
+   and a pilot's control inputs.
 
-2. Learn the details of how a paraglider responds to wind given different
-   control inputs.
+2. Imagine a set of plausible guesses for the current wind vector and control
+   inputs.
 
-3. Imagine a set of plausible guesses for the current wind vector.
+3. Use the knowledge of paraglider behavior to predict how the paraglider
+   would move if each guess was correct.
 
-4. Use the knowledge of paraglider behavior to imagine how the paraglider
-   would be moving if each guess was correct.
-
-5. Consider how well each of the guesses explained how the paraglider is
+4. Consider how well each of the guesses explained how the paraglider is
    actually moving.
 
-6. Summarize the plausible range for the current wind vector.
+5. Summarize the plausible range for the current wind vector.
 
 Then, rewrite the intuitive steps in formal terms:
 
-1. Identify the *data-generating process*.
+1. Model the *data-generating process*.
 
-2. Model the *data-generating process*.
+2. Generate a set of *proposals*.
 
-3. Generate a set of *proposals*.
+3. Use the model dynamics to solve the *forward problem* for each proposal.
 
-4. Use the model dynamics to solve the *forward problem* for each proposal.
+4. *Weight* each proposal according to how well it matches the observation.
 
-5. *Weight* each proposal according to how well it matches the observation.
-
-6. Use the set of solutions to the forward problem to establish a distribution
+5. Use the set of solutions to the forward problem to establish a distribution
    of plausible solutions to the *inverse problem*.
-
-
-Identify the data-generating process
-------------------------------------
-
-The key viewpoint is that the paraglider's position is the output of some
-*data-generating process*. [[FIXME: define *data-generating process*?]]
-
-In this case, the data are a sequence of position measurements over time. The
-positions are a (noisy) record of the paraglider's motion, which is determined
-by the paraglider dynamics. The paraglider dynamics are the result of
-interactions with gravity and wind. The interactions with the wind are
-described by the canopy aerodynamics [[which provide the causal link between
-paraglider motion and the wind]].
-
-[[
-
-You could **describe** the motion with kinematics, but kinematics are not
-causal relationships. You can't use them to infer anything about the
-environment.
-
-From :cite:`mcelreath2020StatisticalRethinking`, page 28:
-
-  Bayesian data analysis usually means producing a story for how the data came
-  to be. This story may be *descriptive*, specifying associations that may be
-  used to predict outcomes, or it may be *causal*, a theory of how some events
-  produce other events.
-
-]]
-
-[[At this stage it's important to acknowledge that some of the **observed**
-motion is false due to sensor error.]]
 
 
 Model the data-generating process
 ---------------------------------
 
-* A model of a *data-generating process* describes how the data was created.
-  For the pilot standing on the ground, the data are visual measurements of
-  paraglider position, and the paraglider position is the result of the
-  paraglider dynamics.
+.. "Learn how a paraglider's motion depends on its interactions with the wind
+   and a pilot's control inputs."
 
-* The model of the *data-generating process* encodes the known relationships
-  between all the variables involved in that process. Those relationships
-  impose additional structure that can be used to solve the inverse problem.
+The fundamental insight to solving the inverse problem is to explicitly
+recognize that flight records are the output of some *data-generating
+process*. A model of the data-generating process describes how the data was
+created. By defining the relationships between all the variables involved in
+the process, the model encodes structural knowledge that can be used to solve
+the inverse problem.
 
-  [[Explain how the model design step allows the designer to express their
-  subject knowledge of how the data and the target are related.]]
+In the case of paraglider flight tracks, the data is a series of position
+measurements recorded at discrete points in time. The natural representation
+of such a sequential process is a discrete-time *state-space model*. The
+process is modeled as a system of two vector-valued equations: one for the
+model state :math:`\vec{x}`, and one for the measurements :math:`\vec{y}`. For
+simplicity, these model often assume that each measurement is evenly spaced in
+time at intervals of some time period :math:`T`, allowing each sample to be
+referenced with a discrete-time index :math:`k = \{0, 1, ...\}`, with
+a corresponding continuous-time index of :math:`t_k = kT`. (In practice, the
+flight data may not be evenly spaced, in which case this model cannot be used
+directly, but that's irrelevant to this discussion.)
 
-* There is flexibility in designing the paraglider dynamics model (the
-  "golem"), but for our current problem it must incorporate the canopy
-  aerodynamics in some way, since the aerodynamics are what define the
-  relationship between the state of the wind field and the paraglider motion.
-  To estimate the wind vectors from the flight data, we must model the
-  data-generating process with a paraglider dynamics model that incorporates
-  the canopy aerodynamics.
+The sequence of states is the iterated output of some *transition function*
+:math:`f`, and the sequence of observations is the output of some *observation
+function* `g`. The transition function encodes how the state variables evolve
+over time, in response to their current values :math:`\vec{x}_k` and any
+exogenous inputs :math:`\vec{u}_k` (such as the wind vector :math:`\vec{w}_k`,
+or the vector of pilot controls :math:`\vec{\delta}_k`), while the observation
+function defines how the data is related to the state variables. The resulting
+state-space model is deceptively simple:
 
-* [[Link to :cite:`mcelreath2020StatisticalRethinking`? Great discussion of
-  this in Sec:16.2.4. Also in Sec:16.4 he discusses "geocentric" models, such
-  as ARMA, which might be useful.]]
+.. math::
+   :label: discrete-time state-space model
+
+   \begin{aligned}
+     \vec{x}_{k+1} &= f \left( \vec{x}_k, \vec{u}_k \right) \\
+     \vec{y}_k &= g \left( \vec{x}_k \right)
+   \end{aligned}
+
+Defining the state-space model means defining the transition and observation
+functions. The details of the observation function depend on the choice of
+state variables, but for the purposes of this discussion the only requirement
+is that it depends on the current state. Defining the transition function is
+more difficult: in order to estimate wind vectors from the flight data the
+state dynamics must depend on the canopy aerodynamics, since they define the
+relationship between the wind field and the paraglider motion. In other words,
+a simple *descriptive* model, such as kinematics, would not contain the
+*causal* relationships necessary to infer the inputs that produced the
+observed behavior (:cite:`mcelreath2020StatisticalRethinking`:28).
+
+The underlying :ref:`system dynamics <paraglider_systems:System dynamics>`
+(which drive the :ref:`state dynamics <paraglider_systems:State dynamics>`)
+are naturally defined by differential equations involving the continuous-time
+index :math:`t`, which means computing state transitions requires integrating
+the state derivatives :math:`\dot{\vec{x}}(t)` over the simulation time
+interval (:cite:`simon2006OptimalStateEstimation`:27):
+
+.. math::
+   :label: state-dynamics
+
+   \dot{\vec{x}}(t) = f \left( \vec{x}(t), \vec{u}(t) \right)
+
+.. math::
+   :label: state-transition
+
+   \vec{x}_{k+1} = \vec{x}_k + \int_{t_k}^{t_{k+1}} \dot{\vec{x}}(t) dt
 
 
-.. State-space models of sequential processes
+The final step of modeling the data-generating process is to account for all
+the sources of uncertainty. The system dynamics are an idealization of the
+true physics, the measurements are corrupted by sensor noise, and (in this
+case) the system inputs are entirely unknown. As a result, the deterministic
+equations must be replaced with stochastic relationships; instead of precise
+point values, the inputs, states, and observations are random variables
+distributed according to probability distributions:
 
-[[Explain using state-space models to describe sequential processes. The
-general form of state-space models is enough to necessitate a dynamics model,
-which is what provides the link between what we know (the output of the
-sequential process) to what we want (the sequence of wind vectors)]]
+.. math::
+   :label: noisy discrete-time state-space model
 
-* Given a suitable model of the paraglider dynamics, we can define a model of
-  the data-generating process. In this case the data is a sequence, and the
-  natural representation of a sequential process is the *state-space model*.
+   \begin{aligned}
+     \vec{w}_0 &\sim p(\vec{w}_0) \\
+     \vec{\delta}_0 &\sim p(\vec{\delta}_0) \\
+     \vec{x}_0 &\sim p(\vec{x}_0) \\
+     \vec{w}_{k+1} &\sim p \left( \vec{w}_{k+1} \given \vec{w}_{k} \right) \\
+     \vec{\delta}_{k+1} &\sim p \left( \vec{\delta}_{k+1} \given \vec{w}_k, \vec{\delta}_k, \vec{x}_k \right) \\
+     \dot{\vec{x}}(t) &= f \left( \vec{x}(t), \vec{u}(t) \right) \\
+     \hat{\vec{x}}_{k+1} &= \vec{x}_k + \int_{t_k}^{t_{k+1}} \dot{\vec{x}}(t) dt \\
+     \vec{x}_{k+1} &\sim p \left( \vec{x}_{k+1} \given \hat{\vec{x}}_{k+1} \right) \\
+     \vec{y}_k &\sim p\left( \vec{y}_k \given \vec{x}_k \right)
+   \end{aligned}
 
-  For a discrete-time, linear, time-invariant model:
-
-  .. math::
-     :label: discrete-time linear state-space model
-
-     \begin{aligned}
-       x_{k+1} &= \mat{A}_k x_k + \mat{B}_k u_k \\
-       y_k &= \mat{C}_k x_k + \mat{D}_k u_k
-     \end{aligned}
-
-  For a continuous-time, non-linear, non-time-invariant model:
-
-  .. math::
-     :label: continuous-time non-linear state-space model
-
-     \begin{aligned}
-       \frac{d}{dt} \vec{x}(t) &= f \left( t, \vec{x}(t), \vec{u}(t) \right) \\
-       \vec{y}(t) &= h \left( t, \vec{x}(t), \vec{u}(t) \right)
-     \end{aligned}
-
-* In this case, the :math:`\vec{x}(t)` are the current state of the flight at
-  time :math:`t`, and :math:`\vec{y}(t)` are the position. The data is
-  a sequence of positions, which are a noisy observation of the true position.
-
-* A complete specification includes a definition of every component in
-  :math:`\vec{x}` and how it is evolving over time.
-
-* [[Define a state-space model for the position-data-generating process using
-  the paraglider dynamics only. Assume wind and control inputs are known.]]
-
-* We now have a complete model of the data-generating process, and it can be
-  used to solve the inverse problem.
-
-  [[Well, the form at least is complete: the paraglider dynamics depend on the
-  control inputs and the wind vectors, which do not appear in the model. The
-  model must have definitions for all variables involved. The discussion of
-  unknown inputs should get pushed back into "Future Work".]]
+In practice the uncertainties will depend on conditional relationships that
+encode additional structure (the wind vector will depend on its previous
+value, the pilot controls will depend on the pilot's intentions, etc), but
+such details are beyond the scope of this paper. Nevertheless, the essence of
+the wind vector estimation problem is captured by equations
+:eq:`state-dynamics`, :eq:`state-transition`, and :eq:`noisy discrete-time
+state-space model`. This stochastic model of the data-generating process is
+ready to be combined with "plausible guesses" of the unknown states and inputs
+in order to solve the inverse problem.
 
 
 Generate a set of proposals
 ---------------------------
 
-[[Define *proposal*, give examples, etc]]
+.. "Imagine a set of plausible guesses for the current wind vector."
+
+* [[Define *proposal*, give examples, etc]]
+
+  Earlier I only mentioned proposals for the wind vectors, but I'll need to
+  deal with the control inputs too.
+
+
+A "guess" or *proposal* is equivalent to drawing a sample from a probability
+distribution. The probabilities for each variable can be based on prior
+knowledge of plausible values, or on estimates of recent values. 
+
 
 
 Solve the forward problem
 -------------------------
 
+.. "Use the knowledge of paraglider behavior to imagine how the paraglider
+   would be moving if each guess was correct."
+
 [[Define *forward problem*]]
+
+[[Here, "solving" the forward problem is "solving" it in the sense of
+"solving" differential equations. In practice, it means, evaluating the state
+transition function :eq:`state-transition`.
+
+Given the set of "guesses" for the system inputs, the state transition
+function :eq:`state-transition` can be used to predict how the paraglider
+would move if the guess is correct. In the context of differential equations,
+this step is referred to as *solving* the equation.]]
 
 
 Weight the outcomes
 -------------------
 
-[[Describe how each proposal produces a predicted behavior, which you then
-compare to the observed actual behavior.]]
+.. "Consider how well each of the guesses explained how the paraglider is
+   actually moving."
+
+[[Each proposal produced a different solution to the forward problem; the were
+predictions of the system behavior. Now you need to "score" each prediction by
+comparing it to the actual observed behavior.]]
+
+.. math::
+   :label: predictive weight
+
+   \alpha_{k|k-1}^{(n)} = \alpha_{k-1|k-1}^{(n)} p \left( \vec{x}_{k}^{n)} \given \vec{x}_{k-1}^{n)} \right)
+
+.. math::
+   :label: posterior weight
+
+   \alpha_{k|k-1}^{(n)} = \alpha_{k-1|k-1}^{(n)} p \left( \vec{x}_{k}^{n)} \given \vec{x}_{k-1}^{n)} \right)
+
 
 
 Solve the inverse problem
 -------------------------
 
+.. "Summarize the plausible range for the current wind vector."
+
 .. Too many unknowns means this is a stochastic filtering problem
+
+The target?
+
+.. math::
+
+   \begin{aligned}
+      p \left( \vec{w}_{1:K} \given \vec{y}_{1:K} \right)
+        &=
+          \iint p \left(
+            {\vec{w}_{1:K}, \vec{x}_{1:K}, \vec{\delta}_{1:K}}
+            \given \vec{y}_{1:K} \right) d \vec{x}_{1:K} \, d \delta_{1:K}\\
+        &\approx \sum_{n = 1}^N \alpha_{K|K}^{(n)} \vec{w}_{1:K}^{(n)}
+   \end{aligned}
 
 [[The relationship is *causal*: the data are observations of an effect
 (paraglider motion), and the wind is a cause.]]
@@ -863,7 +906,8 @@ measurements.]]
 
   **This is where I motivate** :math:`\dot{\vec{x}} = f(\vec{x}, \vec{u})`,
   which is what `glidersim` provides: parametric models to produce the
-  :math:`\dot{\vec{x}}`.]]
+  :math:`\dot{\vec{x}}`. Refer back to :eq:`state-transition`, which is where
+  `x-dot` first appeared.]]
 
   For the "fundamental recursions", see
   :cite:`kantas2015ParticleMethodsParameter`, Eq:3.1 through Eq:3.3
@@ -889,7 +933,7 @@ Parametric paraglider modeling
 
 .. This section sets up the entire paper!
 
-   1. Specification: how you create the model
+   1. Specification: how you create the model (choice of parameters)
 
    2. Functionality: what the model must do
 
@@ -904,85 +948,125 @@ significantly constrains how the model must be specified and places demanding
 requirements on the functionality it must provide.
 
 
-.. Specification: parametric modeling, choice of parameters
+Specification
+-------------
 
 The physical model must be able to capture the essential details of the
 physical system given the available data. This is not trivial for commercial
 paraglider wings, because the available data is severely limited:
 manufacturers only provide summary measurements, such as total surface area,
 span, and number of cells, as well as information necessary for repairs, such
-as the suspension line geometry. Because the official specifications are so
-limited, they must be augmented with domain expertise to "fill in" the missing
-structure. Parametric models replace explicit specification data with
-parametric functions that encode the assumptions of the unknown structure. The
+as individual suspension line lengths. Because the official specifications are
+so limited, they must be augmented with domain expertise to "fill in" the
+missing structure. Parametric models replace explicit geometry data with
+parametric functions that encode assumptions of the unknown structure. The
 parameters summarize the structure, simplifying the specification in order to
 reduce the time and data required to create a model. As a result, it is vital
-that the parameters of the model can be inferred from the available data.
+that a model can be specified in terms of parameters that can be inferred from
+the available data.
 
-.. FIXME: mention the variety of data sources? Official manufacturers
-   specifications, physical measurements, photos and videos of the wing,
-   safety specification reports, etc
+.. FIXME: list the available data? Official manufacturers specifications,
+   physical measurements, photos and videos, safety specification reports, etc
+
 
 Functionality
 -------------
 
-.. The paraglider system model needs to cover the range of flight conditions
-   targeted by the flight reconstruction process, so I need to declare which
-   details of a flight I will and will not attempt to reconstruct. For
-   example, I would like to simulate a paraglider turning due to weight shift
-   and braking, but I will not be attempting to model riser controls (or ANY
-   scenario that includes non-brake canopy deformations, such as deep stall).
-
-The dynamics model must be able to capture the behavior of the system over the
-range of flight conditions it is required to support. For this project that
-would include any conditions encountered during flight reconstruction.
-
-Due to the severely limited sensor data, flight reconstruction is necessarily
-limited to relatively simple scenarios; it would be unreasonable to expect
-reconstruction of flights involving extreme scenarios such as acrobatic
-maneuvers, deep stalls, and wing collapses. Instead, this project is
-deliberately limiting itself to a model that would enable flight
-reconstruction of paraglider flights under "average" flight conditions.
-
-[[However, despite the limitations, I'd still like to simulated detailed
-scenarios such as time-varying, nonuniform wind fields.]]
-
-.. The point here is that the functional requirements explicitly state that
-   the paraglider system model does not need to cover behaviors involving
-   stall, etc. The result is that relaxing the functionality allows the model
-   to use rigid body assumptions, especially for the canopy and lines. The
-   rigid body assumption is not a requirement for flight reconstruction; it's
-   a useful simplification that the models are allowed to make because we've
-   relaxed the goals of flight reconstruction.
-
-[[Within the constraint of "average" flight conditions, the goal is to recover
-enough information to support wind field reconstruction.]]
+The dynamics model should be able to capture the behavior of the system over
+the entire range of flight conditions that will be encountered during flight
+reconstruction. However, due to the severely limited sensor data, flight
+reconstruction is necessarily limited to relatively simple scenarios; it would
+be unreasonable to expect reconstruction of flights involving extreme
+scenarios such as acrobatic maneuvers, deep stalls, and wing collapses.
+Instead, this project is deliberately limiting itself to a model that would
+enable flight reconstruction of paraglider flights under "average" flight
+conditions.
 
 
-.. Which conditions, exactly? (ie, behaviors the model must capture?)
+.. What are some explicit goals and non-goals of the model functionality?
 
-The flight conditions describe the inputs to the system, which are either
-control inputs or wind vectors.
-
-* Controls:
-
-  * Include: accelerator, weight shift, asymmetric braking
-
-  * Exclude: riser controls
-
-  * These motivate the state dynamics :math:`\dot{\vec{x}} = f(\vec{x},
-    \vec{u})`, where :math:`\vec{u} = \left< \delta_{bl}, \delta_{br},
-    \delta_a, \delta_w \right>`.
-
-* Include: non-uniform wind (wind shear, indirect thermal interactions, etc)
-
-* Exclude: acrobatics (extreme flight maneuvers)
-
-* Exclude: deep stall conditions, wing collapses
+The precise model fidelity required for accurate flight reconstruction is
+unclear, so this paper is a "best effort" attempt at predicting [[that. To
+guide the development, here are several explicit goals and non-goals of the
+final paraglider dynamics model:
 
 
-[[What if I suggested some flight scenarios then linked to them implemented in
-`demonstration`?]]
+[[FIXME: this is messy. These affect the component models, the system models,
+and sometimes both (eg, choice of control inputs).]]
+
+Goals:
+
+* Must support the most common control inputs for a paraglider: left brake,
+  right brake, accelerator, and weight shift.
+
+  The control schemes of parafoil-payload systems are not suitable for
+  paraglider modeling. Although some parafoil-payload models include a control
+  input for "rotating" the canopy, it is not easily mapped onto the physical
+  geometry of a paraglider, which is more easily described using explicit
+  changes to line lengths.
+
+* Must support the [[amounts]] of rotation and sideslip that occur during
+  average paraglider flights.
+
+  Either way, longitudinal-only models (that assume head-on relative wind) are
+  clearly inadequate in the general case.
+
+* Must support a large operating range for angle of attack
+
+* Must demonstrate graceful performance degradation as the angle of attack
+  approaches stall conditions.
+
+  Most models use simplified aerodynamics that assume small angles of attack,
+  which is frequently a poor approximation during paraglider flights. It is
+  expected that accuracy will degrade near stall, but it should not fail
+  outright, and its predictions should be reasonable.
+
+* Must support non-uniform wind velocities across the canopy (eg, when the
+  wing encounters wind shear, indirect thermal interactions, etc)
+
+  I'm interested in demonstrating the significance (or non-significance) of
+  non-uniform relative wind (instead of assuming it is negligible).
+
+* Must support variable air density.
+
+  In practice this is a reasonable assumption, but a fixed value of air
+  density should not be encoded in the model.
+
+* [[Must support non-uniform section coefficients, in order to support
+  approximate models of existing wings. This affects both the canopy geometry
+  and the canopy aerodynamics component models.]]
+
+* Must account for the effects of :ref:`paraglider_components:Apparent mass`
+
+  As with non-uniform relative wind, the significance of apparent mass effects
+  should be demonstrated before assuming it is negligible.
+
+* Must support non-fixed payload orientations.
+
+  The significance of relative payload motion should be determined before
+  assuming it is negligible. Also, during average flight conditions the
+  payload can be reasonably well described with a fixed orientation, but which
+  orientation to use for static conditions and the effects of that restriction
+  during dynamic conditions must be reviewed.
+
+
+Non-goals:
+
+* Canopy deformations (no riser control, no wing collapses, etc)
+
+* Acrobatic maneuvers (rapid accelerations, extreme angles of attack, etc)
+
+
+.. What are some examples of scenarios I would like to simulate?
+
+[[Another way to specify the target functionality is through specific
+scenarios, such as:
+
+* A wing that encounters a thermal during a turn. The thermal core may be
+  located towards the inside wing tip, the center of the wing, or the outside
+  wing tip.
+
+* [[FIXME: more interesting scenarios here]]
 
 
 Roadmap
@@ -998,12 +1082,12 @@ tailored for the non-linear details of typical paraglider wings.
 an aerodynamics method suitable for analyzing paraglider motion, and presents
 an adaptation of a non-linear lifting line method that meets those criteria.
 
-Given a geometric and aerodynamic model of the paraglider canopy,
-:doc:`paraglider_components` models the remainder of the paraglider
-components, and :doc:`paraglider_systems` combine the components into complete
-system dynamics models. The final step that enables a dynamics model to
-produce a flight simulation is to choose a suitable set of state variables,
-and link the state dynamics to the paraglider dynamics.
+Given the geometric and aerodynamic models of the paraglider canopy, it will
+design a complete set of :doc:`component models <paraglider_components>` and
+combine them into the final :doc:`system models <paraglider_systems>`. The
+final step that enables a dynamics model to produce a flight simulation is to
+choose a suitable set of state variables, and link the state dynamics to the
+paraglider system dynamics.
 
 To conclude the primary contributions of this paper, :doc:`demonstration`
 presents an example that uses the parametric model to approximate a commercial
