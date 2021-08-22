@@ -26,7 +26,8 @@ which means the majority of the geometry is unknown. Generating a surface
 model from summary information requires making educated guesses about the
 missing structure in order to generate the complete geometry. The assumed
 structure takes the form of domain expertise encoded in parametric *design
-curves* which can extend the summary data to produce a fully specified model.
+curves* which can complete the summary data to produce a fully specified
+model.
 
 
 .. Why not use an existing foil geometry model? The geometry model chooses the
@@ -36,22 +37,21 @@ curves* which can extend the summary data to produce a fully specified model.
 
 An important issue is that the form of the design curves is strongly
 influenced by the variables used to define the geometry. A parafoil canopy has
-some fundamental complexity that must be captured, either in the model
-structure or in the design curves. Unfortunately, existing foil models are
-inflexible, making strong assumptions about how foils are most naturally
-defined, and that inflexibility forces the remaining complexity into the
-design curves. This unnecessary complication makes it difficult to describe
-a parafoil using simple parametric functions: they must not only encode the
-fundamental structure, they must also encode that structure in terms of the
-variables that define the model. Instead of the geometry model adapting to the
-needs of the design curves, the design curves must adapt to the limitations of
-the model.
+a fundamental complexity that must be captured, either in the model structure
+or in the design curves. Unfortunately, existing foil models are inflexible,
+making strong assumptions about how foils are most naturally defined, and that
+inflexibility forces the remaining complexity into the design curves. This
+unnecessary complication makes it difficult to describe a parafoil using
+simple parametric functions: they must not only encode the fundamental
+structure, they must also encode that structure in terms of the variables that
+define the model. Instead of the geometry model adapting to the needs of the
+design curves, the design curves must adapt to the limitations of the model.
 
 The solution developed in this chapter is to reject the assumption that
 predefined reference points are the most convenient way to position the
 elements of a foil surface. The result is a novel foil geometry that fully
 decouples the design curves, allowing each aspect of the foil to be designed
-independently, plus a simplified geometry model that eliminates most of the
+independently, plus a simplified parametrization that eliminates most of the
 additional complexity of the expanded model. The simplified model is both
 flexible and intuitive for designing highly nonlinear foil geometries (such as
 paraglider canopies) using simple parametric functions.
@@ -59,14 +59,14 @@ paraglider canopies) using simple parametric functions.
 
 .. Choose what geometry details to include and which to ignore
 
-A detailed model of a paraglider wing would include all its structural
+[[A detailed model of a paraglider wing would include all its structural
 details, so the structural model can be combined with an aerodynamic model to
 simulate the interactions between the canopy surface deformations and the
 surrounding flow field :cite:`lolies2019NumericalMethodsEfficient`.
 Unfortunately, as discussed earlier, such details are not available. Instead,
 this project must be content to model only the basic structure that can be
 approximate from the available data and record this imprecision as an extra
-source of uncertainty during flight reconstruction. Instead, the models
+source of uncertainty during flight reconstruction.]] Instead, the models
 presented in this chapter represent idealized design targets of the external
 canopy surface. It will not model internal structures, in-flight deformations,
 or surface deviations from the idealized shape (such as the creases where the
@@ -598,9 +598,9 @@ Parametric model
 
 The basic model is adequate to represent wings composed of airfoils, but its
 inflexibility forced incidental complexity into the design curves. The
-expanded model provides additional flexibility, but it is up to the designer
-to identify which aspects of the foil structure result in a simple parametric
-representation. This section identifies some simplifying assumptions that
+expanded model provides additional flexibility, but forces the designer to
+identify which aspects of the foil structure result in a simple parametric
+representation. This section identifies several simplifying assumptions that
 provide a foundation for a particularly concise representation of many foils
 (parafoils in particular). The result is an intuitive, parametric foil
 geometry model that decouples the design curves and allows a parafoil to be

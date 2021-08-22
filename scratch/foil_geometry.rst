@@ -1,3 +1,10 @@
+* TODO: rename *Parametric model*. It's not a helpful description. They're ALL
+  "parametric" in a sense, unless I'm trying to draw attention to some
+  **specific** parametrization, but if that was my intention I should make it
+  more explicit.
+
+* TODO: for `elliptical_arc`, rename `tip_roll` to `tip_phi`?
+
 * Wing origin offset: the chord surface uses it's own coordinate system,
   with its origin defined by the origins of the reference position curves.
   For the wing I'm defining origin as the leading edge of the central
