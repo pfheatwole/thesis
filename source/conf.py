@@ -87,7 +87,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = "Parametric Paraglider Modeling for Statistical Flight Reconstruction: Preliminary Work"
+project = "Parametric Paraglider Modeling"
 copyright = "2021, Peter Frank Heatwole"
 author = 'Peter Frank Heatwole'
 
@@ -110,7 +110,17 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['build', 'scratch', 'TODO.rst', 'figures']
+exclude_patterns = [
+    "build",
+    "scratch",
+    "TODO.rst",
+    "figures",
+
+    # Development files
+    "appendix.rst",
+    "examples.rst",
+    "future_work.rst",
+]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'

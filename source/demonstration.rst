@@ -6,33 +6,29 @@
    flight maneuvers, respectively) and compare them to expected behaviors.
 
 
-* FIXME: when I plot my final wing, the arc doesn't seem to match the actual
-  wing. Might want to comment on that.
-
-* FIXME: where do I discuss the viscous drag corrections due to air intakes?
-
-
 *************
 Demonstration
 *************
 
 Modeling a commercial paraglider wing is difficult because the technical data
 is limited to basic summary measurements. A major task of the modeling process
-is how to augment the missing information to create a complete model. To
+is how to augment the missing information to create a complete model. [[To
 address that problem, this paper started by creating a foil geometry with
 enough flexibility to enable complex foil models to be defined using
-parametric functions which encode the assumptions of the missing structure.
-Modeling a canopy then becomes a problem of choosing suitable parametric
+parametric functions which encode the assumptions of the missing structure.]]
+Modeling a canopy then becomes a problem of designing suitable parametric
 functions and estimating the parameters that best describe the true geometry.
 
 This chapter demonstrates one possible workflow to model a complete paraglider
 system from basic technical specifications using the simplified
 :doc:`component models <paraglider_components>` provided by the ``glidersim``
-package. Once the model is complete, it is sanity checked by comparing
+package. Once the model is defined, it is sanity checked by comparing
 estimates of its longitudinal steady-state aerodynamics over the range of
 control inputs against published performance data, such as minimal sink rate
 and speed range. The chapter concludes with flight simulations using the model
 in a variety of flight scenarios.
+
+   *This chapter is in a very raw state.*
 
 
 Model
@@ -67,7 +63,8 @@ Wing data is available from four primary sources:
 Technical specs
 ---------------
 
-From the manual:
+From the official `technical specifications manual
+<https://niviuk.com/niviuk/customer_pdf/Descatalogado/Hook%203/Datos%20t%C3%A9cnicos/HOOK3_TECNIC_ENG.pdf>`_:
 
 .. list-table:: Wing data
    :header-rows: 1
@@ -132,14 +129,11 @@ Canopy
 
 Developing a canopy model has four basic steps:
 
-1. Design the section layout (scale, position, and orientation)
+1. Design the foil layout (scale, position, and orientation)
 
 2. Assign section profiles
 
-3. Specify the upper and lower surface extents to define air intakes
-
-4. Specify the materials to enable computing the resulting real and air mass
-   inertia matrices.
+3. Specify physical attributes of the manufactured canopy
 
 [[The first two steps create the idealized foil geometry model; should they be
 separate? I guess I like the fact that you can get really far just specifying
@@ -149,36 +143,53 @@ the chord surface using measurements; it's a high-confidence task.]]
 Foil layout
 ^^^^^^^^^^^
 
-.. Design variables: c, x, r_x, yz, r_yz, and theta
+.. Span (b_flat)
+
+[[Start by defining :math:`b_\textrm{flat}`, which can be read directly from
+the technical specs.]]
+
+.. FIXME: discuss
+
+   * The choice of :ref:`section index <foil_geometry:Section index>` makes this
+     step simpler because you can use the `b_flat` instead of `b_proj`. Explain
+     that?
+
+   * In ``glidersim`` this is a scaling factor for the normalized
+     ``FoilGeometry``; that's an implementation detail, but the point of this
+     section is to demonstrate how it makes things easier to define foils, so
+     it's not irrelevant.
 
 
-Chord length
-~~~~~~~~~~~~
+.. Chord length (c)
 
-[[The simplest place to start modeling the canopy is the chord length
-distribution (the section scaling factor). The basic specs only give the root,
-tip, and mean chord lengths, but a reasonable guess is that the wing uses
-a truncated elliptical distribution. Paragliding wings commonly use truncated
-elliptic functions because they encourage elliptic lift distributions (thus
-reducing induced drag). Fitting an elliptic function to the root and tip
-lengths and computing the mean average chord length of the resulting function
-confirms the elliptic assumption.
+[[Next up is the chord length distribution. The technical specifications only
+list the root, tip, and mean chord lengths, but a reasonable guess is that the
+wing uses a truncated elliptical distribution. (Paragliding wings commonly use
+truncated elliptic functions because they encourage elliptic lift
+distributions, thus reducing induced drag.) Fitting an elliptic function to
+the root and tip lengths and computing the mean average chord length of the
+resulting function confirms the elliptic assumption.
 
-[[Confirm the flat area]]
+[[Check: fitting an elliptical produces a standard mean of 2.06m, which
+matches the technical specs exactly.]]
+
+.. FIXME: compare the specified vs computed flat areas
 
 
-Fore-aft positioning
-~~~~~~~~~~~~~~~~~~~~
+.. Fore-aft positioning (r_x, x)
 
-[[The next step is to design the fore-aft positioning of the sections by
-defining the :math:`r_x` parameter. Although this parameter can technically be
-a function of the section index, many wings can be described with a constant
-value. This value can be estimated by considering pictures of the inflated
-wing, but since flattened drawings are commonly available in technical manuals
-they are typically more convenient. (Admittedly, such drawings are not always
-to scale, and so should be used with caution.) For this wing, a small amount
-of trial and error using a top-down view from the wing user manual suggests
-:math:`r_x = 0.7`.]]
+[[The next step is to design the fore-aft positioning of the sections, which
+are controlled by the :math:`r_x(s)` and :math:`x(s)` design curves. Although
+the obvious choice is to choose :math:`r_x(s) = 0` and measure the
+:math:`x`-offsets of each section, this choice often produces an unnecessarily
+complicated :math:`x(s)` function. Instead, paragliders can often be described
+with some constant :math:`r_x(s)` and :math:`x(s) = 0`. The constant reference
+position can be estimated by considering pictures of the inflated wing, but
+since flattened drawings are commonly available in technical manuals they are
+typically more convenient. (Admittedly, such drawings are not always to scale,
+and so should be used with caution.) For this wing, a small amount of trial
+and error using a top-down view from the wing user manual suggests :math:`r_x
+= 0.7`.]]
 
 .. figure:: figures/paraglider/demonstration/Hook3_topdown.jpg
    :name: Hook3_topdown
@@ -192,102 +203,141 @@ As seen in :numref:`Hook3_topdown`, the elliptical chord assumption with
 :math:`r_x = 0.7` gives a close match to the drawing in the manual.
 
 
-Arc
-~~~
+.. Arc (y, z)
 
-The next step is to model the arc. Photos of the wing suggest that a circular
-arc segment is a reasonable starting point. There are several ways to fit an
-arc segment, such as the width to height ratios, or visual estimation of the
-arc angle, but since the specs included both the flattened and projected
-areas, it can be easier to simply increase the arc angle until the projected
-area of the model matches the expected value.
+The next step is to model the *arc* (position curvature in the
+:math:`yz`-plane). Photos of the wing suggest that a circular arc segment is
+a reasonable starting point. There are several ways to estimate the circular
+arc parameters of the physical wing, such as the width to height ratios, or
+visual estimation of the arc angle, but since the specs included both the
+flattened and projected spans, the simplest method is to increase the arc
+angle until the projected span matches the expected value.
 
-[[FIXME: explain how I adjusted `mean_anhedral` until the projected values are
-roughly correct?]]
+[[FIXME: finish writing. For example, checking the "naive" fit based on
+a circular arc is pretty close, but the projected surface area doesn't match
+the specs; the fit can be improved by replacing the circular arc with an
+elliptical arc. Mention that ``glidersim`` provides helper functions to make
+this process easier than it sounds. My final fit was `mean_anhedral = 32`,
+`tip_anhedral = 75`; and yes, those parameter names use "anhedral"
+inconsistently. ☹️ ]]
 
-[[FIXME: explain how I chose `r_yz`? Technically this would depend on the
-geometric torsion, but since I'm unsure the safe choice is `r_yz = 0.5`]]
+.. FIXME:
 
-[[FIXME: show the rear-view picture and the resulting model? I'd prefer
-a straight-on photo, it's hard to tell with angled photos.]]
+   * Explain how I adjusted `mean_anhedral` until the projected values are
+     roughly correct?
 
-[[Confirm the projected area and projected span]]
+   * Explain how I chose `r_yz`? Technically this would depend on the
+     geometric torsion, but since I'm unsure the safe choice is `r_yz = 0.5`
+
+   * Show the rear-view picture and the resulting model? I'd prefer
+     a straight-on photo, it's hard to tell with angled photos.
+
+   * Confirm the projected area and projected span
 
 
-Geometric torsion
-~~~~~~~~~~~~~~~~~
+.. Geometric torsion (theta)
 
-[[This is a guess. Paragliders can be expected to have positive torsion, but
-the distribution is unknown to me.]]
+After the relatively straightforward process of positioning the section comes
+the more difficult task of estimating their orientation. The section roll and
+yaw are predetermined by the :ref:`simplified model <foil_geometry:Parametric
+model>`, but the section pitch (or *geometric torsion*) can be difficult to
+measure. Most parafoils benefit from a small amount of increasing geometric
+torsion towards the wing tips (or *washin*), and a conservative guess of
+4 degrees at the wingtip should be reasonably accurate.
 
-[[FIXME: no way to confirm? The angles are small, would be difficult to
-measure from a wing on the ground.]]
+.. FIXME: what's the DISTRIBUTION for the Hook 3? No way to confirm? The
+   angles are small and difficult to measure from a wing on the ground.
 
 
 Section profiles
 ^^^^^^^^^^^^^^^^
 
-.. Design variables: r_P/LE (points on the airfoil)
+After the section layout (scale, position, and orientation) is complete, each
+section must be assigned an airfoil.
 
-After the section layout is complete, each section must be assigned an
-airfoil.
-
-[[Choose an airfoil]]
-
-* Why did I choose the 24018? Belloc used the 23015, but
-  :cite:`lingard1995RamairParachuteDesign` says that many older designs used
-  a Clark-Y with 18% thickness. I chose the 24018 as a sort of clumsy
-  compromise. He also mentions that newer gliders have "benefited from glider
-  technology and use a range of low-speed section" like the LS(1)-0417 (which
-  was also chosen by :cite:`becker2017ExperimentalStudyParaglider`). I should
-  have probably used the LS(1)-0417 but oh well.
+[[FIXME: explain my choice. Belloc used the 23015, but
+:cite:`lingard1995RamairParachuteDesign` says that many older designs used
+a Clark-Y with 18% thickness. I chose the NACA 24018 as a sort of clumsy
+compromise. He also mentions that newer gliders have "benefited from glider
+technology and use a range of low-speed section" like the LS(1)-0417 (which
+was also chosen by :cite:`becker2017ExperimentalStudyParaglider`).]]
 
 .. figure:: figures/paraglider/demonstration/braking_NACA24018.*
 
    Set of NACA 24018 airfoils with trailing edge deflections.
 
-[[Explain why this is an extremely optimistic model of how parafoil sections
-deform with increasing brake inputs. I'd go as far as to say that this is the
-number one source of error in the model.]]
+[[FIXME: explain why this is an extremely optimistic model of how parafoil
+sections deform with increasing brake inputs. I'd go as far as to say that
+this is the number one source of error in the model.]]
+
+[[FIXME: explain how I produced those profiles. Oof.]]
 
 
-Air intakes
-^^^^^^^^^^^
+Physical attributes
+^^^^^^^^^^^^^^^^^^^
 
-.. Design variables: s_end, r_upper, r_lower
+[[Assigning the section profiles completes the (idealized) parametric
+:doc:`foil geometry <foil_geometry>` model, and it can be used to define
+a :ref:`canopy model <paraglider_components:Canopy>` for the paraglider wing
+by assigning it physical attributes such as surface material densities (to
+calculate its inertia) and air intake extents (to calculate the viscous drag
+corrections).
 
-[[How did I choose the variables for the Hook 3? I never measured them, so
-I had to guess by looking at pictures..]]
+.. Materials (rho_upper, rho_lower, rho_ribs)
 
-The Fig:11.4, page 17 of the user manual uses section numbers. Assuming the
-sections are uniform width, the air intakes start at section 22 of 27 ribs,
-which would mean they start at `s = 0.815`, so `s = 0.8` is a pretty good
-guess.
+In this case, the material densities can be read straight from the technical
+specifications:
+
+.. list-table:: Hook 3 material densities
+   :header-rows: 1
+   :align: center
+   :name: hook3_material_densities
+
+   * - Surface
+     - Material
+     - Density :math:`\left[ \frac{kg}{m^2} \right]`
+   * - Upper
+     - Porcher 9017 E77A
+     - 0.039
+   * - Lower
+     - Dominico N20DMF
+     - 0.035
+   * - Internal ribs
+     - Porcher 9017 E29
+     - 0.041
 
 
-Materials
-^^^^^^^^^
+.. FIXME: the specs list the total wing weight at 4.7kg, but the
+   upper/lower/rib materials only account for 2.5kg or so. My mass
+   calculations neglect the extra mass due to things like the lines, riser
+   straps, carabiners, internal v-ribs, horizontal straps, tension rods, etc,
+   so I'm underestimating that mass, but I'm also assuming the vertical ribs
+   are solid (no ports) so that makes up for a bit of the missing mass
 
-.. Design variables: rho_upper, rho_lower, rho_ribs
 
-* FIXME: from the manual; see `extras/wings.py` for more
+.. Air intakes (s_end, r_upper, r_lower)
 
-  .. code-block:: python
+For the air intakes, the user manual provides a flattened projection which
+includes the air intakes (Fig:11.4, pg17); assuming the sections are uniform
+width, the air intakes start at section 22 of 27 ribs, which would correspond
+to :math:`s = 0.815`, so :math:`s_end = 0.8` is a reasonable guess for the
+extent. The upper and lower profile extent is more difficult to determine just
+by looking at pictures, but considering the viscous drag correction is
+relatively minor a reasonable guess is :math:`r_\textrm{upper} = -0.04` and
+:math:`r_\textrm{lower} = -0.09`.
 
-     rho_upper=39 / 1000,  # [kg/m^2]  Porcher 9017 E77A
-     rho_lower=35 / 1000,  # [kg/m^2]  Dominico N20DMF
-     rho_ribs=41 / 1000,  # [kg/m^2] Porcher 9017 E29
+.. FIXME: show a figure of the resulting profile
 
-* FIXME: the specs list the total wing weight at 4.7kg, but the
-  upper/lower/rib materials only account for 2.5kg or so. My mass calculations
-  neglect the extra mass due to things like the lines, riser straps,
-  carabiners, internal v-ribs, horizontal straps, tension rods, etc, so I'm
-  underestimating that mass, but I'm also assuming the vertical ribs are solid
-  (no ports) so that makes up for a bit of the missing mass
+.. FIXME: this is a crappy way of measuring...
 
 
 Suspension lines
 ----------------
+
+The second basic component of paraglider model is for the suspension lines. It
+is responsible for positioning the payload, adjusting the position as
+a function of the accelerator input, and computing the trailing edge
+deflection angles.
 
 
 Riser position
@@ -367,7 +417,9 @@ Brakes
 
 .. Design variables: s_delta_start0/1, s_delta_stop0/1, kappa_b
 
-   Alternative: explain calculating kappa_b from a constraint on delta_d_max
+[[Tricky to explain how to define `kappa_b` since it depends on the set of
+profiles, the chord distribution, and the brake deflection distribution. Refer
+to `SimpleLineGeometry.maximize_kappa_b`]]
 
 
 .. Deflection angle distribution and braking profiles
@@ -430,8 +482,6 @@ Line drag
   the cascade.
 
 
-
-
 Payload
 -------
 
@@ -439,13 +489,19 @@ Payload
 
 .. Total payload mass, spherical radius, drag coefficient, etc
 
-The specs list maximum in-flight weight limit of 85kg. The wing is roughly
-5kg, so a 75kg payload is reasonable.
-
-[[Radius: how did I arrive at `0.55m`?]]
-
-[[Drag coefficient for a standard upright (non-pod) harness is roughly `0.8`.
-I think I got that from Virgilio?]]
+The specs list maximum in-flight weight limit of 85kg. For the true solid mass
+of the physical wing is 4.7kg, so 75kg payload is reasonable. To choose the
+projected area and drag coefficient, review
+:cite:`benedetti2012ParaglidersFlightDynamics` (p85) or
+:cite:`babinsky1999AerodynamicPerformanceParagliders` (p422); given that 75kg
+is on a lower-than-average payload (so smaller frontal area), and that this is
+a beginner-grade wing (so a more aerodynamic "pod" harness is less likely),
+a reasonable guess of the projected area would be :math:`S_\textrm{payload}
+= 0.55 \left[\textrm{m}^2\right]` with an drag coefficient of
+:math:`C_{d,\textrm{payload}} = 0.8`. With a frontal area of 0.55m^2 the
+payload mass centroid should be roughly 0.5m below the risers (especially
+since the uniform density assumption neglects that the legs shift the center
+of mass below the volume centroid).
 
 
 Static performance
@@ -511,9 +567,6 @@ Polar curves
     a `19m/s` sink rate for the 85kg! Clearly I am unable to model a spiral.
 
 
-
-
-
 Dynamic performance
 ===================
 
@@ -575,6 +628,7 @@ Dynamic performance
   backwards it then pitches forwards to `-7deg`, but still, odd.
 
 * How does geometric torsion affect the off-center thermal scenario?
+
 
 Discussion
 ==========
