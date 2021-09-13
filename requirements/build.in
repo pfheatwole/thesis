@@ -1,5 +1,5 @@
 latexcodec >= 2.0.1
-Sphinx >= 3.4.3
+Sphinx >= 4.0.0
 sphinx-rtd-theme >= 0.5.1
 sphinxcontrib-bibtex >= 2.1.4
 sphinxcontrib-svg2pdfconverter >= 1.1.1
