@@ -61,16 +61,19 @@ suppress_warnings = [
     'autosectionlabel.*',  # Assume I use fully-qualified section references
 ]
 
-mathjax_config = {
-    "TeX": {  # Define TeX macros for MathJax 2.7 (3.0 changed the spec)
-        "extensions": ["cancel.js"],
-        "Macros": {
+mathjax3_config = {
+    "loader": {
+        "load": ["[tex]/cancel"],
+    },
+    "tex": {
+        "macros": {
             "defas": r"\stackrel{\mathrm{def}}{=}",
             "given": r"\;\middle\vert\;",
             "vec": [r"\mathbf{#1}", 1],
             "mat": [r"\mathbf{#1}", 1],
             "crossmat": [r"\left[{#1}\right]^{\times}", 1],
         },
+        "packages": {"[+]": ["cancel"]},
     },
 }
 
