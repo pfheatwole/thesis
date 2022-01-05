@@ -103,7 +103,7 @@ airfoil = gsim.airfoil.NACA(23015, convention="vertical")
 sections = gsim.foil_sections.FoilSections(
     profiles=gsim.airfoil.AirfoilGeometryInterpolator({0: airfoil}),
     coefficients=gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
-    intakes=None,
+    Cd_surface=0.004,  # ref: ware1969WindtunnelInvestigationRamair
 )
 
 canopy = gsim.foil.SimpleFoil(
@@ -178,7 +178,7 @@ t_start = time.perf_counter()
 for _kb, beta in enumerate(betas):
     dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
     r_LE2RM = -wing.r_RM2LE(0)
-    r_CP2LE = wing.control_points(0)
+    r_CP2LE = wing.r_CP2LE(0)
     r_CP2RM = r_CP2LE + r_LE2RM
 
     # Some figures will look for samples at alpha = [0, 5, 10, 15], so make
@@ -198,10 +198,11 @@ for _kb, beta in enumerate(betas):
         v_W2b *= -v_mag  # The Reynolds numbers are a function of the magnitude
 
         try:
+            # FIXME: replace with `resultant_force`
             dF, dM, ref = wing.aerodynamics(
                 0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
-        except gsim.foil_aerodynamics.FoilAerodynamics.ConvergenceError:
+        except gsim.foil_aerodynamics.ConvergenceError:
             ka -= 1
             break
 
@@ -242,7 +243,7 @@ for _kb, beta in enumerate(betas):
             dF, dM, ref = wing.aerodynamics(
                 0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
             )
-        except gsim.foil_aerodynamics.FoilAerodynamics.ConvergenceError:
+        except gsim.foil_aerodynamics.ConvergenceError:
             ka -= 1
             break
 
