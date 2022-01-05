@@ -461,8 +461,6 @@ Sphinx
 * Re-run ``sphinx-quickstart`` and see how the new ``conf.py`` defaults
   compare to my current version (from July 2017)
 
-* Update to Sphinx 4 (and thus MathJax 3)
-
 
 HTML
 ^^^^
