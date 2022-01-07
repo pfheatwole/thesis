@@ -285,14 +285,16 @@ avl = {}  # AVL's VLM method
 xflr5 = {}  # XFLR5's VLM2 method
 
 for beta in betas:
-    avl[beta] = np.genfromtxt(f"avl/polars/beta{beta:02}.txt", names=True)
-    avl[beta] = {field: avl[beta][field] for field in avl[beta].dtype.fields}
+    # Converting to a dict because fields will be added later
+    data = np.genfromtxt(f"avl/polars/beta{beta:02}.txt", names=True)
+    avl[beta] = {field: data[field] for field in data.dtype.fields}
 
 for beta in sorted(plotted_betas.intersection(betas)):
     filename = f"windtunnel/beta{beta:02}.csv"  # Belloc's raw wind tunnel data
     names = np.loadtxt(filename, max_rows=1, dtype=str, delimiter=',')
-    data = np.genfromtxt(filename, skip_header=1, names=list(names), delimiter=',')
-    belloc[beta] = data
+    belloc[beta] = np.genfromtxt(
+        filename, skip_header=1, names=list(names), delimiter=","
+    )
     xflr5[beta] = np.genfromtxt(
         f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}-Inviscid.txt",
         skip_header=7,
