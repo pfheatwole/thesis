@@ -539,55 +539,54 @@ if savefig:
 # ---------------------------------------------------------------------------
 
 # Build sets of coefficients over `betas`, keyed by alpha
-nllt2 = {
-    alpha: {
-        "Cy": [],
-        "Cl": [],
-        "Cm": [],
-        "Cn": [],
-        "CXa": [],
-        "CYa": [],
-        "CZa": [],
-    } for alpha in [0, 5, 10, 15]
-}
-for beta in betas:
-    for alpha in [0, 5, 10, 15]:
+nllt2: dict[float, dict] = {}
+for alpha in [0, 5, 10, 15]:
+    CXa, CYa, CZa, Cl, Cm, Cn  = [], [], [], [], [], []
+    for beta in betas:
         ix = np.nonzero(np.isclose(nllt[beta]["alpha"], alpha))
         if ix[0].shape[0]:
-            nllt2[alpha]["CXa"].append(nllt[beta]["CXa"][ix][0])
-            nllt2[alpha]["CYa"].append(nllt[beta]["CYa"][ix][0])
-            nllt2[alpha]["CZa"].append(nllt[beta]["CZa"][ix][0])
-            nllt2[alpha]["Cl"].append(nllt[beta]["Cl"][ix][0])
-            nllt2[alpha]["Cm"].append(nllt[beta]["Cm"][ix][0])
-            nllt2[alpha]["Cn"].append(nllt[beta]["Cn"][ix][0])
+            CXa.append(nllt[beta]["CXa"][ix][0])
+            CYa.append(nllt[beta]["CYa"][ix][0])
+            CZa.append(nllt[beta]["CZa"][ix][0])
+            Cl.append(nllt[beta]["Cl"][ix][0])
+            Cm.append(nllt[beta]["Cm"][ix][0])
+            Cn.append(nllt[beta]["Cn"][ix][0])
         else:  # pad to keep the sequences the same length as `betas`
-            nllt2[alpha]["CXa"].append(np.nan)
-            nllt2[alpha]["CYa"].append(np.nan)
-            nllt2[alpha]["CZa"].append(np.nan)
-            nllt2[alpha]["Cl"].append(np.nan)
-            nllt2[alpha]["Cm"].append(np.nan)
-            nllt2[alpha]["Cn"].append(np.nan)
+            CXa.append(np.nan)
+            CYa.append(np.nan)
+            CZa.append(np.nan)
+            Cl.append(np.nan)
+            Cm.append(np.nan)
+            Cn.append(np.nan)
+    nllt2[alpha] = {
+        "CXa": np.asfarray(CXa),
+        "CYa": np.asfarray(CYa),
+        "CZa": np.asfarray(CZa),
+        "Cl": np.asfarray(Cl),
+        "Cm": np.asfarray(Cm),
+        "Cn": np.asfarray(Cn),
+    }
 
-avl2 = {
-    alpha: {
-        "CXa": [],
-        "CYa": [],
-        "CZa": [],
-        "Cl": [],
-        "Cm": [],
-        "Cn": [],
-    } for alpha in [0, 5, 10, 15]
-}
-for beta in betas:
-    alpha_rad = np.deg2rad(avl[beta]["alpha"])
-    for alpha in [0, 5, 10, 15]:
+avl2: dict[float, dict] = {}
+for alpha in [0, 5, 10, 15]:
+    CXa, CYa, CZa, Cl, Cm, Cn = [], [], [], [], [], []
+    for beta in betas:
+        alpha_rad = np.deg2rad(avl[beta]["alpha"])
         ix = np.nonzero(np.isclose(avl[beta]["alpha"], alpha))
-        avl2[alpha]["CXa"].append(avl[beta]["CXa"][ix][0])
-        avl2[alpha]["CYa"].append(avl[beta]["CYa"][ix][0])
-        avl2[alpha]["CZa"].append(avl[beta]["CZa"][ix][0])
-        avl2[alpha]["Cl"].append(avl[beta]["Cl"][ix][0])
-        avl2[alpha]["Cm"].append(avl[beta]["Cm"][ix][0])
-        avl2[alpha]["Cn"].append(avl[beta]["Cn"][ix][0])
+        CXa.append(avl[beta]["CXa"][ix][0])
+        CYa.append(avl[beta]["CYa"][ix][0])
+        CZa.append(avl[beta]["CZa"][ix][0])
+        Cl.append(avl[beta]["Cl"][ix][0])
+        Cm.append(avl[beta]["Cm"][ix][0])
+        Cn.append(avl[beta]["Cn"][ix][0])
+    avl2[alpha] = {
+        "CXa": np.asfarray(CXa),
+        "CYa": np.asfarray(CYa),
+        "CZa": np.asfarray(CZa),
+        "Cl": np.asfarray(Cl),
+        "Cm": np.asfarray(Cm),
+        "Cn": np.asfarray(Cn),
+    }
 
 belloc2 = {}
 for alpha in [0, 5, 10, 15]:
