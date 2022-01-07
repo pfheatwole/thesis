@@ -326,7 +326,7 @@ for beta in betas:
     CXa, CYa, CZa = np.einsum(
         "ijk,kj->ik",
         compute_C_w2b(avl[beta]["alpha"], beta),
-        np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]],
+        np.c_[avl[beta]["CX"], avl[beta]["CY"], avl[beta]["CZ"]],
     )
     avl[beta].update({"CXa": CXa, "CYa": CYa, "CZa": CZa})
 
