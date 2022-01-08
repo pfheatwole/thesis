@@ -66,10 +66,16 @@ theta = np.deg2rad([3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3])  # torsion [deg]
 
 
 class InterpolatedArc:
-    """Interface to use a PchipInterpolator for the arc."""
+    """Interface to use point-definitions for the arc.
+
+    FIXME: resample+Pchip is kludgy; do a proper piecewise-linear implementation
+    """
 
     def __init__(self, s, y, z):
-        self._f = scipy.interpolate.PchipInterpolator(s, np.c_[y, z])
+        sr = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
+        fy = scipy.interpolate.interp1d(s, y)
+        fz = scipy.interpolate.interp1d(s, z)
+        self._f = scipy.interpolate.PchipInterpolator(sr, np.c_[fy(sr), fz(sr)])
         self._fd = self._f.derivative()
 
     def __call__(self, s):
@@ -86,18 +92,15 @@ class InterpolatedArc:
 L_segments = np.linalg.norm(np.diff(xyz.T[1:]), axis=0)
 s = np.cumsum(np.r_[0, L_segments]) / L_segments.sum() * 2 - 1
 
-# Coordinates and chords are in meters, and must be normalized
-fx = scipy.interpolate.interp1d(s, xyz.T[0] / (b_flat / 2))
-fy = scipy.interpolate.interp1d(s, xyz.T[1] / (b_flat / 2))
-fz = scipy.interpolate.interp1d(s, (xyz.T[2] - xyz[6, 2]) / (b_flat / 2))
-fc = scipy.interpolate.interp1d(s, c / (b_flat / 2))
-ftheta = scipy.interpolate.interp1d(s, theta)
+# The FoilLayout uses lengths normalized by the semispan since it makes it
+# easier to define parametric representations, so raw coordinates must be
+# normalized first.
 
-# FIXME: move the resampling logic into `InterpolatedArc`, and make that an
-#        official helper class in `foil.py`. It should also use more intelligent
-#        resampling (only needs two extra samples on either side of each point)
-sr = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
-arc = InterpolatedArc(sr, fy(sr), fz(sr))
+arc = InterpolatedArc(
+    s,
+    y=xyz.T[1] / (b_flat / 2),
+    z=(xyz.T[2] - xyz[6, 2]) / (b_flat / 2),
+)
 
 # Alternatively, use the analytical (non-sampled, smooth curvature) form
 # arc = gsim.foil.EllipticalArc(np.rad2deg(np.arctan(.375/.688)), 89)
@@ -107,8 +110,8 @@ layout = gsim.foil_layout.FoilLayout(
     r_x=0.6,
     yz=arc,
     r_yz=0.6,
-    c=fc,
-    theta=ftheta,
+    c=scipy.interpolate.interp1d(s, c / (b_flat / 2)),
+    theta=scipy.interpolate.interp1d(s, theta),
 )
 
 airfoil = gsim.airfoil.NACA(23015, convention="vertical")
