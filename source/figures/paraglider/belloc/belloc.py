@@ -91,6 +91,7 @@ class InterpolatedArc:
 # lengths are equal, and calculating their section indices is simplified.
 L_segments = np.linalg.norm(np.diff(xyz.T[1:]), axis=0)
 s = np.cumsum(np.r_[0, L_segments]) / L_segments.sum() * 2 - 1
+s = s.clip(-1, 1)  # Floating-point error means `s` might slightly exceed ±1
 
 # The FoilLayout uses lengths normalized by the semispan since it makes it
 # easier to define parametric representations, so raw coordinates must be
