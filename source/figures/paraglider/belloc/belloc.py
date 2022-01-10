@@ -279,11 +279,11 @@ for _kb, beta in enumerate(betas):
 
     nllt[beta] = {
         "alpha": np.r_[alphas_down, alphas_up],  # Converged `alpha`
-        "dF": np.asfarray(dFs),  # Section forces
-        "dM": np.asfarray(dMs),  # Net section moments
+        "dF": np.asfarray(dFs),  # Individual section forces
+        "dM": np.asfarray(dMs),  # Individual section moments
         "F": np.asfarray(Fs),  # Net forces
         "M": np.asfarray(Ms),  # Net moments
-        "Mc4": np.asfarray(Mc4s),  # Section pitching moments
+        "Mc4": np.asfarray(Mc4s),  # Net moments from section pitching moments
         "solutions": solutions,  # Solutions for Phillips' method
     }
     print()
