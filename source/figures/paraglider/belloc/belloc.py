@@ -104,7 +104,7 @@ arc = InterpolatedArc(
 )
 
 # Alternatively, use the analytical (non-sampled, smooth curvature) form
-# arc = gsim.foil.EllipticalArc(np.rad2deg(np.arctan(.375/.688)), 89)
+# arc = gsim.foil_layout.EllipticalArc(np.rad2deg(np.arctan(0.375 / 0.688)), 89)
 
 layout = gsim.foil_layout.FoilLayout(
     x=0,
