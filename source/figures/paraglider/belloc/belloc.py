@@ -7,10 +7,13 @@ Recreate the paraglider analysis in [1]_ using multiple aerodynamics models.
 
 2. XFLR5 (VLM)
 
-3. `pfh.glidersim` (Phillips' nonlinear lifting-line model)
+3. `pfh.glidersim` (Phillips' nonlinear lifting-line model [2]_)
 
 .. [1] Hervé Belloc, "Wind Tunnel Investigation of a Rigid Paraglider Reference
-   Wing", 2015
+       Wing", 2015
+
+.. [2] W. F. Phillips and D. O. Snyder, "Modern adaptation of Prandtl's classic
+       lifting-line theory", 2000
 """
 
 import time
@@ -87,8 +90,7 @@ class InterpolatedArc:
 
 # Section indices are the normalized distances from the central section along
 # the length of the `yz` curve (so s=±1 for the right/left wingtips, and s=0
-# for the central section). Because the two semispans are symmetric their
-# lengths are equal, and calculating their section indices is simplified.
+# for the central section).
 L_segments = np.linalg.norm(np.diff(xyz.T[1:]), axis=0)
 s = np.cumsum(np.r_[0, L_segments]) / L_segments.sum() * 2 - 1
 s = s.clip(-1, 1)  # Floating-point error means `s` might slightly exceed ±1
@@ -97,13 +99,14 @@ s = s.clip(-1, 1)  # Floating-point error means `s` might slightly exceed ±1
 # easier to define parametric representations, so raw coordinates must be
 # normalized first.
 
+# Option 1: use the piecewise-linear physical geometry (sampled ellipse):
 arc = InterpolatedArc(
     s,
     y=xyz.T[1] / (b_flat / 2),
-    z=(xyz.T[2] - xyz[6, 2]) / (b_flat / 2),
+    z=(xyz.T[2] - xyz[6, 2]) / (b_flat / 2),  # Central section at `z = 0`
 )
 
-# Alternatively, use the analytical (non-sampled, smooth curvature) form
+# Option 2: use the analytical geometry (true ellipse)
 # arc = gsim.foil_layout.EllipticalArc(np.rad2deg(np.arctan(0.375 / 0.688)), 89)
 
 layout = gsim.foil_layout.FoilLayout(
@@ -193,7 +196,7 @@ print("rho_air:", rho_air)
 
 print("\nRunning simulations...")
 betas = np.arange(-15, 16)
-nllt: dict[int, dict] = {}  # Coefficients for Phillips' NLLT, keyed by `beta`
+nllt: dict[int, dict] = {}  # Results for Phillips' NLLT, keyed by `beta` [deg]
 t_start = time.perf_counter()
 for _kb, beta in enumerate(betas):
     dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
@@ -297,12 +300,8 @@ print(f"Finished in {t_stop - t_start:0.2f} seconds\n")
 
 plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
 
-# Load the aerodynamic coefficients from other datasets, keyed by beta [deg]
-belloc = {}  # Wind tunnel measurements
-avl = {}  # AVL's VLM method
-xflr5 = {}  # XFLR5's VLM2 method
-
 # Dataset: wind tunnel
+belloc: dict[int, dict] = {}  # Keyed by `beta` [deg]
 for beta in plotted_betas:
     belloc[beta] = np.genfromtxt(
         f"windtunnel/beta{beta:02}.csv",
@@ -311,6 +310,7 @@ for beta in plotted_betas:
     )
 
 # Dataset: XFLR5
+xflr5: dict[int, dict] = {}  # Keyed by `beta` [deg]
 for beta in plotted_betas:
     xflr5[beta] = np.genfromtxt(
         f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}-Inviscid.txt",
@@ -319,6 +319,7 @@ for beta in plotted_betas:
     )
 
 # Dataset: AVL
+avl: dict[int, dict] = {}  # Keyed by `beta` [deg]
 for beta in betas:
     data = np.genfromtxt(f"avl/polars/beta{beta:02}.txt", names=True)
     avl[beta] = {field: data[field] for field in data.dtype.fields}
@@ -329,7 +330,6 @@ for beta in betas:
         np.c_[avl[beta]["CX"], avl[beta]["CY"], avl[beta]["CZ"]],
     ).T
     avl[beta].update({"CXa": CXa, "CYa": CYa, "CZa": CZa})
-
 
 # Dataset: NLLT
 S = canopy.S_flat  # Flattened wing as the reference area
@@ -486,8 +486,7 @@ pad_args = {"h_pad": 1.75, "w_pad": 1}
 
 plot_avl = True
 plot_xflr5 = True
-savefig = True  # Save the images to SVG ...
-savefig = False  # ... but don't save by default
+savefig = False  # Export the figures as SVG files
 
 
 # Plot: CL vs alpha
