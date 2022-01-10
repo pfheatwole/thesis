@@ -351,6 +351,27 @@ for beta in betas:
 S = canopy.S_flat  # Flattened wing as the reference area
 q = 0.5 * rho_air * v_mag ** 2
 for beta in betas:
+    if len(nllt[beta]["alpha"]) == 0:
+        # Pad to keep the sequences the same length as `betas`
+        nllt[beta].update(
+            {
+                "CX": np.array([]),
+                "CY": np.array([]),
+                "CZ": np.array([]),
+                "Cl": np.array([]),
+                "Cm": np.array([]),
+                "Cn": np.array([]),
+                "CXa": np.array([]),
+                "CYa": np.array([]),
+                "CZa": np.array([]),
+                "Cla": np.array([]),
+                "Cma": np.array([]),
+                "Cna": np.array([]),
+                "Cm_c4": np.array([]),
+            }
+        )
+        continue
+
     # Body axes
     CX, CY, CZ = nllt[beta]["F"].T / (q * S)
     Cl, Cm, Cn = nllt[beta]["M"].T / (q * S * cc)
