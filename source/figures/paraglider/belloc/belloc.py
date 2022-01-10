@@ -127,7 +127,12 @@ canopy = gsim.foil.SimpleFoil(
     sections=sections,
     b_flat=b_flat,
     aerodynamics_method=gsim.foil_aerodynamics.Phillips,
-    aerodynamics_config={"v_ref_mag": 40, "K": 11},
+    aerodynamics_config={
+        "v_ref_mag": 40,
+        "alpha_ref": 5,
+        "s_nodes": s,
+        # "s_clamp": s_nodes[-1],  # Not supported by XFLR5Coefficients
+    },
 )
 
 print()
