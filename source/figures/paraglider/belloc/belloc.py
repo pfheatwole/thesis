@@ -295,22 +295,6 @@ print(f"Finished in {t_stop - t_start:0.2f} seconds\n")
 ###############################################################################
 # Load or compute the aerodynamic coefficients
 
-
-def compute_C_w2b(euler):
-    """Compute the DCM to transform vectors from body axes into wind axes."""
-    se = np.sin(euler)
-    ce = np.cos(euler)
-    sp, st, sg = se[..., 0], se[..., 1], se[..., 2]
-    cp, ct, cg = ce[..., 0], ce[..., 1], ce[..., 2]
-
-    dcm = [  # Extrinsic yaw-pitch-roll sequence (Tait-Bryan z-y-x)
-        [cg * ct, sg * cp + cg * st * sp, sg * sp - cg * st * cp],
-        [-sg * ct, cg * cp - sg * st * sp, cg * sp + sg * st * cp],
-        [st, -ct * sp, ct * cp],
-    ]
-    return np.moveaxis(dcm, [0, 1], [-2, -1])
-
-
 plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
 
 # Load the aerodynamic coefficients from other datasets, keyed by beta [deg]
@@ -341,7 +325,7 @@ for beta in betas:
     euler = np.stack(np.broadcast_arrays(0, -data["alpha"], beta), axis=-1)
     CXa, CYa, CZa = np.einsum(  # Force coefficients in wind axes
         "ijk,ik->ij",
-        compute_C_w2b(np.deg2rad(euler)),  # C_w2b
+        gsim.orientation.euler_to_dcm(np.deg2rad(euler), intrinsic=False),  # C_w2b
         np.c_[avl[beta]["CX"], avl[beta]["CY"], avl[beta]["CZ"]],
     ).T
     avl[beta].update({"CXa": CXa, "CYa": CYa, "CZa": CZa})
@@ -379,7 +363,7 @@ for beta in betas:
 
     # Wind axes
     euler = np.stack(np.broadcast_arrays(0, -nllt[beta]["alpha"], beta), axis=-1)
-    C_w2b = compute_C_w2b(np.deg2rad(euler))
+    C_w2b = gsim.orientation.euler_to_dcm(np.deg2rad(euler), intrinsic=False)
     CXa, CYa, CZa = np.einsum("ijk,ik->ij", C_w2b, nllt[beta]["F"] / (q * S)).T
     Cla, Cma, Cna = np.einsum("ijk,ik->ij", C_w2b, nllt[beta]["M"] / (q * S * cc)).T
 
