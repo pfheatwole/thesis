@@ -1,0 +1,8872 @@
+oper
+o
+r
+
+b b -15
+1
+a a -6.0
+x
+w
+forces/beta-15_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-15_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-15_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-15_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-15_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-15_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-15_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-15_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-15_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-15_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-15_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-15_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-15_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-15_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-15_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-15_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-15_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-15_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-15_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-15_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-15_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-15_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-15_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-15_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-15_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-15_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-15_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-15_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-15_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-15_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-15_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-15_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-15_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-15_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-15_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-15_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-15_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-15_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-15_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-15_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-15_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-15_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-15_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-15_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-15_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-15_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-15_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-15_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-15_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-15_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-15_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-15_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-15_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-15_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-15_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-15_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-15_alpha22.000.txt
+b b -14
+1
+a a -6.0
+x
+w
+forces/beta-14_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-14_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-14_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-14_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-14_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-14_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-14_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-14_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-14_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-14_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-14_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-14_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-14_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-14_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-14_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-14_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-14_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-14_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-14_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-14_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-14_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-14_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-14_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-14_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-14_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-14_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-14_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-14_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-14_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-14_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-14_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-14_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-14_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-14_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-14_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-14_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-14_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-14_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-14_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-14_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-14_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-14_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-14_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-14_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-14_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-14_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-14_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-14_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-14_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-14_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-14_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-14_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-14_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-14_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-14_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-14_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-14_alpha22.000.txt
+b b -13
+1
+a a -6.0
+x
+w
+forces/beta-13_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-13_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-13_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-13_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-13_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-13_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-13_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-13_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-13_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-13_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-13_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-13_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-13_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-13_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-13_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-13_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-13_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-13_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-13_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-13_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-13_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-13_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-13_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-13_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-13_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-13_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-13_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-13_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-13_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-13_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-13_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-13_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-13_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-13_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-13_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-13_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-13_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-13_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-13_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-13_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-13_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-13_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-13_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-13_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-13_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-13_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-13_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-13_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-13_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-13_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-13_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-13_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-13_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-13_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-13_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-13_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-13_alpha22.000.txt
+b b -12
+1
+a a -6.0
+x
+w
+forces/beta-12_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-12_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-12_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-12_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-12_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-12_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-12_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-12_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-12_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-12_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-12_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-12_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-12_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-12_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-12_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-12_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-12_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-12_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-12_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-12_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-12_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-12_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-12_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-12_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-12_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-12_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-12_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-12_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-12_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-12_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-12_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-12_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-12_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-12_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-12_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-12_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-12_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-12_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-12_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-12_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-12_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-12_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-12_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-12_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-12_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-12_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-12_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-12_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-12_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-12_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-12_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-12_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-12_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-12_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-12_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-12_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-12_alpha22.000.txt
+b b -11
+1
+a a -6.0
+x
+w
+forces/beta-11_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-11_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-11_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-11_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-11_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-11_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-11_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-11_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-11_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-11_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-11_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-11_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-11_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-11_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-11_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-11_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-11_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-11_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-11_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-11_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-11_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-11_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-11_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-11_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-11_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-11_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-11_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-11_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-11_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-11_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-11_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-11_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-11_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-11_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-11_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-11_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-11_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-11_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-11_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-11_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-11_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-11_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-11_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-11_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-11_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-11_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-11_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-11_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-11_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-11_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-11_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-11_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-11_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-11_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-11_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-11_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-11_alpha22.000.txt
+b b -10
+1
+a a -6.0
+x
+w
+forces/beta-10_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-10_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-10_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-10_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-10_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-10_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-10_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-10_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-10_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-10_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-10_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-10_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-10_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-10_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-10_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-10_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-10_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-10_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-10_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-10_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-10_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-10_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-10_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-10_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-10_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-10_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-10_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-10_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-10_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-10_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-10_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-10_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-10_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-10_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-10_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-10_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-10_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-10_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-10_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-10_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-10_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-10_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-10_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-10_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-10_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-10_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-10_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-10_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-10_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-10_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-10_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-10_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-10_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-10_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-10_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-10_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-10_alpha22.000.txt
+b b -9
+1
+a a -6.0
+x
+w
+forces/beta-9_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-9_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-9_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-9_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-9_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-9_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-9_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-9_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-9_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-9_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-9_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-9_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-9_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-9_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-9_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-9_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-9_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-9_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-9_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-9_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-9_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-9_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-9_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-9_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-9_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-9_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-9_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-9_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-9_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-9_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-9_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-9_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-9_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-9_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-9_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-9_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-9_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-9_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-9_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-9_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-9_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-9_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-9_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-9_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-9_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-9_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-9_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-9_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-9_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-9_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-9_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-9_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-9_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-9_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-9_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-9_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-9_alpha22.000.txt
+b b -8
+1
+a a -6.0
+x
+w
+forces/beta-8_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-8_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-8_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-8_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-8_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-8_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-8_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-8_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-8_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-8_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-8_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-8_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-8_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-8_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-8_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-8_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-8_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-8_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-8_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-8_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-8_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-8_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-8_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-8_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-8_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-8_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-8_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-8_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-8_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-8_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-8_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-8_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-8_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-8_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-8_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-8_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-8_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-8_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-8_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-8_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-8_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-8_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-8_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-8_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-8_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-8_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-8_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-8_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-8_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-8_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-8_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-8_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-8_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-8_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-8_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-8_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-8_alpha22.000.txt
+b b -7
+1
+a a -6.0
+x
+w
+forces/beta-7_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-7_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-7_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-7_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-7_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-7_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-7_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-7_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-7_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-7_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-7_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-7_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-7_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-7_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-7_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-7_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-7_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-7_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-7_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-7_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-7_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-7_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-7_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-7_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-7_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-7_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-7_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-7_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-7_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-7_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-7_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-7_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-7_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-7_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-7_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-7_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-7_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-7_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-7_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-7_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-7_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-7_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-7_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-7_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-7_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-7_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-7_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-7_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-7_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-7_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-7_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-7_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-7_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-7_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-7_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-7_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-7_alpha22.000.txt
+b b -6
+1
+a a -6.0
+x
+w
+forces/beta-6_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-6_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-6_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-6_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-6_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-6_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-6_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-6_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-6_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-6_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-6_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-6_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-6_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-6_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-6_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-6_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-6_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-6_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-6_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-6_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-6_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-6_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-6_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-6_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-6_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-6_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-6_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-6_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-6_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-6_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-6_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-6_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-6_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-6_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-6_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-6_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-6_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-6_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-6_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-6_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-6_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-6_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-6_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-6_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-6_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-6_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-6_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-6_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-6_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-6_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-6_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-6_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-6_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-6_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-6_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-6_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-6_alpha22.000.txt
+b b -5
+1
+a a -6.0
+x
+w
+forces/beta-5_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-5_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-5_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-5_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-5_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-5_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-5_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-5_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-5_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-5_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-5_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-5_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-5_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-5_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-5_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-5_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-5_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-5_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-5_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-5_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-5_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-5_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-5_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-5_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-5_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-5_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-5_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-5_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-5_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-5_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-5_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-5_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-5_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-5_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-5_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-5_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-5_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-5_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-5_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-5_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-5_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-5_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-5_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-5_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-5_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-5_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-5_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-5_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-5_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-5_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-5_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-5_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-5_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-5_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-5_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-5_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-5_alpha22.000.txt
+b b -4
+1
+a a -6.0
+x
+w
+forces/beta-4_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-4_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-4_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-4_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-4_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-4_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-4_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-4_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-4_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-4_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-4_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-4_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-4_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-4_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-4_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-4_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-4_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-4_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-4_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-4_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-4_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-4_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-4_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-4_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-4_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-4_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-4_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-4_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-4_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-4_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-4_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-4_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-4_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-4_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-4_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-4_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-4_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-4_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-4_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-4_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-4_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-4_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-4_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-4_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-4_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-4_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-4_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-4_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-4_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-4_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-4_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-4_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-4_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-4_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-4_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-4_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-4_alpha22.000.txt
+b b -3
+1
+a a -6.0
+x
+w
+forces/beta-3_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-3_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-3_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-3_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-3_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-3_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-3_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-3_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-3_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-3_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-3_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-3_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-3_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-3_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-3_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-3_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-3_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-3_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-3_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-3_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-3_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-3_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-3_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-3_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-3_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-3_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-3_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-3_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-3_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-3_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-3_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-3_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-3_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-3_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-3_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-3_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-3_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-3_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-3_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-3_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-3_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-3_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-3_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-3_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-3_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-3_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-3_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-3_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-3_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-3_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-3_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-3_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-3_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-3_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-3_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-3_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-3_alpha22.000.txt
+b b -2
+1
+a a -6.0
+x
+w
+forces/beta-2_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-2_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-2_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-2_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-2_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-2_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-2_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-2_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-2_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-2_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-2_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-2_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-2_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-2_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-2_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-2_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-2_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-2_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-2_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-2_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-2_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-2_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-2_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-2_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-2_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-2_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-2_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-2_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-2_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-2_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-2_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-2_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-2_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-2_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-2_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-2_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-2_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-2_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-2_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-2_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-2_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-2_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-2_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-2_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-2_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-2_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-2_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-2_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-2_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-2_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-2_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-2_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-2_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-2_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-2_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-2_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-2_alpha22.000.txt
+b b -1
+1
+a a -6.0
+x
+w
+forces/beta-1_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta-1_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta-1_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta-1_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta-1_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta-1_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta-1_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta-1_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta-1_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta-1_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta-1_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta-1_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta-1_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta-1_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta-1_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta-1_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta-1_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta-1_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta-1_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta-1_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta-1_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta-1_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta-1_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta-1_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta-1_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta-1_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta-1_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta-1_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta-1_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta-1_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta-1_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta-1_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta-1_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta-1_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta-1_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta-1_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta-1_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta-1_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta-1_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta-1_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta-1_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta-1_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta-1_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta-1_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta-1_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta-1_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta-1_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta-1_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta-1_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta-1_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta-1_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta-1_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta-1_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta-1_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta-1_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta-1_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta-1_alpha22.000.txt
+b b 0
+1
+a a -6.0
+x
+w
+forces/beta00_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta00_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta00_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta00_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta00_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta00_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta00_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta00_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta00_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta00_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta00_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta00_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta00_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta00_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta00_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta00_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta00_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta00_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta00_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta00_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta00_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta00_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta00_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta00_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta00_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta00_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta00_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta00_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta00_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta00_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta00_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta00_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta00_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta00_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta00_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta00_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta00_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta00_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta00_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta00_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta00_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta00_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta00_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta00_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta00_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta00_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta00_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta00_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta00_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta00_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta00_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta00_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta00_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta00_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta00_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta00_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta00_alpha22.000.txt
+b b 1
+1
+a a -6.0
+x
+w
+forces/beta01_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta01_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta01_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta01_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta01_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta01_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta01_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta01_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta01_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta01_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta01_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta01_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta01_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta01_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta01_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta01_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta01_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta01_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta01_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta01_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta01_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta01_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta01_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta01_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta01_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta01_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta01_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta01_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta01_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta01_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta01_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta01_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta01_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta01_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta01_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta01_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta01_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta01_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta01_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta01_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta01_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta01_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta01_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta01_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta01_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta01_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta01_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta01_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta01_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta01_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta01_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta01_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta01_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta01_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta01_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta01_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta01_alpha22.000.txt
+b b 2
+1
+a a -6.0
+x
+w
+forces/beta02_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta02_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta02_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta02_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta02_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta02_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta02_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta02_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta02_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta02_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta02_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta02_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta02_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta02_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta02_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta02_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta02_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta02_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta02_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta02_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta02_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta02_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta02_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta02_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta02_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta02_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta02_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta02_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta02_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta02_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta02_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta02_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta02_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta02_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta02_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta02_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta02_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta02_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta02_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta02_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta02_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta02_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta02_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta02_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta02_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta02_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta02_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta02_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta02_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta02_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta02_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta02_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta02_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta02_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta02_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta02_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta02_alpha22.000.txt
+b b 3
+1
+a a -6.0
+x
+w
+forces/beta03_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta03_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta03_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta03_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta03_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta03_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta03_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta03_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta03_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta03_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta03_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta03_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta03_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta03_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta03_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta03_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta03_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta03_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta03_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta03_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta03_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta03_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta03_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta03_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta03_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta03_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta03_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta03_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta03_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta03_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta03_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta03_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta03_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta03_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta03_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta03_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta03_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta03_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta03_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta03_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta03_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta03_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta03_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta03_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta03_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta03_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta03_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta03_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta03_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta03_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta03_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta03_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta03_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta03_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta03_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta03_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta03_alpha22.000.txt
+b b 4
+1
+a a -6.0
+x
+w
+forces/beta04_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta04_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta04_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta04_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta04_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta04_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta04_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta04_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta04_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta04_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta04_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta04_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta04_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta04_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta04_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta04_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta04_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta04_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta04_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta04_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta04_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta04_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta04_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta04_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta04_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta04_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta04_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta04_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta04_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta04_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta04_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta04_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta04_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta04_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta04_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta04_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta04_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta04_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta04_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta04_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta04_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta04_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta04_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta04_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta04_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta04_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta04_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta04_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta04_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta04_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta04_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta04_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta04_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta04_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta04_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta04_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta04_alpha22.000.txt
+b b 5
+1
+a a -6.0
+x
+w
+forces/beta05_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta05_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta05_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta05_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta05_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta05_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta05_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta05_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta05_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta05_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta05_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta05_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta05_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta05_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta05_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta05_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta05_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta05_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta05_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta05_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta05_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta05_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta05_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta05_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta05_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta05_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta05_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta05_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta05_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta05_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta05_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta05_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta05_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta05_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta05_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta05_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta05_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta05_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta05_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta05_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta05_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta05_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta05_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta05_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta05_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta05_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta05_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta05_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta05_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta05_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta05_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta05_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta05_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta05_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta05_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta05_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta05_alpha22.000.txt
+b b 6
+1
+a a -6.0
+x
+w
+forces/beta06_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta06_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta06_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta06_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta06_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta06_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta06_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta06_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta06_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta06_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta06_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta06_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta06_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta06_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta06_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta06_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta06_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta06_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta06_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta06_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta06_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta06_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta06_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta06_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta06_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta06_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta06_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta06_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta06_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta06_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta06_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta06_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta06_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta06_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta06_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta06_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta06_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta06_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta06_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta06_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta06_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta06_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta06_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta06_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta06_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta06_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta06_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta06_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta06_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta06_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta06_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta06_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta06_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta06_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta06_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta06_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta06_alpha22.000.txt
+b b 7
+1
+a a -6.0
+x
+w
+forces/beta07_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta07_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta07_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta07_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta07_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta07_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta07_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta07_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta07_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta07_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta07_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta07_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta07_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta07_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta07_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta07_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta07_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta07_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta07_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta07_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta07_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta07_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta07_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta07_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta07_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta07_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta07_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta07_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta07_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta07_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta07_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta07_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta07_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta07_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta07_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta07_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta07_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta07_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta07_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta07_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta07_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta07_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta07_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta07_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta07_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta07_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta07_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta07_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta07_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta07_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta07_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta07_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta07_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta07_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta07_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta07_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta07_alpha22.000.txt
+b b 8
+1
+a a -6.0
+x
+w
+forces/beta08_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta08_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta08_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta08_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta08_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta08_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta08_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta08_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta08_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta08_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta08_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta08_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta08_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta08_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta08_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta08_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta08_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta08_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta08_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta08_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta08_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta08_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta08_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta08_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta08_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta08_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta08_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta08_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta08_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta08_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta08_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta08_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta08_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta08_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta08_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta08_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta08_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta08_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta08_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta08_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta08_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta08_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta08_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta08_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta08_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta08_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta08_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta08_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta08_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta08_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta08_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta08_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta08_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta08_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta08_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta08_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta08_alpha22.000.txt
+b b 9
+1
+a a -6.0
+x
+w
+forces/beta09_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta09_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta09_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta09_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta09_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta09_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta09_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta09_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta09_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta09_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta09_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta09_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta09_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta09_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta09_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta09_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta09_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta09_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta09_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta09_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta09_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta09_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta09_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta09_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta09_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta09_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta09_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta09_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta09_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta09_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta09_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta09_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta09_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta09_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta09_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta09_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta09_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta09_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta09_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta09_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta09_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta09_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta09_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta09_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta09_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta09_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta09_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta09_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta09_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta09_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta09_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta09_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta09_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta09_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta09_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta09_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta09_alpha22.000.txt
+b b 10
+1
+a a -6.0
+x
+w
+forces/beta10_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta10_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta10_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta10_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta10_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta10_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta10_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta10_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta10_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta10_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta10_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta10_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta10_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta10_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta10_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta10_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta10_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta10_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta10_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta10_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta10_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta10_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta10_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta10_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta10_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta10_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta10_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta10_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta10_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta10_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta10_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta10_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta10_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta10_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta10_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta10_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta10_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta10_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta10_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta10_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta10_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta10_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta10_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta10_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta10_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta10_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta10_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta10_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta10_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta10_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta10_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta10_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta10_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta10_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta10_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta10_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta10_alpha22.000.txt
+b b 11
+1
+a a -6.0
+x
+w
+forces/beta11_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta11_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta11_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta11_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta11_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta11_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta11_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta11_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta11_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta11_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta11_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta11_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta11_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta11_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta11_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta11_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta11_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta11_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta11_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta11_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta11_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta11_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta11_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta11_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta11_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta11_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta11_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta11_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta11_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta11_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta11_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta11_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta11_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta11_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta11_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta11_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta11_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta11_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta11_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta11_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta11_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta11_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta11_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta11_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta11_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta11_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta11_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta11_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta11_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta11_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta11_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta11_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta11_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta11_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta11_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta11_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta11_alpha22.000.txt
+b b 12
+1
+a a -6.0
+x
+w
+forces/beta12_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta12_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta12_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta12_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta12_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta12_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta12_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta12_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta12_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta12_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta12_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta12_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta12_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta12_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta12_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta12_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta12_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta12_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta12_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta12_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta12_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta12_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta12_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta12_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta12_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta12_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta12_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta12_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta12_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta12_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta12_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta12_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta12_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta12_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta12_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta12_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta12_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta12_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta12_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta12_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta12_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta12_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta12_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta12_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta12_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta12_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta12_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta12_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta12_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta12_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta12_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta12_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta12_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta12_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta12_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta12_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta12_alpha22.000.txt
+b b 13
+1
+a a -6.0
+x
+w
+forces/beta13_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta13_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta13_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta13_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta13_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta13_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta13_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta13_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta13_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta13_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta13_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta13_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta13_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta13_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta13_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta13_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta13_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta13_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta13_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta13_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta13_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta13_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta13_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta13_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta13_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta13_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta13_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta13_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta13_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta13_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta13_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta13_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta13_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta13_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta13_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta13_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta13_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta13_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta13_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta13_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta13_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta13_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta13_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta13_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta13_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta13_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta13_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta13_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta13_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta13_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta13_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta13_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta13_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta13_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta13_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta13_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta13_alpha22.000.txt
+b b 14
+1
+a a -6.0
+x
+w
+forces/beta14_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta14_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta14_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta14_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta14_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta14_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta14_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta14_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta14_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta14_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta14_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta14_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta14_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta14_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta14_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta14_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta14_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta14_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta14_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta14_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta14_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta14_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta14_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta14_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta14_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta14_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta14_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta14_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta14_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta14_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta14_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta14_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta14_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta14_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta14_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta14_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta14_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta14_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta14_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta14_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta14_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta14_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta14_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta14_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta14_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta14_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta14_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta14_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta14_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta14_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta14_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta14_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta14_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta14_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta14_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta14_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta14_alpha22.000.txt
+b b 15
+1
+a a -6.0
+x
+w
+forces/beta15_alpha-6.000.txt
+2
+a a -5.5
+x
+w
+forces/beta15_alpha-5.500.txt
+3
+a a -5.0
+x
+w
+forces/beta15_alpha-5.000.txt
+4
+a a -4.5
+x
+w
+forces/beta15_alpha-4.500.txt
+5
+a a -4.0
+x
+w
+forces/beta15_alpha-4.000.txt
+6
+a a -3.5
+x
+w
+forces/beta15_alpha-3.500.txt
+7
+a a -3.0
+x
+w
+forces/beta15_alpha-3.000.txt
+8
+a a -2.5
+x
+w
+forces/beta15_alpha-2.500.txt
+9
+a a -2.0
+x
+w
+forces/beta15_alpha-2.000.txt
+10
+a a -1.5
+x
+w
+forces/beta15_alpha-1.500.txt
+11
+a a -1.0
+x
+w
+forces/beta15_alpha-1.000.txt
+12
+a a -0.5
+x
+w
+forces/beta15_alpha-0.500.txt
+13
+a a 0.0
+x
+w
+forces/beta15_alpha0.000.txt
+14
+a a 0.5
+x
+w
+forces/beta15_alpha0.500.txt
+15
+a a 1.0
+x
+w
+forces/beta15_alpha1.000.txt
+16
+a a 1.5
+x
+w
+forces/beta15_alpha1.500.txt
+17
+a a 2.0
+x
+w
+forces/beta15_alpha2.000.txt
+18
+a a 2.5
+x
+w
+forces/beta15_alpha2.500.txt
+19
+a a 3.0
+x
+w
+forces/beta15_alpha3.000.txt
+20
+a a 3.5
+x
+w
+forces/beta15_alpha3.500.txt
+21
+a a 4.0
+x
+w
+forces/beta15_alpha4.000.txt
+22
+a a 4.5
+x
+w
+forces/beta15_alpha4.500.txt
+23
+a a 5.0
+x
+w
+forces/beta15_alpha5.000.txt
+24
+a a 5.5
+x
+w
+forces/beta15_alpha5.500.txt
+25
+a a 6.0
+x
+w
+forces/beta15_alpha6.000.txt
+26
+a a 6.5
+x
+w
+forces/beta15_alpha6.500.txt
+27
+a a 7.0
+x
+w
+forces/beta15_alpha7.000.txt
+28
+a a 7.5
+x
+w
+forces/beta15_alpha7.500.txt
+29
+a a 8.0
+x
+w
+forces/beta15_alpha8.000.txt
+30
+a a 8.5
+x
+w
+forces/beta15_alpha8.500.txt
+31
+a a 9.0
+x
+w
+forces/beta15_alpha9.000.txt
+32
+a a 9.5
+x
+w
+forces/beta15_alpha9.500.txt
+33
+a a 10.0
+x
+w
+forces/beta15_alpha10.000.txt
+34
+a a 10.5
+x
+w
+forces/beta15_alpha10.500.txt
+35
+a a 11.0
+x
+w
+forces/beta15_alpha11.000.txt
+36
+a a 11.5
+x
+w
+forces/beta15_alpha11.500.txt
+37
+a a 12.0
+x
+w
+forces/beta15_alpha12.000.txt
+38
+a a 12.5
+x
+w
+forces/beta15_alpha12.500.txt
+39
+a a 13.0
+x
+w
+forces/beta15_alpha13.000.txt
+40
+a a 13.5
+x
+w
+forces/beta15_alpha13.500.txt
+41
+a a 14.0
+x
+w
+forces/beta15_alpha14.000.txt
+42
+a a 14.5
+x
+w
+forces/beta15_alpha14.500.txt
+43
+a a 15.0
+x
+w
+forces/beta15_alpha15.000.txt
+44
+a a 15.5
+x
+w
+forces/beta15_alpha15.500.txt
+45
+a a 16.0
+x
+w
+forces/beta15_alpha16.000.txt
+46
+a a 16.5
+x
+w
+forces/beta15_alpha16.500.txt
+47
+a a 17.0
+x
+w
+forces/beta15_alpha17.000.txt
+48
+a a 17.5
+x
+w
+forces/beta15_alpha17.500.txt
+49
+a a 18.0
+x
+w
+forces/beta15_alpha18.000.txt
+50
+a a 18.5
+x
+w
+forces/beta15_alpha18.500.txt
+51
+a a 19.0
+x
+w
+forces/beta15_alpha19.000.txt
+52
+a a 19.5
+x
+w
+forces/beta15_alpha19.500.txt
+53
+a a 20.0
+x
+w
+forces/beta15_alpha20.000.txt
+54
+a a 20.5
+x
+w
+forces/beta15_alpha20.500.txt
+55
+a a 21.0
+x
+w
+forces/beta15_alpha21.000.txt
+56
+a a 21.5
+x
+w
+forces/beta15_alpha21.500.txt
+57
+a a 22.0
+x
+w
+forces/beta15_alpha22.000.txt
+
+QUIT

@@ -1,18 +1,31 @@
 """
-Recreates the paraglider analysis in "Wind Tunnel Investigation of a Rigid
-Paraglider Reference Wing", H. Belloc, 2015
+Recreate the paraglider analysis in [1]_ using multiple aerodynamics models.
+
+0. Raw wind tunnel data
+
+1. AVL (VLM)
+
+2. XFLR5 (VLM)
+
+3. `pfh.glidersim` (Phillips' nonlinear lifting-line model [2]_)
+
+.. [1] Hervé Belloc, "Wind Tunnel Investigation of a Rigid Paraglider Reference
+       Wing", 2015
+
+.. [2] W. F. Phillips and D. O. Snyder, "Modern adaptation of Prandtl's classic
+       lifting-line theory", 2000
 """
 
 import time
 
-import matplotlib.pyplot as plt  # noqa: F401
+import matplotlib.pyplot as plt
 import numpy as np
 import pfh.glidersim as gsim
 import scipy.interpolate
 
 
-# ---------------------------------------------------------------------------
-# Wing definition from the paper
+###############################################################################
+# Wing specifications from the paper
 
 # Table 1: the full-scale wing dimensions converted into 1/8 model
 h = 3 / 8  # Arch height (vertical deflection from wing root to tips) [m]
@@ -25,8 +38,9 @@ b_flat = 13.64 / 8  # Flattened span [m]
 S_flat = 28.56 / (8 ** 2)  # Flattened area [m^2]
 AR_flat = 6.52  # Flattened aspect ratio
 
-# Table 2: Coordinates along the 0.6c line for the 1/8 model in [m]
-xyz = np.array(
+# Table 2: geometry for the 1/8 model, left-to-right
+# fmt: off
+xyz = np.array(  # Coordinates along the 0.6c line [m]
     [
         [0.000, -0.688,  0.000],
         [0.000, -0.664, -0.097],
@@ -43,35 +57,28 @@ xyz = np.array(
         [0.000,  0.688,  0.000],
     ],
 )
-
 c = np.array([0.107, 0.137, 0.198, 0.259, 0.308, 0.339, 0.350,
               0.339, 0.308, 0.259, 0.198, 0.137, 0.107])  # chords [m]
+# fmt: on
 
 theta = np.deg2rad([3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3])  # torsion [deg]
 
-# Section indices are the normalized distances from the central section along
-# the length of the `yz` curve (so +/-1 for the far left/right, and 0 for the
-# central section). Because the left and right semispans are symmetric their
-# lengths are equal, and calculating their section indicies is simplified.
-L_segments = np.linalg.norm(np.diff(xyz.T[1:]), axis=0)
-s_xyz = np.cumsum(np.r_[0, L_segments]) / L_segments.sum() * 2 - 1
 
-# Coordinates and chords are in meters, and must be normalized
-fx = scipy.interpolate.interp1d(s_xyz, xyz.T[0] / (b_flat / 2))
-fy = scipy.interpolate.interp1d(s_xyz, xyz.T[1] / (b_flat / 2))
-fz = scipy.interpolate.interp1d(s_xyz, (xyz.T[2] - xyz[6, 2]) / (b_flat / 2))
-fc = scipy.interpolate.interp1d(s_xyz, c / (b_flat / 2))
-ftheta = scipy.interpolate.interp1d(s_xyz, theta)
+###############################################################################
+# Build the canopy and wing models
 
-
-# ---------------------------------------------------------------------------
-# Build the canopy and wing
 
 class InterpolatedArc:
-    """Interface to use a PchipInterpolator for the arc."""
+    """Interface to use point-definitions for the arc.
+
+    FIXME: resample+Pchip is kludgy; do a proper piecewise-linear implementation
+    """
 
     def __init__(self, s, y, z):
-        self._f = scipy.interpolate.PchipInterpolator(s, np.c_[y, z])
+        sr = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
+        fy = scipy.interpolate.interp1d(s, y)
+        fz = scipy.interpolate.interp1d(s, z)
+        self._f = scipy.interpolate.PchipInterpolator(sr, np.c_[fy(sr), fz(sr)])
         self._fd = self._f.derivative()
 
     def __call__(self, s):
@@ -81,29 +88,41 @@ class InterpolatedArc:
         return self._fd(s)
 
 
-# FIXME: move the resampling logic into `InterpolatedArc`, and make that an
-#        official helper class in `foil.py`. It should also use more intelligent
-#        resampling (only needs two extra samples on either side of each point)
-s = np.linspace(-1, 1, 1000)  # Resample so the cubic-fit stays linear
-arc = InterpolatedArc(s, fy(s), fz(s))
+# Section indices are the normalized distances from the central section along
+# the length of the `yz` curve (so s=±1 for the right/left wingtips, and s=0
+# for the central section).
+L_segments = np.linalg.norm(np.diff(xyz.T[1:]), axis=0)
+s = np.cumsum(np.r_[0, L_segments]) / L_segments.sum() * 2 - 1
+s = s.clip(-1, 1)  # Floating-point error means `s` might slightly exceed ±1
 
-# Alternatively, use the analytical (non-sampled, smooth curvature) form
-# arc = gsim.foil.EllipticalArc(np.rad2deg(np.arctan(.375/.688)), 89)
+# The FoilLayout uses lengths normalized by the semispan since it makes it
+# easier to define parametric representations, so raw coordinates must be
+# normalized first.
+
+# Option 1: use the piecewise-linear physical geometry (sampled ellipse):
+arc = InterpolatedArc(
+    s,
+    y=xyz.T[1] / (b_flat / 2),
+    z=(xyz.T[2] - xyz[6, 2]) / (b_flat / 2),  # Central section at `z = 0`
+)
+
+# Option 2: use the analytical geometry (true ellipse)
+# arc = gsim.foil_layout.EllipticalArc(np.rad2deg(np.arctan(0.375 / 0.688)), 89)
 
 layout = gsim.foil_layout.FoilLayout(
     x=0,
     r_x=0.6,
     yz=arc,
     r_yz=0.6,
-    c=fc,
-    theta=ftheta,
+    c=scipy.interpolate.interp1d(s, c / (b_flat / 2)),
+    theta=scipy.interpolate.interp1d(s, theta),
 )
 
 airfoil = gsim.airfoil.NACA(23015, convention="vertical")
 sections = gsim.foil_sections.FoilSections(
     profiles=gsim.airfoil.AirfoilGeometryInterpolator({0: airfoil}),
     coefficients=gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
-    intakes=None,
+    Cd_surface=0.004,  # ref: ware1969WindtunnelInvestigationRamair
 )
 
 canopy = gsim.foil.SimpleFoil(
@@ -111,7 +130,12 @@ canopy = gsim.foil.SimpleFoil(
     sections=sections,
     b_flat=b_flat,
     aerodynamics_method=gsim.foil_aerodynamics.Phillips,
-    aerodynamics_config={"v_ref_mag": 40, "K": 11},
+    aerodynamics_config={
+        "v_ref_mag": 40,
+        "alpha_ref": 5,
+        "s_nodes": s,
+        # "s_clamp": s_nodes[-1],  # Not supported by XFLR5Coefficients
+    },
 )
 
 print()
@@ -122,16 +146,18 @@ print(f"    Projected AR> Expected: {AR:.4f},   Actual: {canopy.AR:.4f}")
 print(f"    Flattened AR> Expected: {AR_flat:.4f},   Actual: {canopy.AR_flat:.4f}")
 print()
 
+# This model is overkill for this simulation, but it allows the ParagliderWing
+# to to calculate the moments about the reference point.
 lines = gsim.paraglider_wing.SimpleLineGeometry(
-    kappa_x=0.0875,  # 25% back from the leading edge
-    kappa_z=1.0,  # 1m below the central chord
+    kappa_x=0.0875,  # Reference point is 25% back from the leading edge
+    kappa_z=1.0,  # Reference point is 1m below the central chord
     kappa_A=0,  # unused
     kappa_C=1,  # unused
     kappa_a=0,  # unused
-    total_line_length=0,  # Neglect line drag
-    average_line_diameter=0,
-    r_L2LE=[0, 0, 0],
-    Cd_lines=0,
+    total_line_length=0,  # unused
+    average_line_diameter=0,  # unused
+    r_L2LE=[0, 0, 0],  # unused
+    Cd_lines=0,  # unused
     s_delta_start0=0,  # unused
     s_delta_start1=0,  # unused
     s_delta_stop0=1,  # unused
@@ -142,8 +168,8 @@ lines = gsim.paraglider_wing.SimpleLineGeometry(
 wing = gsim.paraglider_wing.ParagliderWing(
     lines=lines,
     canopy=canopy,
-    rho_upper=0,  # Neglect gravitational forces
-    rho_lower=0,
+    rho_upper=1,  # unused
+    rho_lower=1,  # unused
 )
 
 # print("\nFinished defining the complete wing. Pausing for review.\n")
@@ -152,9 +178,10 @@ wing = gsim.paraglider_wing.ParagliderWing(
 # breakpoint()
 # 1/0
 
-# ---------------------------------------------------------------------------
-# Simulate the wind tunnel tests
-#
+
+###############################################################################
+# Simulate the wind tunnel tests using the NLLT aerodynamics model
+
 # The paper says the wind tunnel is being used at 40m/s to produce a Reynolds
 # number of 920,000. It neglects to mention the air density during the test,
 # but if the dynamic viscosity of the air is standard, then we can compute the
@@ -167,18 +194,14 @@ rho_air = Re * mu / (v_mag * L)
 rho_air = 1.187  # Override: the true (mean) value from the wind tunnel data
 print("rho_air:", rho_air)
 
-# Full-range tests
+print("\nRunning simulations...")
 betas = np.arange(-15, 16)
-# betas = [0, 5, 10, 15]
-nllt = {}  # Coefficients for Phillips' NLLT, keyed by `beta`
-
-print("\nRunning tests...")
+nllt: dict[int, dict] = {}  # Results for Phillips' NLLT, keyed by `beta` [deg]
 t_start = time.perf_counter()
-
 for _kb, beta in enumerate(betas):
     dFs, dMs, Fs, Ms, Mc4s, solutions = [], [], [], [], [], []
     r_LE2RM = -wing.r_RM2LE(0)
-    r_CP2LE = wing.control_points(0)
+    r_CP2LE = wing.r_CP2LE(0)
     r_CP2RM = r_CP2LE + r_LE2RM
 
     # Some figures will look for samples at alpha = [0, 5, 10, 15], so make
@@ -194,14 +217,14 @@ for _kb, beta in enumerate(betas):
         beta_rad = np.deg2rad(beta)
         sa, sb = np.sin(alpha_rad), np.sin(beta_rad)
         ca, cb = np.cos(alpha_rad), np.cos(beta_rad)
-        v_W2b = np.asarray([ca * cb, sb, sa * cb])
+        v_W2b = np.asfarray([ca * cb, sb, sa * cb])
         v_W2b *= -v_mag  # The Reynolds numbers are a function of the magnitude
 
         try:
             dF, dM, ref = wing.aerodynamics(
-                0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
+                0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref
             )
-        except gsim.foil_aerodynamics.FoilAerodynamics.ConvergenceError:
+        except gsim.foil_aerodynamics.ConvergenceError:
             ka -= 1
             break
 
@@ -216,18 +239,16 @@ for _kb, beta in enumerate(betas):
         Mc4s.append(dM.sum(axis=0))
         solutions.append(ref)
 
-    alphas_down = alphas_down[:ka + 1]  # Truncate when convergence failed
-
-    # Reverse the order
-    dFs = dFs[::-1]
-    dMs = dMs[::-1]
-    Fs = Fs[::-1]
-    Ms = Ms[::-1]
-    Mc4s = Mc4s[::-1]
-    solutions = solutions[::-1]
-    alphas_down = alphas_down[::-1]
+    alphas_down = alphas_down[: ka + 1]  # Truncate when convergence failed
 
     # Continue with increasing alpha
+    dFs.reverse()
+    dMs.reverse()
+    Fs.reverse()
+    Ms.reverse()
+    Mc4s.reverse()
+    solutions.reverse()
+    alphas_down = alphas_down[::-1]
     ref = None
     for ka, alpha in enumerate(alphas_up):
         print(f"\rTest: alpha: {alpha:6.2f}, beta: {beta}", end="")
@@ -235,14 +256,14 @@ for _kb, beta in enumerate(betas):
         beta_rad = np.deg2rad(beta)
         sa, sb = np.sin(alpha_rad), np.sin(beta_rad)
         ca, cb = np.cos(alpha_rad), np.cos(beta_rad)
-        v_W2b = np.asarray([ca * cb, sb, sa * cb])
+        v_W2b = np.asfarray([ca * cb, sb, sa * cb])
         v_W2b *= -v_mag  # The Reynolds numbers are a function of the magnitude
 
         try:
             dF, dM, ref = wing.aerodynamics(
-                0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref,
+                0, 0, 0, v_W2b=v_W2b, rho_air=rho_air, reference_solution=ref
             )
-        except gsim.foil_aerodynamics.FoilAerodynamics.ConvergenceError:
+        except gsim.foil_aerodynamics.ConvergenceError:
             ka -= 1
             break
 
@@ -257,15 +278,15 @@ for _kb, beta in enumerate(betas):
         Mc4s.append(dM.sum(axis=0))
         solutions.append(ref)
 
-    alphas_up = alphas_up[:ka + 1]  # Truncate when convergence failed
+    alphas_up = alphas_up[: ka + 1]  # Truncate when convergence failed
 
     nllt[beta] = {
         "alpha": np.r_[alphas_down, alphas_up],  # Converged `alpha`
-        "dF": np.asarray(dFs),  # Section forces
-        "dM": np.asarray(dMs),  # Net section moments
-        "F": np.asarray(Fs),  # Net forces
-        "M": np.asarray(Ms),  # Net moments
-        "Mc4": np.asarray(Mc4s),  # Section pitching moments
+        "dF": np.asfarray(dFs),  # Individual section forces
+        "dM": np.asfarray(dMs),  # Individual section moments
+        "F": np.asfarray(Fs),  # Net forces
+        "M": np.asfarray(Ms),  # Net moments
+        "Mc4": np.asfarray(Mc4s),  # Net moments from section pitching moments
         "solutions": solutions,  # Solutions for Phillips' method
     }
     print()
@@ -273,109 +294,165 @@ for _kb, beta in enumerate(betas):
 t_stop = time.perf_counter()
 print(f"Finished in {t_stop - t_start:0.2f} seconds\n")
 
-# ---------------------------------------------------------------------------
+
+###############################################################################
 # Load or compute the aerodynamic coefficients
 
 plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
 
-# Load the aerodynamic coefficients from other datasets, keyed by beta [deg]
-belloc = {}  # Wind tunnel measurements
-avl = {}  # AVL's VLM method
-xflr5 = {}  # XFLR5's VLM2 method
+# Dataset: wind tunnel
+belloc: dict[int, dict] = {}  # Keyed by `beta` [deg]
+for beta in plotted_betas:
+    belloc[beta] = np.genfromtxt(
+        f"windtunnel/beta{beta:02}.csv",
+        names=True,
+        delimiter=",",
+    )
 
-for beta in betas:
-    avl[beta] = np.genfromtxt(f"avl/polars/beta{beta:02}.txt", names=True)
-    avl[beta] = {field: avl[beta][field] for field in avl[beta].dtype.fields}
-
-for beta in sorted(plotted_betas.intersection(betas)):
-    filename = f"windtunnel/beta{beta:02}.csv"  # Belloc's raw wind tunnel data
-    names = np.loadtxt(filename, max_rows=1, dtype=str, delimiter=',')
-    data = np.genfromtxt(filename, skip_header=1, names=list(names), delimiter=',')
-    belloc[beta] = data
+# Dataset: XFLR5
+xflr5: dict[int, dict] = {}  # Keyed by `beta` [deg]
+for beta in plotted_betas:
     xflr5[beta] = np.genfromtxt(
         f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}-Inviscid.txt",
         skip_header=7,
         names=True,
     )
 
-
-def compute_C_w2b(alpha, beta):
-    """
-    Compute the DCM to transform vectors from body axes into wind axes.
-
-    See "Flight Vehicle Aerodynamics", Drela, 2014, Eq:6.7, page 125. Notice
-    that Drela uses back-right-up instead of front-right-down coordinates, so
-    the CX and CZ terms are negated here.
-    """
-    alpha_rad = np.deg2rad(alpha)
-    beta_rad = np.deg2rad(beta)
-    k = len(alpha)
-    sa, sb = np.sin(alpha_rad), np.full(k, np.sin(beta_rad))
-    ca, cb = np.cos(alpha_rad), np.full(k, np.cos(beta_rad))
-    C_w2b = np.array([
-        [-ca * cb, -sb, -sa * cb],
-        [-ca * sb, cb, -sa * sb],
-        [sa, np.zeros(k), -ca],
-    ])
-    return C_w2b
-
-
-# Compute the force coefficients in wind axes for the AVL dataset
+# Dataset: AVL
+avl: dict[int, dict] = {}  # Keyed by `beta` [deg]
 for beta in betas:
-    CXa, CYa, CZa = np.einsum(
-        "ijk,kj->ik",
-        compute_C_w2b(avl[beta]["alpha"], beta),
-        np.c_[avl[0]["CX"], avl[0]["CY"], avl[0]["CZ"]],
-    )
+    data = np.genfromtxt(f"avl/polars/beta{beta:02}.txt", names=True)
+    avl[beta] = {field: data[field] for field in data.dtype.fields}
+    euler = np.stack(np.broadcast_arrays(0, -data["alpha"], beta), axis=-1)
+    CXa, CYa, CZa = np.einsum(  # Force coefficients in wind axes
+        "ijk,ik->ij",
+        gsim.orientation.euler_to_dcm(np.deg2rad(euler), intrinsic=False),  # C_w2b
+        np.c_[avl[beta]["CX"], avl[beta]["CY"], avl[beta]["CZ"]],
+    ).T
     avl[beta].update({"CXa": CXa, "CYa": CYa, "CZa": CZa})
 
-# Compute the aerodynamic coefficients from the NLLT simulations. Uses the
-# flattened wing area as the reference, as per the paper.
-S = canopy.S_flat
-q = 0.5 * rho_air * v_mag**2
+# Dataset: NLLT
+S = canopy.S_flat  # Flattened wing as the reference area
+q = 0.5 * rho_air * v_mag ** 2
 for beta in betas:
+    if len(nllt[beta]["alpha"]) == 0:
+        # Pad to keep the sequences the same length as `betas`
+        nllt[beta].update(
+            {
+                "CX": np.array([]),
+                "CY": np.array([]),
+                "CZ": np.array([]),
+                "Cl": np.array([]),
+                "Cm": np.array([]),
+                "Cn": np.array([]),
+                "CXa": np.array([]),
+                "CYa": np.array([]),
+                "CZa": np.array([]),
+                "Cla": np.array([]),
+                "Cma": np.array([]),
+                "Cna": np.array([]),
+                "Cm_c4": np.array([]),
+            }
+        )
+        continue
+
     # Body axes
     CX, CY, CZ = nllt[beta]["F"].T / (q * S)
     Cl, Cm, Cn = nllt[beta]["M"].T / (q * S * cc)
-
-    # Wind axes
-    C_w2b = compute_C_w2b(nllt[beta]["alpha"], beta)
-    CXa, CYa, CZa = np.einsum("ijk,kj->ik", C_w2b, nllt[beta]["F"] / (q * S))
-    Cla, Cma, Cna = np.einsum("ijk,kj->ik", C_w2b, nllt[beta]["M"] / (q * S * cc))
-
     Cm_c4 = nllt[beta]["Mc4"].T[1] / (q * S * cc)  # FIXME: useful?
 
-    nllt[beta].update({
-        "CX": CX,
-        "CY": CY,
-        "CZ": CZ,
-        "Cl": Cl,
-        "Cm": Cm,
-        "Cn": Cn,
-        "CXa": CXa,
-        "CYa": CYa,
-        "CZa": CZa,
-        "Cla": Cla,
-        "Cma": Cma,
-        "Cna": Cna,
+    # Wind axes
+    euler = np.stack(np.broadcast_arrays(0, -nllt[beta]["alpha"], beta), axis=-1)
+    C_w2b = gsim.orientation.euler_to_dcm(np.deg2rad(euler), intrinsic=False)
+    CXa, CYa, CZa = np.einsum("ijk,ik->ij", C_w2b, nllt[beta]["F"] / (q * S)).T
+    Cla, Cma, Cna = np.einsum("ijk,ik->ij", C_w2b, nllt[beta]["M"] / (q * S * cc)).T
 
-        "Cm_c4": Cm_c4,
-    })
+    nllt[beta].update(
+        {
+            "CX": CX,
+            "CY": CY,
+            "CZ": CZ,
+            "Cl": Cl,
+            "Cm": Cm,
+            "Cn": Cn,
+            "CXa": CXa,
+            "CYa": CYa,
+            "CZa": CZa,
+            "Cla": Cla,
+            "Cma": Cma,
+            "Cna": Cna,
+            "Cm_c4": Cm_c4,
+        }
+    )
+
+# ----------------------------------------------------------------------------
+# Build alternate groupings of coefficients over `betas`, keyed by `alpha`
+
+belloc2: dict[float, dict] = {}
+for alpha in [0, 5, 10, 15]:
+    filename = f"windtunnel/alpha{alpha:02}v40.csv"
+    belloc2[alpha] = np.genfromtxt(filename, names=True, delimiter=",")
+
+avl2: dict[float, dict] = {}
+for alpha in [0, 5, 10, 15]:
+    CXa, CYa, CZa, Cl, Cm, Cn = [], [], [], [], [], []
+    for beta in betas:
+        alpha_rad = np.deg2rad(avl[beta]["alpha"])
+        ix = np.nonzero(np.isclose(avl[beta]["alpha"], alpha))
+        CXa.append(avl[beta]["CXa"][ix][0])
+        CYa.append(avl[beta]["CYa"][ix][0])
+        CZa.append(avl[beta]["CZa"][ix][0])
+        Cl.append(avl[beta]["Cl"][ix][0])
+        Cm.append(avl[beta]["Cm"][ix][0])
+        Cn.append(avl[beta]["Cn"][ix][0])
+    avl2[alpha] = {
+        "CXa": np.asfarray(CXa),
+        "CYa": np.asfarray(CYa),
+        "CZa": np.asfarray(CZa),
+        "Cl": np.asfarray(Cl),
+        "Cm": np.asfarray(Cm),
+        "Cn": np.asfarray(Cn),
+    }
+
+nllt2: dict[float, dict] = {}
+for alpha in [0, 5, 10, 15]:
+    CXa, CYa, CZa, Cl, Cm, Cn = [], [], [], [], [], []
+    for beta in betas:
+        ix = np.nonzero(np.isclose(nllt[beta]["alpha"], alpha))
+        if ix[0].shape[0]:
+            CXa.append(nllt[beta]["CXa"][ix][0])
+            CYa.append(nllt[beta]["CYa"][ix][0])
+            CZa.append(nllt[beta]["CZa"][ix][0])
+            Cl.append(nllt[beta]["Cl"][ix][0])
+            Cm.append(nllt[beta]["Cm"][ix][0])
+            Cn.append(nllt[beta]["Cn"][ix][0])
+        else:  # pad to keep the sequences the same length as `betas`
+            CXa.append(np.nan)
+            CYa.append(np.nan)
+            CZa.append(np.nan)
+            Cl.append(np.nan)
+            Cm.append(np.nan)
+            Cn.append(np.nan)
+    nllt2[alpha] = {
+        "CXa": np.asfarray(CXa),
+        "CYa": np.asfarray(CYa),
+        "CZa": np.asfarray(CZa),
+        "Cl": np.asfarray(Cl),
+        "Cm": np.asfarray(Cm),
+        "Cn": np.asfarray(Cn),
+    }
 
 
-# ---------------------------------------------------------------------------
-# Coefficient plots
-
-axes_indices = {0: (0, 0), 5: (0, 1), 10: (1, 0), 15: (1, 1)}  # Subplot axes
-
-belloc_args = {"c": "k", "linestyle": "-", "linewidth": 0.75, "label": "Tunnel"}
-nllt_args = {"c": "r", "linestyle": "--", "linewidth": 1, "label": "NLLT"}
-avl_args = {"c": "b", "linestyle": "--", "linewidth": 0.75, "label": "AVL"}
-xflr5_args = {"c": "g", "linestyle": "--", "linewidth": 1, "label": "XFLR5"}
-pad_args = {"h_pad": 1.75, "w_pad": 1}
+###############################################################################
+# Plot the coefficients using the wind axes (front-right-down coordinates where
+# the x-axis points directly into the oncoming wind)
+#
+# Belloc and XFLR5 use back-right-up coordinate axes (which is convenient since
+# `CL = CZa`), but AVL and NLLT use front-right-down so their X and Z
+# components (CXa, CZa, Cla, Cna) must be negated.
 
 
-def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
+def plot2x2(xlabel, ylabel, xlim=None, ylim=None):
     args = {
         "nrows": 2,
         "ncols": 2,
@@ -393,28 +470,35 @@ def plot4x4(xlabel, ylabel, xlim=None, ylim=None):
     axes[1, 1].set_xlabel(xlabel)
     axes[0, 0].set_ylabel(ylabel)
     axes[1, 0].set_ylabel(ylabel)
-    axes[0, 0].grid(c='lightgrey', linestyle="--")
-    axes[0, 1].grid(c='lightgrey', linestyle="--")
-    axes[1, 0].grid(c='lightgrey', linestyle="--")
-    axes[1, 1].grid(c='lightgrey', linestyle="--")
+    axes[0, 0].grid(c="lightgrey", linestyle="--")
+    axes[0, 1].grid(c="lightgrey", linestyle="--")
+    axes[1, 0].grid(c="lightgrey", linestyle="--")
+    axes[1, 1].grid(c="lightgrey", linestyle="--")
     return fig, axes
 
 
+belloc_args = {"c": "k", "linestyle": "-", "linewidth": 0.75, "label": "Tunnel"}
+avl_args = {"c": "b", "linestyle": "--", "linewidth": 0.75, "label": "AVL"}
+xflr5_args = {"c": "g", "linestyle": "--", "linewidth": 1, "label": "XFLR5"}
+nllt_args = {"c": "r", "linestyle": "--", "linewidth": 1, "label": "NLLT"}
+axes_indices = {0: (0, 0), 5: (0, 1), 10: (1, 0), 15: (1, 1)}  # Subplot axes
+pad_args = {"h_pad": 1.75, "w_pad": 1}
+
 plot_avl = True
 plot_xflr5 = True
-savefig = True  # Save the images to SVG ...
-savefig = False  # ... but don't save by default
+savefig = False  # Export the figures as SVG files
+
 
 # Plot: CL vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "CL", xlim=(-10, 25), ylim=(-0.35, 1.4))
+fig, axes = plot2x2("$\\alpha$ [deg]", "CL", xlim=(-10, 25), ylim=(-0.35, 1.4))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CZa"], **belloc_args)
     if plot_avl:
-        ax.plot(avl[beta]["alpha"], avl[beta]["CZa"], **avl_args)
+        ax.plot(avl[beta]["alpha"], -avl[beta]["CZa"], **avl_args)
     if plot_xflr5:
         ax.plot(xflr5[beta]["alpha"], xflr5[beta]["CL"], **xflr5_args)
-    ax.plot(nllt[beta]["alpha"], nllt[beta]["CZa"], **nllt_args)
+    ax.plot(nllt[beta]["alpha"], -nllt[beta]["CZa"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
@@ -422,15 +506,15 @@ if savefig:
     fig.savefig("CL_vs_alpha.svg", dpi=96)
 
 # Plot: CD vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "CD", xlim=(-10, 25), ylim=(-0.01, 0.18))
+fig, axes = plot2x2("$\\alpha$ [deg]", "CD", xlim=(-10, 25), ylim=(-0.01, 0.18))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CXa"], **belloc_args)
     if plot_avl:
-        ax.plot(avl[beta]["alpha"], avl[beta]["CXa"], **avl_args)
+        ax.plot(avl[beta]["alpha"], -avl[beta]["CXa"], **avl_args)
     if plot_xflr5:
         ax.plot(xflr5[beta]["alpha"], xflr5[beta]["CD"], **xflr5_args)
-    ax.plot(nllt[beta]["alpha"], nllt[beta]["CXa"], **nllt_args)
+    ax.plot(nllt[beta]["alpha"], -nllt[beta]["CXa"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
@@ -438,7 +522,7 @@ if savefig:
     fig.savefig("CD_vs_alpha.svg", dpi=96)
 
 # Plot: CY vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "CY", xlim=(-10, 25), ylim=(-0.20, 0.05))
+fig, axes = plot2x2("$\\alpha$ [deg]", "CY", xlim=(-10, 25), ylim=(-0.20, 0.05))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CYa"], **belloc_args)
@@ -454,15 +538,15 @@ if savefig:
     fig.savefig("CY_vs_alpha.svg", dpi=96)
 
 # Plot: CL vs CD
-fig, axes = plot4x4("CD", "CL", xlim=(-0.01, 0.18), ylim=(-0.35, 1.4))
+fig, axes = plot2x2("CD", "CL", xlim=(-0.01, 0.18), ylim=(-0.35, 1.4))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["CXa"], belloc[beta]["CZa"], **belloc_args)
     if plot_avl:
-        ax.plot(avl[beta]["CXa"], avl[beta]["CZa"], **avl_args)
+        ax.plot(-avl[beta]["CXa"], -avl[beta]["CZa"], **avl_args)
     if plot_xflr5:
         ax.plot(xflr5[beta]["CD"], xflr5[beta]["CL"], **xflr5_args)
-    ax.plot(nllt[beta]["CXa"], nllt[beta]["CZa"], **nllt_args)
+    ax.plot(-nllt[beta]["CXa"], -nllt[beta]["CZa"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower right")
 fig.tight_layout(**pad_args)
@@ -470,15 +554,15 @@ if savefig:
     fig.savefig("CL_vs_CD.svg", dpi=96)
 
 # Plot: CL vs Cm
-fig, axes = plot4x4("Cm", "CL", xlim=(-0.6, 0.08), ylim=(-0.35, 1.0))
+fig, axes = plot2x2("Cm", "CL", xlim=(-0.6, 0.08), ylim=(-0.35, 1.0))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["CMT1"][:42], belloc[beta]["CZa"][:42], **belloc_args)
     if plot_avl:
-        ax.plot(avl[beta]["Cm"], avl[beta]["CZa"], **avl_args)
+        ax.plot(avl[beta]["Cm"], -avl[beta]["CZa"], **avl_args)
     # if plot_xflr5:
     #     ax.plot(xflr5[beta]["Cm"], xflr5[beta]["CL"], **xflr5_args)
-    ax.plot(nllt[beta]["Cm"], nllt[beta]["CZa"], **nllt_args)
+    ax.plot(nllt[beta]["Cm"], -nllt[beta]["CZa"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower left")
 fig.tight_layout(**pad_args)
@@ -486,7 +570,7 @@ if savefig:
     fig.savefig("CL_vs_Cm.svg", dpi=96)
 
 # Plot: Cl vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "Cl", xlim=(-10, 25), ylim=(-0.21, 0.035))
+fig, axes = plot2x2("$\\alpha$ [deg]", "Cl", xlim=(-10, 25), ylim=(-0.21, 0.035))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CLT1"], **belloc_args)
@@ -502,7 +586,7 @@ if savefig:
     fig.savefig("Cl_vs_alpha.svg", dpi=96)
 
 # Plot: Cm vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "Cm", xlim=(-10, 25), ylim=(-1.25, 0.25))
+fig, axes = plot2x2("$\\alpha$ [deg]", "Cm", xlim=(-10, 25), ylim=(-1.25, 0.25))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CMT1"], **belloc_args)
@@ -518,7 +602,7 @@ if savefig:
     fig.savefig("Cm_vs_alpha.svg", dpi=96)
 
 # Plot: Cn vs alpha
-fig, axes = plot4x4("$\\alpha$ [deg]", "Cn", xlim=(-10, 25), ylim=(-0.04, 0.24))
+fig, axes = plot2x2("$\\alpha$ [deg]", "Cn", xlim=(-10, 25), ylim=(-0.04, 0.24))
 for beta in sorted(plotted_betas.intersection(betas)):
     ax = axes[axes_indices[beta]]
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CNT1"], **belloc_args)
@@ -533,74 +617,14 @@ fig.tight_layout(**pad_args)
 if savefig:
     fig.savefig("Cn_vs_alpha.svg", dpi=96)
 
-# ---------------------------------------------------------------------------
-
-# Build sets of coefficients over `betas`, keyed by alpha
-nllt2 = {
-    alpha: {
-        "Cy": [],
-        "Cl": [],
-        "Cm": [],
-        "Cn": [],
-        "CXa": [],
-        "CYa": [],
-        "CZa": [],
-    } for alpha in [0, 5, 10, 15]
-}
-for beta in betas:
-    for alpha in [0, 5, 10, 15]:
-        ix = np.nonzero(np.isclose(nllt[beta]["alpha"], alpha))
-        if ix[0].shape[0]:
-            nllt2[alpha]["CXa"].append(nllt[beta]["CXa"][ix][0])
-            nllt2[alpha]["CYa"].append(nllt[beta]["CYa"][ix][0])
-            nllt2[alpha]["CZa"].append(nllt[beta]["CZa"][ix][0])
-            nllt2[alpha]["Cl"].append(nllt[beta]["Cl"][ix][0])
-            nllt2[alpha]["Cm"].append(nllt[beta]["Cm"][ix][0])
-            nllt2[alpha]["Cn"].append(nllt[beta]["Cn"][ix][0])
-        else:  # pad to keep the sequences the same length as `betas`
-            nllt2[alpha]["CXa"].append(np.nan)
-            nllt2[alpha]["CYa"].append(np.nan)
-            nllt2[alpha]["CZa"].append(np.nan)
-            nllt2[alpha]["Cl"].append(np.nan)
-            nllt2[alpha]["Cm"].append(np.nan)
-            nllt2[alpha]["Cn"].append(np.nan)
-
-avl2 = {
-    alpha: {
-        "CXa": [],
-        "CYa": [],
-        "CZa": [],
-        "Cl": [],
-        "Cm": [],
-        "Cn": [],
-    } for alpha in [0, 5, 10, 15]
-}
-for beta in betas:
-    alpha_rad = np.deg2rad(avl[beta]["alpha"])
-    for alpha in [0, 5, 10, 15]:
-        ix = np.nonzero(np.isclose(avl[beta]["alpha"], alpha))
-        avl2[alpha]["CXa"].append(avl[beta]["CXa"][ix][0])
-        avl2[alpha]["CYa"].append(avl[beta]["CYa"][ix][0])
-        avl2[alpha]["CZa"].append(avl[beta]["CZa"][ix][0])
-        avl2[alpha]["Cl"].append(avl[beta]["Cl"][ix][0])
-        avl2[alpha]["Cm"].append(avl[beta]["Cm"][ix][0])
-        avl2[alpha]["Cn"].append(avl[beta]["Cn"][ix][0])
-
-belloc2 = {}
-for alpha in [0, 5, 10, 15]:
-    filename = f"windtunnel/alpha{alpha:02}v40.csv"
-    names = np.loadtxt(filename, max_rows=1, dtype=str, delimiter=',')
-    data = np.genfromtxt(filename, skip_header=1, names=list(names), delimiter=',')
-    belloc2[alpha] = data
-
 # Plot: CD vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "CD", (-17, 17), (-0.01, 0.18))
+fig, axes = plot2x2(r"$\beta$ [deg]", "CD", (-17, 17), (-0.01, 0.18))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CXa"], **belloc_args)
     if plot_avl:
-        ax.plot(betas, avl2[alpha]["CXa"], **avl_args)
-    ax.plot(betas, nllt2[alpha]["CXa"], **nllt_args)
+        ax.plot(betas, -avl2[alpha]["CXa"], **avl_args)
+    ax.plot(betas, -nllt2[alpha]["CXa"], **nllt_args)
     ax.set_title(f"$\\alpha$={alpha}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
@@ -608,7 +632,7 @@ if savefig:
     fig.savefig("CD_vs_beta.svg", dpi=96)
 
 # Plot: CY vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", r"CY", (-17, 17), (-0.23, 0.23))
+fig, axes = plot2x2(r"$\beta$ [deg]", r"CY", (-17, 17), (-0.23, 0.23))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CYa"], **belloc_args)
@@ -622,13 +646,13 @@ if savefig:
     fig.savefig("CY_vs_beta.svg", dpi=96)
 
 # Plot: CL vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "CL", (-17, 17), (-0.01, 1.05))
+fig, axes = plot2x2(r"$\beta$ [deg]", "CL", (-17, 17), (-0.01, 1.05))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CZa"], **belloc_args)
     if plot_avl:
-        ax.plot(betas, avl2[alpha]["CZa"], **avl_args)
-    ax.plot(betas, nllt2[alpha]["CZa"], **nllt_args)
+        ax.plot(betas, -avl2[alpha]["CZa"], **avl_args)
+    ax.plot(betas, -nllt2[alpha]["CZa"], **nllt_args)
     ax.set_title(f"$\\alpha$={alpha}°")
 axes[0, 0].legend(loc="upper left")
 fig.tight_layout(**pad_args)
@@ -636,7 +660,7 @@ if savefig:
     fig.savefig("CL_vs_beta.svg", dpi=96)
 
 # Plot: Cl (wing rolling coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "Cl", (-17, 17), (-0.2, 0.2))
+fig, axes = plot2x2(r"$\beta$ [deg]", "Cl", (-17, 17), (-0.2, 0.2))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CLT1"], **belloc_args)
@@ -650,7 +674,7 @@ if savefig:
     fig.savefig("Cl_vs_beta.svg", dpi=96)
 
 # Plot: Cm (wing pitching coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "Cm", (-17, 17), (-0.65, 0.1))
+fig, axes = plot2x2(r"$\beta$ [deg]", "Cm", (-17, 17), (-0.65, 0.1))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CMT1"], **belloc_args)
@@ -664,7 +688,7 @@ if savefig:
     fig.savefig("Cm_vs_beta.svg", dpi=96)
 
 # Plot: Cn (wing yawing coefficient) vs beta
-fig, axes = plot4x4(r"$\beta$ [deg]", "Cn", (-17, 17), (-0.2, 0.2))
+fig, axes = plot2x2(r"$\beta$ [deg]", "Cn", (-17, 17), (-0.2, 0.2))
 for alpha in [0, 5, 10, 15]:
     ax = axes[axes_indices[alpha]]
     ax.plot(belloc2[alpha]["Beta"], belloc2[alpha]["CNT1"], **belloc_args)

@@ -1,0 +1,31 @@
+ ---------------------------------------------------------------
+ Vortex Lattice Output -- Total Forces
+
+ Configuration: Belloc wind tunnel reference wing                           
+     # Surfaces =   2
+     # Strips   =  80
+     # Vortices = 800
+
+  Sref = 0.44400       Cref = 0.35000       Bref = 0.35000    
+  Xref = 0.87500E-01   Yref =  0.0000       Zref = -1.0000    
+
+ Standard axis orientation,  X fwd, Z down         
+
+ Run case:  -unnamed-                              
+
+  Alpha =  12.00000     pb/2V =  -0.00000     p'b/2V =  -0.00000
+  Beta  =  -4.00000     qc/2V =   0.00000
+  Mach  =     0.000     rb/2V =  -0.00000     r'b/2V =  -0.00000
+
+  CXtot =   0.13521     Cltot =   0.04309     Cl'tot =   0.03407
+  CYtot =   0.04028     Cmtot =  -0.40294
+  CZtot =  -0.79741     Cntot =  -0.03886     Cn'tot =  -0.04697
+
+  CLtot =   0.80810
+  CDtot =   0.03354
+  CDvis =   0.00000     CDind = 0.0335408
+  CLff  =   0.84650     CDff  = 0.0443661    | Trefftz
+  CYff  =   0.04623         e =   18.6892    | Plane  
+
+
+ ---------------------------------------------------------------
