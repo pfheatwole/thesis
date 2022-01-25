@@ -1,18 +1,51 @@
-Suggested next tasks:
+* Should I decompose the paraglider system in the Introduction? It'd explain
+  the existence and order of the chapters.
 
-* Add at least one simple scenario (simulation into `.svg` plus discussion).
+  1. I want flight dynamics models of paragliders
+
+  2. Those are hard to make, so I need a model that's parametrized by basic data
+
+  3. Here's the kind of data I'm talking about
+
+  4. Here's a logical decomposition of the paraglider system that allows each
+     component to be relatively self-contained
+
+     (this outlines the components and previews the chapter structure)
 
 
-Current task
-============
+  The "foil" is the most complicated component and my foil model is independent
+  of any paraglider-specific detail, so the foil geometry and foil aerodynamics
+  get their own chapters. Given a general foil model you can define a specific
+  canopy model.
 
-Review the introductions to each chapter. I should be able to read the chapter
-introductions and get a coherent, complete (albeit superficial) understanding
-of the entire paper.
 
-I need to make sure the overarching "plot" is cohesive before diving back into
-the details. (If my "map" is messy then I'll keep getting lost. Too much
-backtracking right now; I bounce all over.)
+UNFINISHED SECTIONS
+===================
+
+1. Introduction
+
+2. Foil Geometry
+
+   * [2.1.5] Orientation
+
+   * [2.4.1] Section index
+
+   * [2.5] Examples
+
+   * [2.6] Case study
+
+   * [2.7] Discussion
+
+
+3. Foil aerodynamics
+
+   * [3.1] Explain how I selected Phillips
+
+   * [3.3] Case study
+
+6. Demonstration
+
+7. Conclusion
 
 
 Topical
@@ -22,25 +55,20 @@ Topical
 Introduction
 ------------
 
-* Outline the content of an IGC file in the `Introduction`, since the absence
-  of wind vector data is what motivates flight reconstruction.
-
-* Should my introduction chapter include a "Taxonomy of Tools" section that
-  defines what I mean by *state estimation*, *parameter estimation*, *flight
-  reconstruction*, *regression*, etc? It'd be interesting to define all the
-  components, then finish the section by defining my project in terms of those
-  components.
+* There are existing paraglider dynamics models in literature. I need to
+  establish the needs of my application and observe the limitations of those
+  existing models in order to motivate my paper.
 
 
-Canopy geometry
----------------
+Foil geometry
+-------------
 
 * Verify my use of *dihedral* and *anhedral*. At the least I think my use of
   "mean anhedral" is suspect; probably not even a helpful term.
 
 * How do I argue that my definition of `r_LE/RP` decouples the parameters? You
-  can see in the math that `r_LE/RP` and `r_P/LE` both involve `c` and
-  `C_c/s`, but it won't be obvious that it counteracts the changes to keep the
+  can see in the math that `r_LE/RP` and `r_P/LE` both involve `c` and `C_c/s`,
+  but it won't be obvious that it counteracts the changes to keep the
   parameters decoupled.
 
 * Where do I define *design parameters* (span, taper, etc)? Should be pretty
@@ -50,84 +78,52 @@ Canopy geometry
   goal is to derive the version that uses `R` (configurable reference points),
   but keep the parafoil-related material in `Canopy Geometry`.
 
-* Complete the parametric design choices for parafoils in `Canopy Geometry`.
-  The choice to set `r_y = r_z`, how I define `C_c/s`, show some parametric
-  curves (eg, elliptical chord), etc.
 
-* Reconsider using `O` for the origin? Looks like a zero.
+Foil aerodynamics
+-----------------
+
+* What is `CMT1` etc in Belloc's wind tunnel data? Why did I use it? Is it in
+  the body axes? Why do I compute `Cla` for NLLT but not for AVL?
 
 
-Paraglider geometry
--------------------
+Paraglider components
+---------------------
 
-* I'll need to explain why I rejected using a *rigging angle* in favor of
-  positioning `RM` explicitly. I didn't like the rigging angle because that
-  suggested you could set the pitch angle of the wing, but in reality you only
-  have partial control. The pitch angle is a function of many things, such as
-  air density, airspeed, brake deflections, etc.
+Suspension lines
+^^^^^^^^^^^^^^^^
 
-  The primary reference on the topic is probably from the X-38 project. See
-  `iacomini1999InvestigationLargeScale`.
+* I'll need to explain why I rejected using a *rigging angle* (essentially
+  a built-in offset to the pitching angle) in favor of positioning `RM`
+  explicitly. The primary reference on the topic is probably from the X-38
+  project. See `iacomini1999InvestigationLargeScale`. Also used in
+  `cumer2012SimulationGenericDynamics`.
 
-  Oh, and I wanted to use canopy frd as the body axes. The rigging angle is
-  a built-in pitching offset. For me, `gamma = alpha + theta`, but for
-  Iacomini it's `gamma = alpha + theta' + theta_R`, so his `theta' = theta
-  - theta_R`.
+  I didn't like the rigging angle because that suggested you could set the
+  pitch angle of the wing, but in reality you only have partial control. The
+  pitch angle is a function of many things, such as air density, airspeed,
+  brake deflections, etc.
+
+  Also, I wanted to use canopy frd as the body axes. The rigging angle is
+  a built-in pitching offset. For me, `gamma = alpha + theta`, but for Iacomini
+  it's `gamma = alpha + theta' + theta_R`, so his `theta' = theta - theta_R`.
 
   Wait, so is the rigging angle measured from a reference line through the
   central quarter-chord? Oof, if the definition of the rigging angle depends
   on `c4` then that's another complaint against rigging angles Yuck.
 
-  Anyway, **how might I calculate them for my wings?** Would be cool to
-  compute the "effective rigging angle" from wings defined using my
-  parametrization.
+  Anyway, **how might I calculate them for my wings?** Would be cool to compute
+  the "effective rigging angle" from wings defined using my parametrization.
 
-  One big takeaway from `iacomini1999InvestigationLargeScale`: good parafoil
-  performance requires keeping the angle of attack in what they call the
-  *alpha corridor*: too steep and it stalls, too shallow and the leading edge
-  can collapse.
-
-* Is "Paraglider Geometry" a good chapter? I need to discuss the physical
-  model somewhere (materials, controls, inertia, etc). The "canopy geometry"
-  was the abstract shape, but I'm not sure that's very helpful for the system.
-
-  The inertia can be the "real mass" inertia since it's the traditional
-  definition. The apparent mass only comes into play during accelerations.
-
-  Actually, I'm not sure if I should choose a control scheme in this chapter.
-  Focus on the physical system, not the dynamics model. Shouldn't be too hard
-  to write enough about each component to make individual sections.
-
-  So conceptually I have two chapters. The first describes the physical
-  objects, and simplified geometric representations of those objects ("the
-  real physical system is complicated, so here's a simplified physical
-  system"). The second describes the control inputs, inertias, and dynamics of
-  those simplified objects and system.
-
-  I was going to put the inertias together with the physical systems, but I'd
-  like to keep definitions of the inertia matrices close to where their used.
-  Also, I could have `Paraglider Dynamics:Canopy:Inertia:<solid+air+apparent>`
-  all together. I'm not crazy about the apparent inertia being in
-  a sub-sub-section, but it's not like I'm creating novel content there
-  anyway; the derivation will probably stay in `derivations` anyway, it's
-  pretty ugly.
-
-  **Should I rename "Paraglider Geometry" to "Paraglider Components" or maybe
-  "Paraglider Systems"?** In my mind, a system implies components working
-  together. I seem to be pushing for "a model/representation of the
-  system, and a model of the dynamic behavior of that system".
+  One big takeaway from `iacomini`: good parafoil performance requires keeping
+  the angle of attack in what they call the *alpha corridor*: too steep and it
+  stalls, too shallow and the leading edge can collapse.
 
 
-Paraglider dynamics
--------------------
+Paraglider systems
+------------------
 
-* What is `CMT1` etc in Belloc's wind tunnel data? Why did I use it? Is it in
-  the body axes? Why do I compute `Cla` for NLLT but not for AVL?
-
-* Should I be using "canopy" frame instead of "body" frame? I'm using the
-  canopy for the coordinate system. I mean, it's not the worst idea: I always
-  thought "body" was always an ambiguous term, and "wing" conflicted with
-  "wind". Then again, literature tends to use "body" for the wing frame.
+* Barrows use the principal axes for `M_a` and `I_a`. I'm using the body axes.
+  I forget why I'm neglecting that issue.
 
 * Review the terms in the apparent mass derivation. "Apparent inertia matrix"
   etc, get pretty ambiguous. Try to clean it into a translational part,
@@ -136,13 +132,12 @@ Paraglider dynamics
 * In my dynamics derivations, I don't appear to be consistent with specifying
   the coordinate systems; the derivatives in particular.
 
-* Review the inertia equations; I'm using `\overbar{\vec{A}}` for the area
-  centroid? And in the code I have things like `upper_centroid` and
-  `cm_solid`. **Positions vectors should always be in the form** `r_A2B`.
 
+Demonstration
+-------------
 
 Simulation scenarios
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 * In `iacomini1999InvestigationLargeScale` they talk a lot about the problems
   they had with parafoil *surge*, particularly during deployment. For their
@@ -167,23 +162,55 @@ Simulation scenarios
   track to be somewhere in between 6a (infinite yaw resistance) and 9a with
   M_R=0 (zero yaw resistance).
 
+* Might be interesting to make a 2D side-view plot of the xz-coordinate lines
+  connecting from `RM` to the wing and harness to compare `6a` versus `9a`. Do
+  a symmetric brake pulse to show the "dolphin" effect, and compare the two
+  models.
+
+
+Conclusion
+----------
 
 Future work
------------
-
-* Merge `data_considerations` into `future_work`. I should frame my
-  application of sequence alignment as a suggested starting points, which is
-  fine since it's basically untested anyway.
+^^^^^^^^^^^
 
 
-Notation
---------
+Notation and symbols
+--------------------
 
-* In "Notation and Symbols", give examples of position vectors, velocity
-  vectors, linear momentum, angular momentum, derivatives, etc
+* Give examples of vectors (position, velocity, linear momentum, angular
+  momentum, derivatives, etc)
 
 * Add a description of a *direction cosine matrix* to `symbols`? Or maybe the
   `glossary`?
+
+
+Belloc
+------
+
+* Record the software versions used to generate the SVG files
+
+* Ask Belloc if I can publish the wind tunnel data in the public repo
+
+* Add the pseudo-inviscid CL vs CD (builds confidence in the method and
+  implementation)
+
+* Eliminate the yucky resampling logic in `belloc.py:InterpolatedArc`
+  Related: why do I use a `PchipInterpolator`?
+
+* Document the coefficients I'm plotting in Belloc. I'm using `CZa` etc, which
+  means I'm plotting coefficients with respect to the wind axes. I forget why
+  I chose to do that, except (that appears) that's what XFLR5 computes? On the
+  bright side, I'm already using the T1 (moments wrt the CG).
+
+* The arc curvature isn't too extreme in `belloc`, but not zero. How much
+  "excess" wing is there due to overlap/underlap on the lower/upper surfaces
+  between the linear wing segments?
+
+  Compare the chord area to the upper and lower areas. For the chord area, use
+  the Phillips instance variables `dl * c_avg * curve_length`, where
+  `curve_length` is the length of the upper or lower airfoil surface (which
+  assume a chord length of 1)
 
 
 Content Tasks
@@ -192,21 +219,9 @@ Content Tasks
 * Record the momentum derivatives for Barrows in the derivation. It wasn't
   clear from the paper exactly how those worked.
 
-* Sketch a directed graph of the processing pipeline for converting
-  paragliding flight tracks into an in-flight predictive model? (This might be
-  helpful for motivating the structure of the paper.)
-
 
 Drafting
 --------
-
-* Create two parallel outlines, informal and formal, for the overall paper:
-  work through developing the idea of "predicting points of the wind field by
-  learning from the past". The informal development should be easy to read by
-  a non-technical reader. It should function as a guide to show that the math
-  isn't as scary as it might seem; the notation is intimidating, but
-  ultimately it's based on logic that the reader already understands.
-
 
 #. **Define the concrete "key ideas" for the paper.** These will drive how
    I develop the entire paper, both in structure and content. (Possibly start
@@ -217,10 +232,10 @@ Drafting
 #. Develop a topic outline. (Topic ordering implicitly encodes dependencies.)
 
 #. Write an informal overview of the goal, problems, resources, and solutions.
-   This should be conversational: I can get through a description of my
-   project when talking to the Mohlers, I should be able to put it down on
-   paper. The key is to avoid getting hung up on the technical specifics.
-   Those can be filled in later.
+   This should be conversational: I can get through a description of my project
+   when talking to the Mohlers, I should be able to put it down on paper. The
+   key is to avoid getting hung up on the technical specifics. Those can be
+   filled in later.
 
 #. Write an "introduction to the introduction". **Don't make the reader wait
    a long time to understand my contribution.**
@@ -240,11 +255,74 @@ Drafting
    you really want, only then should you spend time creating them.
 
 
+Feedback
+^^^^^^^^
+
+Summary of Bridget's comments from `2021w42`:
+
+* The goal of the thesis is to:
+
+  1. Put the project into plain terms
+
+  2. Provide details for future work building a paragliding flight simulator
+
+* Regarding putting the project into "plain terms":
+
+  * Motivation for the project - describe paragliding and what paragliders
+    (and you in particular) need / desire
+
+  * Existing technology - describe what paragliding models / simulators
+    currently exist and what is lacking from these
+
+  * Your contribution - describe what your contribution is and distinguish
+    how it is different / similar to existing models/devices. It would also
+    be helpful to include a top level system block diagram showing the main
+    input and outputs of the system (I am currently unclear as to what the
+    output is - positional data (i.e. a track)?)
+
+  * An overview of the sections of your thesis so the reader will understand
+    the organization of your chapters. My understanding is that you spend
+    two whole chapters describing the model for the geometry (chapter 2) and
+    aerodynamics (chapter 3) of the foil and then spend a chapter on the
+    models of the 3 main components of the paraglider system (canopy,
+    suspension lines and harness). What is unclear to me here is how does
+    the canopy of chapter 4 differ from what you described in chapters 2 and
+    3 (or is it just a particular instance of a foil). Then chapter 5 is
+    about modeling the system as a whole, and chapter 6 is a case study that
+    tests the performance/accuracy of the system model. It might also be
+    useful to include somewhere in the intro (perhaps near the start as you
+    are describing the motivation) how that even though you are a computer
+    engineering student, the thesis delves into math, statistics, flight
+    dynamics, etc. - all of which you had to learn before you could use your
+    computer engineering skills to program your implementation
+
+* **At the start of each chapter, provide a paragraph about why this chapter
+  is important and how it fits into the whole thesis document.**
+
+* "I kept wanting the document to tell me how your design differed / was the
+  same as existing designs. For example, I know air foils have been modeled
+  before (as well as paragliding wings) - so for your design choices, how
+  much of it was based on an existing design and how much of it did you
+  modify/create (some of your square bracket remarks seemed to hint at this,
+  but I would like to see it more explicitly stated)."
+
+* Chapter 6 (Demonstration)
+
+  "What exactly is the output of the model?"
+
+  "Just describe what it currently does and the limitations it has."
+
+* "Focus on communicating your contributions in a way that someone like me,
+  Lynne, and Marty (who don't have the background in flight dynamics and
+  stats) can understand what you did." (ie, "more intro paragraphs to each
+  section and subsection")
+
+
 References
 ----------
 
-* Create a list of topics relevant for "prior art" papers (paraglider
-  dynamics, wind field estimation, thermal estimation, etc)
+* Create a list of topics relevant for "prior art" papers (paraglider dynamics,
+  wind field estimation, thermal estimation, etc)
 
 * Create a list of sources for each topic, including summary notes
 
@@ -255,19 +333,16 @@ Figures
 * In `generate_canopy_examples.py`, there's a function `_plot_foil` that
   appears to duplicate `gsim.plots.plot_foil`. Why does it exist?
 
+* Factor out the canopy plotting function from the thesis script
+  `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
+  it to to plot my Hook3ish
+
 * I need a diagram for the 6 DoF model. I was going to just show the body
   centroid "B", but that makes it less obvious that the 6 DoF supports weight
   shift. Should all models include "P"? While I'm at it, is "B" still a good
   choice?
 
-* My brake deflection plots are wrong. It assumes fixed hinges at 0.8c, which
-  is very very wrong for the airfoil data I'm using with my Hook3ish
-
-* Factor out the canopy plotting function from the thesis script
-  `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
-  it to to plot my Hook3ish
-
-* Add licenses to my SVG metadata (Inkscape -> Document Properties)
+* Add author and license to my SVG metadata (Inkscape -> Document Properties)
 
 * Figure labels must be globally unique, so standardized label prefixes would
   probably help. Could be based on the content of the figure (the specific
@@ -283,20 +358,6 @@ Figures
 * Remove scratch/unused figures (eg, `elliptical_arc_dihedral.svg`)
 
 
-Extras
-------
-
-* Suppose you had the wind vectors. Assume you've identified some thermals.
-  Any hope of identifying likely **causes**? Causal explanations seem like
-  a lot of work, but things like topography (identifying orographic lift) or
-  materials (identifying likely thermal triggers, like exposed dirt versus
-  surrounding green areas, or identifying likely sinks, like water locations).
-
-  If you think about this like a geostatistician you might think about
-  relating the observations (wind vectors) to other data (topography, surface
-  characteristics, etc).
-
-
 Editorial Tasks
 ===============
 
@@ -310,26 +371,25 @@ Writing Style
 
   * "We will", "I will", "this paper will", etc?
 
+* Eliminate crutch words like "simply", "just", etc
 
-Notation, Math, etc
+* Review page number references; standardize on `p123` style
+
+
+Notation, math, etc
 -------------------
 
-* Use `h_a/R` for "angular momentum of the apparent mass `a` about `R`"?
-  I like the slash as "X with respect to Y", which makes sense here.
+* Although Steven's notation uses `F` and `M` for forces and moments, I want to
+  be consistent that vectors are lowercase-bold. Instead, I'm using Hughes'
+  style of lower `f` and `g` for forces and moments, relying on subscripts for
+  disambiguation; naked `\vec{g}` is a well-established convention for gravity,
+  moments are `\vec{g}_b2R` ("body with respect to reference point `R`")
 
-* Should I use :math:`\mathcal{F}_a` for "frame a" etc?
-
-* I wish that Steven's notation for forces and moments wasn't capital letters
-  "F" and "M". I would really like to reserve lowercase-bold for vectors and
-  uppercase-bold for matrices. In Hughes he uses lowercase `f` and `g` for the
-  force and moment, which is also a bit annoying since `g` is typically
-  reserved for gravity. I could use `m` but that's typically reserved for
-  masses. **Maybe it's time I put my foot down that I simply like using
-  brackets for matrices; it enables visual scanning you can't do otherwise.
-  Also, they help reveal mistakes, kind of like physical units in equations.**
+  The exception is in Phillips' method, where I use `dF` to maintain
+  consistency with the paper.
 
 * When do you need to specify a reference frame in my mathematical notation?
-  (See `notes-202048:Math` for some thoughts.)
+  (Only when taking vector derivatives, I think; see `notes-202048:Math`)
 
 * I'm getting sick of `\mathrm` for all the points (like
   `r_{\mathrm{P}/\mathrm{LE}}`). Can I write a latex macro that will wrap them
@@ -339,22 +399,24 @@ Notation, Math, etc
 Terminology
 -----------
 
-* Everywhere I say "mean anhedral", what I really mean is "arc anhedral" (so
-  "the anhedral of the arc" as opposed to "section anhedral").
+* There is a lot of confusion/ambiguity regarding *anhedral*. You might refer
+  to the angle between the y-axis and the position of the section, or you might
+  be referring to the section roll. I'm leaning towards reserving "anhedral"
+  for "angle between y-axis and section position", since you talk about "arc
+  anhedral" which clearly refers to the POSITION arc, not the roll angle. So,
+  I guess `\Gamma` is that position angle, `\gamma` is the roll angle.
 
 * Should I define a Sphinx role for terms/definitions? There's already
-  a `:term:` role that requires they be in a glossary, but using explicit
-  asterisk wrappers is a bit fragile.
-
-* Review the text for `Gamma` as a reference to section dihedral. I've
-  abandoned Gamma in favor of traditional Euler angle parameters.
+  a `:term:` role that requires they be in a glossary, but what about in-line
+  definitions with no entry in the glossary? (They compile with a warning and
+  render as normal text; no good.)
 
 
 Structural
 ----------
 
 * Make sure all the chapters follow the same structure
-  (`meta/editing:Content:Chapter structure`)
+  (see `meta/editing:Content:Chapter structure`)
 
 * For unnumbered chapters like "Glossary" and "Symbols", I'm using the ``..
   only::`` directive to specify the chapter titles. I have to do that because
@@ -373,17 +435,6 @@ Structural
   cross-references, but I get some errors about "already assigned section
   numbers" when building HTML.
 
-* Introductions: I am using implicit introductions (chapter text preceding
-  the first section). Should they be explicit? Some authors even use both
-  (Frigola-Alcade's dissertation, for example). **This will probably depend on
-  whether any of the introductions require subsections.**
-
-* What sections should have PDF bookmarks?
-
-   * Use `\currentpdfbookmark{label}{bookmarkname}`
-
-   * Update (20191107): I don't know what this means?
-
 * The HTML builder doesn't label the appendices as appendices (it doesn't
   label them with an alphabetical sequence); might need to just handle them
   manually (explicit labels in HTML, explicit `\appendix` entry for the latex
@@ -400,21 +451,20 @@ Formatting
 * I wish I could use tables without borders for aligning sets of items. Do
   I *ever* want tables with borders? If not, I might be able to just redefine
   the `tabulary` environment. I think I can specify my own template
-  `tabulary.tex_t`. The one with Sphinx is in
-  `~/.anaconda3/envs/science38/lib/python3.8/site-packages/sphinx/templates/latex`
-  I'd also need some CSS to fix the HTML tables...
+  `tabulary.tex_t`. The one with Sphinx is in `sphinx/templates/latex` I'd also
+  need some CSS to fix the HTML tables...
 
 * Check headings for consistent capitalization (title case or sentence case).
   Leaning towards sentence case.
 
-* Verify against CalPoly formatting
+* Verify against Cal Poly formatting
 
   * ref: http://www.grad.calpoly.edu/masters-thesis/masters-thesis.html
 
-* Code literals (surrounded by ``\`\```) are gray shaded in HTML, but have
-  white backgrounds in the PDF. I tried setting ``'sphinxsetup':
+* Code literals (``like this``) are gray shaded in HTML, but have white
+  backgrounds in the PDF. I tried setting ``'sphinxsetup':
   "VerbatimColor={rgb}{0.25,0.25,0.25}"`` in ``conf.py``, but that didn't seem
-  to work. In the tex ouput it looks like code literals are inside
+  to work. In the TeX output it looks like code literals are inside
   ``\sphinxcode`` elements; might start there?
 
 * The "REFERENCES" link in the PDF is one page too high.
@@ -437,7 +487,7 @@ Bibliography
 
   See: `<https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html>`_.
 
-* Should I use "Lastname, Firstname"? See "thesis/notes/Notes 2019-W45"
+* Should I use "Lastname, Firstname"? See `thesis/notes/Notes 2019-W45`
 
 * Do I need to redefine ``\bibsection`` in the Latex style? Do the "Memoir"
   defaults meet the style guidelines?
@@ -446,31 +496,45 @@ Bibliography
   appendices?
 
 
+Publishing
+----------
+
+* Publish to Zenodo, add *concept DOI* to README, add DOI to `pfh.glidersim`
+  documentation
+
+* Do I need `sphinx.ext.githubpages`? What does it do?
+
+* Low priority: add `sphinx.ext.linkcode` once `glidersim` is up on Github?
+
+  https://github.com/scikit-learn/scikit-learn/blob/main/doc/sphinxext/github_link.py
+
+
 Development
 ===========
 
-* Add a `README.rst` and explain `requirements`, running scripts, etc
-
 * Use `pip-compile --generate-hashes`? See
-  https://pip.pypa.io/en/latest/user_guide/#hash-checking-mode
+  https://pip.pypa.io/en/latest/cli/pip_install/#hash-checking-mode
 
 
 Sphinx
 ------
 
-* Re-run ``sphinx-quickstart`` and see how the new ``conf.py`` defaults
-  compare to my current version (from July 2017)
+* Eliminate `tex/pwasu.sty`? Don't think I need it anymore.
+
+* Add `sphinx-sitemap`
+
+* Add `sphinxext.opengraph`
+
+* Furo in dark mode brakes SVGs with white backgrounds. Review pictures and add
+  white backgrounds where necessary for dark mode.
 
 
 HTML
 ^^^^
 
-* Add a document title below the sidebar logo?
+* Add a logo?
 
 * The footer (copyright and license) doesn't show on mobile
-
-* If the HTML "Navigation" frame gets too long it goes off the screen, and you
-  can't scroll it.
 
 
 Scripts
