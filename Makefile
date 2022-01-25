@@ -21,5 +21,4 @@ help:
 
 .PHONY:
 serve:
-	test -d build/html || make html
-	python -m http.server --directory build/html 8888
+	sphinx-autobuild --host 0.0.0.0 --port 8888 "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)

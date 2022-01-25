@@ -1,5 +1,6 @@
 -c build.txt
-# pfh.glidersim >= 2022.01.0a0
+sphinx-autobuild
+# pfh.glidersim >= 2022.01.1a0
 file:///home/peter/model/work/glidersim
 black
 flake8

@@ -38,7 +38,7 @@ def plot_deflections(wing, delta_bl, delta_br, save=False):
 
 
 if __name__ == "__main__":
-    wing = gsim.extras.wings.build_hook3(verbose=True)
+    wing = gsim.extras.wings.niviuk_hook3(size=23, verbose=True)
 
     savefig = False
     plot_deflections(wing, 0.25, 0.50, save=savefig)
