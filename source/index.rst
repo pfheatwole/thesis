@@ -58,5 +58,5 @@ Contents
 .. toctree::
    :maxdepth: 3
 
-   symbols
+   notation
    derivations
