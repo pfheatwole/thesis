@@ -39,7 +39,8 @@ Contents
    foil_geometry
    foil_aerodynamics
    paraglider_components
-   paraglider_systems
+   system_dynamics
+   state_dynamics
    demonstration
    conclusion
 
