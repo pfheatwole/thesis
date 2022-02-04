@@ -8,8 +8,8 @@ tilted geometry is not recommended by the developer, and appears to have
 significant issues when computing the moment coefficients, but the lift
 coefficient performance seems promising and worth discussion.
 
-These results are from development version `r1238` (a v6.48 pre-release) which
-includes a fix when using the tilted geometry option.
+These results are from development version `r1237` (a v6.48 pre-release) which
+includes a fix when using the tilted geometry option (bug #156).
 
 Note that the current version still includes a bug where the x-coordinate of
 the reference point resets whenever a polar is reconfigured, or when the
