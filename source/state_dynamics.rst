@@ -61,7 +61,7 @@ State variables
 
 To track the position of the glider, the state models must choose a reference
 point on the glider. It does not have to be the same :ref:`reference point
-<paraglider_systems:Reference point>` used to calculate the system dynamics,
+<system_dynamics:Reference point>` used to calculate the system dynamics,
 but it turns out the riser midpoint :math:`RM` is also good choice for
 tracking the glider position. Because the riser midpoint is close to where
 a pilot would likely mount their flight recorder, it is likely to be

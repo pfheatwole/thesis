@@ -14,7 +14,7 @@ This chapter combines the individual :doc:`component models
 
 In this paper, a *system dynamics* model is a set of derivatives that define
 the translational and angular acceleration of each group of physical components
-on an aircraft. They are treated separately from the :ref:`State dynamics`
+on an aircraft. They are treated separately from the :doc:`state_dynamics`
 because they are independent of the representation of state.
 
 .. For example, the system dynamics don't care if orientation is being tracked
@@ -148,7 +148,7 @@ In particular, the :ref:`method <paraglider_components:Apparent mass>` to
 estimate the apparent inertia matrix requires that the reference point lies in
 the :math:`xz`-plane of the canopy. Two natural choices in that plane are the
 leading edge of the central section, or the midpoint between the two risers.
-The :ref:`riser midpoint <paraglider_systems:Connections>` :math:`RM` has the
+The :ref:`riser midpoint <system_dynamics:Connections>` :math:`RM` has the
 advantage that is a fixed point in both the body and payload coordinate
 systems, which means it does not depend on the relative position or
 orientation of the payload with respect to the body. (This choice simplifies
@@ -168,7 +168,7 @@ translational momentum :math:`{^e \dot{\vec{p}}} = \sum{\vec{F}}
 :cite:`hughes2004SpacecraftAttitudeDynamics`. In addition to requiring the
 forces, moments, and inertia matrices for each component, each system model
 must choose a dynamics reference point and whether to account for the affects
-of *apparent mass*. The :ref:`appendix <derivations:Paraglider Models>`
+of *apparent mass*. The :ref:`appendix <derivations:Paraglider system models>`
 includes derivations demonstrating different choices for several each model.
 
 

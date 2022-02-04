@@ -505,8 +505,8 @@ Angular momentum of the apparent mass about :math:`R`:
      like anything else in my paper so for now I'll leave it.
 
 
-Paraglider Models
-=================
+Paraglider system models
+========================
 
 [[**FIXME**: preview the models. Model `6a` is the most complete, and accounts
 for apparent mass. Models `6b` and `6c` are simpler but require computing the
@@ -529,14 +529,17 @@ coordinate systems are implicit in the notation.
 The derivation develops the equations of motion by starting with derivatives
 of linear and angular momentum. The derivation is largely based on the
 excellent :cite:`hughes2004SpacecraftAttitudeDynamics`, although this section
-uses this paper's version of Stevens' notation (see :ref:`symbols:Notation and
+uses this paper's version of Stevens' notation (see :ref:`notation:Notation and
 Symbols`).
 
-An implementation of this model is available as :py:class:`Paraglider6a
-<glidersim:pfh.glidersim.paraglider.Paraglider6a>` in the ``glidersim``
-package. The ``glidersim`` package also includes :py:class:`Paraglider6b
-<glidersim:pfh.glidersim.paraglider.Paraglider6b>` and :py:class:`Paraglider6c
-<glidersim:pfh.glidersim.paraglider.Paraglider6c>`, which decouple the
+An implementation of this model is available as
+:external+glidersim:py:class:`Paraglider6a
+<pfh.glidersim.paraglider.ParagliderSystemDynamics6a>` in the ``glidersim``
+package. The ``glidersim`` package also includes
+:external+glidersim:py:class:`Paraglider6b
+<pfh.glidersim.paraglider.ParagliderSystemDynamics6b>` and
+:external+glidersim:py:class:`Paraglider6c
+<pfh.glidersim.paraglider.ParagliderSystemDynamics6c>`, which decouple the
 translational and angular equations of motion by choosing the glider center of
 gravity for the dynamics reference point, but do not incorporate the apparent
 mass matrix.
@@ -754,8 +757,9 @@ apparent mass is neglected here, although if :math:`B` lies in the xz-plane
 then the method described in `Apparent mass of a parafoil`_ could be used.
 
 The main purpose of this model is for validating model implementations. An
-implementation of this model is available as :py:class:`Paraglider6b
-<glidersim:pfh.glidersim.paraglider.Paraglider6b>` in the ``glidersim``
+implementation of this model is available as
+:external+glidersim:py:class:`Paraglider6b
+<pfh.glidersim.paraglider.ParagliderSystemDynamics6b>` in the ``glidersim``
 package.
 
 .. math::
@@ -817,14 +821,15 @@ Combining :eq:`model6b_momentum_derivatives1` and
 Model 6c
 --------
 
-Another option is to target :math:`^b \vec{v}_{RM/e}` directly, but again using
-the momentum about the body center of mass :math:`B`. Like `Model 6b`_ this
-also produces a simpler dynamics model, but again at the cost of making it
+Another option is to target :math:`^b \dot{\vec{v}}_{RM/e}` directly, but again
+using the momentum about the body center of mass :math:`B`. Like `Model 6b`_
+this also produces a simpler dynamics model, but again at the cost of making it
 less convenient to precompute the apparent inertia matrix.
 
 The main purpose of this model is for validating model implementations. An
-implementation of this model is available as :py:class:`Paraglider6c
-<glidersim:pfh.glidersim.paraglider.Paraglider6c>` in the ``glidersim``
+implementation of this model is available as
+:external+glidersim:py:class:`Paraglider6c
+<pfh.glidersim.paraglider.ParagliderSystemDynamics6c>` in the ``glidersim``
 package.
 
 Computing the inertial derivatives with respect to the body frame:
@@ -896,14 +901,15 @@ derivation can be found in :cite:`gorman2012EvaluationMultibodyParafoil`
    and significantly simplifies the inclusion of the apparent inertia matrix
    from Barrow's method :cite:`barrows2002ApparentMassParafoils`.
 
-An implementation of this model is available as :py:class:`Paraglider9a
-<glidersim:pfh.glidersim.paraglider.Paraglider9a>` in the ``glidersim``
-package. The ``glidersim`` package also includes :py:class:`Paraglider9b
-<glidersim:pfh.glidersim.paraglider.Paraglider9b>`, which uses the centers of
-mass as the reference points for the body and payload dynamics; that choice
-simplifies the derivatives for angular momentum (since it eliminates the
-moment arms), but makes it less convenient to incorporate the effects of
-apparent mass.
+An implementation of this model is available as
+:external+glidersim:py:class:`Paraglider9a
+<pfh.glidersim.paraglider.ParagliderSystemDynamics9a>` in the ``glidersim``
+package. The ``glidersim`` package also includes
+:external+glidersim:py:class:`Paraglider9b
+<pfh.glidersim.paraglider.ParagliderSystemDynamics9b>`, which uses the centers
+of mass as the reference points for the body and payload dynamics; that choice
+simplifies the derivatives for angular momentum (because it eliminates the
+moment arms), but prohibits incorporating the effects of apparent mass.
 
 
 Real mass only
