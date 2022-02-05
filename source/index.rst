@@ -1,19 +1,23 @@
+.. only:: html or singlehtml
+
+   .. include:: abstract.rst
+
+
 ********
 Contents
 ********
 
 .. raw:: latex
 
-    \frontmatter
-    \csutitle
-    \csucopyright
-    \csucommittee
+   \frontmatter
+   \csutitle
+   \csucopyright
+   \csucommittee
 
 .. only:: html or singlehtml
 
    .. toctree::
 
-      abstract
       acknowledgements
 
 .. only:: latex
