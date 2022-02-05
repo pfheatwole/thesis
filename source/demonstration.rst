@@ -1,6 +1,6 @@
 .. This chapter demonstrates how to use the component models to create
-   complete paraglider system models and simulate their dynamics. The modeling
-   process combines basic technical specs from a user manual with photographic
+   paraglider system models and simulate their dynamics. The modeling process
+   combines basic technical specs from a user manual with photographic
    information and reasonable assumptions about paraglider wing design. The
    simulations perform static and dynamic performance tests (polar plots and
    flight maneuvers, respectively) and compare them to expected behaviors.
@@ -37,12 +37,10 @@ Model
 .. Introduce the wing
 
 The paraglider wing used in this example is a Niviuk Hook 3, size 23. With
-forgiving flight characteristics targeting advanced beginners (or veteran
-pilots that are happy to forgo some performance in exchange for robust
-handling), this wing is not intended for acrobatics. The limitations of the
-:ref:`aerodynamics method <foil_aerodynamics:Phillips' numerical
-lifting-line>` are not an issue when simulating the majority of flights
-produced by this wing.
+forgiving flight characteristics targeting advanced beginners, this wing is
+not intended for acrobatics, so the limitations of the :ref:`aerodynamics
+method <foil_aerodynamics:Phillips' numerical lifting-line>` are not an issue
+when simulating the majority of flights produced by this wing.
 
 .. figure:: figures/paraglider/demonstration/Hook3_front_view.jpg
    :name: Hook3_front_view
@@ -127,21 +125,57 @@ Canopy
    etc. Show what data I had, what assumptions I used to fill in the blanks,
    and how well the result matched the target.
 
-Developing a canopy model has four basic steps:
+This section use the technical data for the wing to instantiate a
+:ref:`canopy component model <paraglider_components:Canopy>`.
 
-1. Design the foil layout (scale, position, and orientation)
+To define a canopy model:
 
-2. Assign section profiles
+1. Specify the foil geometry
 
-3. Specify physical attributes of the manufactured canopy
+   (ie, define the variables of the foil geometry model)
 
-[[The first two steps create the idealized foil geometry model; should they be
-separate? I guess I like the fact that you can get really far just specifying
-the chord surface using measurements; it's a high-confidence task.]]
+   Foil layout (scale, position, orientation) and profiles (each section is
+   assigned a set of profiles that includes trailing edge deflections)
+
+2. Assign surface material properties (upper and lower area densities) for
+   computing the mass distributions (center of mass and mass moment of inertia)
+   for each surface.
+
+   FIXME: what about the internal ribs? I added those to the code.
 
 
-Foil layout
-^^^^^^^^^^^
+Geometry
+^^^^^^^^
+
+.. Workflow:
+
+   0. Choose a scaling factor (`b` or `b_flat`)
+
+      **Isn't this only for my normalized `yz(s)`?** All the other pieces only
+      depend on `s`. Interesting, because that'd mean I could just make `b_flat`
+      a parameter of `elliptical_arc` instead of scaling inside `Foil`. Oh, wait,
+      I'm also scaling the chord distribution by `b_flat`; right, because
+      I thought it was easier to think in terms of proportional chord lengths.
+
+      Even so, you don't HAVE to do it this way for the paper. **Just use the
+      explicit distances for this chapter, even if it doesn't match the code.**
+
+      Counterpoint: it does make it easier to define the arc, even if I don't
+      explain the details. Just say "Here, I've provided an elliptical arc
+      generator: you just need to specify the mean anhedral, tip roll, and flat
+      span."
+
+   1. Fit the flattened chord surface (`c(s)`, `x(s)`, `r_x(s)`)
+
+   2. Fit the arc (`yz(s), r_yz(s)`)
+
+   3. Apply geometric twist (`theta(s)`)
+
+   4. Specify section profiles (airfoils) and their coefficients
+
+      [[Introduce gridded coefficients]]
+
+
 
 .. Span (b_flat)
 
@@ -203,7 +237,7 @@ As seen in :numref:`Hook3_topdown`, the elliptical chord assumption with
 :math:`r_x = 0.7` gives a close match to the drawing in the manual.
 
 
-.. Arc (y, z)
+.. Arc (yz-curve)
 
 The next step is to model the *arc* (position curvature in the
 :math:`yz`-plane). Photos of the wing suggest that a circular arc segment is
@@ -216,10 +250,14 @@ angle until the projected span matches the expected value.
 [[FIXME: finish writing. For example, checking the "naive" fit based on
 a circular arc is pretty close, but the projected surface area doesn't match
 the specs; the fit can be improved by replacing the circular arc with an
-elliptical arc. Mention that ``glidersim`` provides helper functions to make
-this process easier than it sounds. My final fit was `mean_anhedral = 32`,
-`tip_anhedral = 75`; and yes, those parameter names use "anhedral"
-inconsistently. ☹️ ]]
+elliptical arc. For this section, use trig to compute the elliptical parameters
+manually, but mention that ``glidersim`` provides helper functions to simplify
+the process.
+
+My final fit was `mean_anhedral = 32`, `tip_anhedral = 75`. Note that the
+``elliptical_arc`` function uses "anhedral" (`mean_anhedral` and
+`tip_anhedral`) to describe the angles might by the positions of the `yz`
+curve, not the orientation of individual sections.]]
 
 .. FIXME:
 
@@ -249,8 +287,8 @@ torsion towards the wing tips (or *washin*), and a conservative guess of
    angles are small and difficult to measure from a wing on the ground.
 
 
-Section profiles
-^^^^^^^^^^^^^^^^
+
+.. Section profiles
 
 After the section layout (scale, position, and orientation) is complete, each
 section must be assigned an airfoil.
@@ -273,8 +311,8 @@ this is the number one source of error in the model.]]
 [[FIXME: explain how I produced those profiles. Oof.]]
 
 
-Physical attributes
-^^^^^^^^^^^^^^^^^^^
+Inertia
+^^^^^^^
 
 [[Assigning the section profiles completes the (idealized) parametric
 :doc:`foil geometry <foil_geometry>` model, and it can be used to define
@@ -285,7 +323,7 @@ corrections).
 
 .. Materials (rho_upper, rho_lower, rho_ribs)
 
-In this case, the material densities can be read straight from the technical
+In this case, the material densities can be read directly from the technical
 specifications:
 
 .. list-table:: Hook 3 material densities
@@ -318,26 +356,28 @@ specifications:
 .. Air intakes (s_end, r_upper, r_lower)
 
 For the air intakes, the user manual provides a flattened projection which
-includes the air intakes (Fig:11.4, pg17); assuming the sections are uniform
+includes the air intakes (Fig. 11.4, p. 17); assuming the sections are uniform
 width, the air intakes start at section 22 of 27 ribs, which would correspond
 to :math:`s = 0.815`, so :math:`s_end = 0.8` is a reasonable guess for the
 extent. The upper and lower profile extent is more difficult to determine just
 by looking at pictures, but considering the viscous drag correction is
 relatively minor a reasonable guess is :math:`r_\textrm{upper} = -0.04` and
-:math:`r_\textrm{lower} = -0.09`.
+:math:`r_\textrm{lower} = -0.09` for an air intake length roughly 5% of the
+length of the chord.
 
-.. FIXME: show a figure of the resulting profile
+.. figure:: figures/paraglider/demonstration/air_intakes.*
 
-.. FIXME: this is a crappy way of measuring...
+   NACA 24018 with air intakes
 
 
 Suspension lines
 ----------------
 
-The second basic component of paraglider model is for the suspension lines. It
-is responsible for positioning the payload, adjusting the position as
-a function of the accelerator input, and computing the trailing edge
-deflection angles.
+The second basic component of paraglider model is for the :ref:`suspension
+lines <paraglider_components:Suspension lines>`. It is responsible for
+positioning the payload, adjusting the position as a function of the
+accelerator input, computing the trailing edge deflection angles, and
+estimating the aerodynamic drag of the lines.
 
 
 Riser position
@@ -485,6 +525,9 @@ Line drag
 Payload
 -------
 
+The third paraglider component model is for the :ref:`harness
+<paraglider_components:Harness>`. This component is responsible for [[...]].
+
 .. Design variables: m_p, z_riser, S_p, C_d,p, kappa_w
 
 .. Total payload mass, spherical radius, drag coefficient, etc
@@ -506,8 +549,6 @@ of mass below the volume centroid).
 
 Static performance
 ==================
-
-[[FIXME: should I include "360 turn radius" under "static" performance?]]
 
 
 Equilibrium states
@@ -544,27 +585,22 @@ Polar curves
 
   * Best glide: 9.5 (with pod harness)
 
+  * Should I tune my model to match theirs? Size of wing, payload mass, etc?
+    Would make direct comparisons easier.
 
 * `2013-01-23_hook3_23_en`:
 
   * Minimum speed `<25km/h`
 
-  * Symmetric control travel `>60cm` (my model has `kappa_b = 0.46cm`)
+  * Symmetric control travel `>60cm` (my model only supports `kappa_b = 0.43m`
+    due to the limitations of the aerodynamic coefficient data)
 
-    That means I'm modeling **at most** 77% of the travel they got during the
-    test. No wonder their "steeply banked turn" is so extreme. What would my
-    polar look like if you extrapolated it that far, I wonder?
+    That means I'm modeling <72% of the travel they got during the test. No
+    wonder their "steeply banked turn" is so much more extreme than I can
+    produce. What would my polar look like if you extrapolated it that far?
 
-  * Pitch stability upon exiting accelerated flight: dive forward angle on
-    exit less than 30 degrees (my model pitches backwards about 20, then
-    forward to -7, so I think this is good)
-
-  * Sink rate after to steeply banked turns `>14m/s` (I think I'm WAY off
-    here, possibly due to my very limited brake range. And man, that's
-    `31mph`; that is a PLUMMET.)
-
-    Holy cow, later in "Behavior exiting a steep spiral" they recorded
-    a `19m/s` sink rate for the 85kg! Clearly I am unable to model a spiral.
+    Pity they don't list the actual minimum speed, I could at least see where
+    I am relative to that.
 
 
 Dynamic performance
@@ -572,89 +608,145 @@ Dynamic performance
 
 .. Informative flight scenarios
 
-* Steady-state turn rate and radius size
+* For more ideas, see :cite:`wild2009AirworthinessRequirementsHanggliders`
+  Sec:4.1 (pg28) for the DHV maneuvers for wing classification
 
-  Apply 100% brake and observe steady state to really highlight how limited
-  this model is for actual flight conditions.
+  Also, :cite:`lingard1995RamairParachuteDesign` Sec:7 and Sec:8.
 
-  The roll and pitch angles for the 6a are 14.3 and 0.47; that's practically
-  a flat turn! For the 9a it's more like 9.5 and 1.7, still nowhere CLOSE to
-  a spiral or "steep bank angle".
+
+Steady-state turn
+-----------------
+
+* Apply 100% brake and observe steady-state radius, turn rate, and bank angle
+
+  Compare to the sink rates during a hard turn in the DHV ratings guide; are
+  they "within spec"? Does the DHV guide define "hard turn"? I'm restricting
+  the amount of brake input; probably can't reach a "hard" turn.
+
+  I could try to justify this by arguing that "hard turns aren't part of
+  typical flight conditions", but really the issue is about accuracy for
+  a given brake input.
+
+* In `2013-01-23_hook3_23_en` they have the sink rate after two "steeply
+  banked" turns is `>14m/s`. For my model, full brakes and weight shift only
+  get it to `1.397m/s`. Wow, optimistic much? Granted, I'm using VERY
+  optimistic airfoil data and am SEVERELY limiting the brake travel (they say
+  the symmetric control travel is `>60cm`, whereas I'm limited to `kappa_b
+  = 0.43m`, so I'm modeling <72% of the travel they used in their tests)
+
+
+Impulsive controls
+------------------
 
 * Control input impulses (on/off of symmetric brake, asymmetric brake,
   accelerator, weight shift)
 
-* Sink rates during a hard turn. (See the DHV ratings guide)
 
-* Response to "exiting accelerated flight".
+Exiting accelerated flight
+--------------------------
 
-  According to Sec:4.5.1 of the DHV ratings guide, it sounds like wings dive
-  **forward** when the accelerator is abruptly released. For my current
-  Hook3ish, the wing experiences **backwards** pitch. Is this because I'm
-  neglecting changes to the canopy geometry? Or is it symptomatic of the fact
-  that I assume the lines stay taught? Conceptually, when you quickly release
-  the speedbar, the A lines will quickly extend; it takes some time for the
-  harness to drop (or the wing to rise) enough to regain tension, so the wing
-  is certainly going to behave in ways not modeled by my equations. Good to
-  point out.
+According to Sec:4.5.1 of the DHV ratings guide, it sounds like wings dive
+**forward** when the accelerator is abruptly released. For my current
+Hook3ish, rapidly letting off the accelerator produces a ~20deg positive pitch
+(**backwards**), not forwards. Sure, after pitching backwards it then pitches
+forwards to `-7°`, but still, odd.
 
-* Does it exhibit "roll steering" vs "skid steering"? Or maybe the arc is too
-  round for that effect. See :cite:`slegers2003AspectsControlParafoil`.
+Is this because I'm neglecting changes to the canopy geometry? Or is it
+symptomatic of the fact that I assume the lines stay taught? Conceptually,
+when you quickly release the speedbar, the A lines will quickly extend; it
+takes some time for the harness to drop (or the wing to rise) enough to regain
+tension, so the wing is certainly going to behave in ways not modeled by my
+equations. Good to point out.
 
-* The importance of apparent mass. Start by comparing the real versus apparent
-  mass matrices; consider the relative magnitudes and the likely effects from
-  accounting for apparent inertia. Then show some scenarios where the effects
-  are noticeable.
+Related: `2013-01-23_hook3_23_en` says the wing pitches **forward** less than
+`30°` upon exiting accelerated flight? Does this mean AFTER pitching backwards?
+My model says that rapidly letting off accelerator should see a positive pitch
+(backwards), not forwards. Sure, after pitching backwards it then pitches
+forwards to `-7°`, but still, odd.
 
-* For more ideas, see :cite:`wild2009AirworthinessRequirementsHanggliders`
-  Sec:4.1 (pg28) for the DHV maneuvers for wing classification
 
-  Also, :cite:`lingard1995RamairParachuteDesign` Sec:7 and Sec:8.]]
 
-* Compare the apparent inertia to the real inertia.
+Steep turn
+----------
 
-  Under what conditions? It depends on the current velocity. Maybe compare the
-  real mass, apparent mass at hands-up equilibrium, apparent mass during
-  a turn, etc. The point is to **highlight the magnitude of the effect**.
+In `2013-01-23_hook3_23_en` they have the sink rate after two "steeply banked"
+turns is `>14m/s` (31mph!). For my model, full brakes and weight shift only
+get it to `1.42m/s`. Wow, optimistic much? Granted, I'm severely limiting the
+brake travel and am using VERY optimistic airfoil data, but still. **Do they
+define "steep"?**
 
-* In `2013-01-23_hook3_23_en` they have the sink rate after two "steeply
-  banked" turns is `>14m/s`. For my model, full brakes and weight shift only
-  get it to `1.397m/s`. Wow, optimistic much? Granted, I'm severely limiting
-  the brake travel and am using VERY optimistic airfoil data.
+Ah, they rate it as class B, which agrees with sections 4.1.8 and 4.1.9 of the
+DHV standard :cite:`wild2009AirworthinessRequirementsHanggliders`, pg31. The
+DHV say "steepest possible **spiral** dive achievable in two turns". They also
+specify "no counter-turn".
 
-* They say the wing dives **forward** "less than 30deg" upon exiting
-  accelerated flight? My model says that rapidly letting off accelerator
-  should see a positive pitch (backwards), not forwards. Sure, after pitching
-  backwards it then pitches forwards to `-7deg`, but still, odd.
+Well, observe that I'm only able to achieve a 20° bank angle; that's NOTHING
+compared to a "hard spiral dive" you'd see in an SIV. I wonder which component
+model is the limiting factor?
 
-* How does geometric torsion affect the off-center thermal scenario?
+Geeze, later in "Behavior exiting a steep spiral" they recorded a `19m/s` sink
+rate for the 85kg! Clearly I am unable to model a spiral.
+
+
+Skid vs roll steering
+---------------------
+
+Does it exhibit "roll steering" vs "skid steering"? Or maybe the arc is too
+round for that effect. See :cite:`slegers2003AspectsControlParafoil`.
+
+
+Apparent mass
+-------------
+
+Compare the real versus apparent mass matrices.
+
+Under what conditions? It depends on the current velocity. Maybe compare the
+real mass, apparent mass at hands-up equilibrium, apparent mass during a turn,
+etc. The point is to **highlight the magnitude of the effect**.
+
+Consider the relative magnitudes and the likely effects from accounting for
+apparent inertia. Then show some scenarios where the effects are significant
+(figure-8s) and highlight the magnitude of the effect.
+
+
+Off-center thermal interaction
+------------------------------
+
+* Bonus: how does geometric torsion affect the off-center thermal scenario?
 
 
 Discussion
 ==========
+
+* This chapter suggests a simple workflow:
+
+  1. Fit the flattened chord surface (`c(s)`, `x(s)`, `r_x(s)`)
+
+  2. Fit the arc (`yz(s), r_yz(s)`)
+
+  3. Apply geometric twist (`theta(s)`)
+
+  4. Specify section profiles (airfoils) and their coefficients
+
+     [[Indexed profile sets; discuss coefficient tables?]]
+
+  5. Specify material densities (upper, lower, ribs) for computing the inertia
+
+  6. Specify a suspension line model (harness position, accelerator function,
+     brake deflection distribution, line drag)
+
+  7. Specify a harness model
+
 
 * Everything related to the airfoils is sketchy. The choice of airfoil,
   modeling their deflected geometries, modeling the deflection distribution,
   etc. Tons of uncertainty here. Just stick a big red flag in it and say "hey,
   if you want to solve this problem, here's a big sticking point."
 
+* This chapter focuses on collecting the necessary information to produce the
+  model. For the actual implementation, refer to ``glidersim``:
 
-This chapter suggests a simple workflow:
+  * :external+glidersim:py:func:`pfh.glidersim.extras.wings.niviuk_hook3`
 
-1. Fit the flattened chord surface (`c(s)`, `x(s)`, `r_x(s)`)
-
-2. Fit the arc (`yz(s), r_yz(s)`)
-
-3. Apply geometric twist (`theta(s)`)
-
-4. Specify section profiles (airfoils) and their coefficients
-
-   [[Introduce gridded coefficients]]
-
-5. Specify material densities (upper, lower, ribs) for computing the inertia
-
-6. Specify a suspension line model (harness position, accelerator function,
-   brake deflection distribution, line drag)
-
-7. Specify a harness model
+  * https://github.com/pfheatwole/glidersim/blob/main/scripts/build_hook3.py
 
