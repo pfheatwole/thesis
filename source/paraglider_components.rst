@@ -1,29 +1,35 @@
-.. This chapter describes the three basic components of a paraglider (canopy,
-   lines, and payload), defines the component inputs, and provides simple
-   mathematical models of each component.
+.. This chapter describes the three components of a paraglider (canopy, lines,
+   and payload), defines their inputs, and provides parametric models for the
+   inertial properties and resultant forces of each component.
+
+.. FIXME: where do I define *control point*? The way I've worded tells the
+   reader to expect explicit control points, not just vague descriptions of the
+   component aerodynamics
 
 
-***************************
-Paraglider component models
-***************************
+****************
+Component models
+****************
 
-A paraglider can be modeled as a system of three components: a canopy,
-a harness, and suspension lines that connect the canopy to the harness.
-A paraglider system model is assembled from the models of its components. Each
-component model must define any inertial properties, control inputs, and
-aerodynamic control points necessary to compute its dynamics.
-
-.. FIXME: I haven't defined *control point* yet. The way I've worded tells the
-   reader to expect explicit control points, not just vague descriptions of
-   the component aerodynamics
+A paraglider can be modeled as a :doc:`system <system_dynamics>` of three
+components: a canopy, a harness, and suspension lines that connect the canopy
+to the harness.
 
 .. FIXME: add a figure to help visualize the 3 components?
 
+To compute the dynamics of the composite system, each component model must
+define three things:
+
+1. Control inputs
+
+2. Inertial properties
+
+3. `Resultant force <https://en.wikipedia.org/wiki/Resultant_force>`__
+
 This chapter develops basic models for each component, favoring simplicity
-whenever possible. In particular, individual components are based on
-a quasi-rigid body assumption where the only deformations are those produced
-by explicit control inputs. This may seem like a major oversimplification, but
-in practice it works quite well: although nearly every component of
+whenever possible. In particular, all models are based on a quasi-rigid body
+assumption. [[FIXME: explain.]] This may seem like a major oversimplification,
+but in practice it works quite well: although nearly every component of
 a paraglider is made from highly flexible materials, they tend to remain
 relatively rigid during typical flight conditions.
 
@@ -34,9 +40,9 @@ Canopy
 .. What is the canopy? What does it do?
 
 A paraglider canopy (or *parafoil*) is a kind of ram-air parachute: inflatable
-lifting surfaces manufactured from nylon sheets with air intakes at the
-leading edge that pressurize their internal volume. The shape of a parafoil is
-determined by a combination of surface materials, internal structure, internal
+lifting surfaces manufactured from nylon sheets with air intakes at the leading
+edge that pressurize their internal volume. The shape of an inflated parafoil
+is determined by a combination of surface materials, internal structure, air
 pressure, and suspension lines. Because the canopy is flexible, pilots can
 manipulate the suspension lines to change the shape of the canopy, allowing
 them to control its aerodynamics.
@@ -44,16 +50,16 @@ them to control its aerodynamics.
 
 .. How am I modeling it?
 
-To model a parafoil, it is helpful to think of the canopy as a physical
-realization of some idealized :doc:`foil geometry <foil_geometry>` that was
-optimized for aerodynamic efficiency and stability. The physical wing is
-significantly more complex since it must attempt to implement the target
-design using flexible materials that deform once the canopy is pressurized
-(plus additional concerns such as weight, physical reliability,
-manufacturability, etc), but the deformations (cell billowing, profile
-flattening, surface wrinkling, etc) are also exceptionally difficult to model
-without resorting to complete material simulation
-:cite:`lolies2019NumericalMethodsEfficient`.
+[[**FIXME: this paragraph is really wordy and hard to follow**]] To model
+a parafoil, it is helpful to think of the canopy as a physical realization of
+some idealized :doc:`foil geometry <foil_geometry>` that was optimized for
+aerodynamic efficiency and stability. The physical wing is significantly more
+complex since it must attempt to implement the target design using flexible
+materials that deform once the canopy is pressurized (plus additional concerns
+such as weight, physical reliability, manufacturability, etc), but the
+deformations (cell billowing, profile flattening, surface wrinkling, etc) are
+also exceptionally difficult to model without resorting to complete material
+simulation :cite:`lolies2019NumericalMethodsEfficient`.
 
 Instead, this model assumes that the idealized target geometry is an effective
 representation of the physical canopy, then adds small empirical corrections
@@ -87,172 +93,21 @@ model the wing tips can never cravat).
    deformations rely on full CFD modeling.
 
 
-Inertia
--------
-
-.. FIXME: point out that this model ignores trailing edge deflections when
-   calculating the center of mass and rotational inertia
-
-For a parafoil canopy in-flight, the effective inertia is produced by
-a combination of three different masses: a *solid mass*, from the structural
-materials, an *air mass*, from the air enclosed in the foil, and an *apparent
-mass*, from the air surrounding the foil. (Some texts refer to the combination
-of the solid and enclosed air masses as the *real mass*
-:cite:`barrows2002ApparentMassParafoils`.)
-
-
-Solid mass
-^^^^^^^^^^
-
-The solid mass is the surface and structural materials that comprise the foil.
-A rigorous model would include the upper and lower surfaces, ribs, half-ribs,
-v-ribs, horizontal straps, tension rods, tabs (line attachment points),
-stitching, etc, but for this model the calculation is restricted to the upper
-and lower surface materials. (See :ref:`demonstration:Model` for a discussion
-of this simplification.)
-
-Assuming the surface materials are uniform, the inertias of the external
-surface materials can be determined by first calculating the total area
-:math:`a` and areal inertia matrix :math:`\mat{J}` for each surface (using the
-method in :ref:`derivations:Area`), then scaling them by the areal densities
-:math:`\rho` of each surface. The result is the total upper and lower surface
-masses:
-
-.. math::
-   :label: surface_masses
-
-   \begin{aligned}
-     m_{\mathrm{u}} &= \rho_{\mathrm{u}} a_{\mathrm{u}} \\
-     m_{\mathrm{l}} &= \rho_{\mathrm{l}} a_{\mathrm{l}}
-   \end{aligned}
-
-And the upper and lower surface inertias about the canopy origin :math:`O`:
-
-.. math::
-   :label: surface_inertias
-
-   \begin{aligned}
-     \mat{J}_{\mathrm{u}/\mathrm{O}} &= \rho_{\mathrm{u}} \mat{J}_{a_u/\mathrm{O}} \\
-     \mat{J}_{\mathrm{l}/\mathrm{O}} &= \rho_{\mathrm{l}} \mat{J}_{a_l/\mathrm{O}}
-   \end{aligned}
-
-.. FIXME: add the ribs
-
-
-Air mass
-^^^^^^^^
-
-Although the weight of the air inside the canopy is counteracted by its
-buoyancy, it still represents significant mass. When the canopy is accelerated
-the enclosed air is accelerated at the same rate, and must be included in the
-inertial calculations. (This model neglects surface porosity; although the
-canopy is porous, and thus constantly receiving an inflow of air through the
-intakes, in a properly functioning wing the leakage is slow enough that the
-volume of air can be treated as constant.)
-
-Similar to the surface masses, the internal volume and its unscaled inertia
-about the canopy origin is easily computed from the :doc:`foil_geometry` using
-the method in :ref:`derivations:Volume`. Given the internal volume :math:`v`
-and the current air density :math:`\rho_{\mathrm{air}}`, the total mass of the
-enclosed air :math:`m_{\mathrm{air}}` is simply:
-
-.. math::
-   :label: air_mass
-
-   m_{\mathrm{air}} = \rho_{\mathrm{air}} v
-
-Similarly, for the inertia matrix of the enclosed air about the canopy origin
-:math:`O`:
-
-.. math::
-   :label: air_inertia
-
-   \mat{J}_{\mathrm{air}/O} = \rho_{\mathrm{air}} \mat{J}_{\mathrm{v}/\mathrm{O}}
-
-.. FIXME: explicitly note that rho is a function of time?
-
-
-Apparent Mass
-^^^^^^^^^^^^^
-
-Newton's second law states that the acceleration of an isolated object is
-proportional to the net force applied to that object:
-
-.. math::
-
-   a = \frac{\sum{F}}{m}
-
-This simple rule is sufficient and effective for determining the behavior of
-isolated objects, but when an object is immersed in a fluid it is longer
-isolated. When an object moves through a fluid there is an exchange of
-momentum, and so the momentum of the fluid must be taken into account as well.
-In fact, it is this exchange of momentum that gives rise to the aerodynamic
-forces on a wing. The difference is that apparent mass is an unsteady
-phenomena that is not accounted for by simple aerodynamic models, such as
-:ref:`foil_aerodynamics:Phillips' numerical lifting-line`.
-
-In static scenarios, where the vehicle is not changing speed or direction
-relative to the fluid, this exchange of momentum can be summarized with
-coefficients that quantify the forces and moments on the wing due to air
-velocity. But for unsteady flows, where the vehicle is accelerating relative
-to the fluid, the net force on the vehicle is no longer simply the product of
-the vehicle's "real" mass and acceleration. Instead, when a net force is
-applied to an object in a fluid, it will accelerate more slowly than the
-object would have in isolation, as if the vehicle has increased its mass:
-
-.. math::
-
-   a = \frac{\sum{F}}{m + m_a}
-
-This *apparent mass* :math:`m_a` tends to become more significant as the
-density of the vehicle approaches the density of the fluid. If the density of
-the vehicle is much greater than the density of the fluid then the effect is
-often ignored, but for lightweight aircraft the effect can be significant.
-
-.. Whether the apparent mass is significant depends only on the ratio `m
-   / m_a`. If :math:`m \gg m_a` then no worries. However, `m` does depend on
-   the density of the vehicle, and `m_a` does depend on the density of the
-   fluid. But `m_a` also depends on the **shape** of the object and the
-   relative velocity of the fluid. It's not a big deal, but careful how you
-   word it.
-
-Because apparent mass effects are the result of a volume in motion relative to
-a fluid, its magnitude depends on the volume's shape and the direction of the
-motion. Unlike the inertia due to real mass, apparent inertia is anisotropic,
-and the diagonal terms of the apparent mass matrix are independent.
-Calculating the apparent mass of an arbitrary geometry is difficult. For
-a classic discussion of the topic, see :cite:`lamb1945Hydrodynamics`. For
-a more recent discussion of apparent mass in the context of parafoils, see
-:cite:`lissaman1993ApparentMassEffects`, which used an ellipsoid model to
-establish a parametric form commonly used in parafoil-payload literature
-
-This paper uses an updated method from
-:cite:`barrows2002ApparentMassParafoils` which added corrections to the
-ellipsoid model of :cite:`lissaman1993ApparentMassEffects`. (For a replication
-of the equations in that method but given in the notation of this paper, see
-:ref:`derivations:Apparent mass of a parafoil`.) When using the method to
-define a dynamics model that accounts for the apparent mass, the most
-important detail from that derivation is that the reference point for the
-dynamics must lie in the xz-plane of the canopy. [[FIXME: also, there are
-limitations to the method, such as its strong assumptions that the foil has
-circular arc, uniform thickness, uniform chord length, etc.]]
-
-
 Controls
 --------
 
 .. How do pilots control the canopy?
 
-A paraglider canopy is controlled by changing its shape. Pilots control its
-shape by manipulating the suspension lines. In theory, any of the suspension
-lines can be used to alter the positions, orientations, or profiles of its
-wing sections, but this model only supports trailing edge deflections produced
-by the suspension lines connected to the left and right brake handles.
+A paraglider canopy is controlled by changing its shape through manipulation of
+suspension lines. In theory, any of the suspension lines can be used to alter
+the positions, orientations, or profiles of its wing sections, but this model
+only supports trailing edge deflections produced by the lines connected to the
+left and right brake handles.
 
 
 .. How do you model the changes to the canopy shape?
 
-When a pilot uses the :ref:`brakes <paraglider_components:Brakes>`, they
+When a pilot applies the :ref:`brakes <paraglider_components:Brakes>`, they
 generate a continuous deformation along the trailing edge of the canopy. In
 terms of the individual sections, this results in deformed variants of the
 undeflected section profiles. Because this canopy model does not perform
@@ -321,7 +176,7 @@ the *deflection distance* :math:`\delta_d` and the *chord length* :math:`c`:
 .. math::
    :label: normalized deflection distance
 
-   \overline{\delta_d} = \frac{\delta_d}{c}
+   \overline{\delta_d} \defas \frac{\delta_d}{c}
 
 The normalized deflection distances are unusual in that, although they are
 control inputs to the canopy aerodynamics model, they are not direct inputs to
@@ -353,8 +208,168 @@ along the span is a function of section index and brake inputs:
      the same shape for a given value of :math:`\overline{\delta_d}`).
 
 
-Aerodynamics
-------------
+Inertia
+-------
+
+.. FIXME: point out that this model ignores trailing edge deflections when
+   calculating the center of mass and rotational inertia
+
+For a parafoil canopy in-flight, the effective inertia is produced by
+a combination of three different masses: a *solid mass*, from the structural
+materials, an *air mass*, from the air enclosed in the foil, and an *apparent
+mass*, from the air surrounding the foil. (Some texts refer to the combination
+of the solid and enclosed air masses as the *real mass*
+:cite:`barrows2002ApparentMassParafoils`.)
+
+
+Solid mass
+^^^^^^^^^^
+
+The *solid mass* is all the surface and structural materials that comprise the
+canopy. A rigorous model would include the upper and lower surfaces, ribs,
+half-ribs, v-ribs, horizontal straps, tension rods, tabs (line attachment
+points), stitching, etc, but for this model the calculation is restricted to
+the upper and lower surfaces and internal ribs. The internal ribs are assumed
+to be solid (non-ported), resulting in an overestimate that is somewhat
+mitigated by the absence of accounting for the other internal structures.
+
+.. FIXME: discuss this simplification in :ref:`demonstration:Model`?
+
+Assuming the material densities are uniform, the inertial properties of the
+materials can be determined by first calculating the total area :math:`a` and
+areal inertia matrix :math:`\mat{J}` for each surface (using the method in
+:ref:`derivations:Area`), then scaling them by the areal densities :math:`\rho`
+of each surface. The result is the total masses for the upper surface, lower
+surface, and internal ribs:
+
+.. math::
+   :label: surface_masses
+
+   \begin{aligned}
+     m_{\mathrm{u}} &= \rho_{\mathrm{u}} a_{\mathrm{u}} \\
+     m_{\mathrm{l}} &= \rho_{\mathrm{l}} a_{\mathrm{l}} \\
+     m_{\mathrm{r}} &= \rho_{\mathrm{r}} a_{\mathrm{r}}
+   \end{aligned}
+
+And their mass moments of inertia about the canopy origin :math:`O`:
+
+.. math::
+   :label: surface_inertias
+
+   \begin{aligned}
+     \mat{J}_{\mathrm{u}/\mathrm{O}} &= \rho_{\mathrm{u}} \mat{J}_{a_u/\mathrm{O}} \\
+     \mat{J}_{\mathrm{l}/\mathrm{O}} &= \rho_{\mathrm{l}} \mat{J}_{a_l/\mathrm{O}} \\
+     \mat{J}_{\mathrm{r}/\mathrm{O}} &= \rho_{\mathrm{r}} \mat{J}_{a_r/\mathrm{O}}
+   \end{aligned}
+
+In theory the inertial properties are functions of the brake inputs since they
+alter the distribution of mass, but in practice the effect is negligible. For
+this project the centroids and moments of inertia for the solid mass are
+calculated once using the undeflected section profiles.
+
+
+Air mass
+^^^^^^^^
+
+Although the weight of the air inside the canopy is counteracted by its
+buoyancy, it still represents significant mass. When the canopy is accelerated
+the enclosed air is accelerated at the same rate, and must be included in the
+inertial calculations. (This model neglects surface porosity; although the
+canopy is porous, and thus constantly receiving an inflow of air through the
+intakes, in a properly functioning wing the leakage is slow enough that the
+volume of air can be treated as constant.)
+
+Similar to the surface masses, the internal volume and its unscaled inertia
+about the canopy origin is easily computed from the :doc:`foil_geometry` using
+the method in :ref:`derivations:Volume`. Given the internal volume :math:`v`
+and the current air density :math:`\rho_{\mathrm{air}}`, the total mass of the
+enclosed air :math:`m_{\mathrm{air}}` is simply:
+
+.. math::
+   :label: air_mass
+
+   m_{\mathrm{air}} = \rho_{\mathrm{air}} v
+
+Similarly, for the inertia matrix of the enclosed air about the canopy origin
+:math:`O`:
+
+.. math::
+   :label: air_inertia
+
+   \mat{J}_{\mathrm{air}/O} = \rho_{\mathrm{air}} \mat{J}_{\mathrm{v}/\mathrm{O}}
+
+.. FIXME: explicitly note that rho may be a function of time and position?
+
+
+Apparent Mass
+^^^^^^^^^^^^^
+
+Newton's second law states that the acceleration of an isolated object is
+proportional to the net force applied to that object:
+
+.. math::
+
+   a = \frac{\sum{F}}{m}
+
+This simple rule is sufficient and effective for determining the behavior of
+isolated objects, but when an object is immersed in a fluid it is longer
+isolated. When an object moves through a fluid there is an exchange of
+momentum, and so the momentum of the fluid must be taken into account as well.
+In fact, it is this exchange of momentum that gives rise to the aerodynamic
+forces on a wing. The difference is that apparent mass is an unsteady
+phenomena that is not accounted for by simple aerodynamic models, such as
+:ref:`foil_aerodynamics:Phillips' numerical lifting-line`.
+
+In static scenarios, where the vehicle is not changing speed or direction
+relative to the fluid, this exchange of momentum can be summarized with
+coefficients that quantify the forces and moments on the wing due to air
+velocity. But for unsteady flows, where the vehicle is accelerating relative
+to the fluid, the net force on the vehicle is no longer simply the product of
+the vehicle's "real" mass and acceleration. Instead, when a net force is
+applied to an object in a fluid, it will accelerate more slowly than the
+object would have in isolation, as if the vehicle has increased its mass:
+
+.. math::
+
+   a = \frac{\sum{F}}{m + m_a}
+
+This *apparent mass* :math:`m_a` (or *added mass*
+:cite:`thomasson2000EquationsMotionVehicle`) tends to become more significant
+as the density of the vehicle approaches the density of the fluid. If the
+density of the vehicle is much greater than the density of the fluid then the
+effect is often ignored, but for lightweight aircraft the effect can be
+significant.
+
+.. Whether the apparent mass is significant depends only on the ratio `m
+   / m_a`. If :math:`m \gg m_a` then no worries. However, `m` does depend on
+   the density of the vehicle, and `m_a` does depend on the density of the
+   fluid. But `m_a` also depends on the **shape** of the object and the
+   relative velocity of the fluid. It's not a big deal, but careful how you
+   word it.
+
+Because apparent mass effects are the result of a volume in motion relative to
+a fluid, its magnitude depends on the volume's shape and the direction of the
+motion. Unlike the inertia due to real mass, apparent inertia is anisotropic,
+and the diagonal terms of the apparent mass matrix are independent.
+Calculating the apparent mass of an arbitrary geometry is difficult. For
+a classic discussion of the topic, see :cite:`lamb1945Hydrodynamics`. For
+a more recent discussion of apparent mass in the context of parafoils, see
+:cite:`lissaman1993ApparentMassEffects`, which used an ellipsoid model to
+establish a parametric form commonly used in parafoil-payload literature
+
+This paper uses an updated method from
+:cite:`barrows2002ApparentMassParafoils` which added corrections to the
+ellipsoid model of :cite:`lissaman1993ApparentMassEffects`. (For a replication
+of the equations in that method but given in the notation of this paper, see
+:ref:`derivations:Apparent mass of a parafoil`.) The method uses several
+significant simplifying assumptions (the dynamics reference point must lie in
+the :math:`xz`-plane, the foil has circular arc, uniform thickness, uniform
+chord lengths, etc), but the effects of deviations from the method's
+assumptions are negligible for typical parafoil models.
+
+
+Resultant force
+---------------
 
 .. FIXME: review, this is a very crude draft
 
@@ -374,13 +389,13 @@ coefficients as a two step process:
 
 The idealized airfoils are indexed by their normalized deflection distance
 :eq:`normalized deflection distance`, which appears in Phillip' NLLT as the
-control input :math:`delta_i`; the indexed airfoils allow the brakes to
+control input :math:`\delta_i`; the indexed airfoils allow the brakes to
 control the canopy aerodynamics with no modifications to the NLLT. Physical
 inaccuracies refers to characteristics such as flattening, wrinkling, surface
 roughness, air intakes, etc. For example, a common correction for parafoils is
 to add an empirical estimate of the additional viscous drag due to air
-intakes; see the :ref:`example model <demonstration:Air intakes>` for
-a demonstration.
+intakes; see the :ref:`example model <demonstration:Surface materials>` for
+a discussion.
 
 .. FIXME: discussion?
 
@@ -388,6 +403,51 @@ a demonstration.
 
      * Assumes section coefficients are representative of entire wing segments
        (ignores inter-segment flow effects, etc)
+
+
+The :ref:`aerodynamics model <foil_aerodynamics:Phillips' numerical
+lifting-line>` provides the aerodynamic forces
+:math:`\vec{f}_{f,\textrm{aero},n}` :eq:`section lift, 3D vortex lifting law`
+and moments :math:`\vec{g}_{f,\textrm{aero},n}` :eq:`section moment` for the
+:math:`N` foil sections.
+
+.. math::
+   :label: canopy weight
+
+   \vec{f}_{f,\textrm{weight}} = m_p \vec{g}
+
+.. math::
+   :label: canopy aerodynamics aggregate
+
+   \vec{f}_{f,\textrm{aero}} = \sum_{n=1}^{N} \vec{f}_{f,\textrm{aero},n}
+
+.. math::
+   :label: canopy moment
+
+   \vec{g}_{f/R} =
+     \sum_{n=1}^{N} \left( \vec{r}_{CP_n/R} \times \vec{f}_{f,\textrm{aero},n} \right)
+     + \sum_{n=1}^{N} \vec{g}_{f,\textrm{aero},n}
+     + \vec{r}_{S/R} \times \vec{f}_{f,\textrm{weight}}
+
+
+Parameter summary
+-----------------
+
+In addition to the design curves that define the idealized
+:doc:`foil_geometry`, the physical canopy model requires additional
+information:
+
+.. math::
+   :label: canopy parameters
+
+   \begin{aligned}
+     \rho_u \qquad & \textrm{Areal density of the upper surface material} \\
+     \rho_r \qquad & \textrm{Areal density of the internal rib material} \\
+     \rho_l \qquad & \textrm{Areal density of the lower surface material} \\
+     N_\textrm{cells} \qquad & \textrm{Number of internal cells} \\
+     C_{D,\textrm{intakes}} \qquad & \textrm{Drag coefficient due to air intakes} \\
+     C_{D,\textrm{surface}} \qquad & \textrm{Drag coefficient due to surface characterstics} \\
+   \end{aligned}
 
 
 Suspension lines
@@ -445,14 +505,6 @@ use simple approximations that do not depend on an explicit line geometry.
    * Spanwise connections (only considers the central A and C connections since
      the riser only moves in the xz-plane)
 
-
-Inertia
--------
-
-This simplistic model assumes the inertia of the lines is negligible compared
-to that of the canopy; in particular, inaccuracies in the simplified canopy
-inertia are more significant than the line inertia, so this model simply
-defines the translational and rotation inertia as zero.
 
 
 Controls
@@ -525,6 +577,7 @@ a quartic that is symmetric about :math:`p = 0.5` with a peak magnitude of
 .. FIXME: compress the vertical scale of quartic.svg
 
 .. figure:: figures/paraglider/geometry/quartic.svg
+   :scale: 90%
 
    Truncated quartic distribution
 
@@ -591,6 +644,13 @@ distances can be used to compute each section's *airfoil index*
      where a section's delta_d actually decreases?
 
    * For an example using the quartic model, see :ref:`demonstration:Brakes`.
+
+   * This parameter is a convenient simplification: although the brake lines
+     don't have a true "maximum length" (you can always "take a wrap"), they
+     have an effective maximum length. Defining a maximum length allows
+     simulations to use intuitive proportional controls instead of querying the
+     model to determine the maximum lengths. The tradeoff is that you can never
+     exceed this hard limit, but who cares?
 
 
 Accelerator
@@ -732,6 +792,10 @@ central chord :math:`c_0` of the wing, is then:
 Where :math:`{RM}_x` was negated since the wing :math:`x`-axis is positive
 forward.
 
+.. FIXME: it's confusing that I mix RMx being positive for the derivation but
+   negative for the wing. I've drawn the x-axis positive "forwards" in the
+   diagram, but :eq:`accelerator_geometry_line_lengths` has it positive.
+
 .. FIXME: discussion
 
    * This model assumes the accelerator does not change the arc or profiles.
@@ -744,8 +808,17 @@ forward.
      center of mass impacts glider trim and stability.
 
 
-Aerodynamics
-------------
+Inertia
+-------
+
+This simplistic model assumes the inertia of the lines is negligible compared
+to that of the canopy; in particular, inaccuracies in the simplified canopy
+inertia are more significant than the line inertia, so this model simply
+defines the translational and rotation inertia as zero.
+
+
+Resultant force
+---------------
 
 Although the lines are nearly invisible compared to the rest of the wing, they
 contribute a significant amount of aerodynamic drag. Because the total system
@@ -773,18 +846,74 @@ as in :cite:`kulhanek2019IdentificationDegradationAerodynamic` or
 :cite:`babinsky1999AerodynamicPerformanceParagliders`:
 
 .. math::
-   :label: line drag
+   :label: suspension lines total length
 
-   \vec{f}_{d,\textrm{lines}} =
+   S_l = \kappa_L \kappa_d
+
+.. math:: :label: suspension lines aerodynamics, individual
+
+   \vec{f}_{l,\textrm{aero},n} =
      \frac{1}{2}
      \rho_\textrm{air}
-     \norm{\vec{v}_{W/L}}^2
-     S_\textrm{lines}
-     C_{d,\textrm{lines}}
-     \hat{\vec{v}}_{W/L}
+     \norm{\vec{v}_{W/L_n}}^2
+     S_l
+     C_{d,l,n}
+     \hat{\vec{v}}_{W/L_n}
+
+.. math:: :label: suspension lines aerodynamics, aggregate
+
+   \vec{f}_{l,\textrm{aero}} = \frac{1}{N} \sum_{n=1}^{N} \vec{f}_{l,\textrm{aero},n}
+
+.. math::
+   :label: suspension lines moment
+
+   \vec{g}_{l/R} =
+     \frac{1}{N}
+     \sum_{n=1}^{N}
+     \vec{r}_{CP_n/R} \times \vec{f}_{l,\textrm{aero},n}
 
 
-.. Examples of exact values are provided in :doc:`demonstration`
+.. FIXME: I'm negelecting the weight of the lines
+
+
+Parameter summary
+-----------------
+
+For the harness position:
+
+.. math::
+
+   \begin{aligned}
+     \kappa_A \qquad & \textrm{Chord ratio to the A lines} \\
+     \kappa_C \qquad & \textrm{Chord ratio to the C lines} \\
+     \kappa_x \qquad & \textrm{Chord ratio to the } x\textrm{-coordinate of the riser midpoint} \\
+     \kappa_z \qquad & \textrm{Chord ratio to the } z\textrm{-coordinate of the riser midpoint} \\
+     \kappa_a \qquad & \textrm{Accelerator line length} \\
+   \end{aligned}
+
+For the brakes:
+
+.. math::
+
+   \begin{aligned}
+     s_{\textrm{start},0}, s_{\textrm{start},1} \qquad
+       & \textrm{Section indices where deflections begin for } \delta_b \in \{0, 1\} \\
+     s_{\textrm{stop},0}, s_{\textrm{stop},1} \qquad
+       & \textrm{Section indices where deflections end for } \delta_b \in \{0, 1\} \\
+     \kappa_b \qquad & \textrm{Maximum trailing edge deflection distance} \\
+   \end{aligned}
+
+For the aerodynamics:
+
+.. math::
+
+   \begin{aligned}
+     \kappa_L \qquad & \textrm{Total line length} \\
+     \kappa_d \qquad & \textrm{Average line diameter} \\
+     CP_n \qquad & \textrm{Lumped line point} \ n \\
+     \vec{r}_{CP_n/R} \qquad & \textrm{Position of lumped point} n \\
+     C_{d,l,} \qquad & \textrm{Line drag coefficient for control point} \ n \\
+   \end{aligned}
 
 
 Harness
@@ -814,6 +943,37 @@ of the harness. The harness, pilot, and gear are collectively referred to as
 the *payload*.
 
 
+Controls
+--------
+
+Paraglider harnesses allow pilots to shift their weight left and right, causing
+an imbalanced load on each semispan. (For a real wing this maneuver also causes
+a vertical shearing stress along the center of the foil, but due to the rigid
+body assumption of the canopy model this deformation will be neglected.) The
+weight imbalance causes the canopy to roll towards the shifted mass, resulting
+in a gentle turn in the desired direction. Although the turn rate is less than
+can be produced by the brakes, this maneuver causes less drag and is preferred
+(when suitable) for its aerodynamic efficiency.
+
+The movement of the pilot can be arguably described as occurring inside the
+volume of the harness, so *weight shift* control can be modeled as
+a displacement of the payload center of mass :math:`P`. Given that the pilot
+can only shift a limited distance :math:`\kappa_w` in either direction,
+a natural choice of control input is :math:`-1 \le \delta_w \le 1`. With the
+harness initially centered in the canopy :math:`xz`-plane, the displacement due
+to weight shift control is :math:`\Delta y = \delta_w \kappa_w`. The
+displacement of the payload center of mass produces a moment on the risers that
+rolls the wing and induces the turn.
+
+Defining the riser midpoint :math:`RM` as the origin the harness-local
+coordinate system, the position of the displaced center of mass is then:
+
+.. math::
+   :label: payload center of mass
+
+   \vec{r}_{P/RM} = \bar{\vec{r}}_{P/RM} \, + \left< 0, \delta_w \kappa_w, 0 \right>
+
+
 Inertia
 -------
 
@@ -839,31 +999,8 @@ where
    J_{xx} = J_{yy} = J_{zz} = \frac{2}{5} m_p r_p^2 = \frac{2}{5} \frac{m_p S_p}{\pi}
 
 
-Controls
---------
-
-Harnesses allow a pilot to shift their weight left and right, causing an
-imbalanced load on each semispan. (For a real wing this maneuver also causes
-a vertical shearing stress along the center of the foil, but due to the rigid
-body assumption of the canopy model this deformation will be neglected.) The
-weight imbalance causes the canopy to roll towards the shifted mass, resulting
-in a gentle turn in the desired direction. Although the turn rate is less than
-can be produced by the brakes, this maneuver causes less drag and is preferred
-(when suitable) for its aerodynamic efficiency.
-
-The movement of the pilot can be arguably described as occurring inside the
-volume of the harness, so, for this spherical model, *weight shift* control
-can be modeled as a displacement of the payload center of mass :math:`P`.
-Given that the pilot can only shift a limited distance :math:`\kappa_w` in
-either direction, a natural choice of control input is :math:`-1 \le \delta_w
-\le 1`. With the harness initially centered in the canopy :math:`xz`-plane,
-the displacement due to weight shift control is :math:`\Delta y = \delta_w
-\kappa_w`. The displacement of the payload center of mass produces a moment on
-the risers that rolls the wing and induces the turn.
-
-
-Aerodynamics
-------------
+Resultant force
+---------------
 
 Harness drag coefficients were studied experimentally in
 :cite:`virgilio2004StudyAerodynamicEfficiency`. The author measured several
@@ -874,16 +1011,24 @@ sophisticated approach the coefficient can be adjusted to account
 :cite:`kulhanek2019IdentificationDegradationAerodynamic`, but this model
 simply treats the drag coefficient as a constant.
 
-.. math::
-   :label: harness drag
 
-   \vec{f}_p =
-     \frac{1}{2}
-     \rho_\textrm{air}
-     \norm{\vec{v}_{W/P}}^2
-     S_p
-     C_{D,p}
-     \hat{\vec{v}}_{W/P}
+.. math::
+   :label: payload weight
+
+   \vec{f}_{p,\textrm{weight}} = m_p \vec{g}
+
+.. math::
+   :label: payload aerodynamics
+
+   \vec{f}_{p,\textrm{aero}} =
+     \frac{1}{2} \rho_\textrm{air} \norm{\vec{v}_{W/P}}^2 S_p C_{D,p} \hat{\vec{v}}_{W/P}
+
+.. math::
+   :label: payload moment
+
+   \vec{g}_{p/R} =
+     \vec{r}_{CP/R} \times \vec{f}_{p,\textrm{aero}}
+     + \vec{r}_{P/R} \times \vec{f}_{p,\textrm{weight}}
 
 
 Note that the spherical nature of the model implies isotropic drag. Although
@@ -895,3 +1040,17 @@ accuracy). This assumption also has the downside that it will never produce an
 aerodynamic moment about the payload center of mass, but in the absence of
 experimental data on the magnitude of the missing moment, this model continues
 to ignore it.
+
+
+Parameter summary
+-----------------
+
+.. math::
+
+   \begin{aligned}
+     m_p \qquad & \textrm{Total payload mass} \\
+     \bar{\vec{r}}_{P/RM} \qquad & \textrm{Payload center of mass default position} \\
+     \kappa_w \qquad & \textrm{Maximum weight shift distance} \\
+     S_p \qquad & \textrm{Projected payload area} \\
+     C_{d,p} \qquad & \textrm{Payload drag coefficient} \\
+   \end{aligned}
