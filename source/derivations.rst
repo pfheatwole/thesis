@@ -3,80 +3,146 @@ Derivations
 ***********
 
 
-.. Parametric design curves
-   ========================
+Parametric design curves
+========================
 
-   [[Not sure where to put this. I'm using these in the examples, and again in my
-   "case study", wherever that ends up. **How important is it that I present the
-   mathematical versions?** For now I think I'll present the basic ideas, but
-   refer to the code for the complete implementation.]]
-
-   [[The `elliptical_chord` and `elliptical_arc` are helper functions that
-   generate an `EllipticalArc` object. Should I focus on deriving the
-   `EllipticalArc`?]]
+[[Put these here to avoid cluttering the example foils and ``demonstration``.
+FIXME: reference my choice of section index in ref:`foil_geometry:Simplified
+model`.]]
 
 
-   Elliptical chord
-   ----------------
+Elliptical chord
+----------------
 
-   An elliptical arc can be describe with three parameters: A, B, and the
-   constant. Alternatively, letting the constant be `1` you can think of these
-   three parameters as the normalized major axis, normalized minor axis, and
-   scale.
+A :doc:`foil_geometry` requires a chord distribution :math:`c(s)`. For
+parafoils, the chords lengths are most commonly defined by a truncated
+elliptical function of section index, in which case the distribution is
+a function of two design parameters. The typical choices are either the root
+and wingtip chord lengths, or the root length and a taper ratio. Choosing the
+root and wingtip chord lengths, a truncated elliptical function over the
+section index :math:`-1 \le s \le 1` is then:
 
-   The parametric model requires `c(s)`, the chord length as a function of
-   section index. If the chord distribution is an elliptical function of section
-   index, then the major axis is `s`, which ranges from -1 to +1. That leaves two
-   parameters for the designer.
+.. math::
+   :label: elliptical chord
 
-   There are two typical options: `<root, tip>` and `<root, taper>`. My
-   implementation offers `c = f(s; root, tip)`, where `root` and `tip` are the
-   design parameters.
+   \begin{aligned}
+     a &= \frac{1}{\sqrt{1 - \left(\frac{c_\textrm{tip}}{c_\textrm{root}}\right)^2}} \\
+     b &= c_\textrm{root} \\
+     c(s) &= b \sqrt{1 - \left( \frac{s}{a} \right)^2}
+   \end{aligned}
 
-
-   Elliptical arc
-   --------------
-
-   The arc of a wing is the vector-valued function of `<y, z>` coordinates. The
-   majority of parafoil arcs can be described with an elliptical function.
-
-   Similar to the elliptical chord, an elliptical arc can be defined as
-   a function three parameters. Again, the function parameter is `s` with a set
-   domain of -1 to +1, leaving two design parameters.
-
-   One parametrization is to pair the arc anhedral (the angle from the wing root
-   to the wing tip) with the section roll angle at the wing tip. Assuming arc
-   anhedral, this choice constrains `2 * anhedral <= tip_roll < 90`.
-
-   My implementation offers this as `yz = elliptical_arc = f(s; anhedral,
-   tip_roll)`, where `anhedral` and `tip_roll` are the design parameters. If
-   `tip_roll` is unspecified a circular arc is assumed (so `tip_roll
-   = 2 * anhedral`).
+Refer to :external+glidersim:py:class:`EllipticalChord
+<pfh.glidersim.foil_layout.EllipticalChord>` in ``glidersim`` for an
+implementation.
 
 
-   Polynomial torsion
-   ------------------
+Elliptical arc
+--------------
 
-   The most common spanwise geometric torsion is a explicit torsion angles at
-   specific section indices with linear interpolation between sections.
+In this paper the *arc* of a parafoil is the vector-valued function of
+:math:`\left< y, z \right>` coordinates that position the sections. For
+parafoils, the arc is typically defined by an elliptical function.
 
-   For parafoils, it can be more natural to use non-linear curves. A generalized
-   interpolator can use a polynomial:
+.. Explain arc anhedral and section roll. FIXME: draw a diagram
 
-   .. math::
+A centered elliptical curve can be defined as a function of four parameters,
+but the symmetry of the wing reduces that to three free design parameters, and
+normalizing the arc length reduces it to just two. There are several possible
+parametrizations (such as those in FIXME:`benedetti`), but an intuitive choice
+is the [[mean anhedral angle :math:`\Gamma_\textrm{tip}`]] and the [[section
+roll angle :math:`\phi_\textrm{tip}`]] of the wing tips. Using the parameters
+to define an ellipse that is proportional to the desired :math:`yz`-curve
+produces:
 
-      \theta(s) =
-        \begin{cases}
-          0 & s < s_{start} \\
-          T p^\beta & s \ge s_{start}
-        \end{cases}
+.. math::
 
-   Where :math:`T` is the maximum torsion at the wingtip, :math:`p = \frac{\lvert
-   s \rvert - s_{start}}{1 - s_{start}}`,  the fraction from :math:`s_{start}` to
-   the wingtip, and :math:`0 \le s_{start} < 1`.
+   \begin{aligned}
+     k_1        &= 1 - \frac{\tan(\Gamma_\textrm{tip})}{\tan(\phi_\textrm{tip})} \\
+     k_2        &= 1 - \frac{2 \tan(\Gamma_\textrm{tip})}{\tan(\phi_\textrm{tip})} \\
+     A          &= \frac{k_1}{\sqrt{k_2}} \\
+     B          &= \frac{k_1}{k_2} \tan(\Gamma_\textrm{tip}) \\
+     \vec{f}(t) &= \left< A \cos(t), B \sin(t) \right>
+   \end{aligned}
 
-   So :math:`\beta = 1` is linear interpolation from :math:`s_{start} \le \lvert
-   s \rvert \le 1`, :math:`\beta = 2` is quadratic, etc.
+This design requires that :math:`\phi_\textrm{tip} > 2 \Gamma_\textrm{tip}` (so
+the wing must be wider than it is tall and the wing tip roll cannot exceed 90°)
+and is valid over :math:`t_{min} \le t \le \pi - t_{min}`, where :math:`t_{min}
+= \arccos \left( \frac{1}{A} \right)`. However, although the shape is
+proportional to the desired curve, it is not directly usable by the
+:doc:`foil_geometry`. It needs two changes:
+
+1. Make the arc a function of the chosen section index :math:`s`
+
+2. Scale the arc to a total curve length of 2 (to make it easy to scale by
+   :math:`b_\textrm{flat}`)
+
+Both can be achieved by normalizing the ellipse. First, scale the axes to
+produce a new semi-ellipse with a total curve length of 1:
+
+.. math::
+
+   \begin{aligned}
+     L(t)             &= \int_{\frac{\pi}{2}}^{t} \norm{\vec{f}(t)} dt \\
+     k_3              &= L(t_{min}) \\
+     \bar{\vec{f}}(t) &= \left< \frac{A}{k_3} \cos(t), \frac{B}{k_3} \sin(t) \right> \\
+   \end{aligned}
+
+The fact that the section index :math:`s` is defined as the linear distance
+along the curve enables a convenient conversion over :math:`\frac{\pi}{2} \le
+t \le t_{min}` and :math:`0 \le s \le 1`:
+
+.. math::
+
+   \begin{aligned}
+     \bar{L}(t) &= \int_{\frac{\pi}{2}}^{t} \norm{\bar{\vec{f}}(t)} dt = s(t) \\
+     t(s)       &= s^{-1}(t)
+   \end{aligned}
+
+Thus the complete parametric function for the :math:`yz`-curve of the arc is
+thus :math:`\left< y, z \right>(s) = \bar{\vec{f}}(t(\left|s\right|))`. The
+integrals and inverse functions are not available analytically, but are trivial
+to compute numerically. Refer to :external+glidersim:py:class:`EllipticalArc
+<pfh.glidersim.foil_layout.EllipticalArc>` in ``glidersim`` for an
+implementation.
+
+.. Bonus: you can calculate `\Gamma_\textrm{tip}` directly if you know the
+   position coordinates of the wingtip: `\Gamma = arctan(z/y)`
+
+
+Polynomial torsion
+------------------
+
+Like most wings, parafoils use section-relative pitch :math:`\theta(s)`
+(conventionally referred to as *geometric torsion*) to control wing behavior.
+The exact distribution of geometric torsion along a wing can be difficult to
+measure, but they are frequently described using simple polynomials or
+piecewise-linear functions. For idealized models of nonlinear geometries such
+as those developed here, a piecewise-polynomial function is adequate.
+
+Assuming a symmetric wing, define three parameters:
+
+* :math:`T`: the maximum torsion (in radians) at the wingtips
+
+* :math:`s_{start}`: the section index where the torsion begins (where :math:`0
+  \le s_{start} < 1`)
+
+* :math:`\beta`: the degree of the polynomial (for example, :math:`\beta = 1`
+  is linear, :math:`\beta = 2` is quadratic, etc.)
+
+.. math::
+
+   \begin{aligned}
+     p(s) &= \frac{|s| - s_{start}}{1 - s_{start}} \\
+     \theta(s) & =
+       \begin{cases}
+         0 & |s| < s_{start} \\
+         T p^\beta & |s| \ge s_{start}
+       \end{cases}
+   \end{aligned}
+
+Refer to :external+glidersim:py:class:`PolynomialTorsion
+<pfh.glidersim.foil_layout.PolynomialTorsion>` in ``glidersim`` for an
+implementation.
 
 
 Area and Volume of a Mesh
@@ -265,7 +331,6 @@ be computed directly from the covariance matrix:
 
    \mat{J}_{v/O} = \mathrm{trace} \left( \mat{\Sigma}_v \right) \vec{I}_3 - \mat{\Sigma}_v
 
-
 .. FIXME: make a table showing the six variables and their names. Well, nine
    variables? There are upper and lower surfaces.
 
@@ -297,10 +362,11 @@ are:
 
 Some notes about Barrows' development:
 
-* It assumes the foil is symmetric about the xz-plane (left-right symmetry)
-  and about the yz-plane (fore-aft symmetry).
+* It assumes the foil is symmetric about the :math:`xz`-plane (left-right
+  symmetry) and about the :math:`yz`-plane (fore-aft symmetry).
 
-* It assumes :math:`R` is a point in the xz-plane
+* It requires that the dynamics reference point :math:`R` lies in the
+  :math:`xz`-plane
 
 * It assumes the canopy arc is circular.
 
@@ -488,6 +554,9 @@ Angular momentum of the apparent mass about :math:`R`:
      \right) \cdot \mat{M}_a \cdot \vec{v}_{R/e}
      + \mat{J}_{a/R} \cdot \omega_{b/e}
 
+Refer to :external+glidersim:py:class:`ParagliderWing
+<pfh.glidersim.paraglider_wing.ParagliderWing>` in ``glidersim`` for an
+implementation.
 
 .. Notes to self
 
@@ -615,8 +684,8 @@ in terms of derivatives in the body frame :math:`\mathcal{F}_b`:
    \end{aligned}
 
 Relate the derivatives of momentum with respect to the inertial frame to the
-net force on the body :math:`f_b` and the net moment on the body about the
-reference point :math:`g_{b/RM}`:
+net force on the body :math:`\vec{f}_b` and the net moment on the body about
+the reference point :math:`\vec{g}_{b/RM}`:
 
 .. For angular momentum, see Stevens Eq:1.7-1 (pg35)
 
