@@ -33,7 +33,7 @@ Notation and Symbols
      - a matrix exponential, where :math:`z` is a scalar
    * - :math:`\left| x \right|`
      - absolute value of a scalar
-   * - :math:`\left\| \vec{x} \right\|`
+   * - :math:`\norm{\vec{x}}`
      - Euclidean norm of a vector
    * - :math:`\left| \mat{X} \right|`
      - determinant of a matrix

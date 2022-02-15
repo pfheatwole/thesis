@@ -72,6 +72,7 @@ mathjax3_config = {
             "vec": [r"\mathbf{#1}", 1],
             "mat": [r"\mathbf{#1}", 1],
             "crossmat": [r"\left[{#1}\right]^{\times}", 1],
+            "norm": [r"\left\|{#1}\right\|", 1],
         },
         "packages": {"[+]": ["cancel"]},
     },
@@ -156,6 +157,7 @@ EXTRA_PREAMBLE = r"""
 \renewcommand{\vec}[1]{\bm{#1}}
 \newcommand{\mat}[1]{\bm{#1}}
 \newcommand{\crossmat}[1]{\left[#1\right]^{\times}}
+\newcommand{\norm}[1]{\left\|#1\right\|}
 """
 
 latex_engine = "xelatex"  # pdflatex has poor unicode support

@@ -117,11 +117,11 @@ two legs of the triangle:
    a_n =
       \frac{1}{2}
       \rho
-      \left\|
-         \left( \vec{r}_{2,n} - \vec{r}_{1,n} \right)
-         \times
-         \left( \vec{r}_{3,n} - \vec{r}_{2,n} \right)
-      \right\|
+      \norm{
+        \left( \vec{r}_{2,n} - \vec{r}_{1,n} \right)
+        \times
+        \left( \vec{r}_{3,n} - \vec{r}_{2,n} \right)
+      }
 
 The total area of the surface is the sum of the triangle areas:
 

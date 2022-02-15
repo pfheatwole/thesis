@@ -102,10 +102,10 @@ lifting law` and one using the local the section lift coefficients
 .. math::
    :label: differential lifting force
 
-   \left\| \vec{\mathrm{d}F}_i \right\| =
+   \norm{\vec{\mathrm{d}F}_i} =
      \frac{1}{2}
      \rho
-     \left\| \vec{V}_i \right\| ^2
+     \norm{\vec{V}_i}^2
      C_{L_i} \left( \alpha_i, \delta_i \right)
      A_i
 
@@ -158,8 +158,8 @@ vortex :math:`i` is given by:
    :label: horseshoe vortex strength optimization target
 
    f_i \left( \Gamma_i \right) =
-      2 \Gamma_i \left\| \vec{W}_i \right\|
-      - \left\| \vec{V}_i \right\|^2 A_i C_{L,i} \left(\alpha_i, \delta_i \right)
+      2 \Gamma_i \norm{\vec{W}_i}
+      - \norm{\vec{V}_i}^2 A_i C_{L,i} \left(\alpha_i, \delta_i \right)
 
 where
 
@@ -179,10 +179,10 @@ Phillips suggests gradient descent using the system Jacobian :math:`J_{ij}
 
    \begin{aligned}
    J_{ij} =\;
-      &\delta_{ij}\, 2 \left\| \vec{W}_i \right\|
-      + 2\, \Gamma_i \frac {\vec{W}_i} {\left\| \vec{W}_i \right\|}
+      &\delta_{ij}\, 2 \norm{\vec{W}_i}
+      + 2\, \Gamma_i \frac {\vec{W}_i} {\norm{\vec{W}_i}}
           \cdot \left( \vec{v}_{ji} \times \mathrm{d} \vec{l}_i \right)\\
-      &- \left\| \vec{V}_i \right\|^2 A_i
+      &- \norm{\vec{V}_i}^2 A_i
          \frac
             {\partial C_{L,i}}
             {\partial \alpha_i}

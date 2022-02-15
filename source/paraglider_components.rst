@@ -627,8 +627,8 @@ midpoint :math:`RM`:
 .. math::
 
    \begin{aligned}
-     \overline{A} &\defas \left\| \vec{r}_{A/RM} \right\|\\
-     \overline{C} &\defas \left\| \vec{r}_{C/RM} \right\|\\
+     \overline{A} &\defas \norm{\vec{r}_{A/RM}} \\
+     \overline{C} &\defas \norm{\vec{r}_{C/RM}}
    \end{aligned}
 
 The default lengths of the lines are defined by two pairs of design
@@ -778,7 +778,7 @@ as in :cite:`kulhanek2019IdentificationDegradationAerodynamic` or
    \vec{f}_{d,\textrm{lines}} =
      \frac{1}{2}
      \rho_\textrm{air}
-     \left\| \vec{v}_{W/L} \right\|^2
+     \norm{\vec{v}_{W/L}}^2
      S_\textrm{lines}
      C_{d,\textrm{lines}}
      \hat{\vec{v}}_{W/L}
@@ -880,7 +880,7 @@ simply treats the drag coefficient as a constant.
    \vec{f}_p =
      \frac{1}{2}
      \rho_\textrm{air}
-     \left\| \vec{v}_{W/P} \right\|^2
+     \norm{\vec{v}_{W/P}}^2
      S_p
      C_{D,p}
      \hat{\vec{v}}_{W/P}
