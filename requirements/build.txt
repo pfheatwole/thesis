@@ -19,7 +19,7 @@ docutils==0.17.1
     #   pybtex-docutils
     #   sphinx
     #   sphinxcontrib-bibtex
-furo==2022.2.14.1
+furo==2022.2.23
     # via -r build.in
 idna==3.3
     # via requests
