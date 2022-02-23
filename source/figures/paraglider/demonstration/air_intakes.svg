@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="59.541519pt"
+   version="1.1"
+   viewBox="0 0 325.48822 59.541518"
+   width="325.48822pt"
+   id="svg206"
+   sodipodi:docname="air_intakes.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview208"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.8945312"
+     inkscape:cx="86.828868"
+     inkscape:cy="15.571134"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg206" />
+  <metadata
+     id="metadata2">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2021-08-24T09:56:33.966909</dc:date>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Matplotlib v3.4.3, https://matplotlib.org/</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <style
+       type="text/css"
+       id="style4">*{stroke-linecap:butt;stroke-linejoin:round;}</style>
+  </defs>
+  <path
+     clip-path="url(#pff421ac0fb)"
+     d="m 391.02809,191.18511 c 6.33255,-2.66195 9.53832,-10.43991 5.9958,-16.55631 -7.78762,-13.71426 -23.56217,-20.1204 -38.00482,-24.35235 -30.05826,-7.66047 -61.45751,-5.16995 -92.04857,-2.95806 -61.8827,5.66445 -123.13891,17.02449 -183.628463,31.07577 -3.168963,0.75715 -6.34427,1.48817 -9.50926,2.26176"
+     style="fill:none;stroke:#000000;stroke-width:0.75;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none"
+     id="path181"
+     transform="translate(-73.379464,-144.71695)" />
+  <path
+     clip-path="url(#pff421ac0fb)"
+     d="m 375.2332,196.34295 c -30.66668,5.62439 -61.94866,7.66208 -93.10138,7.53495 -58.19004,-0.83774 -116.10913,-7.96325 -173.52041,-17.0983 -11.62099,-1.87659 -23.21024,-3.94761 -34.778683,-6.12369"
+     style="fill:none;stroke:#000000;stroke-width:0.75;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none"
+     id="path184"
+     transform="translate(-73.379464,-144.71695)" />
+  <defs
+     id="defs204">
+    <clipPath
+       id="pff421ac0fb">
+      <rect
+         height="64.657288"
+         width="357.12"
+         x="57.599998"
+         y="142.19936"
+         id="rect201" />
+    </clipPath>
+  </defs>
+</svg>
