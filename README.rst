@@ -33,13 +33,13 @@ Unfortunately, flight records do not include a dynamics model of the glider
 that generated the data (in fact, they frequently omit any description of the
 glider at all), so the dynamics model itself is uncertain. Thus, performing
 flight reconstruction over a large number of flight tracks requires more than
-single dynamics model: it needs an entire distribution of models. Developing
+a single dynamics model: it needs an entire distribution of models. Developing
 models is time consuming and requires extensive construction details that are
 not readily available, so the new goal was to create a tool that can generate
 paraglider models from publicly available information. Specifically, I wanted
 a dynamics model that is parametrized by the most readily available wing data:
-user manuals, pictures, and physical measurements. This paper develops such a
-parametric model.
+user manuals, pictures, and physical measurements. This paper develops such
+a parametric model.
 
 
 Building
