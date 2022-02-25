@@ -5,7 +5,7 @@ import pfh.glidersim as gsim
 from pfh.glidersim.extras import simulation
 
 
-# ---------------------------------------------------------------------------
+###############################################################################
 # Scenario-building utility functions
 
 
@@ -248,7 +248,7 @@ def lateral_gust(delta_a=0, delta_b=0):
     return inputs, T
 
 
-# ---------------------------------------------------------------------------
+###############################################################################
 # Model and simulation utlity functions
 
 
@@ -257,59 +257,185 @@ def build_paragliders(
     kappa_RM=(-100, 0, -10),  # Coefficients for Theta_p2b
     kappa_RM_dot=(-50, -5, -50),  # Coefficients for dot{Theta_p2b}
 ):
+    """
+    Build a set of glider models.
 
-    """Build a set of glider models from a common base configuration."""
-    wing = gsim.extras.wings.niviuk_hook3(size=23, verbose=False)
-    harness = gsim.paraglider_harness.Spherical(
+    The size 23 uses a normal "upright" harness, the 25 and 27 use pod-style
+    harnesses (to match specs from flight tests by thermik.at and Parapente).
+    """
+
+    ###########################################################################
+    # Build the wings and appropriate payloads
+
+    # size=23 using an upright harness like mine
+    wing23 = gsim.extras.wings.niviuk_hook3(size=23, verbose=True)
+    harness23 = gsim.paraglider_harness.Spherical(
         mass=75,
         z_riser=0.5,
         S=0.55,
         CD=0.8,
-        kappa_w=0.1,
+        kappa_w=0.15,
     )
+
+    # size=25 using a pod harness as in `Hook 3 Parapente Mag 148.pdf`
+    wing25 = gsim.extras.wings.niviuk_hook3(size=25, verbose=True)
+    harness25 = gsim.paraglider_harness.Spherical(
+        mass=94,
+        z_riser=0.5,
+        S=0.65,
+        CD=0.4,
+        kappa_w=0.15,
+    )
+
+    # size=27 using a pod harness as in `hook_3_perfils.pdf`
+    wing27 = gsim.extras.wings.niviuk_hook3(size=27, verbose=True)
+    harness27 = gsim.paraglider_harness.Spherical(
+        mass=115,
+        z_riser=0.5,
+        S=0.70,
+        CD=0.4,
+        kappa_w=0.15,
+    )
+
+    ###########################################################################
+    # Build the paraglider system models
 
     # 6 DoF models
-    paraglider_6a = gsim.paraglider.Paraglider6a(
-        wing,
-        harness,
+    paraglider6a_23 = gsim.paraglider.ParagliderSystemDynamics6a(
+        wing23,
+        harness23,
         use_apparent_mass=use_apparent_mass,
     )
-    paraglider_6b = gsim.paraglider.Paraglider6b(wing, harness)  # No apparent mass
-    paraglider_6c = gsim.paraglider.Paraglider6c(wing, harness)  # No apparent mass
+    paraglider6b_23 = gsim.paraglider.ParagliderSystemDynamics6b(
+        wing23,
+        harness23,
+        # No apparent mass
+    )
+    paraglider6c_23 = gsim.paraglider.ParagliderSystemDynamics6c(
+        wing23,
+        harness23,
+        # No apparent mass
+    )
 
-    # Coefficients for the spring-damper connection (9DoF models)
-    # FIXME: naming?
+    paraglider6a_25 = gsim.paraglider.ParagliderSystemDynamics6a(
+        wing25,
+        harness25,
+        use_apparent_mass=use_apparent_mass,
+    )
+    paraglider6b_25 = gsim.paraglider.ParagliderSystemDynamics6b(
+        wing25,
+        harness25,
+        # No apparent mass
+    )
+    paraglider6c_25 = gsim.paraglider.ParagliderSystemDynamics6c(
+        wing25,
+        harness25,
+        # No apparent mass
+    )
+
+    paraglider6a_27 = gsim.paraglider.ParagliderSystemDynamics6a(
+        wing27,
+        harness27,
+        use_apparent_mass=use_apparent_mass,
+    )
+    paraglider6b_27 = gsim.paraglider.ParagliderSystemDynamics6b(
+        wing27,
+        harness27,
+        # No apparent mass
+    )
+    paraglider6c_27 = gsim.paraglider.ParagliderSystemDynamics6c(
+        wing27,
+        harness27,
+        # No apparent mass
+    )
 
     # 9 DoF models
-    paraglider_9a = gsim.paraglider.Paraglider9a(
-        wing,
-        harness,
+    paraglider9a_23 = gsim.paraglider.ParagliderSystemDynamics9a(
+        wing23,
+        harness23,
         kappa_RM=kappa_RM,
         kappa_RM_dot=kappa_RM_dot,
         use_apparent_mass=use_apparent_mass,
     )
-    paraglider_9b = gsim.paraglider.Paraglider9b(
-        wing,
-        harness,
+    paraglider9a_25 = gsim.paraglider.ParagliderSystemDynamics9a(
+        wing25,
+        harness25,
+        kappa_RM=kappa_RM,
+        kappa_RM_dot=kappa_RM_dot,
+        use_apparent_mass=use_apparent_mass,
+    )
+    paraglider9a_27 = gsim.paraglider.ParagliderSystemDynamics9a(
+        wing27,
+        harness27,
+        kappa_RM=kappa_RM,
+        kappa_RM_dot=kappa_RM_dot,
+        use_apparent_mass=use_apparent_mass,
+    )
+
+    paraglider9b_23 = gsim.paraglider.ParagliderSystemDynamics9b(
+        wing23,
+        harness23,
         kappa_RM=kappa_RM,
         kappa_RM_dot=kappa_RM_dot,
         # No apparent mass
     )
-    paraglider_9c = gsim.paraglider.Paraglider9c(
-        wing,
-        harness,
+    paraglider9b_25 = gsim.paraglider.ParagliderSystemDynamics9b(
+        wing25,
+        harness25,
+        kappa_RM=kappa_RM,
+        kappa_RM_dot=kappa_RM_dot,
+        # No apparent mass
+    )
+    paraglider9b_27 = gsim.paraglider.ParagliderSystemDynamics9b(
+        wing27,
+        harness27,
+        kappa_RM=kappa_RM,
+        kappa_RM_dot=kappa_RM_dot,
+        # No apparent mass
+    )
+
+    paraglider9c_23 = gsim.paraglider.ParagliderSystemDynamics9c(
+        wing23,
+        harness23,
+        kappa_RM=kappa_RM,
+        kappa_RM_dot=kappa_RM_dot,
+        use_apparent_mass=use_apparent_mass,
+    )
+    paraglider9c_25 = gsim.paraglider.ParagliderSystemDynamics9c(
+        wing25,
+        harness25,
+        kappa_RM=kappa_RM,
+        kappa_RM_dot=kappa_RM_dot,
+        use_apparent_mass=use_apparent_mass,
+    )
+    paraglider9c_27 = gsim.paraglider.ParagliderSystemDynamics9c(
+        wing27,
+        harness27,
         kappa_RM=kappa_RM,
         kappa_RM_dot=kappa_RM_dot,
         use_apparent_mass=use_apparent_mass,
     )
 
     return {
-        "6a": paraglider_6a,
-        "6b": paraglider_6b,
-        "6c": paraglider_6c,
-        "9a": paraglider_9a,
-        "9b": paraglider_9b,
-        "9c": paraglider_9c,
+        "6a_23": paraglider6a_23,
+        "6a_25": paraglider6a_25,
+        "6a_27": paraglider6a_27,
+        "6b_23": paraglider6b_23,
+        "6b_25": paraglider6b_25,
+        "6b_27": paraglider6b_27,
+        "6c_23": paraglider6c_23,
+        "6c_25": paraglider6c_25,
+        "6c_27": paraglider6c_27,
+
+        "9a_23": paraglider9a_23,
+        "9a_25": paraglider9a_25,
+        "9a_27": paraglider9a_27,
+        "9b_23": paraglider9b_23,
+        "9b_25": paraglider9b_25,
+        "9b_27": paraglider9b_27,
+        "9c_23": paraglider9c_23,
+        "9c_25": paraglider9c_25,
+        "9c_27": paraglider9c_27,
     }
 
 
