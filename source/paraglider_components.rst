@@ -2,10 +2,6 @@
    and payload), defines their inputs, and provides parametric models for the
    inertial properties and resultant forces of each component.
 
-.. FIXME: where do I define *control point*? The way I've worded tells the
-   reader to expect explicit control points, not just vague descriptions of the
-   component aerodynamics
-
 
 ****************
 Component models
@@ -36,6 +32,11 @@ relatively rigid during typical flight conditions.
 
 Canopy
 ======
+
+**FIXME: make sure to clearly explain that a canopy is an instance of a foil,
+and we're going to use the foil geometry to estimate its aerodynamics and
+inertial properties.**
+
 
 .. What is the canopy? What does it do?
 
@@ -267,6 +268,8 @@ alter the distribution of mass, but in practice the effect is negligible. For
 this project the centroids and moments of inertia for the solid mass are
 calculated once using the undeflected section profiles.
 
+.. FIXME: define the upper/lower surface extents due to air intakes?
+
 
 Air mass
 ^^^^^^^^
@@ -404,6 +407,10 @@ a discussion.
      * Assumes section coefficients are representative of entire wing segments
        (ignores inter-segment flow effects, etc)
 
+
+[[FIXME: introduce the coefficient modifiers for "surface characteristics"
+:cite:`ware1969WindtunnelInvestigationRamair` and air intakes
+:cite:`babinsky1999AerodynamicPerformanceParagliders`]]
 
 The :ref:`aerodynamics model <foil_aerodynamics:Phillips' numerical
 lifting-line>` provides the aerodynamic forces
@@ -882,6 +889,7 @@ Parameter summary
 For the harness position:
 
 .. math::
+   :label: suspension lines parameters, riser position
 
    \begin{aligned}
      \kappa_A \qquad & \textrm{Chord ratio to the A lines} \\
@@ -894,6 +902,7 @@ For the harness position:
 For the brakes:
 
 .. math::
+   :label: suspension lines parameters, brakes
 
    \begin{aligned}
      s_{\textrm{start},0}, s_{\textrm{start},1} \qquad
@@ -906,6 +915,7 @@ For the brakes:
 For the aerodynamics:
 
 .. math::
+   :label: suspension lines parameters, aerodynamics
 
    \begin{aligned}
      \kappa_L \qquad & \textrm{Total line length} \\
