@@ -11,74 +11,73 @@
 State dynamics
 **************
 
-A *flight simulator* uses an aircraft's *state dynamics* to generate a *state
-trajectory*: a record of how the *state* (position, orientation, etc) of the
-aircraft evolved over time.
+.. What is *state*? What are *state dynamics*?
 
-This chapter develops several state dynamics models suitable for paraglider
-flight simulation. For each system model, it chooses a set of *state variables*
-:math:`\vec{x}` and defines the *state dynamics* :math:`\dot{\vec{x}}` in terms
-of the *system dynamics*.
-
-
-The system dynamics defined the acceleration of the aircraft in terms of local
-reference frames traveling with the aircraft. To track the global position and
-orientation of the aircraft during a flight, its *state* must be recorded
-relative to some global reference frame. The *state dynamics* define the
-acceleration of the aircraft in that global frame, and are defined in terms of
-the system dynamics. The exact relationship depends on the choice of state
-variables, so implementing a flight simulator given a system dynamics model
-involves several steps:
+The :doc:`system_dynamics` defined the instantaneous accelerations of the
+aircraft in terms of local reference frames traveling with the aircraft. To
+record the behavior of an aircraft over time, a set of variables must be chosen
+to encode the *state* of the system relative to some global reference frame.
+The *state dynamics* — time derivatives of the state variables — encode the
+dynamic behavior of the aircraft in that global frame. A flight simulator
+integrates the state dynamics to generate a *state trajectory*: a record of how
+the state of the aircraft evolved over time.
 
 
-.. Define the state dynamics and integrate them over time to generate flight
-   trajectories
+.. Roadmap for the chapter
 
-1. Transform inputs from the global coordinate system into the local coordinate
-   system
-
-2. Choose a suitable set of state variables (including a global coordinate
-   system)
-
-3. Define the state derivatives in terms of the system derivatives
+This chapter develops state dynamics models for the paraglider system models.
+For each system model, it chooses a global coordinate system, defines a set of
+*state variables* :math:`\vec{x}` in terms of that global coordinate system,
+and defines the *state dynamics* :math:`\dot{\vec{x}}` in terms of the system
+dynamics.
 
 
-[[stuff this chapter should touch on:
+.. How are state dynamics different from system dynamics?
 
-* coordinate systems, reference frames
-* equations of motion
-* state variables, state derivatives
+[[Miscellaneous notes:]]
 
-Elaborate that the choice of variables is one of the ways that the state
-dynamics model provides the interface between the system dynamics and the
-flight simulator.]]
+* The :doc:`system_dynamics` are treated separately from the state dynamics
+  because the system behavior is independent of the representation of state.
+
+* A state dynamics model serves as the interface between the system dynamics
+  and the flight simulator.
 
 
 State variables
 ===============
 
+.. A subtlety is that a state dynamics model may choose to involve a state
+   derivative that is that is the same as a derivative calculated by the system
+   model. For example, suppose the system dynamics choose to derive its
+   equations of motion with respect to some point `R`; if the velocity of `R`
+   is be chosen as a state variable, then the state derivative will be
+   identical to the system derivative. However, it's not required that they are
+   equal. For example, a different state model might choose to encode position
+   using latitude and longitude, in which case they're different.
+
+
 .. Position
 
 To track the position of the glider, the state models must choose a reference
-point on the glider. It does not have to be the same :ref:`reference point
-<system_dynamics:Reference point>` used to calculate the system dynamics,
-but it turns out the riser midpoint :math:`RM` is also good choice for
-tracking the glider position. Because the riser midpoint is close to where
-a pilot would likely mount their flight recorder, it is likely to be
+point in the glider's local coordinate system. It does not have to be the same
+:ref:`reference point <system_dynamics:Reference point>` used to calculate the
+system dynamics, but it turns out the riser midpoint :math:`RM` is also good
+choice for tracking the glider position. Because the riser midpoint is close to
+where a pilot would likely mount their flight recorder, it is likely to be
 representative of the data in a flight track, which makes it the most
 convenient point for comparing real flight data to simulated data. Another
 advantage is that the riser midpoint is typically very close to the glider
-center of mass, which makes it easy to visualize the glider motion when
+center of mass, which makes the position data easier to understand when
 developing the models.
 
-Next, the state model must choose a coordinate system for the position.
-Typical of most GPS applications, paraglider flight records (IGC files) encode
+Next, the state model must choose a coordinate system for the position. Most
+GPS applications, including paraglider flight records (IGC files), encode
 position using the WGS-84 *geodetic datum*, which uses the geocentric
 coordinates of latitude, longitude, and altitude. However, positioning on the
-global spheroid is unnecessary for these simulations, so to avoid the
-complexity involved with angular coordinates the state models here use
-a *tangent-plane* approximation that records position as a linear displacement
-from an arbitrary origin.
+global spheroid is overkill for these simulations, so to avoid the complexity
+involved with angular coordinates the state models here use a *tangent-plane*
+(:math:`tp`) approximation (:cite:`stevens2015AircraftControlSimulation`, p.
+27) that records position as a linear displacement from an arbitrary origin.
 
 
 .. Orientation
@@ -88,9 +87,9 @@ For orientation, there are two common representations: *Euler angles* and
 but they can experience an issue known as *Gimbal lock* which prevents their
 use in situations where the aircraft rotates to extreme angles. Although the
 limitations of the paraglider aerodynamics make it unlikely for the simulator
-to create situations in which the glider is facing straight up or straight
-down, the state models in this project chose quaternions for peace of mind and
-a minor improvement in computational efficiency.
+to encounter situations in which the glider is facing straight up or straight
+down, quaternions provide peace of mind and a minor improvement in
+computational efficiency.
 
 .. My implementations use the Hamilton convention
    (:cite:`sola2017QuaternionKinematicsErrorstate`, Tab:2).
@@ -127,80 +126,28 @@ quaternion and angular acceleration vector for the payload:
    \end{aligned}
 
 
-Simulator inputs
-================
-
-.. FIXME: explain how the simulator queries the wind and control inputs
-
-The state dynamics model must pass whatever inputs are required by the system
-dynamics model. The inputs :math:`\vec{u}` to the system model are the control
-inputs for each component, the wind velocity :math:`\vec{v}_{W/e}`, and the
-gravity vector :math:`\vec{g}`.
-
-.. math::
-   :label: system inputs
-
-   \vec{u} =
-     \left\{
-       \delta_a,
-       \delta_{bl},
-       \delta_{br},
-       \delta_w,
-       \vec{v}_{W/e}^b,
-       \vec{g}^b,
-     \right\}
-
-Here the wind field is assumed to be uniform so the wind velocity at every
-control point is defined by a single, constant vector, but for non-uniform
-wind fields there will be a unique wind vector for each aerodynamic control
-point. Also, note that the deflection distances :math:`\delta_d(s)` used by
-the :ref:`canopy model <paraglider_components:Canopy>` are computed internally
-by the system model; they are not system inputs.
-
-
-.. FIXME: discussion:
-
-   * `v_W/e` could be written as a matrix (an array of vectors)
-
-   * These are functions of time, not standalone/"instantaneous" variables.
-
-   * All inputs to the simulator are defined in `tp` coordinates.
-
-   * I've decided to have the state dynamics models transform all the vectors
-     into body coordinates so the system models don't have to. For the 9-DoF,
-     I'm passing `Theta_p2b` to allow transforming the wind vectors for the
-     payload control points into payload coordinates; they need `C_p2b`
-     anyway, so that's not a big deal, and passing them as Euler angles allows
-     them to be used for the restoring moments.]]
-
-
 State derivatives
 =================
 
 .. Define the derivatives of the state variables in terms of the current state
    and the system derivatives.
 
-A flight simulator generates a state trajectory by integrating the state
-derivatives over time. Although the state derivatives are functions of the
-system derivatives (and the current state), the two must not be conflated; the
-system dynamics do provide a set of derivatives that describe the motion of
-the aircraft, but they are not necessarily equal to the state derivatives. For
-example, the state variable for position may track a different reference point
-than was used for calculating the system dynamics, the derivatives may be
-taken with respect to a different reference frame, etc.
+[[Now we need to define the derivatives of the state variables in terms of the
+current state and the system derivatives.]]
 
-.. Position: in this case we ARE using the same reference point.
 
-.. Reference frame
+.. Position: translational acceleration in the inertial reference frame
 
-For example, the derivatives calculated by the system dynamics models were
-taken in the body and payload reference frames, :math:`\mathcal{F}_b` and
-:math:`\mathcal{F}_p`, but tracking the position and orientation of the
-aircraft relative to the tangent plane requires derivatives taken with respect
-to the inertial frame :math:`\mathcal{F}_e`. To provide the simulator with the
-proper derivatives, the state dynamics models must use the *equation of
-Coriolis* [[FIXME: add reference to Stevens]] to calculate the state
-derivatives taken with respect to the inertial frame:
+[[Position is easy since we're using the same reference point for the dynamics
+and for the position state variable. The only catch is that]] the derivatives
+calculated by the system dynamics models were taken in the body and payload
+reference frames, :math:`\mathcal{F}_b` and :math:`\mathcal{F}_p`, but tracking
+the position and orientation of the aircraft relative to the tangent plane
+requires derivatives taken with respect to the inertial frame
+:math:`\mathcal{F}_e`. To provide the simulator with the proper derivatives,
+the state dynamics models must use the *equation of Coriolis*
+:cite:`stevens2015AircraftControlSimulation` to calculate the state derivatives
+taken with respect to the inertial frame:
 
 .. math::
 
@@ -219,13 +166,11 @@ derivatives taken with respect to the inertial frame:
 
 .. Orientation
 
-Also, the state derivatives require an additional equation to define the
-quaternion derivatives in terms of the angular velocity state variables. The
-time derivative of some quaternion :math:`\vec{q}` that is tracking the
-orientation of an object relative to a reference frame can be calculated using
-the object's angular velocity vector :math:`\vec{\omega} = \{ p, q, r \}` in
-the coordinate system attached to that object (:math:`\vec{\omega}_{b/e}^b` for
-the body, or :math:`\vec{\omega}_{p/e}^p` for the payload)
+For the orientation state variable, the time derivative of a quaternion
+:math:`\vec{q}` that is tracking the orientation of an object can be calculated
+using the object's angular velocity vector :math:`\vec{\omega} = \{ p, q, r \}`
+in the coordinate system attached to that object (:math:`\vec{\omega}_{b/e}^b`
+for the body, or :math:`\vec{\omega}_{p/e}^p` for the payload)
 (:cite:`stevens2015AircraftControlSimulation`, Eq. 1.8-15):
 
 .. math::
@@ -296,4 +241,5 @@ The state dynamics models in :eq:`6dof_state_dynamics` and
 :eq:`9dof_state_dynamics` are ready to be used with a suitable numerical
 integration method to generate the state trajectories. Due to the significant
 nonlinear behavior of the dynamics, the implementation for this project uses
-a standard 4th order Runge-Kutta method.
+a standard 4th order `Runge-Kutta
+<https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods>`__ method.
