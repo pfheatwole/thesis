@@ -1,0 +1,1217 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Notation and Symbols" href="notation.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+        <title>Derivations - Parametric Paraglider Modeling</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     <b>This document is a draft!</b> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Parametric Paraglider Modeling</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Parametric Paraglider Modeling</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="notation.html">Notation and Symbols</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Derivations</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="derivations">
+<h1>Derivations<a class="headerlink" href="#derivations" title="Permalink to this headline">#</a></h1>
+<section id="parametric-design-curves">
+<h2>Parametric design curves<a class="headerlink" href="#parametric-design-curves" title="Permalink to this headline">#</a></h2>
+<p>[[Put these here to avoid cluttering the example foils and <code class="docutils literal notranslate"><span class="pre">demonstration</span></code>.
+FIXME: reference my choice of section index in ref:<cite>foil_geometry:Simplified
+model</cite>.]]</p>
+<section id="elliptical-chord">
+<h3>Elliptical chord<a class="headerlink" href="#elliptical-chord" title="Permalink to this headline">#</a></h3>
+<p>A <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a> requires a chord distribution <span class="math notranslate nohighlight">\(c(s)\)</span>. For
+parafoils, the chords lengths are most commonly defined by a truncated
+elliptical function of section index, in which case the distribution is
+a function of two design parameters. The typical choices are either the root
+and wingtip chord lengths, or the root length and a taper ratio. Choosing the
+root and wingtip chord lengths, a truncated elliptical function over the
+section index <span class="math notranslate nohighlight">\(-1 \le s \le 1\)</span> is then:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-elliptical-chord">
+<span class="eqno">(2)<a class="headerlink" href="#equation-elliptical-chord" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  a &amp;= \frac{1}{\sqrt{1 - \left(\frac{c_\textrm{tip}}{c_\textrm{root}}\right)^2}} \\
+  b &amp;= c_\textrm{root} \\
+  c(s) &amp;= b \sqrt{1 - \left( \frac{s}{a} \right)^2}
+\end{aligned}\end{split}\]</div></div>
+<p>Refer to <a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.foil_layout.html#pfh.glidersim.foil_layout.EllipticalChord" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">EllipticalChord</span></code></a> in <code class="docutils literal notranslate"><span class="pre">glidersim</span></code> for an
+implementation.</p>
+</section>
+<section id="elliptical-arc">
+<h3>Elliptical arc<a class="headerlink" href="#elliptical-arc" title="Permalink to this headline">#</a></h3>
+<p>In this paper the <em>arc</em> of a parafoil is the vector-valued function of
+<span class="math notranslate nohighlight">\(\left&lt; y, z \right&gt;\)</span> coordinates that position the sections. For
+parafoils, the arc is typically defined by an elliptical function.</p>
+<p>A centered elliptical curve can be defined as a function of four parameters,
+but the symmetry of the wing reduces that to three free design parameters, and
+normalizing the arc length reduces it to just two. There are several possible
+parametrizations (such as those in FIXME:<cite>benedetti</cite>), but an intuitive choice
+is the [[mean anhedral angle <span class="math notranslate nohighlight">\(\Gamma_\textrm{tip}\)</span>]] and the [[section
+roll angle <span class="math notranslate nohighlight">\(\phi_\textrm{tip}\)</span>]] of the wing tips. Using the parameters
+to define an ellipse that is proportional to the desired <span class="math notranslate nohighlight">\(yz\)</span>-curve
+produces:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  k_1        &amp;= 1 - \frac{\tan(\Gamma_\textrm{tip})}{\tan(\phi_\textrm{tip})} \\
+  k_2        &amp;= 1 - \frac{2 \tan(\Gamma_\textrm{tip})}{\tan(\phi_\textrm{tip})} \\
+  A          &amp;= \frac{k_1}{\sqrt{k_2}} \\
+  B          &amp;= \frac{k_1}{k_2} \tan(\Gamma_\textrm{tip}) \\
+  \vec{f}(t) &amp;= \left&lt; A \cos(t), B \sin(t) \right&gt;
+\end{aligned}\end{split}\]</div></div>
+<p>This design requires that <span class="math notranslate nohighlight">\(\phi_\textrm{tip} &gt; 2 \Gamma_\textrm{tip}\)</span> (so
+the wing must be wider than it is tall and the wing tip roll cannot exceed 90°)
+and is valid over <span class="math notranslate nohighlight">\(t_{min} \le t \le \pi - t_{min}\)</span>, where <span class="math notranslate nohighlight">\(t_{min}
+= \arccos \left( \frac{1}{A} \right)\)</span>. However, although the shape is
+proportional to the desired curve, it is not directly usable by the
+<a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a>. It needs two changes:</p>
+<ol class="arabic simple">
+<li><p>Make the arc a function of the chosen section index <span class="math notranslate nohighlight">\(s\)</span></p></li>
+<li><p>Scale the arc to a total curve length of 2 (to make it easy to scale by
+<span class="math notranslate nohighlight">\(b_\textrm{flat}\)</span>)</p></li>
+</ol>
+<p>Both can be achieved by normalizing the ellipse. First, scale the axes to
+produce a new semi-ellipse with a total curve length of 1:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  L(t)             &amp;= \int_{\frac{\pi}{2}}^{t} \norm{\vec{f}(t)} dt \\
+  k_3              &amp;= L(t_{min}) \\
+  \bar{\vec{f}}(t) &amp;= \left&lt; \frac{A}{k_3} \cos(t), \frac{B}{k_3} \sin(t) \right&gt; \\
+\end{aligned}\end{split}\]</div></div>
+<p>The fact that the section index <span class="math notranslate nohighlight">\(s\)</span> is defined as the linear distance
+along the curve enables a convenient conversion over <span class="math notranslate nohighlight">\(\frac{\pi}{2} \le
+t \le t_{min}\)</span> and <span class="math notranslate nohighlight">\(0 \le s \le 1\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  \bar{L}(t) &amp;= \int_{\frac{\pi}{2}}^{t} \norm{\bar{\vec{f}}(t)} dt = s(t) \\
+  t(s)       &amp;= s^{-1}(t)
+\end{aligned}\end{split}\]</div></div>
+<p>Thus the complete parametric function for the <span class="math notranslate nohighlight">\(yz\)</span>-curve of the arc is
+thus <span class="math notranslate nohighlight">\(\left&lt; y, z \right&gt;(s) = \bar{\vec{f}}(t(\left|s\right|))\)</span>. The
+integrals and inverse functions are not available analytically, but are trivial
+to compute numerically. Refer to <a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.foil_layout.html#pfh.glidersim.foil_layout.EllipticalArc" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">EllipticalArc</span></code></a> in <code class="docutils literal notranslate"><span class="pre">glidersim</span></code> for an
+implementation.</p>
+</section>
+<section id="polynomial-torsion">
+<h3>Polynomial torsion<a class="headerlink" href="#polynomial-torsion" title="Permalink to this headline">#</a></h3>
+<p>Like most wings, parafoils use section-relative pitch <span class="math notranslate nohighlight">\(\theta(s)\)</span>
+(conventionally referred to as <em>geometric torsion</em>) to control wing behavior.
+The exact distribution of geometric torsion along a wing can be difficult to
+measure, but they are frequently described using simple polynomials or
+piecewise-linear functions. For idealized models of nonlinear geometries such
+as those developed here, a piecewise-polynomial function is adequate.</p>
+<p>Assuming a symmetric wing, define three parameters:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T\)</span>: the maximum torsion (in radians) at the wingtips</p></li>
+<li><p><span class="math notranslate nohighlight">\(s_{start}\)</span>: the section index where the torsion begins (where <span class="math notranslate nohighlight">\(0
+\le s_{start} &lt; 1\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta\)</span>: the degree of the polynomial (for example, <span class="math notranslate nohighlight">\(\beta = 1\)</span>
+is linear, <span class="math notranslate nohighlight">\(\beta = 2\)</span> is quadratic, etc.)</p></li>
+</ul>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  p(s) &amp;= \frac{|s| - s_{start}}{1 - s_{start}} \\
+  \theta(s) &amp; =
+    \begin{cases}
+      0 &amp; |s| &lt; s_{start} \\
+      T p^\beta &amp; |s| \ge s_{start}
+    \end{cases}
+\end{aligned}\end{split}\]</div></div>
+<p>Refer to <a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.foil_layout.html#pfh.glidersim.foil_layout.PolynomialTorsion" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolynomialTorsion</span></code></a> in <code class="docutils literal notranslate"><span class="pre">glidersim</span></code> for an
+implementation.</p>
+</section>
+</section>
+<section id="area-and-volume-of-a-mesh">
+<h2>Area and Volume of a Mesh<a class="headerlink" href="#area-and-volume-of-a-mesh" title="Permalink to this headline">#</a></h2>
+<p>The paraglider dynamics require the inertial properties of the canopy surface
+areas and volume. These include the magnitudes (total mass or volume),
+centroids, and inertia tensors. All of these quantities can be computed using
+a triangular surface mesh over the canopy surfaces.</p>
+<p>What follows is a reproduction of the procedure developed in
+<span id="id1">[<a class="reference internal" href="zreferences.html#id13" title="Jonathan Blow and Atman J. Binstock. How to find the inertia tensor (or other mass properties) of a 3D solid body represented by a triangle mesh. http://www.number-none.com/blow/inertia/index.html, 2004.">29</a>]</span>, which is a functionally equivalent to the
+procedure from <span id="id2">[<a class="reference internal" href="zreferences.html#id51" title="Cha Zhang and Tsuhan Chen. Efficient feature extraction for 2D/3D objects in mesh representation. In Proceedings 2001 International Conference on Image Processing (Cat. No.01CH37205), volume 3, 935-938 vol.3. October 2001.">30</a>]</span> but with a more
+intuitive interpretation and complete equations for the inertia tensors.</p>
+<section id="area">
+<h3>Area<a class="headerlink" href="#area" title="Permalink to this headline">#</a></h3>
+<p>To compute the mass distribution of the upper and lower surfaces, start by
+computing the dimensionless inertia tensor of the areas then scale them by the
+surface material areal densities. [[FIXME: what? Reword: we want the total
+area, total area centroid, and dimensionless inertia matrices. We can scale
+those by the upper and lower surface densities to get the actual values.]]</p>
+<p>First, for each of the upper and lower surfaces, cover the surface with
+a triangulated mesh so it is represented by a set of <span class="math notranslate nohighlight">\(N\)</span> triangles. Each
+triangle is defined by three points <span class="math notranslate nohighlight">\(\left\{ \mathrm{P1}, \mathrm{P2},
+\mathrm{P3} \right\}_n\)</span> in canopy coordinates. For convenience, define position
+vectors for each of the three points of the nth triangle: <span class="math notranslate nohighlight">\(\vec{r}_{i,n}
+\defas \vec{r}_{Pi/O,n}\)</span>.</p>
+<p>The area of each triangle is easily computed using the vector cross-product of
+two legs of the triangle:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[a_n =
+   \frac{1}{2}
+   \rho
+   \norm{
+     \left( \vec{r}_{2,n} - \vec{r}_{1,n} \right)
+     \times
+     \left( \vec{r}_{3,n} - \vec{r}_{2,n} \right)
+   }\]</div></div>
+<p>The total area of the surface is the sum of the triangle areas:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[a = \sum^N_{n=1} a_n\]</div></div>
+<p>The area centroid of each triangle:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\overline{\vec{a}}_n \defas
+  \frac{1}{3} \left( \vec{r}_{1,n} + \vec{r}_{2,n} + \vec{r}_{3,n} \right)\]</div></div>
+<p>And the centroid <span class="math notranslate nohighlight">\(\mathrm{A}\)</span> of the total surface area with respect to
+the canopy origin <span class="math notranslate nohighlight">\(\mathrm{O}\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\vec{r}_{\mathrm{A}/\mathrm{O}} = \frac{1}{a} \sum^N_{n=1} a_n \overline{\vec{a}}_n\]</div></div>
+<p>The covariance matrix of the total surface area:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mat{\Sigma}_a = \sum^N_{n=1} a_n \overline{\vec{a}}_n \overline{\vec{a}}_n^T\]</div></div>
+<p>The inertia tensor of the total surface area <span class="math notranslate nohighlight">\(a\)</span> about the canopy origin
+<span class="math notranslate nohighlight">\(\mathrm{O}\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mat{J}_{a/\mathrm{O}} = \mathrm{trace} \left( \mat{\Sigma}_a \right) \vec{I}_3 - \mat{\Sigma}_a\]</div></div>
+<p>And tada, we’ve computed the three relevant properties for each surface area:
+the total area <span class="math notranslate nohighlight">\(a\)</span>, the area centroid
+<span class="math notranslate nohighlight">\(\vec{r}_{\mathrm{A}/\mathrm{O}}\)</span>, and the inertia tensor
+<span class="math notranslate nohighlight">\(\mat{J}_{a/\mathrm{O}}\)</span>.</p>
+</section>
+<section id="volume">
+<h3>Volume<a class="headerlink" href="#volume" title="Permalink to this headline">#</a></h3>
+<p>Now for the volume. For the purposes of computing the inertia properties of the
+enclosed air, it is convenient to neglect the air intakes and treat the canopy
+as a closed volume. Given this simplifying assumption, build another triangular
+mesh that covers the entire canopy surface as well as the left and right wing
+tip sections. For this derivation, it is essential that the points on each
+triangle are ordered such that a right-handed traversal produces a normal
+vector pointing out of the volume. It is also essential that the complete mesh
+does not contain any holes, or the volume may be miscounted. Given a surface
+triangulation over the closed canopy geometry using <span class="math notranslate nohighlight">\(N\)</span> triangles, the
+volume can be computed as follows.</p>
+<p>First, treat each triangle as the face of a tetrahedron that includes the
+origin. The signed volume of the tetrahedron formed by each triangle is given
+by:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[v_n =
+   \frac{1}{6}
+   \left(
+      \vec{r}_{1,n} \times \vec{r}_{2,n}
+   \right)
+   \cdot \vec{r}_{3,n}\]</div></div>
+<p>Given that the vertices of each triangle were oriented such that they satisfy
+a right-hand rule, the sign of each volume will be positive if the normal
+vector for each triangular face points away from the origin, and negative if
+it points towards the origin. In essence the tetrahedrons “overcount” the
+volume for triangles pointing away from the origin, then the triangles facing
+the origin subtract away the excess volume. The final volume of the canopy is
+the simple sum:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[v = \sum^N_{n=1} v_n\]</div></div>
+<p>For the volume centroid of each tetrahedron:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\overline{\vec{v}}_n \defas \frac{1}{4} \sum^3_{i=1} \vec{r}_{i,n}\]</div></div>
+<p>And the centroid <span class="math notranslate nohighlight">\(\mathrm{V}\)</span> of the total volume with respect to the
+canopy origin <span class="math notranslate nohighlight">\(\mathrm{O}\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\vec{r}_{\mathrm{V}/\mathrm{O}} = \frac{1}{v} \sum^N_{n=1} v_n \overline{\vec{v}}_n\]</div></div>
+<p>Lastly, calculating the inertia tensor of the volume can be simplified by
+computing the inertia tensor of a prototypical or “canonical” tetrahedron and
+applying an affine transformation to produce the inertia tensor of each
+individual volume.</p>
+<p>First, given the covariance matrix of the “canonical” tetrahedron:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\mat{\hat{\Sigma}} \defas \begin{bmatrix}
+   \frac{1}{60} &amp; \frac{1}{120} &amp; \frac{1}{120}\\
+   \frac{1}{120} &amp; \frac{1}{60} &amp; \frac{1}{120}\\
+   \frac{1}{120} &amp; \frac{1}{120} &amp; \frac{1}{60}
+\end{bmatrix}\end{split}\]</div></div>
+<p>Use the points in each triangle to define:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\mat{T}_n \defas
+   \begin{bmatrix}
+      | &amp; | &amp; | \\
+      \vec{r}_{1,n} &amp; \vec{r}_{2,n} &amp; \vec{r}_{3,n}\\
+      | &amp; | &amp; | \\
+   \end{bmatrix}\end{split}\]</div></div>
+<p>The covariance of each tetrahedron volume is then:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mat{\Sigma}_n = \left| \mat{T}_n \right| \mat{T}_n^T \mat{\hat{\Sigma}} \mat{T}_n\]</div></div>
+<p>And the covariance matrix of the complete volume:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mat{\Sigma}_v = \sum^N_{n=1} \mat{\Sigma}_n\]</div></div>
+<p>And at last, the inertia tensor of the volume about the origin <span class="math notranslate nohighlight">\(O\)</span> can
+be computed directly from the covariance matrix:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mat{J}_{v/O} = \mathrm{trace} \left( \mat{\Sigma}_v \right) \vec{I}_3 - \mat{\Sigma}_v\]</div></div>
+</section>
+</section>
+<section id="apparent-mass-of-a-parafoil">
+<h2>Apparent mass of a parafoil<a class="headerlink" href="#apparent-mass-of-a-parafoil" title="Permalink to this headline">#</a></h2>
+<p>This section presents Barrows’ method <span id="id3">[<a class="reference internal" href="zreferences.html#id8" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">16</a>]</span>
+for estimating the apparent mass matrix of a wing with circular arc anhedral.
+(For a discussion of apparent mass effects, see
+<a class="reference internal" href="paraglider_components.html#apparent-mass"><span class="std std-ref">Apparent Mass</span></a>.) The equations have been adapted
+to use the standard notation of this paper.</p>
+<p>The purpose of the equations is estimate several terms that allow the
+paraglider system dynamics model to calculate the apparent inertia matrix with
+respect to the dynamics reference point, so the apparent mass can be taken
+into account when calculating the canopy acceleration. The necessary terms
+are:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mat{A}_{a/R}\)</span>: apparent inertia matrix with respect to some
+<em>reference point</em> <span class="math notranslate nohighlight">\(R\)</span>. This matrix is comprised of a translational
+inertia part <span class="math notranslate nohighlight">\(\mat{M}_a\)</span> and a rotational inertia part
+<span class="math notranslate nohighlight">\(\mat{J}_{a/R}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\vec{r}_{RC/R}\)</span>: roll center with respect to <span class="math notranslate nohighlight">\(R\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\vec{r}_{PC/RC}\)</span>: pitch center with respect to the <em>roll center</em>
+<span class="math notranslate nohighlight">\(RC\)</span></p></li>
+</ul>
+<p>Some notes about Barrows’ development:</p>
+<ul class="simple">
+<li><p>It assumes the foil is symmetric about the <span class="math notranslate nohighlight">\(xz\)</span>-plane (left-right
+symmetry) and about the <span class="math notranslate nohighlight">\(yz\)</span>-plane (fore-aft symmetry).</p></li>
+<li><p>It requires that the dynamics reference point <span class="math notranslate nohighlight">\(R\)</span> lies in the
+<span class="math notranslate nohighlight">\(xz\)</span>-plane</p></li>
+<li><p>It assumes the canopy arc is circular.</p></li>
+<li><p>It assumes a constant chord length over the entire span.</p></li>
+<li><p>It assumes constant thickness over the entire span.</p></li>
+<li><p>It assumes no chordwise camber.</p></li>
+<li><p>It assumes the chords are all parallel to the x-axis (which also means no
+geometric twist). This mostly isn’t a problem since our coordinate system is
+defined by the central chord, the geometric torsion angles tend to be quite
+small, and twist tends to occur over segments which represent negligible
+volume compared to the bulk of the wing.</p></li>
+</ul>
+<figure class="align-default" id="barrows-diagram">
+<img alt="_images/barrows.svg" src="_images/barrows.svg"/><figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Geometry for Barrow’s apparent mass equations.</span><a class="headerlink" href="#barrows-diagram" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Some initial definitions:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  t   &amp;= \text{Airfoil thickness.} \\
+  h^* &amp;= \frac{h}{b} \\
+\end{aligned}\end{split}\]</div></div>
+<p>First, the apparent mass terms for a flat wing of a similar volume, from
+Barrows’ equations 34-39:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  m_{f11} &amp;= k_A \pi \left( t^2 b / 4 \right) \\
+  m_{f22} &amp;= k_B \pi \left( t^2 c / 4 \right) \\
+  m_{f33} &amp;= \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] \pi \left( c^2 b / 4 \right) \\
+  \\
+  I_{f11} &amp;= 0.055 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] b S^2 \\
+  I_{f22} &amp;= 0.0308 \left[ \mathrm{AR} / \left( 1 + \mathrm{AR} \right) \right] c^3 S \\
+  I_{f33} &amp;= 0.055 b^3 t^2
+\end{aligned}\end{split}\]</div></div>
+<p>Where <span class="math notranslate nohighlight">\(k_A\)</span> and <span class="math notranslate nohighlight">\(k_B\)</span> are the “correction factors for
+three-dimensional effects”:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  k_A &amp;= 0.85 \\
+  k_B &amp;= 1.0
+\end{aligned}\end{split}\]</div></div>
+<p>Assuming the parafoil arc is circular and with no chordwise camber, use Barrows
+equations 44 and 50 to compute the <em>pitch center</em> <span class="math notranslate nohighlight">\(PC\)</span> and <em>roll center</em>
+<span class="math notranslate nohighlight">\(RC\)</span> as points directly above the <em>confluence point</em> <span class="math notranslate nohighlight">\(C\)</span> of the
+arc:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  z_{PC/C}  &amp;= -\frac{r \sin \left( \Theta \right)}{\Theta} \\
+  z_{RC/C}  &amp;= -\frac{z_{PC/C} \; m_{f22}}{m_{f22} + I_{f11}/r^2} \\
+  z_{PC/RC} &amp;= z_{PC/C} - z_{RC/C}
+\end{aligned}\end{split}\]</div></div>
+<p>Modifying the apparent mass terms from the flat wing to approximate the terms
+for the arched wing, Barrows equations 51-55:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  m_{11} &amp;= k_A \left[ 1 + \left(\frac{8}{3}\right){h^*}^2 \right] \pi \left( t^2 b / 4 \right) \\
+  m_{22} &amp;= \frac{r^2 m_{f22} + I_{f11}}{z^2_{PC/C}} \\
+  m_{33} &amp;= m_{f33} \\
+  \\
+  I_{11} &amp;= \frac{z^2_{PC/RC}}{z^2_{PC/C}} r^2 m_{f22} + \frac{z^2_{RC/C}}{z^2_{PC/C}} I_{f11} \\
+  I_{22} &amp;= I_{f22} \\
+  I_{33} &amp;= 0.055 \left( 1 + 8 {h^*}^2 \right) b^3 t^2
+\end{aligned}\end{split}\]</div></div>
+<p>The apparent mass and apparent moment of inertia matrices are then defined in
+Barrows equations 1 and 17:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-apparent-mass-matrix">
+<span class="eqno">(3)<a class="headerlink" href="#equation-apparent-mass-matrix" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{M}_a \defas
+  \begin{bmatrix}
+    m_{11} &amp; 0      &amp; 0 \\
+    0      &amp; m_{22} &amp; 0 \\
+    0      &amp; 0      &amp; m_{33}
+  \end{bmatrix}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-apparent-moment-of-inertia-matrix">
+<span class="eqno">(4)<a class="headerlink" href="#equation-apparent-moment-of-inertia-matrix" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{I}_a \defas
+  \begin{bmatrix}
+    I_{11} &amp; 0      &amp; 0 \\
+    0      &amp; I_{22} &amp; 0 \\
+    0      &amp; 0      &amp; I_{33}
+  \end{bmatrix}\end{split}\]</div></div>
+<p>Define two helper matrices:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\mat{S}_2 \defas
+  \begin{bmatrix}
+    0 &amp; 0 &amp; 0 \\
+    0 &amp; 1 &amp; 0 \\
+    0 &amp; 0 &amp; 0
+  \end{bmatrix}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mat{Q} = \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} \mat{M}_a \crossmat{\vec{r}_{RC/R}}\]</div></div>
+<p>Where <span class="math notranslate nohighlight">\(\crossmat{\vec{x}}\)</span> is the <a class="reference internal" href="notation.html#crossmat"><span class="std std-ref">cross-product matrix operator</span></a>.</p>
+<p>Using the helper matrices, use Barrows equation 25 to write the rotational
+part of the apparent inertia matrix:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mat{J}_{a/R} \defas
+   \mat{I}
+   - \crossmat{\vec{r}_{RC/R}} \mat{M}_a \crossmat{\vec{r}_{RC/R}}
+   - \crossmat{\vec{r}_{PC/RC}} \mat{M}_a \crossmat{\vec{r}_{PC/RC}} \mat{S}_2
+   - \mat{Q}
+   - \mat{Q}^T\]</div></div>
+<p>And the corresponding angular momentum of the apparent mass about <span class="math notranslate nohighlight">\(R\)</span>,
+using Barrows equation 24:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\vec{h}_{a/R} =
+   \left(
+      \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
+   \right) \mat{M}_a \vec{v}_{R/e} + \mat{J}_{a/R} \omega\]</div></div>
+<p>And finally, the completed apparent inertia matrix with respect to the
+reference point <span class="math notranslate nohighlight">\(R\)</span>, from Barrows equation 27:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-apparent-inertia-matrix">
+<span class="eqno">(5)<a class="headerlink" href="#equation-apparent-inertia-matrix" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{A}_{a/R} =
+  \begin{bmatrix}
+    \mat{M}_a &amp; -\mat{M}_a \left( \crossmat{\vec{r}_{RC/R}} + \crossmat{\vec{r}_{PC/RC}} \mat{S}_2 \right) \\
+    \left( \mat{S}_2 \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}} \right) \mat{M}_a &amp; \mat{J}_{a/R}
+\end{bmatrix}\end{split}\]</div></div>
+<p>Plus the vectors necessary to incorporate <span class="math notranslate nohighlight">\(\mat{J}_{a/R}\)</span> into the
+final dynamics:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\vec{r}_{PC/RC} = \begin{bmatrix} 0 &amp; 0 &amp; z_{PC/RC}\end{bmatrix}\]</div></div>
+<p>Linear momentum of the apparent mass:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-apparent-linear-momentum">
+<span class="eqno">(6)<a class="headerlink" href="#equation-apparent-linear-momentum" title="Permalink to this equation">#</a></span>\[\vec{p}_{a/e} =
+  \mat{M}_a \cdot \left(
+    \vec{v}_{R/e}
+    - \crossmat{\vec{r}_{RC/R}} \omega_{b/e}
+    - \crossmat{\vec{r}_{PC/RC}} \mat{S}_2 \cdot \omega_{b/e}
+  \right)\]</div></div>
+<p>Angular momentum of the apparent mass about <span class="math notranslate nohighlight">\(R\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-apparent-angular-momentum">
+<span class="eqno">(7)<a class="headerlink" href="#equation-apparent-angular-momentum" title="Permalink to this equation">#</a></span>\[\vec{h}_{a/R} =
+  \left(
+    \mat{S}_2 \cdot \crossmat{\vec{r}_{PC/RC}} + \crossmat{\vec{r}_{RC/R}}
+  \right) \cdot \mat{M}_a \cdot \vec{v}_{R/e}
+  + \mat{J}_{a/R} \cdot \omega_{b/e}\]</div></div>
+<p>Refer to <a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider_wing.html#pfh.glidersim.paraglider_wing.ParagliderWing" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParagliderWing</span></code></a> in <code class="docutils literal notranslate"><span class="pre">glidersim</span></code> for an
+implementation.</p>
+</section>
+<section id="paraglider-system-models">
+<h2>Paraglider system models<a class="headerlink" href="#paraglider-system-models" title="Permalink to this headline">#</a></h2>
+<p>[[<strong>FIXME</strong>: preview the models. Model <cite>6a</cite> is the most complete, and accounts
+for apparent mass. Models <cite>6b</cite> and <cite>6c</cite> are simpler but require computing the
+body center of mass <span class="math notranslate nohighlight">\(r_{B/RM}\)</span> before computing <span class="math notranslate nohighlight">\(A_{a/B}\)</span> (plus
+<span class="math notranslate nohighlight">\(B\)</span> is not strictly a fixed point since air density changes); they are
+mostly useful for verifying the implementations.]]</p>
+<section id="model-6a">
+<h3>Model 6a<a class="headerlink" href="#model-6a" title="Permalink to this headline">#</a></h3>
+<p>This section describe a paraglider dynamics model with 6 degrees of freedom.
+It uses a rigid-body assumption, and incorporates the effects of apparent
+mass. The dynamics are computed with respect to the riser midpoint <span class="math notranslate nohighlight">\(RM\)</span>
+instead of the wing center of mass <span class="math notranslate nohighlight">\(B\)</span> because it avoids needing to
+recompute the apparent inertia matrix whenever <cite>B</cite> changes. In this derivation
+all vectors are in the canopy coordinate system <span class="math notranslate nohighlight">\(c\)</span>, so the vector
+coordinate systems are implicit in the notation.</p>
+<p>The derivation develops the equations of motion by starting with derivatives
+of linear and angular momentum. The derivation is largely based on the
+excellent <span id="id4">[<a class="reference internal" href="zreferences.html#id26" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">24</a>]</span>, although this section
+uses this paper’s version of Stevens’ notation (see <a class="reference internal" href="notation.html#notation-and-symbols"><span class="std std-ref">Notation and Symbols</span></a>).</p>
+<p>An implementation of this model is available as
+<a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics6a" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider6a</span></code></a> in the <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>
+package. The <code class="docutils literal notranslate"><span class="pre">glidersim</span></code> package also includes
+<a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics6b" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider6b</span></code></a> and
+<a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics6c" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider6c</span></code></a>, which decouple the
+translational and angular equations of motion by choosing the glider center of
+gravity for the dynamics reference point, but do not incorporate the apparent
+mass matrix.</p>
+<section id="real-mass-only">
+<h4>Real mass only<a class="headerlink" href="#real-mass-only" title="Permalink to this headline">#</a></h4>
+<p>Start with the equations for the translational and angular momentum of the
+body <span class="math notranslate nohighlight">\(b\)</span> about the reference point <span class="math notranslate nohighlight">\(RM\)</span> as observed by the
+inertial reference frame <span class="math notranslate nohighlight">\(e\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-p">
+<span class="eqno">(8)<a class="headerlink" href="#equation-model6a-p" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {\vec{p}_{b/e}}
+    &amp;= m_b \, \vec{v}_{B/e} \\
+    &amp;= m_b \left(
+         {\vec{v}_{RM/e}} + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/RM}}
+       \right)
+\end{aligned}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-h">
+<span class="eqno">(9)<a class="headerlink" href="#equation-model6a-h" title="Permalink to this equation">#</a></span>\[\vec{h}_{b/RM} =
+  m_b \, \vec{r}_{B/RM} \times \vec{v}_{RM/e}
+  + \mat{J}_{b/RM} \cdot \vec{\omega}_{b/e}\]</div></div>
+<p>Compute the momentum derivatives in the inertial frame <span class="math notranslate nohighlight">\(\mathcal{F}_e\)</span>
+in terms of derivatives in the body frame <span class="math notranslate nohighlight">\(\mathcal{F}_b\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-momentum-derivatives1">
+<span class="eqno">(10)<a class="headerlink" href="#equation-model6a-momentum-derivatives1" title="Permalink to this equation">#</a></span>\[ \begin{align}\begin{aligned}\begin{aligned}
+  {^e \dot{\vec{p}}_{b/e}}
+    &amp;= {^b \dot{\vec{p}}_{b/e}}
+       + \vec{\omega}_{b/e} \times \vec{p}_{b/e}\\    &amp;= m_b \left(
+         {^b \dot{\vec{v}}_{RM/e}}
+         + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/RM}}
+         + {\vec{\omega}}_{b/e} \times {\cancelto{0}{^b \dot{\vec{r}_{B/RM}}}}
+       \right)
+       + \vec{\omega}_{b/e} \times \vec{p}_{b/e}\\    &amp;= m_b \left(
+         {^b \dot{\vec{v}}_{RM/e}}
+         + {^b\dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/RM}}
+       \right)
+       + \vec{\omega}_{b/e} \times \vec{p}_{b/e}\\\begin{split}  \\\end{split}\\  {^e \dot{\vec{h}}_{b/RM}}
+    &amp;= {^b\dot{\vec{h}}_{b/RM}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/RM}}\\    &amp;= m_b \left(
+         {\cancelto{0}{^b \dot{\vec{r}_{B/RM}}}} \times \vec{v}_{RM/e}
+         + \vec{r}_{B/RM} \times {^b \dot{\vec{v}_{RM/e}}}
+       \right)
+       + {\mat{J}_{b/RM} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+       + {\vec{\omega}_{b/e} \times \vec{h}_{b/RM}}\\    &amp;= m_b \, \vec{r}_{B/RM} \times {^b \dot{\vec{v}_{RM/e}}}
+       + {\mat{J}_{b/RM} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+       + {\vec{\omega}_{b/e} \times \vec{h}_{b/RM}}\\\end{aligned}\end{aligned}\end{align} \]</div></div>
+<p>Relate the derivatives of momentum with respect to the inertial frame to the
+net force on the body <span class="math notranslate nohighlight">\(\vec{f}_b\)</span> and the net moment on the body about
+the reference point <span class="math notranslate nohighlight">\(\vec{g}_{b/RM}\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-momentum-derivatives2">
+<span class="eqno">(11)<a class="headerlink" href="#equation-model6a-momentum-derivatives2" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {^e \dot{\vec{p}}_{b/e}} &amp;=
+    \mat{f}_b \\
+  {^e \dot{\vec{h}}_{b/RM}} + \vec{v}_{RM/e} \times \vec{p}_{b/e} &amp;=
+    \mat{g}_{b/RM}
+\end{aligned}\end{split}\]</div></div>
+<p>Where</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  \vec{f}_b &amp;=
+    {\vec{f}_{b,\textrm{aero}}}
+    + {\vec{f}_{b,\textrm{weight}}} \\
+  \vec{g}_{b/RM} &amp;=
+    {\vec{g}_{b,\textrm{aero}}}
+    + {\vec{r}_{B/RM} \times {\vec{f}_{b,\textrm{weight}}}}
+\end{aligned}\end{split}\]</div></div>
+<p>Combining <a class="reference internal" href="#equation-model6a-momentum-derivatives1">(10)</a> and
+<a class="reference internal" href="#equation-model6a-momentum-derivatives2">(11)</a> gives the final equations for the dynamics
+of the real mass (solid mass plus the enclosed air) in terms of <span class="math notranslate nohighlight">\(^b
+\dot{\vec{v}}_{RM/e}\)</span> and <span class="math notranslate nohighlight">\(^b \dot{\vec{\omega}}_{b/e}\)</span>.</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-dynamics-equations">
+<span class="eqno">(12)<a class="headerlink" href="#equation-model6a-dynamics-equations" title="Permalink to this equation">#</a></span>\[ \begin{align}\begin{aligned}\begin{aligned}
+   m_b \, {^b \dot{\vec{v}}_{RM/e}}
+   + m_b \, {^b \dot{\vec{\omega}}_{b/e}} \times \vec{r}_{B/RM}
+   &amp;= \vec{f}_b
+      - \vec{\omega}_{b/e} \times \vec{p}_{b/e}\\   m_b \, \vec{r}_{B/RM} \times {^b \dot{\vec{v}}_{RM/e}}
+   + \mat{J}_{b/RM} \cdot {^b \dot{\vec{\omega}}_{b/e}}
+   &amp;= \vec{g}_{b/RM} - \vec{\omega}_{b/e} \times \vec{h}_{b/RM}
+      - \vec{v}_{RM/e} \times \vec{p}_{b/e}
+\end{aligned}\end{aligned}\end{align} \]</div></div>
+<p>Rewriting the equations as a linear system:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-real-system">
+<span class="eqno">(13)<a class="headerlink" href="#equation-model6a-real-system" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{A}_{r/RM}
+\begin{bmatrix}
+  {^b \dot{\vec{v}}_{RM/e}} \\
+  {^b \dot{\vec{\omega}}_{b/e}} \\
+\end{bmatrix}
+= \begin{bmatrix}
+    \vec{b}_1\\
+    \vec{b}_2\\
+  \end{bmatrix}\end{split}\]</div></div>
+<p>Where:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  \mat{A}_{r/RM} &amp;=
+    \begin{bmatrix}
+      {m_b \, \mat{I}_3} &amp; {-m_b \crossmat{\vec{r}_{B/RM}}} \\
+      {m_b \, \crossmat{\vec{r}_{B/RM}}} &amp; {\mat{J}_{b/RM}} \\
+    \end{bmatrix} \\
+  \\
+  \vec{b}_1 &amp;=
+    \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+  \vec{b}_2 &amp;=
+    \vec{g}_{b/RM}
+    - \vec{\omega}_{b/e} \times \vec{h}_{b/RM}
+    - \vec{v}_{RM/e} \times \vec{p}_{b/e} \\
+\end{aligned}\end{split}\]</div></div>
+</section>
+<section id="real-mass-apparent-mass">
+<h4>Real mass + apparent mass<a class="headerlink" href="#real-mass-apparent-mass" title="Permalink to this headline">#</a></h4>
+<p>Writing the dynamics in matrix form not only makes it straightforward to solve
+for the state derivatives, it also makes it easy to incorporate the apparent
+inertia matrix from <a class="reference internal" href="#apparent-mass-of-a-parafoil">Apparent mass of a parafoil</a>. Adding the apparent
+inertia into the system matrix and accounting for the translational and
+angular apparent momentum produces:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-complete-system">
+<span class="eqno">(14)<a class="headerlink" href="#equation-model6a-complete-system" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{bmatrix}
+  \mat{A}_{r/RM} + \mat{A}_{a/RM}
+\end{bmatrix}
+\begin{bmatrix}
+  {^b \dot{\vec{v}}_{RM/e}} \\
+  {^b \dot{\vec{\omega}}_{b/e}} \\
+\end{bmatrix}
+= \begin{bmatrix}
+    \begin{aligned}
+       \vec{b}_3 \\
+       \vec{b}_4
+   \end{aligned}
+  \end{bmatrix}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  \vec{b}_3 &amp;= \vec{b}_1 - \vec{\omega}_{b/e} \times \vec{p}_{a/e} \\
+  \vec{b}_4 &amp;=
+    \vec{b}_2
+    - {\vec{v}_{RM/e} \times \vec{p}_{a/e}}
+    - {\vec{\omega}_{b/e} \times \vec{h}_{a/RM}}
+    + {\vec{v}_{RM/e} \times \left( \mat{M}_a \cdot \vec{v}_{RM/e} \right) }
+\end{aligned}\end{split}\]</div></div>
+<p>Where <span class="math notranslate nohighlight">\(\mat{A}_{a/RM}\)</span> is the apparent inertia matrix of the canopy from
+<a class="reference internal" href="#equation-apparent-inertia-matrix">(5)</a>, <span class="math notranslate nohighlight">\(\mat{M}_a\)</span> is the apparent mass matrix
+from <a class="reference internal" href="#equation-apparent-mass-matrix">(3)</a>, and <span class="math notranslate nohighlight">\(\vec{p}_{a/e}\)</span> and
+<span class="math notranslate nohighlight">\(\vec{h}_{a/RM}\)</span> are the linear and angular apparent momentums from
+<a class="reference internal" href="#equation-apparent-linear-momentum">(6)</a> and <a class="reference internal" href="#equation-apparent-angular-momentum">(7)</a>. The extra
+term <span class="math notranslate nohighlight">\(\vec{v}_{RM/e} \times \left( \mat{M}_a \vec{v}_{RM/e} \right)\)</span> in
+<span class="math notranslate nohighlight">\(\vec{b}_4\)</span> is necessary to avoid double counting the aerodynamic moment
+already accounted for by the section pitching coefficients.</p>
+</section>
+</section>
+<section id="model-6b">
+<h3>Model 6b<a class="headerlink" href="#model-6b" title="Permalink to this headline">#</a></h3>
+<p>Following the same logic as <a class="reference internal" href="#model-6a">Model 6a</a>, but targeting <span class="math notranslate nohighlight">\(^b
+\vec{v}_{B/e}\)</span> and using the momentum about the body center of mass <span class="math notranslate nohighlight">\(B\)</span>
+produces a simpler model with a diagonal system matrix, but at the cost of
+requiring the body center of mass to be determined before computing the
+apparent inertia matrix with respect to that point. For that reason the
+apparent mass is neglected here, although if <span class="math notranslate nohighlight">\(B\)</span> lies in the xz-plane
+then the method described in <a class="reference internal" href="#apparent-mass-of-a-parafoil">Apparent mass of a parafoil</a> could be used.</p>
+<p>The main purpose of this model is for validating model implementations. An
+implementation of this model is available as
+<a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics6b" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider6b</span></code></a> in the <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>
+package.</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6b-p">
+<span class="eqno">(15)<a class="headerlink" href="#equation-model6b-p" title="Permalink to this equation">#</a></span>\[\vec{p}_{b/e} = m_b \, \vec{v}_{B/e}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6b-h">
+<span class="eqno">(16)<a class="headerlink" href="#equation-model6b-h" title="Permalink to this equation">#</a></span>\[\vec{h}_{b/B} = \mat{J}_{b/B} \cdot \vec{\omega}_{b/e}\]</div></div>
+<p>Computing the inertial derivatives with respect to the body frame:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6b-momentum-derivatives1">
+<span class="eqno">(17)<a class="headerlink" href="#equation-model6b-momentum-derivatives1" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {^e \dot{\vec{p}}_{b/e}}
+    &amp;= m_b \, {^b \dot{\vec{v}}_{B/e}}
+       + \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+  \\
+  {^e \dot{\vec{h}}_{b/B}}
+    &amp;= \mat{J}_{b/B} \cdot {^b \dot{\vec{\omega}}_{b/e}}
+       + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+\end{aligned}\end{split}\]</div></div>
+<p>Using the body center of mass as the reference point simplifies the equation
+for angular momentum:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6b-momentum-derivatives2">
+<span class="eqno">(18)<a class="headerlink" href="#equation-model6b-momentum-derivatives2" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {^e \dot{\vec{p}}_{b/e}} &amp;= \mat{f}_b \\
+  {^e \dot{\vec{h}}_{b/B}} &amp;= \mat{g}_{b/B}
+\end{aligned}\end{split}\]</div></div>
+<p>Combining <a class="reference internal" href="#equation-model6b-momentum-derivatives1">(17)</a> and
+<a class="reference internal" href="#equation-model6b-momentum-derivatives2">(18)</a>: and rewriting as a linear system:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6b-real-system">
+<span class="eqno">(19)<a class="headerlink" href="#equation-model6b-real-system" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{bmatrix}
+  m_b &amp; 0 \\
+  0 &amp; \mat{J}_{b/B}
+\end{bmatrix}
+\begin{bmatrix}
+  {^b \dot{\vec{v}}_{B/e}} \\
+  {^b \dot{\vec{\omega}}_{b/e}}
+\end{bmatrix}
+= \begin{bmatrix}
+    \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+    \vec{g}_{b/B} - \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+  \end{bmatrix}\end{split}\]</div></div>
+</section>
+<section id="model-6c">
+<h3>Model 6c<a class="headerlink" href="#model-6c" title="Permalink to this headline">#</a></h3>
+<p>Another option is to target <span class="math notranslate nohighlight">\(^b \dot{\vec{v}}_{RM/e}\)</span> directly, but again
+using the momentum about the body center of mass <span class="math notranslate nohighlight">\(B\)</span>. Like <a class="reference internal" href="#model-6b">Model 6b</a>
+this also produces a simpler dynamics model, but again at the cost of making it
+less convenient to precompute the apparent inertia matrix.</p>
+<p>The main purpose of this model is for validating model implementations. An
+implementation of this model is available as
+<a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics6c" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider6c</span></code></a> in the <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>
+package.</p>
+<p>Computing the inertial derivatives with respect to the body frame:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6c-momentum-derivatives1">
+<span class="eqno">(20)<a class="headerlink" href="#equation-model6c-momentum-derivatives1" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {^e \dot{\vec{p}}_{b/e}}
+    &amp;= m_b \left(
+         {^b \dot{\vec{v}}_{RM/e}}
+         + {^b \dot{\vec{\omega}}_{b/e}} \times \vec{r}_{B/RM}
+       \right)
+       + \vec{\omega}_{b/e} \times \vec{p}_{b/e}
+  \\
+  {^e \dot{\vec{h}}_{b/B}}
+    &amp;= \mat{J}_{b/B} \cdot {^b \dot{\vec{\omega}}_{b/e}}
+       + \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+\end{aligned}\end{split}\]</div></div>
+<p>Using the body center of mass as the reference point simplifies the equation
+for angular momentum:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6c-momentum-derivatives2">
+<span class="eqno">(21)<a class="headerlink" href="#equation-model6c-momentum-derivatives2" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {^e \dot{\vec{p}}_{b/e}} &amp;= \mat{f}_b \\
+  {^e \dot{\vec{h}}_{b/B}} &amp;= \mat{g}_{b/B}
+\end{aligned}\end{split}\]</div></div>
+<p>Combining <a class="reference internal" href="#equation-model6c-momentum-derivatives1">(20)</a> and
+<a class="reference internal" href="#equation-model6c-momentum-derivatives2">(21)</a>: and rewriting as a linear system:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6c-real-system">
+<span class="eqno">(22)<a class="headerlink" href="#equation-model6c-real-system" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{bmatrix}
+  m_b &amp; -m_b \crossmat{\vec{r}_{B/RM}} \\
+  0 &amp; \mat{J}_{b/B}
+\end{bmatrix}
+\begin{bmatrix}
+  {^b \dot{\vec{v}}_{RM/e}} \\
+  {^b \dot{\vec{\omega}}_{b/e}}
+\end{bmatrix}
+= \begin{bmatrix}
+    \vec{f}_b - \vec{\omega}_{b/e} \times \vec{p}_{b/e} \\
+    \vec{g}_{b/B} - \vec{\omega}_{b/e} \times \vec{h}_{b/B}
+  \end{bmatrix}\end{split}\]</div></div>
+</section>
+<section id="model-9a">
+<h3>Model 9a<a class="headerlink" href="#model-9a" title="Permalink to this headline">#</a></h3>
+<p>Similar to <a class="reference internal" href="#model-6a">Model 6a</a>, this design uses the riser connection midpoint <cite>RM</cite> as
+the reference point for both the body and the payload, which simplifies
+incorporating the apparent mass matrix. However, this model treats the body
+and payload as separate components, connected by a rotational spring-damper
+model that adds an additional three degrees-of-freedom. A similar 9DoF model
+derivation can be found in <span id="id5">[<a class="reference internal" href="zreferences.html#id24" title="Chrystine M. Gorman and Nathan Slegers. Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature Wireless Sensors. Journal of Aircraft, 49(2):546–555, 2012. doi:10.2514/1.C031566.">31</a>]</span>
+(9DoF, but relative roll and pitch are unconstrained).</p>
+<p>An implementation of this model is available as
+<a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics9a" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider9a</span></code></a> in the <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>
+package. The <code class="docutils literal notranslate"><span class="pre">glidersim</span></code> package also includes
+<a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics9b" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider9b</span></code></a>, which uses the centers
+of mass as the reference points for the body and payload dynamics; that choice
+simplifies the derivatives for angular momentum (because it eliminates the
+moment arms), but prohibits incorporating the effects of apparent mass.</p>
+<section id="id6">
+<h4>Real mass only<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h4>
+<p>Start with the equations for the translational and angular momentum of the
+body <span class="math notranslate nohighlight">\(b\)</span> about the reference point <span class="math notranslate nohighlight">\(RM\)</span> as observed by the inertial
+reference frame <span class="math notranslate nohighlight">\(e\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-body-p">
+<span class="eqno">(23)<a class="headerlink" href="#equation-model9a-body-p" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {\vec{p}_{b/e}}
+    &amp;= m_b \, \vec{v}_{B/e} \\
+    &amp;= m_b \left(
+         {\vec{v}_{RM/e}} + {\vec{\omega}_{b/e}} \times {\vec{r}_{B/RM}}
+       \right)
+\end{aligned}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-payload-p">
+<span class="eqno">(24)<a class="headerlink" href="#equation-model9a-payload-p" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {\vec{p}_{p/e}}
+    &amp;= m_p \, \vec{v}_{P/e} \\
+    &amp;= m_p \left(
+         {\vec{v}_{RM/e}} + {\vec{\omega}_{b/e}} \times {\vec{r}_{P/RM}}
+       \right)
+\end{aligned}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-body-h">
+<span class="eqno">(25)<a class="headerlink" href="#equation-model9a-body-h" title="Permalink to this equation">#</a></span>\[\vec{h}_{b/RM} =
+  m_b \, \vec{r}_{B/RM} \times \vec{v}_{RM/e}
+  + \mat{J}_{b/RM} \cdot \vec{\omega}_{b/e}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-payload-h">
+<span class="eqno">(26)<a class="headerlink" href="#equation-model9a-payload-h" title="Permalink to this equation">#</a></span>\[\vec{h}_{p/RM} =
+  m_p \, \vec{r}_{P/RM} \times \vec{v}_{RM/e}
+  + \mat{J}_{p/RM} \cdot \vec{\omega}_{p/e}\]</div></div>
+<p>Compute the two momentum derivatives:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-momentum-derivatives1">
+<span class="eqno">(27)<a class="headerlink" href="#equation-model9a-momentum-derivatives1" title="Permalink to this equation">#</a></span>\[ \begin{align}\begin{aligned}\begin{aligned}
+  {^e \dot{\vec{p}}_{b/e}}
+    &amp;= {^b \dot{\vec{p}}_{b/e}} + \vec{\omega}_{b/e} \times \vec{p}_{b/e}\\    &amp;= m_b \left(
+         {^b \dot{\vec{v}}_{RM/e}}
+         + {^b \dot{\vec{\omega}}_{b/e}} \times {\vec{r}_{B/RM}}
+       \right)
+         + \vec{\omega}_{b/e} \times \vec{p}_{b/e}\\  {^e \dot{\vec{h}}_{b/RM}}
+    &amp;= {^b \dot{\vec{h}}_{b/RM}} + {\vec{\omega}_{b/e} \times \vec{h}_{b/RM}}\\    &amp;= m_b \vec{r}_{B/RM} \times {^b \vec{\dot{v}}_{RM/e}}
+       + {\mat{J}_{b/RM} \cdot {^b \dot{\vec{\omega}}_{b/e}}}
+       + {\vec{\omega}_{b/e} \times \vec{h}_{b/RM}}\\  {^e \dot{\vec{p}}_{p/e}}
+    &amp;= {^p \dot{\vec{p}}_{p/e}} + \vec{\omega}_{p/e} \times \vec{p}_{p/e}\\    &amp;= m_p \left(
+         {^p \dot{\vec{v}}_{RM/e}}
+         + {^p \dot{\vec{\omega}}_{p/e}} \times {\vec{r}_{P/RM}}
+       \right)
+         + \vec{\omega}_{p/e} \times \vec{p}_{p/e}\\    &amp;= m_p \left(
+         {^b \dot{\vec{v}}_{RM/e}}
+         + \vec{\omega}_{b/p} \times \vec{v}_{RM/e}
+         + {^p \dot{\vec{\omega}}_{p/e}} \times {\vec{r}_{P/RM}}
+       \right)
+         + \vec{\omega}_{p/e} \times \vec{p}_{p/e}\\  {^e \dot{\vec{h}}_{p/RM}}
+    &amp;= {^p \dot{\vec{h}}_{p/RM}} + {\vec{\omega}_{p/e} \times \vec{h}_{p/RM}}\\    &amp;= m_p \vec{r}_{P/RM}
+         \times {^p \dot{\vec{v}_{RM/e}}}
+         + \mat{J}_{p/RM} \cdot {^p \dot{\vec{\omega}}}_{p/e}
+         + \vec{\omega}_{p/e} \times \vec{h}_{p/RM}\\    &amp;= m_p \vec{r}_{P/RM}
+         \times \left( {^b \dot{\vec{v}_{RM/e}}} + \vec{\omega}_{b/p} \times \vec{v}_{RM/e} \right)
+         + \mat{J}_{p/RM} \cdot {^p \dot{\vec{\omega}}}_{p/e}
+         + \vec{\omega}_{p/e} \times \vec{h}_{p/RM}\\\end{aligned}\end{aligned}\end{align} \]</div></div>
+<p>Derivatives of the payload momentums are computed in terms of the body
+velocity derivative in the body frame to allow writing the dynamics as
+a single system of equations. First, compute the net external forces and
+moments:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-net-forces">
+<span class="eqno">(28)<a class="headerlink" href="#equation-model9a-net-forces" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  \vec{f}_b &amp;= \vec{f}_{b,\textrm{aero}} + \vec{f}_{b,\textrm{weight}} \\
+  \vec{g}_{b/RM} &amp;= \vec{g}_{b,\textrm{aero}} + \vec{g}_{b,\textrm{weight}} \\
+  \vec{f}_p &amp;= \vec{f}_{p,\textrm{aero}} + \vec{f}_{p,\textrm{weight}} \\
+  \vec{g}_{p/RM} &amp;= \vec{g}_{p,\textrm{aero}} + \vec{g}_{p,\textrm{weight}}  \\
+\end{aligned}\end{split}\]</div></div>
+<p>And equate them to the derivatives of momentum with respect to the inertial
+frame:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-momentum-derivatives2">
+<span class="eqno">(29)<a class="headerlink" href="#equation-model9a-momentum-derivatives2" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {^e \dot{\vec{p}}_{b/e}} &amp;=
+    \vec{f}_b - \vec{f}_{RM} \\
+  {^e \dot{\vec{h}}_{b/RM}} + \vec{v}_{RM/e} \times \vec{p}_{b/e} &amp;=
+    \vec{g}_{b/RM} - \vec{g}_{RM} \\
+  {^e \dot{\vec{p}}_{p/e}} &amp;=
+    \vec{f}_p + \vec{f}_{RM} \\
+  {^e \dot{\vec{h}}_{p/RM}} + \vec{v}_{RM/e} \times \vec{p}_{p/e} &amp;=
+    \vec{g}_{p/RM} + \vec{g}_{RM} \\
+\end{aligned}\end{split}\]</div></div>
+<p>[[<strong>FIXME</strong>: ambiguous notation? I’m interested in communicating “the moment
+about <cite>RM</cite> due to the spring” and “the moment about <cite>RM</cite> due to the aerodynamic
+forces”, etc]]</p>
+<p>[[<strong>FIXME</strong>: define <cite>g_{b,aero}</cite> etc? Has contributions from both aerodynamic
+moments as well as forces applied on some lever arm to <cite>RM</cite>.]]</p>
+<p>[[<strong>FIXME</strong>: need to describe <cite>f_{RM}</cite> and <cite>g_{RM}</cite></p>
+<p>The spring-damper connection produces forces and moments shared by the body
+and the payload. There are six variables but only three degrees of freedom.
+Both systems have the riser connection point <span class="math notranslate nohighlight">\(RM\)</span> at a fixed position,
+and the force only exists to maintain the fixed relative positioning.</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-linear-spring-moment">
+<span class="eqno">(30)<a class="headerlink" href="#equation-model9a-linear-spring-moment" title="Permalink to this equation">#</a></span>\[\begin{split}\vec{g}_{RM} =
+  \begin{bmatrix}
+    \begin{aligned}
+      \kappa_{\phi} \phi &amp;+ \kappa_{\dot{\phi}} \dot{\phi} \\
+      \kappa_{\theta} \theta &amp;+ \kappa_{\dot{\theta}} \dot{\theta} \\
+      \kappa_{\gamma} \gamma &amp;+ \kappa_{\dot{\gamma}} \dot{\gamma} \\
+    \end{aligned}
+  \end{bmatrix}\end{split}\]</div></div>
+<p>Where <span class="math notranslate nohighlight">\(\vec{\omega}_{p/b}^p = \left&lt; \phi, \theta, \gamma \right&gt;\)</span> are
+the angular rates of the payload, <span class="math notranslate nohighlight">\(^p \dot{\vec{\omega}}_{p/b}^p
+= \left&lt; \dot{\phi}, \dot{\theta}, \dot{\gamma} \right&gt;\)</span> are the angular
+accelerations of the payload, and the <span class="math notranslate nohighlight">\(\kappa\)</span> are the stiffness and
+dampening coefficients of the spring-damper model.</p>
+<p>This is a very simple model. A better model would need to account for the
+coupling between dimensions, and should really be a function of the riser
+strap width.]]</p>
+<p>Combining equations <a class="reference internal" href="#equation-model9a-momentum-derivatives1">(27)</a> and
+<a class="reference internal" href="#equation-model9a-momentum-derivatives2">(29)</a> and rewriting as a linear system provides
+the dynamics of the real mass (solid mass plus the enclosed air) in terms of
+<span class="math notranslate nohighlight">\(^b \dot{\vec{v}}_{RM/e}\)</span>, <span class="math notranslate nohighlight">\(^b \dot{\vec{\omega}}_{b/e}\)</span>, <span class="math notranslate nohighlight">\(^b
+\dot{\vec{\omega}}_{p/e}^p\)</span>, and <span class="math notranslate nohighlight">\(\vec{f}_{RM}^b\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-real-system">
+<span class="eqno">(31)<a class="headerlink" href="#equation-model9a-real-system" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{A}_{r/RM}
+\begin{bmatrix}
+  {^b \dot{\vec{v}}_{RM/e}^b} \\
+  {^b \dot{\vec{\omega}}_{b/e}^b} \\
+  {^p \dot{\vec{\omega}}_{p/e}^p} \\
+  {   \vec{f}_{RM}^b}
+\end{bmatrix}
+= \begin{bmatrix}
+    \vec{b}_1^b \\
+    \vec{b}_2^b \\
+    \vec{b}_3^p \\
+    \vec{b}_4^p
+  \end{bmatrix}\end{split}\]</div></div>
+<p>Where:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\mat{A}_{r/RM} =
+  \begin{bmatrix}
+    {m_b \, \mat{I}_3}
+      &amp; {-m_b \crossmat{\vec{r}_{B/RM}^b}}
+      &amp; {\mat{0}_{3\times3}}
+      &amp; {\mat{I}_3} \\
+    {m_b \, \crossmat{\vec{r}_{B/RM}^b}}
+      &amp; {\mat{J}_{b/RM}^b}
+      &amp; {\mat{0}_{3\times3}}
+      &amp; {\mat{0}_{3\times3}} \\
+    {m_p \, \mat{C}_{p/b}}
+      &amp; {\mat{0}_{3\times3}}
+      &amp; {-m_p \crossmat{\vec{r}_{P/RM}^p}}
+      &amp; {-\mat{C}_{p/b}} \\
+    {m_p \, \crossmat{\vec{r}_{P/RM}^p} \mat{C}_{p/b}}
+      &amp; {\mat{0}_{3\times3}}
+      &amp; {\mat{J}_{p/RM}^p}
+      &amp; {\mat{0}_{3\times3}}
+  \end{bmatrix}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-dynamics-rhs">
+<span class="eqno">(32)<a class="headerlink" href="#equation-model9a-dynamics-rhs" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+   \vec{b}_1^b &amp;=
+     \vec{f}_b^b
+     - \vec{\omega}_{b/e}^b \times \vec{p}_{b/e}^b \\
+   \vec{b}_2^b &amp;=
+     \vec{g}_b^b
+     - \vec{g}_{RM}^b
+     - \vec{v}_{RM/e}^b \times \vec{p}_{b/e}^b
+     - \vec{\omega}_{b/e}^b \times \vec{h}_{b/RM}^b \\
+   \vec{b}_3^p &amp;=
+     \vec{f}_p^p
+     - \vec{\omega}_{p/e}^p \times \vec{p}_{p/e}^p
+     - m_p \vec{\omega}_{b/p}^p \times \vec{v}_{RM/e}^p \\
+   \vec{b}_4^p &amp;=
+     \vec{g}_b^p
+     + \vec{g}_{RM}^p
+     - \vec{v}_{RM/e}^p \times \vec{p}_{p/e}^p
+     - \vec{\omega}_{p/e}^p \times \vec{h}_{p/RM}^p
+     - m_p \vec{r}_{P/RM}^p \times \left( \vec{\omega}_{b/p}^p \times \vec{v}_{RM/e}^p \right)
+\end{aligned}\end{split}\]</div></div>
+</section>
+<section id="id7">
+<h4>Real mass + apparent mass<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h4>
+<p>As with the 6-DoF system, the effects of apparent mass on the canopy can be
+accounted for by adding the apparent inertia matrix from <a class="reference internal" href="#apparent-mass-of-a-parafoil">Apparent mass of
+a parafoil</a> to the components of the system matrix associated with the
+translational and angular acceleration of the body and accounting for the
+translational and angular apparent momentum:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-complete-system">
+<span class="eqno">(33)<a class="headerlink" href="#equation-model9a-complete-system" title="Permalink to this equation">#</a></span>\[\begin{split}\left(
+  \mat{A}_{r/RM}
+  + \begin{bmatrix}
+      \mat{A}_{a/RM} &amp; \mat{0}_{6\times6} \\
+      \mat{0}_{6\times6} &amp; \mat{0}_{6\times6}
+    \end{bmatrix}
+\right)
+\begin{bmatrix}
+  {^b \dot{\vec{v}}_{RM/e}^b} \\
+  {^b \dot{\vec{\omega}}_{b/e}^b} \\
+  {^p \dot{\vec{\omega}}_{p/e}^p} \\
+  {   \vec{f}_{RM}^b}
+\end{bmatrix}
+= \begin{bmatrix}
+    \vec{b}_5^b \\
+    \vec{b}_6^b \\
+    \vec{b}_3^p \\
+    \vec{b}_4^p
+  \end{bmatrix}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  \vec{b}_5^b &amp;= \vec{b}_1^b - \vec{\omega}_{b/e} \times \vec{p}_{a/e} \\
+  \vec{b}_6^b &amp;=
+    \vec{b}_2^b
+    - {\vec{v}_{RM/e} \times \vec{p}_{a/e}}
+    - {\vec{\omega}_{b/e} \times \vec{h}_{a/RM}}
+    + {\vec{v}_{RM/e} \times \left( \mat{M}_a \cdot \vec{v}_{RM/e} \right) }
+\end{aligned}\end{split}\]</div></div>
+<p>Where <span class="math notranslate nohighlight">\(\mat{A}_{a/RM}\)</span> is the apparent inertia matrix of the canopy from
+<a class="reference internal" href="#equation-apparent-inertia-matrix">(5)</a>, <span class="math notranslate nohighlight">\(\mat{M}_a\)</span> is the apparent mass matrix
+from <a class="reference internal" href="#equation-apparent-mass-matrix">(3)</a>, and <span class="math notranslate nohighlight">\(\vec{p}_{a/e}\)</span> and
+<span class="math notranslate nohighlight">\(\vec{h}_{a/RM}\)</span> are the linear and angular apparent momentums from
+<a class="reference internal" href="#equation-apparent-linear-momentum">(6)</a> and <a class="reference internal" href="#equation-apparent-angular-momentum">(7)</a>. The extra
+term <span class="math notranslate nohighlight">\(\vec{v}_{RM/e} \times \left( \mat{M}_a \vec{v}_{RM/e} \right)\)</span> in
+<span class="math notranslate nohighlight">\(\vec{b}_6^b\)</span> is necessary to avoid double counting the aerodynamic
+moment already accounted for by the section pitching coefficients.</p>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+<div class="related-pages">
+  
+  <a class="prev-page" href="notation.html">
+      <svg><use href="#svg-arrow-right"></use></svg>
+      <div class="page-info">
+        <div class="context">
+          <span>Previous</span>
+        </div>
+        
+        <div class="title">Notation and Symbols</div>
+        
+      </div>
+    </a>
+</div>
+<div class="bottom-of-page">
+  <div class="left-details">
+    &copy; 2022, Peter Frank Heatwole
+    |
+    <a href="https://creativecommons.org/licenses/by/4.0" style="text-decoration-line:none">
+      <img
+        class="logo"
+        src="_static/cc_by_80x15.svg"
+        height="15px"
+        style="vertical-align:middle"
+        alt="Licensed CC-BY 4.0"
+      />
+    </a>
+    | Powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+    w/ <a href="https://github.com/pradyunsg/furo">Furo</a>
+      | <a class="muted-link" href="_sources/derivations.rst.txt"
+        rel="nofollow">
+        Show Source
+      </a>
+  </div>
+  <div class="right-details">
+    <div class="icons">
+      
+    </div>
+  </div>
+</div>
+
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Derivations</a><ul>
+<li><a class="reference internal" href="#parametric-design-curves">Parametric design curves</a><ul>
+<li><a class="reference internal" href="#elliptical-chord">Elliptical chord</a></li>
+<li><a class="reference internal" href="#elliptical-arc">Elliptical arc</a></li>
+<li><a class="reference internal" href="#polynomial-torsion">Polynomial torsion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#area-and-volume-of-a-mesh">Area and Volume of a Mesh</a><ul>
+<li><a class="reference internal" href="#area">Area</a></li>
+<li><a class="reference internal" href="#volume">Volume</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#apparent-mass-of-a-parafoil">Apparent mass of a parafoil</a></li>
+<li><a class="reference internal" href="#paraglider-system-models">Paraglider system models</a><ul>
+<li><a class="reference internal" href="#model-6a">Model 6a</a><ul>
+<li><a class="reference internal" href="#real-mass-only">Real mass only</a></li>
+<li><a class="reference internal" href="#real-mass-apparent-mass">Real mass + apparent mass</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#model-6b">Model 6b</a></li>
+<li><a class="reference internal" href="#model-6c">Model 6c</a></li>
+<li><a class="reference internal" href="#model-9a">Model 9a</a><ul>
+<li><a class="reference internal" href="#id6">Real mass only</a></li>
+<li><a class="reference internal" href="#id7">Real mass + apparent mass</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/cancel"]}, "tex": {"macros": {"defas": "\\stackrel{\\mathrm{def}}{=}", "given": "\\;\\middle\\vert\\;", "vec": ["\\mathbf{#1}", 1], "mat": ["\\mathbf{#1}", 1], "crossmat": ["\\left[{#1}\\right]^{\\times}", 1], "norm": ["\\left\\|{#1}\\right\\|", 1]}, "packages": {"[+]": ["cancel"]}}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

@@ -1,0 +1,1009 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="8. Conclusion" href="conclusion.html" /><link rel="prev" title="6. State dynamics" href="state_dynamics.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+        <title>7. Demonstration - Parametric Paraglider Modeling</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     <b>This document is a draft!</b> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Parametric Paraglider Modeling</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Parametric Paraglider Modeling</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">7. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notation.html">Notation and Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="derivations.html">Derivations</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="demonstration">
+<h1><span class="section-number">7. </span>Demonstration<a class="headerlink" href="#demonstration" title="Permalink to this headline">#</a></h1>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p><strong>This chapter is VERY raw. I recommend skipping it for now.</strong></p>
+</div>
+<p>One reason that modeling a commercial paraglider wing is difficult is because
+the published specifications are limited to basic summary measurements. A major
+task of the modeling process is augmenting the missing information to create
+a complete model. To address that difficulty, this paper developed parametric
+<a class="reference internal" href="paraglider_components.html"><span class="doc">component models</span></a> that encode assumptions of the
+unknown structure.</p>
+<p>This chapter demonstrates one possible workflow to estimate the parameters of
+the component models by combining publicly available technical specifications
+and photographs with knowledge of typical paraglider wing design. Once the
+components are combined into a <a class="reference internal" href="system_dynamics.html"><span class="doc">system model</span></a>, it is
+validated by comparing its estimates of the glider’s longitudinal steady-state
+aerodynamics over the range of control inputs against published performance
+data, such as minimum sink rate and speed range. The chapter concludes with
+flight simulations using the model in a variety of flight scenarios.</p>
+<section id="model-creation">
+<h2><span class="section-number">7.1. </span>Model creation<a class="headerlink" href="#model-creation" title="Permalink to this headline">#</a></h2>
+<p>The paraglider wing used in this example is a Niviuk Hook 3. With forgiving
+flight characteristics targeting advanced beginners, this wing is not intended
+for acrobatics, so the <a class="reference internal" href="foil_aerodynamics.html#limitations"><span class="std std-ref">limitations</span></a> of
+the <a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line"><span class="std std-ref">aerodynamics method</span></a> are not an issue when simulating the majority of flights
+produced by this wing.</p>
+<figure class="align-default" id="hook3-front-view">
+<img alt="_images/Hook3_front_view.jpg" src="_images/Hook3_front_view.jpg"/>
+<figcaption>
+<p><span class="caption-number">Fig. 7.1 </span><span class="caption-text">Front-view of an inflated Niviuk Hook 3</span><a class="headerlink" href="#hook3-front-view" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Wing data for a commercial wing is typically available from four primary
+sources:</p>
+<ol class="arabic simple">
+<li><p>Technical specifications and user manuals</p></li>
+<li><p>Flight test data from certifications and reviews</p></li>
+<li><p>Pictures and videos</p></li>
+<li><p>Physical measurements</p></li>
+</ol>
+<p>For this chapter, only the first three will be utilized. Although physical
+measurements are ideal, they are frequently difficult to obtain (especially for
+older wings). Instead, this demonstration is focused on showing that it is
+feasible to create an approximate wing model even if physical measurements are
+unavailable.</p>
+<section id="technical-specs">
+<h3><span class="section-number">7.1.1. </span>Technical specs<a class="headerlink" href="#technical-specs" title="Permalink to this headline">#</a></h3>
+<p>From the official <a class="reference external" href="https://niviuk.com/niviuk/customer_pdf/Descatalogado/Hook%203/Datos%20t%C3%A9cnicos/HOOK3_TECNIC_ENG.pdf">technical specifications manual</a>:</p>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default" id="id6">
+<caption><span class="caption-number">Table 7.1 </span><span class="caption-text">Wing data</span><a class="headerlink" href="#id6" title="Permalink to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property [unit]</p></th>
+<th class="head"><p>Size 23</p></th>
+<th class="head"><p>Size 25</p></th>
+<th class="head"><p>Size 27</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Flat area [m<sup>2</sup>]</p></td>
+<td><p>23</p></td>
+<td><p>25</p></td>
+<td><p>27</p></td>
+</tr>
+<tr class="row-odd"><td><p>Flat span [m]</p></td>
+<td><p>11.15</p></td>
+<td><p>11.62</p></td>
+<td><p>12.08</p></td>
+</tr>
+<tr class="row-even"><td><p>Flat aspect ratio</p></td>
+<td><p>5.40</p></td>
+<td><p>5.40</p></td>
+<td><p>5.40</p></td>
+</tr>
+<tr class="row-odd"><td><p>Projected area [m<sup>2</sup>]</p></td>
+<td><p>19.55</p></td>
+<td><p>21.25</p></td>
+<td><p>22.95</p></td>
+</tr>
+<tr class="row-even"><td><p>Projected span [m]</p></td>
+<td><p>8.84</p></td>
+<td><p>9.22</p></td>
+<td><p>9.58</p></td>
+</tr>
+<tr class="row-odd"><td><p>Projected aspect ratio</p></td>
+<td><p>4.00</p></td>
+<td><p>4.00</p></td>
+<td><p>4.00</p></td>
+</tr>
+<tr class="row-even"><td><p>Root chord [m]</p></td>
+<td><p>2.58</p></td>
+<td><p>2.69</p></td>
+<td><p>2.8</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tip chord [m]</p></td>
+<td><p>0.52</p></td>
+<td><p>0.54</p></td>
+<td><p>0.56</p></td>
+</tr>
+<tr class="row-even"><td><p>Standard mean chord [m]</p></td>
+<td><p>2.06</p></td>
+<td><p>2.14</p></td>
+<td><p>2.23</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of cells</p></td>
+<td><p>52</p></td>
+<td><p>52</p></td>
+<td><p>52</p></td>
+</tr>
+<tr class="row-even"><td><p>Total line length [m]</p></td>
+<td><p>218</p></td>
+<td><p>227</p></td>
+<td><p>236</p></td>
+</tr>
+<tr class="row-odd"><td><p>Central line length [m]</p></td>
+<td><p>6.8</p></td>
+<td><p>7.09</p></td>
+<td><p>7.36</p></td>
+</tr>
+<tr class="row-even"><td><p>Accelerator line length [m]</p></td>
+<td><p>0.15</p></td>
+<td><p>0.15</p></td>
+<td><p>0.15</p></td>
+</tr>
+<tr class="row-odd"><td><p>Solid mass [kg]</p></td>
+<td><p>4.9</p></td>
+<td><p>5.3</p></td>
+<td><p>5.5</p></td>
+</tr>
+<tr class="row-even"><td><p>In-flight weight range [kg]</p></td>
+<td><p>65-85</p></td>
+<td><p>80-100</p></td>
+<td><p>95-115</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>This section demonstrates how to estimate the parameters for a size 23 wing.
+The same process is used (but not shown) to create models of the size 25 and
+27 wings for the discussion in <a class="reference internal" href="#model-validation"><span class="std std-ref">Model validation</span></a>.</p>
+</section>
+<section id="canopy">
+<h3><span class="section-number">7.1.2. </span>Canopy<a class="headerlink" href="#canopy" title="Permalink to this headline">#</a></h3>
+<p>The first component model of the paraglider system is for the <a class="reference internal" href="paraglider_components.html#canopy"><span class="std std-ref">canopy</span></a>. The canopy model uses a <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a>
+model and <a class="reference internal" href="paraglider_components.html#solid-mass"><span class="std std-ref">physical details</span></a> such as
+material densities and surface extents to estimate the aerodynamics and
+inertial properties of the canopy. There are two groups of model parameters:</p>
+<ol class="arabic simple">
+<li><p>Parameters of the design curves that define the variables <a class="reference internal" href="foil_geometry.html#equation-simplified-foil-geometry-variables">(2.15)</a> of the <a class="reference internal" href="foil_geometry.html#simplified-model"><span class="std std-ref">simplified foil geometry model</span></a></p></li>
+<li><p>Parameters of the canopy component model <a class="reference internal" href="paraglider_components.html#equation-canopy-parameters">(4.10)</a></p></li>
+</ol>
+<section id="geometry">
+<h4><span class="section-number">7.1.2.1. </span>Geometry<a class="headerlink" href="#geometry" title="Permalink to this headline">#</a></h4>
+<p class="rubric">Layout</p>
+<p>The first part of specifying a foil geometry is to layout the scale, position,
+and orientation of its sections.</p>
+<p>[[For a parafoil, it’s easiest to start by describing the geometry of the
+flattened (uninflated) canopy before dealing with the arc. This approach is
+made a lot easier by the choice of the <a class="reference internal" href="foil_geometry.html#simplified-model"><span class="std std-ref">Simplified model</span></a> to
+define the <a class="reference internal" href="foil_geometry.html#simplified-model-section-index"><span class="std std-ref">section index</span></a> in terms of
+the <span class="math notranslate nohighlight">\(yz\)</span>-curve. When a parafoil is flattened the section index
+corresponds to the normalized distance along each semispan, the
+<span class="math notranslate nohighlight">\(x\)</span>-positions and chord lengths can be measured directly without regard
+for the arc.]]</p>
+<p>The easiest place to start is with the chord length distribution <span class="math notranslate nohighlight">\(c(s)\)</span>.
+The technical specifications only list the root, tip, and mean chord lengths,
+so more information is required. Thankfully, for parafoils a reasonable guess
+is that the wing uses a truncated elliptical distribution. (Paragliding wings
+commonly use truncated elliptic functions because they encourage elliptical
+lift distributions, thus reducing induced drag.) Such a truncated elliptical
+distribution can be easily parametrized by the wing root and wing tip section
+chord lengths, as shown in the <a class="reference internal" href="derivations.html#elliptical-chord"><span class="std std-ref">Elliptical chord</span></a> parametric
+model. The technical specs list these two parameters as <span class="math notranslate nohighlight">\(c_\textrm{root}
+= 2.58\)</span> and <span class="math notranslate nohighlight">\(c_\textrm{tip} = 0.52\)</span>, respectively. Using those parameters
+produces a mean chord length of <span class="math notranslate nohighlight">\(2.06\)</span>, which exactly matches the
+standard mean chord listed in the manufacturers specs. The assumption was
+justified. An additional check is to compare the area of the flattened chord
+surface; for these parameters the flattened area is <span class="math notranslate nohighlight">\(22.986\)</span> compared to
+the true specification of <span class="math notranslate nohighlight">\(23.0\)</span>. (This discrepancy may be explained by
+differences in measuring methodology or by the absence of any geometry twist,
+but in practice the effect is negligible.)</p>
+<p>Next is the fore-aft positioning of the sections, which are controlled by the
+<span class="math notranslate nohighlight">\(r_x(s)\)</span> and <span class="math notranslate nohighlight">\(x(s)\)</span> design curves. Although traditional wing
+geometry models would effectively choose <span class="math notranslate nohighlight">\(r_x(s) = 0\)</span> and measure the
+<span class="math notranslate nohighlight">\(x\)</span>-offsets of each section’s leading edge, that choice often produces an
+unnecessarily complicated <span class="math notranslate nohighlight">\(x(s)\)</span> function. Instead, paragliders can often
+be described with constant <span class="math notranslate nohighlight">\(r_x(s)\)</span> and <span class="math notranslate nohighlight">\(x(s) = 0\)</span>. As with the
+chord lengths, the value of <span class="math notranslate nohighlight">\(r_x(s)\)</span> is easiest to estimate from the
+flattened wing; in fact, flattened drawings are commonly available in technical
+manuals, making them especially convenient. (Admittedly, such drawings are not
+always to scale, and so should be used with caution.) For this wing, a small
+amount of trial and error using a top-down view from the wing user manual
+suggests <span class="math notranslate nohighlight">\(r_x = 0.7\)</span>.</p>
+<p>As seen in <a class="reference internal" href="#hook3-topdown"><span class="std std-numref">Fig. 7.2</span></a>, the elliptical chord assumption with
+<span class="math notranslate nohighlight">\(r_x = 0.7\)</span> gives a close match to the drawing in the manual.</p>
+<figure class="align-default" id="hook3-topdown">
+<img alt="_images/Hook3_topdown.jpg" src="_images/Hook3_topdown.jpg"/>
+<figcaption>
+<p><span class="caption-number">Fig. 7.2 </span><span class="caption-text">Top-down outline of flattened canopy</span><a class="headerlink" href="#hook3-topdown" title="Permalink to this image">#</a></p>
+<div class="legend">
+<p>The black outline is the boundary of the model’s flattened chord surface.
+The colored background is taken from the user manual for the wing.</p>
+</div>
+</figcaption>
+</figure>
+<p>With the flattened chord surface completed, the next step is to define the
+<em>arc</em> (position in the <span class="math notranslate nohighlight">\(yz\)</span>-plane). Photos of the wing suggest that
+a circular arc segment is a reasonable starting point. As with the truncated
+elliptical distribution for the chord lengths, a parametric
+<a class="reference internal" href="derivations.html#elliptical-arc"><span class="std std-ref">Elliptical arc</span></a> model for <span class="math notranslate nohighlight">\(yz(s)\)</span> can be produced from
+two parameters: <span class="math notranslate nohighlight">\(\Gamma_\textrm{tip}\)</span>, <span class="math notranslate nohighlight">\(\phi_\textrm{tip}\)</span>, and
+scaled by the flattened span <span class="math notranslate nohighlight">\(b_\textrm{flat}\)</span>. There are several ways to
+estimate the elliptical arc parameters of the physical wing, such as the width
+to height ratios, or visual estimation of the arc angle, but since the specs
+included both the flattened and projected spans, the simplest method is to
+guess <span class="math notranslate nohighlight">\(\phi_\textrm{tip}\)</span> and increase <span class="math notranslate nohighlight">\(\Gamma_\textrm{tip}\)</span> until
+the projected span matches the expected value. [[FIXME: finish writing. For
+example, checking the “naive” fit based on a circular arc is pretty close, but
+the projected surface area doesn’t match the specs; the fit can be improved by
+replacing the circular arc with an elliptical arc. For this section, use trig
+to compute the elliptical parameters manually, but mention that <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>
+provides helper functions to simplify the process. My final fit was
+<span class="math notranslate nohighlight">\(\Gamma_\textrm{tip} = 32\)</span>, <span class="math notranslate nohighlight">\(\phi_\textrm{tip} = 75\)</span>.]]</p>
+<p>After the relatively straightforward process of positioning the sections is the
+more difficult task of estimating their orientation. In the <a class="reference internal" href="foil_geometry.html#simplified-model"><span class="std std-ref">simplified
+model</span></a> section roll is defined by the
+curvature of the <span class="math notranslate nohighlight">\(yz\)</span>-curve and the section yaw is defined as zero, but
+the section pitch <span class="math notranslate nohighlight">\(\theta(s)\)</span> (or <em>geometric torsion</em>) can be difficult
+to measure. Most parafoils benefit from a small amount of increasing geometric
+torsion towards the wing tips (or <em>washin</em>), and a conservative guess of <cite>4</cite>
+degrees at the wingtip should be reasonably accurate. [[FIXME: how does the
+torsion develop? Most designs assume linear, but I use a <a class="reference internal" href="derivations.html#polynomial-torsion"><span class="std std-ref">polynomial</span></a> model.]]</p>
+<p>[[FIXME: sanity check the inflated chord surface. Span, area, AR.]]</p>
+<p class="rubric">Profiles</p>
+<p>After the section layout (scale, position, and orientation) is complete, each
+section must be assigned an airfoil.</p>
+<p>[[FIXME: explain my choice. Belloc used the 23015, but
+<span id="id1">[<a class="reference internal" href="zreferences.html#id34" title="J Stephen Lingard. Ram-air parachute Design. In 13th AIAA Aerodynamic Decelerator Systems Technology Conference, 15–18. 1995.">26</a>]</span> says that many older designs used
+a Clark-Y with 18% thickness. I chose the NACA 24018 as a sort of clumsy
+compromise. He also mentions that newer gliders have “benefited from glider
+technology and use a range of low-speed section” like the LS(1)-0417 (which
+was also chosen by <span id="id2">[<a class="reference internal" href="zreferences.html#id9" title="Sarah Becker and Paul Bruce. Experimental Study of Paraglider Aerodynamics. Master's thesis, Imperial College London, September 2017. doi:10.13140/RG.2.2.33674.16321.">27</a>]</span>).]]</p>
+<figure class="align-default" id="airfoil-set-braking-naca24018">
+<img alt="_images/braking_NACA24018.svg" src="_images/braking_NACA24018.svg"/><figcaption>
+<p><span class="caption-number">Fig. 7.3 </span><span class="caption-text">Set of NACA 24018 airfoils with trailing edge deflections.</span><a class="headerlink" href="#airfoil-set-braking-naca24018" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>[[FIXME: explain how I produced those profiles? Oof.]]</p>
+<p>[[FIXME: explain why this is an extremely optimistic model of how parafoil
+sections deform with increasing brake inputs. I’d go as far as to say that
+this is the number one source of error in the model.]]</p>
+<p>[[FIXME: explain using XFOIL to estimate the section coefficients]]</p>
+</section>
+<section id="surface-materials">
+<h4><span class="section-number">7.1.2.2. </span>Surface materials<a class="headerlink" href="#surface-materials" title="Permalink to this headline">#</a></h4>
+<p>Given the (idealized) <a class="reference internal" href="foil_geometry.html"><span class="doc">foil geometry</span></a> model, specify the
+physical attributes such as surface material densities and air intake extents
+allows the canopy model to calculate its inertial properties and viscous drag
+corrections.</p>
+<p>In this case, the surface material densities can be read directly from the
+materials section of the user manual:</p>
+<div class="table-wrapper"><table class="docutils align-default" id="hook3-material-densities">
+<caption><span class="caption-number">Table 7.2 </span><span class="caption-text">Hook 3 material densities</span><a class="headerlink" href="#hook3-material-densities" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Surface</p></th>
+<th class="head"><p>Material</p></th>
+<th class="head"><p>Density <span class="math notranslate nohighlight">\(\left[ \frac{kg}{m^2} \right]\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Upper</p></td>
+<td><p>Porcher 9017 E77A</p></td>
+<td><p>0.039</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lower</p></td>
+<td><p>Dominico N20DMF</p></td>
+<td><p>0.035</p></td>
+</tr>
+<tr class="row-even"><td><p>Internal ribs</p></td>
+<td><p>Porcher 9017 E29</p></td>
+<td><p>0.041</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>In addition to the material densities, the canopy model requires the number of
+cells to determine the distribution of mass for the internal ribs. The specs
+lists <span class="math notranslate nohighlight">\(N_\textrm{cells} = 52\)</span>, which implies the wing has 53 internal
+ribs. In reality the ribs are <em>ported</em> (holes that allow air to flow between
+cells), but since the canopy model is neglecting the mass in the remainder of
+the internal structure the discrepancy should balance out.</p>
+<p>For the air intakes, the user manual provides a projected diagram (Fig. 11.4,
+p. 17) which shows that the air intakes start at the 21st of 26 ribs spreading
+out from the central rib; assuming a linear spacing of the ribs this would
+correspond to <span class="math notranslate nohighlight">\(s = 0.807\)</span>, so <span class="math notranslate nohighlight">\(s_\textrm{end} = 0.8\)</span> is
+a reasonable guess for the spanwise extent of sections with air intakes.</p>
+<p>The other dimension of the air intakes is the size of their opening, which is
+determined by the extent of the upper and lower surface. This value is
+difficult to determine precisely from photos, but thankfully its effect on the
+solid mass inertia and viscous drag is relatively minor; in the absence of
+physical measurements, a reasonable guess is <span class="math notranslate nohighlight">\(r_\textrm{upper} = -0.04\)</span>
+and <span class="math notranslate nohighlight">\(r_\textrm{lower} = -0.09\)</span> for an air intake length roughly 5% of the
+length of the chord.</p>
+<figure class="align-default" id="naca24018-with-air-intakes">
+<img alt="_images/air_intakes.svg" src="_images/air_intakes.svg"/><figcaption>
+<p><span class="caption-number">Fig. 7.4 </span><span class="caption-text">NACA 24018 with air intakes</span><a class="headerlink" href="#naca24018-with-air-intakes" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>[[FIXME: one of my references mentions sizes of air intakes. Explain why
+I chose 5% as “a reasonable guess”.]]</p>
+<p>[[FIXME: sanity check the total mass. The specs list the total wing weight at
+4.9kg, but the canopy upper/lower/rib materials only account for 2.95kg. My
+mass calculations neglect the extra mass due to things like the lines, riser
+straps, carabiners, internal v-ribs, horizontal straps, tension rods, etc, so
+I’m underestimating that mass, but I’m also assuming the vertical ribs are
+solid (no ports) so that makes up for a bit of the missing mass]]</p>
+<p>[[FIXME: add the viscous drag corrections</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(C_{D,\textrm{intakes}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(C_{D,\textrm{surface}}\)</span></p></li>
+</ul>
+<p>]]</p>
+</section>
+</section>
+<section id="suspension-lines">
+<h3><span class="section-number">7.1.3. </span>Suspension lines<a class="headerlink" href="#suspension-lines" title="Permalink to this headline">#</a></h3>
+<p>The second component model of the paraglider system is for the <a class="reference internal" href="paraglider_components.html#suspension-lines"><span class="std std-ref">suspension
+lines</span></a>. It is responsible for
+positioning the payload, adjusting the position as a function of the
+accelerator input, computing the trailing edge deflection angles, and
+estimating the aerodynamic drag of the lines.</p>
+<section id="riser-position">
+<h4><span class="section-number">7.1.3.1. </span>Riser position<a class="headerlink" href="#riser-position" title="Permalink to this headline">#</a></h4>
+<p>[[This demonstration uses the simplified line geometry model. Instead of
+modeling the complete set of lines, it focuses on producing the effects of the
+lines with as few parameters as possible.]]</p>
+<p><a class="reference internal" href="paraglider_components.html#equation-suspension-lines-parameters-riser-position">(4.24)</a></p>
+<ul class="simple">
+<li><p>Typically the easiest parameter to procure is <span class="math notranslate nohighlight">\(\kappa_z\)</span>: the vertical
+distance from the riser midpoint to the canopy. For this wing, the technical
+specs listed this value as the “Central line length” and can be used
+directly.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The fore and aft suspension lines are referred to as the A and C lines, and
+connect to the canopy at the <span class="math notranslate nohighlight">\(\kappa_A\)</span> and <span class="math notranslate nohighlight">\(\kappa_C\)</span> chord
+positions.</p></li>
+<li><p>The chord ratios are easiest to measure on a physical wing, but measurements
+from a line layout diagram in a technical manual may work as well.</p></li>
+<li><p>[[FIXME: explain that because the accelerator causes the wing to rotate about
+the C connection point, <cite>kappa_C</cite> strongly affects wing behavior when
+accelerator is applied.]]</p></li>
+<li><p>[[FIXME: show the diagram from the manual?]]</p></li>
+</ul>
+<ul class="simple">
+<li><p>[[The accelerator decreases the length of the A lines to reposition the
+harness. For this wing, the accelerator line length can be read directly from
+the specs: <span class="math notranslate nohighlight">\(\kappa_a = 0.15\)</span>]]</p></li>
+</ul>
+<ul class="simple">
+<li><p>Lastly is to define the fore-aft position of the payload with
+<span class="math notranslate nohighlight">\(\kappa_x\)</span>.</p></li>
+<li><p>[[FIXME: explain why it’s easiest to estimate this last. It’s not in the
+specs and very difficult to measure from the physical wing, diagrams, or
+pictures.]]</p></li>
+<li><p>[[FIXME: explain how <cite>kappa_x</cite> affects wing behavior and the polar curve so
+we can take advantage of that knowledge for designing the model]]</p></li>
+<li><p>A simple rule of thumb for modern paragliders is to start with the assumption
+that the wing has been designed to maximize its glide ratio at “trim”
+conditions (ie, when no inputs are applied). Given that assumption,
+calculating the equilibrium conditions [[as explained below]] for the wing
+turns this parameter estimation into an optimization problem. If maximum
+glide occurs with brakes, increase <cite>kappa_x</cite>; if it needs accelerator,
+decrease it. Eventually you’ll find a payload position</p></li>
+<li><p>[[FIXME: this step happens later! After you’ve finished the model. It’s an
+optimization pass after you’ve created the entire system. Also point out that
+this approach requires making an assumption of what harness and weight the
+wing designer was optimizing the design for since those affect the polar.]]</p></li>
+<li><p>[[Summary: start with <cite>kappa_x = 0.5</cite>, finish designing the complete system,
+then optimize <cite>kappa_x</cite> until best glide occurs for zero inputs.]]</p></li>
+</ul>
+</section>
+<section id="brakes">
+<h4><span class="section-number">7.1.3.2. </span>Brakes<a class="headerlink" href="#brakes" title="Permalink to this headline">#</a></h4>
+<p><strong>Estimating the maximum trailing edge deflection</strong></p>
+<ul>
+<li><p>The <a class="reference internal" href="paraglider_components.html#suspension-lines"><span class="std std-ref">Suspension lines</span></a> model assumed the brake
+inputs are on a scale from 0 to 1, with maximum braking associated with
+a predetermined maximum brake deflection <span class="math notranslate nohighlight">\(\kappa_b\)</span>.</p>
+<p>(Related: deflection distance <a class="reference internal" href="paraglider_components.html#equation-normalized-deflection-distance">(4.1)</a>)</p>
+</li>
+<li><p>On a real wing the brake lines effectively don’t have a limit, since
+a pilot can literally pull the trailing edge all the way back to the
+risers. It exists because it made the model more convenient to use.</p></li>
+<li><p>It represents the maximum deflection distance that the line model will
+produce. Providing an upper bound is useful for keeping the wing within the
+operating range of the section coefficient data.</p>
+<p>For this model, the coefficients are limited to a normalized deflection
+distance of <cite>0.203</cite> (see <a class="reference internal" href="#airfoil-set-braking-naca24018"><span class="std std-numref">Fig. 7.3</span></a>).</p>
+</li>
+<li><p>[[FIXME: explain how the coefficient data sets the upper bound on
+<span class="math notranslate nohighlight">\(\kappa_b\)</span>, and how to use an optimization routine to compute it.
+Tricky, to explain since the procedure depends on the set of profiles, the
+chord distribution, and the brake deflection distribution. Refer to
+<cite>SimpleLineGeometry.maximize_kappa_b</cite>]]</p></li>
+</ul>
+<p><strong>Estimating start/stop positions</strong></p>
+<p>The true deflection angle distribution depends on the complete physical
+line geometry (line lengths and cascade angles, but since the simple model
+does not include those the deflection angles must be assumed/guessed.</p>
+<p>[[Estimate the parameters of the quartic model in
+<a class="reference internal" href="paraglider_components.html#brakes"><span class="std std-ref">Brakes</span></a> by looking at a rear-view photo of
+a wing.]]</p>
+<figure class="align-default" id="hook3-rear-view">
+<img alt="_images/Hook3_rear_view.jpg" src="_images/Hook3_rear_view.jpg"/>
+<figcaption>
+<p><span class="caption-number">Fig. 7.5 </span><span class="caption-text">Rear-view of an inflated Hook 3 with symmetric brake deflections</span><a class="headerlink" href="#hook3-rear-view" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>[[From this picture you can see that the brake deflection doesn’t start until
+some distance from the root. The brake lines are hard to see, but their
+deflections are intuitive. The result is that instead of using a true line
+geometry, you can get away with an approximate deflection distribution using
+a simple cubic function with a few carefully chosen end points.]]</p>
+<p>[[This method is admittedly weak. Probably not a major problem in practice,
+but call it out when discussing reasons why I’m not comparing this to actual
+flight data (goes together with the other uncertainties, like unknown
+airfoil).]]</p>
+<figure class="align-default" id="id7">
+<img alt="_images/Hook3_TE_0.25_0.50.svg" src="_images/Hook3_TE_0.25_0.50.svg"/><figcaption>
+<p><span class="caption-number">Fig. 7.6 </span><span class="caption-text">Quartic brake deflections, <span class="math notranslate nohighlight">\(\delta_{bl} = 0.25\)</span> and <span class="math notranslate nohighlight">\(\delta_{br}
+= 0.5\)</span></span><a class="headerlink" href="#id7" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<br/><figure class="align-default" id="id8">
+<img alt="_images/Hook3_TE_1.00_1.00.svg" src="_images/Hook3_TE_1.00_1.00.svg"/><figcaption>
+<p><span class="caption-number">Fig. 7.7 </span><span class="caption-text">Quartic brake deflections, <span class="math notranslate nohighlight">\(\delta_{bl} = 1.00\)</span> and
+<span class="math notranslate nohighlight">\(\delta_{br} = 1.0\)</span></span><a class="headerlink" href="#id8" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>[[FIXME: explain how I generated some VERY idealized deformed profiles to
+implement deflected trailing edges]]</p>
+<p>[[FIXME: explain using XFOIL to get the section coefficients.]]</p>
+</section>
+<section id="line-drag">
+<h4><span class="section-number">7.1.3.3. </span>Line drag<a class="headerlink" href="#line-drag" title="Permalink to this headline">#</a></h4>
+<ul>
+<li><p>FIXME: how should I specify the total line length and lumped position for
+the line drag? I really hate <cite>r_L2LE</cite>; should it just assume two points at
+<cite>&lt;0.5c, +/- 0.25 b/2, 0.25 z_RM&gt;</cite>? I haven’t assigned these proper variable
+names yet; leave it that way?</p>
+<p>Also, the line drag coefficient assumes the lines are the same diameter
+everywhere, which is clearly wrong. The lines getter smaller as you go up
+the cascade.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="payload">
+<h3><span class="section-number">7.1.4. </span>Payload<a class="headerlink" href="#payload" title="Permalink to this headline">#</a></h3>
+<p>The final component model of the paraglider system is for the <a class="reference internal" href="paraglider_components.html#harness"><span class="std std-ref">harness</span></a>. This component is responsible for [[…]].</p>
+<p>The manual for the size 23 wing specifies a maximum in-flight weight limit of
+85kg, and the (true) solid mass of the physical wing is 4.9kg, so a 75kg
+payload is reasonable. To choose the projected area and drag coefficient,
+[[consider]] <span id="id3">[<a class="reference internal" href="zreferences.html#id11" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">5</a>]</span> (p. 85) or
+<span id="id4">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span> (p. 422); given that 75kg
+is a lower-than-average payload (so smaller frontal area), and that this is
+a beginner-grade wing (so a more aerodynamic “pod” harness is less likely),
+a reasonable guess of the projected area would be <span class="math notranslate nohighlight">\(S_\textrm{payload}
+= 0.55 \left[\textrm{m}^2\right]\)</span> with an drag coefficient of
+<span class="math notranslate nohighlight">\(C_{d,\textrm{payload}} = 0.8\)</span>. At that size the payload mass centroid
+should be approximately 0.5m below the risers (especially since the uniform
+density assumption neglects that the legs shift the center of mass below the
+volume centroid).</p>
+</section>
+</section>
+<section id="model-validation">
+<h2><span class="section-number">7.2. </span>Model validation<a class="headerlink" href="#model-validation" title="Permalink to this headline">#</a></h2>
+<p>[[Work in progress:</p>
+<p>Validating the model is difficult for several reasons:</p>
+<ul class="simple">
+<li><p>Unlike the <code class="docutils literal notranslate"><span class="pre">case</span> <span class="pre">study</span></code>, wind tunnel measurements are unavailable.</p></li>
+<li><p>There are more components, and their connections.</p></li>
+<li><p>Dynamic behavior is significantly more complex than static behavior</p></li>
+<li><p>more?</p></li>
+</ul>
+<p>]]</p>
+<section id="polar-curve">
+<h3><span class="section-number">7.2.1. </span>Polar curve<a class="headerlink" href="#polar-curve" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>[[FIXME: define <em>equilibrium state</em>]]</p></li>
+<li><p>[[FIXME: consider the zero input condition, and discuss how allowing the
+payload to pitch changes the result. (The 6a has a smaller theta_b2e and
+a positive theta_p2e (since b2e==p2e for 6a), whereas 9a has a larger b2e and
+negative p2e.) A plot isn’t worth it since the angles are so small, so maybe
+just list the angles.]]</p></li>
+</ul>
+<ul>
+<li><p>[[FIXME: define <em>polar curve</em>. Explain how they summarize the equilibrium
+states over a range of accelerator and symmetric brake inputs.]]</p></li>
+<li><p>[[FIXME: add figure for polar curves. For which size and pod type? <strong>Probably
+choose configurations that I’ll be analyzing</strong>; not much point showing
+multiple polars if some don’t have data.]]</p></li>
+<li><p>[[FIXME: Discuss the zero input states (“trim”).]]</p></li>
+<li><p>[[Discuss the range of control inputs.</p>
+<p>For the brakes, I’m only modeling 43cm of brake travel; that’s not a ton.</p>
+<p>For the accelerator, I’m guessing at <span class="math notranslate nohighlight">\(\kappa_A\)</span> and <span class="math notranslate nohighlight">\(\kappa_C\)</span>.
+The design is pretty sensitive to those.</p>
+</li>
+</ul>
+<p>[[Size 25 test from <cite>Hook 3 Parapente Mag 148.pdf</cite>]]</p>
+<figure class="align-default">
+<img alt="_images/polar_25.svg" src="_images/polar_25.svg"/></figure>
+<ul class="simple">
+<li><p>My horizontal speed at trim is about 0.35 m/s slower than theirs.</p></li>
+</ul>
+<p>[[Size 27 test from <cite>hook 3 perfils.pdf</cite>]]</p>
+<figure class="align-default">
+<img alt="_images/polar_27.svg" src="_images/polar_27.svg"/></figure>
+<ul>
+<li><p>My horizontal speed at trim is about 0.35 m/s slower than theirs.</p></li>
+<li><p>They list min sink as occurring with 50% brakes. Given that <cite>kappa_b
+= 0.46</cite> for the size=27 model, 50% of 60cm corresponds to <cite>delta_a = 0.65</cite>,
+but for the size=27 model the min sink occurs closer to <cite>delta_a = 0.2</cite>.
+<strong>Assuming everything else is fine</strong> that would suggest my brake model is
+wrong? Like, the L/D ratio dies off too fast for my model? (Of course, can
+I trust them that such a convenient value of brakes produces min sink?)</p></li>
+<li><p>Cool, they claim max glide is at 0% brakes! Confirms my choice for
+<cite>kappa_x</cite> if it’s true. As good as any justification, I guess.</p></li>
+<li><p>Their best glide with a pod harness is 9.5: for my model with <cite>S=0.6, CD=0.4</cite>
+I get 9.68? Verify.</p></li>
+<li><p>Extra data from the certification test <cite>2013-01-23_hook3_23_en</cite>:</p>
+<ul>
+<li><p>FIXME: what size and pod type?</p></li>
+<li><p>List the minimum speed as <cite>&lt;25km/h</cite> (<cite>6.94m/s</cite>)</p></li>
+<li><p>List the sink rate after to sharply banked turns as <cite>&gt;14m/s</cite>. My model
+doesn’t have enough control authority to get CLOSE to that.</p></li>
+<li><p>Symmetric control travel <cite>&gt;60cm</cite> (my model size=23 only supports <cite>kappa_b
+= 0.43m</cite> due to the limitations of the aerodynamic coefficient data)</p>
+<p>That means I’m modeling &lt;72% of the travel they got during the test. No
+wonder their “steeply banked turn” is so much more extreme than I can
+produce. What would my polar look like if you extrapolated it that far?</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Discussion:</p>
+<ul>
+<li><p>For the riser midpoint, I assume <cite>kappa_z</cite> is just the “height”, and that
+<cite>kappa_x</cite> was chosen such that best glide is at trim.</p></li>
+<li><p>My model relies on section coefficients, but I don’t have coefficient data
+from extreme trailing edge deflections, so I can only model roughly the first
+70% of the brake range. That’s one factor why my minimum speeds are too high.</p>
+<p>The value of <cite>kappa_b</cite> depends on the glider since it’s normalized by the
+chord lengths, but for the 25 <cite>kapa_b = 0.444</cite> and for the 27 <cite>kappa_b
+= 0.463</cite>.</p>
+</li>
+</ul>
+</section>
+<section id="steady-state-turn">
+<h3><span class="section-number">7.2.2. </span>Steady-state turn<a class="headerlink" href="#steady-state-turn" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>Apply 100% brake and observe steady-state radius, turn rate, and bank angle</p>
+<p>Compare to the sink rates during a hard turn in the DHV ratings guide; are
+they “within spec”? Does the DHV guide define “hard turn”? I’m restricting
+the amount of brake input; probably can’t reach a “hard” turn.</p>
+<p>I could try to justify this by arguing that “hard turns aren’t part of
+typical flight conditions”, but really the issue is about accuracy for
+a given brake input.</p>
+</li>
+<li><p>In <cite>2013-01-23_hook3_23_en</cite> they have the sink rate after two “steeply
+banked” turns is <cite>&gt;14m/s</cite>. For my model, full brakes and weight shift only
+get it to <cite>1.397m/s</cite>. Wow, optimistic much? I wish I knew what bank angle
+they considered “steep”. Granted, I’m using VERY optimistic airfoil data and
+am SEVERELY limiting the brake travel (they say the symmetric control travel
+is <cite>&gt;60cm</cite>, whereas I’m limited to <cite>kappa_b = 0.43m</cite>, so this model only
+covers &lt;72% of the travel they used in their tests)</p></li>
+</ul>
+</section>
+<section id="impulsive-controls">
+<h3><span class="section-number">7.2.3. </span>Impulsive controls<a class="headerlink" href="#impulsive-controls" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Control input impulses (on/off of symmetric brake, asymmetric brake,
+accelerator, weight shift). See the DHV certifications for guidelines.</p></li>
+</ul>
+</section>
+<section id="exiting-accelerated-flight">
+<h3><span class="section-number">7.2.4. </span>Exiting accelerated flight<a class="headerlink" href="#exiting-accelerated-flight" title="Permalink to this headline">#</a></h3>
+<p>According to Sec:4.5.1 of the DHV ratings guide, it sounds like wings dive
+<strong>forward</strong> when the accelerator is abruptly released. For my current
+Hook3ish, rapidly letting off the accelerator produces a ~20deg positive pitch
+(<strong>backwards</strong>), not forwards. Sure, after pitching backwards it then pitches
+forwards to <cite>-7°</cite>, but still, odd. Related: <cite>2013-01-23_hook3_23_en</cite> says the
+wing pitches forward less than <cite>30°</cite> upon exiting accelerated flight, which
+I guess agrees with my model.</p>
+<p>Is this because I’m neglecting changes to the canopy geometry? Or is it
+symptomatic of the fact that I assume the lines stay taught? Conceptually,
+when you quickly release the speedbar, the A lines will quickly extend; it
+takes some time for the harness to drop (or the wing to rise) enough to regain
+tension, so the wing is certainly going to behave in ways not modeled by my
+equations. Good to point out.</p>
+</section>
+</section>
+<section id="model-investigation">
+<h2><span class="section-number">7.3. </span>Model investigation<a class="headerlink" href="#model-investigation" title="Permalink to this headline">#</a></h2>
+<p>[[Run interesting scenarios and consider the observed behavior. Useful to
+discuss both the behavior of the (true) physical system and the model.]]</p>
+<section id="apparent-mass">
+<h3><span class="section-number">7.3.1. </span>Apparent mass<a class="headerlink" href="#apparent-mass" title="Permalink to this headline">#</a></h3>
+<p>Compare the real versus apparent mass matrices.</p>
+<p>Under what conditions? It depends on the current velocity. Maybe compare the
+real mass, apparent mass at hands-up equilibrium, apparent mass during a turn,
+etc. The point is to <strong>highlight the magnitude of the effect</strong>.</p>
+<p>Consider the relative magnitudes and the likely effects from accounting for
+apparent inertia. Then show some scenarios where the effects are significant
+(figure-8s) and highlight the magnitude of the effect.</p>
+</section>
+<section id="steep-turn">
+<h3><span class="section-number">7.3.2. </span>Steep turn<a class="headerlink" href="#steep-turn" title="Permalink to this headline">#</a></h3>
+<p>In <cite>2013-01-23_hook3_23_en</cite> they list the sink rate after two “steeply banked”
+turns as <cite>&gt;14m/s</cite> (31mph!). For my model, full brakes and weight shift only get
+it to down to <cite>1.42m/s</cite>. Wow, optimistic much? Granted, I’m severely limiting
+the brake travel and am using VERY optimistic airfoil data, but still. <strong>Do
+they define “steep”?</strong></p>
+<p>Ah, they rate it as class B, which agrees with sections 4.1.8 and 4.1.9 of the
+DHV standard <span id="id5">[<a class="reference internal" href="zreferences.html#id50" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">28</a>]</span>, pg31. The
+DHV say “steepest possible <strong>spiral</strong> dive achievable in two turns”. They also
+specify “no counter-turn”.</p>
+<p>Well, observe that I’m only able to achieve a 20° bank angle; that’s NOTHING
+compared to a “hard spiral dive” you’d see in an SIV. I wonder which component
+model is the limiting factor?</p>
+<p>Geeze, later in “Behavior exiting a steep spiral” they recorded a <cite>19m/s</cite> sink
+rate for the 85kg! Clearly I am unable to model a spiral.</p>
+</section>
+<section id="off-center-thermal-interaction">
+<h3><span class="section-number">7.3.3. </span>Off-center thermal interaction<a class="headerlink" href="#off-center-thermal-interaction" title="Permalink to this headline">#</a></h3>
+<p><strong>This was a major goal of my work.</strong> It’s one of the major reasons I insisted
+on the aerodynamics supporting non-uniform wind fields.</p>
+<ul class="simple">
+<li><p>Bonus: how does geometric torsion affect the off-center thermal scenario?</p></li>
+</ul>
+</section>
+</section>
+<section id="discussion">
+<h2><span class="section-number">7.4. </span>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>This chapter suggests a workflow:</p>
+<ol class="arabic">
+<li><p>Fit the flattened chord surface (<cite>c(s)</cite>, <cite>x(s)</cite>, <cite>r_x(s)</cite>)</p></li>
+<li><p>Fit the arc (<cite>yz(s), r_yz(s)</cite>)</p></li>
+<li><p>Apply geometric twist (<cite>theta(s)</cite>)</p></li>
+<li><p>Specify section profiles (airfoils) and their coefficients</p>
+<p>[[Indexed profile sets; discuss coefficient tables?]]</p>
+</li>
+<li><p>Specify material densities (upper, lower, ribs) for computing the inertia</p></li>
+<li><p>Specify a suspension line model (harness position, accelerator function,
+brake deflection distribution, line drag)</p>
+<p>(includes an initial guess for <span class="math notranslate nohighlight">\(kappa_x\)</span></p>
+</li>
+<li><p>Specify a harness model</p></li>
+<li><p>Specify a system model (connection parameters, if applicable)</p></li>
+<li><p>Adjust <cite>kappa_x</cite> until maximum glide is at zero controls</p></li>
+</ol>
+</li>
+<li><p>Everything related to the airfoils is sketchy. The choice of airfoil,
+modeling their deflected geometries, modeling the deflection distribution,
+etc. Tons of uncertainty here. Just stick a big red flag in it and say “hey,
+if you want to solve this problem, here’s a big sticking point.”</p></li>
+<li><p>This chapter focuses on collecting the necessary information to produce the
+model. For the actual implementation, refer to <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.extras.wings.html#pfh.glidersim.extras.wings.niviuk_hook3" title="(in pfh.glidersim)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pfh.glidersim.extras.wings.niviuk_hook3()</span></code></a></p></li>
+<li><p><a class="reference external" href="https://github.com/pfheatwole/glidersim/blob/main/scripts/build_hook3.py">https://github.com/pfheatwole/glidersim/blob/main/scripts/build_hook3.py</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+<div class="related-pages">
+  <a class="next-page" href="conclusion.html">
+      <div class="page-info">
+        <div class="context">
+          <span>Next</span>
+        </div>
+        <div class="title"><span class="section-number">8. </span>Conclusion</div>
+      </div>
+      <svg><use href="#svg-arrow-right"></use></svg>
+    </a>
+  <a class="prev-page" href="state_dynamics.html">
+      <svg><use href="#svg-arrow-right"></use></svg>
+      <div class="page-info">
+        <div class="context">
+          <span>Previous</span>
+        </div>
+        
+        <div class="title"><span class="section-number">6. </span>State dynamics</div>
+        
+      </div>
+    </a>
+</div>
+<div class="bottom-of-page">
+  <div class="left-details">
+    &copy; 2022, Peter Frank Heatwole
+    |
+    <a href="https://creativecommons.org/licenses/by/4.0" style="text-decoration-line:none">
+      <img
+        class="logo"
+        src="_static/cc_by_80x15.svg"
+        height="15px"
+        style="vertical-align:middle"
+        alt="Licensed CC-BY 4.0"
+      />
+    </a>
+    | Powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+    w/ <a href="https://github.com/pradyunsg/furo">Furo</a>
+      | <a class="muted-link" href="_sources/demonstration.rst.txt"
+        rel="nofollow">
+        Show Source
+      </a>
+  </div>
+  <div class="right-details">
+    <div class="icons">
+      
+    </div>
+  </div>
+</div>
+
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">7. Demonstration</a><ul>
+<li><a class="reference internal" href="#model-creation">7.1. Model creation</a><ul>
+<li><a class="reference internal" href="#technical-specs">7.1.1. Technical specs</a></li>
+<li><a class="reference internal" href="#canopy">7.1.2. Canopy</a><ul>
+<li><a class="reference internal" href="#geometry">7.1.2.1. Geometry</a></li>
+<li><a class="reference internal" href="#surface-materials">7.1.2.2. Surface materials</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#suspension-lines">7.1.3. Suspension lines</a><ul>
+<li><a class="reference internal" href="#riser-position">7.1.3.1. Riser position</a></li>
+<li><a class="reference internal" href="#brakes">7.1.3.2. Brakes</a></li>
+<li><a class="reference internal" href="#line-drag">7.1.3.3. Line drag</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#payload">7.1.4. Payload</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#model-validation">7.2. Model validation</a><ul>
+<li><a class="reference internal" href="#polar-curve">7.2.1. Polar curve</a></li>
+<li><a class="reference internal" href="#steady-state-turn">7.2.2. Steady-state turn</a></li>
+<li><a class="reference internal" href="#impulsive-controls">7.2.3. Impulsive controls</a></li>
+<li><a class="reference internal" href="#exiting-accelerated-flight">7.2.4. Exiting accelerated flight</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#model-investigation">7.3. Model investigation</a><ul>
+<li><a class="reference internal" href="#apparent-mass">7.3.1. Apparent mass</a></li>
+<li><a class="reference internal" href="#steep-turn">7.3.2. Steep turn</a></li>
+<li><a class="reference internal" href="#off-center-thermal-interaction">7.3.3. Off-center thermal interaction</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#discussion">7.4. Discussion</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/cancel"]}, "tex": {"macros": {"defas": "\\stackrel{\\mathrm{def}}{=}", "given": "\\;\\middle\\vert\\;", "vec": ["\\mathbf{#1}", 1], "mat": ["\\mathbf{#1}", 1], "crossmat": ["\\left[{#1}\\right]^{\\times}", 1], "norm": ["\\left\\|{#1}\\right\\|", 1]}, "packages": {"[+]": ["cancel"]}}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

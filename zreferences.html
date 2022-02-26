@@ -1,0 +1,377 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Notation and Symbols" href="notation.html" /><link rel="prev" title="Glossary" href="glossary.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+        <title>References - Parametric Paraglider Modeling</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     <b>This document is a draft!</b> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Parametric Paraglider Modeling</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Parametric Paraglider Modeling</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notation.html">Notation and Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="derivations.html">Derivations</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="references">
+<h1>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h1>
+</section>
+<p id="id1"><dl class="citation">
+<dt class="label" id="id36"><span class="brackets">1</span></dt>
+<dd><p>Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. <em>Aerotecnica Missili &amp; Spazio</em>, 98(3):221–229, September 2019. <a class="reference external" href="https://doi.org/10.1007/s42496-019-00017-2">doi:10.1007/s42496-019-00017-2</a>.</p>
+</dd>
+<dt class="label" id="id2"><span class="brackets">2</span></dt>
+<dd><p>Ira H. Abbott and Albert E. Von Doenhoff. <em>Theory of Wing Sections</em>. Dover Publications, Inc., New York, USA, 1959. ISBN 978-0-486-60586-9.</p>
+</dd>
+<dt class="label" id="id12"><span class="brackets">3</span></dt>
+<dd><p>John J. Bertin and Russel M. Cummings. <em>Aerodynamics for Engineers</em>. Pearson Education, sixth edition, 2014.</p>
+</dd>
+<dt class="label" id="id25"><span class="brackets">4</span></dt>
+<dd><p>Snorri Gudmundsson. <em>General Aviation Aircraft Design</em>. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. <a class="reference external" href="https://doi.org/10.1016/B978-0-12-397308-5.00001-5">doi:10.1016/B978-0-12-397308-5.00001-5</a>.</p>
+</dd>
+<dt class="label" id="id11"><span class="brackets">5</span></dt>
+<dd><p>Diego Muniz Benedetti. <em>Paragliders Flight Dynamics</em>. PhD thesis, Universidade Federal de Minas Gerais, 2012.</p>
+</dd>
+<dt class="label" id="id10"><span class="brackets">6</span></dt>
+<dd><p>Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. <em>Journal of Aircraft</em>, 52(2):703–708, 2015. <a class="reference external" href="https://doi.org/10.2514/1.C032513">doi:10.2514/1.C032513</a>.</p>
+</dd>
+<dt class="label" id="id18"><span class="brackets">7</span></dt>
+<dd><p>Russel M. Cummings, William H. Mason, Scott A. Morton, and David R. McDaniel. <em>Applied Computational Aerodynamics</em>. Cambridge University Press, April 2015. ISBN 978-1-316-23651-2.</p>
+</dd>
+<dt class="label" id="id39"><span class="brackets">8</span></dt>
+<dd><p>Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. <em>Journal of Aircraft</em>, 37(4):662–670, 2000. <a class="reference external" href="https://doi.org/10.2514/2.2649">doi:10.2514/2.2649</a>.</p>
+</dd>
+<dt class="label" id="id27"><span class="brackets">9</span></dt>
+<dd><p>Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In <em>24th AIAA Applied Aerodynamics Conference</em>. San Francisco, CA, USA, 2006. <a class="reference external" href="https://doi.org/10.2514/6.2006-3466">doi:10.2514/6.2006-3466</a>.</p>
+</dd>
+<dt class="label" id="id38"><span class="brackets">10</span></dt>
+<dd><p>D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In <em>36th AIAA Aerospace Sciences Meeting and Exhibit</em>, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. <a class="reference external" href="https://doi.org/10.2514/6.1998-597">doi:10.2514/6.1998-597</a>.</p>
+</dd>
+<dt class="label" id="id41"><span class="brackets">11</span></dt>
+<dd><p>P. G. Saffman. <em>Vortex Dynamics</em>. Cambridge University Press, California Institute of Technology, 1992.</p>
+</dd>
+<dt class="label" id="id49"><span class="brackets">12</span></dt>
+<dd><p>J. Weissinger. The lift distribution of swept-back wings. Technical 1120, NACA, March 1947.</p>
+</dd>
+<dt class="label" id="id21"><span class="brackets">13</span></dt>
+<dd><p>Mark Drela. <em>Flight Vehicle Aerodynamics</em>. The MIT Press, February 2014. ISBN 978-0-262-52644-9.</p>
+</dd>
+<dt class="label" id="id3"><span class="brackets">14</span></dt>
+<dd><p>John D. Anderson and Stephen Corda. Numerical lifting line theory applied to drooped leading-edge wings below and above stall. <em>Journal of Aircraft</em>, 17(12):898–904, 1980. <a class="reference external" href="https://doi.org/10.2514/3.44690">doi:10.2514/3.44690</a>.</p>
+</dd>
+<dt class="label" id="id7"><span class="brackets">15</span></dt>
+<dd><p>Jewel B. Barlow, William H. Rae, and Alan Pope. <em>Low-Speed Wind Tunnel Testing</em>. John Wiley &amp; Sons, third edition, February 1999. ISBN 978-0-471-55774-6.</p>
+</dd>
+<dt class="label" id="id8"><span class="brackets">16</span></dt>
+<dd><p>Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. <em>Journal of Aircraft</em>, 39(3):445–451, 2002. <a class="reference external" href="https://doi.org/10.2514/2.2949">doi:10.2514/2.2949</a>.</p>
+</dd>
+<dt class="label" id="id45"><span class="brackets">17</span></dt>
+<dd><p>Peter G. Thomasson. Equations of motion of a vehicle in a moving fluid. <em>Journal of Aircraft</em>, 37(4):630–639, 2000. <a class="reference external" href="https://doi.org/10.2514/2.2645">doi:10.2514/2.2645</a>.</p>
+</dd>
+<dt class="label" id="id32"><span class="brackets">18</span></dt>
+<dd><p>Horace Lamb. <em>Hydrodynamics</em>. Dover Publications, Inc., New York, USA, June 1945.</p>
+</dd>
+<dt class="label" id="id35"><span class="brackets">19</span></dt>
+<dd><p>Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In <em>Aerospace Design Conference</em>, 1236. 1993. <a class="reference external" href="https://doi.org/10.2514/6.1993-1236">doi:10.2514/6.1993-1236</a>.</p>
+</dd>
+<dt class="label" id="id48"><span class="brackets">20</span></dt>
+<dd><p>George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets">21</span></dt>
+<dd><p>Holger Babinsky. The aerodynamic performance of paragliders. <em>The Aeronautical Journal (1968)</em>, 103(1027):421–428, 1999. <a class="reference external" href="https://doi.org/10.1017/S0001924000027974">doi:10.1017/S0001924000027974</a>.</p>
+</dd>
+<dt class="label" id="id31"><span class="brackets">22</span></dt>
+<dd><p>Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. <em>Aircraft Engineering and Aerospace Technology</em>, January 2019. <a class="reference external" href="https://doi.org/10.1108/AEAT-06-2018-0162">doi:10.1108/AEAT-06-2018-0162</a>.</p>
+</dd>
+<dt class="label" id="id46"><span class="brackets">23</span></dt>
+<dd><p>Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.</p>
+</dd>
+<dt class="label" id="id26"><span class="brackets">24</span></dt>
+<dd><p>Peter C. Hughes. <em>Spacecraft Attitude Dynamics</em>. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.</p>
+</dd>
+<dt class="label" id="id44"><span class="brackets">25</span></dt>
+<dd><p>Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. <em>Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems</em>. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.</p>
+</dd>
+<dt class="label" id="id34"><span class="brackets">26</span></dt>
+<dd><p>J Stephen Lingard. Ram-air parachute Design. In <em>13th AIAA Aerodynamic Decelerator Systems Technology Conference</em>, 15–18. 1995.</p>
+</dd>
+<dt class="label" id="id9"><span class="brackets">27</span></dt>
+<dd><p>Sarah Becker and Paul Bruce. Experimental Study of Paraglider Aerodynamics. Master's thesis, Imperial College London, September 2017. <a class="reference external" href="https://doi.org/10.13140/RG.2.2.33674.16321">doi:10.13140/RG.2.2.33674.16321</a>.</p>
+</dd>
+<dt class="label" id="id50"><span class="brackets">28</span></dt>
+<dd><p>Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.</p>
+</dd>
+<dt class="label" id="id13"><span class="brackets">29</span></dt>
+<dd><p>Jonathan Blow and Atman J. Binstock. How to find the inertia tensor (or other mass properties) of a 3D solid body represented by a triangle mesh. http://www.number-none.com/blow/inertia/index.html, 2004.</p>
+</dd>
+<dt class="label" id="id51"><span class="brackets">30</span></dt>
+<dd><p>Cha Zhang and Tsuhan Chen. Efficient feature extraction for 2D/3D objects in mesh representation. In <em>Proceedings 2001 International Conference on Image Processing (Cat. No.01CH37205)</em>, volume 3, 935–938 vol.3. October 2001.</p>
+</dd>
+<dt class="label" id="id24"><span class="brackets">31</span></dt>
+<dd><p>Chrystine M. Gorman and Nathan Slegers. Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature Wireless Sensors. <em>Journal of Aircraft</em>, 49(2):546–555, 2012. <a class="reference external" href="https://doi.org/10.2514/1.C031566">doi:10.2514/1.C031566</a>.</p>
+</dd>
+</dl>
+</p>
+
+        </article>
+      </div>
+      <footer>
+        
+<div class="related-pages">
+  <a class="next-page" href="notation.html">
+      <div class="page-info">
+        <div class="context">
+          <span>Next</span>
+        </div>
+        <div class="title">Notation and Symbols</div>
+      </div>
+      <svg><use href="#svg-arrow-right"></use></svg>
+    </a>
+  <a class="prev-page" href="glossary.html">
+      <svg><use href="#svg-arrow-right"></use></svg>
+      <div class="page-info">
+        <div class="context">
+          <span>Previous</span>
+        </div>
+        
+        <div class="title">Glossary</div>
+        
+      </div>
+    </a>
+</div>
+<div class="bottom-of-page">
+  <div class="left-details">
+    &copy; 2022, Peter Frank Heatwole
+    |
+    <a href="https://creativecommons.org/licenses/by/4.0" style="text-decoration-line:none">
+      <img
+        class="logo"
+        src="_static/cc_by_80x15.svg"
+        height="15px"
+        style="vertical-align:middle"
+        alt="Licensed CC-BY 4.0"
+      />
+    </a>
+    | Powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+    w/ <a href="https://github.com/pradyunsg/furo">Furo</a>
+      | <a class="muted-link" href="_sources/zreferences.rst.txt"
+        rel="nofollow">
+        Show Source
+      </a>
+  </div>
+  <div class="right-details">
+    <div class="icons">
+      
+    </div>
+  </div>
+</div>
+
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>

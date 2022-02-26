@@ -1,0 +1,1314 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="3. Foil aerodynamics" href="foil_aerodynamics.html" /><link rel="prev" title="1. Introduction" href="introduction.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+        <title>2. Foil geometry - Parametric Paraglider Modeling</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     <b>This document is a draft!</b> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Parametric Paraglider Modeling</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Parametric Paraglider Modeling</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">2. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notation.html">Notation and Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="derivations.html">Derivations</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="foil-geometry">
+<h1><span class="section-number">2. </span>Foil geometry<a class="headerlink" href="#foil-geometry" title="Permalink to this headline">#</a></h1>
+<p>The essential components of any flying object are the lifting surfaces, or
+<em>foils</em>: by redirecting airflow, a foil exchanges momentum with the air,
+producing a lifting force that allows the object to fly. The dynamics of a foil
+depend on its inertial properties and its aerodynamics, both of which can be
+estimated from its shape. In this project the foils of interest are the
+canopies of commercial paraglider wings, which poses a major difficulty:
+manufacturers do not provide detailed geometry data. At best, marketing
+materials and user manuals provide basic summary specifications, which means
+the majority of the geometry is unknown. Generating a surface model from
+summary information requires making educated guesses about the missing
+structure in order to generate a complete geometry. That assumed structure
+takes the form of domain expertise encoded in parametric <em>design curves</em> which
+augment the summary data to produce a fully specified model.</p>
+<p>The problem with this approach is that the choice of variables in a geometry
+model controls how a designer must specify the structure. More variables
+increase model flexibility at the cost of increased complexity, so the goal is
+to choose the smallest number of variables that provide the designer with
+adequate flexibility. Existing foil models are inflexible, making strong
+assumptions about how foils are most naturally defined, and that inflexibility
+forces the remaining complexity into the design curves. This unnecessary
+complication makes it difficult to describe a parafoil using simple parametric
+functions: they must not only encode the fundamental structure, they must also
+translate that structure into the variables that define the model. Instead of
+the geometry model adapting to the needs of the design curves, the design
+curves must adapt to the limitations of the model.</p>
+<p>The solution developed in this chapter is to reject the assumption that
+predefined reference points are the most convenient way to position the
+elements of a foil surface. The result is a novel foil geometry that fully
+decouples the design curves, allowing each aspect of the foil to be designed
+independently. It also presents a simplified model that eliminates most of the
+additional complexity of the expanded model. The simplified model is both
+flexible and intuitive for designing highly nonlinear foil geometries (such as
+paraglider canopies) using simple parametric functions.</p>
+<p>But first, a remark on notation: in this chapter, the lifting surface of an
+aircraft is referred to as a <em>foil</em> instead of using the conventional terms
+<em>wing</em> or <em>canopy</em> (for traditional aircraft or parafoils, respectively). This
+unconventional term was chosen to avoid two generalization issues. First,
+although <em>wing</em> is the conventional term for the primary lifting surfaces of
+non-rotary aircraft, the paragliding community already uses the term
+<em>paraglider wing</em> to reference not only the lifting surface but also the
+supporting structure connected to it, such as suspension lines, risers, etc.
+Second, although this project is primarily concerned with parafoils, the
+content in this chapter is not limited to parafoil canopies, making “canopy”
+a poor choice.</p>
+<p>In addition, note that these are idealized geometry models, not detailed
+structural models. Structural models include physical details that can be used
+to simulate effects such as internal forces and wing deformations
+<span id="id1">[<a class="reference internal" href="zreferences.html#id36" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">1</a>]</span>. Unfortunately, as discussed
+earlier, such details are not available for commercial paraglider wings, and
+such analyses would be time prohibitive even if they were. Instead, this design
+will model only those details of the shape that can be approximated from the
+available data. It does not model internal structures, in-flight deformations,
+or surface deviations from the idealized design target.</p>
+<section id="modeling-with-wing-sections">
+<h2><span class="section-number">2.1. </span>Modeling with wing sections<a class="headerlink" href="#modeling-with-wing-sections" title="Permalink to this headline">#</a></h2>
+<p>At its most basic, a foil geometry is the surface of a volume. Points on the
+surface can be defined with explicit coordinates, or they can be generated
+using functions that encode aspects of the surface’s structure. Explicit
+geometries are extremely flexible (since they can encode arbitrary amounts of
+detail), but refining an explicit mesh can be very time consuming (in addition
+to requiring highly detailed geometry data). Conversely, parametric geometries
+model the surface mesh indirectly using parametric functions which encode
+structural knowledge of the shape. In effect, the parameters summarize the
+structure: a structural parameter communicates more information than an
+explicit coordinate, which means less work (and less data) is required to
+specify a design.</p>
+<p>The standard first step towards parametrizing a foil geometry is to define it
+in terms of <em>wing sections</em> (<span id="id2">[<a class="reference internal" href="zreferences.html#id2" title="Ira H. Abbott and Albert E. Von Doenhoff. Theory of Wing Sections. Dover Publications, Inc., New York, USA, 1959. ISBN 978-0-486-60586-9.">2</a>]</span>;
+<span id="id3">[<a class="reference internal" href="zreferences.html#id12" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">3</a>]</span>, Sec. 5.2). The foil is modeled as
+a sequence of <em>sections</em> (typically arranged spanwise, left to right) over some
+continuous <em>section index</em> <span class="math notranslate nohighlight">\(s\)</span>. Each section is assigned a 2D
+cross-sectional profile, called an <em>airfoil</em>, which lies perpendicular to the
+local spanwise axis. Each airfoil is scaled, positioned, and oriented to
+produce the <em>section profile</em>. Together, the section profiles produce
+a continuous surface that defines the complete 3D volume.</p>
+<p>Wing design using airfoils is thus decomposed into two steps:</p>
+<ol class="arabic simple">
+<li><p>Specify the scale, position, and orientation of each section</p></li>
+<li><p>Specify the airfoil at each section</p></li>
+</ol>
+<figure class="align-default" id="id10">
+<img alt="_images/wing_sections2.svg" src="_images/wing_sections2.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.1 </span><span class="caption-text">Wing section profiles.</span><a class="headerlink" href="#id10" title="Permalink to this image">#</a></p>
+<div class="legend">
+<p>Note that section profiles are not the same thing as the ribs of a parafoil.
+Parafoil ribs are the internal structure that produce the desired section
+profile at specific points along the span.</p>
+</div>
+</figcaption>
+</figure>
+<p>In some literature <span id="id4">[<a class="reference internal" href="zreferences.html#id25" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">4</a>]</span> these two
+steps are described as designing the <em>planform</em> and the <em>profile</em>, but this
+description is problematic due to inconsistent uses of the term <em>planform</em>
+across literature. Specifically, in some cases the planform is the complete
+surface produced by the section chords, and in others “planform” refers to
+a projected-view of the chord surface onto the <span class="math notranslate nohighlight">\(xy\)</span>-plane. Due to this
+ambiguity, this paper avoids the term <em>planform</em> in preference of explicit
+references such as <em>chord surface</em>, <em>mean camber surface</em>, or <em>profile
+surface</em>.</p>
+<section id="section-index">
+<h3><span class="section-number">2.1.1. </span>Section index<a class="headerlink" href="#section-index" title="Permalink to this headline">#</a></h3>
+<p>In order to generate a foil from discrete wing sections (and to support queries
+about their individual properties) each section must be assigned a unique
+identifier which this paper refers to as a <em>section index</em> <span class="math notranslate nohighlight">\(s\)</span>. This term
+is deliberately generic. Some aeronautics literature use the term <em>spanwise
+station</em>, but “spanwise” is ambiguous: some papers use “spanwise” to refer to
+the absolute <span class="math notranslate nohighlight">\(y\)</span>-coordinate of some reference point embedded in each
+section, while others refer to the linear distance along the curve through
+those reference points. The term <em>section index</em> generalizes these concepts and
+provides an arbitrary reference to any choice of unique identifier over the set
+of sections.</p>
+<p>However, avoiding ambiguity is the not the primary purpose of this generality.
+The real goal is to avoid unnecessary coupling of the design curves that define
+the geometry. Instead of committing to a definition immediately, delaying the
+choice of section index allows a designer the freedom to define the section
+index in terms of the geometry, or the geometry in terms of the section index,
+or a even a mixture of the two. This freedom will be used later by the
+<a class="reference internal" href="#simplified-model"><span class="std std-ref">Simplified model</span></a> to enable particularly simple parametric
+design curves.</p>
+</section>
+<section id="airfoil">
+<h3><span class="section-number">2.1.2. </span>Airfoil<a class="headerlink" href="#airfoil" title="Permalink to this headline">#</a></h3>
+<p>The building block of each section is its dimensionless cross-sectional
+profile, called an <em>airfoil</em>. The volume of the wing is generated by the
+continuum of neighboring airfoils, so the choice of 2D airfoils is vital to
+designing the flow field characteristics over the 3D wing. The choice involves
+trade-offs specific to the application (for example, thicker airfoils tend to
+offer more gentle stall characteristics in exchange for a small increase in
+drag); as a result, the variety of airfoil designs is very diverse.</p>
+<figure class="align-default" id="id11">
+<img alt="_images/airfoil_examples.svg" src="_images/airfoil_examples.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.2 </span><span class="caption-text">Airfoils.</span><a class="headerlink" href="#id11" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Airfoils are conventionally described using terms that assume the airfoil can
+be divided into upper and lower surfaces. The upper and lower surfaces are
+separated by two points defined by a straight <em>chord line</em> that runs from the
+rounded leading edge back to the sharp trailing edge. The curve created by the
+midpoints between the upper and lower surface curves is the <em>mean camber line</em>.</p>
+<figure class="align-default" id="airfoil-diagram">
+<a class="reference internal image-reference" href="_images/airfoil_diagram.svg"><img alt="_images/airfoil_diagram.svg" height="171" src="_images/airfoil_diagram.svg" width="460"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2.3 </span><span class="caption-text">Components of an airfoil.</span><a class="headerlink" href="#airfoil-diagram" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Another standard design parameter for an airfoil is its <em>thickness
+distribution</em>. Unfortunately, the mean camber line and thickness distribution
+are not universally defined, because there are two conventions for measuring
+the airfoil thickness: perpendicular to the chord line (sometimes referred to
+as the “British” convention), or perpendicular to the mean camber line (the
+“American” convention). The thickness convention also determines what point is
+designated the <em>leading edge</em>. For the “British” convention the leading edge is
+the point where the curve is perpendicular to a line from the trailing edge.
+For the “American” convention, the leading edge is the “leftmost” point with
+the smallest radius (greatest curvature).</p>
+<figure class="align-default" id="airfoil-thickness">
+<a class="reference internal image-reference" href="_images/NACA-6412-thickness-conventions.svg"><img alt="_images/NACA-6412-thickness-conventions.svg" height="214" src="_images/NACA-6412-thickness-conventions.svg" width="460"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2.4 </span><span class="caption-text">Airfoil thickness conventions.</span><a class="headerlink" href="#airfoil-thickness" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>As a result, the exact value of the mean camber line and thickness depends on
+the thickness convention, but in general the mean camber line will lie halfway
+between an upper and lower surface whose separation distance is specified by
+the thickness distribution. Fortunately, this ambiguity is irrelevant except
+when comparing airfoil design parameters.</p>
+</section>
+<section id="scale">
+<h3><span class="section-number">2.1.3. </span>Scale<a class="headerlink" href="#scale" title="Permalink to this headline">#</a></h3>
+<p>By convention, airfoils are normalized to a unit chord length. Similarly, the
+aerodynamic coefficients associated with an airfoil are also dimensionless. To
+generate the geometry and compute the aerodynamic forces associated with a wing
+segment, both the airfoil and its aerodynamic coefficients must be scaled in
+units appropriate to the model.</p>
+<p>Although conceptually simple, section scale plays a large role in controlling
+the aerodynamic behavior of a wing segment; in fact, all but the most basic
+foils have variable section chord lengths. The only fundamental requirement is
+that the sections collectively produce enough aerodynamic lift to support the
+aircraft, but beyond that a foil designer is free to use use spanwise variation
+to control behavior such as:</p>
+<ul class="simple">
+<li><p>Spanwise loading (the chord lengths are one factor, along with choice of
+section profile and orientation/twist, that can be used to encourage an
+elliptical load distribution, thus minimizing induced drag)</p></li>
+<li><p>Weight distribution</p></li>
+<li><p>Relative importance of wing segments (if the wingtips are smaller then they
+contribute less to the loading, making the loading is less sensitive to
+wingtip stalls, leading to “gentler” stall characteristics)</p></li>
+</ul>
+</section>
+<section id="position">
+<h3><span class="section-number">2.1.4. </span>Position<a class="headerlink" href="#position" title="Permalink to this headline">#</a></h3>
+<p>The relative position of the sections is fundamental to controlling important
+foil characteristics such as <em>span</em>, <em>sweep</em>, and <em>arc</em>
+<span id="id5">[<a class="reference internal" href="zreferences.html#id25" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">4</a>]</span>. Span (the width of the wing,
+roughly speaking) together with the chord distribution determines the <em>aspect
+ratio</em> of a foil, which impacts characteristics such as aerodynamic efficiency
+and maneuverability. Sweep (the fore-aft relative positioning of the sections)
+is important for controlling spanwise airflow. Arc (the vertical relative
+positioning of the sections, roughly speaking) is primarily used to increase
+the roll stability of conventional wings, although for parafoils the <em>arc
+anhedral</em> is essential to designing the spanwise loading across the suspension
+lines.</p>
+<p>To define their layout, each section must be positioned by specifying a vector
+in foil coordinates of some <em>reference point</em> in the section’s local coordinate
+system. For example, the most common choice of reference point is the leading
+edge of the section profile; by convention the section leading edge will
+coincide with the origin of the airfoil coordinate system, which means no
+additional translations are required to position the profile. This conventional
+choice is demonstrated by the <a class="reference internal" href="#basic-model"><span class="std std-ref">Basic model</span></a>, then relaxed by
+the <a class="reference internal" href="#expanded-model"><span class="std std-ref">Expanded model</span></a>.</p>
+</section>
+<section id="orientation">
+<h3><span class="section-number">2.1.5. </span>Orientation<a class="headerlink" href="#orientation" title="Permalink to this headline">#</a></h3>
+<p>[[FIXME: finish]]</p>
+<ul class="simple">
+<li><p>[[Section pitch/roll/yaw. Dihedral/anhedral. Geometric torsion.]]</p></li>
+<li><p>Section roll helps keep the sections oriented parallel to each other</p></li>
+</ul>
+<p>Section orientation can be used to control characteristics such as:</p>
+<ul class="simple">
+<li><p>Zero-lift angle (optimize the wing for its target/intended flight
+conditions)</p></li>
+<li><p>Stability</p></li>
+<li><p>Spanwise loading</p></li>
+<li><p>Stall profile (how stall conditions develop across the span)</p></li>
+<li><p>Roll-yaw coupling</p></li>
+</ul>
+</section>
+</section>
+<section id="basic-model">
+<h2><span class="section-number">2.2. </span>Basic model<a class="headerlink" href="#basic-model" title="Permalink to this headline">#</a></h2>
+<p>Choosing to model a foil using <em>wing sections</em> means that the surfaces are
+defined by 2D airfoils. The 2D airfoil curves must be converted into a 3D
+section-local coordinate system, then scaled, positioned, and oriented relative
+to the foil coordinate system.</p>
+<p>First, let <span class="math notranslate nohighlight">\(P\)</span> represent any point in a wing section (such as points on
+the chord, mean camber line, or profile), and <span class="math notranslate nohighlight">\(LE\)</span> be the leading edge of
+that section. It is conventional to share the origin between the airfoil and
+section coordinate systems, and specify the section position using the section
+leading edge, so using the <a class="reference external" href="_common_notation">notation</a> of this paper,
+a general equation for the position of that point <span class="math notranslate nohighlight">\(P\)</span> with respect to the
+foil origin <span class="math notranslate nohighlight">\(O\)</span>, written in terms of the foil coordinate system
+<span class="math notranslate nohighlight">\(f\)</span>, is:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-conventional-position-layout">
+<span class="eqno">(2.1)<a class="headerlink" href="#equation-conventional-position-layout" title="Permalink to this equation">#</a></span>\[\vec{r}_{P/O}^f = \vec{r}_{P/LE}^f + \vec{r}_{LE/O}^f\]</div></div>
+<p>Assuming the foil geometry is symmetric, designate the central section the
+foil <em>root</em>, and let the 3D foil inherit the 3D coordinate system defined by
+the root section. Points in section (local) coordinate systems <span class="math notranslate nohighlight">\(s\)</span> must
+be rotated into the foil (global) coordinate system <span class="math notranslate nohighlight">\(f\)</span>. Given the
+<em>direction cosine matrix</em> <span class="math notranslate nohighlight">\(\mat{C}_{f/s}\)</span> between the section and foil
+coordinate systems, position vectors in foil coordinates can be written in
+terms of section coordinates:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-profile-points">
+<span class="eqno">(2.2)<a class="headerlink" href="#equation-profile-points" title="Permalink to this equation">#</a></span>\[\vec{r}_{P/LE}^f = \mat{C}_{f/s} \vec{r}_{P/LE}^s\]</div></div>
+<p>Because airfoil curves are defined in the 2D airfoil-local coordinate system,
+another transformation is required to convert them into 3D section-local
+coordinates. The convention for airfoil coordinates places the origin at the
+leading edge, with the <span class="math notranslate nohighlight">\(x\)</span>-axis pointing from the leading edge towards
+the trailing edge, and the <span class="math notranslate nohighlight">\(y\)</span>-axis oriented towards the upper surface.
+This paper uses a front-right-down convention for all 3D coordinate systems, so
+the conversion can be written with a matrix transformation:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-t-s2a">
+<span class="eqno">(2.3)<a class="headerlink" href="#equation-t-s2a" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{T}_{s/a} \defas \begin{bmatrix}
+   -1 &amp; 0 \\
+   0 &amp; 0\\
+   0 &amp; -1
+\end{bmatrix}\end{split}\]</div></div>
+<p>Next, the airfoil must be scaled. By convention, airfoil geometries are
+normalized to a unit chord, so the section geometry defined by the airfoil must
+be scaled by the section chord <span class="math notranslate nohighlight">\(c\)</span>. Writing the points in terms of
+relative position vectors defined in the foil coordinate system produces:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-profile-points-in-airfoil-coordinates">
+<span class="eqno">(2.4)<a class="headerlink" href="#equation-profile-points-in-airfoil-coordinates" title="Permalink to this equation">#</a></span>\[\vec{r}_{P/LE}^f = \mat{C}_{f/s} \mat{T}_{s/a} \, c \, \vec{r}_{P/LE}^a\]</div></div>
+<p>The complete general equation for arbitrary points <span class="math notranslate nohighlight">\(P\)</span> in each section
+<span class="math notranslate nohighlight">\(s\)</span> is then:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-basic-equation">
+<span class="eqno">(2.5)<a class="headerlink" href="#equation-basic-equation" title="Permalink to this equation">#</a></span>\[\vec{r}_{P/O}^f(s) =
+  \mat{C}_{f/s}(s) \mat{T}_{s/a} \, c(s) \, \vec{r}_{P/LE}^a(s)
+  + \vec{r}_{LE/O}^f(s)\]</div></div>
+<p>In this form it is clear that a complete geometry definition requires four
+<em>design curves</em> that define the variables for every section:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-basic-foil-geometry-variables">
+<span class="eqno">(2.6)<a class="headerlink" href="#equation-basic-foil-geometry-variables" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  c(s) \qquad &amp; \textrm{Scale} \\
+  \vec{r}_{LE/O}^f(s) \qquad &amp; \textrm{Position} \\
+  \mat{C}_{f/s}(s) \qquad &amp; \textrm{Orientation} \\
+  \vec{r}_{P/LE}^a(s) \qquad &amp; \textrm{Airfoil} \\
+\end{aligned}\end{split}\]</div></div>
+</section>
+<section id="expanded-model">
+<h2><span class="section-number">2.3. </span>Expanded model<a class="headerlink" href="#expanded-model" title="Permalink to this headline">#</a></h2>
+<p>The basic equation <a class="reference internal" href="#equation-basic-equation">(2.5)</a> is an explicit mathematical equivalent
+of the approach used by most freely available wing modeling tools. However,
+although it is technically sufficient to describe arbitrary foils composed of
+airfoils, its inflexibility can introduce incidental complexity into what
+should be fundamentally simple design curves.</p>
+<p>For example, consider a delta wing with a straight trailing edge:</p>
+<figure class="align-default" id="id12">
+<img alt="_images/Wing_ogival_delta.svg" src="_images/Wing_ogival_delta.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.5 </span><span class="caption-text">Ogival delta wing planform.</span><a class="headerlink" href="#id12" title="Permalink to this image">#</a></p>
+<div class="legend">
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/File:Wing_ogival_delta.svg">Figure</a>  by
+Wikimedia contributor “Steelpillow”, distributed under a CC-BY-SA 3.0 license.</p>
+</div>
+</figcaption>
+</figure>
+<p>The wing geometry is fundamentally simple. Its specification should be equally
+simple, but defining this wing with a model that is only capable of
+positioning sections by their leading edge makes that impossible. Instead, the
+position curve must be just as complex as the scale function (chord length) in
+order to achieve the straight trailing edge. The simplicity of the model has
+forced an artificial coupling between the design curves.</p>
+<p>The problem becomes much more severe when section section chords no longer lie
+in the <span class="math notranslate nohighlight">\(xy\)</span>-plane, because the trailing edge position is no longer
+a simple <span class="math notranslate nohighlight">\(x\)</span>-coordinate offset; instead, all of the scale, position, and
+orientation design curves are coupled together, making design iterations
+incredibly tedious. Whether the adjustments are performed manually or with the
+development of additional tooling, the fact is the extra work is unnecessary.</p>
+<p>The solution is to decouple all of the design curves by allowing section
+position to be specified using arbitrary reference points in the section
+coordinate systems. This can be accomplished by decomposing their positions
+into two vectors: one from the section <em>leading edge</em> <span class="math notranslate nohighlight">\(LE\)</span> to some
+arbitrary <em>reference point</em> <span class="math notranslate nohighlight">\(RP\)</span>, and one from the reference point to
+the <em>foil origin</em> <span class="math notranslate nohighlight">\(O\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-decomposed-leading-edge">
+<span class="eqno">(2.7)<a class="headerlink" href="#equation-decomposed-leading-edge" title="Permalink to this equation">#</a></span>\[\vec{r}_{LE/O}^f = \vec{r}_{LE/RP}^f + \vec{r}_{RP/O}^f\]</div></div>
+<p>Although this decomposition increases model complexity, the additional
+flexibility allows a designer to choose whichever point in each section’s
+coordinate system will produce the simplest geometry specification. The basic
+model <a class="reference internal" href="#equation-basic-equation">(2.5)</a> is replaced by an expanded equation with a new set
+of design curves:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-expanded-equation">
+<span class="eqno">(2.8)<a class="headerlink" href="#equation-expanded-equation" title="Permalink to this equation">#</a></span>\[\vec{r}_{P/O}^f(s) =
+  \mat{C}_{f/s}(s) \mat{T}_{s/a} \, c(s) \, \vec{r}_{P/LE}^a(s)
+  + \vec{r}_{LE/RP}^f(s) + \vec{r}_{RP/O}^f(s)\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-expanded-foil-geometry-variables">
+<span class="eqno">(2.9)<a class="headerlink" href="#equation-expanded-foil-geometry-variables" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  c(s) \qquad &amp; \textrm{Scale} \\
+  \vec{r}_{RP/O}^f(s) \qquad &amp; \textrm{Position} \\
+  \mat{C}_{f/s}(s) \qquad &amp; \textrm{Orientation} \\
+  \vec{r}_{P/LE}^a(s) \qquad &amp; \textrm{Airfoil} \\
+  \vec{r}_{LE/RP}^f(s) \qquad &amp; \textrm{Reference point} \\
+\end{aligned}\end{split}\]</div></div>
+</section>
+<section id="simplified-model">
+<h2><span class="section-number">2.4. </span>Simplified model<a class="headerlink" href="#simplified-model" title="Permalink to this headline">#</a></h2>
+<p>The basic model is adequate to represent wings composed of airfoils, but its
+inflexibility forced incidental complexity into the design curves. The expanded
+model provides additional flexibility, but it’s generality can make it
+difficult for a designer to identify which aspects of the foil structure result
+in a simple parametric representation. This section identifies several
+simplifying assumptions that provide a foundation for a particularly concise
+representation of many foils (parafoils in particular). The result is an
+intuitive, partially-parametrized foil geometry model that decouples the design
+curves and allows a parafoil to be rapidly approximated using only minimal
+available data, even if that data was obtained from a flattened version of the
+parafoil.</p>
+<p>[[To make it clear how this parametrization is valuable for designing parafoils
+from basic data it will repeatedly consider the fact that a lot of that basic
+data from from measurements taken from a flattened parafoil. Choosing
+a parametrization that allows you to use data from a flattened version of the
+wing is REALLY helpful here.]]</p>
+<section id="simplified-model-section-index">
+<span id="id6"></span><h3><span class="section-number">2.4.1. </span>Section index<a class="headerlink" href="#simplified-model-section-index" title="Permalink to this headline">#</a></h3>
+<p>[[FIXME: finish]]</p>
+<p>Although most tools do not explicitly refer to their choice of section index,
+there are two conventions in common use: one is to use the section
+<span class="math notranslate nohighlight">\(y\)</span>-coordinate, and the other is the linear distance along the position
+curve <span class="math notranslate nohighlight">\(\vec{r}_{RP/O}\)</span>. Unfortunately, both are problematic for modeling
+a parafoil from the most readily-available data.</p>
+<p>[[FIXME: explain the advantages of my choice]]</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-yz-distance-section-index">
+<span class="eqno">(2.10)<a class="headerlink" href="#equation-yz-distance-section-index" title="Permalink to this equation">#</a></span>\[s = \frac{y_{flat}}{b_{flat}/2}\]</div></div>
+</section>
+<section id="reference-point">
+<h3><span class="section-number">2.4.2. </span>Reference point<a class="headerlink" href="#reference-point" title="Permalink to this headline">#</a></h3>
+<p>The basic model positions each section using the section origins (the leading
+edges). The expanded model allows the sections to be positioned using arbitrary
+reference points anywhere in the 3D section coordinate systems. Although
+flexible, the freedom of the expanded model does not address the problem of
+choosing good reference points.</p>
+<p>One intuitive choice is to use points on the section chords, in which case the
+reference point is a function of a chord ratio <span class="math notranslate nohighlight">\(0 \le r \le 1\)</span>. The
+chord lies on the negative section <span class="math notranslate nohighlight">\(x\)</span>-axis, so a reference point at
+some fraction <span class="math notranslate nohighlight">\(r\)</span> along the chord is given by <span class="math notranslate nohighlight">\(\vec{r}_{RP/LE}^s
+= -r\, c\, \hat{x}^s_s\)</span> (where <span class="math notranslate nohighlight">\(\hat{x}^s_s \defas \begin{bmatrix}1
+&amp; 0 &amp; 0\end{bmatrix}^T\)</span>, the <span class="math notranslate nohighlight">\(x\)</span>-axis of section <span class="math notranslate nohighlight">\(s\)</span> in that
+section’s local coordinate system).</p>
+<p>Substituting <span class="math notranslate nohighlight">\(\vec{r}_{LE/RP} = -\vec{r}_{RP/LE}\)</span> into
+<a class="reference internal" href="#equation-expanded-equation">(2.8)</a> produces:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\vec{r}_{LE/O}^f =
+      \mat{C}_{f/s}\, r\, c\, \hat{x}^s_s
+      + \vec{r}_{RP/O}^f\]</div></div>
+<p>Simple and intuitive, this parametrization captures the choices used by every
+foil modelling tool reviewed for this project. Models that position sections by
+their leading edge (XFLR5, AVL, MachUpX) are equivalent to setting <span class="math notranslate nohighlight">\(r
+= 0\)</span>. Another (less common <span id="id7">[<a class="reference internal" href="zreferences.html#id11" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">5</a>]</span>)
+choice is to use the quarter-chord positions, in which case <span class="math notranslate nohighlight">\(r = 0.25\)</span>.
+The problem with the constraint that reference points lie on the section chords
+is that it couples the position functions for all three dimensions. For many
+foil geometries it can be significantly more convenient to use different chord
+positions for different dimensions.</p>
+<p>For example, suppose an engineer is designing a foil with an elliptical chord
+distribution and geometric twist, and they wish to place the leading edge in
+the plane <span class="math notranslate nohighlight">\(x = 0\)</span> and the trailing edge in the plane <span class="math notranslate nohighlight">\(z = 0\)</span>.
+Although the intuitive specification of this foil would be <span class="math notranslate nohighlight">\({x(s) = 0,
+z(s) = 0}\)</span>, it cannot be used because it needs to position different points on
+each section chord: the <span class="math notranslate nohighlight">\(x(s) = 0\)</span> design requires <span class="math notranslate nohighlight">\(r = 0\)</span>, but the
+<span class="math notranslate nohighlight">\(z(s) = 0\)</span> design requires <span class="math notranslate nohighlight">\(r = 1\)</span>. One of the position curves must
+be changed, introducing unnecessary complexity to make up for this
+inflexibility.</p>
+<p>For another example, a foil designer may want to arc an elliptical planform
+such that the <span class="math notranslate nohighlight">\(y\)</span>- and <span class="math notranslate nohighlight">\(z\)</span>-coordinates of the quarter-chord
+(<span class="math notranslate nohighlight">\(r = 0.25\)</span>) follow a circular arc while the <span class="math notranslate nohighlight">\(x\)</span>-coordinate of the
+trailing edge (<span class="math notranslate nohighlight">\(r = 1\)</span>) is a constant. Because of the elliptical chord
+distribution, the <span class="math notranslate nohighlight">\(x\)</span>-coordinates of the quarter-chord that would produce
+a straight trailing edge are distinctly non-constant; if geometric twist is
+present the issue becomes even more severe. What should be a simple <span class="math notranslate nohighlight">\(x(s)
+= 0\)</span> to specify the straight trailing edge must become a complex function with
+no simple analytical representation.</p>
+<p>The underlying problem is that the designer cannot specify their design
+directly using a shared reference point that lies directly on the chord;
+instead, they must translate their design into an alternative specification
+using positions that accommodate the shared reference point.</p>
+<p>The solution is that instead of using a shared reference point directly on the
+chord for all dimensions, allow each dimension to choose independent reference
+points along the chord, and associate each dimension of the position design
+curve with that dimension’s coordinate of that dimension’s reference point.
+The <span class="math notranslate nohighlight">\(x(s)\)</span> design curve specifies the <span class="math notranslate nohighlight">\(x\)</span>-coordinate of the
+reference point for the <span class="math notranslate nohighlight">\(x\)</span>-dimension, etc.</p>
+<p>Fortunately, providing this flexibility is easier to implement and use than it
+is to describe. Instead of a shared <span class="math notranslate nohighlight">\(r\)</span> for all three dimension, allow
+each dimension of the reference point to choose an independent <span class="math notranslate nohighlight">\(r\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\mat{R} \defas \begin{bmatrix}
+   r_x &amp; 0 &amp; 0\\
+   0 &amp; r_y &amp; 0\\
+   0 &amp; 0 &amp; r_z
+\end{bmatrix}\end{split}\]</div></div>
+<p>where <span class="math notranslate nohighlight">\(0 \le r_x, r_y, r_z \le 1\)</span> are proportions of the chord, as
+before. The coordinates of the leading edge relative to the reference point are
+now the displacement of the section origin relative to the <span class="math notranslate nohighlight">\(\left\{ x, y,
+z \right\}\)</span> components of the <span class="math notranslate nohighlight">\(\left\{ r_x, r_y, r_z \right\}\)</span> positions
+along the chord. The resulting equation, which allows completely decoupled
+positioning for each dimension, is surprisingly simple:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\vec{r}_{LE/O}^f =
+  \mat{R} \mat{C}_{f/s} c\, \hat{x}^s_s
+  + \vec{r}_{RP/O}^f\]</div></div>
+<p>This choice of reference point makes the earlier examples trivial to
+implement. For the first, which was struggling with the fact that geometric
+twist has coupled the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span> positions is solved with
+<span class="math notranslate nohighlight">\(\{r_x = 0, r_z = 1\}\)</span> (because the foil is flat, every choice of
+<span class="math notranslate nohighlight">\(r_y\)</span> is equivalent). The second example, which was struggling to define
+an <span class="math notranslate nohighlight">\(x(s)\)</span> to achieve a straight trailing edge, the answer is simply
+<span class="math notranslate nohighlight">\(\{ r_x = 1, r_y = 0.25, r_z = 0.25 \}\)</span>. In both cases, the designer is
+able to specify their target directly, using simple design curves, with no
+translation necessary.</p>
+<p>[[FIXME: explain how choosing <cite>r_y = r_z</cite> simplifies the design by maintaining
+the proportional scaling of the <cite>y</cite> and <cite>z</cite> curves; you can design a joint
+<cite>yz</cite> curve and it won’t get distorted on the final foil. Useful for defining
+<cite>yz(s)</cite> as a single vector-valued parametric function.]]</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-simplified-model-reference-point-vector">
+<span class="eqno">(2.11)<a class="headerlink" href="#equation-simplified-model-reference-point-vector" title="Permalink to this equation">#</a></span>\[\vec{r}_{LE/RP}^f = \mat{R} \mat{C}_{f/s} c\, \hat{x}^s_s\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-simplified-model-reference-point-matrix">
+<span class="eqno">(2.12)<a class="headerlink" href="#equation-simplified-model-reference-point-matrix" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{R} \defas \begin{bmatrix}
+   r_x &amp; 0 &amp; 0\\
+   0 &amp; r_{yz} &amp; 0\\
+   0 &amp; 0 &amp; r_{yz}
+\end{bmatrix}\end{split}\]</div></div>
+</section>
+<section id="id8">
+<h3><span class="section-number">2.4.3. </span>Orientation<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h3>
+<p>The expanded model <a class="reference internal" href="#equation-expanded-equation">(2.8)</a> uses a <em>direction cosine matrix</em>
+(DCM) to define the orientation of each section. A natural parametrization of
+a DCM is a set of three Euler angles <span class="math notranslate nohighlight">\(\left&lt; \phi, \theta, \gamma
+\right&gt;\)</span>, corresponding to roll, pitch, and yaw. The Euler parametrization
+replaces the <span class="math notranslate nohighlight">\(\mathbb{R}^{3 \times 3}\)</span> matrix with a 3-vector, but the
+structure of typical parafoils can provide further simplifications.</p>
+<p>In particular, observe that when a parafoil is flattened out on the ground, the
+sections are (essentially) vertical, with no relative roll or yaw. Inflating
+the parafoil and using the suspension lines to form the arc will produce
+a natural section roll without affecting the section yaw. These observations
+reveal that the section orientation produced by inflating a parafoil is well
+approximated by a single degree of freedom, resulting in a minimal
+parametrization with a single design variable for section pitch
+<span class="math notranslate nohighlight">\(\theta(s)\)</span>.</p>
+<p>[[Why does this paragraph repeat so much information that follows?]]</p>
+<p>For the section roll <span class="math notranslate nohighlight">\(\phi(s)\)</span>, observe that inflating the foil to
+produce the arc does not produce a shearing effect between sections; instead,
+the sections roll together with the arc. This relationship can be encoded using
+the derivatives of the <span class="math notranslate nohighlight">\(\left&lt; y(s), z(s) \right&gt;\)</span> components of the
+position curve <span class="math notranslate nohighlight">\(\vec{r}_{RP/O}(s)\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-roll-from-position">
+<span class="eqno">(2.13)<a class="headerlink" href="#equation-section-roll-from-position" title="Permalink to this equation">#</a></span>\[\phi = \mathrm{arctan} \left( \frac{dz}{dy} \right)\]</div></div>
+<p>For the section yaw <span class="math notranslate nohighlight">\(\gamma(s)\)</span>, inflating the parafoil to produce the
+arc anhedral will roll the sections in the foil’s <span class="math notranslate nohighlight">\(yz\)</span>-plane and does not
+affect the section yaw, which remains zero:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-yaw-constant-zero">
+<span class="eqno">(2.14)<a class="headerlink" href="#equation-section-yaw-constant-zero" title="Permalink to this equation">#</a></span>\[\gamma = 0\]</div></div>
+<p>Lastly, although inflating a parafoil will not cause the sections to rotate
+about their spanwise axes, the relative section pitch <span class="math notranslate nohighlight">\(\theta(s)\)</span>
+produced during manufacturing is an important design variable, referred to as
+<em>geometric torsion</em>.</p>
+<figure class="align-default" id="id13">
+<img alt="_images/geometric_torsion.svg" src="_images/geometric_torsion.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.6 </span><span class="caption-text">Geometric torsion.</span><a class="headerlink" href="#id13" title="Permalink to this image">#</a></p>
+<div class="legend">
+<p>Note that this refers to the angle, and is the same regardless of any
+particular rotation point.</p>
+</div>
+</figcaption>
+</figure>
+</section>
+<section id="summary">
+<h3><span class="section-number">2.4.4. </span>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">#</a></h3>
+<p>[[List the design variables as in the Basic and Expanded model subsections.]]</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-simplified-foil-geometry-variables">
+<span class="eqno">(2.15)<a class="headerlink" href="#equation-simplified-foil-geometry-variables" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  c(s) \qquad &amp; \textrm{Scale} \\
+  r_x(s) \qquad &amp; \textrm{Chord ratio for positioning} \ RP_x \\
+  r_{yz}(s) \qquad &amp; \textrm{Chord ratio for positioning} \ RP_y \ \textrm{and} \ RP_z \\
+  \vec{r}_{RP/O}^f(s) \qquad &amp; \textrm{Position} \\
+  \theta(s) \qquad &amp; \textrm{Pitch} \\
+  \vec{r}_{P/LE}^a(s) \qquad &amp; \textrm{Airfoil} \\
+\end{aligned}\end{split}\]</div></div>
+</section>
+</section>
+<section id="examples">
+<h2><span class="section-number">2.5. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">#</a></h2>
+<p>[[FIXME: finish]]</p>
+<p>These examples demonstrate how the expanded model makes it easy to represent
+nonlinear foil geometries using simple parametric functions, such as constants,
+absolute functions, ellipticals, and polynomials. For a discussion of the
+elliptical functions for the arc and chord distributions, see
+<a class="reference internal" href="derivations.html#parametric-design-curves"><span class="std std-ref">Parametric design curves</span></a>.</p>
+<p>All examples show a wireframe view of the chord surface because it is easier to
+visualize the foil layout. The green dashed lines are projections of the
+section quarter-chord positions. The red dashed lines are the projections of
+the <span class="math notranslate nohighlight">\(r_x\)</span> and <span class="math notranslate nohighlight">\(r_{yz}\)</span> chord positions.</p>
+<section id="delta-wing">
+<h3><span class="section-number">2.5.1. </span>Delta wing<a class="headerlink" href="#delta-wing" title="Permalink to this headline">#</a></h3>
+<p>Straight wing with a linear chord distribution and no twist.</p>
+<figure class="align-default">
+<img alt="_images/flat2_curves.svg" src="_images/flat2_curves.svg"/></figure>
+<figure class="align-default" id="id14">
+<img alt="_images/flat2_canopy_chords.svg" src="_images/flat2_canopy_chords.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.7 </span><span class="caption-text">Chord surface of a delta wing planform.</span><a class="headerlink" href="#id14" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="elliptical-wing">
+<h3><span class="section-number">2.5.2. </span>Elliptical wing<a class="headerlink" href="#elliptical-wing" title="Permalink to this headline">#</a></h3>
+<p>Straight wing with an elliptical chord distribution and no twist.</p>
+<figure class="align-default">
+<img alt="_images/flat3_curves.svg" src="_images/flat3_curves.svg"/></figure>
+<figure class="align-default" id="id15">
+<img alt="_images/flat3_canopy_chords.svg" src="_images/flat3_canopy_chords.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.8 </span><span class="caption-text">Chord surface of an elliptical wing planform.</span><a class="headerlink" href="#id15" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="twisted-wing">
+<h3><span class="section-number">2.5.3. </span>Twisted wing<a class="headerlink" href="#twisted-wing" title="Permalink to this headline">#</a></h3>
+<p>Wings with geometric torsion (or “twist”) typically use relatively small
+angles that can be difficult to visualize. Exaggerating the angles with
+extreme torsion makes it easier to see the relationship.</p>
+<figure class="align-default">
+<img alt="_images/flat4_curves.svg" src="_images/flat4_curves.svg"/></figure>
+<figure class="align-default" id="id16">
+<img alt="_images/flat4_canopy_chords.svg" src="_images/flat4_canopy_chords.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.9 </span><span class="caption-text">Chord surface of a wing with geometric twist.</span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="manta-ray">
+<h3><span class="section-number">2.5.4. </span>Manta ray<a class="headerlink" href="#manta-ray" title="Permalink to this headline">#</a></h3>
+<p>The effect of changing the reference positions can be surprising. A great
+example is a “manta ray” inspired design that changes nothing but the constant
+value of <span class="math notranslate nohighlight">\(r_x\)</span>.</p>
+<figure class="align-default">
+<img alt="_images/manta1_curves.svg" src="_images/manta1_curves.svg"/></figure>
+<figure class="align-default" id="id17">
+<img alt="_images/manta1_canopy_chords.svg" src="_images/manta1_canopy_chords.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.10 </span><span class="caption-text">“Manta ray” with <span class="math notranslate nohighlight">\(r_x = 0\)</span></span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default">
+<img alt="_images/manta2_curves.svg" src="_images/manta2_curves.svg"/></figure>
+<figure class="align-default" id="id18">
+<img alt="_images/manta2_canopy_chords.svg" src="_images/manta2_canopy_chords.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.11 </span><span class="caption-text">“Manta ray” with <span class="math notranslate nohighlight">\(r_x = 0.5\)</span></span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default">
+<img alt="_images/manta3_curves.svg" src="_images/manta3_curves.svg"/></figure>
+<figure class="align-default" id="id19">
+<img alt="_images/manta3_canopy_chords.svg" src="_images/manta3_canopy_chords.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.12 </span><span class="caption-text">“Manta ray” with <span class="math notranslate nohighlight">\(r_x = 1.0\)</span></span><a class="headerlink" href="#id19" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>These examples clearly demonstrate the power of wing design using extremely
+simple parametric curves. Four of the six design “curves” are merely constants,
+and yet they enable significantly nonlinear designs in an intuitive way.</p>
+</section>
+<section id="parafoil">
+<h3><span class="section-number">2.5.5. </span>Parafoil<a class="headerlink" href="#parafoil" title="Permalink to this headline">#</a></h3>
+<p>[[This example should be a complete description, explaining the design curves
+and the plots. The other examples can be less detailed; the curves and result
+should suffice.]]</p>
+<p>[[FIXME: describe the “anhedral” correctly]]</p>
+<p>An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
+89 degrees:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+c(s) &amp;= \mathrm{elliptical\_chord}(root=0.5, tip=0.2)\\
+\theta(s) &amp;= 0\\
+r_x(s) &amp;= 0.75\\
+x(s) &amp;= 0\\
+r_{yz}(s) &amp;= 1\\
+yz(s) &amp;= \mathrm{elliptical\_arc}(mean\_anhedral=30, tip\_roll=89)\\
+\end{aligned}\end{split}\]</div></div>
+<figure class="align-default">
+<img alt="_images/elliptical3_curves.svg" src="_images/elliptical3_curves.svg"/></figure>
+<figure class="align-default" id="id20">
+<img alt="_images/elliptical3_canopy_chords.svg" src="_images/elliptical3_canopy_chords.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.13 </span><span class="caption-text">Chord surface of a simple parafoil.</span><a class="headerlink" href="#id20" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id21">
+<img alt="_images/elliptical3_canopy_airfoils.svg" src="_images/elliptical3_canopy_airfoils.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.14 </span><span class="caption-text">Profile surface of a simple parafoil.</span><a class="headerlink" href="#id21" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>[[<strong>FIXME</strong>: good time to explain that if <cite>x</cite> is constant then it’s irrelevant.
+One of the more confusing aspects of this geometry is that no matter what you
+define, the central leading edge is always at the origin. Is it accurate to say
+that the <cite>x</cite> and <cite>yz</cite> curves are all about <strong>RELATIVE</strong> positioning? They’re
+not exactly displacement vectors, because the final positions depend on all the
+other variables. On the bright side, you don’t have to care.]]</p>
+<p>The code does have the option of letting the design curves use absolute
+positioning, but I’m not sure I want to discuss that here.]]</p>
+</section>
+</section>
+<section id="case-study">
+<h2><span class="section-number">2.6. </span>Case study<a class="headerlink" href="#case-study" title="Permalink to this headline">#</a></h2>
+<p>The purpose of the <a class="reference internal" href="#expanded-model">Expanded model</a> is to increase the freedom of how a foil
+is specified. The examples demonstrated how this freedom can be used to design
+complex foil geometries using simple design curves. Another benefit of this
+freedom is that it is more adaptable to the variety of foil specifications
+used in literature.</p>
+<p>[[FIXME: what value does this paragraph provide?]]</p>
+<p>Parafoil canopies in particular are not convenient to design using the leading
+edge. The geometry from a 2015 parafoil wind tunnel test
+<span id="id9">[<a class="reference internal" href="zreferences.html#id10" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">6</a>]</span> makes an excellent case study of
+a foil specification from literature that positions the sections using
+alternative reference points on the section chords. Moreover, the geometry
+satisfies the assumptions of the <a class="reference internal" href="#simplified-model">Simplified model</a>, making an implementation
+of the geometry almost trivial.</p>
+<p>First, the paper describes the geometry of the full-scale canopy they wish to
+study:</p>
+<div class="table-wrapper"><table class="docutils align-default" id="id22">
+<caption><span class="caption-number">Table 2.1 </span><span class="caption-text">Full-scale wing dimensions</span><a class="headerlink" href="#id22" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Arch height</p></td>
+<td><p>3.00</p></td>
+<td><p>m</p></td>
+</tr>
+<tr class="row-odd"><td><p>Central chord</p></td>
+<td><p>2.80</p></td>
+<td><p>m</p></td>
+</tr>
+<tr class="row-even"><td><p>Projected area</p></td>
+<td><p>25.08</p></td>
+<td><p>m<sup>2</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p>Projected span</p></td>
+<td><p>11.00</p></td>
+<td><p>m</p></td>
+</tr>
+<tr class="row-even"><td><p>Projected aspect ratio</p></td>
+<td><p>4.82</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>Flat area</p></td>
+<td><p>28.56</p></td>
+<td><p>m<sup>2</sup></p></td>
+</tr>
+<tr class="row-even"><td><p>Flat span</p></td>
+<td><p>13.64</p></td>
+<td><p>m</p></td>
+</tr>
+<tr class="row-odd"><td><p>Flat aspect ratio</p></td>
+<td><p>6.52</p></td>
+<td><p>–</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>For the wind tunnel test, a physical model was built at a quarter-scale.
+Physical dimensions and positions were provided for the physical model as
+pointwise data with linear interpolation between each point.</p>
+<div class="table-wrapper"><table class="docutils align-default" id="id23">
+<caption><span class="caption-number">Table 2.2 </span><span class="caption-text">Wind tunnel wing geometry data at panel’s ends</span><a class="headerlink" href="#id23" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(i\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(y\)</span> [m]</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(z\)</span> [m]</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(c\)</span> [m]</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(r_x\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(r_{yz}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\theta\)</span> [deg]</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>-0.688</p></td>
+<td><p>0.000</p></td>
+<td><p>0.107</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>-0.664</p></td>
+<td><p>-0.097</p></td>
+<td><p>0.137</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>-0.595</p></td>
+<td><p>-0.188</p></td>
+<td><p>0.198</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>-0.486</p></td>
+<td><p>-0.265</p></td>
+<td><p>0.259</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>-0.344</p></td>
+<td><p>-0.325</p></td>
+<td><p>0.308</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>-0.178</p></td>
+<td><p>-0.362</p></td>
+<td><p>0.339</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>0.000</p></td>
+<td><p>-0.375</p></td>
+<td><p>0.350</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>0.178</p></td>
+<td><p>-0.362</p></td>
+<td><p>0.339</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>0.344</p></td>
+<td><p>-0.325</p></td>
+<td><p>0.308</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>0.486</p></td>
+<td><p>-0.265</p></td>
+<td><p>0.259</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>0.595</p></td>
+<td><p>-0.188</p></td>
+<td><p>0.198</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>0.664</p></td>
+<td><p>-0.097</p></td>
+<td><p>0.137</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>0.688</p></td>
+<td><p>0.000</p></td>
+<td><p>0.107</p></td>
+<td><p>0.6</p></td>
+<td><p>0.6</p></td>
+<td><p>3</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>It is important to notice the difference between the section numbers <span class="math notranslate nohighlight">\(i\)</span>
+used in the paper and the section indices <span class="math notranslate nohighlight">\(s\)</span> used in the simplified
+model. The section indices are easily calculated using the normalized linear
+distance along the <span class="math notranslate nohighlight">\(\left&lt; y, z \right&gt;\)</span> points.</p>
+<p>Another important point is that the reference data is defined with the wing
+tips at <span class="math notranslate nohighlight">\(z = 0\)</span>, whereas the convention of this paper places the canopy
+origin at the leading edge of the central section. This is easily accommodated
+by subtracting the central <span class="math notranslate nohighlight">\(z = -0.375\)</span> from all <span class="math notranslate nohighlight">\(z\)</span>-coordinates.
+(The implementation of the simplified model in <code class="docutils literal notranslate"><span class="pre">glidersim</span></code> shifts the origin
+automatically.) [[This is the same issue as for normal parametric functions;
+the origin of the parametric functions is arbitrary; the origin of the canopy
+is a predetermined point.]]</p>
+<p>For the section profiles, the model uses a NACA 23015 airfoil.</p>
+<figure class="align-default" id="id24">
+<img alt="_images/NACA-23015.svg" src="_images/NACA-23015.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.15 </span><span class="caption-text">NACA 23015</span><a class="headerlink" href="#id24" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Calculating the section indices for each point and building a linear
+interpolator for each component as a function of the section index produces
+a set of piecewise-linear design curves:</p>
+<figure class="align-default">
+<img alt="_images/belloc_curves.svg" src="_images/belloc_curves.svg"/></figure>
+<figure class="align-default" id="id25">
+<img alt="_images/belloc_canopy_chords.svg" src="_images/belloc_canopy_chords.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.16 </span><span class="caption-text">Chord surface for Belloc’s reference paraglider wing.</span><a class="headerlink" href="#id25" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id26">
+<img alt="_images/belloc_canopy_airfoils.svg" src="_images/belloc_canopy_airfoils.svg"/><figcaption>
+<p><span class="caption-number">Fig. 2.17 </span><span class="caption-text">Profile surface for Belloc’s reference paraglider wing.</span><a class="headerlink" href="#id26" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>[[FIXME: compute the summary specs and compare; area, span, etc]]</p>
+</section>
+<section id="discussion">
+<h2><span class="section-number">2.7. </span>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h2>
+<p>[[FIXME: finish]]</p>
+<ul class="simple">
+<li><p>This project requires a parametric geometry that could model complex wing
+shapes using simple, parametric design functions. The parametrization must
+make it convenient to model existing paraglider canopies using the limited
+available data.</p></li>
+<li><p>There are two aspects to a geometry model:</p>
+<ol class="arabic simple">
+<li><p>The choice of variables that combine to describe the wing. The choice of
+variables is the language the designer must use to describe the wing.</p></li>
+<li><p>Assigning values to those variables</p></li>
+</ol>
+</li>
+<li><p>This chapter started with <em>wing sections</em> to derive a general equation
+typical of existing geometry models. It decomposed the position variable to
+allow positioning via an arbitrary reference point. The decomposition
+allowed each design variable to be decoupled, making it easier to design
+them using simple parametric functions. I concluded with a simplified model
+that eliminated most of the extra complexity of the expanded model, and
+showed some examples of canopies using that parametrization.</p></li>
+<li><p>Reference the <a class="reference internal" href="foil_aerodynamics.html#case-study"><span class="std std-ref">Case study</span></a> (Belloc’s wing) and
+<a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a> (my Hook3ish)</p></li>
+</ul>
+<section id="advantages">
+<h3><span class="section-number">2.7.1. </span>Advantages<a class="headerlink" href="#advantages" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>This is not the first time someone has suggested using reference points other
+than the leading edge; for example, Benedetti used the quarter-chord
+position. It’s also not the first time someone has suggested a parametric
+reference point; for example, the “Paraglider Design Manual” suggested (but
+did not implement) using one chord position for the position reference point
+followed by another chord position for the geometric twist (which he called
+the “rotation point”).</p>
+<p>The approach of the expanded model is different because <strong>it acknowledges
+that the most convenient reference point might not lie on the section chord
+at all</strong>. Instead of restricting the reference to lie on the section x-axis,
+the reference point can be a position anywhere in the section coordinate
+system. <strong>That’s what provided the simplified model the flexibility to
+decouple the position curves, allowing a designer to directly target
+individual aspects of the geometry without them affecting each other.</strong> At
+last you don’t need to recompute positions just because you changed
+a section’s orientation.</p>
+</li>
+<li><p>The equations are simple, so their implementations are simple.</p></li>
+<li><p>Parametric design functions have significant advantages over explicit
+functions (ie, specifying a set of points and using linear interpolation):</p>
+<ul class="simple">
+<li><p>Parametric functions are amenable to mathematical optimization routines,
+such as exploring performance behaviors or performing statistical parameter
+estimation (fitting a model to flight data).</p></li>
+<li><p>Explicit (as opposed to parametric) representations make it difficult to
+incorporate deformations programmatically. There are a variety of
+interesting situations that deform a paraglider wing: trailing edge
+deflections due to braking, C-riser piloting, accelerator flattening,
+weight shift, cell billowing, etc.</p></li>
+<li><p>[[These statements are true, but again: not unique to this
+parametrization?]]</p></li>
+</ul>
+</li>
+<li><p>Parametric design parameters can be parametrized to produce cells,
+billowing, weight shift deformations, etc? [[Again: not unique.]]</p></li>
+</ul>
+</section>
+<section id="limitations">
+<h3><span class="section-number">2.7.2. </span>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>It’s too flexible: it doesn’t impose any restrictions on the values of the
+variables, meaning it allows design layouts that can’t be (reasonably)
+analyzed using section coefficient data. It forces all the responsibility
+on the designer to produce a usable foil definition. [[This isn’t a valid
+criticism; if someone abused it like that then that’s their fault.]]</p>
+<p>It also doesn’t impose any constraints on self-intersections.
+Self-intersections can occur if the chord surface is excessively curved
+(so the surface intersects itself), or if the thickness of an airfoil
+causes the inner surface of a radius to overlap. [[These are limitations
+of the general equation that are inherited by this parametrization. If
+I allowed section yaw then you’d have this issue for that too.]] I’ve
+accepted this limitation with the understanding that the equations are
+intended to be as simple as possible, and reasonable wing designs are
+unlikely to be impacted. If these geometric constraints are important for
+a design then the geometry can be validated as an additional
+post-processing step instead of polluting these equations.</p>
+</li>
+<li><p>It’s not flexible enough: it requires the designer to use the section
+leading edges to position the sections. In many cases it is more
+convenient to position with other points, such as the quarter-chord,
+trailing edge, etc. [[If a designer wants to define a foil using some
+other reference point they cannot do it directly; they must specify the
+shape indirectly by manually calculating the corresponding leading edge
+position.]]</p></li>
+<li><p>I’m explicitly disallowing section-yaw (so no wedge-shaped segments), and
+assume that the section y-axes are all parallel to the body y-axis when the
+wing is flat. I’m not sure how accurate that is.</p></li>
+<li><p>Doesn’t model internal structure (ribs, straps), and thus cannot model
+cells, cell distortions, and cannot account for the mass of the internal
+structure.</p>
+<p>Conceptually the abstracted section indices should enable a relatively
+simple mapping between inflated and deflated sections, but I never developed
+a suitable transformation to the section profiles.</p>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+<div class="related-pages">
+  <a class="next-page" href="foil_aerodynamics.html">
+      <div class="page-info">
+        <div class="context">
+          <span>Next</span>
+        </div>
+        <div class="title"><span class="section-number">3. </span>Foil aerodynamics</div>
+      </div>
+      <svg><use href="#svg-arrow-right"></use></svg>
+    </a>
+  <a class="prev-page" href="introduction.html">
+      <svg><use href="#svg-arrow-right"></use></svg>
+      <div class="page-info">
+        <div class="context">
+          <span>Previous</span>
+        </div>
+        
+        <div class="title"><span class="section-number">1. </span>Introduction</div>
+        
+      </div>
+    </a>
+</div>
+<div class="bottom-of-page">
+  <div class="left-details">
+    &copy; 2022, Peter Frank Heatwole
+    |
+    <a href="https://creativecommons.org/licenses/by/4.0" style="text-decoration-line:none">
+      <img
+        class="logo"
+        src="_static/cc_by_80x15.svg"
+        height="15px"
+        style="vertical-align:middle"
+        alt="Licensed CC-BY 4.0"
+      />
+    </a>
+    | Powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+    w/ <a href="https://github.com/pradyunsg/furo">Furo</a>
+      | <a class="muted-link" href="_sources/foil_geometry.rst.txt"
+        rel="nofollow">
+        Show Source
+      </a>
+  </div>
+  <div class="right-details">
+    <div class="icons">
+      
+    </div>
+  </div>
+</div>
+
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">2. Foil geometry</a><ul>
+<li><a class="reference internal" href="#modeling-with-wing-sections">2.1. Modeling with wing sections</a><ul>
+<li><a class="reference internal" href="#section-index">2.1.1. Section index</a></li>
+<li><a class="reference internal" href="#airfoil">2.1.2. Airfoil</a></li>
+<li><a class="reference internal" href="#scale">2.1.3. Scale</a></li>
+<li><a class="reference internal" href="#position">2.1.4. Position</a></li>
+<li><a class="reference internal" href="#orientation">2.1.5. Orientation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basic-model">2.2. Basic model</a></li>
+<li><a class="reference internal" href="#expanded-model">2.3. Expanded model</a></li>
+<li><a class="reference internal" href="#simplified-model">2.4. Simplified model</a><ul>
+<li><a class="reference internal" href="#simplified-model-section-index">2.4.1. Section index</a></li>
+<li><a class="reference internal" href="#reference-point">2.4.2. Reference point</a></li>
+<li><a class="reference internal" href="#id8">2.4.3. Orientation</a></li>
+<li><a class="reference internal" href="#summary">2.4.4. Summary</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">2.5. Examples</a><ul>
+<li><a class="reference internal" href="#delta-wing">2.5.1. Delta wing</a></li>
+<li><a class="reference internal" href="#elliptical-wing">2.5.2. Elliptical wing</a></li>
+<li><a class="reference internal" href="#twisted-wing">2.5.3. Twisted wing</a></li>
+<li><a class="reference internal" href="#manta-ray">2.5.4. Manta ray</a></li>
+<li><a class="reference internal" href="#parafoil">2.5.5. Parafoil</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#case-study">2.6. Case study</a></li>
+<li><a class="reference internal" href="#discussion">2.7. Discussion</a><ul>
+<li><a class="reference internal" href="#advantages">2.7.1. Advantages</a></li>
+<li><a class="reference internal" href="#limitations">2.7.2. Limitations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/cancel"]}, "tex": {"macros": {"defas": "\\stackrel{\\mathrm{def}}{=}", "given": "\\;\\middle\\vert\\;", "vec": ["\\mathbf{#1}", 1], "mat": ["\\mathbf{#1}", 1], "crossmat": ["\\left[{#1}\\right]^{\\times}", 1], "norm": ["\\left\\|{#1}\\right\\|", 1]}, "packages": {"[+]": ["cancel"]}}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

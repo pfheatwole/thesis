@@ -1,0 +1,465 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="6. State dynamics" href="state_dynamics.html" /><link rel="prev" title="4. Component models" href="paraglider_components.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+        <title>5. System dynamics - Parametric Paraglider Modeling</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     <b>This document is a draft!</b> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Parametric Paraglider Modeling</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Parametric Paraglider Modeling</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">5. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notation.html">Notation and Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="derivations.html">Derivations</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="system-dynamics">
+<h1><span class="section-number">5. </span>System dynamics<a class="headerlink" href="#system-dynamics" title="Permalink to this headline">#</a></h1>
+<p>This chapter combines the individual <a class="reference internal" href="paraglider_components.html"><span class="doc">component models</span></a> into composite <em>system dynamics</em> models. In this
+paper, a <em>system dynamics</em> model is a set of derivatives that define the
+translational and angular acceleration of groups of components that represent
+an aircraft, specified using a coordinate system attached to the aircraft.
+Developing a system model can be roughly described as a sequence of steps:</p>
+<ol class="arabic simple">
+<li><p>Choose a set of components to represent the aircraft</p></li>
+<li><p>Characterize their connections</p></li>
+<li><p>Choose a dynamics reference point for the composite system</p></li>
+<li><p>Develop the system of equations for the accelerations</p></li>
+</ol>
+<section id="components">
+<h2><span class="section-number">5.1. </span>Components<a class="headerlink" href="#components" title="Permalink to this headline">#</a></h2>
+<p>The previous chapter defined component models for the canopy, suspension lines,
+and harness; in the system models, these are lumped into two quasi-rigid-body
+groups called the <em>body</em> and the <em>payload</em>. The <em>body</em> of the glider is the
+combination of canopy and suspension lines. The <em>payload</em> includes the harness,
+pilot, and their gear (in this simplified model, the pilot and their gear are
+treated as additional masses that are added to the mass of the harness).</p>
+<p>These models are quasi-rigid because the dynamics equations will only consider
+their instantaneous configurations when calculating their accelerations;
+conservation of momentum requires accounting for redistributions of mass, but
+doing so would require inertia derivatives as functions of time derivatives of
+the control input (such as weight shift, accelerator, etc), which would
+significantly complicate the model. Because the redistributions of mass are
+relatively small for typical scenarios, these models assume the affect of
+violating conservation of momentum is negligible.</p>
+<p>It is important to note that the unfortunately ambiguous terminology of <em>body</em>
+is deliberate. The paraglider community typically refers to the combination of
+canopy and lines as a <em>paraglider wing</em>, but the “body” convention improves
+consistency with existing <em>parafoil-payload</em> literature (which in turn
+inherited the term from conventional aeronautics literature). Some texts
+prefer the term <em>parafoil</em>, but having the same prefix <span class="math notranslate nohighlight">\(p\)</span> for both
+<em>parafoil</em> and <em>payload</em> makes subscripting the variables unnecessarily
+difficult. Similarly, using “wing” would be preferred in this context, but
+subscripting with <span class="math notranslate nohighlight">\(w\)</span> causes confusion when discussing wind vectors.
+Referring to whatever group of components include the canopy as the <em>body</em> was
+a compromise chosen for consistency with existing literature.</p>
+</section>
+<section id="connections">
+<h2><span class="section-number">5.2. </span>Connections<a class="headerlink" href="#connections" title="Permalink to this headline">#</a></h2>
+<p>Next, the system model must characterize the connection between the body and
+payload. In literature, parafoil-payload models are commonly categorized by
+their <em>degrees-of-freedom</em> (DoF): the total number of dimensions in which the
+components of the system are free to move. The body has 3-DoF for
+translational motion and another 3-DoF for rotational motion, and if the
+payload is allowed to translate or rotate relative to the body, those
+additional DoF are added to the total DoF of the system model. For example, in
+a 6-DoF model, the body and payload are connected as a single rigid body, with
+no relative motion between them.</p>
+<figure class="align-default" id="paraglider-fbd-6dof">
+<img alt="_images/paraglider_fbd_6dof.svg" src="_images/paraglider_fbd_6dof.svg"/><figcaption>
+<p><span class="caption-number">Fig. 5.1 </span><span class="caption-text">Diagram for a 6-DoF model.</span><a class="headerlink" href="#paraglider-fbd-6dof" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>For typical paragliding flight maneuvers, assuming a fixed payload orientation
+is reasonably accurate, but with one significant failing: although the
+relative roll and twist are typically negligible, relative pitch about the
+riser connections is very common, even during static glides. Friction at the
+riser carabiners (and aerodynamic drag, to a lesser extent) dampen pitching
+oscillations, but the payload is otherwise free to pitch as necessary to
+maintain equilibrium. Assuming a fixed relative pitch angle introduces
+a fictitious pitching moment that disturbs the equilibrium conditions of the
+wing and artificially dampens the pitching dynamics during maneuvers. To
+mitigate that issue, the obvious solution is to add an additional DoF, but for
+demonstration purposes it is simpler to define a full 9-DoF model, where the
+body and payload are connected at the <a class="reference internal" href="paraglider_components.html#accelerator"><span class="std std-ref">riser midpoint</span></a> <span class="math notranslate nohighlight">\(RM\)</span>. The connection is modeled as
+a spring-damper system, which produces an internal force <span class="math notranslate nohighlight">\(\vec{F}_R\)</span> and
+moment <span class="math notranslate nohighlight">\(\vec{M}_R\)</span>:</p>
+<figure class="align-default" id="paraglider-fbd-9dof">
+<img alt="_images/paraglider_fbd_9dof.svg" src="_images/paraglider_fbd_9dof.svg"/><figcaption>
+<p><span class="caption-number">Fig. 5.2 </span><span class="caption-text">Diagram for a 9-DoF model with internal forces.</span><a class="headerlink" href="#paraglider-fbd-9dof" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="reference-point">
+<h2><span class="section-number">5.3. </span>Reference point<a class="headerlink" href="#reference-point" title="Permalink to this headline">#</a></h2>
+<p>Each dynamics model must choose a reference point about which the moments and
+angular inertia are calculated. A common choice for conventional aircraft is
+the center of real mass because it decouples the translational and angular
+dynamics of isolated objects. For a paraglider, however, this is not possible:
+paragliders are sensitive to apparent mass, which depends on the direction of
+motion, so there is no “center” that decouples the translational and
+rotational terms of the apparent inertia matrix
+<span id="id1">[<a class="reference internal" href="zreferences.html#id8" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">16</a>]</span>. Because the system matrix cannot be
+diagonalized there is no advantage in choosing the center of real mass.
+Instead, the reference point can be chosen such that it simplifies other
+calculations.</p>
+<p>In particular, the <a class="reference internal" href="paraglider_components.html#apparent-mass"><span class="std std-ref">method</span></a> to
+estimate the apparent inertia matrix requires that the reference point lies in
+the <span class="math notranslate nohighlight">\(xz\)</span>-plane of the canopy. Two natural choices in that plane are the
+leading edge of the central section, or the midpoint between the two risers.
+The <a class="reference internal" href="#connections"><span class="std std-ref">riser midpoint</span></a> <span class="math notranslate nohighlight">\(RM\)</span> has the
+advantage that is a fixed point in both the body and payload coordinate
+systems, which means it does not depend on the relative position or
+orientation of the payload with respect to the body. (This choice simplifies
+the equations for the <a class="reference internal" href="derivations.html#model-9a"><span class="std std-ref">9-DoF model</span></a> while
+maintaining consistency with the <a class="reference internal" href="derivations.html#model-9a"><span class="std std-ref">6-DoF model</span></a>.)</p>
+</section>
+<section id="system-inputs">
+<h2><span class="section-number">5.4. </span>System inputs<a class="headerlink" href="#system-inputs" title="Permalink to this headline">#</a></h2>
+<p>The inputs <span class="math notranslate nohighlight">\(\vec{u}\)</span> to the system model the control inputs for each
+component (with the exception of the trailing edge <a class="reference internal" href="paraglider_components.html#deflected-airfoil-arc"><span class="std std-ref">deflection distances</span></a> <span class="math notranslate nohighlight">\(\delta_d(s)\)</span> which are computed internally
+using the suspension lines and foil geometry models), the wind velocity
+<span class="math notranslate nohighlight">\(\vec{v}_{W/e}\)</span>, air density <span class="math notranslate nohighlight">\(\rho_\textrm{air}\)</span>, and the gravity
+vector <span class="math notranslate nohighlight">\(\vec{g}\)</span>.</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-system-inputs">
+<span class="eqno">(5.1)<a class="headerlink" href="#equation-system-inputs" title="Permalink to this equation">#</a></span>\[\vec{u} =
+  \left\{
+    \delta_a,
+    \delta_{bl},
+    \delta_{br},
+    \delta_w,
+    \vec{v}_{W/e}^b,
+    \rho_\textrm{air},
+    \vec{g}^b,
+  \right\}\]</div></div>
+<p>Here the wind field is assumed to be uniform so the wind velocity at every
+control point is defined by a single, constant vector, but for non-uniform
+wind fields there will be a unique wind vector for each aerodynamic control
+point.</p>
+</section>
+<section id="equations-of-motion">
+<h2><span class="section-number">5.5. </span>Equations of motion<a class="headerlink" href="#equations-of-motion" title="Permalink to this headline">#</a></h2>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Equations_of_motion">equations of motion</a>
+are developed by solving for the derivatives of translational momentum
+<span class="math notranslate nohighlight">\({^e \dot{\vec{p}}} = \sum{\vec{F}} = m \dot{\vec{v}}\)</span> and angular
+momentum <span class="math notranslate nohighlight">\({^e \dot{\vec{h}}} = \sum \vec{M} = \mat{J} \dot{\vec{\omega}}\)</span>
+for each group of components <span id="id2">[<a class="reference internal" href="zreferences.html#id26" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">24</a>]</span>. In
+addition to requiring the forces, moments, and inertia matrices for each
+component, each system model must choose a dynamics reference point and whether
+to account for the affects of <em>apparent mass</em>. The <a class="reference internal" href="derivations.html#paraglider-system-models"><span class="std std-ref">appendix</span></a> includes derivations demonstrating
+different choices for several each model.</p>
+<p>For the 6-DoF model, the most complete is <a class="reference internal" href="derivations.html#model-6a"><span class="std std-ref">Model 6a</span></a> which
+accounts for the effects of apparent mass, while <a class="reference internal" href="derivations.html#model-6b"><span class="std std-ref">Model 6b</span></a>
+and <a class="reference internal" href="derivations.html#model-6c"><span class="std std-ref">Model 6c</span></a> have the advantage of simplicity (making them
+easier to implement and useful for validating implementations of more complex
+models). The derivation produces a system of equations
+<a class="reference internal" href="derivations.html#equation-model6a-complete-system">(14)</a> that can be solved for the two vector
+derivatives that describe the accelerations of the body relative to the earth
+frame <span class="math notranslate nohighlight">\(\mathcal{F}_e\)</span> taken with respect to the body frame
+<span class="math notranslate nohighlight">\(\mathcal{F}_b\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-system-derivatives">
+<span class="eqno">(5.2)<a class="headerlink" href="#equation-model6a-system-derivatives" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {^b \dot{\vec{v}}_{RM/e}} \qquad &amp; \textrm{translational acceleration of the riser midpoint} \, RM \\
+  {^b \dot{\vec{\omega}}_{b/e}} \qquad &amp; \textrm{angular acceleration of the body} \\
+\end{aligned}\end{split}\]</div></div>
+<p>Similarly, for the 9-DoF model, <a class="reference internal" href="derivations.html#model-9a"><span class="std std-ref">Model 9a</span></a> also develops
+a complete system of equations <a class="reference internal" href="derivations.html#equation-model9a-complete-system">(33)</a> that account for
+apparent mass of the canopy, but with the addition of a separate angular
+acceleration for the payload with respect to the payload frame
+<span class="math notranslate nohighlight">\(\mathcal{F}_p\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-system-derivatives">
+<span class="eqno">(5.3)<a class="headerlink" href="#equation-model9a-system-derivatives" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+  {^b \dot{\vec{v}}_{RM/e}} \qquad &amp;\textrm{translational acceleration of the riser midpoint} \, RM \\
+  {^b \dot{\vec{\omega}}_{b/e}} \qquad &amp; \textrm{angular acceleration of the body} \\
+  {^p \dot{\vec{\omega}}_{p/e}} \qquad &amp; \textrm{angular acceleration of the payload} \\
+\end{aligned}\end{split}\]</div></div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+<div class="related-pages">
+  <a class="next-page" href="state_dynamics.html">
+      <div class="page-info">
+        <div class="context">
+          <span>Next</span>
+        </div>
+        <div class="title"><span class="section-number">6. </span>State dynamics</div>
+      </div>
+      <svg><use href="#svg-arrow-right"></use></svg>
+    </a>
+  <a class="prev-page" href="paraglider_components.html">
+      <svg><use href="#svg-arrow-right"></use></svg>
+      <div class="page-info">
+        <div class="context">
+          <span>Previous</span>
+        </div>
+        
+        <div class="title"><span class="section-number">4. </span>Component models</div>
+        
+      </div>
+    </a>
+</div>
+<div class="bottom-of-page">
+  <div class="left-details">
+    &copy; 2022, Peter Frank Heatwole
+    |
+    <a href="https://creativecommons.org/licenses/by/4.0" style="text-decoration-line:none">
+      <img
+        class="logo"
+        src="_static/cc_by_80x15.svg"
+        height="15px"
+        style="vertical-align:middle"
+        alt="Licensed CC-BY 4.0"
+      />
+    </a>
+    | Powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+    w/ <a href="https://github.com/pradyunsg/furo">Furo</a>
+      | <a class="muted-link" href="_sources/system_dynamics.rst.txt"
+        rel="nofollow">
+        Show Source
+      </a>
+  </div>
+  <div class="right-details">
+    <div class="icons">
+      
+    </div>
+  </div>
+</div>
+
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">5. System dynamics</a><ul>
+<li><a class="reference internal" href="#components">5.1. Components</a></li>
+<li><a class="reference internal" href="#connections">5.2. Connections</a></li>
+<li><a class="reference internal" href="#reference-point">5.3. Reference point</a></li>
+<li><a class="reference internal" href="#system-inputs">5.4. System inputs</a></li>
+<li><a class="reference internal" href="#equations-of-motion">5.5. Equations of motion</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/cancel"]}, "tex": {"macros": {"defas": "\\stackrel{\\mathrm{def}}{=}", "given": "\\;\\middle\\vert\\;", "vec": ["\\mathbf{#1}", 1], "mat": ["\\mathbf{#1}", 1], "crossmat": ["\\left[{#1}\\right]^{\\times}", 1], "norm": ["\\left\\|{#1}\\right\\|", 1]}, "packages": {"[+]": ["cancel"]}}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

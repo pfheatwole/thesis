@@ -1,0 +1,1008 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="4. Component models" href="paraglider_components.html" /><link rel="prev" title="2. Foil geometry" href="foil_geometry.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+        <title>3. Foil aerodynamics - Parametric Paraglider Modeling</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     <b>This document is a draft!</b> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Parametric Paraglider Modeling</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Parametric Paraglider Modeling</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">3. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notation.html">Notation and Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="derivations.html">Derivations</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="foil-aerodynamics">
+<h1><span class="section-number">3. </span>Foil aerodynamics<a class="headerlink" href="#foil-aerodynamics" title="Permalink to this headline">#</a></h1>
+<p>For the purposes of this chapter, an <em>aerodynamics model</em> provides the
+instantaneous forces and moments produced on a foil when it moves relative to
+air. In a rigorous modeling process the aerodynamic forces and moments would be
+measured experimentally, either in a wind tunnel or with flight tests, but that
+rigor is time consuming, expensive, and requires physical possession of the
+wing. Instead, this paper is concerned with estimating the dynamics of
+commercial paraglider wings from basic technical specifications, and so it must
+rely on theoretical methods that predict the flow-field surrounding a foil by
+combining fundamental equations of fluid behavior with the foil geometry.</p>
+<p>This chapter suggests performance criteria for simulating paraglider
+aerodynamics, and selects a theoretical method capable of simulating those
+dynamics under the [[target flight conditions]]. It presents a derivation of
+the method, modifies the method to improve its behavior in the context of
+flight simulation, and validates the modified method by comparing its
+predictions against wind tunnel measurements of a representative parafoil model
+from literature.</p>
+<section id="aerodynamics-models">
+<h2><span class="section-number">3.1. </span>Aerodynamics models<a class="headerlink" href="#aerodynamics-models" title="Permalink to this headline">#</a></h2>
+<p>Classical aerodynamics predate the modern computing era, and were forced to
+prioritize simplifying assumptions that would enable analytical solutions of
+the governing equations; those assumptions placed heavy restrictions on what
+geometries could be analyzed and what characteristics of the flow-field must be
+neglected. These simplifying assumption made the problems tractable in
+a surprising variety of situations, but — despite their elegance — such
+analytical solutions are inadequate for analyzing the geometry and flight
+conditions of a paraglider.</p>
+<p>In contrast, modern <em>computational aerodynamics</em>
+<span id="id1">[<a class="reference internal" href="zreferences.html#id18" title="Russel M. Cummings, William H. Mason, Scott A. Morton, and David R. McDaniel. Applied Computational Aerodynamics. Cambridge University Press, April 2015. ISBN 978-1-316-23651-2.">7</a>]</span> solve the equations
+numerically, relaxing the need for analytical solutions. As a result, modern
+methods can analyze significantly more complex foil geometries over the entire
+set of flow-field characteristics. However, even with modern computers the
+fluid equations are too difficult to solve in the general case, so simplifying
+assumptions are still required to produce a tractable system of equations. This
+modeling process has led to a wide variety aerodynamic models built on
+different simplifying assumptions regarding the geometry and the
+characteristics of the flow-field.</p>
+<section id="model-requirements">
+<h3><span class="section-number">3.1.1. </span>Model requirements<a class="headerlink" href="#model-requirements" title="Permalink to this headline">#</a></h3>
+<p>[[FIXME: finish.]]</p>
+<p>[[Each simplification restricts the physical scenarios that a model can
+represent, so the first step in selecting a method is to establish what
+characteristics of the foil geometry and flight conditions are relevant to
+paraglider simulations. Start with the geometry and flow-field since they
+establish the selection criteria. Cover issues like nonlinear geometry, slow
+airspeed, non-longitudinal, wind shear, high angle of attack, etc.]]</p>
+</section>
+<section id="model-selection">
+<h3><span class="section-number">3.1.2. </span>Model selection<a class="headerlink" href="#model-selection" title="Permalink to this headline">#</a></h3>
+<p>[[FIXME: finish]]</p>
+<ul class="simple">
+<li><p>Survey the available models (LLT, VLM, panel methods, CFD, etc) and
+progressively eliminate them.</p></li>
+<li><p>Conclusion: only Phillips’ NLLT met my requirements (except that no open
+source implementations were available at the time).</p></li>
+</ul>
+</section>
+</section>
+<section id="phillips-numerical-lifting-line">
+<h2><span class="section-number">3.2. </span>Phillips’ numerical lifting-line<a class="headerlink" href="#phillips-numerical-lifting-line" title="Permalink to this headline">#</a></h2>
+<p>Phillips’ numerical lifting-line method (NLLT)
+<span id="id2">[<a class="reference internal" href="zreferences.html#id39" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">8</a>]</span> is an extension of Prandtl’s
+classic <em>lifting-line theory</em> (LLT) to account for the effects of a curved
+lifting-line.</p>
+<p>Unlike the classical LLT, this numerical approach supports the characteristic
+nonlinear geometry of parafoils by decomposing the foil into discrete wing
+segments, each with their own scale, position, orientation, and profile. It can
+also be adapted to non-uniform wind vectors, allowing it to analyze
+non-uniform, non-longitudinal scenarios involving wind shear and wing rotation.</p>
+<p>Unlike pure potential flow solutions, such as traditional vortex lattice and
+surface panel methods, it is able to approximately account for the effects of
+viscosity through its use of section coefficients (critical for incorporating
+viscous drag corrections and approximating flow behavior at high angles of
+attack).</p>
+<p>And unlike full CFD solvers, the implementation is relatively simple, requires
+minimal manual configuration, and is computationally efficient (a critical
+point when generating iterated solutions for flight simulation).</p>
+<section id="derivation">
+<h3><span class="section-number">3.2.1. </span>Derivation<a class="headerlink" href="#derivation" title="Permalink to this headline">#</a></h3>
+<p>For the purposes of discussion, the derivation of Phillips’ NLLT is briefly
+repeated here using the notation of this paper. Note that to avoid confusion,
+this derivation breaks the convention of this paper and instead uses Phillips’
+convention of a capital <span class="math notranslate nohighlight">\(\vec{V}\)</span> for velocity, and a lowercase
+<span class="math notranslate nohighlight">\(\vec{v}\)</span> for the induced velocities.</p>
+<figure class="align-default" id="id23">
+<img alt="_images/phillips_scratch.svg" src="_images/phillips_scratch.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.1 </span><span class="caption-text">Wing sections for Phillips’ method.</span><a class="headerlink" href="#id23" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The goal is to establish a system of equations by equating two measures of the
+aerodynamic force applied to discrete segments of a wing. One uses the 3D
+vortex lifting law <a class="reference internal" href="#equation-section-lift-3d-vortex-lifting-law">(3.1)</a> and the other uses
+the local section lift coefficients <a class="reference internal" href="#equation-section-lift-coefficients">(3.2)</a>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-lift-3d-vortex-lifting-law">
+<span class="eqno">(3.1)<a class="headerlink" href="#equation-section-lift-3d-vortex-lifting-law" title="Permalink to this equation">#</a></span>\[\vec{\mathrm{d}F}_i = \rho \Gamma_i \vec{V}_i \times \mathrm{d}\vec{l}_i\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-lift-coefficients">
+<span class="eqno">(3.2)<a class="headerlink" href="#equation-section-lift-coefficients" title="Permalink to this equation">#</a></span>\[\norm{\vec{\mathrm{d}F}_i} =
+  \frac{1}{2}
+  \rho_\textrm{air}
+  \norm{\vec{V}_i}^2
+  C_{L_i} \left( \alpha_i, \delta_i \right)
+  A_i\]</div></div>
+<p>The net local velocity <span class="math notranslate nohighlight">\(\vec{V}_i\)</span> at control point <span class="math notranslate nohighlight">\(i\)</span> is the sum
+of the freestream relative wind velocity <span class="math notranslate nohighlight">\(\vec{V}_{\infty}\)</span> at the
+control point and the induced velocities from all the other segments:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-local-velocity-phillips">
+<span class="eqno">(3.3)<a class="headerlink" href="#equation-local-velocity-phillips" title="Permalink to this equation">#</a></span>\[\vec{V}_i = \vec{V}_{\infty} + \sum^N_{j=1} \Gamma_j \vec{v}_{ji}\]</div></div>
+<p>where <span class="math notranslate nohighlight">\(\vec{v}_{ji}\)</span> are the velocities induced at control point
+<span class="math notranslate nohighlight">\(i\)</span> by horseshoe vortex <span class="math notranslate nohighlight">\(j\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-induced-velocities">
+<span class="eqno">(3.4)<a class="headerlink" href="#equation-induced-velocities" title="Permalink to this equation">#</a></span>\[\vec{v}_{ji} =
+  \frac{1}{4\pi}
+  \left[
+    \frac
+      {\vec{u}_{\infty} \times \vec{r}_{j_2i}}
+      {r_{j_2i} \left( r_{j_2i} - \vec{u}_{\infty} \cdot \vec{r}_{j_2i} \right)}
+    + (1 - \delta_{ji}) \frac
+      {(r_{j_1i} + r_{j_2i})(\vec{r}_{j_1i} \times \vec{r}_{j_2i})}
+      {r_{j_1i}r_{j_2i}(r_{j_1i}r_{j_2i} + \vec{r}_{j_1i} \cdot \vec{r}_{j_2i})}
+    - \frac
+      {\vec{u}_{\infty} \times \vec{r}_{j_1i}}
+      {r_{j_1i} \left( r_{j_1i} - \vec{u}_{\infty} \cdot \vec{r}_{j_1i} \right)}
+  \right]\]</div></div>
+<p>and <span class="math notranslate nohighlight">\(\delta_{ji}\)</span> is the Kronecker delta function:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-kronecker-delta">
+<span class="eqno">(3.5)<a class="headerlink" href="#equation-kronecker-delta" title="Permalink to this equation">#</a></span>\[\begin{split}\delta_{ji} \defas
+  \begin{cases}
+    1\quad &amp;i = j \\
+    0\quad &amp;i \neq j
+  \end{cases}\end{split}\]</div></div>
+<p>Solving for the vector of circulation strengths can be approached as
+a multi-dimensional root-finding problem over <span class="math notranslate nohighlight">\(f\)</span>, where <span class="math notranslate nohighlight">\(f\)</span> is
+a vector-valued function of residuals, and the residual for each horseshoe
+vortex <span class="math notranslate nohighlight">\(i\)</span> is the difference between the two measures of section lift,
+<a class="reference internal" href="#equation-section-lift-3d-vortex-lifting-law">(3.1)</a> and <a class="reference internal" href="#equation-section-lift-coefficients">(3.2)</a>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-horseshoe-vortex-strength-optimization-target">
+<span class="eqno">(3.6)<a class="headerlink" href="#equation-horseshoe-vortex-strength-optimization-target" title="Permalink to this equation">#</a></span>\[f_i \left( \Gamma_i \right) =
+   2 \Gamma_i \norm{\vec{W}_i}
+   - \norm{\vec{V}_i}^2 A_i C_{L,i} \left(\alpha_i, \delta_i \right)\]</div></div>
+<p>where</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-unlabeled1">
+<span class="eqno">(3.7)<a class="headerlink" href="#equation-unlabeled1" title="Permalink to this equation">#</a></span>\[\vec{W}_i = \vec{V}_i \times \mathrm{d} \vec{l}_i\]</div></div>
+<p>The set of residuals <span class="math notranslate nohighlight">\(f_i \left( \Gamma_i \right)\)</span> represent a system of
+nonlinear equations that can be solved numerically to produce an estimate of
+the spanwise circulation <span class="math notranslate nohighlight">\(\Gamma_i\)</span>. In order to solve the system,
+Phillips suggests gradient descent using the system Jacobian <span class="math notranslate nohighlight">\(J_{ij}
+\defas \frac{\partial f_{i}}{\partial \Gamma_j}\)</span>, which expands to:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-phillips-jacobian">
+<span class="eqno">(3.8)<a class="headerlink" href="#equation-phillips-jacobian" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+J_{ij} =\;
+   &amp;\delta_{ij}\, 2 \norm{\vec{W}_i}
+   + 2\, \Gamma_i \frac {\vec{W}_i} {\norm{\vec{W}_i}}
+       \cdot \left( \vec{v}_{ji} \times \mathrm{d} \vec{l}_i \right)\\
+   &amp;- \norm{\vec{V}_i}^2 A_i
+      \frac
+         {\partial C_{L,i}}
+         {\partial \alpha_i}
+      \frac
+         {V_{a,i} \left( \vec{v}_{ji} \cdot \vec{u}_{n,i} \right)
+         - V_{n,i} \left( \vec{v}_{ji} \cdot \vec{u}_{a,i} \right)}
+         {V_{ai}^2 + V_{ni}^2}\\
+   &amp;- 2 A_i C_{L,i}(\alpha_i, \delta_i)(\vec{V}_i \cdot \vec{v}_{ji})
+\end{aligned}\end{split}\]</div></div>
+<p>with the effective wind speed in the normal and chordwise directions</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-axes">
+<span class="eqno">(3.9)<a class="headerlink" href="#equation-section-axes" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{C}_{f/s_i} =
+   -\begin{bmatrix}
+      | &amp; | &amp; | \\
+      \vec{u}_{a,i} &amp; \vec{u}_{s,i} &amp; \vec{u}_{n,i} \\
+      | &amp; | &amp; | \\
+   \end{bmatrix}\end{split}\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-wind-speeds">
+<span class="eqno">(3.10)<a class="headerlink" href="#equation-section-wind-speeds" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+   V_{a,i} &amp;= \vec{V}_i \cdot \vec{u}_{a,i}\\
+   V_{n,i} &amp;= \vec{V}_i \cdot \vec{u}_{n,i}
+\end{aligned}\end{split}\]</div></div>
+<p>and the <em>effective local angle of attack</em> <span class="math notranslate nohighlight">\(\alpha_i\)</span></p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-effective-local-angle-of-attack">
+<span class="eqno">(3.11)<a class="headerlink" href="#equation-effective-local-angle-of-attack" title="Permalink to this equation">#</a></span>\[\alpha_i = \arctan \left( \frac {V_{a,i}} {V_{n,i}} \right)\]</div></div>
+<p>After solving for the circulation strengths, the 3D vortex lifting law
+<a class="reference internal" href="#equation-section-lift-3d-vortex-lifting-law">(3.1)</a> is used to compute the inviscid
+forces at each control point, and the viscous drag and pitching moments are
+computed as in standard <em>strip theory</em> using the effective angle of attack
+<a class="reference internal" href="#equation-effective-local-angle-of-attack">(3.11)</a>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-viscous-drag">
+<span class="eqno">(3.12)<a class="headerlink" href="#equation-section-viscous-drag" title="Permalink to this equation">#</a></span>\[\vec{\mathrm{d}F}_{\textrm{visc},i} =
+  \frac{1}{2}
+  \rho_\textrm{air}
+  \norm{\vec{V}_i}^2
+  c_i
+  C_{D,i} \left( \alpha_i, \delta_i \right)
+  \hat{\vec{V}}_i\]</div></div>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-moment">
+<span class="eqno">(3.13)<a class="headerlink" href="#equation-section-moment" title="Permalink to this equation">#</a></span>\[\vec{\mathrm{d}M}_i =
+  -\frac{1}{2}
+  \rho_\textrm{air}
+  \norm{\vec{V}_i}^2
+  A_i
+  c_i
+  C_{M,i} \left( \alpha_i, \delta_i \right)
+  \vec{u}_{s,i}\]</div></div>
+</section>
+<section id="modifications">
+<h3><span class="section-number">3.2.2. </span>Modifications<a class="headerlink" href="#modifications" title="Permalink to this headline">#</a></h3>
+<p>Although the original derivation is suitable for simple, static scenarios, it
+is inadequate for simulating dynamic conditions that commonly occur during
+paraglider flights. This section presents a number of modifications to improve
+the usability, functionality, and numerical stability of the method that
+greatly extend its applicability.</p>
+<section id="control-point-distribution">
+<h4><span class="section-number">3.2.2.1. </span>Control point distribution<a class="headerlink" href="#control-point-distribution" title="Permalink to this headline">#</a></h4>
+<p>The paper recommends placing the control points using a cosine distribution
+over the 3D spanwise coordinate <span class="math notranslate nohighlight">\(y\)</span>, but that recommendation assumes
+a predominantly flat wing; cosine spacing generates a poor distribution when
+the wing tips are nearly vertical, which is common with parafoils. Instead,
+distributing the control points according to the <em>section index</em> <span class="math notranslate nohighlight">\(s\)</span> will
+maintain spacing along the foil’s <span class="math notranslate nohighlight">\(yz\)</span>-curve regardless of the arc. (Note
+that although this works well for parafoils, other foil geometries may be
+better suited to either a different section index, or some nonlinear spacing in
+<span class="math notranslate nohighlight">\(s\)</span>.)</p>
+</section>
+<section id="variable-reynolds-numbers">
+<h4><span class="section-number">3.2.2.2. </span>Variable Reynolds numbers<a class="headerlink" href="#variable-reynolds-numbers" title="Permalink to this headline">#</a></h4>
+<p>Lifting-line methods typically assume the section coefficient data is an
+explicit function of angle of attack <span class="math notranslate nohighlight">\(\alpha\)</span>, and possibly some sort of
+control deflection <span class="math notranslate nohighlight">\(\delta\)</span>, but assume the coefficients are constant
+with respect to Reynolds number. For relatively high Reynolds regimes this is
+reasonable since the airfoil data is essentially constant, but parafoil
+sections under typical flight conditions experience Reynolds numbers in the
+range from roughly 150,000 to 3,000,000, spanning the transitional regime where
+viscous effects can be significant. To verify whether section-local Reynolds
+numbers have a significant effect on parafoil aerodynamics, the coefficients
+should be an explicit function of Reynolds number.</p>
+</section>
+<section id="non-uniform-upstream-velocities">
+<h4><span class="section-number">3.2.2.3. </span>Non-uniform upstream velocities<a class="headerlink" href="#non-uniform-upstream-velocities" title="Permalink to this headline">#</a></h4>
+<p>Phillips’ original derivation <span id="id3">[<a class="reference internal" href="zreferences.html#id39" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">8</a>]</span>
+assumes uniform flow, but <span id="id4">[<a class="reference internal" href="zreferences.html#id27" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">9</a>]</span>
+relaxes that assumption by replacing the uniform <em>freestream velocity</em>
+<span class="math notranslate nohighlight">\(V_{\infty}\)</span> with the relative <em>upstream velocity</em> <span class="math notranslate nohighlight">\(V_{rel,i}\)</span> that
+“may also have contributions from prop-wash or rotations of the lifting surface
+about the aircraft center of gravity.” (Compare Phillips Eq:5 to
+Hunsaker-Snyder Eq:5.) The result is that <a class="reference internal" href="#equation-local-velocity-phillips">(3.3)</a> is
+replaced with:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-local-velocity-hunsaker">
+<span class="eqno">(3.14)<a class="headerlink" href="#equation-local-velocity-hunsaker" title="Permalink to this equation">#</a></span>\[\vec{V}_i = \vec{V}_{rel,i} + \sum^N_{j=1} \Gamma_j \vec{v}_{ji}\]</div></div>
+<p>In <span id="id5">[<a class="reference internal" href="zreferences.html#id27" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">9</a>]</span> they are concerned with
+accounting for propeller wash, but for a parafoil the upstream velocity is
+simply the local wind velocity at control point <span class="math notranslate nohighlight">\(i\)</span> combined with the
+velocity produced by the control point <span class="math notranslate nohighlight">\(CP,i\)</span> rotating about the glider
+center of mass <span class="math notranslate nohighlight">\(CM\)</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-upstream-velocity">
+<span class="eqno">(3.15)<a class="headerlink" href="#equation-upstream-velocity" title="Permalink to this equation">#</a></span>\[\vec{V}_{rel,i} =
+  \vec{V}_{\infty,i}
+  + \vec{r}_{CP,i/CM} \times \vec{\omega}_{b/e}\]</div></div>
+<p>This change enables the method to approximately accommodate non-uniform wind
+conditions, such as from wind shear, turning maneuvers, etc. This flexibility
+should be used with caution, however; see <a class="reference internal" href="#straight-wake-assumption">Straight-wake assumption</a> for
+a discussion.</p>
+</section>
+<section id="better-solver">
+<h4><span class="section-number">3.2.2.4. </span>Better solver<a class="headerlink" href="#better-solver" title="Permalink to this headline">#</a></h4>
+<p>To solve for the circulation strengths <span class="math notranslate nohighlight">\(\Gamma_i\)</span>, the Phillips paper
+suggests using <em>Newtons’ method</em>, which computes the zero of a function via
+gradient descent. Gradient descent has several practical issues, but the most
+important problem in this case is that it fails to converge if the gradient
+goes to zero. For this application, the function under evaluation is the
+residual error <a class="reference internal" href="#equation-horseshoe-vortex-strength-optimization-target">(3.6)</a>, and its
+gradient <a class="reference internal" href="#equation-phillips-jacobian">(3.8)</a> depends on derivatives of the section lift
+coefficients. When a wing section reaches the angle of attack associated with
+<span class="math notranslate nohighlight">\(C_{L,max}\)</span> the section has stalled, its section lift slope is zero, and
+gradient descent will fail to converge. Phillips suggests switching to Picard
+iterations to deal with stalled sections, but it is unclear whether the target
+function reliably produces fixed points; a simple prototype failed to converge.</p>
+<p>An alternative is to use a robust, hybrid root-finding algorithm that uses
+gradient descent for speed but switches to a line-search method when the
+gradient goes to zero. The implementation for this project had great success
+with a modified <a class="reference external" href="https://en.wikipedia.org/wiki/Powell%27s_method">Powell’s method</a>, which “retains the fast
+convergence of Newton’s method but will also reduce the residual when Newton’s
+method is unreliable” (see the <a class="reference external" href="https://www.gnu.org/software/gsl/doc/html/multiroots.html#c.gsl_multiroot_fdfsolver_hybridsj">GSL discussion</a>
+or MINPACK’s <a class="reference external" href="https://www.math.utah.edu/software/minpack/minpack/hybrj.html">hybrj documentation</a> for more
+information). This method not only mitigates the convergence issues near stall,
+but it is also significantly faster: it does not depend on fixed step sizes
+(which must be inherently pessimistic to encourage convergence) and is able to
+use approximate Jacobian updates instead of requiring full Jacobian evaluations
+at each step.</p>
+</section>
+<section id="reference-solutions">
+<h4><span class="section-number">3.2.2.5. </span>Reference solutions<a class="headerlink" href="#reference-solutions" title="Permalink to this headline">#</a></h4>
+<p>The root-finding algorithm that solves for the circulation strengths requires
+an initial proposal for the <em>circulation distribution</em> <span class="math notranslate nohighlight">\(\Gamma(s)\)</span>. Poor
+proposals produce large residual errors that can push Newton iterations into
+unrecoverable states, so it is preferable to use prior information to predict
+the true distribution. The original paper suggested solving a linearized
+version of the equations, but that choice is only suitable for foils with no
+sweep or dihedral. Another common suggestion from related methods is to assume
+an elliptical distribution; for most foils, an elliptical circulation
+distribution is a reasonable guess during straight and steady flight, but it is
+a poor proposal for scenarios that include non-uniform wind or asymmetric
+control inputs, such as during flight maneuvers. It is clear that generating
+suitable proposals for nonlinear geometries under variable flight conditions
+requires a different approach.</p>
+<p>For sequential problems, such as the sequence of states in a flight simulator
+or the points of a polar curve, an effective solution is to use the solution
+from the previous iteration as the proposal. Provided the time resolution of
+the simulation is reasonably small then the state of the aircraft should be
+similar between each timestep, so the proposal will be very close to the
+target. An added advantage of using a prior solution is an ability to capture
+hysteresis effects <span id="id6">[<a class="reference internal" href="zreferences.html#id38" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">10</a>]</span>.</p>
+</section>
+<section id="clamping-section-coefficients">
+<h4><span class="section-number">3.2.2.6. </span>Clamping section coefficients<a class="headerlink" href="#clamping-section-coefficients" title="Permalink to this headline">#</a></h4>
+<p>A major issue with the method is a tendency to produce fictitious “infinite”
+induced velocities under certain conditions, causing convergence to fail. This
+tendency increases as the grid resolution is refined, and is most commonly
+observed at the wing tips, especially during turning maneuvers. The cause is
+apparent in equation <a class="reference internal" href="#equation-induced-velocities">(3.4)</a>, where the induced velocities
+between bound segments increases as the inverse of their separation distance;
+as the separation distance goes to zero, the induced velocity goes to infinity.
+In most cases, the induced velocities from the left and right neighbors of
+a segment mostly cancel, but if the foil has discontinuities (such as at the
+wingtips, where the outer segment has only an inboard neighbor) then
+cancellation may be incomplete, leaving a large imbalance. It can also occur
+due to numerical issues at very fine grid resolutions.</p>
+<p>For parafoils the most significant discontinuities are at the wingtips, where
+the effect of the induced velocity spike is to dramatically overestimate the
+effective angle of attack. The NLLT relies on accurate section coefficient
+data, and if that coefficient data is unavailable (such as at high angles of
+attack) then the numerical routine cannot continue, causing convergence to
+fail.</p>
+<p>Clearly the lack of coefficient data is not a valid reason to abort, since the
+large induced angle of attack is fictitious. To mitigate the issue when it
+occurs at the wingtips, assume the true <span class="math notranslate nohighlight">\(\alpha\)</span> is less than or equal to
+the maximum <span class="math notranslate nohighlight">\(\alpha\)</span> supported by the coefficient data, and clamp
+<span class="math notranslate nohighlight">\(C_L\)</span> to its value at that maximum <span class="math notranslate nohighlight">\(\alpha\)</span>. In the case where the
+high <span class="math notranslate nohighlight">\(\alpha\)</span> is fictitious, the <span class="math notranslate nohighlight">\(C_L\)</span> will be incorrect but will
+at least remain relatively close to the true value, and will allow the
+simulation to continue. In the case where <span class="math notranslate nohighlight">\(\alpha\)</span> is genuinely large,
+then the unclamped inboard segments will also lack coefficient data and the
+method will correctly fail.</p>
+<p>It is important to note that this is a practical mitigation, not
+a theoretically-justified solution. The point is not to “fix” the method, the
+point is to limit the magnitude of the error and allow the simulation to
+continue with reasonable accuracy. However, despite lacking a theoretical
+basis, there are several strong justifications:</p>
+<ol class="arabic">
+<li><p>If the outer segment is small, then its contribution to the error is
+expected to be small. For example, if the outer segment represents the last
+5% of the wing span means then the error from much less than 5% of the total
+aerodynamic contributions (since the area of that wingtip segment is very
+small).</p></li>
+<li><p>If the outer segment is small, you wouldn’t expect a significant change in
+alpha from the wingtip to its neighbor, so if the inboard neighbor is in the
+valid range you can expect that the wingtip alpha is (relatively) close to
+the valid range.</p>
+<p>[[The <span class="math notranslate nohighlight">\(C_L\)</span> curve stays (relatively) flat for significant range of
+<span class="math notranslate nohighlight">\(\alpha\)</span> post-stall, so the true value of <span class="math notranslate nohighlight">\(C_L\)</span> should be
+relatively close to the clamped value, so even if <span class="math notranslate nohighlight">\(\alpha_\textrm{true}
+&gt; \alpha_\textrm{max}\)</span>, it’s unlikely for <span class="math notranslate nohighlight">\(C_L(\alpha_\textrm{max})\)</span>
+to be wildly inaccurate (provided the section coefficient data covers
+a reasonably high <span class="math notranslate nohighlight">\(\alpha\)</span>).]]</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="limitations">
+<h3><span class="section-number">3.2.3. </span>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">#</a></h3>
+<section id="assumes-minimal-spanwise-flow">
+<h4><span class="section-number">3.2.3.1. </span>Assumes minimal spanwise flow<a class="headerlink" href="#assumes-minimal-spanwise-flow" title="Permalink to this headline">#</a></h4>
+<p>This method argues that the derivation of the 3D vortex lifting law in
+<span id="id7">[<a class="reference internal" href="zreferences.html#id41" title="P. G. Saffman. Vortex Dynamics. Cambridge University Press, California Institute of Technology, 1992.">11</a>]</span> proves that “the relationship between section
+lift and section circulation is not affected by flow parallel to the bound
+vorticity.” In other words, it relies on the fact that the 3D vortex lifting
+law holds even in the presence of spanwise flow. What this does not account
+for, however, is the effect of spanwise flow on the section coefficients. Wing
+analysis using section coefficients relies on the assumption that each wing
+segment acts as a finite segment of an infinite wing, provided the spanwise
+flow is negligible (<span id="id8">[<a class="reference internal" href="zreferences.html#id12" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">3</a>]</span>, p. 356). Although
+the 3D vortex law holds in the presence of spanwise flow, solving for the
+circulation strengths using section coefficients does not.</p>
+<p>A similar discussion can be found in <span id="id9">[<a class="reference internal" href="zreferences.html#id38" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">10</a>]</span>,
+who apply a similar NLLT to a flat wing with 45° sweep. They acknowledge that
+although the sweep introduces significant 3D flow-field effects, the method
+“shows very good agreement” versus experimental measurements. Their success
+offers some confidence that the effects of spanwise flow may indeed be
+negligible, but it is unclear whether the effect has more significance once
+continuous arc anhedral is involved.</p>
+</section>
+<section id="straight-wake-assumption">
+<h4><span class="section-number">3.2.3.2. </span>Straight-wake assumption<a class="headerlink" href="#straight-wake-assumption" title="Permalink to this headline">#</a></h4>
+<p>A common aerodynamic modeling approximation is to assume that vorticity is shed
+into the wake as a trailing <em>vortex sheet</em>; the strength of the shed vorticity
+varies with the local variation of lift along the span. In a rigorous analysis,
+the trailing vorticity should follow a curved path
+(<span id="id10">[<a class="reference internal" href="zreferences.html#id12" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">3</a>]</span>, p. 390), but this produces an
+intractable nonlinear system of equations. Instead, models apply a further
+simplification known as the <em>straight-wake assumption</em>: that the trailing <em>wake
+vortex sheet</em> streams straight back from the lifting-line. The straight-wake
+assumption is an important step in linearizing the system of equations to allow
+mathematically tractable solutions.</p>
+<p>For a discretized method, such as Phillips’ or Weissinger’s LLT
+<span id="id11">[<a class="reference internal" href="zreferences.html#id49" title="J. Weissinger. The lift distribution of swept-back wings. Technical 1120, NACA, March 1947.">12</a>]</span>, the vortex sheet is lumped
+into a series of shed vortex filaments whose strength is proportional to the
+difference in local lift of neighboring segments. Under the straight-wake
+assumption, the trailing legs of all horseshoe vortices extend from the nodes
+in straight lines parallel to some <em>freestream velocity</em> direction
+<span class="math notranslate nohighlight">\(\vec{u}_{\infty}\)</span> (see <a class="reference internal" href="#equation-induced-velocities">(3.4)</a>). This is clearly
+invalid for a rotating wing where a freestream velocity is ambiguous.</p>
+<p>Despite this limitation, this project assumes that as long as the rotation
+rates remain small enough that relative flow angles remain small the method
+still provides useful approximations. This assumption is made without
+theoretical justification; instead, this paper relies on the superior
+aerodynamics knowledge of its sources. First, the use of this method with
+non-zero rotation is explicitly mentioned in
+<span id="id12">[<a class="reference internal" href="zreferences.html#id27" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">9</a>]</span>. Also, this assumption is
+shared with the vortex-lattice model used in <a class="reference external" href="https://web.mit.edu/drela/Public/web/avl/">AVL</a>, although in that method the
+trailing legs are aligned with the foil <span class="math notranslate nohighlight">\(x\)</span>-axis, regardless of
+freestream flow. In Phillips’ method the trailing are aligned to the
+freestream, which for this work is defined as the local upstream velocity
+<span class="math notranslate nohighlight">\(\vec{u}_{\infty,0}\)</span> of the central section under the assumption that it
+minimizes average deviation.</p>
+<p>For a related technical discussion that incorporates rotation rates into
+a vortex lattice method, refer to <span id="id13">[<a class="reference internal" href="zreferences.html#id21" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">13</a>]</span>
+Sec. 6.5; in particular, Eq. 6.33 for aligning the trailing legs with the
+<span class="math notranslate nohighlight">\(x\)</span>-axis and Eq. 6.39 for incorporating the rotation rates into the
+aerodynamic influence coefficients matrix.</p>
+</section>
+<section id="reliance-on-section-coefficients">
+<h4><span class="section-number">3.2.3.3. </span>Reliance on section coefficients<a class="headerlink" href="#reliance-on-section-coefficients" title="Permalink to this headline">#</a></h4>
+<p>A significant limitation of aerodynamic methods based on the theory of <em>wing
+sections</em> their assumption that the section coefficient data is accurate and
+representative of the flow conditions during a flight. In practice, section
+coefficient data is notoriously optimistic, relying on idealized geometry,
+negligible spanwise flow, a uniform flow-field across the segment, steady-state
+conditions, etc. These assumptions are strong to begin with, and become
+particularly questionable near stall, especially when using simulated airfoil
+data.</p>
+<p>Not only do these methods assume the section coefficient data is accurate for
+each individual section in isolation, they also assume the flow conditions of
+each section will have a negligible impact on the coefficients of neighboring
+sections. In reality, development of 3D flow-field conditions such as
+separation bubbles is significantly impacted by such neighboring sections. Part
+of the interaction can be captured by the induced velocities, but section
+coefficients are ultimately incapable of modeling effects such as turbulence,
+3D separation bubbles, significant spanwise (or “cross”) flow, etc. Such
+effects seem likely to be even more prominent given the significant arc of
+a parafoil.</p>
+</section>
+<section id="no-unsteady-effects">
+<h4><span class="section-number">3.2.3.4. </span>No unsteady effects<a class="headerlink" href="#no-unsteady-effects" title="Permalink to this headline">#</a></h4>
+<p>This method produces a steady-state (non-accelerated) solution. It does not
+include unsteady (time-varying) effects, such as
+(<span id="id14">[<a class="reference internal" href="zreferences.html#id21" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">13</a>]</span>, p. 149):</p>
+<ul class="simple">
+<li><p>Unsteady foil motion</p></li>
+<li><p>Unsteady foil deformation</p></li>
+<li><p>Spatially-varying or unsteady atmospheric velocity field</p></li>
+</ul>
+<p>Thankfully, the (arguably) most important unsteady effect for the purposes of
+paraglider simulation under typical flight conditions can be accounted for by
+the simulator itself; see <a class="reference internal" href="paraglider_components.html#apparent-mass"><span class="std std-ref">Apparent Mass</span></a>.</p>
+</section>
+<section id="non-unique-solutions">
+<h4><span class="section-number">3.2.3.5. </span>Non-unique solutions<a class="headerlink" href="#non-unique-solutions" title="Permalink to this headline">#</a></h4>
+<p>Gradient descent will find a zero of the residual, but it is not guaranteed to
+be unique, especially given that the numerical solver relies on tolerances
+instead of exact solutions. Depending on the initial conditions, the solver may
+converge to different circulation distributions.</p>
+</section>
+<section id="sensitive-to-initial-proposal">
+<h4><span class="section-number">3.2.3.6. </span>Sensitive to initial proposal<a class="headerlink" href="#sensitive-to-initial-proposal" title="Permalink to this headline">#</a></h4>
+<p>This method relies on a good proposal (an initial “guess” of the circulation
+distribution) to encourage convergence while minimizing optimization runtime.
+The root-finding problem uses the residual error <a class="reference internal" href="#equation-horseshoe-vortex-strength-optimization-target">(3.6)</a> which is likely a non-convex function, in which case
+a global optimization method such as gradient descent is not guaranteed to find
+the global minimum for a non-convex function, so the solution is sensitive to
+the starting point (the initial proposal). In practice this issue is not
+a major problem when the intended use is flight simulation; solutions are
+generated iteratively, in which case the previous solution is a natural choice
+for minimizing the initial residual error (see <cite>Reference solutions</cite>). As an
+added bonus, using the previous solution adds the capability of capturing
+hysteresis effects <span id="id15">[<a class="reference internal" href="zreferences.html#id38" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">10</a>]</span>; for example, in
+<span id="id16">[<a class="reference internal" href="zreferences.html#id3" title="John D. Anderson and Stephen Corda. Numerical lifting line theory applied to drooped leading-edge wings below and above stall. Journal of Aircraft, 17(12):898–904, 1980. doi:10.2514/3.44690.">14</a>]</span> they discuss a wing that demonstrates
+hysteresis depending on whether data were generated with increasing versus
+decreasing alpha. Nevertheless, the fact that the method has a tendency to
+produce different solutions for different proposals mean the method will
+exhibit hysteresis effects which may or may not be physically accurate.</p>
+</section>
+<section id="unreliable-near-stall">
+<h4><span class="section-number">3.2.3.7. </span>Unreliable near stall<a class="headerlink" href="#unreliable-near-stall" title="Permalink to this headline">#</a></h4>
+<p>Phillips suggests that this method can be used up to stall “with caution”.
+Closely related to the issues of spanwise flow, the development of stall
+conditions along a wing has a high likelihood of violating the assumptions used
+to generate the section coefficients. Worse, the flexible nature of a parafoil
+will exacerbate the effects of section stall, which cause the profiles to
+deform and wrinkle even more than normal. Nevertheless, this project attempts
+to apply the method to “near stall” conditions under the belief that, for the
+purposes of flight reconstruction, it is preferable to get a low-quality
+estimate as opposed to no estimate at all. It is vital, however, for the
+filtering architecture to model the increased uncertainty as sections approach
+stall conditions.</p>
+</section>
+</section>
+</section>
+<section id="case-study">
+<h2><span class="section-number">3.3. </span>Case study<a class="headerlink" href="#case-study" title="Permalink to this headline">#</a></h2>
+<p>This section considers the ability of Phillips’ NLLT to predict the
+aerodynamics of a typical paraglider geometry. It continues the discussion from
+the foil geometry <a class="reference internal" href="foil_geometry.html#case-study"><span class="std std-ref">case study</span></a> by comparing the
+theoretical predictions of several aerodynamics models against experimental
+wind tunnel data.</p>
+<section id="wind-tunnel-data">
+<h3><span class="section-number">3.3.1. </span>Wind tunnel data<a class="headerlink" href="#wind-tunnel-data" title="Permalink to this headline">#</a></h3>
+<p>As explained in <span id="id17">[<a class="reference internal" href="zreferences.html#id10" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">6</a>]</span>, a 1/8th-scale model
+was fabricated from wood and [[material]], mounted on a 1 meter rod connected
+to force sensors, and placed in a wind tunnel configured for 40 m/s airspeed.
+Measurements were taken with the angle of attack and sideslip ranging over
+<span class="math notranslate nohighlight">\(-5 &lt; \alpha &lt; 22\)</span> and <span class="math notranslate nohighlight">\(-15 &lt; \beta &lt; 15\)</span>.</p>
+<p>For better accuracy, wind tunnel measurements should be corrected for wall
+interactions with the flow (<span id="id18">[<a class="reference internal" href="zreferences.html#id7" title="Jewel B. Barlow, William H. Rae, and Alan Pope. Low-Speed Wind Tunnel Testing. John Wiley &amp; Sons, third edition, February 1999. ISBN 978-0-471-55774-6.">15</a>]</span>;
+<span id="id19">[<a class="reference internal" href="zreferences.html#id21" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">13</a>]</span>, Sec. 10.3). However, because
+classical wind tunnel wall corrections assume a flat wing, the data for the
+arched parafoil are uncorrected for wall effects.</p>
+</section>
+<section id="id20">
+<h3><span class="section-number">3.3.2. </span>Aerodynamics models<a class="headerlink" href="#id20" title="Permalink to this headline">#</a></h3>
+<p>[[FIXME: Introduce the aerodynamic models I’ll be comparing against the NLLT:
+a traditional <em>vortex lattice method</em> (VLM) in <a class="reference external" href="https://web.mit.edu/drela/Public/web/avl/">AVL</a> , and an experimental VLM in
+<a class="reference external" href="https://www.xflr5.tech/xflr5.htm">XFLR5</a> (which tilts the geometry to
+mitigate the “small angles” approximation for alpha and beta).]]</p>
+</section>
+<section id="experimental-vs-theoretical-results">
+<h3><span class="section-number">3.3.3. </span>Experimental vs theoretical results<a class="headerlink" href="#experimental-vs-theoretical-results" title="Permalink to this headline">#</a></h3>
+<section id="coefficients-vs-angle-of-attack">
+<h4><span class="section-number">3.3.3.1. </span>Coefficients vs angle of attack<a class="headerlink" href="#coefficients-vs-angle-of-attack" title="Permalink to this headline">#</a></h4>
+<p>[[Coefficients versus angle of attack <span class="math notranslate nohighlight">\(\alpha\)</span>, measured at four
+different angles of sideslip <span class="math notranslate nohighlight">\(\beta\)</span>]]</p>
+<figure class="align-default" id="belloc-cl-vs-alpha">
+<img alt="_images/CL_vs_alpha.svg" src="_images/CL_vs_alpha.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Lift coefficient vs angle of attack.</span><a class="headerlink" href="#belloc-cl-vs-alpha" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="belloc-cd-vs-alpha">
+<img alt="_images/CD_vs_alpha.svg" src="_images/CD_vs_alpha.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.3 </span><span class="caption-text">Drag coefficient vs angle of attack.</span><a class="headerlink" href="#belloc-cd-vs-alpha" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="belloc-cm-vs-alpha">
+<img alt="_images/Cm_vs_alpha.svg" src="_images/Cm_vs_alpha.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.4 </span><span class="caption-text">Pitching coefficient vs angle of attack.</span><a class="headerlink" href="#belloc-cm-vs-alpha" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>[[This is the global pitching coefficient, which includes contributions from
+both the section pitching coefficients and the aerodynamic forces. These
+coefficients are computed using the riser midpoint <cite>RM</cite>.]]</p>
+</section>
+<section id="coefficients-vs-sideslip">
+<h4><span class="section-number">3.3.3.2. </span>Coefficients vs sideslip<a class="headerlink" href="#coefficients-vs-sideslip" title="Permalink to this headline">#</a></h4>
+<p>[[Coefficients versus angle of sideslip <span class="math notranslate nohighlight">\(\beta\)</span>, measured at four
+different angles of attack <span class="math notranslate nohighlight">\(\alpha\)</span>]]</p>
+<figure class="align-default" id="belloc-cy-vs-beta">
+<img alt="_images/CY_vs_beta.svg" src="_images/CY_vs_beta.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.5 </span><span class="caption-text">Lateral force coefficient vs sideslip.</span><a class="headerlink" href="#belloc-cy-vs-beta" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="belloc-cl-vs-beta">
+<img alt="_images/Cl_vs_beta.svg" src="_images/Cl_vs_beta.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.6 </span><span class="caption-text">Rolling coefficient vs sideslip.</span><a class="headerlink" href="#belloc-cl-vs-beta" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="belloc-cn-vs-beta">
+<img alt="_images/Cn_vs_beta.svg" src="_images/Cn_vs_beta.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.7 </span><span class="caption-text">Yawing coefficient vs sideslip.</span><a class="headerlink" href="#belloc-cn-vs-beta" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="coefficients-vs-each-other">
+<h4><span class="section-number">3.3.3.3. </span>Coefficients vs each other<a class="headerlink" href="#coefficients-vs-each-other" title="Permalink to this headline">#</a></h4>
+<p>[[This is the classic way to consider the overall performance of a wing.]]</p>
+<figure class="align-default" id="belloc-cl-vs-cd">
+<img alt="_images/CL_vs_CD.svg" src="_images/CL_vs_CD.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.8 </span><span class="caption-text">Lift coefficient vs drag coefficient.</span><a class="headerlink" href="#belloc-cl-vs-cd" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="belloc-cl-vs-cm">
+<img alt="_images/CL_vs_Cm.svg" src="_images/CL_vs_Cm.svg"/><figcaption>
+<p><span class="caption-number">Fig. 3.9 </span><span class="caption-text">Lift coefficient vs global pitching coefficient.</span><a class="headerlink" href="#belloc-cl-vs-cm" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="discussion">
+<h3><span class="section-number">3.3.4. </span>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>Does the NLLT include the empirical viscous drag corrections?</p></li>
+<li><p>The inviscid solutions agree with the NLLT quite well for small angles of
+attack. I think the deviation occurs when the “thin boundary layer”
+assumption starts to break down; for the 2D lift coefficient, the BL really
+starts to thicken around alpha=12, so when you consider the <strong>effective</strong>
+angle of attack it happens around alpha=9? Seems about right. I’m not sure if
+flow separation is involved, but I don’t think that tends to happen until
+after a section exceeds <cite>Cl_max</cite>?</p></li>
+<li><p>The VLM and NLLT disagree on the zero-lift angle of attack? Hm. That seems to
+suggest bad airfoil coefficients, doesn’t it? I would think you’d have the
+least amount of flow separation at that alpha; is that intuition correct? Or
+maybe BL thickness is already significant at that angle; I should check the
+overall spanwise alphas.</p></li>
+<li><p>The wind tunnel data is only testing the <strong>uniform</strong> flow-field case. In my
+simulations I’m using this method for <strong>asymmetric</strong> flows (spanwise
+variation in speed and/or direction). That’s definitely questionable (similar
+to what I mention about assuming the trailing wake is aligned to the central
+freestream: highly questionable).</p>
+<p>Not a big deal though; I just need to be clear that the point isn’t to claim
+this is a great model; I just need something useful for testing the geometry
+and “good enough” for simulations.</p>
+<p><strong>This was always meant to be used in an uncertain environment (stochastic
+simulations). As long as the choice of aerodynamic method is not the dominant
+source of error, I’m fine with it.</strong></p>
+</li>
+<li><p>Did Belloc account for hysteresis? In
+<span id="id21">[<a class="reference internal" href="zreferences.html#id3" title="John D. Anderson and Stephen Corda. Numerical lifting line theory applied to drooped leading-edge wings below and above stall. Journal of Aircraft, 17(12):898–904, 1980. doi:10.2514/3.44690.">14</a>]</span> they plots how both the experimental
+and numerical data were strongly affected by increasing vs decreasing alpha.</p>
+<p>TODO: run the numerical solutions forward and backwards in alpha!</p>
+</li>
+<li><p>I’m frustrated that the lift curve for all methods is so high compared to the
+wind tunnel data, but at least the NLLT matches AVL, XFLR5, and MachUpX, so
+I’m pretty confident I’ve implemented it correctly. I need to make a list of
+explanations for the discrepancies though: unmodeled viscous effects in
+particular, but there’s still the chance of an issues with the <cite>CZa</cite> or
+<cite>Alphac</cite> values in the wind tunnel data.</p>
+<p>Also, maybe it’s not such a terrible result overall? It is a pretty low
+aspect ratio wing, after all. See Fig:7.22 of
+<span id="id22">[<a class="reference internal" href="zreferences.html#id12" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">3</a>]</span> shows theoretical vs experimental CL
+for a wing with AR=5.3; the theoretical estimate significantly overestimates
+(IMHO) the lift coefficient, but the author calls it a “reasonable” estimate.</p>
+<p>Possibly related to the lift discrepancy:</p>
+<ul class="simple">
+<li><p>“Aerodynamics for Engineers”, p. 326, he discusses the effects of
+a “separated wake”, although that’s in the context of airfoils. Still it
+does have the same look as my data.</p></li>
+<li><p>In <a class="reference external" href="https://www.xflr5.tech/docs/Part%20IV:%20Limitations.pdf">https://www.xflr5.tech/docs/Part%20IV:%20Limitations.pdf</a>, p. 29, he
+mentions that the “flat wake” assumption (no wake roll-up) causes an
+overestimation of the vortex strengths (and thus the lift), and that the
+error can be in the order of 1% to 10% for the lift and induced drag.</p></li>
+</ul>
+</li>
+<li><p>Why is this a good/useful test?</p>
+<ul>
+<li><p>The range of angle of attack is suitable for capturing the longitudinal
+performance of the wing post-stall</p></li>
+<li><p>The range of sideslip angles is useful for considering the impact of the
+<a class="reference internal" href="#straight-wake-assumption">Straight-wake assumption</a> for a non-rotating wing.</p>
+<p>FIXME: how is the straight-wake assumption under question for
+a non-rotating wing? It’s important for aerodynamic models that assume the
+wind is head on, I think; isn’t that the issue that the experimental VLM2
+in XFLR5 is meant to address? Like, doesn’t AVL “assume” the wind is head
+on then make corrections instead of modeling the wind directly?</p>
+</li>
+<li><p>In terms of aerodynamics: good representation of the unusual geometry of
+a paraglider; completely known geometry (including airfoil); extensive data
+for a range of wind conditions; internal wood structure maintains the
+shape, eliminating uncertainty due to distortions</p></li>
+<li><p>It also provides a good demonstration of how to use my geometry.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+<div class="related-pages">
+  <a class="next-page" href="paraglider_components.html">
+      <div class="page-info">
+        <div class="context">
+          <span>Next</span>
+        </div>
+        <div class="title"><span class="section-number">4. </span>Component models</div>
+      </div>
+      <svg><use href="#svg-arrow-right"></use></svg>
+    </a>
+  <a class="prev-page" href="foil_geometry.html">
+      <svg><use href="#svg-arrow-right"></use></svg>
+      <div class="page-info">
+        <div class="context">
+          <span>Previous</span>
+        </div>
+        
+        <div class="title"><span class="section-number">2. </span>Foil geometry</div>
+        
+      </div>
+    </a>
+</div>
+<div class="bottom-of-page">
+  <div class="left-details">
+    &copy; 2022, Peter Frank Heatwole
+    |
+    <a href="https://creativecommons.org/licenses/by/4.0" style="text-decoration-line:none">
+      <img
+        class="logo"
+        src="_static/cc_by_80x15.svg"
+        height="15px"
+        style="vertical-align:middle"
+        alt="Licensed CC-BY 4.0"
+      />
+    </a>
+    | Powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+    w/ <a href="https://github.com/pradyunsg/furo">Furo</a>
+      | <a class="muted-link" href="_sources/foil_aerodynamics.rst.txt"
+        rel="nofollow">
+        Show Source
+      </a>
+  </div>
+  <div class="right-details">
+    <div class="icons">
+      
+    </div>
+  </div>
+</div>
+
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">3. Foil aerodynamics</a><ul>
+<li><a class="reference internal" href="#aerodynamics-models">3.1. Aerodynamics models</a><ul>
+<li><a class="reference internal" href="#model-requirements">3.1.1. Model requirements</a></li>
+<li><a class="reference internal" href="#model-selection">3.1.2. Model selection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#phillips-numerical-lifting-line">3.2. Phillips’ numerical lifting-line</a><ul>
+<li><a class="reference internal" href="#derivation">3.2.1. Derivation</a></li>
+<li><a class="reference internal" href="#modifications">3.2.2. Modifications</a><ul>
+<li><a class="reference internal" href="#control-point-distribution">3.2.2.1. Control point distribution</a></li>
+<li><a class="reference internal" href="#variable-reynolds-numbers">3.2.2.2. Variable Reynolds numbers</a></li>
+<li><a class="reference internal" href="#non-uniform-upstream-velocities">3.2.2.3. Non-uniform upstream velocities</a></li>
+<li><a class="reference internal" href="#better-solver">3.2.2.4. Better solver</a></li>
+<li><a class="reference internal" href="#reference-solutions">3.2.2.5. Reference solutions</a></li>
+<li><a class="reference internal" href="#clamping-section-coefficients">3.2.2.6. Clamping section coefficients</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#limitations">3.2.3. Limitations</a><ul>
+<li><a class="reference internal" href="#assumes-minimal-spanwise-flow">3.2.3.1. Assumes minimal spanwise flow</a></li>
+<li><a class="reference internal" href="#straight-wake-assumption">3.2.3.2. Straight-wake assumption</a></li>
+<li><a class="reference internal" href="#reliance-on-section-coefficients">3.2.3.3. Reliance on section coefficients</a></li>
+<li><a class="reference internal" href="#no-unsteady-effects">3.2.3.4. No unsteady effects</a></li>
+<li><a class="reference internal" href="#non-unique-solutions">3.2.3.5. Non-unique solutions</a></li>
+<li><a class="reference internal" href="#sensitive-to-initial-proposal">3.2.3.6. Sensitive to initial proposal</a></li>
+<li><a class="reference internal" href="#unreliable-near-stall">3.2.3.7. Unreliable near stall</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#case-study">3.3. Case study</a><ul>
+<li><a class="reference internal" href="#wind-tunnel-data">3.3.1. Wind tunnel data</a></li>
+<li><a class="reference internal" href="#id20">3.3.2. Aerodynamics models</a></li>
+<li><a class="reference internal" href="#experimental-vs-theoretical-results">3.3.3. Experimental vs theoretical results</a><ul>
+<li><a class="reference internal" href="#coefficients-vs-angle-of-attack">3.3.3.1. Coefficients vs angle of attack</a></li>
+<li><a class="reference internal" href="#coefficients-vs-sideslip">3.3.3.2. Coefficients vs sideslip</a></li>
+<li><a class="reference internal" href="#coefficients-vs-each-other">3.3.3.3. Coefficients vs each other</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#discussion">3.3.4. Discussion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/cancel"]}, "tex": {"macros": {"defas": "\\stackrel{\\mathrm{def}}{=}", "given": "\\;\\middle\\vert\\;", "vec": ["\\mathbf{#1}", 1], "mat": ["\\mathbf{#1}", 1], "crossmat": ["\\left[{#1}\\right]^{\\times}", 1], "norm": ["\\left\\|{#1}\\right\\|", 1]}, "packages": {"[+]": ["cancel"]}}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

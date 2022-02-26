@@ -1,0 +1,469 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Acknowledgements" href="acknowledgements.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+        <title>Parametric Paraglider Modeling</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     <b>This document is a draft!</b> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="#"><div class="brand">Parametric Paraglider Modeling</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+  
+  
+  <span class="sidebar-brand-text">Parametric Paraglider Modeling</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notation.html">Notation and Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="derivations.html">Derivations</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="abstract">
+<h1>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">#</a></h1>
+</section>
+<p>Dynamic simulations are invaluable for studying system behavior, developing
+control models, and running statistical analyses. For example, paraglider
+flight simulations could be used to analyze how a wing behaves when it
+encounters wind shear, or to reconstruct the wind field that was present during
+a flight. Unfortunately, creating dynamics models for commercial paraglider
+wings is difficult: not only are detailed specifications unavailable, but even
+if they were a detailed model would be laborious to create. To address that
+difficulty, this project decomposes a paraglider system into a set of
+parametric component models that can approximate paraglider flight dynamics
+using incomplete technical specifications and knowledge of typical wing design.
+[[An implementation of the models is available as an <a class="reference external" href="https://github.com/pfheatwole/glidersim">open source library</a> built on the Python scientific
+computing stack.]]</p>
+<section id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">#</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#motivation">1.1. Motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#roadmap">1.2. Roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#modeling-with-wing-sections">2.1. Modeling with wing sections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#section-index">2.1.1. Section index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#airfoil">2.1.2. Airfoil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#scale">2.1.3. Scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#position">2.1.4. Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#orientation">2.1.5. Orientation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#basic-model">2.2. Basic model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#expanded-model">2.3. Expanded model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#simplified-model">2.4. Simplified model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#simplified-model-section-index">2.4.1. Section index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#reference-point">2.4.2. Reference point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#id8">2.4.3. Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#summary">2.4.4. Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#examples">2.5. Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#delta-wing">2.5.1. Delta wing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#elliptical-wing">2.5.2. Elliptical wing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#twisted-wing">2.5.3. Twisted wing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#manta-ray">2.5.4. Manta ray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#parafoil">2.5.5. Parafoil</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#case-study">2.6. Case study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#discussion">2.7. Discussion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#advantages">2.7.1. Advantages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#limitations">2.7.2. Limitations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foil_aerodynamics.html#aerodynamics-models">3.1. Aerodynamics models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#model-requirements">3.1.1. Model requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#model-selection">3.1.2. Model selection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line">3.2. Phillips’ numerical lifting-line</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#derivation">3.2.1. Derivation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#modifications">3.2.2. Modifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#limitations">3.2.3. Limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foil_aerodynamics.html#case-study">3.3. Case study</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#wind-tunnel-data">3.3.1. Wind tunnel data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#id20">3.3.2. Aerodynamics models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#experimental-vs-theoretical-results">3.3.3. Experimental vs theoretical results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#discussion">3.3.4. Discussion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#canopy">4.1. Canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#controls">4.1.1. Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#inertia">4.1.2. Inertia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#resultant-force">4.1.3. Resultant force</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#parameter-summary">4.1.4. Parameter summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#suspension-lines">4.2. Suspension lines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id10">4.2.1. Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id11">4.2.2. Inertia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id12">4.2.3. Resultant force</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id18">4.2.4. Parameter summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#harness">4.3. Harness</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id19">4.3.1. Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id20">4.3.2. Inertia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id23">4.3.3. Resultant force</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id26">4.3.4. Parameter summary</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#components">5.1. Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#connections">5.2. Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#reference-point">5.3. Reference point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#system-inputs">5.4. System inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#equations-of-motion">5.5. Equations of motion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="state_dynamics.html#state-variables">6.1. State variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="state_dynamics.html#state-derivatives">6.2. State derivatives</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="demonstration.html#model-creation">7.1. Model creation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#technical-specs">7.1.1. Technical specs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#canopy">7.1.2. Canopy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#suspension-lines">7.1.3. Suspension lines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#payload">7.1.4. Payload</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="demonstration.html#model-validation">7.2. Model validation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#polar-curve">7.2.1. Polar curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#steady-state-turn">7.2.2. Steady-state turn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#impulsive-controls">7.2.3. Impulsive controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#exiting-accelerated-flight">7.2.4. Exiting accelerated flight</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="demonstration.html#model-investigation">7.3. Model investigation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#apparent-mass">7.3.1. Apparent mass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#steep-turn">7.3.2. Steep turn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#off-center-thermal-interaction">7.3.3. Off-center thermal interaction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="demonstration.html#discussion">7.4. Discussion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notation.html">Notation and Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="derivations.html">Derivations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="derivations.html#parametric-design-curves">Parametric design curves</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#elliptical-chord">Elliptical chord</a></li>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#elliptical-arc">Elliptical arc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#polynomial-torsion">Polynomial torsion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="derivations.html#area-and-volume-of-a-mesh">Area and Volume of a Mesh</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#area">Area</a></li>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#volume">Volume</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="derivations.html#apparent-mass-of-a-parafoil">Apparent mass of a parafoil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="derivations.html#paraglider-system-models">Paraglider system models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#model-6a">Model 6a</a></li>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#model-6b">Model 6b</a></li>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#model-6c">Model 6c</a></li>
+<li class="toctree-l3"><a class="reference internal" href="derivations.html#model-9a">Model 9a</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+<div class="related-pages">
+  <a class="next-page" href="acknowledgements.html">
+      <div class="page-info">
+        <div class="context">
+          <span>Next</span>
+        </div>
+        <div class="title">Acknowledgements</div>
+      </div>
+      <svg><use href="#svg-arrow-right"></use></svg>
+    </a>
+  
+</div>
+<div class="bottom-of-page">
+  <div class="left-details">
+    &copy; 2022, Peter Frank Heatwole
+    |
+    <a href="https://creativecommons.org/licenses/by/4.0" style="text-decoration-line:none">
+      <img
+        class="logo"
+        src="_static/cc_by_80x15.svg"
+        height="15px"
+        style="vertical-align:middle"
+        alt="Licensed CC-BY 4.0"
+      />
+    </a>
+    | Powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+    w/ <a href="https://github.com/pradyunsg/furo">Furo</a>
+      | <a class="muted-link" href="_sources/index.rst.txt"
+        rel="nofollow">
+        Show Source
+      </a>
+  </div>
+  <div class="right-details">
+    <div class="icons">
+      
+    </div>
+  </div>
+</div>
+
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Abstract</a></li>
+<li><a class="reference internal" href="#contents">Contents</a><ul>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>
