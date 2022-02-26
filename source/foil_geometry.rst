@@ -44,9 +44,9 @@ assumptions about how foils are most naturally defined, and that inflexibility
 forces the remaining complexity into the design curves. This unnecessary
 complication makes it difficult to describe a parafoil using simple parametric
 functions: they must not only encode the fundamental structure, they must also
-encode the translation of that structure into the variables that define the
-model. Instead of the geometry model adapting to the needs of the design
-curves, the design curves must adapt to the limitations of the model.
+translate that structure into the variables that define the model. Instead of
+the geometry model adapting to the needs of the design curves, the design
+curves must adapt to the limitations of the model.
 
 
 .. The Solution
@@ -72,22 +72,21 @@ non-rotary aircraft, the paragliding community already uses the term
 *paraglider wing* to reference not only the lifting surface but also the
 supporting structure connected to it, such as suspension lines, risers, etc.
 Second, although this project is primarily concerned with parafoils, the
-majority of the content in this chapter is not limited to parafoil canopies,
-making "canopy" a poor choice.
+content in this chapter is not limited to parafoil canopies, making "canopy"
+a poor choice.
 
 
 .. Choose what geometry details to include and which to ignore
 
 In addition, note that these are idealized geometry models, not detailed
-structural models. Structural models include physical details that could be
-used to simulate the interactions between the canopy surface deformations and
-the surrounding flow field :cite:`lolies2019NumericalMethodsEfficient`.
-Unfortunately, as discussed earlier, such details are not available for
-commercial paraglider wings, and such analyses would be time prohibitive even
-if they were. Instead, this design will model only those details of the shape
-that can be approximated from the available data. It does not model internal
-structures, in-flight deformations, or surface deviations from that idealized
-shape (such as internal ribs, cell billowing, or surface material creases).
+structural models. Structural models include physical details that can be used
+to simulate effects such as internal forces and wing deformations
+:cite:`lolies2019NumericalMethodsEfficient`. Unfortunately, as discussed
+earlier, such details are not available for commercial paraglider wings, and
+such analyses would be time prohibitive even if they were. Instead, this design
+will model only those details of the shape that can be approximated from the
+available data. It does not model internal structures, in-flight deformations,
+or surface deviations from the idealized design target.
 
 .. For statistical filtering this imprecision would simply be another source of
    model uncertainty.
@@ -128,8 +127,8 @@ shape (such as internal ribs, cell billowing, or surface material creases).
    10. Discussion
 
 
-Parametric modeling with wing sections
-======================================
+Modeling with wing sections
+===========================
 
 .. Introduce designing a wing using "wing sections". They're the conventional
    starting point for parametrizing a wing geometry (airfoil curves capture
@@ -169,9 +168,9 @@ a continuous surface that defines the complete 3D volume.
 
 Wing design using airfoils is thus decomposed into two steps:
 
-1. Specify the airfoil at each section
+1. Specify the scale, position, and orientation of each section
 
-2. Specify the scale, position, and orientation of each section
+2. Specify the airfoil at each section
 
 .. figure:: figures/paraglider/geometry/wing_sections2.svg
 
@@ -182,7 +181,7 @@ Wing design using airfoils is thus decomposed into two steps:
    profile at specific points along the span.
 
 In some literature :cite:`gudmundsson2014GeneralAviationAircraft` these two
-steps are described as designing the *profile* and the *planform*, but this
+steps are described as designing the *planform* and the *profile*, but this
 description is problematic due to inconsistent uses of the term *planform*
 across literature. Specifically, in some cases the planform is the complete
 surface produced by the section chords, and in others "planform" refers to
@@ -195,20 +194,25 @@ surface*.
 Section index
 -------------
 
-Wing sections are convenient for generating a foil geometry mesh, but they are
-also convenient for querying properties of a model; for example, aerodynamic
-methods that rely on section coefficients must be able to query the scale,
-position, and orientation of individual sections. To support queries involving
-discrete wing sections, each section must be assigned a unique identifier,
-which this paper refers to as a *section index* :math:`s`.
+In order to generate a foil from discrete wing sections (and to support queries
+about their individual properties) each section must be assigned a unique
+identifier which this paper refers to as a *section index* :math:`s`. This term
+is deliberately generic. Some aeronautics literature use the term *spanwise
+station*, but "spanwise" is ambiguous: some papers use "spanwise" to refer to
+the absolute :math:`y`-coordinate of some reference point embedded in each
+section, while others refer to the linear distance along the curve through
+those reference points. The term *section index* generalizes these concepts and
+provides an arbitrary reference to any choice of unique identifier over the set
+of sections.
 
-This term is deliberately generic. Some aeronautics literature use the term
-*spanwise station*, but *spanwise* is ambiguous; some papers use "spanwise" to
-refer to the absolute :math:`y`-coordinate of some reference point embedded in
-the section, while others refer to a linear distance along some curve tangent
-to the section :math:`y`-axes (the "local spanwise axis", as it were). The
-term *section index* generalizes these concepts and provides an arbitrary
-reference to any choice of unique identifier over the set of sections.
+However, avoiding ambiguity is the not the primary purpose of this generality.
+The real goal is to avoid unnecessary coupling of the design curves that define
+the geometry. Instead of committing to a definition immediately, delaying the
+choice of section index allows a designer the freedom to define the section
+index in terms of the geometry, or the geometry in terms of the section index,
+or a even a mixture of the two. This freedom will be used later by the
+:ref:`foil_geometry:Simplified model` to enable particularly simple parametric
+design curves.
 
 
 .. Why do I refer to an explicit, abstract section index?
@@ -227,15 +231,6 @@ reference to any choice of unique identifier over the set of sections.
 .. Defining the section index
 
    Don't confuse how you generate the geometry with how you index a section.
-
-Although the primary purpose of a section index is as an independent variable
-to query the geometry, it may also be used to define the geometry. Conversely,
-it is commonly defined by the geometry; for example, a common convention is to
-refer to sections by the :math:`y`-coordinate of some point embedded in the
-section, or the linear distance of some curve that runs through points
-embedded in the sections. It is a feature of this generality that provides
-models the flexibility to choose a definition that is convenient for each
-application.
 
 
 .. Other considerations:
@@ -290,6 +285,8 @@ the point where the curve is perpendicular to a line from the trailing edge.
 For the "American" convention, the leading edge is the "leftmost" point with
 the smallest radius (greatest curvature).
 
+.. FIXME: add a reference for British and American conventions?
+
 .. The choice of convention is irrelevant. The only thing that matters is that
    you manufacture the wing with the sections scaled and oriented in exactly
    the same way as they were defined. For example, you could define the chord
@@ -313,6 +310,11 @@ between an upper and lower surface whose separation distance is specified by
 the thickness distribution. Fortunately, this ambiguity is irrelevant except
 when comparing airfoil design parameters.
 
+.. FIXME: when **does** it matter? It affects the mean camber line so it would
+   affect the placement of aerodynamic control points on the mean camber
+   surface; it would change the thickness for inertia calculations (as in
+   Barrows method for computing apparent mass); more?
+
 
 Scale
 -----
@@ -325,15 +327,17 @@ generate the geometry and compute the aerodynamic forces associated with a wing
 segment, both the airfoil and its aerodynamic coefficients must be scaled in
 units appropriate to the model.
 
+.. FIXME: unit analysis to verify the coefficients are dimensionless
+
 
 .. What is determined by the scale distribution?
 
 Although conceptually simple, section scale plays a large role in controlling
 the aerodynamic behavior of a wing segment; in fact, all but the most basic
-foils vary the chord length along the span. The only fundamental requirement of
-scale is that the sections collectively produce enough aerodynamic lift to
-support the aircraft, but spanwise variation allows a foil designer to control
-behavior such as:
+foils have variable section chord lengths. The only fundamental requirement is
+that the sections collectively produce enough aerodynamic lift to support the
+aircraft, but beyond that a foil designer is free to use use spanwise variation
+to control behavior such as:
 
 * Spanwise loading (the chord lengths are one factor, along with choice of
   section profile and orientation/twist, that can be used to encourage an
@@ -345,39 +349,36 @@ behavior such as:
   contribute less to the loading, making the loading is less sensitive to
   wingtip stalls, leading to "gentler" stall characteristics)
 
-.. [[Keeping scale as an independent parameter instead of hard-baking it into
-   the airfoil and its coefficients means a foil designer can use general
-   coefficient data an adjust the results on demand.]]
+.. Bonus: keeping scale as an independent parameter instead of hard-baking it
+   into the airfoil and its coefficients means a foil designer can use general
+   coefficient data an adjust the results on demand.
 
 
 Position
 --------
 
-To layout a 3D foil, each section must be positioned by specifying a vector in
-foil coordinates of some *reference point* in the section's local coordinate
+The relative position of the sections is fundamental to controlling important
+foil characteristics such as *span*, *sweep*, and *arc*
+:cite:`gudmundsson2014GeneralAviationAircraft`. Span (the width of the wing,
+roughly speaking) together with the chord distribution determines the *aspect
+ratio* of a foil, which impacts characteristics such as aerodynamic efficiency
+and maneuverability. Sweep (the fore-aft relative positioning of the sections)
+is important for controlling spanwise airflow. Arc (the vertical relative
+positioning of the sections, roughly speaking) is primarily used to increase
+the roll stability of conventional wings, although for parafoils the *arc
+anhedral* is essential to designing the spanwise loading across the suspension
+lines.
+
+To define their layout, each section must be positioned by specifying a vector
+in foil coordinates of some *reference point* in the section's local coordinate
 system. For example, the most common choice of reference point is the leading
 edge of the section profile; by convention the section leading edge will
 coincide with the origin of the airfoil coordinate system, which means no
-additional translations are required to position the profile. Section
-positions are fundamental to controlling important foil characteristics such
-as *span*, *sweep*, and *arc* :cite:`gudmundsson2014GeneralAviationAircraft`.
+additional translations are required to position the profile. This conventional
+choice is demonstrated by the :ref:`foil_geometry:Basic model`, then relaxed by
+the :ref:`foil_geometry:Expanded model`.
 
-
-.. Misc:
-
-   * Span (span together with the chord distribution determine the aspect ratio,
-     and thus directly impact aerodynamic efficiency)
-
-   * Sweep (important for controlling the spanwise flow, especially in
-     supersonic regimes?)
-
-   * Arc (affects aerodynamic and structural stability)
-
-     Rigid foils such as traditional wings are often designed to produce
-     in-flight *dihedral* to increase aerodynamic roll stability.
-
-     For parafoils, creating an arc *anhedral* is essential to developing the
-     spanwise load on the suspension lines.
+.. FIXME: this paragraph feels awkward. What's its point?
 
 
 Orientation
@@ -548,6 +549,9 @@ the *foil origin* :math:`O`:
 
    \vec{r}_{LE/O}^f = \vec{r}_{LE/RP}^f + \vec{r}_{RP/O}^f
 
+.. The major point here is that the reference point can be anywhere in the
+   section's 3D coordinate system; it is not constrained to the section x-axis.
+
 Although this decomposition increases model complexity, the additional
 flexibility allows a designer to choose whichever point in each section's
 coordinate system will produce the simplest geometry specification. The basic
@@ -620,11 +624,12 @@ wing is REALLY helpful here.]]
    that claim.
 
 
+.. _simplified model section index:
+
 Section index
 -------------
 
 [[FIXME: finish]]
-
 
 .. This section defines the section index as a dependent variable of `yz(s)`
 
@@ -638,66 +643,15 @@ Section index
 Although most tools do not explicitly refer to their choice of section index,
 there are two conventions in common use: one is to use the section
 :math:`y`-coordinate, and the other is the linear distance along the position
-curve :math:`\vec{r}_{RP/O}`.
+curve :math:`\vec{r}_{RP/O}`. Unfortunately, both are problematic for modeling
+a parafoil from the most readily-available data.
 
-Unfortunately, both are problematic for modeling a parafoil from the most
-readily-available data. 
-
-
-**You can measure c(s) and x(s) directly from the flattened foil. You don't
-know the final position, so using position is a bad idea. You only know
-y_flat, so use y_flat to define the section index. The effect of using y_flat
-is that s is defined as the linear distance along the yz curve (or in this
-case, the normalized y_flat equates to the normalized yz distance). You should
-be able to layout the flattened planform and finalize those design curves;
-they shouldn't change when you change the yz-curve.**
-
-
-* The section index connects all of the design curves.
-
-* Models should choose a definition that encourages simple parametric forms of
-  the design curves. Decoupling the curves as much as possible gives them the
-  freedom to choose simple parametric forms (that's why the expanded model
-  decomposed position).
-
-* [[Another issue arises when modeling an existing wing from technical
-  specifications and physical measurements.
-
-  You should choose a scheme that makes it easy to determine the index of each
-  section, and thus the index associate with each measurement.]]
-
-
-
-.. What are the common choices?
-
-A traditional choice of section index is the section :math:`y`-coordinate,
-sometimes normalized by the span of the wing to produce an index between ±1
-(so :math:`s = \frac{y}{b/2}`). Although simple and intuitive for flat wings,
-defining a nonlinear geometry in terms of :math:`y` can become unwieldy, so
-another common choice is to use the linear distance along the position curve
-:math:`\vec{r}_{RP/O}`; again, this distance is sometimes normalized to ±1.
-
-
-.. What is my choice? What is the advantage of my choice?
-
-[[I chose the linear distance along the :math:`yz` curve (that is, only the
-:math:`y` and :math:`z` components of :math:`r_{RP/O}(s)`). This choice has
-the distinct advantage that section indices can be determined even when the
-parafoil is flattened out on the ground, which means it is equivalent to
+[[FIXME: explain the advantages of my choice]]
 
 .. math::
    :label: yz-distance section index
 
    s = \frac{y_{flat}}{b_{flat}/2}
-
-[[Very useful when some data comes from measurements of a flattened foil. You
-can determine `s` directly from the flattened wing and measure `r_x(s)`,
-`x(s)`, and `c(s)` without knowing :math:`yz(s)`. Importantly, **manipulating
-`yz(s)` doesn't change `s`.**]]
-
-[[Caveat: unless `x = constant`, linear spacing along `yz` will not produce
-linear spacing along `xyz`. That can be surprising, but easy to understand if
-you always visualize the wing from directly behind it.]]
 
 
 Reference point
@@ -831,17 +785,18 @@ the proportional scaling of the `y` and `z` curves; you can design a joint
 
 
 .. math::
+   :label: simplified model reference point vector
 
    \vec{r}_{LE/RP}^f = \mat{R} \mat{C}_{f/s} c\, \hat{x}^s_s
 
 .. math::
+   :label: simplified model reference point matrix
 
    \mat{R} \defas \begin{bmatrix}
       r_x & 0 & 0\\
       0 & r_{yz} & 0\\
       0 & 0 & r_{yz}
    \end{bmatrix}
-
 
 
 Orientation
@@ -864,6 +819,9 @@ reveal that the section orientation produced by inflating a parafoil is well
 approximated by a single degree of freedom, resulting in a minimal
 parametrization with a single design variable for section pitch
 :math:`\theta(s)`.
+
+[[Why does this paragraph repeat so much information that follows?]]
+
 
 .. The default orientation of each section is parallel to the central section.
    Real wings may want to pitch (geometric torsion) or roll (local "dihedral",
@@ -938,21 +896,20 @@ Examples
 
 These examples demonstrate how the expanded model makes it easy to represent
 nonlinear foil geometries using simple parametric functions, such as constants,
-absolute functions, ellipticals, and polynomials.
+absolute functions, ellipticals, and polynomials. For a discussion of the
+elliptical functions for the arc and chord distributions, see
+:ref:`derivations:Parametric design curves`.
 
-[[All examples use a NACA 23015 airfoil for the section profiles. For
-a discussion of the elliptical functions for the arc and chord distribution,
-see :ref:`derivations:Parametric design curves`; for their implementations, see
-the :external+glidersim:doc:`glidersim documentation <reference>`, such as
-:external+glidersim:py:class:`EllipticalArc
-<pfh.glidersim.foil_layout.EllipticalArc>`. The source code to generate each
-example is available at [[FIXME: link to source]], making them useful starting
-points for working with the model.]]
+All examples show a wireframe view of the chord surface because it is easier to
+visualize the foil layout. The green dashed lines are projections of the
+section quarter-chord positions. The red dashed lines are the projections of
+the :math:`r_x` and :math:`r_{yz}` chord positions.
 
-[[**FIXME**: need to explain the diagrams. The dashed green and red lines in
-particular.]]
+.. FIXME: that's a mighty terse explanation of the lines
 
-[[**FIXME**: embed the video in the HTML build]]
+.. FIXME: link to the source?
+
+.. FIXME: embed the video in the HTML build?
 
 
 Delta wing
@@ -1084,6 +1041,8 @@ is specified. The examples demonstrated how this freedom can be used to design
 complex foil geometries using simple design curves. Another benefit of this
 freedom is that it is more adaptable to the variety of foil specifications
 used in literature.
+
+[[FIXME: what value does this paragraph provide?]]
 
 Parafoil canopies in particular are not convenient to design using the leading
 edge. The geometry from a 2015 parafoil wind tunnel test
@@ -1226,12 +1185,25 @@ Discussion
 Advantages
 ----------
 
-* Using arbitrary reference points is great because (1) they decouple the
-  parameters (so you can change one without needing to modify the others) and
-  (2) they allow the designer to directly target the aspects of the design
-  they're interested in (eg, you don't have to specify rotation points)
+* This is not the first time someone has suggested using reference points other
+  than the leading edge; for example, Benedetti used the quarter-chord
+  position. It's also not the first time someone has suggested a parametric
+  reference point; for example, the "Paraglider Design Manual" suggested (but
+  did not implement) using one chord position for the position reference point
+  followed by another chord position for the geometric twist (which he called
+  the "rotation point").
 
-* The equations are simple, so implementation is simple.
+  The approach of the expanded model is different because **it acknowledges
+  that the most convenient reference point might not lie on the section chord
+  at all**. Instead of restricting the reference to lie on the section x-axis,
+  the reference point can be a position anywhere in the section coordinate
+  system. **That's what provided the simplified model the flexibility to
+  decouple the position curves, allowing a designer to directly target
+  individual aspects of the geometry without them affecting each other.** At
+  last you don't need to recompute positions just because you changed
+  a section's orientation.
+
+* The equations are simple, so their implementations are simple.
 
 * Parametric design functions have significant advantages over explicit
   functions (ie, specifying a set of points and using linear interpolation):
@@ -1241,9 +1213,10 @@ Advantages
     estimation (fitting a model to flight data).
 
   * Explicit (as opposed to parametric) representations make it difficult to
-    incorporate deformations. There are a variety of interesting situations that
-    deform a paraglider wing: trailing edge deflections due to braking, C-riser
-    piloting, accelerator flattening, weight shift, cell billowing, etc.
+    incorporate deformations programmatically. There are a variety of
+    interesting situations that deform a paraglider wing: trailing edge
+    deflections due to braking, C-riser piloting, accelerator flattening,
+    weight shift, cell billowing, etc.
 
   * [[These statements are true, but again: not unique to this
     parametrization?]]
@@ -1255,33 +1228,31 @@ Advantages
 Limitations
 -----------
 
-* Problems with the general surface equation
+* It's too flexible: it doesn't impose any restrictions on the values of the
+  variables, meaning it allows design layouts that can't be (reasonably)
+  analyzed using section coefficient data. It forces all the responsibility
+  on the designer to produce a usable foil definition. [[This isn't a valid
+  criticism; if someone abused it like that then that's their fault.]]
 
-  * It's too flexible: it doesn't impose any restrictions on the values of the
-    variables, meaning it allows design layouts that can't be (reasonably)
-    analyzed using section coefficient data. It forces all the responsibility
-    on the designer to produce a usable foil definition. [[This isn't a valid
-    criticism; if someone abused it like that then that's their fault.]]
+  It also doesn't impose any constraints on self-intersections.
+  Self-intersections can occur if the chord surface is excessively curved
+  (so the surface intersects itself), or if the thickness of an airfoil
+  causes the inner surface of a radius to overlap. [[These are limitations
+  of the general equation that are inherited by this parametrization. If
+  I allowed section yaw then you'd have this issue for that too.]] I've
+  accepted this limitation with the understanding that the equations are
+  intended to be as simple as possible, and reasonable wing designs are
+  unlikely to be impacted. If these geometric constraints are important for
+  a design then the geometry can be validated as an additional
+  post-processing step instead of polluting these equations.
 
-    It also doesn't impose any constraints on self-intersections.
-    Self-intersections can occur if the chord surface is excessively curved
-    (so the surface intersects itself), or if the thickness of an airfoil
-    causes the inner surface of a radius to overlap. [[These are limitations
-    of the general equation that are inherited by this parametrization. If
-    I allowed section yaw then you'd have this issue for that too.]] I've
-    accepted this limitation with the understanding that the equations are
-    intended to be as simple as possible, and reasonable wing designs are
-    unlikely to be impacted. If these geometric constraints are important for
-    a design then the geometry can be validated as an additional
-    post-processing step instead of polluting these equations.
-
-  * It's not flexible enough: it requires the designer to use the section
-    leading edges to position the sections. In many cases it is more
-    convenient to position with other points, such as the quarter-chord,
-    trailing edge, etc. [[If a designer wants to define a foil using some
-    other reference point they cannot do it directly; they must specify the
-    shape indirectly by manually calculating the corresponding leading edge
-    position.]]
+* It's not flexible enough: it requires the designer to use the section
+  leading edges to position the sections. In many cases it is more
+  convenient to position with other points, such as the quarter-chord,
+  trailing edge, etc. [[If a designer wants to define a foil using some
+  other reference point they cannot do it directly; they must specify the
+  shape indirectly by manually calculating the corresponding leading edge
+  position.]]
 
 * I'm explicitly disallowing section-yaw (so no wedge-shaped segments), and
   assume that the section y-axes are all parallel to the body y-axis when the
@@ -1294,5 +1265,3 @@ Limitations
   Conceptually the abstracted section indices should enable a relatively
   simple mapping between inflated and deflated sections, but I never developed
   a suitable transformation to the section profiles.
-
-* My choice of section index assumes a symmetric foil.
