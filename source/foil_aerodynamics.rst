@@ -50,8 +50,8 @@ Classical aerodynamics predate the modern computing era, and were forced to
 prioritize simplifying assumptions that would enable analytical solutions of
 the governing equations; those assumptions placed heavy restrictions on what
 geometries could be analyzed and what characteristics of the flow-field must be
-neglected. [[These simplifying assumption made the problems tractable in
-a surprising variety of situations, but]] despite their elegance, such
+neglected. These simplifying assumption made the problems tractable in
+a surprising variety of situations, but — despite their elegance — such
 analytical solutions are inadequate for analyzing the geometry and flight
 conditions of a paraglider.
 
@@ -59,7 +59,7 @@ In contrast, modern *computational aerodynamics*
 :cite:`cummings2015AppliedComputationalAerodynamics` solve the equations
 numerically, relaxing the need for analytical solutions. As a result, modern
 methods can analyze significantly more complex foil geometries over the entire
-set of flow-field characteristics. [[However, even with modern computers]] the
+set of flow-field characteristics. However, even with modern computers the
 fluid equations are too difficult to solve in the general case, so simplifying
 assumptions are still required to produce a tractable system of equations. This
 modeling process has led to a wide variety aerodynamic models built on
@@ -72,49 +72,26 @@ Model requirements
 
 .. Define the selection criteria
 
+[[FIXME: finish.]]
+
 [[Each simplification restricts the physical scenarios that a model can
 represent, so the first step in selecting a method is to establish what
 characteristics of the foil geometry and flight conditions are relevant to
-paraglider simulations.
-
-Start with the geometry and flow-field since they establish the selection
-criteria. Cover issues like nonlinear geometry, slow airspeed,
-non-longitudinal, wind shear, high angle of attack, etc.]]
+paraglider simulations. Start with the geometry and flow-field since they
+establish the selection criteria. Cover issues like nonlinear geometry, slow
+airspeed, non-longitudinal, wind shear, high angle of attack, etc.]]
 
 
 Model selection
 ---------------
 
-* [[FIXME: Survey the methods and progressively eliminate them. Include
-  citations with an overview of aerodynamic models, like Drela. Section
-  profiles were covered in the previous chapter so that terminology is
-  available.
+[[FIXME: finish]]
 
-* [[Survey the available models (LLT, VLM, panel methods, CFD, etc).
+* Survey the available models (LLT, VLM, panel methods, CFD, etc) and
+  progressively eliminate them.
 
-  What simplifying assumptions do they make regarding the geometry? What
-  simplifying assumptions do they make regarding the flow-field (viscosity,
-  compressibility, etc)?
-
-  What are their limitations? (spanwise flow, flow separation, linear
-  coefficients, uniform wind, etc)
-
-  **Should I discuss these separately?** For example, does it make sense to
-  declare that the LLT assumes the wing is straight without the context that
-  it models the flow-field using a variable-strength vortex filament? Not sure
-  how to broach this discussion.]]
-
-* [[Some of these models are already being used in literature to estimate the
-  performance of parafoils. Explain why methods that "work" for other papers do
-  not meet the performance criteria for **this** project.]]
-
-
-* Classical LLT fails with non-linear geometry, VLM handles non-linear geometry
-  but assumes linear aerodynamics and neglects thickness, which can be
-  significant for parafoils, CFD is too slow.
-
-* Only Phillips' NLLT met my requirements (except no open source
-  implementations were available at the time).
+* Conclusion: only Phillips' NLLT met my requirements (except that no open
+  source implementations were available at the time).
 
 
 Phillips' numerical lifting-line
@@ -180,7 +157,7 @@ the local section lift coefficients :eq:`section lift, coefficients`:
      C_{L_i} \left( \alpha_i, \delta_i \right)
      A_i
 
-[[FIXME: define *control point*]]
+.. FIXME: define *control point*
 
 The net local velocity :math:`\vec{V}_i` at control point :math:`i` is the sum
 of the freestream relative wind velocity :math:`\vec{V}_{\infty}` at the
@@ -303,6 +280,17 @@ computed as in standard *strip theory* using the effective angle of attack
 :eq:`effective local angle of attack`:
 
 .. math::
+   :label: section viscous drag
+
+   \vec{\mathrm{d}F}_{\textrm{visc},i} =
+     \frac{1}{2}
+     \rho_\textrm{air}
+     \norm{\vec{V}_i}^2
+     c_i
+     C_{D,i} \left( \alpha_i, \delta_i \right)
+     \hat{\vec{V}}_i
+
+.. math::
    :label: section moment
 
    \vec{\mathrm{d}M}_i =
@@ -311,7 +299,7 @@ computed as in standard *strip theory* using the effective angle of attack
      \norm{\vec{V}_i}^2
      A_i
      c_i
-     C_{M_i} \left( \alpha_i, \delta_i \right)
+     C_{M,i} \left( \alpha_i, \delta_i \right)
      \vec{u}_{s,i}
 
 
@@ -322,9 +310,9 @@ Modifications
 
 Although the original derivation is suitable for simple, static scenarios, it
 is inadequate for simulating dynamic conditions that commonly occur during
-paraglider flights. This section presents a small number of modifications to
-improve the usability, functionality, and numerical stability of the method
-that greatly extend its applicability.
+paraglider flights. This section presents a number of modifications to improve
+the usability, functionality, and numerical stability of the method that
+greatly extend its applicability.
 
 
 Control point distribution
@@ -475,14 +463,14 @@ hysteresis effects :cite:`owens1998WeissingerModelNonlinear`.
 Clamping section coefficients
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-One significant issue with the method is a tendency to produce fictitious
-"infinite" induced velocities, causing convergence to fail. This tendency
-increases as the grid resolution is refined, and is most commonly observed at
-the wing tips, especially during turning maneuvers. The cause is apparent in
-equation :eq:`induced velocities`, where the induced velocities between bound
-segments increases as the inverse of their separation distance; as the
-separation distance goes to zero, the induced velocity goes to infinity. In
-most cases, the induced velocities from the left and right neighbors of
+A major issue with the method is a tendency to produce fictitious "infinite"
+induced velocities under certain conditions, causing convergence to fail. This
+tendency increases as the grid resolution is refined, and is most commonly
+observed at the wing tips, especially during turning maneuvers. The cause is
+apparent in equation :eq:`induced velocities`, where the induced velocities
+between bound segments increases as the inverse of their separation distance;
+as the separation distance goes to zero, the induced velocity goes to infinity.
+In most cases, the induced velocities from the left and right neighbors of
 a segment mostly cancel, but if the foil has discontinuities (such as at the
 wingtips, where the outer segment has only an inboard neighbor) then
 cancellation may be incomplete, leaving a large imbalance. It can also occur
@@ -577,7 +565,7 @@ offers some confidence that the effects of spanwise flow may indeed be
 negligible, but it is unclear whether the effect has more significance once
 continuous arc anhedral is involved.
 
-[[FIXME: good place to cite `goates2021`? He talks about swept wings.]]
+.. FIXME: good place to cite `goates2021`? He talks about swept wings.
 
 
 Straight-wake assumption
@@ -787,7 +775,7 @@ Case study
 
 This section considers the ability of Phillips' NLLT to predict the
 aerodynamics of a typical paraglider geometry. It continues the discussion from
-:ref:`Foil Geometry:Case Study <foil_geometry:Case study>` by comparing the
+the foil geometry :ref:`case study <foil_geometry:Case study>` by comparing the
 theoretical predictions of several aerodynamics models against experimental
 wind tunnel data.
 
@@ -816,10 +804,10 @@ arched parafoil are uncorrected for wall effects.
 Aerodynamics models
 -------------------
 
-[[Introduce the aerodynamic models I'll be comparing against the NLLT:
+[[FIXME: Introduce the aerodynamic models I'll be comparing against the NLLT:
 a traditional *vortex lattice method* (VLM) in `AVL
-<https://web.mit.edu/drela/Public/web/avl/>`_ , and an experimental VLM in
-`XFLR5 <https://www.xflr5.tech/xflr5.htm>`_ (which tilts the geometry to
+<https://web.mit.edu/drela/Public/web/avl/>`__ , and an experimental VLM in
+`XFLR5 <https://www.xflr5.tech/xflr5.htm>`__ (which tilts the geometry to
 mitigate the "small angles" approximation for alpha and beta).]]
 
 
