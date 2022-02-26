@@ -46,7 +46,7 @@ autosectionlabel_prefix_document = True
 bibtex_bibfiles = ["references.bib"]
 
 intersphinx_mapping = {
-    'glidersim': ('/home/peter/model/work/glidersim/docs/build/html', None),
+    "glidersim": ("https://pfheatwole.github.io/glidersim", None),
 }
 
 
