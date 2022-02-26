@@ -1,220 +1,17 @@
-* Should I decompose the paraglider system in the Introduction? It'd explain
-  the existence and order of the chapters.
+* The code doesn't match the text. The paper refers to a canopy component
+  model, but glidersim doesn't have a `ParagliderCanopy` class; the logic from
+  that section of the paper (stuff like calculating the extra mass due to the
+  ribs) is in `ParagliderWing`
 
-  1. I want flight dynamics models of paragliders
+* Regarding coefficients, one source of definition is "Flight Vehicle
+  Aerodynamics" (Drela; 2014), p.208, where they use `{Cx, Cy, Cz, Cl, Cm, Cn}`
 
-  2. Those are hard to make, so I need a model that's parametrized by basic data
-
-  3. Here's the kind of data I'm talking about
-
-  4. Here's a logical decomposition of the paraglider system that allows each
-     component to be relatively self-contained
-
-     (this outlines the components and previews the chapter structure)
+  Then you've got the classic CL/CD (Cza and Cxa, respectively). The conflict
+  with section vs wing `CL` is a compelling argument for `CL'` or whatnot.
 
 
-  The "foil" is the most complicated component and my foil model is independent
-  of any paraglider-specific detail, so the foil geometry and foil aerodynamics
-  get their own chapters. Given a general foil model you can define a specific
-  canopy model.
-
-
-UNFINISHED SECTIONS
-===================
-
-1. Introduction
-
-2. Foil Geometry
-
-   * [2.1.5] Orientation
-
-   * [2.4.1] Section index
-
-   * [2.5] Examples
-
-   * [2.6] Case study
-
-   * [2.7] Discussion
-
-
-3. Foil aerodynamics
-
-   * [3.1] Explain how I selected Phillips
-
-   * [3.3] Case study
-
-6. Demonstration
-
-7. Conclusion
-
-
-Topical
+Content
 =======
-
-
-Introduction
-------------
-
-* There are existing paraglider dynamics models in literature. I need to
-  establish the needs of my application and observe the limitations of those
-  existing models in order to motivate my paper.
-
-
-Foil geometry
--------------
-
-* Verify my use of *dihedral* and *anhedral*. At the least I think my use of
-  "mean anhedral" is suspect; probably not even a helpful term.
-
-* How do I argue that my definition of `r_LE/RP` decouples the parameters? You
-  can see in the math that `r_LE/RP` and `r_P/LE` both involve `c` and `C_c/s`,
-  but it won't be obvious that it counteracts the changes to keep the
-  parameters decoupled.
-
-* Where do I define *design parameters* (span, taper, etc)? Should be pretty
-  early on on `Canopy Geometry` when I'm motivating parametric models.
-
-* Finish the derivation of my parametrized wing geometry in `derivations`. The
-  goal is to derive the version that uses `R` (configurable reference points),
-  but keep the parafoil-related material in `Canopy Geometry`.
-
-
-Foil aerodynamics
------------------
-
-* What is `CMT1` etc in Belloc's wind tunnel data? Why did I use it? Is it in
-  the body axes? Why do I compute `Cla` for NLLT but not for AVL?
-
-
-Paraglider components
----------------------
-
-Suspension lines
-^^^^^^^^^^^^^^^^
-
-* I'll need to explain why I rejected using a *rigging angle* (essentially
-  a built-in offset to the pitching angle) in favor of positioning `RM`
-  explicitly. The primary reference on the topic is probably from the X-38
-  project. See `iacomini1999InvestigationLargeScale`. Also used in
-  `cumer2012SimulationGenericDynamics`.
-
-  I didn't like the rigging angle because that suggested you could set the
-  pitch angle of the wing, but in reality you only have partial control. The
-  pitch angle is a function of many things, such as air density, airspeed,
-  brake deflections, etc.
-
-  Also, I wanted to use canopy frd as the body axes. The rigging angle is
-  a built-in pitching offset. For me, `gamma = alpha + theta`, but for Iacomini
-  it's `gamma = alpha + theta' + theta_R`, so his `theta' = theta - theta_R`.
-
-  Wait, so is the rigging angle measured from a reference line through the
-  central quarter-chord? Oof, if the definition of the rigging angle depends
-  on `c4` then that's another complaint against rigging angles Yuck.
-
-  Anyway, **how might I calculate them for my wings?** Would be cool to compute
-  the "effective rigging angle" from wings defined using my parametrization.
-
-  One big takeaway from `iacomini`: good parafoil performance requires keeping
-  the angle of attack in what they call the *alpha corridor*: too steep and it
-  stalls, too shallow and the leading edge can collapse.
-
-
-Paraglider systems
-------------------
-
-* Barrows use the principal axes for `M_a` and `I_a`. I'm using the body axes.
-  I forget why I'm neglecting that issue.
-
-* Review the terms in the apparent mass derivation. "Apparent inertia matrix"
-  etc, get pretty ambiguous. Try to clean it into a translational part,
-  a rotational part, and a complete matrix.
-
-* In my dynamics derivations, I don't appear to be consistent with specifying
-  the coordinate systems; the derivatives in particular.
-
-
-Demonstration
--------------
-
-Simulation scenarios
-^^^^^^^^^^^^^^^^^^^^
-
-* In `iacomini1999InvestigationLargeScale` they talk a lot about the problems
-  they had with parafoil *surge*, particularly during deployment. For their
-  purposes, they defined surge as "the transition of the parafoil from
-  a falling object to a flying object". I should create some scenarios that
-  simulate wing surge, such as if you entered a sinking bubble (eg, instantly
-  add +0.5ms vertical wind down so the wing has to rapidly equilibrate).
-
-* How should I discuss the sensations of angular accelerations? During a turn
-  you have constant angular velocities, thus constant centrifugal forces. The
-  angular **accelerations** are more akin to a falling sensation.
-
-* Checkout the `lateral_gust` scenarios. With full accelerator the glider
-  largely ignores the gust, but with symmetric brakes it really struggles.
-  I was using a 10mph gust that ramps up over 1sec and lasts for 3sec for the
-  accelerator, but the symmetric brake condition simply can't handle it: the
-  aerodynamics fail to converge.
-
-* Create a set of top-down figure-8s with 6a, 9a with M_R=0, and 9a with some
-  yaw restoring force. Plot the xy coordinates on top of each other to show
-  how the yaw force affects the track. Conceptually, you'd expect the actual
-  track to be somewhere in between 6a (infinite yaw resistance) and 9a with
-  M_R=0 (zero yaw resistance).
-
-* Might be interesting to make a 2D side-view plot of the xz-coordinate lines
-  connecting from `RM` to the wing and harness to compare `6a` versus `9a`. Do
-  a symmetric brake pulse to show the "dolphin" effect, and compare the two
-  models.
-
-
-Conclusion
-----------
-
-Future work
-^^^^^^^^^^^
-
-
-Notation and symbols
---------------------
-
-* Give examples of vectors (position, velocity, linear momentum, angular
-  momentum, derivatives, etc)
-
-* Add a description of a *direction cosine matrix* to `symbols`? Or maybe the
-  `glossary`?
-
-
-Belloc
-------
-
-* Record the software versions used to generate the SVG files
-
-* Ask Belloc if I can publish the wind tunnel data in the public repo
-
-* Add the pseudo-inviscid CL vs CD (builds confidence in the method and
-  implementation)
-
-* Eliminate the yucky resampling logic in `belloc.py:InterpolatedArc`
-  Related: why do I use a `PchipInterpolator`?
-
-* Document the coefficients I'm plotting in Belloc. I'm using `CZa` etc, which
-  means I'm plotting coefficients with respect to the wind axes. I forget why
-  I chose to do that, except (that appears) that's what XFLR5 computes? On the
-  bright side, I'm already using the T1 (moments wrt the CG).
-
-* The arc curvature isn't too extreme in `belloc`, but not zero. How much
-  "excess" wing is there due to overlap/underlap on the lower/upper surfaces
-  between the linear wing segments?
-
-  Compare the chord area to the upper and lower areas. For the chord area, use
-  the Phillips instance variables `dl * c_avg * curve_length`, where
-  `curve_length` is the length of the upper or lower airfoil surface (which
-  assume a chord length of 1)
-
-
-Content Tasks
-=============
 
 * Record the momentum derivatives for Barrows in the derivation. It wasn't
   clear from the paper exactly how those worked.
@@ -223,36 +20,28 @@ Content Tasks
 Drafting
 --------
 
-#. **Define the concrete "key ideas" for the paper.** These will drive how
-   I develop the entire paper, both in structure and content. (Possibly start
-   with the non-technical development, then convert that into technical terms.
-   It requires probabilistic methods, so satisfying the needs of that math
-   should do a pretty good job establishing the core components of the paper.)
+* **Define the concrete "key ideas" for the paper.** These will drive how
+  I develop the entire paper, both in structure and content.
 
-#. Develop a topic outline. (Topic ordering implicitly encodes dependencies.)
+* Write an informal overview of the goal, problems, resources, and solutions.
+  Avoid technical details; fill those in later.
 
-#. Write an informal overview of the goal, problems, resources, and solutions.
-   This should be conversational: I can get through a description of my project
-   when talking to the Mohlers, I should be able to put it down on paper. The
-   key is to avoid getting hung up on the technical specifics. Those can be
-   filled in later.
+* Write an "introduction to the introduction". **Don't make the reader wait
+  a long time to understand my contribution.**
 
-#. Write an "introduction to the introduction". **Don't make the reader wait
-   a long time to understand my contribution.**
+* Draft a full abstract.
 
-#. Draft a full abstract.
+* Draft a full introduction.
 
-#. Draft a full introduction.
+* Review each section has adequately defined assumptions. You need to establish
+  the assumptions and constraints of your method to make sure you don't
+  overpromise.
 
-#. Review each section has adequately description assumptions. You need to
-   establish the assumptions and constraints of your method to make sure you
-   don't overpromise.
-
-#. Annotate the informal draft with **text-only** descriptions of good
-   supporting material (figure descriptions, equations, code references, etc.)
-   Don't worry about actually producing those elements; this is about
-   establishing a pathway to a cohesive structure: once you know what elements
-   you really want, only then should you spend time creating them.
+* Annotate the informal draft with **text-only** descriptions of good
+  supporting material (figure descriptions, equations, code references, etc.)
+  Don't worry about actually producing those elements; this is about
+  establishing a pathway to a cohesive structure: once you know what elements
+  you really want, only then should you spend time creating them.
 
 
 Feedback
@@ -327,8 +116,13 @@ References
 * Create a list of sources for each topic, including summary notes
 
 
-Figures
+Scripts
 -------
+
+* The figures will largely be generated by `matplotlib` scripts. They must all
+  use consistent styling. How should I define and apply that configuration?
+  A project-local `matplotlibrc`? A Python script that the figures import and
+  execute?
 
 * In `generate_canopy_examples.py`, there's a function `_plot_foil` that
   appears to duplicate `gsim.plots.plot_foil`. Why does it exist?
@@ -336,6 +130,16 @@ Figures
 * Factor out the canopy plotting function from the thesis script
   `generate_canopy_examples.py` (the one with the faux grid). I'd like to use
   it to to plot my Hook3ish
+
+
+Figures
+-------
+
+* If I can't use the moment coefficient output for XFLR5 then what's the point
+  in including it for the other coefficients? Should I remove it? Kinda weird
+  for it to be on some plots but not others.
+
+* Remove the `figures/data` folder (has the vario alignment stuff)
 
 * I need a diagram for the 6 DoF model. I was going to just show the body
   centroid "B", but that makes it less obvious that the 6 DoF supports weight
@@ -357,9 +161,36 @@ Figures
 
 * Remove scratch/unused figures (eg, `elliptical_arc_dihedral.svg`)
 
+Belloc
+------
 
-Editorial Tasks
-===============
+* Record the software versions used to generate the SVG files
+
+* Ask Belloc if I can publish the wind tunnel data in the public repo
+
+* Add the pseudo-inviscid CL vs CD (builds confidence in the method and
+  implementation)
+
+* Eliminate the yucky resampling logic in `belloc.py:InterpolatedArc`
+  Related: why do I use a `PchipInterpolator`?
+
+* Document the coefficients I'm plotting in Belloc. I'm using `CZa` etc, which
+  means I'm plotting coefficients with respect to the wind axes. I forget why
+  I chose to do that, except (that appears) that's what XFLR5 computes? On the
+  bright side, I'm already using the T1 (moments wrt the CG).
+
+* The arc curvature isn't too extreme in `belloc`, but not zero. How much
+  "excess" wing is there due to overlap/underlap on the lower/upper surfaces
+  between the linear wing segments?
+
+  Compare the chord area to the upper and lower areas. For the chord area, use
+  the Phillips instance variables `dl * c_avg * curve_length`, where
+  `curve_length` is the length of the upper or lower airfoil surface (which
+  assume a chord length of 1)
+
+
+Editorial
+=========
 
 
 Writing Style
@@ -373,11 +204,15 @@ Writing Style
 
 * Eliminate crutch words like "simply", "just", etc
 
-* Review page number references; standardize on `p123` style
-
 
 Notation, math, etc
 -------------------
+
+* Give examples of vectors (position, velocity, linear momentum, angular
+  momentum, derivatives, etc)
+
+* Add a description of a *direction cosine matrix* to `symbols`? Or maybe the
+  `glossary`?
 
 * Although Steven's notation uses `F` and `M` for forces and moments, I want to
   be consistent that vectors are lowercase-bold. Instead, I'm using Hughes'
@@ -525,32 +360,5 @@ Sphinx
 
 * Add `sphinxext.opengraph`
 
-* Furo in dark mode brakes SVGs with white backgrounds. Review pictures and add
+* Furo in dark mode breaks SVGs with white backgrounds. Review figures and add
   white backgrounds where necessary for dark mode.
-
-
-HTML
-^^^^
-
-* Add a logo?
-
-* The footer (copyright and license) doesn't show on mobile
-
-
-Scripts
-=======
-
-* The figures will largely be generated by `matplotlib` scripts. They must all
-  use consistent styling. How should I define and apply that configuration?
-  A project-local `matplotlibrc`? A Python script that the figures import and
-  execute?
-
-
-Miscellaneous
-=============
-
-* Create a project-local ``spellfile`` for vim (lots of project-specific
-  words, like "kriging")
-
-* I should mention that my canopy geometry supports "open" parafoil designs;
-  it's easy to use just the upper surface and ignore the lower.
