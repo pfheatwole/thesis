@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="133.73816pt"
    version="1.1"
    viewBox="0 0 425.19685 133.73816"
    width="425.19684pt"
    id="svg152"
-   sodipodi:docname="Hook3_deltad_1.00_1.00.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
+   sodipodi:docname="Hook3_TE_1.00_1.00.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -24,17 +24,20 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="2560"
-     inkscape:window-height="1376"
+     inkscape:window-height="1371"
      id="namedview154"
      showgrid="false"
      inkscape:zoom="2.7529288"
-     inkscape:cx="283.53366"
-     inkscape:cy="68.054374"
+     inkscape:cx="283.69786"
+     inkscape:cy="67.564406"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg152"
-     inkscape:document-rotation="0" />
+     inkscape:document-rotation="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="pt"
+     inkscape:snap-page="true" />
   <metadata
      id="metadata2">
     <rdf:RDF>
@@ -85,6 +88,13 @@
          id="path2858-5-0-2" />
     </marker>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke-width:0.75;stroke-linecap:round;stroke:none"
+     id="rect879"
+     width="425.19684"
+     height="133.73816"
+     x="0"
+     y="0" />
   <g
      id="line2d_9"
      transform="matrix(1.3067923,0,0,1.3067923,-96.013642,-161.05992)">

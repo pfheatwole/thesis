@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="accelerator.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    width="140.22189mm"
    height="141.88696mm"
    viewBox="0 0 140.2219 141.88697"
    version="1.1"
-   id="svg5444">
+   id="svg5444"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs5438">
     <marker
@@ -1971,20 +1971,24 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.414634"
-     inkscape:cx="75.654242"
-     inkscape:cy="241.19124"
+     inkscape:cx="75.637939"
+     inkscape:cy="240.34485"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="svg5444"
      inkscape:document-rotation="0"
      showgrid="false"
      inkscape:window-width="2560"
-     inkscape:window-height="1376"
+     inkscape:window-height="1371"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:object-paths="true" />
+     inkscape:object-paths="true"
+     inkscape:pagecheckerboard="true"
+     inkscape:snap-page="true"
+     inkscape:showpageshadow="false"
+     showborder="false" />
   <metadata
      id="metadata5441">
     <rdf:RDF>
@@ -1993,10 +1997,16 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <rect
+     style="fill:#ffffff;stroke-width:0.264583;stroke-linecap:round"
+     id="rect1562"
+     width="140.22189"
+     height="141.88696"
+     x="0"
+     y="0" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"

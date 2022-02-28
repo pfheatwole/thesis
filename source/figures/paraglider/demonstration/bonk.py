@@ -1,3 +1,6 @@
+This needs to set `s_clamp = 0` to trigger the bad behavior
+
+
 """
 Demonstrates what happens when you use gradient descent and change the starting
 point. Observe the `alpha_b2e` plot; those jumps happen when the model reverts

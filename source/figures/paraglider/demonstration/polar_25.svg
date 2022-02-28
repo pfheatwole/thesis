@@ -5,7 +5,7 @@
    viewBox="0 0 595.50958 143.12437"
    version="1.1"
    id="svg471"
-   sodipodi:docname="fig.svg"
+   sodipodi:docname="polar_25.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -22,7 +22,7 @@
      borderopacity="1.0"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
+     inkscape:pagecheckerboard="false"
      inkscape:document-units="pt"
      showgrid="false"
      inkscape:zoom="2"
@@ -33,7 +33,8 @@
      inkscape:window-x="0"
      inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg471" />
+     inkscape:current-layer="svg471"
+     inkscape:snap-page="true" />
   <metadata
      id="metadata2">
     <rdf:RDF>
@@ -285,6 +286,13 @@
       </symbol>
     </g>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke-width:0.75;stroke-linecap:round"
+     id="rect1206"
+     width="595.50958"
+     height="143.12437"
+     x="0"
+     y="0" />
   <g
      id="patch_2"
      transform="translate(-62.959374,-117.85687)">

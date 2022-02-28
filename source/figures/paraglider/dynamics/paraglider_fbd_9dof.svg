@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    sodipodi:docname="paraglider_fbd_9dof.svg"
-   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    width="48.244965mm"
    height="84.709297mm"
    viewBox="0 0 48.244962 84.709299"
@@ -995,10 +995,10 @@
      showguides="true"
      showgrid="false"
      inkscape:document-rotation="0"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="svg8"
      inkscape:document-units="mm"
-     inkscape:cy="124.31991"
-     inkscape:cx="33.860492"
+     inkscape:cy="123.57844"
+     inkscape:cx="33.613336"
      inkscape:zoom="2.0230066"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -1006,7 +1006,8 @@
      bordercolor="#666666"
      pagecolor="#ffffff"
      id="base"
-     inkscape:pagecheckerboard="0">
+     inkscape:pagecheckerboard="0"
+     inkscape:snap-page="true">
     <inkscape:grid
        originy="-59.543757"
        originx="-410.76045"
@@ -1024,9 +1025,16 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <rect
+     style="fill:#ffffff;stroke-width:0.264583;stroke-linecap:round"
+     id="rect1220"
+     width="48.244965"
+     height="84.709297"
+     x="0"
+     y="0" />
   <g
      style="display:inline"
-     transform="translate(-410.761, -59.5438)"
+     transform="translate(-410.761,-59.5438)"
      id="layer1"
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
