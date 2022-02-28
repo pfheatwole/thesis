@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    sodipodi:docname="elliptical3_canopy_chords.svg"
    id="svg238"
    width="441.41013pt"
    viewBox="0 0 441.41013 414.19595"
    version="1.1"
-   height="414.19595pt">
+   height="414.19595pt"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <metadata
      id="metadata242">
     <rdf:RDF>
@@ -27,16 +27,16 @@
   </metadata>
   <sodipodi:namedview
      inkscape:current-layer="svg238"
-     inkscape:window-maximized="0"
-     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:window-y="32"
      inkscape:window-x="0"
-     inkscape:cy="310.28839"
-     inkscape:cx="207.91423"
+     inkscape:cy="309.7076"
+     inkscape:cx="207.7193"
      inkscape:zoom="1.06875"
      showgrid="false"
      id="namedview240"
-     inkscape:window-height="1198"
-     inkscape:window-width="1396"
+     inkscape:window-height="1371"
+     inkscape:window-width="2560"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      guidetolerance="10"
@@ -44,7 +44,10 @@
      objecttolerance="10"
      borderopacity="1"
      bordercolor="#666666"
-     pagecolor="#ffffff" />
+     pagecolor="#ffffff"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="pt"
+     inkscape:snap-page="true" />
   <defs
      id="defs4">
     <style
@@ -53,6 +56,13 @@
 *{stroke-linecap:butt;stroke-linejoin:round;}
   </style>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke-width:0.75;stroke-linecap:round"
+     id="rect994"
+     width="441.4101"
+     height="414.19598"
+     x="0"
+     y="0" />
   <g
      transform="translate(-204.06433,-127.28371)"
      id="axes_1">

@@ -5,7 +5,6 @@
    simulations perform static and dynamic performance tests (polar plots and
    flight maneuvers, respectively) and compare them to expected behaviors.
 
-
 *************
 Demonstration
 *************
@@ -15,7 +14,7 @@ Demonstration
 
 One reason that modeling a commercial paraglider wing is difficult is because
 the published specifications are limited to basic summary measurements. A major
-task of the modeling process is to augment the missing information to create
+task of the modeling process is augmenting the missing information to create
 a complete model. To address that difficulty, this paper developed parametric
 :doc:`component models <paraglider_components>` that encode assumptions of the
 unknown structure.
@@ -47,7 +46,8 @@ produced by this wing.
 
    Front-view of an inflated Niviuk Hook 3
 
-Wing data for a commercial wing is typically limited to four sources:
+Wing data for a commercial wing is typically available from four primary
+sources:
 
 1. Technical specifications and user manuals
 
@@ -67,16 +67,8 @@ unavailable.
 Technical specs
 ---------------
 
-The following sections demonstrate how to estimate the parameters for a size
-23 version of the wing. The same process is used (but not shown) to create
-models of the size 25 and 27 wings for the discussion in
-:ref:`demonstration:Model validation`.
-
-The process begins with the primary technical data from the official `technical
-specifications manual
-<https://niviuk.com/niviuk/customer_pdf/Descatalogado/Hook%203/Datos%20t%C3%A9cnicos/HOOK3_TECNIC_ENG.pdf>`__:
-
-.. FIXME: this link is now broken!
+From the official `technical specifications manual
+<https://niviuk.com/niviuk/customer_pdf/Descatalogado/Hook%203/Datos%20t%C3%A9cnicos/HOOK3_TECNIC_ENG.pdf>`_:
 
 .. list-table:: Wing data
    :header-rows: 1
@@ -147,11 +139,11 @@ specifications manual
      - 80-100
      - 95-115
 
+This section demonstrates how to estimate the parameters for a size 23 wing.
+The same process is used (but not shown) to create models of the size 25 and
+27 wings for the discussion in :ref:`demonstration:Model validation`.
 
-Recall that a "paraglider wing" includes both the canopy and the suspension
-lines, so the technical data describes both components. It also includes the
-weight range that the wing can safely carry while retaining control authority,
-which is useful for defining an suitable payload.
+.. FIXME: link to the implementation in glidersim
 
 
 Canopy
@@ -163,24 +155,23 @@ Canopy
    and how well the result matched the target.
 
 The first component model of the paraglider system is for the :ref:`canopy
-<paraglider_components:Canopy>`. The canopy model combines an (idealized)
-:doc:`foil_geometry` model with physical details to estimate the aerodynamics
-and inertial properties of the canopy. For the canopy model parameters, it's
-easiest to think of them in two groups:
+<paraglider_components:Canopy>`. The canopy model uses a :doc:`foil_geometry`
+model and :ref:`physical details <paraglider_components:Solid mass>` such as
+material densities and surface extents to estimate the aerodynamics and
+inertial properties of the canopy. There are two groups of model parameters:
 
-.. FIXME: awkward wording
+1. Parameters of the design curves that define the variables :eq:`simplified
+   foil geometry variables` of the :ref:`simplified foil geometry model
+   <foil_geometry:Simplified model>`
 
-1. Parameters for the :ref:`design curves <derivations:Parametric design
-   curves>` that define the variables :eq:`simplified foil geometry variables`
-   of the :ref:`foil geometry model <foil_geometry:Simplified model>`
-
-2. Parameters for the physical details :eq:`canopy parameters`
+2. Parameters of the canopy component model :eq:`canopy parameters`
 
 .. FIXME: copy them here?
 
 
-Foil geometry
-^^^^^^^^^^^^^
+Geometry
+^^^^^^^^
+
 
 .. rubric:: Layout
 
@@ -189,34 +180,33 @@ and orientation of its sections.
 
 [[For a parafoil, it's easiest to start by describing the geometry of the
 flattened (uninflated) canopy before dealing with the arc. This approach is
-made much easier by the choice of the :ref:`foil_geometry:Simplified model` to
+made a lot easier by the choice of the :ref:`foil_geometry:Simplified model` to
 define the :ref:`section index <simplified model section index>` in terms of
 the :math:`yz`-curve. When a parafoil is flattened the section index
-corresponds to the normalized distance along each semispan, which allows the
-:math:`x`-positions and chord lengths to be measured directly without regard
+corresponds to the normalized distance along each semispan, the
+:math:`x`-positions and chord lengths can be measured directly without regard
 for the arc.]]
 
 
 .. Chord length (c)
 
-First, consider the chord length distribution :math:`c(s)`. The technical
-specifications only list the root, tip, and mean chord lengths, so more
-information is required. Thankfully, for parafoils a reasonable guess is that
-the wing uses a truncated elliptical distribution. (Paragliding wings commonly
-use truncated elliptic functions because they encourage elliptical lift
-distributions, thus reducing induced drag.) Such a truncated elliptical
+The easiest place to start is with the chord length distribution :math:`c(s)`.
+The technical specifications only list the root, tip, and mean chord lengths,
+so more information is required. Thankfully, for parafoils a reasonable guess
+is that the wing uses a truncated elliptical distribution. (Paragliding wings
+commonly use truncated elliptic functions because they encourage elliptical
+lift distributions, thus reducing induced drag.) Such a truncated elliptical
 distribution can be easily parametrized by the wing root and wing tip section
-chord lengths, as shown by the :ref:`derivations:Elliptical chord` design
-curve. The technical specs list these two parameters as :math:`c_\textrm{root}
-= 2.58` and :math:`c_\textrm{tip} = 0.52`, respectively. Using those values
+chord lengths, as shown in the :ref:`derivations:Elliptical chord` parametric
+model. The technical specs list these two parameters as :math:`c_\textrm{root}
+= 2.58` and :math:`c_\textrm{tip} = 0.52`, respectively. Using those parameters
 produces a mean chord length of :math:`2.06`, which exactly matches the
 standard mean chord listed in the manufacturers specs. The assumption was
 justified. An additional check is to compare the area of the flattened chord
-surface; for these values the truncated elliptical produces a flattened area of
-:math:`22.986` compared to the true specification of :math:`23.0`. (This
-discrepancy may be explained by differences in measuring methodology or by the
-current absence of any geometry twist, but in practice the effect is
-negligible.)
+surface; for these parameters the flattened area is :math:`22.986` compared to
+the true specification of :math:`23.0`. (This discrepancy may be explained by
+differences in measuring methodology or by the absence of any geometry twist,
+but in practice the effect is negligible.)
 
 
 .. Fore-aft positioning (r_x, x)
@@ -232,8 +222,10 @@ flattened wing; in fact, flattened drawings are commonly available in technical
 manuals, making them especially convenient. (Admittedly, such drawings are not
 always to scale, and so should be used with caution.) For this wing, a small
 amount of trial and error using a top-down view from the wing user manual
-suggests :math:`r_x = 0.7` gives a strong agreement with the drawing in the
-manual, as seen in :numref:`Hook3_topdown`.
+suggests :math:`r_x = 0.7`.
+
+As seen in :numref:`Hook3_topdown`, the elliptical chord assumption with
+:math:`r_x = 0.7` gives a close match to the drawing in the manual.
 
 .. figure:: figures/paraglider/demonstration/Hook3_topdown.jpg
    :name: Hook3_topdown
@@ -247,29 +239,36 @@ manual, as seen in :numref:`Hook3_topdown`.
 .. Arc (yz-curve)
 
 With the flattened chord surface completed, the next step is to define the
-*arc* (position in the :math:`yz`-plane). Photos of the wing suggest that an
-elliptical arc segment is a reasonable starting point. For the arc reference
-points :math:`r_yz(s)`, the exact value has a small impact on most parafoil
-designs, but a reasonable guess is to use the quarter-chord position
-:math:`r_{yz}(s) = 0.25`. For the arc positions :math:`yz(s)`, a parametric
-:ref:`derivations:Elliptical arc` can be defined using three parameters: two
-for the normalized shape (:math:`\Gamma_\textrm{tip}` and
-:math:`\phi_\textrm{tip}`) and one for the scale (:math:`b_\textrm{flat}`).
-There are several ways to estimate the elliptical arc parameters of the
-physical wing, such as the width to height ratios, or visual estimation of the
-arc angle, but since the specs included both the flattened and projected spans,
-the simplest method is to guess :math:`\phi_\textrm{tip}` and increase
-:math:`\Gamma_\textrm{tip}` until the projected span matches the expected
-value. Starting with an initial guess of :math:`\phi_\textrm{tip} = 75`, a few
-iterations shows good agreement with :math:`\Gamma_\textrm{tip} = 32`. Checking
-the fit shows a projected span of :math:`b = 8.845` (versus the true value of
-:math:`b = 8.840`) and a projected area of :math:`S = 19.405` (versus the true
-value of :math:`S = 19.550`). As with the flattened values, the small
-discrepancy may be explained by differences in measurement methodology, and
-isn't worth optimizing further.
+*arc* (position in the :math:`yz`-plane). Photos of the wing suggest that
+a circular arc segment is a reasonable starting point. As with the truncated
+elliptical distribution for the chord lengths, a parametric
+:ref:`derivations:Elliptical arc` model for :math:`yz(s)` can be produced from
+two parameters: :math:`\Gamma_\textrm{tip}`, :math:`\phi_\textrm{tip}`, and
+scaled by the flattened span :math:`b_\textrm{flat}`. There are several ways to
+estimate the elliptical arc parameters of the physical wing, such as the width
+to height ratios, or visual estimation of the arc angle, but since the specs
+included both the flattened and projected spans, the simplest method is to
+guess :math:`\phi_\textrm{tip}` and increase :math:`\Gamma_\textrm{tip}` until
+the projected span matches the expected value. [[FIXME: finish writing. For
+example, checking the "naive" fit based on a circular arc is pretty close, but
+the projected surface area doesn't match the specs; the fit can be improved by
+replacing the circular arc with an elliptical arc. For this section, use trig
+to compute the elliptical parameters manually, but mention that ``glidersim``
+provides helper functions to simplify the process. My final fit was
+:math:`\Gamma_\textrm{tip} = 32`, :math:`\phi_\textrm{tip} = 75`.]]
 
-.. FIXME: show the rear-view picture and the resulting model? I'd prefer
-   a straight-on photo, it's hard to tell with angled photos.
+.. FIXME:
+
+   * Explain how I adjusted `mean_anhedral` until the projected values are
+     roughly correct?
+
+   * Explain how I chose `r_yz`? Technically this would depend on the
+     geometric torsion, but since I'm unsure the safe choice is `r_yz = 0.5`
+
+   * Show the rear-view picture and the resulting model? I'd prefer
+     a straight-on photo, it's hard to tell with angled photos.
+
+   * Confirm the projected area and projected span
 
 
 .. Geometric torsion (theta)
@@ -281,18 +280,19 @@ curvature of the :math:`yz`-curve and the section yaw is defined as zero, but
 the section pitch :math:`\theta(s)` (or *geometric torsion*) can be difficult
 to measure. Most parafoils benefit from a small amount of increasing geometric
 torsion towards the wing tips (or *washin*), and a conservative guess of `4`
-degrees at the wingtip should be reasonably accurate. For lack of better
-information, this demonstration chose a piecewise :ref:`linear model
-<derivations:Polynomial torsion>` that grows from 0 to 4 degrees over the range
-:math:`0.05 \le |s| \le 1`.
+degrees at the wingtip should be reasonably accurate. [[FIXME: how does the
+torsion develop? Most designs assume linear, but I use a :ref:`polynomial
+<derivations:Polynomial torsion>` model.]]
+
+[[FIXME: sanity check the inflated chord surface. Span, area, AR.]]
 
 
 .. Section profiles
 
 .. rubric:: Profiles
 
-Having finished defining the section layout (scale, position, and orientation),
-each section must be assigned an airfoil.
+After the section layout (scale, position, and orientation) is complete, each
+section must be assigned an airfoil.
 
 [[FIXME: explain my choice. Belloc used the 23015, but
 :cite:`lingard1995RamairParachuteDesign` says that many older designs used
@@ -306,26 +306,24 @@ was also chosen by :cite:`becker2017ExperimentalStudyParaglider`).]]
 
    Set of NACA 24018 airfoils with trailing edge deflections.
 
-[[FIXME: explain how I produced those profiles? Oof. While I'm at it, explain
-why this is an extremely optimistic model of how parafoil sections deform with
-increasing brake inputs. I'd go as far as to guess that this is the number one
-source of error in the model.]]
+[[FIXME: explain how I produced those profiles? Oof.]]
 
-[[FIXME: explain using XFOIL to estimate the section coefficients?]]
+[[FIXME: explain why this is an extremely optimistic model of how parafoil
+sections deform with increasing brake inputs. I'd go as far as to say that
+this is the number one source of error in the model.]]
+
+[[FIXME: explain using XFOIL to estimate the section coefficients]]
 
 
-Physical details
-^^^^^^^^^^^^^^^^
+Surface materials
+^^^^^^^^^^^^^^^^^
 
-In addition to a :doc:`foil geometry <foil_geometry>`, a canopy model requires
-details of physical attributes such as surface material densities and air
-intake extents in order to calculate inertial properties and viscous drag
+Given the (idealized) :doc:`foil geometry <foil_geometry>` model, specify the
+physical attributes such as surface material densities and air intake extents
+allows the canopy model to calculate its inertial properties and viscous drag
 corrections.
 
-
-.. rubric:: Surface materials
-
-.. Materials (rho_upper, rho_lower, rho_ribs, N_cells)
+.. Materials (rho_upper, rho_lower, rho_ribs)
 
 In this case, the surface material densities can be read directly from the
 materials section of the user manual:
@@ -353,18 +351,16 @@ In addition to the material densities, the canopy model requires the number of
 cells to determine the distribution of mass for the internal ribs. The specs
 lists :math:`N_\textrm{cells} = 52`, which implies the wing has 53 internal
 ribs. In reality the ribs are *ported* (holes that allow air to flow between
-cells) so assuming solid ribs is an overestimate, but since the canopy model is
-neglecting the mass in the remainder of the internal structure the discrepancy
-should balance out.
+cells), but since the canopy model is neglecting the mass in the remainder of
+the internal structure the discrepancy should balance out.
 
 .. Air intakes (s_end, r_upper, r_lower)
 
 For the air intakes, the user manual provides a projected diagram (Fig. 11.4,
-p. 17) which shows that the air intakes start at the 21st of 26 ribs (the 27th
-"rib" in the diagram is part of the stabilizer panel) spreading out from the
-central rib; assuming a linear spacing of the ribs this would correspond to
-:math:`s = 0.807`, so :math:`s_\textrm{end} = 0.8` is a reasonable guess for
-the spanwise extent of sections with air intakes.
+p. 17) which shows that the air intakes start at the 21st of 26 ribs spreading
+out from the central rib; assuming a linear spacing of the ribs this would
+correspond to :math:`s = 0.807`, so :math:`s_\textrm{end} = 0.8` is
+a reasonable guess for the spanwise extent of sections with air intakes.
 
 The other dimension of the air intakes is the size of their opening, which is
 determined by the extent of the upper and lower surface. This value is
@@ -374,13 +370,13 @@ physical measurements, a reasonable guess is :math:`r_\textrm{upper} = -0.04`
 and :math:`r_\textrm{lower} = -0.09` for an air intake length roughly 5% of the
 length of the chord.
 
-.. FIXME: one of my references mentions sizes of air intakes. Explain why
-   I chose 5% as "a reasonable guess".
-
 .. figure:: figures/paraglider/demonstration/air_intakes.*
    :name: NACA24018 with air intakes
 
    NACA 24018 with air intakes
+
+[[FIXME: one of my references mentions sizes of air intakes. Explain why
+I chose 5% as "a reasonable guess".]]
 
 [[FIXME: sanity check the total mass. The specs list the total wing weight at
 4.9kg, but the canopy upper/lower/rib materials only account for 2.95kg. My
@@ -390,15 +386,14 @@ I'm underestimating that mass, but I'm also assuming the vertical ribs are
 solid (no ports) so that makes up for a bit of the missing mass]]
 
 
-.. rubric:: Viscous drag corrections
-
 .. Aerodynamic coefficients for viscous drag corrections
 
-* :math:`C_{D,\textrm{intakes}}`
+[[FIXME: add the viscous drag corrections
 
+* :math:`C_{D,\textrm{intakes}}`
 * :math:`C_{D,\textrm{surface}}`
 
-[[This assumes a single profile is used for all sections.]]
+]]
 
 
 Suspension lines
@@ -418,8 +413,11 @@ Riser position
 
 .. Design variables: kappa_x, kappa_z, kappa_A, kappa_C, kappa_a
 
-[[FIXME: explain how to estimate the lines' parameters :eq:`suspension lines
-parameters, riser position`]]
+[[This demonstration uses the simplified line geometry model. Instead of
+modeling the complete set of lines, it focuses on producing the effects of the
+lines with as few parameters as possible.]]
+
+:eq:`suspension lines parameters, riser position`
 
 
 .. kappa_z
@@ -668,30 +666,41 @@ Model validation
    which means we already know what we expect to see. Validation is about
    *confirming*, not *learning*.
 
+   Geometry expectations: does the geometry accurately predict specifcations
+   that were not explicitly included in the model? Flattened and projected
+   area, span, and aspect ratio; total mass; etc. (Hm, I think that's better to
+   consider when defining the model. It's what you'd check when deciding if you
+   can "stop" tweaking.)
+
+   Behavior expectations: polar plots, 360 turn radius, 360 sink rate, etc.
+   These tend to fall into static and dynamic behaviors; it's not essential to
+   declare them that way, but it might be useful for thinking of behaviors.
+
+   For dynamic behavior discussion points, see
+   :cite:`wild2009AirworthinessRequirementsHanggliders` Sec:4.1 (pg28) for the
+   DHV maneuvers for wing classification. Also,
+   :cite:`lingard1995RamairParachuteDesign` Sec:7 and Sec:8.
+
+
+[[Work in progress:
+
 Validating the model is difficult for several reasons:
 
 * Unlike the ``case study``, wind tunnel measurements are unavailable.
 
-* It's not just the foil geometry and aerodynamic coefficients: now there's
-  extra drag due to air intakes, suspension lines, the payload, and their
-  connections.
+* There are more components, and their connections.
 
-* Then there's dynamic behavior which is significantly more complex. It
-  requires good flight data but that's hard to get.
+* Dynamic behavior is significantly more complex than static behavior
 
 * more?
 
-Conclusion: we've got to make do with point measurements of static behavior and
-general expectations of dynamic behavior.
+]]
 
 
 Polar curve
 -----------
 
-.. Plot and discuss the predicted polar curves.
-
-   I don't have access to full polar curves, but I do have point estimates from
-   certification and wing review flights.
+.. Plot and discuss the predicted polar curve.
 
    Use this section to really highlight the limitations/assumptions of the
    model? Unknown airfoil, unknown true line positions, lack of a proper
@@ -705,24 +714,35 @@ Polar curve
 
 * [[FIXME: define *equilibrium state*]]
 
+* [[FIXME: consider the zero input condition, and discuss how allowing the
+  payload to pitch changes the result. (The 6a has a smaller theta_b2e and
+  a positive theta_p2e (since b2e==p2e for 6a), whereas 9a has a larger b2e and
+  negative p2e.) A plot isn't worth it since the angles are so small, so maybe
+  just list the angles.]]
+
 
 .. Polar curves
 
 * [[FIXME: define *polar curve*. Explain how they summarize the equilibrium
   states over a range of accelerator and symmetric brake inputs.]]
 
+* [[FIXME: add figure for polar curves. For which size and pod type? **Probably
+  choose configurations that I'll be analyzing**; not much point showing
+  multiple polars if some don't have data.]]
+
+* [[FIXME: Discuss the zero input states ("trim").]]
+
 * [[Discuss the range of control inputs.
 
-  For the brakes, the coefficient data limits the amount of trailing edge
-  deflection the model can produce.
+  For the brakes, I'm only modeling 43cm of brake travel; that's not a ton.
 
-  For the accelerator, review the effect of :math:`\kappa_A` and
-  :math:`\kappa_C`. I'm guessing those values, but wing's tend to be pretty
-  sensitive to those.
+  For the accelerator, I'm guessing at :math:`\kappa_A` and :math:`\kappa_C`.
+  The design is pretty sensitive to those.
 
 
-Size 25
-^^^^^^^
+.. I don't have access to full polar curves, but I do have point estimates from
+   certification and wing review flights.
+
 
 [[Size 25 test from `Hook 3 Parapente Mag 148.pdf`]]
 
@@ -731,17 +751,57 @@ Size 25
 * My horizontal speed at trim is about 0.35 m/s slower than theirs.
 
 
-Size 27
-^^^^^^^
 
-Test data for the size=27 model comes from a certification flight and
-a magazine review in the Spanish magazine "Parapente".
-
-
-The polar curve for the computer model:
+[[Size 27 test from `hook 3 perfils.pdf`]]
 
 .. figure:: figures/paraglider/demonstration/polar_27.svg
 
+
+* My horizontal speed at trim is about 0.35 m/s slower than theirs.
+
+* They list min sink as occurring with 50% brakes. Given that `kappa_b
+  = 0.46` for the size=27 model, 50% of 60cm corresponds to `delta_a = 0.65`,
+  but for the size=27 model the min sink occurs closer to `delta_a = 0.2`.
+  **Assuming everything else is fine** that would suggest my brake model is
+  wrong? Like, the L/D ratio dies off too fast for my model? (Of course, can
+  I trust them that such a convenient value of brakes produces min sink?)
+
+* Cool, they claim max glide is at 0% brakes! Confirms my choice for
+  `kappa_x` if it's true. As good as any justification, I guess.
+
+* Their best glide with a pod harness is 9.5: for my model with `S=0.6, CD=0.4`
+  I get 9.68? Verify.
+
+
+* Extra data from the certification test `2013-01-23_hook3_23_en`:
+
+  * FIXME: what size and pod type?
+
+  * List the minimum speed as `<25km/h` (`6.94m/s`)
+
+  * List the sink rate after to sharply banked turns as `>14m/s`. My model
+    doesn't have enough control authority to get CLOSE to that.
+
+  * Symmetric control travel `>60cm` (my model size=23 only supports `kappa_b
+    = 0.43m` due to the limitations of the aerodynamic coefficient data)
+
+    That means I'm modeling <72% of the travel they got during the test. No
+    wonder their "steeply banked turn" is so much more extreme than I can
+    produce. What would my polar look like if you extrapolated it that far?
+
+
+Discussion:
+
+* For the riser midpoint, I assume `kappa_z` is just the "height", and that
+  `kappa_x` was chosen such that best glide is at trim.
+
+* My model relies on section coefficients, but I don't have coefficient data
+  from extreme trailing edge deflections, so I can only model roughly the first
+  70% of the brake range. That's one factor why my minimum speeds are too high.
+
+  The value of `kappa_b` depends on the glider since it's normalized by the
+  chord lengths, but for the 25 `kapa_b = 0.444` and for the 27 `kappa_b
+  = 0.463`.
 
 
 
@@ -825,11 +885,11 @@ apparent inertia. Then show some scenarios where the effects are significant
 Steep turn
 ----------
 
-In `2013-01-23_hook3_23_en.pdf` they list the sink rate after two "steeply
-banked" turns as `>14m/s` (31mph!). For my model, full brakes and weight shift
-only get it to down to `1.42m/s`. Wow, optimistic much? Granted, I'm severely
-limiting the brake travel and am using VERY optimistic airfoil data, but still.
-**Do they define "steep"?**
+In `2013-01-23_hook3_23_en` they list the sink rate after two "steeply banked"
+turns as `>14m/s` (31mph!). For my model, full brakes and weight shift only get
+it to down to `1.42m/s`. Wow, optimistic much? Granted, I'm severely limiting
+the brake travel and am using VERY optimistic airfoil data, but still. **Do
+they define "steep"?**
 
 Ah, they rate it as class B, which agrees with sections 4.1.8 and 4.1.9 of the
 DHV standard :cite:`wild2009AirworthinessRequirementsHanggliders`, pg31. The
@@ -886,10 +946,6 @@ Discussion
   modeling their deflected geometries, modeling the deflection distribution,
   etc. Tons of uncertainty here. Just stick a big red flag in it and say "hey,
   if you want to solve this problem, here's a big sticking point."
-
-* Discuss how allowing the payload to pitch changes the result? The polars
-  don't barely change so the effect is pretty negligible. A plot isn't worth it
-  since the angles are so small, so maybe just list the angles.
 
 * This chapter focuses on collecting the necessary information to produce the
   model. For the actual implementation, refer to ``glidersim``:

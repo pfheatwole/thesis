@@ -18,25 +18,15 @@ The essential components of any flying object are the lifting surfaces, or
 *foils*: by redirecting airflow, a foil exchanges momentum with the air,
 producing a lifting force that allows the object to fly. The dynamics of a foil
 depend on its inertial properties and its aerodynamics, both of which can be
-estimated from its shape.
-
-A foil geometry model describes the shape of a foil by defining the positions
-of all the points on the foil's surfaces. Although those positions can be
-defined as an explicit set of points (with interpolation in between), it is
-much more convenient to decompose them into a set of variables that represent
-distinct characteristics of the foil's shape. Similarly, those variables may be
-defined using explicit values, but it is much more convenient to define them
-using *design curves*: parametric functions that encode that underlying
-structure of the foil with a small number of intuitive parameters.
-
-This decomposition is essential to this project, because the foils of interest
-are commercial paraglider wings, and manufacturers do not provide explicit
-geometry data; at best, marketing materials and user manuals provide basic
-summary specifications, which means the majority of the geometry is unknown.
-Generating a surface model from summary information requires making educated
-guesses about the missing structure in order to generate a complete geometry.
-That assumed structure takes the form of domain expertise encoded in the design
-curves, which augment the summary data to produce a fully specified model.
+estimated from its shape. In this project the foils of interest are the
+canopies of commercial paraglider wings, which poses a major difficulty:
+manufacturers do not provide detailed geometry data. At best, marketing
+materials and user manuals provide basic summary specifications, which means
+the majority of the geometry is unknown. Generating a surface model from
+summary information requires making educated guesses about the missing
+structure in order to generate a complete geometry. That assumed structure
+takes the form of domain expertise encoded in parametric *design curves* which
+augment the summary data to produce a fully specified model.
 
 
 .. The Problem
@@ -45,7 +35,7 @@ curves, which augment the summary data to produce a fully specified model.
    variables, which in turn determines the structure of the functions that
    define those variables.
 
-The difficulty with this approach is that the choice of variables in a geometry
+The problem with this approach is that the choice of variables in a geometry
 model controls how a designer must specify the structure. More variables
 increase model flexibility at the cost of increased complexity, so the goal is
 to choose the smallest number of variables that provide the designer with
@@ -56,7 +46,7 @@ complication makes it difficult to describe a parafoil using simple parametric
 functions: they must not only encode the fundamental structure, they must also
 translate that structure into the variables that define the model. Instead of
 the geometry model adapting to the needs of the design curves, the design
-curves must adapt to the inflexibility of the model.
+curves must adapt to the limitations of the model.
 
 
 .. The Solution
@@ -64,7 +54,7 @@ curves must adapt to the inflexibility of the model.
 The solution developed in this chapter is to reject the assumption that
 predefined reference points are the most convenient way to position the
 elements of a foil surface. The result is a novel foil geometry that fully
-decouples the design curves, allowing each variable to be designed
+decouples the design curves, allowing each aspect of the foil to be designed
 independently. It also presents a simplified model that eliminates most of the
 additional complexity of the expanded model. The simplified model is both
 flexible and intuitive for designing highly nonlinear foil geometries (such as
@@ -428,7 +418,7 @@ First, let :math:`P` represent any point in a wing section (such as points on
 the chord, mean camber line, or profile), and :math:`LE` be the leading edge of
 that section. It is conventional to share the origin between the airfoil and
 section coordinate systems, and specify the section position using the section
-leading edge, so using the :ref:`notation <common_notation>` of this paper,
+leading edge, so using the `notation <_common_notation>`_ of this paper,
 a general equation for the position of that point :math:`P` with respect to the
 foil origin :math:`O`, written in terms of the foil coordinate system
 :math:`f`, is:
@@ -922,10 +912,6 @@ the :math:`r_x` and :math:`r_{yz}` chord positions.
 .. FIXME: embed the video in the HTML build?
 
 
-.. raw:: latex
-
-   \newpage
-
 Delta wing
 ----------
 
@@ -938,10 +924,6 @@ Straight wing with a linear chord distribution and no twist.
    Chord surface of a delta wing planform.
 
 
-.. raw:: latex
-
-   \newpage
-
 Elliptical wing
 ---------------
 
@@ -953,10 +935,6 @@ Straight wing with an elliptical chord distribution and no twist.
 
    Chord surface of an elliptical wing planform.
 
-
-.. raw:: latex
-
-   \newpage
 
 Twisted wing
 ------------
@@ -972,10 +950,6 @@ extreme torsion makes it easier to see the relationship.
    Chord surface of a wing with geometric twist.
 
 
-.. raw:: latex
-
-   \newpage
-
 Manta ray
 ----------
 
@@ -990,20 +964,12 @@ value of :math:`r_x`.
    "Manta ray" with :math:`r_x = 0`
 
 
-.. raw:: latex
-
-   \newpage
-
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_curves.*
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta2_canopy_chords.*
 
    "Manta ray" with :math:`r_x = 0.5`
 
-
-.. raw:: latex
-
-   \newpage
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta3_curves.*
 
@@ -1016,10 +982,6 @@ simple parametric curves. Four of the six design "curves" are merely constants,
 and yet they enable significantly nonlinear designs in an intuitive way.
 
 
-.. raw:: latex
-
-   \newpage
-
 Parafoil
 --------
 
@@ -1027,8 +989,22 @@ Parafoil
 and the plots. The other examples can be less detailed; the curves and result
 should suffice.]]
 
-An elliptical arc with a mean anhedral of 30 degrees and a wingtip roll of
+[[FIXME: describe the "anhedral" correctly]]
+
+An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
 89 degrees:
+
+.. math::
+
+   \begin{aligned}
+   c(s) &= \mathrm{elliptical\_chord}(root=0.5, tip=0.2)\\
+   \theta(s) &= 0\\
+   r_x(s) &= 0.75\\
+   x(s) &= 0\\
+   r_{yz}(s) &= 1\\
+   yz(s) &= \mathrm{elliptical\_arc}(mean\_anhedral=30, tip\_roll=89)\\
+   \end{aligned}
+
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_curves.*
 
@@ -1039,6 +1015,16 @@ An elliptical arc with a mean anhedral of 30 degrees and a wingtip roll of
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_airfoils.*
 
    Profile surface of a simple parafoil.
+
+[[**FIXME**: good time to explain that if `x` is constant then it's irrelevant.
+One of the more confusing aspects of this geometry is that no matter what you
+define, the central leading edge is always at the origin. Is it accurate to say
+that the `x` and `yz` curves are all about **RELATIVE** positioning? They're
+not exactly displacement vectors, because the final positions depend on all the
+other variables. On the bright side, you don't have to care.]]
+
+The code does have the option of letting the design curves use absolute
+positioning, but I'm not sure I want to discuss that here.]]
 
 
 Case study
@@ -1172,10 +1158,10 @@ Discussion
 [[FIXME: finish]]
 
 
-* This project required a foil geometry that could generate complex wing shapes
-  using simple, parametric functions; specifically, the parametrization must
-  enable modeling of commercial paraglider canopies using the limited available
-  data.
+* This project requires a parametric geometry that could model complex wing
+  shapes using simple, parametric design functions. The parametrization must
+  make it convenient to model existing paraglider canopies using the limited
+  available data.
 
 * There are two aspects to a geometry model:
 
@@ -1186,11 +1172,11 @@ Discussion
 
 * This chapter started with *wing sections* to derive a general equation
   typical of existing geometry models. It decomposed the position variable to
-  allow sections to be positioned with arbitrary reference points. The
-  decomposition decoupled the variable, making it easier to define them using
-  simple parametric functions. The chapter concluded with a simplified model
+  allow positioning via an arbitrary reference point. The decomposition
+  allowed each design variable to be decoupled, making it easier to design
+  them using simple parametric functions. I concluded with a simplified model
   that eliminated most of the extra complexity of the expanded model, and
-  showed examples of canopies using that parametrization.
+  showed some examples of canopies using that parametrization.
 
 * Reference the :ref:`foil_aerodynamics:Case study` (Belloc's wing) and
   :doc:`demonstration` (my Hook3ish)

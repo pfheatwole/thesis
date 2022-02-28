@@ -396,8 +396,9 @@ control input :math:`\delta_i`; the indexed airfoils allow the brakes to
 control the canopy aerodynamics with no modifications to the NLLT. Physical
 inaccuracies refers to characteristics such as flattening, wrinkling, surface
 roughness, air intakes, etc. For example, a common correction for parafoils is
-to add an empirical estimate of the additional viscous drag due to air intakes;
-see the :ref:`example model <demonstration:Physical details>` for a discussion.
+to add an empirical estimate of the additional viscous drag due to air
+intakes; see the :ref:`example model <demonstration:Surface materials>` for
+a discussion.
 
 .. FIXME: discussion?
 
@@ -439,9 +440,9 @@ and moments :math:`\vec{g}_{f,\textrm{aero},n}` :eq:`section moment` for the
 Parameter summary
 -----------------
 
-In addition to the design curves that define the :doc:`foil_geometry`, the
-physical canopy model requires additional information about physical details
-associated with that geometry:
+In addition to the design curves that define the idealized
+:doc:`foil_geometry`, the physical canopy model requires additional
+information:
 
 .. math::
    :label: canopy parameters
@@ -468,18 +469,18 @@ Suspension lines
    * Control inputs: delta_a, delta_bl, delta_br (produces delta_d)
 
 
-.. What are the suspension lines? What do they do?
+.. What is the bridle? What does it do?
 
-The suspension lines connect the canopy to the harness and pilot. The lines are
-conventionally grouped into load-bearing sets (labeled A/B/C/D, depending on
-their relative positions on the section chords), brake lines (that produce the
-trailing edge deflections), and *stabilo* lines (that assist in preventing the
-wing tips from curling into a dangerous *cravat*). Starting from the canopy,
-the lines progressively attach together in a *cascade* that terminates at two
-*risers* which connect the lines to the harness. The lines are responsible for
-producing the arc of the canopy, suspending the harness at some position
-relative to the canopy, and allowing the pilot to manipulate the shape of the
-canopy.
+The suspension lines, or *bridle*, connect the canopy to the harness and
+pilot. The lines are conventionally grouped into load-bearing sets (labeled
+A/B/C/D, depending on their relative positions on the section chords), brake
+lines (that produce the trailing edge deflections), and *stabilo* lines (that
+assist in preventing the wing tips from curling into a dangerous *cravat*).
+Starting from the canopy, the lines progressively attach together in
+a *cascade* that terminates at two *risers* which connect the lines to the
+harness. The bridle is responsible for producing the arc of the canopy,
+suspending the harness at some position relative to the canopy, and allowing
+the pilot to manipulate the shape of the canopy.
 
 
 .. How am I modeling it?
@@ -553,9 +554,9 @@ asymmetric deflections cause the wing to turn.
    Wikimedia contributor "PiRK" under a CC-BY-SA 3.0 license.
 
 A physically accurate model of the deflection distribution would need to model
-the length and angle of every line and how the angles deform during braking
-maneuvers. Because the line geometry was not a focus for this project, an
-approximation is used instead.
+the length and angle of every line in the bridle and how the angles deform
+during braking maneuvers. Because the line geometry was not a focus for this
+project, an approximation is used instead.
 
 First, observe that as brakes are progressively applied the deflections will
 typically start near the middle and radiate towards the wing root and tip as
@@ -920,7 +921,7 @@ For the aerodynamics:
      \kappa_L \qquad & \textrm{Total line length} \\
      \kappa_d \qquad & \textrm{Average line diameter} \\
      CP_n \qquad & \textrm{Lumped line point} \ n \\
-     \vec{r}_{CP_n/R} \qquad & \textrm{Position of lumped point} \ n \\
+     \vec{r}_{CP_n/R} \qquad & \textrm{Position of lumped point} n \\
      C_{d,l,} \qquad & \textrm{Line drag coefficient for control point} \ n \\
    \end{aligned}
 

@@ -466,8 +466,9 @@ control input <span class="math notranslate nohighlight">\(\delta_i\)</span>; th
 control the canopy aerodynamics with no modifications to the NLLT. Physical
 inaccuracies refers to characteristics such as flattening, wrinkling, surface
 roughness, air intakes, etc. For example, a common correction for parafoils is
-to add an empirical estimate of the additional viscous drag due to air intakes;
-see the <a class="reference internal" href="demonstration.html#physical-details"><span class="std std-ref">example model</span></a> for a discussion.</p>
+to add an empirical estimate of the additional viscous drag due to air
+intakes; see the <a class="reference internal" href="demonstration.html#surface-materials"><span class="std std-ref">example model</span></a> for
+a discussion.</p>
 <p>[[FIXME: introduce the coefficient modifiers for “surface characteristics”
 <span id="id8">[<a class="reference internal" href="zreferences.html#id48" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">20</a>]</span> and air intakes
 <span id="id9">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span>]]</p>
@@ -487,9 +488,9 @@ and moments <span class="math notranslate nohighlight">\(\vec{g}_{f,\textrm{aero
 </section>
 <section id="parameter-summary">
 <h3><span class="section-number">4.1.4. </span>Parameter summary<a class="headerlink" href="#parameter-summary" title="Permalink to this headline">#</a></h3>
-<p>In addition to the design curves that define the <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a>, the
-physical canopy model requires additional information about physical details
-associated with that geometry:</p>
+<p>In addition to the design curves that define the idealized
+<a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a>, the physical canopy model requires additional
+information:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-canopy-parameters">
 <span class="eqno">(4.10)<a class="headerlink" href="#equation-canopy-parameters" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   \rho_u \qquad &amp; \textrm{Areal density of the upper surface material} \\
@@ -503,16 +504,16 @@ associated with that geometry:</p>
 </section>
 <section id="suspension-lines">
 <h2><span class="section-number">4.2. </span>Suspension lines<a class="headerlink" href="#suspension-lines" title="Permalink to this headline">#</a></h2>
-<p>The suspension lines connect the canopy to the harness and pilot. The lines are
-conventionally grouped into load-bearing sets (labeled A/B/C/D, depending on
-their relative positions on the section chords), brake lines (that produce the
-trailing edge deflections), and <em>stabilo</em> lines (that assist in preventing the
-wing tips from curling into a dangerous <em>cravat</em>). Starting from the canopy,
-the lines progressively attach together in a <em>cascade</em> that terminates at two
-<em>risers</em> which connect the lines to the harness. The lines are responsible for
-producing the arc of the canopy, suspending the harness at some position
-relative to the canopy, and allowing the pilot to manipulate the shape of the
-canopy.</p>
+<p>The suspension lines, or <em>bridle</em>, connect the canopy to the harness and
+pilot. The lines are conventionally grouped into load-bearing sets (labeled
+A/B/C/D, depending on their relative positions on the section chords), brake
+lines (that produce the trailing edge deflections), and <em>stabilo</em> lines (that
+assist in preventing the wing tips from curling into a dangerous <em>cravat</em>).
+Starting from the canopy, the lines progressively attach together in
+a <em>cascade</em> that terminates at two <em>risers</em> which connect the lines to the
+harness. The bridle is responsible for producing the arc of the canopy,
+suspending the harness at some position relative to the canopy, and allowing
+the pilot to manipulate the shape of the canopy.</p>
 <p>For rigorous models the line geometry is a major factor in wing performance,
 but for this project a fully-specified suspension line model would be both
 tedious and redundant. It would be tedious because it would require the
@@ -557,9 +558,9 @@ Wikimedia contributor “PiRK” under a CC-BY-SA 3.0 license.</p>
 </figcaption>
 </figure>
 <p>A physically accurate model of the deflection distribution would need to model
-the length and angle of every line and how the angles deform during braking
-maneuvers. Because the line geometry was not a focus for this project, an
-approximation is used instead.</p>
+the length and angle of every line in the bridle and how the angles deform
+during braking maneuvers. Because the line geometry was not a focus for this
+project, an approximation is used instead.</p>
 <p>First, observe that as brakes are progressively applied the deflections will
 typically start near the middle and radiate towards the wing root and tip as
 the brake magnitude is increased. For small brake inputs the deflections are
@@ -795,7 +796,7 @@ as in <span id="id16">[<a class="reference internal" href="zreferences.html#id31
   \kappa_L \qquad &amp; \textrm{Total line length} \\
   \kappa_d \qquad &amp; \textrm{Average line diameter} \\
   CP_n \qquad &amp; \textrm{Lumped line point} \ n \\
-  \vec{r}_{CP_n/R} \qquad &amp; \textrm{Position of lumped point} \ n \\
+  \vec{r}_{CP_n/R} \qquad &amp; \textrm{Position of lumped point} n \\
   C_{d,l,} \qquad &amp; \textrm{Line drag coefficient for control point} \ n \\
 \end{aligned}\end{split}\]</div></div>
 </section>
