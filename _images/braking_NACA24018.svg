@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="2.1384315in"
    version="1.1"
    viewBox="0 0 431.99998 153.96708"
    width="6in"
    id="svg247"
    sodipodi:docname="braking_NACA24018.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -25,18 +25,22 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="2560"
-     inkscape:window-height="1376"
+     inkscape:window-height="1371"
      id="namedview249"
      showgrid="false"
-     inkscape:zoom="2.0763889"
-     inkscape:cx="276.14656"
-     inkscape:cy="137.7472"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="437.6991"
+     inkscape:cy="41.7193"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg247"
      inkscape:document-rotation="0"
-     units="in" />
+     units="in"
+     inkscape:pagecheckerboard="true"
+     inkscape:document-units="in"
+     inkscape:snap-page="true"
+     inkscape:showpageshadow="false" />
   <metadata
      id="metadata2">
     <rdf:RDF>
@@ -50,7 +54,6 @@
             <dc:title>Matplotlib v3.4.1, https://matplotlib.org/</dc:title>
           </cc:Agent>
         </dc:creator>
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -143,6 +146,13 @@
       </symbol>
     </g>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke:none;stroke-width:0.75;stroke-linecap:round"
+     id="rect1017"
+     width="432"
+     height="153.96707"
+     x="0"
+     y="0" />
   <path
      style="fill:none;stroke:#808080;stroke-width:0.843554;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5.06133, 0.843554;stroke-dashoffset:0;stroke-opacity:1"
      d="M 33.932444,51.766079 H 430.69288"

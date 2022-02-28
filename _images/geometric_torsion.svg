@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    sodipodi:docname="geometric_torsion.svg"
    id="svg362"
    width="92.456375mm"
    viewBox="0 0 262.08109 57.014563"
    version="1.1"
-   height="20.113472mm">
+   height="20.113472mm"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <metadata
      id="metadata366">
     <rdf:RDF>
@@ -22,7 +22,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -45,16 +44,19 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="2560"
-     inkscape:window-height="1376"
+     inkscape:window-height="1371"
      id="namedview364"
      showgrid="false"
-     inkscape:zoom="1.7274373"
-     inkscape:cx="282.54308"
-     inkscape:cy="-90.340547"
+     inkscape:zoom="6.9097492"
+     inkscape:cx="77.426833"
+     inkscape:cy="53.981699"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="axes_1" />
+     inkscape:current-layer="axes_1"
+     inkscape:pagecheckerboard="true"
+     inkscape:snap-page="true"
+     inkscape:showpageshadow="false" />
   <defs
      id="defs4">
     <marker
@@ -162,6 +164,13 @@
       </symbol>
     </g>
   </defs>
+  <rect
+     style="display:inline;fill:#ffffff;stroke-width:0.75;stroke-linecap:round"
+     id="rect1082"
+     width="262.08105"
+     height="57.014568"
+     x="0"
+     y="0" />
   <g
      id="axes_1"
      transform="translate(-95.462461,-124.46641)">
@@ -211,20 +220,10 @@
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.750001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4.49999, 0.750001;stroke-dashoffset:0;stroke-opacity:1"
        d="M 95.527659,132.75201 355.78887,180.7714"
        id="path861" />
-    <g
-       id="g4503"
-       style="display:inline;fill:#000000;fill-opacity:1;stroke-width:1.4458"
-       transform="matrix(1.9606126,0,0,1.9606126,-442.21796,-271.85176)">
-      <g
-         id="use9144"
-         style="stroke-width:1.4458"
-         transform="matrix(0.75000004,0,0,0.75000004,276.68507,222.26818)">
-        <path
-           style="stroke:none;stroke-width:1.4458"
-           d="m 7.3393939,-5.4709358 c 0,-0.65625 -0.171875,-2.046875 -1.1875,-2.046875 -1.3906246,0 -2.9218746,2.8125 -2.9218746,5.09375 0,0.9375 0.28125,2.04687502 1.1875,2.04687502 1.4062496,0 2.9218746,-2.85937502 2.9218746,-5.09375002 z m -3.0624996,1.359375 c 0.171875,-0.625 0.375,-1.421875 0.78125,-2.140625 0.265625,-0.484375 0.625,-1.046875 1.0781246,-1.046875 0.484375,0 0.546875,0.640625 0.546875,1.203125 0,0.5 -0.07813,1 -0.3125,1.984375 z m 1.9999996,0.328125 c -0.109375,0.453125 -0.3125,1.296875 -0.7031246,2.015625 -0.34375,0.6875 -0.71875,1.17187502 -1.15625,1.17187502 -0.328125,0 -0.53125,-0.296875 -0.53125,-1.21875002 0,-0.421875 0.0625,-1 0.3125,-1.96875 z m 0,0"
-           id="path878" />
-      </g>
-    </g>
+    <path
+       style="display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.12599"
+       d="m 111.04656,155.88525 c 0,-0.965 -0.25274,-3.00986 -1.74618,-3.00986 -2.04486,0 -4.2965,4.13568 -4.2965,7.49015 0,1.37857 0.41357,3.00986 1.74618,3.00986 2.06784,0 4.2965,-4.2046 4.2965,-7.49015 z m -4.50329,1.9989 c 0.25275,-0.91904 0.55142,-2.09081 1.1488,-3.1477 0.3906,-0.71225 0.91904,-1.5394 1.58534,-1.5394 0.71225,0 0.80416,0.94202 0.80416,1.76916 0,0.73523 -0.11489,1.47046 -0.45953,2.91794 z m 2.94092,0.48249 c -0.16077,0.66631 -0.45951,1.90701 -1.03391,2.9639 -0.50548,1.01095 -1.05691,1.7232 -1.70022,1.7232 -0.48249,0 -0.78119,-0.43655 -0.78119,-1.79212 0,-0.62036 0.092,-1.47046 0.45953,-2.89498 z m 0,0"
+       id="path878" />
   </g>
   <defs
      id="defs360">
