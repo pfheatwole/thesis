@@ -104,7 +104,7 @@ and compares its estimates to experimental wind tunnel data. Next,
 :doc:`paraglider_components` decomposes a paraglider into a system of
 components, and develops parametric models for each component. Finally,
 :doc:`system_dynamics` combine the components into complete dynamics models,
-and :doc:`state_dynamics` select a suitable set of state variables and define
+and :doc:`state_dynamics` selects a suitable set of state variables and defines
 their derivatives in terms of the system dynamics. The paper concludes with
 a :doc:`demonstration` that uses the parametric components to create a flight
 dynamics model of a commercial paraglider wing; it estimates the parameters of
