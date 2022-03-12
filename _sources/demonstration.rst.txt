@@ -837,12 +837,6 @@ Polar curve
    expected."
 
 
-.. Equilibrium states
-
-* [[FIXME: define *equilibrium state*]]
-
-
-
 .. Polar curves
 
 A standard chart that summarizes the performance of a gliding aircraft is the
