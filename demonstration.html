@@ -822,31 +822,41 @@ wing performance.</p>
 <em>polar curve</em>. These curves show the vertical and horizontal speed of the
 aircraft at equilibrium over the range of brake and accelerator inputs,
 providing information such as the usable range of the glider and its glide
-ratio at different ground speeds. Despite their value, these charts are never
-completely defined experimentally; instead, pilots report individual points on
-the curve and rely on interpolation for the rest.</p>
-<p>Despite this ambiguity, polar curves are an excellent starting point for
-checking the estimates of a flight dynamics model for a glider. The previous
-section demonstrated the creation of a paraglider model for a Niviuk Hook 3,
-size 23. Now, models for the larger sizes of the wing (created using the same
-workflow) will be compared to the experimental data from test flights.</p>
+ratio at different ground speeds. Given the wealth of information compactly
+summarized by a polar curve, they are an excellent starting point for
+critiquing the estimates of a flight dynamics model for a glider.</p>
+<p>The previous section demonstrated the creation of a paraglider model for
+a Niviuk Hook 3, size 23. Now, models for the larger sizes of the wing (created
+using the same workflow) will be compared to experimental data by comparing
+measurements from test flights to the predicted polar curves.</p>
 <section id="size-25">
 <h4><span class="section-number">7.2.1.1. </span>Size 25<a class="headerlink" href="#size-25" title="Permalink to this headline">#</a></h4>
-<p>A size 25 version of the wing was reviewed for the French magazine “Parapente
-Mag” [[FIXME: citation; see <cite>Hook 3 Parapente Mag 148.pdf</cite>]].</p>
-<p>The polar curve for the computer model overlaid with the point values from the
-magazine article:</p>
+<p>For the experimental data, a size 25 version of the wing was reviewed for the
+French magazine “Parapente Mag” [[FIXME: citation; see <cite>Hook 3 Parapente Mag
+148.pdf</cite>]].</p>
+<p>Unfortunately, reviews such as this cannot provide the entire polar curve;
+because each point is laborious to measure accurately, reviews only provide
+noteworthy values, such as the minimum and maximum speeds, or the horizontal
+and vertical speeds that mark the “minimum sink” and “best glide” operating
+points of the glider. Despite this ambiguity, by plotting the experimental
+point data over the theoretical curve it is possible to get a sense of the
+general accuracy of the model estimates.</p>
 <figure class="align-default" id="id17">
 <img alt="_images/polar_25.svg" src="_images/polar_25.svg"/><figcaption>
 <p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 25.</span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
 <div class="legend">
-<p>Red sections represent braking, green sections represent accelerating. The
-four vertical dashed lines mark the maximum brakes, minimum sink rate, zero
-brakes, and maximum accelerator, as reported by Parapente Mag.</p>
+<p>Black lines are experimental, colored lines are theoretical. Red sections
+represent braking, green sections represent accelerating. The blue line
+marks the theoretical best glide ratio at trim. The four vertical dashed
+lines mark the experimental values for minimum speed, minimum sink rate,
+trim (no brakes or accelerator), and maximum accelerator, as reported by
+Parapente Mag.</p>
 </div>
 </figcaption>
 </figure>
-<p>Observations:</p>
+<p>Although the diagram is a convenient way to summarize so much information, it
+can be hard to distinguish specific values, so their numerical equivalents are
+listed below.</p>
 <div class="table-wrapper"><table class="docutils align-default">
 <colgroup>
 <col style="width: 33%"/>
@@ -876,26 +886,72 @@ brakes, and maximum accelerator, as reported by Parapente Mag.</p>
 <td><p>14.7</p></td>
 <td><p>14.4</p></td>
 </tr>
+<tr class="row-even"><td><p>Best glide &lt;h, v&gt;</p></td>
+<td><p>&lt;10.2, 1.08&gt;</p></td>
+<td><p>&lt;10.4, 1.12&gt;</p></td>
+</tr>
+<tr class="row-odd"><td><p>Best glide ratio</p></td>
+<td><p>9.44</p></td>
+<td><p>9.3</p></td>
+</tr>
 </tbody>
 </table></div>
+<p>Observations:</p>
+<ul class="simple">
+<li><p>The minimum ground speed of the theoretical model is significantly higher
+than the experimental value. That may be explained by the conservative value
+of <span class="math notranslate nohighlight">\(\kappa_b = 0.44 \, [m]\)</span> (the maximum distance the brakes can be
+pulled; see the earlier discussion when defining the parameters for the
+<a class="reference internal" href="#brakes"><span class="std std-ref">Brakes</span></a>). The review listed the maximum brake length as
+&gt;60cm, which suggests that this model can only apply &lt;73% of the full range
+of brakes, so this result in unsurprising.</p></li>
+<li><p>Minimum sink occurs at about 0.4 m/s slower ground speed. This may be related
+to the procedure to generate the deflected <a class="reference internal" href="#profiles">Profiles</a>, to the deflection
+distribution, or to the aerodynamic coefficient estimates from XFOIL.</p></li>
+<li><p>Minimum sink rate is remarkably close (1.06 versus 1.02 m/s), which I find
+surprising since I expected the “optimistic” airfoil set <a class="reference internal" href="#airfoil-set-braking-naca24018"><span class="std std-numref">Fig. 7.4</span></a> to overestimate lift during braking.</p></li>
+<li><p>The theoretical model underestimates the ground speed at trim. Although this
+could be due to it overestimating the drag, it is far more likely that the
+model is overestimating the lift of the wing, so less speed is required to
+counteract the weight of the glider.</p></li>
+<li><p>This experimental data reported the best glide at 10.4 m/s when trim was 10.6
+m/s. This disagrees with our earlier assumption that best glide should occur
+at trim.</p></li>
+<li><p>The model overestimates the maximum ground speed. This may suggest it is
+underestimating drag, or it could suggest that the model parameters are wrong
+(<span class="math notranslate nohighlight">\(\kappa_C\)</span> in particular has a large impact on maximum speed), or it
+could be because this rigid body model neglects foil deformations (it assumes
+the accelerator produces a perfect pitch-rotation of the foil) as well as the
+section profile deformations that increase with speed.</p></li>
+</ul>
+<p>In truth, these observations are just a drop in the bucket of possible issues
+with the theoretical model (not to mention issues with the experimental data
+itself); there are so many simplifications at work, and point data cannot hope
+to reveal all their flaws. These results suggest that the performance of the
+model is excellent when predicting longitudinal equilibrium, but a wider
+variety of wing models need to be examined to determine if this excellence
+generalizes to other wings.</p>
 </section>
 <section id="size-27">
 <h4><span class="section-number">7.2.1.2. </span>Size 27<a class="headerlink" href="#size-27" title="Permalink to this headline">#</a></h4>
-<p>A size 27 model of the wing was reviewed for the Spanish magazine “Parapente”
-[[FIXME: citation; see <cite>hook 3 perfils.pdf</cite>]].</p>
-<p>The polar curve for the computer model overlaid with the point values from the
-magazine article:</p>
+<p>For the experimental data, a size 27 model of the wing was reviewed for the
+Spanish magazine “Parapente” [[FIXME: citation; see <cite>hook 3 perfils.pdf</cite>]]. As
+with the size 25 model, plotting the experimental data on top of the
+theoretical curves produces valuable reference data:</p>
 <figure class="align-default" id="id18">
 <img alt="_images/polar_27.svg" src="_images/polar_27.svg"/><figcaption>
 <p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 27.</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
 <div class="legend">
-<p>Red sections represent braking, green sections represent accelerating. The
-four vertical dashed lines mark the maximum brakes, minimum sink rate, zero
-brakes, and maximum accelerator, as reported by Parapente.</p>
+<p>Black lines are experimental, colored lines are theoretical. Red sections
+represent braking, green sections represent accelerating. The blue line
+marks the theoretical best glide ratio at trim. The four vertical dashed
+lines mark the experimental values for minimum speed, minimum sink rate,
+trim (no brakes or accelerator), and maximum accelerator, as reported by
+Parapente.</p>
 </div>
 </figcaption>
 </figure>
-<p>Observations:</p>
+<p>And as before, the numerical equivalents of the data in the figure above:</p>
 <div class="table-wrapper"><table class="docutils align-default">
 <colgroup>
 <col style="width: 33%"/>
@@ -923,28 +979,24 @@ brakes, and maximum accelerator, as reported by Parapente.</p>
 </tr>
 <tr class="row-odd"><td><p>Maximum speed</p></td>
 <td><p>15.4</p></td>
-<td><p>14.4</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-even"><td><p>Best glide &lt;h, v&gt;</p></td>
+<td><p>&lt;10.8, 1.13&gt;</p></td>
+<td><p>&lt;11.1, 1.17&gt;</p></td>
+</tr>
+<tr class="row-odd"><td><p>Best glide ratio</p></td>
+<td><p>9.52</p></td>
+<td><p>9.5</p></td>
 </tr>
 </tbody>
 </table></div>
-</section>
-<section id="discussion">
-<h4><span class="section-number">7.2.1.3. </span>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h4>
-<ul class="simple">
-<li><p>The airfoil set (<a class="reference internal" href="#airfoil-set-braking-naca24018"><span class="std std-numref">Fig. 7.4</span></a>) limits the brake
-line length (<span class="math notranslate nohighlight">\(\kappa_b\)</span>) to ~70% or so of the expected “maximum
-brakes”, so it’s not surprising that it can’t reach the true minimum
-groundspeed. Also, the way I created the deflected airfoils is probably
-underestimating the drag since it had to relax the curvature in order to
-avoid flow separation (so XFOIL could converge)</p></li>
-<li><p>Minimum sink rates are remarkably close, which is surprising since I expect the
-airfoils to overestimate the lift.</p></li>
-<li><p>Suspicious that the minimum and maximum speeds are identical for the size 25
-and size 27 wings. Did they really measure these?</p></li>
-<li><p>Pity they only reported horizontal speed; vertical speed would be very
-helpful.</p></li>
-<li><p>Overall I’m absolutely delighted it’s this close.</p></li>
-</ul>
+<p>The observations are similar to that for the size 25 model. Overall the fit is
+excellent. This model was limited to <span class="math notranslate nohighlight">\(\kappa_b = 0.46 \, [m]\)</span>, or &lt;76% of
+the usable “&gt;60cm” brake length, so the minimum ground speed is still too high.
+And again, the model underestimates the ground speed at trim. The best glide
+ratio matches exactly, although the theoretical model still slightly
+underestimates the ground speed where that occurs.</p>
 </section>
 </section>
 </section>
@@ -1085,7 +1137,6 @@ developing an intuition of how their interactions affect the system behavior.</p
 <li><a class="reference internal" href="#polar-curve">7.2.1. Polar curve</a><ul>
 <li><a class="reference internal" href="#size-25">7.2.1.1. Size 25</a></li>
 <li><a class="reference internal" href="#size-27">7.2.1.2. Size 27</a></li>
-<li><a class="reference internal" href="#discussion">7.2.1.3. Discussion</a></li>
 </ul>
 </li>
 </ul>
