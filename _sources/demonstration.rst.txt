@@ -938,10 +938,12 @@ Observations:
 Discussion
 ^^^^^^^^^^
 
-* The airfoil set is pretty limited, so it's not surprising that it can't reach
-  the true minimum groundspeed. Also, the way I created the deflected airfoils
-  is probably underestimating the drag since it had to relax the curvature in
-  order to avoid flow separation (so XFOIL could converge)
+* The airfoil set (:numref:`airfoil set, braking NACA24018`) limits the brake
+  line length (:math:`\kappa_b`) to ~70% or so of the expected "maximum
+  brakes", so it's not surprising that it can't reach the true minimum
+  groundspeed. Also, the way I created the deflected airfoils is probably
+  underestimating the drag since it had to relax the curvature in order to
+  avoid flow separation (so XFOIL could converge)
 
 * Minimum sink rates are remarkably close, which is surprising since I expect the
   airfoils to overestimate the lift.

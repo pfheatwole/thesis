@@ -931,10 +931,12 @@ brakes, and maximum accelerator, as reported by Parapente.</p>
 <section id="discussion">
 <h4><span class="section-number">7.2.1.3. </span>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h4>
 <ul class="simple">
-<li><p>The airfoil set is pretty limited, so it’s not surprising that it can’t reach
-the true minimum groundspeed. Also, the way I created the deflected airfoils
-is probably underestimating the drag since it had to relax the curvature in
-order to avoid flow separation (so XFOIL could converge)</p></li>
+<li><p>The airfoil set (<a class="reference internal" href="#airfoil-set-braking-naca24018"><span class="std std-numref">Fig. 7.4</span></a>) limits the brake
+line length (<span class="math notranslate nohighlight">\(\kappa_b\)</span>) to ~70% or so of the expected “maximum
+brakes”, so it’s not surprising that it can’t reach the true minimum
+groundspeed. Also, the way I created the deflected airfoils is probably
+underestimating the drag since it had to relax the curvature in order to
+avoid flow separation (so XFOIL could converge)</p></li>
 <li><p>Minimum sink rates are remarkably close, which is surprising since I expect the
 airfoils to overestimate the lift.</p></li>
 <li><p>Suspicious that the minimum and maximum speeds are identical for the size 25
