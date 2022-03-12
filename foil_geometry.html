@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="3. Foil aerodynamics" href="foil_aerodynamics.html" /><link rel="prev" title="1. Introduction" href="introduction.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>2. Foil geometry - Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     
@@ -21,16 +21,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -213,16 +215,24 @@
 <em>foils</em>: by redirecting airflow, a foil exchanges momentum with the air,
 producing a lifting force that allows the object to fly. The dynamics of a foil
 depend on its inertial properties and its aerodynamics, both of which can be
-estimated from its shape. In this project the foils of interest are the
-canopies of commercial paraglider wings, which poses a major difficulty:
-manufacturers do not provide detailed geometry data. At best, marketing
-materials and user manuals provide basic summary specifications, which means
-the majority of the geometry is unknown. Generating a surface model from
-summary information requires making educated guesses about the missing
-structure in order to generate a complete geometry. That assumed structure
-takes the form of domain expertise encoded in parametric <em>design curves</em> which
-augment the summary data to produce a fully specified model.</p>
-<p>The problem with this approach is that the choice of variables in a geometry
+estimated from its shape.</p>
+<p>A foil geometry model describes the shape of a foil by defining the positions
+of all the points on the foil’s surfaces. Although those positions can be
+defined as an explicit set of points (with interpolation in between), it is
+much more convenient to decompose them into a set of variables that represent
+distinct characteristics of the foil’s shape. Similarly, those variables may be
+defined using explicit values, but it is much more convenient to define them
+using <em>design curves</em>: parametric functions that encode that underlying
+structure of the foil with a small number of intuitive parameters.</p>
+<p>This decomposition is essential to this project, because the foils of interest
+are commercial paraglider wings, and manufacturers do not provide explicit
+geometry data; at best, marketing materials and user manuals provide basic
+summary specifications, which means the majority of the geometry is unknown.
+Generating a surface model from summary information requires making educated
+guesses about the missing structure in order to generate a complete geometry.
+That assumed structure takes the form of domain expertise encoded in the design
+curves, which augment the summary data to produce a fully specified model.</p>
+<p>The difficulty with this approach is that the choice of variables in a geometry
 model controls how a designer must specify the structure. More variables
 increase model flexibility at the cost of increased complexity, so the goal is
 to choose the smallest number of variables that provide the designer with
@@ -233,11 +243,11 @@ complication makes it difficult to describe a parafoil using simple parametric
 functions: they must not only encode the fundamental structure, they must also
 translate that structure into the variables that define the model. Instead of
 the geometry model adapting to the needs of the design curves, the design
-curves must adapt to the limitations of the model.</p>
+curves must adapt to the inflexibility of the model.</p>
 <p>The solution developed in this chapter is to reject the assumption that
 predefined reference points are the most convenient way to position the
 elements of a foil surface. The result is a novel foil geometry that fully
-decouples the design curves, allowing each aspect of the foil to be designed
+decouples the design curves, allowing each variable to be designed
 independently. It also presents a simplified model that eliminates most of the
 additional complexity of the expanded model. The simplified model is both
 flexible and intuitive for designing highly nonlinear foil geometries (such as
@@ -256,7 +266,7 @@ a poor choice.</p>
 <p>In addition, note that these are idealized geometry models, not detailed
 structural models. Structural models include physical details that can be used
 to simulate effects such as internal forces and wing deformations
-<span id="id1">[<a class="reference internal" href="zreferences.html#id36" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">1</a>]</span>. Unfortunately, as discussed
+<span id="id1">[<a class="reference internal" href="zreferences.html#id37" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">1</a>]</span>. Unfortunately, as discussed
 earlier, such details are not available for commercial paraglider wings, and
 such analyses would be time prohibitive even if they were. Instead, this design
 will model only those details of the shape that can be approximated from the
@@ -299,7 +309,7 @@ profile at specific points along the span.</p>
 </div>
 </figcaption>
 </figure>
-<p>In some literature <span id="id4">[<a class="reference internal" href="zreferences.html#id25" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">4</a>]</span> these two
+<p>In some literature <span id="id4">[<a class="reference internal" href="zreferences.html#id26" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">4</a>]</span> these two
 steps are described as designing the <em>planform</em> and the <em>profile</em>, but this
 description is problematic due to inconsistent uses of the term <em>planform</em>
 across literature. Specifically, in some cases the planform is the complete
@@ -403,7 +413,7 @@ wingtip stalls, leading to “gentler” stall characteristics)</p></li>
 <h3><span class="section-number">2.1.4. </span>Position<a class="headerlink" href="#position" title="Permalink to this headline">#</a></h3>
 <p>The relative position of the sections is fundamental to controlling important
 foil characteristics such as <em>span</em>, <em>sweep</em>, and <em>arc</em>
-<span id="id5">[<a class="reference internal" href="zreferences.html#id25" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">4</a>]</span>. Span (the width of the wing,
+<span id="id5">[<a class="reference internal" href="zreferences.html#id26" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">4</a>]</span>. Span (the width of the wing,
 roughly speaking) together with the chord distribution determines the <em>aspect
 ratio</em> of a foil, which impacts characteristics such as aerodynamic efficiency
 and maneuverability. Sweep (the fore-aft relative positioning of the sections)
@@ -449,7 +459,7 @@ to the foil coordinate system.</p>
 the chord, mean camber line, or profile), and <span class="math notranslate nohighlight">\(LE\)</span> be the leading edge of
 that section. It is conventional to share the origin between the airfoil and
 section coordinate systems, and specify the section position using the section
-leading edge, so using the <a class="reference external" href="_common_notation">notation</a> of this paper,
+leading edge, so using the <a class="reference internal" href="notation.html#common-notation"><span class="std std-ref">notation</span></a> of this paper,
 a general equation for the position of that point <span class="math notranslate nohighlight">\(P\)</span> with respect to the
 foil origin <span class="math notranslate nohighlight">\(O\)</span>, written in terms of the foil coordinate system
 <span class="math notranslate nohighlight">\(f\)</span>, is:</p>
@@ -821,18 +831,8 @@ and yet they enable significantly nonlinear designs in an intuitive way.</p>
 <p>[[This example should be a complete description, explaining the design curves
 and the plots. The other examples can be less detailed; the curves and result
 should suffice.]]</p>
-<p>[[FIXME: describe the “anhedral” correctly]]</p>
-<p>An elliptical arc with a mean anhedral of 30 degrees and a wingtip anhedral of
+<p>An elliptical arc with a mean anhedral of 30 degrees and a wingtip roll of
 89 degrees:</p>
-<div class="math-wrapper"><div class="math notranslate nohighlight">
-\[\begin{split}\begin{aligned}
-c(s) &amp;= \mathrm{elliptical\_chord}(root=0.5, tip=0.2)\\
-\theta(s) &amp;= 0\\
-r_x(s) &amp;= 0.75\\
-x(s) &amp;= 0\\
-r_{yz}(s) &amp;= 1\\
-yz(s) &amp;= \mathrm{elliptical\_arc}(mean\_anhedral=30, tip\_roll=89)\\
-\end{aligned}\end{split}\]</div></div>
 <figure class="align-default">
 <img alt="_images/elliptical3_curves.svg" src="_images/elliptical3_curves.svg"/></figure>
 <figure class="align-default" id="id20">
@@ -845,14 +845,6 @@ yz(s) &amp;= \mathrm{elliptical\_arc}(mean\_anhedral=30, tip\_roll=89)\\
 <p><span class="caption-number">Fig. 2.14 </span><span class="caption-text">Profile surface of a simple parafoil.</span><a class="headerlink" href="#id21" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p>[[<strong>FIXME</strong>: good time to explain that if <cite>x</cite> is constant then it’s irrelevant.
-One of the more confusing aspects of this geometry is that no matter what you
-define, the central leading edge is always at the origin. Is it accurate to say
-that the <cite>x</cite> and <cite>yz</cite> curves are all about <strong>RELATIVE</strong> positioning? They’re
-not exactly displacement vectors, because the final positions depend on all the
-other variables. On the bright side, you don’t have to care.]]</p>
-<p>The code does have the option of letting the design curves use absolute
-positioning, but I’m not sure I want to discuss that here.]]</p>
 </section>
 </section>
 <section id="case-study">
@@ -862,9 +854,7 @@ is specified. The examples demonstrated how this freedom can be used to design
 complex foil geometries using simple design curves. Another benefit of this
 freedom is that it is more adaptable to the variety of foil specifications
 used in literature.</p>
-<p>[[FIXME: what value does this paragraph provide?]]</p>
-<p>Parafoil canopies in particular are not convenient to design using the leading
-edge. The geometry from a 2015 parafoil wind tunnel test
+<p>The geometry from a 2015 parafoil wind tunnel test
 <span id="id9">[<a class="reference internal" href="zreferences.html#id10" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">6</a>]</span> makes an excellent case study of
 a foil specification from literature that positions the sections using
 alternative reference points on the section chords. Moreover, the geometry
@@ -1090,10 +1080,10 @@ a set of piecewise-linear design curves:</p>
 <h2><span class="section-number">2.7. </span>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h2>
 <p>[[FIXME: finish]]</p>
 <ul class="simple">
-<li><p>This project requires a parametric geometry that could model complex wing
-shapes using simple, parametric design functions. The parametrization must
-make it convenient to model existing paraglider canopies using the limited
-available data.</p></li>
+<li><p>This project required a foil geometry that could generate complex wing shapes
+using simple, parametric functions; specifically, the parametrization must
+enable modeling of commercial paraglider canopies using the limited available
+data.</p></li>
 <li><p>There are two aspects to a geometry model:</p>
 <ol class="arabic simple">
 <li><p>The choice of variables that combine to describe the wing. The choice of
@@ -1103,11 +1093,11 @@ variables is the language the designer must use to describe the wing.</p></li>
 </li>
 <li><p>This chapter started with <em>wing sections</em> to derive a general equation
 typical of existing geometry models. It decomposed the position variable to
-allow positioning via an arbitrary reference point. The decomposition
-allowed each design variable to be decoupled, making it easier to design
-them using simple parametric functions. I concluded with a simplified model
+allow sections to be positioned with arbitrary reference points. The
+decomposition decoupled the variable, making it easier to define them using
+simple parametric functions. The chapter concluded with a simplified model
 that eliminated most of the extra complexity of the expanded model, and
-showed some examples of canopies using that parametrization.</p></li>
+showed examples of canopies using that parametrization.</p></li>
 <li><p>Reference the <a class="reference internal" href="foil_aerodynamics.html#case-study"><span class="std std-ref">Case study</span></a> (Belloc’s wing) and
 <a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a> (my Hook3ish)</p></li>
 </ul>

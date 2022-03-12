@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Notation and Symbols" href="notation.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>Derivations - Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     
@@ -21,16 +21,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -211,9 +213,11 @@
 <h1>Derivations<a class="headerlink" href="#derivations" title="Permalink to this headline">#</a></h1>
 <section id="parametric-design-curves">
 <h2>Parametric design curves<a class="headerlink" href="#parametric-design-curves" title="Permalink to this headline">#</a></h2>
-<p>[[Put these here to avoid cluttering the example foils and <code class="docutils literal notranslate"><span class="pre">demonstration</span></code>.
-FIXME: reference my choice of section index in ref:<cite>foil_geometry:Simplified
-model</cite>.]]</p>
+<p>The <a class="reference internal" href="foil_geometry.html#simplified-model"><span class="std std-ref">“simplified” foil geometry</span></a> chose
+a set of variables <a class="reference internal" href="foil_geometry.html#equation-simplified-foil-geometry-variables">(2.15)</a> that describe
+different aspects of the shape. This section provides definitions for several
+of those variables using parametric functions that can approximate the
+structure of a typical parafoil using a small number of simple parameters.</p>
 <section id="elliptical-chord">
 <h3>Elliptical chord<a class="headerlink" href="#elliptical-chord" title="Permalink to this headline">#</a></h3>
 <p>A <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a> requires a chord distribution <span class="math notranslate nohighlight">\(c(s)\)</span>. For
@@ -235,16 +239,17 @@ implementation.</p>
 <section id="elliptical-arc">
 <h3>Elliptical arc<a class="headerlink" href="#elliptical-arc" title="Permalink to this headline">#</a></h3>
 <p>In this paper the <em>arc</em> of a parafoil is the vector-valued function of
-<span class="math notranslate nohighlight">\(\left&lt; y, z \right&gt;\)</span> coordinates that position the sections. For
-parafoils, the arc is typically defined by an elliptical function.</p>
+<span class="math notranslate nohighlight">\(\left&lt; y, z \right&gt;\)</span> coordinates that position the section reference
+points. For parafoils, the arc is typically defined by an elliptical function.</p>
 <p>A centered elliptical curve can be defined as a function of four parameters,
 but the symmetry of the wing reduces that to three free design parameters, and
 normalizing the arc length reduces it to just two. There are several possible
-parametrizations (such as those in FIXME:<cite>benedetti</cite>), but an intuitive choice
-is the [[mean anhedral angle <span class="math notranslate nohighlight">\(\Gamma_\textrm{tip}\)</span>]] and the [[section
-roll angle <span class="math notranslate nohighlight">\(\phi_\textrm{tip}\)</span>]] of the wing tips. Using the parameters
-to define an ellipse that is proportional to the desired <span class="math notranslate nohighlight">\(yz\)</span>-curve
-produces:</p>
+parametrizations, but an intuitive choice is the mean anhedral angle
+<span class="math notranslate nohighlight">\(\Gamma_\textrm{tip}\)</span> and the section roll angle
+<span class="math notranslate nohighlight">\(\phi_\textrm{tip}\)</span> of the wing tips
+<span id="id1">[<a class="reference internal" href="zreferences.html#id11" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">5</a>]</span>. Choosing those parameters to
+define an elliptical function that is proportional to the desired
+<span class="math notranslate nohighlight">\(yz\)</span>-curve produces an intermediate result:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
   k_1        &amp;= 1 - \frac{\tan(\Gamma_\textrm{tip})}{\tan(\phi_\textrm{tip})} \\
@@ -256,28 +261,30 @@ produces:</p>
 <p>This design requires that <span class="math notranslate nohighlight">\(\phi_\textrm{tip} &gt; 2 \Gamma_\textrm{tip}\)</span> (so
 the wing must be wider than it is tall and the wing tip roll cannot exceed 90°)
 and is valid over <span class="math notranslate nohighlight">\(t_{min} \le t \le \pi - t_{min}\)</span>, where <span class="math notranslate nohighlight">\(t_{min}
-= \arccos \left( \frac{1}{A} \right)\)</span>. However, although the shape is
-proportional to the desired curve, it is not directly usable by the
-<a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a>. It needs two changes:</p>
+= \arccos \left( \frac{1}{A} \right)\)</span>.</p>
+<p>Next although the shape produced by this intermediate result is proportional to
+the desired curve, it is not directly usable by the <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a>. It
+needs two modifications:</p>
 <ol class="arabic simple">
 <li><p>Make the arc a function of the chosen section index <span class="math notranslate nohighlight">\(s\)</span></p></li>
-<li><p>Scale the arc to a total curve length of 2 (to make it easy to scale by
-<span class="math notranslate nohighlight">\(b_\textrm{flat}\)</span>)</p></li>
+<li><p>Scale the arc to a total curve length of <span class="math notranslate nohighlight">\(b_\textrm{flat}\)</span></p></li>
 </ol>
-<p>Both can be achieved by normalizing the ellipse. First, scale the axes to
-produce a new semi-ellipse with a total curve length of 1:</p>
+<p>Both can be achieved by normalizing the elliptical function to a curve length
+of 2. First, scale the axes to produce a new semi-ellipse with a total curve
+length of 1:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
-  L(t)             &amp;= \int_{\frac{\pi}{2}}^{t} \norm{\vec{f}(t)} dt \\
+  L(t)             &amp;= \int_{\frac{\pi}{2}}^{t_{min}} \norm{\vec{f}(t)} dt \\
   k_3              &amp;= L(t_{min}) \\
   \bar{\vec{f}}(t) &amp;= \left&lt; \frac{A}{k_3} \cos(t), \frac{B}{k_3} \sin(t) \right&gt; \\
 \end{aligned}\end{split}\]</div></div>
-<p>The fact that the section index <span class="math notranslate nohighlight">\(s\)</span> is defined as the linear distance
-along the curve enables a convenient conversion over <span class="math notranslate nohighlight">\(\frac{\pi}{2} \le
-t \le t_{min}\)</span> and <span class="math notranslate nohighlight">\(0 \le s \le 1\)</span>:</p>
+<p>The fact that the simplified foil geometry chose to define the <a class="reference internal" href="foil_geometry.html#simplified-model-section-index"><span class="std std-ref">section
+index</span></a> <span class="math notranslate nohighlight">\(s\)</span> as the linear distance along
+the <span class="math notranslate nohighlight">\(yz\)</span>-curve enables a convenient conversion over <span class="math notranslate nohighlight">\(\frac{\pi}{2}
+\le t \le t_{min}\)</span> and <span class="math notranslate nohighlight">\(0 \le s \le 1\)</span>:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
-  \bar{L}(t) &amp;= \int_{\frac{\pi}{2}}^{t} \norm{\bar{\vec{f}}(t)} dt = s(t) \\
+  \bar{L}(t) &amp;= \int_{\frac{\pi}{2}}^{t_{min}} \norm{\bar{\vec{f}}(t)} dt = s(t) \\
   t(s)       &amp;= s^{-1}(t)
 \end{aligned}\end{split}\]</div></div>
 <p>Thus the complete parametric function for the <span class="math notranslate nohighlight">\(yz\)</span>-curve of the arc is
@@ -289,11 +296,12 @@ implementation.</p>
 <section id="polynomial-torsion">
 <h3>Polynomial torsion<a class="headerlink" href="#polynomial-torsion" title="Permalink to this headline">#</a></h3>
 <p>Like most wings, parafoils use section-relative pitch <span class="math notranslate nohighlight">\(\theta(s)\)</span>
-(conventionally referred to as <em>geometric torsion</em>) to control wing behavior.
+(conventionally referred to as <em>geometric torsion</em>) to fine-tune wing behavior.
 The exact distribution of geometric torsion along a wing can be difficult to
 measure, but they are frequently described using simple polynomials or
 piecewise-linear functions. For idealized models of nonlinear geometries such
-as those developed here, a piecewise-polynomial function is adequate.</p>
+as those developed here, a piecewise-polynomial function is assumed to be
+adequate.</p>
 <p>Assuming a symmetric wing, define three parameters:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(T\)</span>: the maximum torsion (in radians) at the wingtips</p></li>
@@ -322,8 +330,8 @@ areas and volume. These include the magnitudes (total mass or volume),
 centroids, and inertia tensors. All of these quantities can be computed using
 a triangular surface mesh over the canopy surfaces.</p>
 <p>What follows is a reproduction of the procedure developed in
-<span id="id1">[<a class="reference internal" href="zreferences.html#id13" title="Jonathan Blow and Atman J. Binstock. How to find the inertia tensor (or other mass properties) of a 3D solid body represented by a triangle mesh. http://www.number-none.com/blow/inertia/index.html, 2004.">29</a>]</span>, which is a functionally equivalent to the
-procedure from <span id="id2">[<a class="reference internal" href="zreferences.html#id51" title="Cha Zhang and Tsuhan Chen. Efficient feature extraction for 2D/3D objects in mesh representation. In Proceedings 2001 International Conference on Image Processing (Cat. No.01CH37205), volume 3, 935-938 vol.3. October 2001.">30</a>]</span> but with a more
+<span id="id2">[<a class="reference internal" href="zreferences.html#id13" title="Jonathan Blow and Atman J. Binstock. How to find the inertia tensor (or other mass properties) of a 3D solid body represented by a triangle mesh. http://www.number-none.com/blow/inertia/index.html, 2004.">32</a>]</span>, which is a functionally equivalent to the
+procedure from <span id="id3">[<a class="reference internal" href="zreferences.html#id52" title="Cha Zhang and Tsuhan Chen. Efficient feature extraction for 2D/3D objects in mesh representation. In Proceedings 2001 International Conference on Image Processing (Cat. No.01CH37205), volume 3, 935-938 vol.3. October 2001.">33</a>]</span> but with a more
 intuitive interpretation and complete equations for the inertia tensors.</p>
 <section id="area">
 <h3>Area<a class="headerlink" href="#area" title="Permalink to this headline">#</a></h3>
@@ -443,7 +451,7 @@ be computed directly from the covariance matrix:</p>
 </section>
 <section id="apparent-mass-of-a-parafoil">
 <h2>Apparent mass of a parafoil<a class="headerlink" href="#apparent-mass-of-a-parafoil" title="Permalink to this headline">#</a></h2>
-<p>This section presents Barrows’ method <span id="id3">[<a class="reference internal" href="zreferences.html#id8" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">16</a>]</span>
+<p>This section presents Barrows’ method <span id="id4">[<a class="reference internal" href="zreferences.html#id8" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">16</a>]</span>
 for estimating the apparent mass matrix of a wing with circular arc anhedral.
 (For a discussion of apparent mass effects, see
 <a class="reference internal" href="paraglider_components.html#apparent-mass"><span class="std std-ref">Apparent Mass</span></a>.) The equations have been adapted
@@ -621,7 +629,7 @@ all vectors are in the canopy coordinate system <span class="math notranslate no
 coordinate systems are implicit in the notation.</p>
 <p>The derivation develops the equations of motion by starting with derivatives
 of linear and angular momentum. The derivation is largely based on the
-excellent <span id="id4">[<a class="reference internal" href="zreferences.html#id26" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">24</a>]</span>, although this section
+excellent <span id="id5">[<a class="reference internal" href="zreferences.html#id27" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">24</a>]</span>, although this section
 uses this paper’s version of Stevens’ notation (see <a class="reference internal" href="notation.html#notation-and-symbols"><span class="std std-ref">Notation and Symbols</span></a>).</p>
 <p>An implementation of this model is available as
 <a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics6a" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider6a</span></code></a> in the <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>
@@ -879,7 +887,7 @@ the reference point for both the body and the payload, which simplifies
 incorporating the apparent mass matrix. However, this model treats the body
 and payload as separate components, connected by a rotational spring-damper
 model that adds an additional three degrees-of-freedom. A similar 9DoF model
-derivation can be found in <span id="id5">[<a class="reference internal" href="zreferences.html#id24" title="Chrystine M. Gorman and Nathan Slegers. Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature Wireless Sensors. Journal of Aircraft, 49(2):546–555, 2012. doi:10.2514/1.C031566.">31</a>]</span>
+derivation can be found in <span id="id6">[<a class="reference internal" href="zreferences.html#id25" title="Chrystine M. Gorman and Nathan Slegers. Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature Wireless Sensors. Journal of Aircraft, 49(2):546–555, 2012. doi:10.2514/1.C031566.">34</a>]</span>
 (9DoF, but relative roll and pitch are unconstrained).</p>
 <p>An implementation of this model is available as
 <a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics9a" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider9a</span></code></a> in the <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>
@@ -888,8 +896,8 @@ package. The <code class="docutils literal notranslate"><span class="pre">glider
 of mass as the reference points for the body and payload dynamics; that choice
 simplifies the derivatives for angular momentum (because it eliminates the
 moment arms), but prohibits incorporating the effects of apparent mass.</p>
-<section id="id6">
-<h4>Real mass only<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h4>
+<section id="id7">
+<h4>Real mass only<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h4>
 <p>Start with the equations for the translational and angular momentum of the
 body <span class="math notranslate nohighlight">\(b\)</span> about the reference point <span class="math notranslate nohighlight">\(RM\)</span> as observed by the inertial
 reference frame <span class="math notranslate nohighlight">\(e\)</span>:</p>
@@ -1059,8 +1067,8 @@ the dynamics of the real mass (solid mass plus the enclosed air) in terms of
      - m_p \vec{r}_{P/RM}^p \times \left( \vec{\omega}_{b/p}^p \times \vec{v}_{RM/e}^p \right)
 \end{aligned}\end{split}\]</div></div>
 </section>
-<section id="id7">
-<h4>Real mass + apparent mass<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h4>
+<section id="id8">
+<h4>Real mass + apparent mass<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h4>
 <p>As with the 6-DoF system, the effects of apparent mass on the canopy can be
 accounted for by adding the apparent inertia matrix from <a class="reference internal" href="#apparent-mass-of-a-parafoil">Apparent mass of
 a parafoil</a> to the components of the system matrix associated with the
@@ -1189,8 +1197,8 @@ moment already accounted for by the section pitching coefficients.</p>
 <li><a class="reference internal" href="#model-6b">Model 6b</a></li>
 <li><a class="reference internal" href="#model-6c">Model 6c</a></li>
 <li><a class="reference internal" href="#model-9a">Model 9a</a><ul>
-<li><a class="reference internal" href="#id6">Real mass only</a></li>
-<li><a class="reference internal" href="#id7">Real mass + apparent mass</a></li>
+<li><a class="reference internal" href="#id7">Real mass only</a></li>
+<li><a class="reference internal" href="#id8">Real mass + apparent mass</a></li>
 </ul>
 </li>
 </ul>

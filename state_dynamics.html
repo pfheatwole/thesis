@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="7. Demonstration" href="demonstration.html" /><link rel="prev" title="5. System dynamics" href="system_dynamics.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>6. State dynamics - Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     
@@ -21,16 +21,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -248,7 +250,7 @@ position using the WGS-84 <em>geodetic datum</em>, which uses the geocentric
 coordinates of latitude, longitude, and altitude. However, positioning on the
 global spheroid is overkill for these simulations, so to avoid the complexity
 involved with angular coordinates the state models here use a <em>tangent-plane</em>
-(<span class="math notranslate nohighlight">\(tp\)</span>) approximation (<span id="id1">[<a class="reference internal" href="zreferences.html#id44" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span>, p.
+(<span class="math notranslate nohighlight">\(tp\)</span>) approximation (<span id="id1">[<a class="reference internal" href="zreferences.html#id45" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span>, p.
 27) that records position as a linear displacement from an arbitrary origin.</p>
 <p>For orientation, there are two common representations: <em>Euler angles</em> and
 <em>quaternions</em>. Euler angles have the advantage of being easier to understand,
@@ -290,7 +292,7 @@ the position and orientation of the aircraft relative to the tangent plane
 requires derivatives taken with respect to the inertial frame
 <span class="math notranslate nohighlight">\(\mathcal{F}_e\)</span>. To provide the simulator with the proper derivatives,
 the state dynamics models must use the <em>equation of Coriolis</em>
-<span id="id2">[<a class="reference internal" href="zreferences.html#id44" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span> to calculate the state derivatives
+<span id="id2">[<a class="reference internal" href="zreferences.html#id45" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span> to calculate the state derivatives
 taken with respect to the inertial frame:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
@@ -309,7 +311,7 @@ taken with respect to the inertial frame:</p>
 using the object’s angular velocity vector <span class="math notranslate nohighlight">\(\vec{\omega} = \{ p, q, r \}\)</span>
 in the coordinate system attached to that object (<span class="math notranslate nohighlight">\(\vec{\omega}_{b/e}^b\)</span>
 for the body, or <span class="math notranslate nohighlight">\(\vec{\omega}_{p/e}^p\)</span> for the payload)
-(<span id="id3">[<a class="reference internal" href="zreferences.html#id44" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span>, Eq. 1.8-15):</p>
+(<span id="id3">[<a class="reference internal" href="zreferences.html#id45" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span>, Eq. 1.8-15):</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\mat{\Omega} \defas
   \begin{bmatrix}

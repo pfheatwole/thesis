@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="6. State dynamics" href="state_dynamics.html" /><link rel="prev" title="4. Component models" href="paraglider_components.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>5. System dynamics - Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     
@@ -21,16 +21,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -337,7 +339,7 @@ point.</p>
 are developed by solving for the derivatives of translational momentum
 <span class="math notranslate nohighlight">\({^e \dot{\vec{p}}} = \sum{\vec{F}} = m \dot{\vec{v}}\)</span> and angular
 momentum <span class="math notranslate nohighlight">\({^e \dot{\vec{h}}} = \sum \vec{M} = \mat{J} \dot{\vec{\omega}}\)</span>
-for each group of components <span id="id2">[<a class="reference internal" href="zreferences.html#id26" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">24</a>]</span>. In
+for each group of components <span id="id2">[<a class="reference internal" href="zreferences.html#id27" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">24</a>]</span>. In
 addition to requiring the forces, moments, and inertia matrices for each
 component, each system model must choose a dynamics reference point and whether
 to account for the affects of <em>apparent mass</em>. The <a class="reference internal" href="derivations.html#paraglider-system-models"><span class="std std-ref">appendix</span></a> includes derivations demonstrating

@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="5. System dynamics" href="system_dynamics.html" /><link rel="prev" title="3. Foil aerodynamics" href="foil_aerodynamics.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>4. Component models - Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     
@@ -21,16 +21,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -246,7 +248,7 @@ materials that deform once the canopy is pressurized (plus additional concerns
 such as weight, physical reliability, manufacturability, etc), but the
 deformations (cell billowing, profile flattening, surface wrinkling, etc) are
 also exceptionally difficult to model without resorting to complete material
-simulation <span id="id1">[<a class="reference internal" href="zreferences.html#id36" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">1</a>]</span>.</p>
+simulation <span id="id1">[<a class="reference internal" href="zreferences.html#id37" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">1</a>]</span>.</p>
 <p>Instead, this model assumes that the idealized target geometry is an effective
 representation of the physical canopy, then adds small empirical corrections
 to account for the most significant error. It models the canopy volume with
@@ -420,7 +422,7 @@ object would have in isolation, as if the vehicle has increased its mass:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[a = \frac{\sum{F}}{m + m_a}\]</div></div>
 <p>This <em>apparent mass</em> <span class="math notranslate nohighlight">\(m_a\)</span> (or <em>added mass</em>
-<span id="id3">[<a class="reference internal" href="zreferences.html#id45" title="Peter G. Thomasson. Equations of motion of a vehicle in a moving fluid. Journal of Aircraft, 37(4):630–639, 2000. doi:10.2514/2.2645.">17</a>]</span>) tends to become more significant
+<span id="id3">[<a class="reference internal" href="zreferences.html#id46" title="Peter G. Thomasson. Equations of motion of a vehicle in a moving fluid. Journal of Aircraft, 37(4):630–639, 2000. doi:10.2514/2.2645.">17</a>]</span>) tends to become more significant
 as the density of the vehicle approaches the density of the fluid. If the
 density of the vehicle is much greater than the density of the fluid then the
 effect is often ignored, but for lightweight aircraft the effect can be
@@ -430,13 +432,13 @@ a fluid, its magnitude depends on the volume’s shape and the direction of the
 motion. Unlike the inertia due to real mass, apparent inertia is anisotropic,
 and the diagonal terms of the apparent mass matrix are independent.
 Calculating the apparent mass of an arbitrary geometry is difficult. For
-a classic discussion of the topic, see <span id="id4">[<a class="reference internal" href="zreferences.html#id32" title="Horace Lamb. Hydrodynamics. Dover Publications, Inc., New York, USA, June 1945.">18</a>]</span>. For
+a classic discussion of the topic, see <span id="id4">[<a class="reference internal" href="zreferences.html#id33" title="Horace Lamb. Hydrodynamics. Dover Publications, Inc., New York, USA, June 1945.">18</a>]</span>. For
 a more recent discussion of apparent mass in the context of parafoils, see
-<span id="id5">[<a class="reference internal" href="zreferences.html#id35" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">19</a>]</span>, which used an ellipsoid model to
+<span id="id5">[<a class="reference internal" href="zreferences.html#id36" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">19</a>]</span>, which used an ellipsoid model to
 establish a parametric form commonly used in parafoil-payload literature</p>
 <p>This paper uses an updated method from
 <span id="id6">[<a class="reference internal" href="zreferences.html#id8" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">16</a>]</span> which added corrections to the
-ellipsoid model of <span id="id7">[<a class="reference internal" href="zreferences.html#id35" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">19</a>]</span>. (For a replication
+ellipsoid model of <span id="id7">[<a class="reference internal" href="zreferences.html#id36" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">19</a>]</span>. (For a replication
 of the equations in that method but given in the notation of this paper, see
 <a class="reference internal" href="derivations.html#apparent-mass-of-a-parafoil"><span class="std std-ref">Apparent mass of a parafoil</span></a>.) The method uses several
 significant simplifying assumptions (the dynamics reference point must lie in
@@ -466,12 +468,16 @@ control input <span class="math notranslate nohighlight">\(\delta_i\)</span>; th
 control the canopy aerodynamics with no modifications to the NLLT. Physical
 inaccuracies refers to characteristics such as flattening, wrinkling, surface
 roughness, air intakes, etc. For example, a common correction for parafoils is
-to add an empirical estimate of the additional viscous drag due to air
-intakes; see the <a class="reference internal" href="demonstration.html#surface-materials"><span class="std std-ref">example model</span></a> for
-a discussion.</p>
-<p>[[FIXME: introduce the coefficient modifiers for “surface characteristics”
-<span id="id8">[<a class="reference internal" href="zreferences.html#id48" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">20</a>]</span> and air intakes
-<span id="id9">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span>]]</p>
+to add an empirical estimate of the additional viscous drag due to air intakes;
+see the <a class="reference internal" href="demonstration.html#physical-details"><span class="std std-ref">example model</span></a> for a discussion.</p>
+<p>[[FIXME: introduce the coefficient modifiers:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(C_{D,\textrm{surface}}\)</span>, “surface characteristics”
+<span id="id8">[<a class="reference internal" href="zreferences.html#id49" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">20</a>]</span>,
+<span id="id9">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(C_{D,\textrm{intakes}}\)</span>, air intakes
+<span id="id10">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span></p></li>
+</ul>
 <p>The <a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line"><span class="std std-ref">aerodynamics model</span></a> provides the aerodynamic forces
 <span class="math notranslate nohighlight">\(\vec{f}_{f,\textrm{aero},n}\)</span> <a class="reference internal" href="foil_aerodynamics.html#equation-section-lift-3d-vortex-lifting-law">(3.1)</a>
 and moments <span class="math notranslate nohighlight">\(\vec{g}_{f,\textrm{aero},n}\)</span> <a class="reference internal" href="foil_aerodynamics.html#equation-section-moment">(3.13)</a> for the
@@ -488,9 +494,9 @@ and moments <span class="math notranslate nohighlight">\(\vec{g}_{f,\textrm{aero
 </section>
 <section id="parameter-summary">
 <h3><span class="section-number">4.1.4. </span>Parameter summary<a class="headerlink" href="#parameter-summary" title="Permalink to this headline">#</a></h3>
-<p>In addition to the design curves that define the idealized
-<a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a>, the physical canopy model requires additional
-information:</p>
+<p>In addition to the design curves that define the <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a>, the
+physical canopy model requires additional information about physical details
+associated with that geometry:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-canopy-parameters">
 <span class="eqno">(4.10)<a class="headerlink" href="#equation-canopy-parameters" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   \rho_u \qquad &amp; \textrm{Areal density of the upper surface material} \\
@@ -504,16 +510,16 @@ information:</p>
 </section>
 <section id="suspension-lines">
 <h2><span class="section-number">4.2. </span>Suspension lines<a class="headerlink" href="#suspension-lines" title="Permalink to this headline">#</a></h2>
-<p>The suspension lines, or <em>bridle</em>, connect the canopy to the harness and
-pilot. The lines are conventionally grouped into load-bearing sets (labeled
-A/B/C/D, depending on their relative positions on the section chords), brake
-lines (that produce the trailing edge deflections), and <em>stabilo</em> lines (that
-assist in preventing the wing tips from curling into a dangerous <em>cravat</em>).
-Starting from the canopy, the lines progressively attach together in
-a <em>cascade</em> that terminates at two <em>risers</em> which connect the lines to the
-harness. The bridle is responsible for producing the arc of the canopy,
-suspending the harness at some position relative to the canopy, and allowing
-the pilot to manipulate the shape of the canopy.</p>
+<p>The suspension lines connect the canopy to the harness and pilot. The lines are
+conventionally grouped into load-bearing sets (labeled A/B/C/D, depending on
+their relative positions on the section chords), brake lines (that produce the
+trailing edge deflections), and <em>stabilo</em> lines (that assist in preventing the
+wing tips from curling into a dangerous <em>cravat</em>). Starting from the canopy,
+the lines progressively attach together in a <em>cascade</em> that terminates at two
+<em>risers</em> which connect the lines to the harness. The lines are responsible for
+producing the arc of the canopy, suspending the harness at some position
+relative to the canopy, and allowing the pilot to manipulate the shape of the
+canopy.</p>
 <p>For rigorous models the line geometry is a major factor in wing performance,
 but for this project a fully-specified suspension line model would be both
 tedious and redundant. It would be tedious because it would require the
@@ -523,8 +529,8 @@ a quasi-rigid body whose <em>arc</em> is already defined by the <span class="mat
 the idealized foil geometry. As a result, the suspension lines can only affect
 the riser position and trailing edge deflections, so this model can reasonably
 use simple approximations that do not depend on an explicit line geometry.</p>
-<section id="id10">
-<h3><span class="section-number">4.2.1. </span>Controls<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h3>
+<section id="id11">
+<h3><span class="section-number">4.2.1. </span>Controls<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h3>
 <p>The suspension lines provide two primary methods of controlling the paraglider
 system: through brakes, which change the canopy aerodynamics, and the
 accelerator, which repositions the payload underneath the canopy.</p>
@@ -537,20 +543,20 @@ controls induce downward trailing edge deflections (see
 <a class="reference internal" href="#deflected-airfoil-arc"><span class="std std-numref">Fig. 4.3</span></a>) along each half of the canopy, increasing
 drag on that side of the wing. Symmetric deflections slow the wing down, and
 asymmetric deflections cause the wing to turn.</p>
-<figure class="align-default" id="id27">
+<figure class="align-default" id="id28">
 <img alt="_images/Wikimedia_Paragliding.jpg" src="_images/Wikimedia_Paragliding.jpg"/>
 <figcaption>
-<p><span class="caption-number">Fig. 4.4 </span><span class="caption-text">Asymmetric brake deflection.</span><a class="headerlink" href="#id27" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 4.4 </span><span class="caption-text">Asymmetric brake deflection.</span><a class="headerlink" href="#id28" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p><a class="reference external" href="https://commons.wikimedia.org/wiki/File:Paragliding.jpg">Photograph</a>  by
 Frédéric Bonifas, distributed under a CC-BY-SA 3.0 license.</p>
 </div>
 </figcaption>
 </figure>
-<figure class="align-default" id="id28">
+<figure class="align-default" id="id29">
 <img alt="_images/Wikimedia_ApcoAllegra.jpg" src="_images/Wikimedia_ApcoAllegra.jpg"/>
 <figcaption>
-<p><span class="caption-number">Fig. 4.5 </span><span class="caption-text">Symmetric brake deflection.</span><a class="headerlink" href="#id28" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 4.5 </span><span class="caption-text">Symmetric brake deflection.</span><a class="headerlink" href="#id29" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p><a class="reference external" href="https://commons.wikimedia.org/wiki/File:ApcoAllegra.jpg">Photograph</a> by
 Wikimedia contributor “PiRK” under a CC-BY-SA 3.0 license.</p>
@@ -558,9 +564,9 @@ Wikimedia contributor “PiRK” under a CC-BY-SA 3.0 license.</p>
 </figcaption>
 </figure>
 <p>A physically accurate model of the deflection distribution would need to model
-the length and angle of every line in the bridle and how the angles deform
-during braking maneuvers. Because the line geometry was not a focus for this
-project, an approximation is used instead.</p>
+the length and angle of every line and how the angles deform during braking
+maneuvers. Because the line geometry was not a focus for this project, an
+approximation is used instead.</p>
 <p>First, observe that as brakes are progressively applied the deflections will
 typically start near the middle and radiate towards the wing root and tip as
 the brake magnitude is increased. For small brake inputs the deflections are
@@ -579,10 +585,10 @@ a quartic that is symmetric about <span class="math notranslate nohighlight">\(p
     16p^4 - 32p^3 + 16p^2 &amp;\mbox 0 \le p \le 1 \\
     0 &amp; \mbox{else}
   \end{cases}\end{split}\]</div></div>
-<figure class="align-default" id="id29">
-<a class="reference internal image-reference" href="_images/quartic.svg"><img alt="_images/quartic.svg" height="4396" src="_images/quartic.svg" width="5826"/></a>
+<figure class="align-default" id="id30">
+<a class="reference internal image-reference" href="_images/quartic.svg"><img alt="_images/quartic.svg" src="_images/quartic.svg" width="75%"/></a>
 <figcaption>
-<p><span class="caption-number">Fig. 4.6 </span><span class="caption-text">Truncated quartic distribution</span><a class="headerlink" href="#id29" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 4.6 </span><span class="caption-text">Truncated quartic distribution</span><a class="headerlink" href="#id30" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Next define two variables for the section indices near the canopy root and tip
@@ -722,36 +728,36 @@ central chord <span class="math notranslate nohighlight">\(c_0\)</span> of the w
 forward.</p>
 </section>
 </section>
-<section id="id11">
-<h3><span class="section-number">4.2.2. </span>Inertia<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h3>
+<section id="id12">
+<h3><span class="section-number">4.2.2. </span>Inertia<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h3>
 <p>This simplistic model assumes the inertia of the lines is negligible compared
 to that of the canopy; in particular, inaccuracies in the simplified canopy
 inertia are more significant than the line inertia, so this model simply
 defines the translational and rotation inertia as zero.</p>
 </section>
-<section id="id12">
-<h3><span class="section-number">4.2.3. </span>Resultant force<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h3>
+<section id="id13">
+<h3><span class="section-number">4.2.3. </span>Resultant force<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h3>
 <p>Although the lines are nearly invisible compared to the rest of the wing, they
 contribute a significant amount of aerodynamic drag. Because the total system
 drag of a paraglider is relatively small, even a small increase can have
 a large impact on sensitive characteristics such as glide ratio; in fact,
 paraglider suspension lines contribute upwards of 20% of the total paraglider
-system drag (<span id="id13">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span>,
-<span id="id14">[<a class="reference internal" href="zreferences.html#id31" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span>), and should not be
+system drag (<span id="id14">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span>,
+<span id="id15">[<a class="reference internal" href="zreferences.html#id32" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span>), and should not be
 neglected.</p>
 <p>This model does not provide an explicit line geometry, so it can’t compute the
 true line area distribution. Instead, it lumps the entire length of the lines
 into configurable control points; for example, given the total line length and
 average line diameter, the line area can be lumped into singularities such as
 the centroid of line area for each semispan. As with other similar designs
-<span id="id15">[<a class="reference internal" href="zreferences.html#id31" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span>, this model treats
+<span id="id16">[<a class="reference internal" href="zreferences.html#id32" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span>, this model treats
 the drag as isotropic (because the operating ranges of alpha and beta are so
 small the line drag is effectively constant, and what little force exists
 along the <span class="math notranslate nohighlight">\(z\)</span>-axis is negligible compared to the lift of the canopy).
 Given the total area <span class="math notranslate nohighlight">\(S_\textrm{lines}\)</span> represented by each singularity
 the total aerodynamic drag at some control point <span class="math notranslate nohighlight">\(L\)</span> can be calculated
-as in <span id="id16">[<a class="reference internal" href="zreferences.html#id31" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span> or
-<span id="id17">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span>:</p>
+as in <span id="id17">[<a class="reference internal" href="zreferences.html#id32" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span> or
+<span id="id18">[<a class="reference internal" href="zreferences.html#id6" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">21</a>]</span>:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-suspension-lines-total-length">
 <span class="eqno">(4.20)<a class="headerlink" href="#equation-suspension-lines-total-length" title="Permalink to this equation">#</a></span>\[S_l = \kappa_L \kappa_d\]</div></div>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-suspension-lines-aerodynamics-individual">
@@ -770,8 +776,8 @@ as in <span id="id16">[<a class="reference internal" href="zreferences.html#id31
   \sum_{n=1}^{N}
   \vec{r}_{CP_n/R} \times \vec{f}_{l,\textrm{aero},n}\]</div></div>
 </section>
-<section id="id18">
-<h3><span class="section-number">4.2.4. </span>Parameter summary<a class="headerlink" href="#id18" title="Permalink to this headline">#</a></h3>
+<section id="id19">
+<h3><span class="section-number">4.2.4. </span>Parameter summary<a class="headerlink" href="#id19" title="Permalink to this headline">#</a></h3>
 <p>For the harness position:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-suspension-lines-parameters-riser-position">
 <span class="eqno">(4.24)<a class="headerlink" href="#equation-suspension-lines-parameters-riser-position" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
@@ -795,10 +801,9 @@ as in <span id="id16">[<a class="reference internal" href="zreferences.html#id31
 <span class="eqno">(4.26)<a class="headerlink" href="#equation-suspension-lines-parameters-aerodynamics" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   \kappa_L \qquad &amp; \textrm{Total line length} \\
   \kappa_d \qquad &amp; \textrm{Average line diameter} \\
-  CP_n \qquad &amp; \textrm{Lumped line point} \ n \\
-  \vec{r}_{CP_n/R} \qquad &amp; \textrm{Position of lumped point} n \\
-  C_{d,l,} \qquad &amp; \textrm{Line drag coefficient for control point} \ n \\
-\end{aligned}\end{split}\]</div></div>
+  \vec{r}_{CP_n/R} \qquad &amp; \textrm{Position of lumped control point} \ n \\
+  C_{d,l,n} \qquad &amp; \textrm{Line drag coefficient for control point} \ n \\
+  \end{aligned}\end{split}\]</div></div>
 </section>
 </section>
 <section id="harness">
@@ -819,8 +824,8 @@ physics: it considers the harness as a sphere. Moreover, the pilot, gear, and
 reserve parachute are accounted for by simply adding their masses to the mass
 of the harness. The harness, pilot, and gear are collectively referred to as
 the <em>payload</em>.</p>
-<section id="id19">
-<h3><span class="section-number">4.3.1. </span>Controls<a class="headerlink" href="#id19" title="Permalink to this headline">#</a></h3>
+<section id="id20">
+<h3><span class="section-number">4.3.1. </span>Controls<a class="headerlink" href="#id20" title="Permalink to this headline">#</a></h3>
 <p>Paraglider harnesses allow pilots to shift their weight left and right, causing
 an imbalanced load on each semispan. (For a real wing this maneuver also causes
 a vertical shearing stress along the center of the foil, but due to the rigid
@@ -843,10 +848,10 @@ coordinate system, the position of the displaced center of mass is then:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-payload-center-of-mass">
 <span class="eqno">(4.27)<a class="headerlink" href="#equation-payload-center-of-mass" title="Permalink to this equation">#</a></span>\[\vec{r}_{P/RM} = \bar{\vec{r}}_{P/RM} \, + \left&lt; 0, \delta_w \kappa_w, 0 \right&gt;\]</div></div>
 </section>
-<section id="id20">
-<h3><span class="section-number">4.3.2. </span>Inertia<a class="headerlink" href="#id20" title="Permalink to this headline">#</a></h3>
-<p>As in <span id="id21">[<a class="reference internal" href="zreferences.html#id46" title="Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.">23</a>]</span> (and similarly in
-<span id="id22">[<a class="reference internal" href="zreferences.html#id31" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span>), the payload is
+<section id="id21">
+<h3><span class="section-number">4.3.2. </span>Inertia<a class="headerlink" href="#id21" title="Permalink to this headline">#</a></h3>
+<p>As in <span id="id22">[<a class="reference internal" href="zreferences.html#id47" title="Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.">23</a>]</span> (and similarly in
+<span id="id23">[<a class="reference internal" href="zreferences.html#id32" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span>), the payload is
 modeled as a solid sphere of uniform density. With a total mass <span class="math notranslate nohighlight">\(m_p\)</span>,
 center of mass <span class="math notranslate nohighlight">\(P\)</span>, and projected surface area <span class="math notranslate nohighlight">\(S_p\)</span>, the moment
 of inertia about the payload center of mass is simply:</p>
@@ -861,15 +866,15 @@ of inertia about the payload center of mass is simply:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[J_{xx} = J_{yy} = J_{zz} = \frac{2}{5} m_p r_p^2 = \frac{2}{5} \frac{m_p S_p}{\pi}\]</div></div>
 </section>
-<section id="id23">
-<h3><span class="section-number">4.3.3. </span>Resultant force<a class="headerlink" href="#id23" title="Permalink to this headline">#</a></h3>
+<section id="id24">
+<h3><span class="section-number">4.3.3. </span>Resultant force<a class="headerlink" href="#id24" title="Permalink to this headline">#</a></h3>
 <p>Harness drag coefficients were studied experimentally in
-<span id="id24">[<a class="reference internal" href="zreferences.html#id46" title="Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.">23</a>]</span>. The author measured several
+<span id="id25">[<a class="reference internal" href="zreferences.html#id47" title="Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.">23</a>]</span>. The author measured several
 harness models in a wind tunnel and converted the results into aerodynamic
 coefficients normalized by the cross-sectional area of the sphere. For a more
 sophisticated approach the coefficient can be adjusted to account
 (approximately) for angle of attack and Reynolds number
-<span id="id25">[<a class="reference internal" href="zreferences.html#id31" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span>, but this model
+<span id="id26">[<a class="reference internal" href="zreferences.html#id32" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">22</a>]</span>, but this model
 simply treats the drag coefficient as a constant.</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-payload-weight">
 <span class="eqno">(4.28)<a class="headerlink" href="#equation-payload-weight" title="Permalink to this equation">#</a></span>\[\vec{f}_{p,\textrm{weight}} = m_p \vec{g}\]</div></div>
@@ -890,8 +895,8 @@ aerodynamic moment about the payload center of mass, but in the absence of
 experimental data on the magnitude of the missing moment, this model continues
 to ignore it.</p>
 </section>
-<section id="id26">
-<h3><span class="section-number">4.3.4. </span>Parameter summary<a class="headerlink" href="#id26" title="Permalink to this headline">#</a></h3>
+<section id="id27">
+<h3><span class="section-number">4.3.4. </span>Parameter summary<a class="headerlink" href="#id27" title="Permalink to this headline">#</a></h3>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
   m_p \qquad &amp; \textrm{Total payload mass} \\
@@ -985,21 +990,21 @@ to ignore it.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#suspension-lines">4.2. Suspension lines</a><ul>
-<li><a class="reference internal" href="#id10">4.2.1. Controls</a><ul>
+<li><a class="reference internal" href="#id11">4.2.1. Controls</a><ul>
 <li><a class="reference internal" href="#brakes">4.2.1.1. Brakes</a></li>
 <li><a class="reference internal" href="#accelerator">4.2.1.2. Accelerator</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id11">4.2.2. Inertia</a></li>
-<li><a class="reference internal" href="#id12">4.2.3. Resultant force</a></li>
-<li><a class="reference internal" href="#id18">4.2.4. Parameter summary</a></li>
+<li><a class="reference internal" href="#id12">4.2.2. Inertia</a></li>
+<li><a class="reference internal" href="#id13">4.2.3. Resultant force</a></li>
+<li><a class="reference internal" href="#id19">4.2.4. Parameter summary</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#harness">4.3. Harness</a><ul>
-<li><a class="reference internal" href="#id19">4.3.1. Controls</a></li>
-<li><a class="reference internal" href="#id20">4.3.2. Inertia</a></li>
-<li><a class="reference internal" href="#id23">4.3.3. Resultant force</a></li>
-<li><a class="reference internal" href="#id26">4.3.4. Parameter summary</a></li>
+<li><a class="reference internal" href="#id20">4.3.1. Controls</a></li>
+<li><a class="reference internal" href="#id21">4.3.2. Inertia</a></li>
+<li><a class="reference internal" href="#id24">4.3.3. Resultant force</a></li>
+<li><a class="reference internal" href="#id27">4.3.4. Parameter summary</a></li>
 </ul>
 </li>
 </ul>

@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Acknowledgements" href="acknowledgements.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.23"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=3c656993158f05539f962c5cea52a5e6c184bb8c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     
@@ -21,16 +21,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -300,17 +302,17 @@ computing stack.]]</p>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#suspension-lines">4.2. Suspension lines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id10">4.2.1. Controls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id11">4.2.2. Inertia</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id12">4.2.3. Resultant force</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id18">4.2.4. Parameter summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id11">4.2.1. Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id12">4.2.2. Inertia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id13">4.2.3. Resultant force</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id19">4.2.4. Parameter summary</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#harness">4.3. Harness</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id19">4.3.1. Controls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id20">4.3.2. Inertia</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id23">4.3.3. Resultant force</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id26">4.3.4. Parameter summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id20">4.3.1. Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id21">4.3.2. Inertia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id24">4.3.3. Resultant force</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id27">4.3.4. Parameter summary</a></li>
 </ul>
 </li>
 </ul>
@@ -338,18 +340,12 @@ computing stack.]]</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="demonstration.html#model-validation">7.2. Model validation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="demonstration.html#polar-curve">7.2.1. Polar curve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#steady-state-turn">7.2.2. Steady-state turn</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#impulsive-controls">7.2.3. Impulsive controls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#exiting-accelerated-flight">7.2.4. Exiting accelerated flight</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="demonstration.html#model-investigation">7.3. Model investigation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#apparent-mass">7.3.1. Apparent mass</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#steep-turn">7.3.2. Steep turn</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#off-center-thermal-interaction">7.3.3. Off-center thermal interaction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#drag-breakdown">7.3.1. Drag breakdown</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="demonstration.html#discussion">7.4. Discussion</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
