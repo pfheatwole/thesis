@@ -288,11 +288,10 @@ defined by the curvature of the :math:`yz`-curve and the section yaw
 (or *geometric torsion*) can be difficult to determine (even with a physical
 wing in hand). Relying on the fact that parafoils commonly benefit from a small
 amount of increasing geometric torsion towards the wing tips (or *washin*),
-a conservative guess of `4` degrees at the wingtip should be reasonably
-accurate :cite:`casellasParagliderDesignHandbook`. For lack of better
-information, this demonstration chose a piecewise :ref:`linear model
-<derivations:Polynomial torsion>` that grows from 0 to
-4 degrees over the range :math:`0.05 \le |s| \le 1`.
+a conservative guess of 4° at the wingtip should be reasonably accurate
+:cite:`casellasParagliderDesignHandbook`. For lack of better information, this
+demonstration chose a piecewise :ref:`linear model <derivations:Polynomial
+torsion>` that grows 0–4° degrees over the range :math:`0.05 \le |s| \le 1`.
 
 
 .. Section profiles
@@ -782,8 +781,8 @@ a reasonable choice of the area would be :math:`S_\textrm{payload} = 0.55
 \left[\textrm{m}^2\right]` with an drag coefficient of
 :math:`C_{d,\textrm{payload}} = 0.8`.
 
-Lastly, when choosing a weight shift limit an underestimate is preferable to an
-overestimate, since an underestimate merely limits the range of behavior the
+Lastly, when choosing a weight shift limit, underestimates are preferable to
+overestimates, since an underestimate merely limits the range of behavior the
 model can produce, whereas an overestimate can produce fictitious behavior; in
 the absence of a rigorous measurement, a conservative guess is :math:`\kappa_w
 = 0.15 \left[\textrm{m}\right]`.
@@ -800,7 +799,7 @@ Model validation
 .. What is model validation? Why is it difficult for paragliders?
 
 Having defined the parameters for the three component models, they are combined
-into a composite :doc:`system_dynamics` model that provides behavior of the
+into a composite :doc:`system_dynamics` model that provides the behavior of the
 complete glider. Getting to this point with such little information required
 many modeling assumptions, simplifications, approximations, and outright
 guesswork. The natural next step is to question the validity of the model: how
@@ -845,7 +844,7 @@ aircraft at equilibrium over the range of brake and accelerator inputs,
 providing information such as the usable range of the glider and its glide
 ratio at different ground speeds. Despite their value, these charts are never
 completely defined experimentally; instead, pilots report individual points on
-the curve and rely on interpolation to complete the curve.
+the curve and rely on interpolation for the rest.
 
 Despite this ambiguity, polar curves are an excellent starting point for
 checking the estimates of a flight dynamics model for a glider. The previous

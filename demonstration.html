@@ -445,10 +445,9 @@ defined by the curvature of the <span class="math notranslate nohighlight">\(yz\
 (or <em>geometric torsion</em>) can be difficult to determine (even with a physical
 wing in hand). Relying on the fact that parafoils commonly benefit from a small
 amount of increasing geometric torsion towards the wing tips (or <em>washin</em>),
-a conservative guess of <cite>4</cite> degrees at the wingtip should be reasonably
-accurate <span id="id1">[<a class="reference internal" href="zreferences.html#id15" title="Pere Casellas. Paraglider Design Handbook. http://laboratoridenvol.com/paragliderdesign/.">26</a>]</span>. For lack of better
-information, this demonstration chose a piecewise <a class="reference internal" href="derivations.html#polynomial-torsion"><span class="std std-ref">linear model</span></a> that grows from 0 to
-4 degrees over the range <span class="math notranslate nohighlight">\(0.05 \le |s| \le 1\)</span>.</p>
+a conservative guess of 4° at the wingtip should be reasonably accurate
+<span id="id1">[<a class="reference internal" href="zreferences.html#id15" title="Pere Casellas. Paraglider Design Handbook. http://laboratoridenvol.com/paragliderdesign/.">26</a>]</span>. For lack of better information, this
+demonstration chose a piecewise <a class="reference internal" href="derivations.html#polynomial-torsion"><span class="std std-ref">linear model</span></a> that grows 0–4° degrees over the range <span class="math notranslate nohighlight">\(0.05 \le |s| \le 1\)</span>.</p>
 <p class="rubric" id="profiles">Profiles</p>
 <p>Having finished defining the section layout (scale, position, and orientation),
 each section must be assigned an airfoil <span id="id2">[<a class="reference internal" href="zreferences.html#id2" title="Ira H. Abbott and Albert E. Von Doenhoff. Theory of Wing Sections. Dover Publications, Inc., New York, USA, 1959. ISBN 978-0-486-60586-9.">2</a>]</span>.
@@ -790,8 +789,8 @@ a beginner-grade wing (so a high performance “pod” harness is less likely),
 a reasonable choice of the area would be <span class="math notranslate nohighlight">\(S_\textrm{payload} = 0.55
 \left[\textrm{m}^2\right]\)</span> with an drag coefficient of
 <span class="math notranslate nohighlight">\(C_{d,\textrm{payload}} = 0.8\)</span>.</p>
-<p>Lastly, when choosing a weight shift limit an underestimate is preferable to an
-overestimate, since an underestimate merely limits the range of behavior the
+<p>Lastly, when choosing a weight shift limit, underestimates are preferable to
+overestimates, since an underestimate merely limits the range of behavior the
 model can produce, whereas an overestimate can produce fictitious behavior; in
 the absence of a rigorous measurement, a conservative guess is <span class="math notranslate nohighlight">\(\kappa_w
 = 0.15 \left[\textrm{m}\right]\)</span>.</p>
@@ -800,7 +799,7 @@ the absence of a rigorous measurement, a conservative guess is <span class="math
 <section id="model-validation">
 <h2><span class="section-number">7.2. </span>Model validation<a class="headerlink" href="#model-validation" title="Permalink to this headline">#</a></h2>
 <p>Having defined the parameters for the three component models, they are combined
-into a composite <a class="reference internal" href="system_dynamics.html"><span class="doc">System dynamics</span></a> model that provides behavior of the
+into a composite <a class="reference internal" href="system_dynamics.html"><span class="doc">System dynamics</span></a> model that provides the behavior of the
 complete glider. Getting to this point with such little information required
 many modeling assumptions, simplifications, approximations, and outright
 guesswork. The natural next step is to question the validity of the model: how
@@ -825,7 +824,7 @@ aircraft at equilibrium over the range of brake and accelerator inputs,
 providing information such as the usable range of the glider and its glide
 ratio at different ground speeds. Despite their value, these charts are never
 completely defined experimentally; instead, pilots report individual points on
-the curve and rely on interpolation to complete the curve.</p>
+the curve and rely on interpolation for the rest.</p>
 <p>Despite this ambiguity, polar curves are an excellent starting point for
 checking the estimates of a flight dynamics model for a glider. The previous
 section demonstrated the creation of a paraglider model for a Niviuk Hook 3,
