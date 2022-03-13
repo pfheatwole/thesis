@@ -6,8 +6,8 @@
 
 div.legend {
   font-size: 0.8em;
-  margin-bottom: 1em;
-  border-bottom-color: black;
+  padding-bottom: 0.4em;
   border-bottom-width: 1px;
   border-bottom-style: dotted;
+  border-bottom-color: var(--color-foreground-primary);
 }
