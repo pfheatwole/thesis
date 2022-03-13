@@ -5,8 +5,26 @@ Introduction
 .. What does this paper do? It creates parametric paraglider flight dynamics
    models.
 
-The objective of this paper is to produce paraglider flight dynamics models as
-systems of differential equations :math:`\dot{\vec{x}} = f(\vec{x}, \vec{u})`.
+The objective of this paper is to create a set of parametric models that can
+estimate the system dynamics of commercial paraglider wings using only limited
+technical specifications. These *flight dynamics models* describe the behavior
+of a paraglider by computing the translational and angular acceleration of the
+aircraft in response to the pilot control inputs and its interactions with the
+environment.
+
+.. figure:: figures/block0.svg
+
+The models are composed as systems of parametric components. Each component
+model is responsible for calculating the inertial properties and resultant
+forces that the system model will use to compute the glider acceleration. The
+fact that only summary data is available for commercial wings means that each
+component must encode a large amount of structural knowledge to augment the
+data, and provide carefully chosen structural parameters that can be estimated
+from that data.
+
+.. In particular, the objective of this paper is to produce paraglider flight
+   dynamics models as systems of differential equations :math:`\dot{\vec{x}}
+   = f(\vec{x}, \vec{u})`.
 
 
 .. Context
@@ -81,14 +99,19 @@ field. This is vital information, because given a causal model it may be
 possible to perform statistical *flight reconstruction*. [[FIXME: finish; add
 reference to the MH370 paper.]]
 
+
 .. Occupying the niche (Response): parametric modeling
 
-[[The problem is that it's difficult to create a single flight dynamics model
-of a commercial wing, much less an entire set of models. It would be laborious
-if you had detailed specs, but we don't even have that. All we have is summary
-measurements. The response taken in this project is to encode the bulk of the
-structure is in parametric functions that are parametrized by that available
-data. FIXME: finish.]]
+The need for a flight dynamics model of the paraglider that produced the data
+is a major stumbling block: not only are the dynamics unknown, but the glider
+itself is unknown. Flight reconstruction would require not just a single model,
+but an entire distribution over all dynamics models that could have produced
+the data. It is laborious to create a single model for a commercial paraglider,
+much less an entire set of models, then there's the killing blow that the only
+available wing data is a sparse collection of summary measurements. The
+response taken in this project is to encode large amounts of structural
+knowledge in parametric functions that can augment the data and eliminate large
+portions of the modeling process.
 
 
 Roadmap
@@ -104,12 +127,10 @@ and compares its estimates to experimental wind tunnel data. Next,
 :doc:`paraglider_components` decomposes a paraglider into a system of
 components, and develops parametric models for each component. Finally,
 :doc:`system_dynamics` combine the components into complete dynamics models,
-and :doc:`state_dynamics` select a suitable set of state variables and define
+and :doc:`state_dynamics` selects a suitable set of state variables and defines
 their derivatives in terms of the system dynamics. The paper concludes with
-a :doc:`demonstration` that uses the parametric components to create a flight
-dynamics model of a commercial paraglider wing; it estimates the parameters of
-the component models from technical data, compares the simulated behavior
-against static and dynamic measurements from physical wing tests, and considers
-the simulated behavior in a variety of scenarios.
+a collection of :doc:`demonstrations <demonstration>` that show how to estimate
+the parameters of the component models for a commercial paraglider wing, how to
+validate the model, and how the model can be used to study paraglider behavior.
 
 .. FIXME: would this be better in a "goals, steps, results" format?

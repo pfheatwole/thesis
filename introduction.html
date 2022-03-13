@@ -211,8 +211,21 @@
         <article role="main">
           <section id="introduction">
 <h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h1>
-<p>The objective of this paper is to produce paraglider flight dynamics models as
-systems of differential equations <span class="math notranslate nohighlight">\(\dot{\vec{x}} = f(\vec{x}, \vec{u})\)</span>.</p>
+<p>The objective of this paper is to create a set of parametric models that can
+estimate the system dynamics of commercial paraglider wings using only limited
+technical specifications. These <em>flight dynamics models</em> describe the behavior
+of a paraglider by computing the translational and angular acceleration of the
+aircraft in response to the pilot control inputs and its interactions with the
+environment.</p>
+<figure class="align-default">
+<img alt="_images/block0.svg" src="_images/block0.svg"/></figure>
+<p>The models are composed as systems of parametric components. Each component
+model is responsible for calculating the inertial properties and resultant
+forces that the system model will use to compute the glider acceleration. The
+fact that only summary data is available for commercial wings means that each
+component must encode a large amount of structural knowledge to augment the
+data, and provide carefully chosen structural parameters that can be estimated
+from that data.</p>
 <section id="motivation">
 <h2><span class="section-number">1.1. </span>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">#</a></h2>
 <p>Paragliding is a recreational flying activity that uses a lightweight, flexible
@@ -265,12 +278,16 @@ relationship between the sequence of glider positions and the underlying wind
 field. This is vital information, because given a causal model it may be
 possible to perform statistical <em>flight reconstruction</em>. [[FIXME: finish; add
 reference to the MH370 paper.]]</p>
-<p>[[The problem is that it’s difficult to create a single flight dynamics model
-of a commercial wing, much less an entire set of models. It would be laborious
-if you had detailed specs, but we don’t even have that. All we have is summary
-measurements. The response taken in this project is to encode the bulk of the
-structure is in parametric functions that are parametrized by that available
-data. FIXME: finish.]]</p>
+<p>The need for a flight dynamics model of the paraglider that produced the data
+is a major stumbling block: not only are the dynamics unknown, but the glider
+itself is unknown. Flight reconstruction would require not just a single model,
+but an entire distribution over all dynamics models that could have produced
+the data. It is laborious to create a single model for a commercial paraglider,
+much less an entire set of models, then there’s the killing blow that the only
+available wing data is a sparse collection of summary measurements. The
+response taken in this project is to encode large amounts of structural
+knowledge in parametric functions that can augment the data and eliminate large
+portions of the modeling process.</p>
 </section>
 <section id="roadmap">
 <h2><span class="section-number">1.2. </span>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">#</a></h2>
@@ -282,13 +299,11 @@ and compares its estimates to experimental wind tunnel data. Next,
 <a class="reference internal" href="paraglider_components.html"><span class="doc">Component models</span></a> decomposes a paraglider into a system of
 components, and develops parametric models for each component. Finally,
 <a class="reference internal" href="system_dynamics.html"><span class="doc">System dynamics</span></a> combine the components into complete dynamics models,
-and <a class="reference internal" href="state_dynamics.html"><span class="doc">State dynamics</span></a> select a suitable set of state variables and define
+and <a class="reference internal" href="state_dynamics.html"><span class="doc">State dynamics</span></a> selects a suitable set of state variables and defines
 their derivatives in terms of the system dynamics. The paper concludes with
-a <a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a> that uses the parametric components to create a flight
-dynamics model of a commercial paraglider wing; it estimates the parameters of
-the component models from technical data, compares the simulated behavior
-against static and dynamic measurements from physical wing tests, and considers
-the simulated behavior in a variety of scenarios.</p>
+a collection of <a class="reference internal" href="demonstration.html"><span class="doc">demonstrations</span></a> that show how to estimate
+the parameters of the component models for a commercial paraglider wing, how to
+validate the model, and how the model can be used to study paraglider behavior.</p>
 </section>
 </section>
 
@@ -378,7 +393,5 @@ the simulated behavior in a variety of scenarios.</p>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
-    <script>window.MathJax = {"loader": {"load": ["[tex]/cancel"]}, "tex": {"macros": {"defas": "\\stackrel{\\mathrm{def}}{=}", "given": "\\;\\middle\\vert\\;", "vec": ["\\mathbf{#1}", 1], "mat": ["\\mathbf{#1}", 1], "crossmat": ["\\left[{#1}\\right]^{\\times}", 1], "norm": ["\\left\\|{#1}\\right\\|", 1]}, "packages": {"[+]": ["cancel"]}}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>
