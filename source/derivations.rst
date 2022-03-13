@@ -6,9 +6,11 @@ Derivations
 Parametric design curves
 ========================
 
-[[Put these here to avoid cluttering the example foils and ``demonstration``.
-FIXME: reference my choice of section index in ref:`foil_geometry:Simplified
-model`.]]
+The :ref:`"simplified" foil geometry <foil_geometry:Simplified model>` chose
+a set of variables :eq:`simplified foil geometry variables` that describe
+different aspects of the shape. This section provides definitions for several
+of those variables using parametric functions that can approximate the
+structure of a typical parafoil using a small number of simple parameters.
 
 
 Elliptical chord
@@ -40,19 +42,20 @@ Elliptical arc
 --------------
 
 In this paper the *arc* of a parafoil is the vector-valued function of
-:math:`\left< y, z \right>` coordinates that position the sections. For
-parafoils, the arc is typically defined by an elliptical function.
+:math:`\left< y, z \right>` coordinates that position the section reference
+points. For parafoils, the arc is typically defined by an elliptical function.
 
 .. Explain arc anhedral and section roll. FIXME: draw a diagram
 
 A centered elliptical curve can be defined as a function of four parameters,
 but the symmetry of the wing reduces that to three free design parameters, and
 normalizing the arc length reduces it to just two. There are several possible
-parametrizations (such as those in FIXME:`benedetti`), but an intuitive choice
-is the [[mean anhedral angle :math:`\Gamma_\textrm{tip}`]] and the [[section
-roll angle :math:`\phi_\textrm{tip}`]] of the wing tips. Using the parameters
-to define an ellipse that is proportional to the desired :math:`yz`-curve
-produces:
+parametrizations, but an intuitive choice is the mean anhedral angle
+:math:`\Gamma_\textrm{tip}` and the section roll angle
+:math:`\phi_\textrm{tip}` of the wing tips
+:cite:`benedetti2012ParaglidersFlightDynamics`. Choosing those parameters to
+define an elliptical function that is proportional to the desired
+:math:`yz`-curve produces an intermediate result:
 
 .. math::
 
@@ -64,37 +67,42 @@ produces:
      \vec{f}(t) &= \left< A \cos(t), B \sin(t) \right>
    \end{aligned}
 
+.. FIXME: this really needs a diagram
+
 This design requires that :math:`\phi_\textrm{tip} > 2 \Gamma_\textrm{tip}` (so
 the wing must be wider than it is tall and the wing tip roll cannot exceed 90°)
 and is valid over :math:`t_{min} \le t \le \pi - t_{min}`, where :math:`t_{min}
-= \arccos \left( \frac{1}{A} \right)`. However, although the shape is
-proportional to the desired curve, it is not directly usable by the
-:doc:`foil_geometry`. It needs two changes:
+= \arccos \left( \frac{1}{A} \right)`.
+
+Next although the shape produced by this intermediate result is proportional to
+the desired curve, it is not directly usable by the :doc:`foil_geometry`. It
+needs two modifications:
 
 1. Make the arc a function of the chosen section index :math:`s`
 
-2. Scale the arc to a total curve length of 2 (to make it easy to scale by
-   :math:`b_\textrm{flat}`)
+2. Scale the arc to a total curve length of :math:`b_\textrm{flat}`
 
-Both can be achieved by normalizing the ellipse. First, scale the axes to
-produce a new semi-ellipse with a total curve length of 1:
+Both can be achieved by normalizing the elliptical function to a curve length
+of 2. First, scale the axes to produce a new semi-ellipse with a total curve
+length of 1:
 
 .. math::
 
    \begin{aligned}
-     L(t)             &= \int_{\frac{\pi}{2}}^{t} \norm{\vec{f}(t)} dt \\
+     L(t)             &= \int_{\frac{\pi}{2}}^{t_{min}} \norm{\vec{f}(t)} dt \\
      k_3              &= L(t_{min}) \\
      \bar{\vec{f}}(t) &= \left< \frac{A}{k_3} \cos(t), \frac{B}{k_3} \sin(t) \right> \\
    \end{aligned}
 
-The fact that the section index :math:`s` is defined as the linear distance
-along the curve enables a convenient conversion over :math:`\frac{\pi}{2} \le
-t \le t_{min}` and :math:`0 \le s \le 1`:
+The fact that the simplified foil geometry chose to define the :ref:`section
+index <simplified model section index>` :math:`s` as the linear distance along
+the :math:`yz`-curve enables a convenient conversion over :math:`\frac{\pi}{2}
+\le t \le t_{min}` and :math:`0 \le s \le 1`:
 
 .. math::
 
    \begin{aligned}
-     \bar{L}(t) &= \int_{\frac{\pi}{2}}^{t} \norm{\bar{\vec{f}}(t)} dt = s(t) \\
+     \bar{L}(t) &= \int_{\frac{\pi}{2}}^{t_{min}} \norm{\bar{\vec{f}}(t)} dt = s(t) \\
      t(s)       &= s^{-1}(t)
    \end{aligned}
 
@@ -113,11 +121,12 @@ Polynomial torsion
 ------------------
 
 Like most wings, parafoils use section-relative pitch :math:`\theta(s)`
-(conventionally referred to as *geometric torsion*) to control wing behavior.
+(conventionally referred to as *geometric torsion*) to fine-tune wing behavior.
 The exact distribution of geometric torsion along a wing can be difficult to
 measure, but they are frequently described using simple polynomials or
 piecewise-linear functions. For idealized models of nonlinear geometries such
-as those developed here, a piecewise-polynomial function is adequate.
+as those developed here, a piecewise-polynomial function is assumed to be
+adequate.
 
 Assuming a symmetric wing, define three parameters:
 

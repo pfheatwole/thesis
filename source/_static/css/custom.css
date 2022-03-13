@@ -3,3 +3,11 @@
   top: unset;
   bottom: 5%;
 }
+
+div.legend {
+  font-size: 0.8em;
+  padding-bottom: 0.4em;
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
+  border-bottom-color: var(--color-foreground-primary);
+}

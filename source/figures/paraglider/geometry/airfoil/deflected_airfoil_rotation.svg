@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:ns1="http://www.iki.fi/pav/software/textext/"
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="32.303001mm"
    version="1.1"
    viewBox="0 0 300.83003 91.567555"
    width="106.12615mm"
    id="svg360"
    sodipodi:docname="deflected_airfoil_rotation.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:ns1="http://www.iki.fi/pav/software/textext/">
   <metadata
      id="metadata364">
     <rdf:RDF>
@@ -24,7 +24,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -38,7 +37,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="2560"
-     inkscape:window-height="1376"
+     inkscape:window-height="1371"
      id="namedview362"
      showgrid="false"
      inkscape:document-units="mm"
@@ -46,16 +45,17 @@
      inkscape:pagecheckerboard="true"
      inkscape:showpageshadow="false"
      inkscape:zoom="3.1912573"
-     inkscape:cx="236.6399"
-     inkscape:cy="67.846521"
+     inkscape:cx="236.58387"
+     inkscape:cy="67.371565"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg360"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:document-rotation="0"
-     inkscape:object-paths="true" />
+     inkscape:object-paths="true"
+     inkscape:snap-page="true" />
   <defs
      id="defs4">
     <marker
@@ -352,6 +352,13 @@
          id="rect2-9" />
     </clipPath>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke-width:0.75;stroke-linecap:round"
+     id="rect961"
+     width="300.83002"
+     height="91.567558"
+     x="0"
+     y="0" />
   <path
      transform="matrix(0.96502675,0,0,0.96474328,-83.898904,-132.18195)"
      d="m 87.36,173.18 h 297.6"

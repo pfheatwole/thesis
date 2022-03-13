@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="133.18643pt"
    version="1.1"
    viewBox="0 0 425.19688 133.18642"
    width="425.19687pt"
    id="svg152"
-   sodipodi:docname="Hook3_deltad_0.25_0.50.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
+   sodipodi:docname="Hook3_TE_0.25_0.50.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -24,16 +24,20 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="2560"
-     inkscape:window-height="1376"
+     inkscape:window-height="1371"
      id="namedview154"
      showgrid="false"
      inkscape:zoom="1.9466146"
-     inkscape:cx="287.87129"
-     inkscape:cy="106.54056"
+     inkscape:cx="287.67893"
+     inkscape:cy="105.82475"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg152" />
+     inkscape:current-layer="svg152"
+     inkscape:pagecheckerboard="true"
+     inkscape:document-units="pt"
+     inkscape:snap-page="true"
+     inkscape:showpageshadow="true" />
   <metadata
      id="metadata2">
     <rdf:RDF>
@@ -47,7 +51,6 @@
             <dc:title>Matplotlib v3.3.3, https://matplotlib.org/</dc:title>
           </cc:Agent>
         </dc:creator>
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -85,6 +88,13 @@
          id="path2858-5-0-2" />
     </marker>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke-width:0.75;stroke-linecap:round;stroke:none"
+     id="rect879"
+     width="425.19684"
+     height="133.18643"
+     x="0"
+     y="0" />
   <g
      id="line2d_9"
      transform="matrix(1.3067923,0,0,1.3067923,-638.97934,-152.90925)">
