@@ -137,7 +137,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -203,7 +203,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -211,92 +211,7 @@
         <article role="main">
           <section id="conclusion">
 <h1><span class="section-number">8. </span>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h1>
-<ul class="simple">
-<li><p>This paper started by creating a foil geometry with enough flexibility to
-enable complex foil models to be defined using parametric functions. Modeling
-a canopy then becomes a problem of designing suitable parametric functions
-and estimating the parameters that best describe the true geometry.</p></li>
-<li><p>[[developed a foil geometry with enough flexibility to enable complex foil
-models to be defined using parametric functions which encode the assumptions
-of the missing structure.]]</p></li>
-<li><p>Modeling a canopy then becomes a problem of designing suitable parametric
-functions and estimating the parameters that best describe the true
-geometry.</p></li>
-</ul>
-<section id="summary">
-<h2><span class="section-number">8.1. </span>Summary?<a class="headerlink" href="#summary" title="Permalink to this headline">#</a></h2>
-<ul>
-<li><p>This is an engineering paper, not a research paper. It’s about implementing
-solutions/tools/models, not answering questions.</p>
-<p>This should summarize how well the project addressed the need defined by the
-introduction. I said I wanted to use basic specs to produce paraglider flight
-dynamics models; did I succeed?</p>
-</li>
-<li><p>You can use this to learn about wing behavior. For example, the effect of the
-riser midpoint: how to changes the polar curves, control authority, etc.</p></li>
-<li><p>Although the design was focused on paragliders, the decomposition should be
-easily adaptable to other gliding aircraft such as hang gliders or kites.</p></li>
-<li><p>The implementation is available under a permissive open source license.</p></li>
-<li><p>A parametric geometry and a dynamics model in Python. Includes several state
-models and simulator.</p></li>
-<li><p>Derivations available in appendices.</p></li>
-<li><p>Modular system design (doesn’t simplify the equations by merging the
-components; each component is independent, as much as reasonable possible)</p></li>
-<li><p>Code available on Github using open source libraries</p>
-<ul class="simple">
-<li><p>Why Python?</p>
-<ul>
-<li><p>Approachable syntax</p></li>
-<li><p>Good cross-domain language</p></li>
-<li><p>Free (unlike matlab)</p></li>
-<li><p>Numerical libraries (numpy, scipy)</p></li>
-<li><p>Large library ecosystem (s2sphere, sklearn, databases, PyMC3, pandas, etc)</p></li>
-<li><p>Easy integration into tools w/ native support (Blender, FreeCAD, QGIS)</p>
-<ul>
-<li><p>Generate a simulation directly inside Blender</p></li>
-<li><p>Design a wing and estimate it’s polar curve inside FreeCAD</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Developed entirely using freely available tools (XFLR5, AVL, etc) and open
-source libraries (numpy, scipy, matplotlib, etc)</p></li>
-<li><p>The entire work is under permissive licensing: code is MIT, text and figures
-are CC-BY</p></li>
-</ul>
-</section>
-<section id="future-work">
-<h2><span class="section-number">8.2. </span>Future work<a class="headerlink" href="#future-work" title="Permalink to this headline">#</a></h2>
-</section>
-<section id="freewrite">
-<h2><span class="section-number">8.3. </span>Freewrite<a class="headerlink" href="#freewrite" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>The motivating problem for this project was the need for a distribution of
-dynamics models over commercial paraglider wings to enable paraglider flight
-reconstruction.</p></li>
-<li><p>To facilitate the creation of paraglider dynamics models, it developed
-a novel foil geometry that [[made it feasible to define]] design curves that
-are parametrized by the [[most easily available public data]].</p></li>
-<li><p>It also implemented an aerodynamics method that is well suited for the
-variety of nonlinearities involved with analyzing paraglider dynamics. It
-then modified the method to significantly improve its performance when used
-for sequential flight simulation (faster convergence, approximately handle
-non-uniform wind vectors (such as during wing rotations), more stable during
-wing rotations (clamped coefficients), etc).</p></li>
-<li><p>In additional to the parametric foil geometry, it also decomposed the system
-model into three components (canopy, lines, and payload) and implemented
-parametric models for them.</p></li>
-<li><p>It implemented several system dynamics models that combine the component
-models, and account for the effects of apparent mass.</p></li>
-<li><p>It concluded by implementing state dynamics models and a flight simulator
-for generating state trajectories.</p></li>
-<li><p>To demonstrate its effectiveness, it implemented a commercial wing (a Niviuk
-Hook 3, size 23) using only publicly available data, then compared its
-static and dynamic performance to experimental flight performance.</p></li>
-</ul>
-</section>
+<p><em>This page intentionally left blank.</em></p>
 </section>
 
         </article>
@@ -354,29 +269,8 @@ static and dynamic performance to experimental flight performance.</p></li>
 
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">8. Conclusion</a><ul>
-<li><a class="reference internal" href="#summary">8.1. Summary?</a></li>
-<li><a class="reference internal" href="#future-work">8.2. Future work</a></li>
-<li><a class="reference internal" href="#freewrite">8.3. Freewrite</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

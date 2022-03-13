@@ -493,13 +493,12 @@ assumed to have a negligible impact on the overall system behavior.
 
 .. Aerodynamic coefficients for viscous drag corrections
 
-[[FIXME: finish]]
+[[FIXME: add the viscous drag corrections
 
 * :math:`C_{D,\textrm{intakes}}`
-
 * :math:`C_{D,\textrm{surface}}`
 
-[[This assumes a single profile is used for all sections.]]
+]]
 
 
 Suspension lines
@@ -609,25 +608,6 @@ a reasonable starting point is :math:`\kappa_x = 0.5`.
 
 Brakes
 ^^^^^^
-
-.. Don't discuss the design of the brake model, just explain how to estimate
-   the parameters, but for my own sake, here's a recap:
-
-   * `\delta_d` is the absolute deflection distance
-
-   * `\bar{\delta}_d` is the normalized deflection distance
-
-   * `\bar{\delta_{d,max}` is the largest normalized delta_d supported by the
-     airfoil set
-
-   * `kappa_b` is the maximum distance you can pull the brakes. It is the
-     scaling factor applied to the quartic, which produces `\delta_d`
-
-   * `kappa_b` should be as large as possible in order to maximize the usable
-     range of the brakes. It's not necessarily determined by section that
-     experiences the maximum ABSOLUTE deflection; it's determined by the
-     section with the maximum NORMALIZED deflection, which depends on the
-     section chord.
 
 
 The second group of parameters :eq:`suspension lines parameters, brakes` for
@@ -839,14 +819,6 @@ thus far. Nevertheless, when taken together they can at least provide
 incremental confidence that a model is adequate to answer basic questions of
 wing performance.
 
-.. FIXME: focus on establishing that I'm at least getting close! And yeah, The
-   absence of detailed performance information clearly limits the suitability
-   of these models to different applications, but at least I've got this far.
-   "More work is needed" is a satisfactory conclusion to this project, in my
-   opinion. The component models leave a lot of room for improvement. But
-   that's part of the point: it was designed for flexibility from the get go,
-   and it succeeded at that.]]
-
 
 Polar curve
 -----------
@@ -862,15 +834,6 @@ Polar curve
    applied are both unknown), no cell billowing, etc etc. Seems like a good
    place to point out "this is overestimating lift and underestimating drag, as
    expected."
-
-
-.. Equilibrium states
-
-* [[FIXME: define *equilibrium state*]]
-
-* Dynamic equilibrium does not mean steady-state. For example, a wing doing
-  a steady-state 360° turn is not in equilibrium: its translational velocity is
-  changing, so its acceleration is non-zero.
 
 
 .. Polar curves
@@ -906,35 +869,16 @@ general accuracy of the model estimates.
 
 .. figure:: figures/paraglider/demonstration/polar_25.svg
 
-   Polar curve for Niviuk Hook 3 size 25
+   Polar curve for Niviuk Hook 3 size 25.
 
-   Colored markings are theoretical data from the model, black markings are
-   experimental data from Parapente Mag. Red represents braking, green
-   represents accelerating, and the blue diagonal line marks the predicted best
-   glide ratio. The three black vertical lines mark the experimental values for
-   minimum speed, trim speed, and maximum speed; the left black dot is the
-   "minimum sink" operating point, and the right dot is the "best glide"
-   operating point.
+   Black lines are experimental, colored lines are theoretical. Red sections
+   represent braking, green sections represent accelerating. The blue line
+   marks the theoretical best glide ratio at trim. The four vertical dashed
+   lines mark the experimental values for minimum speed, minimum sink rate,
+   trim (no brakes or accelerator), and maximum accelerator, as reported by
+   Parapente Mag.
 
-If the model is a good approximation of the glider that generated the data
-— and assuming the data was collected accurately — then the experimental values
-should match the predicted values:
-
-* The minimum ground speed should align with the leftmost endpoint of the red
-  curve
-
-* Trim speed should align with the point where the red and green curves connect
-
-* The maximum ground speed should align with the rightmost endpoint of the
-  green curve
-
-* The "minimum sink" operating point should lie on the point where the curve
-  reaches its minimum
-
-* The "best glide" operating point should lie on the point where the blue line
-  touches the polar curve
-
-Although the diagram is a convenient way to summarize so much information it
+Although the diagram is a convenient way to summarize so much information, it
 can be hard to distinguish specific values, so their numerical equivalents are
 listed below.
 
@@ -1016,15 +960,14 @@ theoretical curves produces valuable reference data:
 
 .. figure:: figures/paraglider/demonstration/polar_27.svg
 
-   Polar curve for Niviuk Hook 3 size 27
+   Polar curve for Niviuk Hook 3 size 27.
 
-   Colored markings are theoretical data from the model, black markings are
-   experimental data from Parapente. Red represents braking, green represents
-   accelerating, and the blue diagonal line marks the predicted best glide
-   ratio. The three black vertical lines mark the experimental values for
-   minimum speed, trim speed, and maximum speed; the left black dot is the
-   "minimum sink" operating point, and the right dot is the "best glide"
-   operating point.
+   Black lines are experimental, colored lines are theoretical. Red sections
+   represent braking, green sections represent accelerating. The blue line
+   marks the theoretical best glide ratio at trim. The four vertical dashed
+   lines mark the experimental values for minimum speed, minimum sink rate,
+   trim (no brakes or accelerator), and maximum accelerator, as reported by
+   Parapente.
 
 And as before, the numerical equivalents of the data in the figure above:
 

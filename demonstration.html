@@ -616,12 +616,12 @@ of that missing mass is near the system center of mass and does not impart
 a major weight moment, so for the goals of this project the discrepancy is
 assumed to have a negligible impact on the overall system behavior.</p>
 <p class="rubric">Viscous drag corrections</p>
-<p>[[FIXME: finish]]</p>
+<p>[[FIXME: add the viscous drag corrections</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(C_{D,\textrm{intakes}}\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(C_{D,\textrm{surface}}\)</span></p></li>
 </ul>
-<p>[[This assumes a single profile is used for all sections.]]</p>
+<p>]]</p>
 </section>
 </section>
 <section id="suspension-lines">
@@ -818,12 +818,6 @@ incremental confidence that a model is adequate to answer basic questions of
 wing performance.</p>
 <section id="polar-curve">
 <h3><span class="section-number">7.2.1. </span>Polar curve<a class="headerlink" href="#polar-curve" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>[[FIXME: define <em>equilibrium state</em>]]</p></li>
-<li><p>Dynamic equilibrium does not mean steady-state. For example, a wing doing
-a steady-state 360° turn is not in equilibrium: its translational velocity is
-changing, so its acceleration is non-zero.</p></li>
-</ul>
 <p>The conventional way to summarize the performance of a gliding aircraft is with
 a chart called the <em>polar curve</em>. These curves show the vertical and horizontal
 speed of the aircraft at equilibrium over the range of brake and accelerator
@@ -849,33 +843,18 @@ point data over the theoretical curve it is possible to get a sense of the
 general accuracy of the model estimates.</p>
 <figure class="align-default" id="id17">
 <img alt="_images/polar_25.svg" src="_images/polar_25.svg"/><figcaption>
-<p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 25</span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 25.</span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
 <div class="legend">
-<p>Colored markings are theoretical data from the model, black markings are
-experimental data from Parapente Mag. Red represents braking, green
-represents accelerating, and the blue diagonal line marks the predicted best
-glide ratio. The three black vertical lines mark the experimental values for
-minimum speed, trim speed, and maximum speed; the left black dot is the
-“minimum sink” operating point, and the right dot is the “best glide”
-operating point.</p>
+<p>Black lines are experimental, colored lines are theoretical. Red sections
+represent braking, green sections represent accelerating. The blue line
+marks the theoretical best glide ratio at trim. The four vertical dashed
+lines mark the experimental values for minimum speed, minimum sink rate,
+trim (no brakes or accelerator), and maximum accelerator, as reported by
+Parapente Mag.</p>
 </div>
 </figcaption>
 </figure>
-<p>If the model is a good approximation of the glider that generated the data
-— and assuming the data was collected accurately — then the experimental values
-should match the predicted values:</p>
-<ul class="simple">
-<li><p>The minimum ground speed should align with the leftmost endpoint of the red
-curve</p></li>
-<li><p>Trim speed should align with the point where the red and green curves connect</p></li>
-<li><p>The maximum ground speed should align with the rightmost endpoint of the
-green curve</p></li>
-<li><p>The “minimum sink” operating point should lie on the point where the curve
-reaches its minimum</p></li>
-<li><p>The “best glide” operating point should lie on the point where the blue line
-touches the polar curve</p></li>
-</ul>
-<p>Although the diagram is a convenient way to summarize so much information it
+<p>Although the diagram is a convenient way to summarize so much information, it
 can be hard to distinguish specific values, so their numerical equivalents are
 listed below.</p>
 <div class="table-wrapper"><table class="docutils align-default">
@@ -961,15 +940,14 @@ with the size 25 model, plotting the experimental data on top of the
 theoretical curves produces valuable reference data:</p>
 <figure class="align-default" id="id18">
 <img alt="_images/polar_27.svg" src="_images/polar_27.svg"/><figcaption>
-<p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 27</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 27.</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
 <div class="legend">
-<p>Colored markings are theoretical data from the model, black markings are
-experimental data from Parapente. Red represents braking, green represents
-accelerating, and the blue diagonal line marks the predicted best glide
-ratio. The three black vertical lines mark the experimental values for
-minimum speed, trim speed, and maximum speed; the left black dot is the
-“minimum sink” operating point, and the right dot is the “best glide”
-operating point.</p>
+<p>Black lines are experimental, colored lines are theoretical. Red sections
+represent braking, green sections represent accelerating. The blue line
+marks the theoretical best glide ratio at trim. The four vertical dashed
+lines mark the experimental values for minimum speed, minimum sink rate,
+trim (no brakes or accelerator), and maximum accelerator, as reported by
+Parapente.</p>
 </div>
 </figcaption>
 </figure>

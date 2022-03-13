@@ -213,42 +213,6 @@
 <h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h1>
 <p>The objective of this paper is to produce paraglider flight dynamics models as
 systems of differential equations <span class="math notranslate nohighlight">\(\dot{\vec{x}} = f(\vec{x}, \vec{u})\)</span>.</p>
-<p>[[specifically, using parametric component models]]</p>
-<ol class="arabic">
-<li><p>Dynamic simulations</p>
-<ul class="simple">
-<li><p>What are they?</p></li>
-<li><p>What are their applications? (motivate their value)</p></li>
-<li><p>How do they work? (A <em>dynamics model</em> provides a set of derivatives that
-describe the behavior of a system, and a simulator integrates those
-derivatives to create a record of that behavior over time.)</p></li>
-<li><p>[[Refer to my notes on “dynamic simulation” in
-<cite>work/content/state_dynamics.rst:Flight simulation</cite>]]</p></li>
-</ul>
-</li>
-<li><p>Flight simulation</p>
-<ul class="simple">
-<li><p>A <em>flight dynamics model</em> is just a dynamics model for an aircraft, and
-<em>flight simulation</em> is a normal dynamic simulation but of an aircraft.</p></li>
-<li><p>Tricky bits when dealing with aircraft:</p>
-<ul>
-<li><p>Aerodynamic forces</p></li>
-<li><p>Apparent mass effects</p></li>
-</ul>
-</li>
-<li><p>A <em>flight dynamics model</em> doesn’t just provide mass and forces, it compute
-the accelerations to account for those tricky bits? (Not necessarily; the
-aerodynamics may have been precomputed as linear coefficients.)</p></li>
-</ul>
-</li>
-<li><p>Paraglider flight simulation</p>
-<p>I’d like to simulate commercial paraglider wings, so this paper develops
-a parametric flight dynamics model for paragliders.</p>
-<p>(This is the first time I’ve specifically reference paragliding, and should
-segue into the next section, which introduces paragliding and establishes
-the performance criteria for the flight dynamics model that I require.)</p>
-</li>
-</ol>
 <section id="motivation">
 <h2><span class="section-number">1.1. </span>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">#</a></h2>
 <p>Paragliding is a recreational flying activity that uses a lightweight, flexible
@@ -301,12 +265,6 @@ relationship between the sequence of glider positions and the underlying wind
 field. This is vital information, because given a causal model it may be
 possible to perform statistical <em>flight reconstruction</em>. [[FIXME: finish; add
 reference to the MH370 paper.]]</p>
-<p>[[One of the sub-problems is that because we don’t know what paraglider model
-produced the data we also don’t have a single dynamics model: flight
-reconstruction would need an entire <strong>distribution</strong> of dynamics models. An
-analytical distribution over wing models is infeasible, but an empirical
-distribution over a representative subset of commercial paraglider wings should
-suffice.]]</p>
 <p>[[The problem is that it’s difficult to create a single flight dynamics model
 of a commercial wing, much less an entire set of models. It would be laborious
 if you had detailed specs, but we don’t even have that. All we have is summary
@@ -314,127 +272,8 @@ measurements. The response taken in this project is to encode the bulk of the
 structure is in parametric functions that are parametrized by that available
 data. FIXME: finish.]]</p>
 </section>
-<section id="paraglider-flight-dynamics">
-<h2><span class="section-number">1.2. </span>Paraglider flight dynamics<a class="headerlink" href="#paraglider-flight-dynamics" title="Permalink to this headline">#</a></h2>
-<ul>
-<li><p>What’s required to produce a flight dynamics model for a paraglider?</p>
-<p>Depends on the functionality you require; what control inputs, what sorts of
-flight scenarios (does it need to turn?), etc.</p>
-</li>
-<li><p>[[Define “typical flight conditions” in here somewhere; the flight conditions
-and foil geometry establish the criteria for selecting an aerodynamics
-method: nonlinear geometry, viscous effects, nonuniform wind fields, etc.]]</p></li>
-<li><p>Preview how to decompose a paraglider system into components. Do they really
-need their own subsections? Might depend on how I fill out the “Existing
-methods” section.</p></li>
-</ul>
-<p>Component models encode:</p>
-<ol class="arabic simple">
-<li><p>Inertial properties</p></li>
-<li><p>Aerodynamic and gravitational forces</p></li>
-</ol>
-<p>This is the tricky bit; most of the complexity is hidden in the component
-dynamics.</p>
-<p>The system dynamics combine the component dynamics into a composite system
-model.</p>
-<p>The state dynamics define the state derivatives in terms of system dynamics.</p>
-</section>
-<section id="existing-methods">
-<h2><span class="section-number">1.3. </span>Existing methods<a class="headerlink" href="#existing-methods" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>“Methods” includes existing tools and models in literature)</p></li>
-<li><p>How does <cite>glidersim</cite> compare to existing methods for modeling and for
-estimation? What did I do differently to justify creating a new model?</p></li>
-</ul>
-<p>What are the tasks?</p>
-<ul class="simple">
-<li><p>Foil modeling (paraglider components like harness, lines, etc, are one-offs)</p>
-<ul>
-<li><p>Designing a wing geometry (where does the geometry spec come from?)</p></li>
-<li><p>Instantiating a wing geometry (turning a spec into a geometry model that
-can answer queries required by an aerodynamics model)</p></li>
-<li><p>Estimating wing aerodynamics</p></li>
-</ul>
-</li>
-<li><p>Component models</p>
-<ul>
-<li><p>Models from literature, I guess…</p></li>
-</ul>
-</li>
-<li><p>System dynamics (defining the complete aircraft; combines ALL the pieces, not
-just the wing)</p>
-<ul>
-<li><p>I think YASim, JSBSim, etc fall into this category, possibly overlapping
-with the state dynamics. I imagine FlightGear defines the state variables
-and YAsim provides them.</p></li>
-</ul>
-</li>
-<li><p>State dynamics</p></li>
-<li><p>Flight simulation</p></li>
-</ul>
-<section id="foil-modeling">
-<h3><span class="section-number">1.3.1. </span>Foil modeling<a class="headerlink" href="#foil-modeling" title="Permalink to this headline">#</a></h3>
-<p>For “designing vs instantiating” a geometry, it might be easier to describe
-“explicit vs parametric” geometries. They’re hard to separate, so maybe don’t
-even try; instead, explain that some tools expect you to define the geometry
-<strong>directly</strong> versus <strong>parametrically</strong>.</p>
-<section id="geometry">
-<h4><span class="section-number">1.3.1.1. </span>Geometry<a class="headerlink" href="#geometry" title="Permalink to this headline">#</a></h4>
-<ul>
-<li><p>Existing tools: XFLR5, AVL, MachUpX, Benedetti</p></li>
-<li><p>Really hard to separate designing versus instantiating a geometry spec…</p></li>
-<li><p>Explicit geometry tools like XFLR5 require that you already have a wing
-geometry spec and just want to instantiate it. Very inconvenient for
-<strong>designing</strong> new geometries; pointwise models are completely unsuitable for
-designing nonlinear geometries in particular.</p>
-<p>Designing nonlinear foils is much easier to do when you can work with
-parametric mathematical models. Benedetti is similar to what I did, but still
-to restricted. I generalized it, allowing more flexibility which I then used
-to create simpler (and more precise) parametric representations of the
-underlying structure.</p>
-</li>
-</ul>
-</section>
-<section id="aerodynamics">
-<h4><span class="section-number">1.3.1.2. </span>Aerodynamics<a class="headerlink" href="#aerodynamics" title="Permalink to this headline">#</a></h4>
-<ul class="simple">
-<li><p>Existing tools: XFLR5, AVL, MachUpX, etc</p></li>
-</ul>
-<p>Okay, I need to differentiate general aerodynamics methods and
-paraglider-specific methods. There are tools like AVL for estimating
-aerodynamics of nonlinear wings. There are also specialized methods in
-literature for quickly approximating paraglider aerodynamics (Gonzalez, etc).
-I’m arguing that both the <strong>available</strong> general and specialized models were
-inadequate, justifying my work.</p>
-<p>Models that assume you already know the total wing aerodynamic coefficients are
-out since those are unknown (and those are typically linear models anyway). An
-explicit goal of my project was to NOT assume linearity.</p>
-<p>Problems with existing models in literature for paraglider aerodynamics:</p>
-<ul>
-<li><p>Many models from literature analyzing paraglider aerodynamics are for
-longitudinal-only dynamics</p></li>
-<li><p>Assumed linearity</p>
-<p>No degradation near stall (high alpha), no apparent mass, etc</p>
-</li>
-<li><p>They assume uniform wind</p>
-<p>For example, what happens when a paraglider has an indirect interaction with
-a thermal?</p>
-</li>
-</ul>
-</section>
-</section>
-<section id="paraglider-components">
-<h3><span class="section-number">1.3.2. </span>Paraglider components<a class="headerlink" href="#paraglider-components" title="Permalink to this headline">#</a></h3>
-</section>
-<section id="paraglider-system-dynamics">
-<h3><span class="section-number">1.3.3. </span>Paraglider system dynamics<a class="headerlink" href="#paraglider-system-dynamics" title="Permalink to this headline">#</a></h3>
-</section>
-<section id="paraglider-state-dynamics">
-<h3><span class="section-number">1.3.4. </span>Paraglider state dynamics<a class="headerlink" href="#paraglider-state-dynamics" title="Permalink to this headline">#</a></h3>
-</section>
-</section>
 <section id="roadmap">
-<h2><span class="section-number">1.4. </span>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">1.2. </span>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">#</a></h2>
 <p>The modeling process begins by developing a novel <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a> tailored
 for nonlinear shapes, enabling simple, parametric representations of typical
 paraglider canopies. It then chooses a <a class="reference internal" href="foil_aerodynamics.html"><span class="doc">Foil aerodynamics</span></a> method suitable
@@ -443,7 +282,7 @@ and compares its estimates to experimental wind tunnel data. Next,
 <a class="reference internal" href="paraglider_components.html"><span class="doc">Component models</span></a> decomposes a paraglider into a system of
 components, and develops parametric models for each component. Finally,
 <a class="reference internal" href="system_dynamics.html"><span class="doc">System dynamics</span></a> combine the components into complete dynamics models,
-and <a class="reference internal" href="state_dynamics.html"><span class="doc">State dynamics</span></a> selects a suitable set of state variables and defines
+and <a class="reference internal" href="state_dynamics.html"><span class="doc">State dynamics</span></a> select a suitable set of state variables and define
 their derivatives in terms of the system dynamics. The paper concludes with
 a <a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a> that uses the parametric components to create a flight
 dynamics model of a commercial paraglider wing; it estimates the parameters of
@@ -522,19 +361,7 @@ the simulated behavior in a variety of scenarios.</p>
             <ul>
 <li><a class="reference internal" href="#">1. Introduction</a><ul>
 <li><a class="reference internal" href="#motivation">1.1. Motivation</a></li>
-<li><a class="reference internal" href="#paraglider-flight-dynamics">1.2. Paraglider flight dynamics</a></li>
-<li><a class="reference internal" href="#existing-methods">1.3. Existing methods</a><ul>
-<li><a class="reference internal" href="#foil-modeling">1.3.1. Foil modeling</a><ul>
-<li><a class="reference internal" href="#geometry">1.3.1.1. Geometry</a></li>
-<li><a class="reference internal" href="#aerodynamics">1.3.1.2. Aerodynamics</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#paraglider-components">1.3.2. Paraglider components</a></li>
-<li><a class="reference internal" href="#paraglider-system-dynamics">1.3.3. Paraglider system dynamics</a></li>
-<li><a class="reference internal" href="#paraglider-state-dynamics">1.3.4. Paraglider state dynamics</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#roadmap">1.4. Roadmap</a></li>
+<li><a class="reference internal" href="#roadmap">1.2. Roadmap</a></li>
 </ul>
 </li>
 </ul>
