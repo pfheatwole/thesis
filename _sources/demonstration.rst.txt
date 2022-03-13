@@ -869,16 +869,35 @@ general accuracy of the model estimates.
 
 .. figure:: figures/paraglider/demonstration/polar_25.svg
 
-   Polar curve for Niviuk Hook 3 size 25.
+   Polar curve for Niviuk Hook 3 size 25
 
-   Black lines are experimental, colored lines are theoretical. Red sections
-   represent braking, green sections represent accelerating. The blue line
-   marks the theoretical best glide ratio at trim. The four vertical dashed
-   lines mark the experimental values for minimum speed, minimum sink rate,
-   trim (no brakes or accelerator), and maximum accelerator, as reported by
-   Parapente Mag.
+   Colored markings are theoretical data from the model, black markings are
+   experimental data from Parapente Mag. Red represents braking, green
+   represents accelerating, and the blue diagonal line marks the predicted best
+   glide ratio. The three black vertical lines mark the experimental values for
+   minimum speed, trim speed, and maximum speed; the left black dot is the
+   "minimum sink" operating point, and the right dot is the "best glide"
+   operating point.
 
-Although the diagram is a convenient way to summarize so much information, it
+If the model is a good approximation of the glider that generated the data
+— and assuming the data was collected accurately — then the experimental values
+should match the predicted values:
+
+* The minimum ground speed should align with the leftmost endpoint of the red
+  curve
+
+* Trim speed should align with the point where the red and green curves connect
+
+* The maximum ground speed should align with the rightmost endpoint of the
+  green curve
+
+* The "minimum sink" operating point should lie on the point where the curve
+  reaches its minimum
+
+* The "best glide" operating point should lie on the point where the blue line
+  touches the polar curve
+
+Although the diagram is a convenient way to summarize so much information it
 can be hard to distinguish specific values, so their numerical equivalents are
 listed below.
 
@@ -960,14 +979,15 @@ theoretical curves produces valuable reference data:
 
 .. figure:: figures/paraglider/demonstration/polar_27.svg
 
-   Polar curve for Niviuk Hook 3 size 27.
+   Polar curve for Niviuk Hook 3 size 27
 
-   Black lines are experimental, colored lines are theoretical. Red sections
-   represent braking, green sections represent accelerating. The blue line
-   marks the theoretical best glide ratio at trim. The four vertical dashed
-   lines mark the experimental values for minimum speed, minimum sink rate,
-   trim (no brakes or accelerator), and maximum accelerator, as reported by
-   Parapente.
+   Colored markings are theoretical data from the model, black markings are
+   experimental data from Parapente. Red represents braking, green represents
+   accelerating, and the blue diagonal line marks the predicted best glide
+   ratio. The three black vertical lines mark the experimental values for
+   minimum speed, trim speed, and maximum speed; the left black dot is the
+   "minimum sink" operating point, and the right dot is the "best glide"
+   operating point.
 
 And as before, the numerical equivalents of the data in the figure above:
 
