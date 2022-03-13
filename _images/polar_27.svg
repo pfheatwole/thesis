@@ -26,15 +26,15 @@
      inkscape:document-units="pt"
      showgrid="false"
      inkscape:snap-page="true"
-     inkscape:zoom="1.2322917"
-     inkscape:cx="396.01014"
-     inkscape:cy="82.772612"
+     inkscape:zoom="4.9291668"
+     inkscape:cx="437.39644"
+     inkscape:cy="121.52155"
      inkscape:window-width="2560"
      inkscape:window-height="1371"
      inkscape:window-x="0"
      inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg480" />
+     inkscape:current-layer="axes_1" />
   <metadata
      id="metadata2">
     <rdf:RDF>
@@ -1201,14 +1201,6 @@
       </g>
     </g>
     <g
-       id="line2d_27">
-      <path
-         d="m 90,132.975 488.25,51.27116"
-         clip-path="url(#p4e406c2c4f)"
-         style="fill:none;stroke:#0000ff;stroke-width:0.75;stroke-dasharray:2.775, 1.2;stroke-dashoffset:0"
-         id="path377" />
-    </g>
-    <g
        id="line2d_28">
       <path
          d="m 390.95659,164.57847 4.17965,0.49061 4.32179,0.54511 4.48845,0.60299 4.70408,0.67064 4.92663,0.74585 5.14994,0.82696 5.39297,0.91734 5.65376,1.01679 5.93387,1.12832 6.22289,1.25006 6.49881,1.38048 6.77156,1.52026 7.0586,1.67424 7.35282,1.84224 7.63779,2.02092 7.89753,2.20814 8.16781,2.40963 8.43183,2.62482 8.68665,2.85179 8.93285,3.09135"
@@ -1223,6 +1215,14 @@
          clip-path="url(#p4e406c2c4f)"
          style="fill:none;stroke:#ff0000;stroke-width:1.5;stroke-linecap:square"
          id="path383" />
+    </g>
+    <g
+       id="line2d_27">
+      <path
+         d="m 90,132.975 488.25,51.27116"
+         clip-path="url(#p4e406c2c4f)"
+         style="display:inline;fill:none;stroke:#0000ff;stroke-width:0.75;stroke-dasharray:2.775, 1.2;stroke-dashoffset:0"
+         id="path377" />
     </g>
     <g
        id="LineCollection_1">

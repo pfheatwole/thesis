@@ -3,3 +3,11 @@
   top: unset;
   bottom: 5%;
 }
+
+div.legend {
+  font-size: 0.8em;
+  margin-bottom: 1em;
+  border-bottom-color: black;
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
+}
