@@ -88,7 +88,28 @@ Model selection
 [[FIXME: finish]]
 
 * Survey the available models (LLT, VLM, panel methods, CFD, etc) and
-  progressively eliminate them.
+  progressively eliminate them. Include citations with an overview of
+  aerodynamic models, like Drela. Section profiles were covered in the previous
+  chapter so that terminology is available.
+
+  What simplifying assumptions do they make regarding the geometry? What
+  simplifying assumptions do they make regarding the flow-field (viscosity,
+  compressibility, etc)?
+
+  What are their limitations? (spanwise flow, flow separation, linear
+  coefficients, uniform wind, etc)
+
+  **Should I discuss these separately?** For example, does it make sense to
+  declare that the LLT assumes the wing is straight without the context that
+  it models the flow-field using a variable-strength vortex filament? Not sure
+  how to concisely deal with this discussion.
+
+* Some of these models are already being used in literature to estimate the
+  performance of parafoils. Explain why methods that "work" for other papers do
+  not meet the performance criteria for **this** project.
+
+  Classical LLT fails with non-linear geometry, VLM handles non-linear geometry
+  but neglects viscosity, CFD is too slow.
 
 * Conclusion: only Phillips' NLLT met my requirements (except that no open
   source implementations were available at the time).

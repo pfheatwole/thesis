@@ -656,12 +656,71 @@ there are two conventions in common use: one is to use the section
 curve :math:`\vec{r}_{RP/O}`. Unfortunately, both are problematic for modeling
 a parafoil from the most readily-available data.
 
-[[FIXME: explain the advantages of my choice]]
+
+**You can measure c(s) and x(s) directly from the flattened foil. You don't
+know the final position, so using position is a bad idea. You only know
+y_flat, so use y_flat to define the section index. The effect of using y_flat
+is that s is defined as the linear distance along the yz curve (or in this
+case, the normalized y_flat equates to the normalized yz distance). You should
+be able to layout the flattened planform and finalize those design curves;
+they shouldn't change when you change the yz-curve.**
+
+
+* The section index connects all of the design curves.
+
+* Models should choose a definition that encourages simple parametric forms of
+  the design curves. Decoupling the curves as much as possible gives them the
+  freedom to choose simple parametric forms (that's why the expanded model
+  decomposed position).
+
+* [[Another issue arises when modeling an existing wing from technical
+  specifications and physical measurements.
+
+  You should choose a scheme that makes it easy to determine the index of each
+  section, and thus the index associate with each measurement.]]
+
+
+
+.. What are the common choices?
+
+A traditional choice of section index is the section :math:`y`-coordinate,
+sometimes normalized by the span of the wing to produce an index between ±1
+(so :math:`s = \frac{y}{b/2}`). Although simple and intuitive for flat wings,
+defining a nonlinear geometry in terms of :math:`y` can become unwieldy, so
+another common choice is to use the linear distance along the position curve
+:math:`\vec{r}_{RP/O}`; again, this distance is sometimes normalized to ±1.
+
+
+.. What is my choice? What is the advantage of my choice?
+
+[[I chose the linear distance along the :math:`yz` curve (that is, only the
+:math:`y` and :math:`z` components of :math:`r_{RP/O}(s)`). This choice has
+the distinct advantage that section indices can be determined even when the
+parafoil is flattened out on the ground, which means it is equivalent to:
 
 .. math::
    :label: yz-distance section index
 
    s = \frac{y_{flat}}{b_{flat}/2}
+
+[[
+
+The benefit of this choice will be apparent when trying to use measurements
+taken from a flattened parafoil, as in :ref:`demonstration:Foil geometry`.
+Defining the section index using the normalized linear distance along the
+:math:`yz`-curve decouples the section index from whether the canopy is
+inflated or not, allowing either measurements to be used directly.
+
+Very useful when some data comes from measurements of a flattened foil. You can
+determine `s` directly from the flattened wing and measure `r_x(s)`, `x(s)`,
+and `c(s)` without knowing :math:`yz(s)`. Importantly, **manipulating `yz(s)`
+doesn't change `s`.**
+
+]]
+
+[[Caveat: unless `x = constant`, linear spacing along `yz` will not produce
+linear spacing along `xyz`. That can be surprising, but easy to understand if
+you always visualize the wing from directly behind it.]]
 
 
 Reference point
@@ -1050,12 +1109,23 @@ Case study
 
    2. Prepare for the wind tunnel test in the next chapter
 
+
+**FIXME: apparently I need to clarify what value this section provides. What
+"study" am I referring to?** The key takeaway of this section should be how the
+flexibility of the simplified model makes it easy to use the provided
+specifications?
+
+
 The purpose of the `Expanded model`_ is to increase the freedom of how a foil
 is specified. The examples demonstrated how this freedom can be used to design
 complex foil geometries using simple design curves. Another benefit of this
 freedom is that it is more adaptable to the variety of foil specifications
 used in literature.
 
+[[FIXME: what value does this paragraph provide?]]
+
+Parafoil canopies in particular are not convenient to design using the leading
+edge.
 
 The geometry from a 2015 parafoil wind tunnel test
 :cite:`belloc2015WindTunnelInvestigation` makes an excellent case study of

@@ -4,6 +4,10 @@
    Glossary
    ********
 
+.. note::
+
+   *This glossary is a placeholder. It may or may not be useful in the end.*
+
 .. raw:: latex
 
    \addcontentsline{toc}{chapter}{Glossary}
@@ -12,11 +16,20 @@
 .. glossary::
    :sorted:
 
-   term
-      This is a sample definition.
+   track
+      FIXME
 
-   another term
-      This is another sample definition.
+   flight record
+      FIXME
+
+   parametric model
+      FIXME
+
+   dihedral
+      FIXME
+
+   anhedral
+      See :term:`dihedral`
 
    filtering problem
       A category of problems involving stochastic systems where the goal is to
@@ -29,3 +42,7 @@
 
    ISA
       International standard atmosphere.
+
+   design curve
+      A function that defines a variable in a :doc:`foil_geometry` at every
+      section index

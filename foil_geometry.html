@@ -590,9 +590,51 @@ there are two conventions in common use: one is to use the section
 <span class="math notranslate nohighlight">\(y\)</span>-coordinate, and the other is the linear distance along the position
 curve <span class="math notranslate nohighlight">\(\vec{r}_{RP/O}\)</span>. Unfortunately, both are problematic for modeling
 a parafoil from the most readily-available data.</p>
-<p>[[FIXME: explain the advantages of my choice]]</p>
+<p><strong>You can measure c(s) and x(s) directly from the flattened foil. You don’t
+know the final position, so using position is a bad idea. You only know
+y_flat, so use y_flat to define the section index. The effect of using y_flat
+is that s is defined as the linear distance along the yz curve (or in this
+case, the normalized y_flat equates to the normalized yz distance). You should
+be able to layout the flattened planform and finalize those design curves;
+they shouldn’t change when you change the yz-curve.</strong></p>
+<ul>
+<li><p>The section index connects all of the design curves.</p></li>
+<li><p>Models should choose a definition that encourages simple parametric forms of
+the design curves. Decoupling the curves as much as possible gives them the
+freedom to choose simple parametric forms (that’s why the expanded model
+decomposed position).</p></li>
+<li><p>[[Another issue arises when modeling an existing wing from technical
+specifications and physical measurements.</p>
+<p>You should choose a scheme that makes it easy to determine the index of each
+section, and thus the index associate with each measurement.]]</p>
+</li>
+</ul>
+<p>A traditional choice of section index is the section <span class="math notranslate nohighlight">\(y\)</span>-coordinate,
+sometimes normalized by the span of the wing to produce an index between ±1
+(so <span class="math notranslate nohighlight">\(s = \frac{y}{b/2}\)</span>). Although simple and intuitive for flat wings,
+defining a nonlinear geometry in terms of <span class="math notranslate nohighlight">\(y\)</span> can become unwieldy, so
+another common choice is to use the linear distance along the position curve
+<span class="math notranslate nohighlight">\(\vec{r}_{RP/O}\)</span>; again, this distance is sometimes normalized to ±1.</p>
+<p>[[I chose the linear distance along the <span class="math notranslate nohighlight">\(yz\)</span> curve (that is, only the
+<span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span> components of <span class="math notranslate nohighlight">\(r_{RP/O}(s)\)</span>). This choice has
+the distinct advantage that section indices can be determined even when the
+parafoil is flattened out on the ground, which means it is equivalent to:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-yz-distance-section-index">
 <span class="eqno">(2.10)<a class="headerlink" href="#equation-yz-distance-section-index" title="Permalink to this equation">#</a></span>\[s = \frac{y_{flat}}{b_{flat}/2}\]</div></div>
+<p>[[</p>
+<p>The benefit of this choice will be apparent when trying to use measurements
+taken from a flattened parafoil, as in <a class="reference internal" href="demonstration.html#foil-geometry"><span class="std std-ref">Foil geometry</span></a>.
+Defining the section index using the normalized linear distance along the
+<span class="math notranslate nohighlight">\(yz\)</span>-curve decouples the section index from whether the canopy is
+inflated or not, allowing either measurements to be used directly.</p>
+<p>Very useful when some data comes from measurements of a flattened foil. You can
+determine <cite>s</cite> directly from the flattened wing and measure <cite>r_x(s)</cite>, <cite>x(s)</cite>,
+and <cite>c(s)</cite> without knowing <span class="math notranslate nohighlight">\(yz(s)\)</span>. Importantly, <strong>manipulating `yz(s)`
+doesn’t change `s`.</strong></p>
+<p>]]</p>
+<p>[[Caveat: unless <cite>x = constant</cite>, linear spacing along <cite>yz</cite> will not produce
+linear spacing along <cite>xyz</cite>. That can be surprising, but easy to understand if
+you always visualize the wing from directly behind it.]]</p>
 </section>
 <section id="reference-point">
 <h3><span class="section-number">2.4.2. </span>Reference point<a class="headerlink" href="#reference-point" title="Permalink to this headline">#</a></h3>
@@ -849,11 +891,18 @@ should suffice.]]</p>
 </section>
 <section id="case-study">
 <h2><span class="section-number">2.6. </span>Case study<a class="headerlink" href="#case-study" title="Permalink to this headline">#</a></h2>
+<p><strong>FIXME: apparently I need to clarify what value this section provides. What
+“study” am I referring to?</strong> The key takeaway of this section should be how the
+flexibility of the simplified model makes it easy to use the provided
+specifications?</p>
 <p>The purpose of the <a class="reference internal" href="#expanded-model">Expanded model</a> is to increase the freedom of how a foil
 is specified. The examples demonstrated how this freedom can be used to design
 complex foil geometries using simple design curves. Another benefit of this
 freedom is that it is more adaptable to the variety of foil specifications
 used in literature.</p>
+<p>[[FIXME: what value does this paragraph provide?]]</p>
+<p>Parafoil canopies in particular are not convenient to design using the leading
+edge.</p>
 <p>The geometry from a 2015 parafoil wind tunnel test
 <span id="id9">[<a class="reference internal" href="zreferences.html#id10" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">6</a>]</span> makes an excellent case study of
 a foil specification from literature that positions the sections using

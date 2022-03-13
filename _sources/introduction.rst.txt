@@ -8,6 +8,49 @@ Introduction
 The objective of this paper is to produce paraglider flight dynamics models as
 systems of differential equations :math:`\dot{\vec{x}} = f(\vec{x}, \vec{u})`.
 
+[[specifically, using parametric component models]]
+
+
+.. What is a *dynamic simulation*?
+
+1. Dynamic simulations
+
+   * What are they?
+
+   * What are their applications? (motivate their value)
+
+   * How do they work? (A *dynamics model* provides a set of derivatives that
+     describe the behavior of a system, and a simulator integrates those
+     derivatives to create a record of that behavior over time.)
+
+   * [[Refer to my notes on "dynamic simulation" in
+     `work/content/state_dynamics.rst:Flight simulation`]]
+
+2. Flight simulation
+
+   * A *flight dynamics model* is just a dynamics model for an aircraft, and
+     *flight simulation* is a normal dynamic simulation but of an aircraft.
+
+   * Tricky bits when dealing with aircraft:
+
+     * Aerodynamic forces
+
+     * Apparent mass effects
+
+   * A *flight dynamics model* doesn't just provide mass and forces, it compute
+     the accelerations to account for those tricky bits? (Not necessarily; the
+     aerodynamics may have been precomputed as linear coefficients.)
+
+3. Paraglider flight simulation
+
+   I'd like to simulate commercial paraglider wings, so this paper develops
+   a parametric flight dynamics model for paragliders.
+
+   (This is the first time I've specifically reference paragliding, and should
+   segue into the next section, which introduces paragliding and establishes
+   the performance criteria for the flight dynamics model that I require.)
+
+
 
 .. Context
 
@@ -81,6 +124,14 @@ field. This is vital information, because given a causal model it may be
 possible to perform statistical *flight reconstruction*. [[FIXME: finish; add
 reference to the MH370 paper.]]
 
+[[One of the sub-problems is that because we don't know what paraglider model
+produced the data we also don't have a single dynamics model: flight
+reconstruction would need an entire **distribution** of dynamics models. An
+analytical distribution over wing models is infeasible, but an empirical
+distribution over a representative subset of commercial paraglider wings should
+suffice.]]
+
+
 .. Occupying the niche (Response): parametric modeling
 
 [[The problem is that it's difficult to create a single flight dynamics model
@@ -89,6 +140,168 @@ if you had detailed specs, but we don't even have that. All we have is summary
 measurements. The response taken in this project is to encode the bulk of the
 structure is in parametric functions that are parametrized by that available
 data. FIXME: finish.]]
+
+
+Paraglider flight dynamics
+==========================
+
+.. Elaborate on what a paraglider flight dynamics models do and what goes into
+   creating one.
+
+   What do I mean "parglider flight dynamics"? What do I mean by "parametric"?
+
+
+* What's required to produce a flight dynamics model for a paraglider?
+
+  Depends on the functionality you require; what control inputs, what sorts of
+  flight scenarios (does it need to turn?), etc.
+
+* [[Define "typical flight conditions" in here somewhere; the flight conditions
+  and foil geometry establish the criteria for selecting an aerodynamics
+  method: nonlinear geometry, viscous effects, nonuniform wind fields, etc.]]
+
+* Preview how to decompose a paraglider system into components. Do they really
+  need their own subsections? Might depend on how I fill out the "Existing
+  methods" section.
+
+
+.. Foil geometry
+
+
+.. Foil aerodynamics
+
+
+.. Component models
+
+Component models encode:
+
+1. Inertial properties
+
+2. Aerodynamic and gravitational forces
+
+This is the tricky bit; most of the complexity is hidden in the component
+dynamics.
+
+
+.. System dynamics
+
+The system dynamics combine the component dynamics into a composite system
+model.
+
+
+.. State dynamics
+
+The state dynamics define the state derivatives in terms of system dynamics.
+
+
+Existing methods
+================
+
+* "Methods" includes existing tools and models in literature)
+
+* How does `glidersim` compare to existing methods for modeling and for
+  estimation? What did I do differently to justify creating a new model?
+
+
+What are the tasks?
+
+* Foil modeling (paraglider components like harness, lines, etc, are one-offs)
+
+  * Designing a wing geometry (where does the geometry spec come from?)
+
+  * Instantiating a wing geometry (turning a spec into a geometry model that
+    can answer queries required by an aerodynamics model)
+
+  * Estimating wing aerodynamics
+
+* Component models
+
+  * Models from literature, I guess...
+
+* System dynamics (defining the complete aircraft; combines ALL the pieces, not
+  just the wing)
+
+  * I think YASim, JSBSim, etc fall into this category, possibly overlapping
+    with the state dynamics. I imagine FlightGear defines the state variables
+    and YAsim provides them.
+
+* State dynamics
+
+* Flight simulation
+
+
+Foil modeling
+-------------
+
+For "designing vs instantiating" a geometry, it might be easier to describe
+"explicit vs parametric" geometries. They're hard to separate, so maybe don't
+even try; instead, explain that some tools expect you to define the geometry
+**directly** versus **parametrically**.
+
+
+Geometry
+^^^^^^^^
+
+* Existing tools: XFLR5, AVL, MachUpX, Benedetti
+
+* Really hard to separate designing versus instantiating a geometry spec...
+
+* Explicit geometry tools like XFLR5 require that you already have a wing
+  geometry spec and just want to instantiate it. Very inconvenient for
+  **designing** new geometries; pointwise models are completely unsuitable for
+  designing nonlinear geometries in particular.
+
+  Designing nonlinear foils is much easier to do when you can work with
+  parametric mathematical models. Benedetti is similar to what I did, but still
+  to restricted. I generalized it, allowing more flexibility which I then used
+  to create simpler (and more precise) parametric representations of the
+  underlying structure.
+
+
+Aerodynamics
+^^^^^^^^^^^^
+
+* Existing tools: XFLR5, AVL, MachUpX, etc
+
+Okay, I need to differentiate general aerodynamics methods and
+paraglider-specific methods. There are tools like AVL for estimating
+aerodynamics of nonlinear wings. There are also specialized methods in
+literature for quickly approximating paraglider aerodynamics (Gonzalez, etc).
+I'm arguing that both the **available** general and specialized models were
+inadequate, justifying my work.
+
+
+Models that assume you already know the total wing aerodynamic coefficients are
+out since those are unknown (and those are typically linear models anyway). An
+explicit goal of my project was to NOT assume linearity.
+
+
+Problems with existing models in literature for paraglider aerodynamics:
+
+* Many models from literature analyzing paraglider aerodynamics are for
+  longitudinal-only dynamics
+
+* Assumed linearity
+
+  No degradation near stall (high alpha), no apparent mass, etc
+
+* They assume uniform wind
+
+  For example, what happens when a paraglider has an indirect interaction with
+  a thermal?
+
+
+Paraglider components
+---------------------
+
+
+Paraglider system dynamics
+--------------------------
+
+
+Paraglider state dynamics
+-------------------------
+
 
 
 Roadmap
@@ -104,7 +317,7 @@ and compares its estimates to experimental wind tunnel data. Next,
 :doc:`paraglider_components` decomposes a paraglider into a system of
 components, and develops parametric models for each component. Finally,
 :doc:`system_dynamics` combine the components into complete dynamics models,
-and :doc:`state_dynamics` select a suitable set of state variables and define
+and :doc:`state_dynamics` selects a suitable set of state variables and defines
 their derivatives in terms of the system dynamics. The paper concludes with
 a :doc:`demonstration` that uses the parametric components to create a flight
 dynamics model of a commercial paraglider wing; it estimates the parameters of
