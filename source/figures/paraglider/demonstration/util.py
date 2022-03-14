@@ -487,3 +487,34 @@ def plot_xy(states, ax=None):
     ax.set_ylabel("x")
     ax.set_aspect("equal")
     return ax
+
+
+def plot_path_sideview(r_RM2O, r_C02O, r_P2O, ax):
+    """
+    Plot glider positions over time with lines to the wing and harness.
+
+    See `pfh.glidersim.extras.simulation.sample_glider_positions` for a helper
+    function to compute the positions from a simulated glider path.
+
+    Parameters
+    ----------
+    r_RM2O : array of float, shape (T,3)
+        Position vectors of the riser midpoint with respect to the world origin O.
+    r_C02O : array of float, shape (T,3)
+        Position vectors of the point on the central chord directly above RM
+        with respect to to the world origin O. The vertical line makes it easy
+        to visualize the pitch angle of the wing.
+    r_P2O : array of float, shape (T,3)
+        Position vectors of a payload reference point with respect to the world
+        origin O. Using a fixed reference point makes it easy to visualize the
+        relative orientation of the payload.
+    ax : matplotlib.axes
+    """
+    ax.plot(*r_RM2O[:, [0, 2]].T, label="Riser midpoint")
+    ax.plot(*r_C02O[:, [0, 2]].T, label="Central chord")
+    ax.plot(*r_P2O[:, [0, 2]].T, label="Payload", lw=0.5, c="r")
+    for t in range(0, len(r_RM2O)):
+        p1, p2 = r_RM2O[t], r_C02O[t]  # Risers -> wing central chord
+        ax.plot([p1[0], p2[0]], [p1[2], p2[2]], lw=0.5, c="k")
+        p1, p2 = r_RM2O[t], r_P2O[t]  # Risers -> payload
+        ax.plot([p1[0], p2[0]], [p1[2], p2[2]], lw=0.5, c="k")

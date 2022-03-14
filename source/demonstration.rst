@@ -1024,6 +1024,44 @@ ratio matches exactly, although the theoretical model still slightly
 underestimates the ground speed where that occurs.
 
 
+Pitch stability
+---------------
+
+Another simple sanity check is to verify the glider pitch stability by flying
+on a straight course at maximum speed and abruptly releasing the accelerator
+(:cite:`wild2009AirworthinessRequirementsHanggliders`, Sec. 4.1.5). Releasing
+the accelerator shifts the payload to shift aft, causing the canopy to pitch
+backwards; in the positive-pitch position the glider briefly ascends as it
+converts the energy from its high airspeed into altitude, but because the wing
+loses airspeed so quickly it will "overshoot" its equilibrium point and need to
+dive forward as the glider attempts to reestablish equilibrium.
+
+The danger of this pitch-forward behavior is that it may induced a frontal
+collapse of the canopy. To estimate the safety margin of the wing, the test
+assigns a grade based on the negative pitch angle as it dives forward. If the
+wing pitches forward less than 30° it receives an "A"; if it pitches forward
+30–60° it receives a "C", and for >60° it receives an "F". The Niviuk Hook 3 is
+rated as an "B" wing, and should not pitch forward more than 30°. Using this
+model to simulate the test protocol by releasing the accelerator in 0.3s
+produces:
+
+.. figure:: figures/paraglider/demonstration/accelerator_fast_release_path_sideview.*
+
+   Flight test, rapidly exiting accelerated flight, side view
+
+   Black lines are drawn from the riser to the point directly above the payload
+   to help visualize the canopy pitch angle, and are added every 0.5 seconds.
+
+.. figure:: figures/paraglider/demonstration/accelerator_fast_release_pitch_angle.*
+
+   Flight test, rapidly exiting accelerated flight, pitch angle
+
+The model predicts the wing configuration will pitch backwards 23° before
+diving forwards to a pitch angle of -13° which satisfies the expected grading.
+Although this test is not particularly informative, it's simplicity makes it
+worthwhile.
+
+
 Model investigation
 ===================
 
