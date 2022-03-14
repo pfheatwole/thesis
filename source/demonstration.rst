@@ -841,10 +841,10 @@ Polar curve
 The conventional way to summarize the performance of a gliding aircraft is with
 a chart called the *polar curve*. These curves show the vertical and horizontal
 speed of the aircraft at equilibrium over the range of brake and accelerator
-inputs, providing information such as the usable range of the glider and its
-glide ratio at different ground speeds. Given the wealth of information
-compactly communicated by a polar curve, they are an excellent starting point
-for critiquing the estimates of a flight dynamics model for a glider.
+inputs, providing information such as the speed range of the glider and its
+glide ratio at different speeds. Given the wealth of information compactly
+communicated by a polar curve, they are an excellent starting point for
+critiquing the estimates of a flight dynamics model for a glider.
 
 The previous section demonstrated the creation of a paraglider model for
 a Niviuk Hook 3, size 23. Now, models for the larger sizes of the wing (created
@@ -872,12 +872,12 @@ general accuracy of the model estimates.
    Polar curve for Niviuk Hook 3 size 25
 
    Colored markings are theoretical data from the model, black markings are
-   experimental data from Parapente Mag. Red represents braking, green
-   represents accelerating, and the blue diagonal line marks the predicted best
-   glide ratio. The three black vertical lines mark the experimental values for
-   minimum speed, trim speed, and maximum speed; the left black dot is the
-   "minimum sink" operating point, and the right dot is the "best glide"
-   operating point.
+   experimental data from Parapente Mag. Red represents symmetric braking,
+   green represents accelerating, and the blue diagonal line marks the
+   predicted best glide ratio. The three black vertical lines mark the
+   experimental values for minimum speed, trim speed, and maximum speed; the
+   left black dot is the "minimum sink" operating point, and the right dot is
+   the "best glide" operating point.
 
 If the model is a good approximation of the glider that generated the data
 — and assuming the data was collected accurately — then the experimental values
@@ -982,9 +982,9 @@ theoretical curves produces valuable reference data:
    Polar curve for Niviuk Hook 3 size 27
 
    Colored markings are theoretical data from the model, black markings are
-   experimental data from Parapente. Red represents braking, green represents
-   accelerating, and the blue diagonal line marks the predicted best glide
-   ratio. The three black vertical lines mark the experimental values for
+   experimental data from Parapente. Red represents symmetric braking, green
+   represents accelerating, and the blue diagonal line marks the predicted best
+   glide ratio. The three black vertical lines mark the experimental values for
    minimum speed, trim speed, and maximum speed; the left black dot is the
    "minimum sink" operating point, and the right dot is the "best glide"
    operating point.
