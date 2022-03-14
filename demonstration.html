@@ -258,8 +258,8 @@ models of the size 25 and 27 wings for the discussion in
 <a class="reference internal" href="#model-validation"><span class="std std-ref">Model validation</span></a>.</p>
 <p>The process begins with the primary technical data from the official <a class="reference external" href="https://niviuk.com/niviuk/customer_pdf/Descatalogado/Hook%203/Datos%20t%C3%A9cnicos/HOOK3_TECNIC_ENG.pdf">technical
 specifications manual</a>:</p>
-<div class="table-wrapper"><table class="colwidths-auto docutils align-default" id="id14">
-<caption><span class="caption-number">Table 7.1 </span><span class="caption-text">Wing data</span><a class="headerlink" href="#id14" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default" id="id15">
+<caption><span class="caption-number">Table 7.1 </span><span class="caption-text">Wing data</span><a class="headerlink" href="#id15" title="Permalink to this table">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Property [unit]</p></th>
 <th class="head"><p>Size 23</p></th>
@@ -718,16 +718,16 @@ foil’s chord distribution, and these brake position parameters, the model can
 allow the brake lines to be pulled a maximum distance of <span class="math notranslate nohighlight">\(42.6 \, [cm]\)</span>.</p>
 <p>To check the model fit, plot the undeflected and deflected trailing edge to
 compare with the reference photos:</p>
-<figure class="align-default" id="id15">
+<figure class="align-default" id="id16">
 <img alt="_images/Hook3_TE_0.25_0.50.svg" src="_images/Hook3_TE_0.25_0.50.svg"/><figcaption>
 <p><span class="caption-number">Fig. 7.7 </span><span class="caption-text">Quartic brake deflections, <span class="math notranslate nohighlight">\(\delta_{bl} = 0.25\)</span> and <span class="math notranslate nohighlight">\(\delta_{br}
-= 0.5\)</span></span><a class="headerlink" href="#id15" title="Permalink to this image">#</a></p>
+= 0.5\)</span></span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<br/><figure class="align-default" id="id16">
+<br/><figure class="align-default" id="id17">
 <img alt="_images/Hook3_TE_1.00_1.00.svg" src="_images/Hook3_TE_1.00_1.00.svg"/><figcaption>
 <p><span class="caption-number">Fig. 7.8 </span><span class="caption-text">Quartic brake deflections, <span class="math notranslate nohighlight">\(\delta_{bl} = 1.00\)</span> and
-<span class="math notranslate nohighlight">\(\delta_{br} = 1.0\)</span></span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
+<span class="math notranslate nohighlight">\(\delta_{br} = 1.0\)</span></span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>FIXME: update these old examples with the true brake deflections!!!!</strong></p>
@@ -821,10 +821,10 @@ wing performance.</p>
 <p>The conventional way to summarize the performance of a gliding aircraft is with
 a chart called the <em>polar curve</em>. These curves show the vertical and horizontal
 speed of the aircraft at equilibrium over the range of brake and accelerator
-inputs, providing information such as the usable range of the glider and its
-glide ratio at different ground speeds. Given the wealth of information
-compactly communicated by a polar curve, they are an excellent starting point
-for critiquing the estimates of a flight dynamics model for a glider.</p>
+inputs, providing information such as the speed range of the glider and its
+glide ratio at different speeds. Given the wealth of information compactly
+communicated by a polar curve, they are an excellent starting point for
+critiquing the estimates of a flight dynamics model for a glider.</p>
 <p>The previous section demonstrated the creation of a paraglider model for
 a Niviuk Hook 3, size 23. Now, models for the larger sizes of the wing (created
 using the same workflow) will be compared to experimental data by comparing
@@ -841,17 +841,17 @@ and vertical speeds that mark the “minimum sink” and “best glide” operat
 points of the glider. Despite this ambiguity, by plotting the experimental
 point data over the theoretical curve it is possible to get a sense of the
 general accuracy of the model estimates.</p>
-<figure class="align-default" id="id17">
+<figure class="align-default" id="id18">
 <img alt="_images/polar_25.svg" src="_images/polar_25.svg"/><figcaption>
-<p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 25</span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 25</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p>Colored markings are theoretical data from the model, black markings are
-experimental data from Parapente Mag. Red represents braking, green
-represents accelerating, and the blue diagonal line marks the predicted best
-glide ratio. The three black vertical lines mark the experimental values for
-minimum speed, trim speed, and maximum speed; the left black dot is the
-“minimum sink” operating point, and the right dot is the “best glide”
-operating point.</p>
+experimental data from Parapente Mag. Red represents symmetric braking,
+green represents accelerating, and the blue diagonal line marks the
+predicted best glide ratio. The three black vertical lines mark the
+experimental values for minimum speed, trim speed, and maximum speed; the
+left black dot is the “minimum sink” operating point, and the right dot is
+the “best glide” operating point.</p>
 </div>
 </figcaption>
 </figure>
@@ -953,14 +953,14 @@ generalizes to other wings.</p>
 Spanish magazine “Parapente” [[FIXME: citation; see <cite>hook 3 perfils.pdf</cite>]]. As
 with the size 25 model, plotting the experimental data on top of the
 theoretical curves produces valuable reference data:</p>
-<figure class="align-default" id="id18">
+<figure class="align-default" id="id19">
 <img alt="_images/polar_27.svg" src="_images/polar_27.svg"/><figcaption>
-<p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 27</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 27</span><a class="headerlink" href="#id19" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p>Colored markings are theoretical data from the model, black markings are
-experimental data from Parapente. Red represents braking, green represents
-accelerating, and the blue diagonal line marks the predicted best glide
-ratio. The three black vertical lines mark the experimental values for
+experimental data from Parapente. Red represents symmetric braking, green
+represents accelerating, and the blue diagonal line marks the predicted best
+glide ratio. The three black vertical lines mark the experimental values for
 minimum speed, trim speed, and maximum speed; the left black dot is the
 “minimum sink” operating point, and the right dot is the “best glide”
 operating point.</p>
@@ -1015,23 +1015,59 @@ ratio matches exactly, although the theoretical model still slightly
 underestimates the ground speed where that occurs.</p>
 </section>
 </section>
-</section>
-<section id="model-investigation">
-<h2><span class="section-number">7.3. </span>Model investigation<a class="headerlink" href="#model-investigation" title="Permalink to this headline">#</a></h2>
+<section id="pitch-stability">
+<h3><span class="section-number">7.2.2. </span>Pitch stability<a class="headerlink" href="#pitch-stability" title="Permalink to this headline">#</a></h3>
+<p>Another simple sanity check is to verify the glider pitch stability by flying
+on a straight course at maximum speed and abruptly releasing the accelerator
+(<span id="id13">[<a class="reference internal" href="zreferences.html#id51" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">30</a>]</span>, Sec. 4.1.5). Releasing
+the accelerator shifts the payload to shift aft, causing the canopy to pitch
+backwards; in the positive-pitch position the glider briefly ascends as it
+converts the energy from its high airspeed into altitude, but because the wing
+loses airspeed so quickly it will “overshoot” its equilibrium point and need to
+dive forward as the glider attempts to reestablish equilibrium.</p>
+<p>The danger of this pitch-forward behavior is that it may induced a frontal
+collapse of the canopy. To estimate the safety margin of the wing, the test
+assigns a grade based on the negative pitch angle as it dives forward. If the
+wing pitches forward less than 30° it receives an “A”; if it pitches forward
+30–60° it receives a “C”, and for &gt;60° it receives an “F”. The Niviuk Hook 3 is
+rated as an “B” wing, and should not pitch forward more than 30°. Using this
+model to simulate the test protocol by releasing the accelerator in 0.3s
+produces:</p>
+<figure class="align-default" id="id20">
+<img alt="_images/accelerator_fast_release_path_sideview.svg" src="_images/accelerator_fast_release_path_sideview.svg"/><figcaption>
+<p><span class="caption-number">Fig. 7.11 </span><span class="caption-text">Flight test, rapidly exiting accelerated flight, side view</span><a class="headerlink" href="#id20" title="Permalink to this image">#</a></p>
+<div class="legend">
+<p>Black lines are drawn from the riser to the point directly above the payload
+to help visualize the canopy pitch angle, and are added every 0.5 seconds.</p>
+</div>
+</figcaption>
+</figure>
+<figure class="align-default" id="id21">
+<img alt="_images/accelerator_fast_release_pitch_angle.svg" src="_images/accelerator_fast_release_pitch_angle.svg"/><figcaption>
+<p><span class="caption-number">Fig. 7.12 </span><span class="caption-text">Flight test, rapidly exiting accelerated flight, pitch angle</span><a class="headerlink" href="#id21" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The model predicts the wing configuration will pitch backwards 23° before
+diving forwards to a pitch angle of -13° which satisfies the expected grading.
+Although this test is not particularly informative, it’s simplicity makes it
+worthwhile.
+Model investigation
+===================</p>
 <p>[[Assuming the model has been successfully validated to within useful accuracy,
 now we can use the model to learn about the behavior of the physical system.
 Run demonstrative scenarios and consider the observed behavior. Useful to
 discuss both the behavior of the (true) physical system and the model.]]</p>
+</section>
 <section id="drag-breakdown">
-<h3><span class="section-number">7.3.1. </span>Drag breakdown<a class="headerlink" href="#drag-breakdown" title="Permalink to this headline">#</a></h3>
+<h3><span class="section-number">7.2.3. </span>Drag breakdown<a class="headerlink" href="#drag-breakdown" title="Permalink to this headline">#</a></h3>
 <p>A common question for curious pilots is how to reduce the drag of their glider
 so they can improve the glide ratio or top speed of their wing. The natural
 progression of this curiosity is wonder where all the drag comes from in the
 first place. One way to answer that question is to plot the drag contributions
-from each component <span id="id13">[<a class="reference internal" href="zreferences.html#id5" title="Holger Babinsky. Aerodynamic improvements of paraglider performance. In 17th Applied Aerodynamics Conference, 3148. 1999.">31</a>]</span>.</p>
-<figure class="align-default" id="id19">
+from each component <span id="id14">[<a class="reference internal" href="zreferences.html#id5" title="Holger Babinsky. Aerodynamic improvements of paraglider performance. In 17th Applied Aerodynamics Conference, 3148. 1999.">31</a>]</span>.</p>
+<figure class="align-default" id="id22">
 <img alt="_images/drag_breakdown.svg" src="_images/drag_breakdown.svg"/><figcaption>
-<p><span class="caption-number">Fig. 7.11 </span><span class="caption-text">Drag breakdown for Niviuk Hook 3 23 with a pod harness.</span><a class="headerlink" href="#id19" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.13 </span><span class="caption-text">Drag breakdown for Niviuk Hook 3 23 with a pod harness.</span><a class="headerlink" href="#id22" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Viscous drag includes effects such as the sheer forces produced by the
@@ -1155,10 +1191,8 @@ developing an intuition of how their interactions affect the system behavior.</p
 <li><a class="reference internal" href="#size-27">7.2.1.2. Size 27</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a class="reference internal" href="#model-investigation">7.3. Model investigation</a><ul>
-<li><a class="reference internal" href="#drag-breakdown">7.3.1. Drag breakdown</a></li>
+<li><a class="reference internal" href="#pitch-stability">7.2.2. Pitch stability</a></li>
+<li><a class="reference internal" href="#drag-breakdown">7.2.3. Drag breakdown</a></li>
 </ul>
 </li>
 </ul>

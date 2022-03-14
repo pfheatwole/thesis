@@ -841,10 +841,10 @@ Polar curve
 The conventional way to summarize the performance of a gliding aircraft is with
 a chart called the *polar curve*. These curves show the vertical and horizontal
 speed of the aircraft at equilibrium over the range of brake and accelerator
-inputs, providing information such as the usable range of the glider and its
-glide ratio at different ground speeds. Given the wealth of information
-compactly communicated by a polar curve, they are an excellent starting point
-for critiquing the estimates of a flight dynamics model for a glider.
+inputs, providing information such as the speed range of the glider and its
+glide ratio at different speeds. Given the wealth of information compactly
+communicated by a polar curve, they are an excellent starting point for
+critiquing the estimates of a flight dynamics model for a glider.
 
 The previous section demonstrated the creation of a paraglider model for
 a Niviuk Hook 3, size 23. Now, models for the larger sizes of the wing (created
@@ -872,12 +872,12 @@ general accuracy of the model estimates.
    Polar curve for Niviuk Hook 3 size 25
 
    Colored markings are theoretical data from the model, black markings are
-   experimental data from Parapente Mag. Red represents braking, green
-   represents accelerating, and the blue diagonal line marks the predicted best
-   glide ratio. The three black vertical lines mark the experimental values for
-   minimum speed, trim speed, and maximum speed; the left black dot is the
-   "minimum sink" operating point, and the right dot is the "best glide"
-   operating point.
+   experimental data from Parapente Mag. Red represents symmetric braking,
+   green represents accelerating, and the blue diagonal line marks the
+   predicted best glide ratio. The three black vertical lines mark the
+   experimental values for minimum speed, trim speed, and maximum speed; the
+   left black dot is the "minimum sink" operating point, and the right dot is
+   the "best glide" operating point.
 
 If the model is a good approximation of the glider that generated the data
 — and assuming the data was collected accurately — then the experimental values
@@ -982,9 +982,9 @@ theoretical curves produces valuable reference data:
    Polar curve for Niviuk Hook 3 size 27
 
    Colored markings are theoretical data from the model, black markings are
-   experimental data from Parapente. Red represents braking, green represents
-   accelerating, and the blue diagonal line marks the predicted best glide
-   ratio. The three black vertical lines mark the experimental values for
+   experimental data from Parapente. Red represents symmetric braking, green
+   represents accelerating, and the blue diagonal line marks the predicted best
+   glide ratio. The three black vertical lines mark the experimental values for
    minimum speed, trim speed, and maximum speed; the left black dot is the
    "minimum sink" operating point, and the right dot is the "best glide"
    operating point.
@@ -1024,6 +1024,42 @@ ratio matches exactly, although the theoretical model still slightly
 underestimates the ground speed where that occurs.
 
 
+Pitch stability
+---------------
+
+Another simple sanity check is to verify the glider pitch stability by flying
+on a straight course at maximum speed and abruptly releasing the accelerator
+(:cite:`wild2009AirworthinessRequirementsHanggliders`, Sec. 4.1.5). Releasing
+the accelerator shifts the payload to shift aft, causing the canopy to pitch
+backwards; in the positive-pitch position the glider briefly ascends as it
+converts the energy from its high airspeed into altitude, but because the wing
+loses airspeed so quickly it will "overshoot" its equilibrium point and need to
+dive forward as the glider attempts to reestablish equilibrium.
+
+The danger of this pitch-forward behavior is that it may induced a frontal
+collapse of the canopy. To estimate the safety margin of the wing, the test
+assigns a grade based on the negative pitch angle as it dives forward. If the
+wing pitches forward less than 30° it receives an "A"; if it pitches forward
+30–60° it receives a "C", and for >60° it receives an "F". The Niviuk Hook 3 is
+rated as an "B" wing, and should not pitch forward more than 30°. Using this
+model to simulate the test protocol by releasing the accelerator in 0.3s
+produces:
+
+.. figure:: figures/paraglider/demonstration/accelerator_fast_release_path_sideview.*
+
+   Flight test, rapidly exiting accelerated flight, side view
+
+   Black lines are drawn from the riser to the point directly above the payload
+   to help visualize the canopy pitch angle, and are added every 0.5 seconds.
+
+.. figure:: figures/paraglider/demonstration/accelerator_fast_release_pitch_angle.*
+
+   Flight test, rapidly exiting accelerated flight, pitch angle
+
+The model predicts the wing configuration will pitch backwards 23° before
+diving forwards to a pitch angle of -13° which satisfies the expected grading.
+Although this test is not particularly informative, it's simplicity makes it
+worthwhile.
 Model investigation
 ===================
 
