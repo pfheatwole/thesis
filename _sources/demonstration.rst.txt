@@ -1060,6 +1060,8 @@ The model predicts the wing configuration will pitch backwards 23° before
 diving forwards to a pitch angle of -13° which satisfies the expected grading.
 Although this test is not particularly informative, it's simplicity makes it
 worthwhile.
+
+
 Model investigation
 ===================
 
