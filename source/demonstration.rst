@@ -1139,3 +1139,16 @@ developing an intuition of how their interactions affect the system behavior.
    coefficients, surface imperfections, etc. At maximum braking you'd expect
    the foil distortions (creasing, etc) to have a significant impact for a real
    wing. At high speed I'm ignoring deformations to the air intakes [[]]
+
+
+Indirect thermal interaction
+----------------------------
+
+.. figure:: figures/paraglider/demonstration/indirect_thermal.*
+
+   Indirect thermal interaction.
+
+[[FIXME: explain. The wing is flying straight at equilibrium, when it enters
+a thermal 15 meters to its right. The thermal strength has a squared distance
+decay to 5% by the time it :math:`y = 0`, so only the right side of the wing
+experiences a significant change to lift.  Etc etc.]]
