@@ -460,6 +460,9 @@ associated with that geometry:
      C_{D,\textrm{surface}} \qquad & \textrm{Drag coefficient due to surface characterstics} \\
    \end{aligned}
 
+[[FIXME: add s_end/r_upper/r_lower for the intakes]]
+
+
 
 Suspension lines
 ================

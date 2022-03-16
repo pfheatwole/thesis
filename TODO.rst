@@ -1,3 +1,7 @@
+* Why do I use `image.*` versus `image.svg` in some places?
+
+* `generate_canopy_examples.py` is broken; need's the updated the API
+
 * The code doesn't match the text. The paper refers to a canopy component
   model, but glidersim doesn't have a `ParagliderCanopy` class; the logic from
   that section of the paper (stuff like calculating the extra mass due to the

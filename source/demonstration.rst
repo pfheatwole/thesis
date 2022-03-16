@@ -496,9 +496,10 @@ assumed to have a negligible impact on the overall system behavior.
 [[FIXME: add the viscous drag corrections
 
 * :math:`C_{D,\textrm{intakes}}`
+
 * :math:`C_{D,\textrm{surface}}`
 
-]]
+[[This assumes a single profile is used for all sections.]]
 
 
 Suspension lines
