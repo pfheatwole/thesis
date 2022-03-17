@@ -8,19 +8,15 @@
 Demonstration
 *************
 
-The motivation for this project was a need for flight dynamics models of
-commercial paraglider wings. The goal of this project was to create parametric
-:doc:`component models <paraglider_components>` that can approximate those
-flight dynamics by augmenting the [[limited available specifications with
-assumptions of the unknown structure]].
+The motivation for this project was a need for paraglider flight dynamics
+models for commercial paraglider wings. The goal of this project was to build
+those system models by creating parametric :doc:`component models
+<paraglider_components>` that augment the limited available specifications with
+assumptions of the unknown structure. This chapter demonstrates one possible
+workflow to estimate the parameters of those component models by combining
+publicly available technical specifications and photographs with knowledge of
+typical paraglider wing design.
 
-This chapter demonstrates one possible workflow to estimate the parameters of
-the component models by combining publicly available technical specifications
-and photographs with knowledge of typical paraglider wing design.
-
-
-Model creation
-==============
 
 .. Introduce the wing
 
@@ -53,8 +49,8 @@ feasible to create an approximate wing model even if physical measurements are
 unavailable.
 
 
-Technical specs
----------------
+Technical specifications
+========================
 
 The following sections demonstrate how to estimate the parameters for a size
 23 version of the wing. The same process is used (but not shown) to create
@@ -144,7 +140,7 @@ which will be used to define a suitable payload.
 
 
 Canopy
-------
+======
 
 .. This section should highlight how a reasonable approximation can be
    produced from the minimal wing data like flat and inflated span, taper,
@@ -169,7 +165,7 @@ easiest to think of them in two groups:
 
 
 Foil geometry
-^^^^^^^^^^^^^
+-------------
 
 .. _Layout:
 
@@ -395,7 +391,7 @@ drag.
 
 
 Physical details
-^^^^^^^^^^^^^^^^
+----------------
 
 In addition to a :doc:`foil geometry <foil_geometry>`, a canopy model requires
 details of physical attributes such as surface material densities and air
@@ -489,7 +485,7 @@ assumed to have a negligible impact on the overall system behavior.
 
 
 Suspension lines
-----------------
+================
 
 The second component model of the paraglider system is for the :ref:`suspension
 lines <paraglider_components:Suspension lines>`. The behavior of the lines is
@@ -498,7 +494,7 @@ related functionality to (hopefully) make their relationships more intuitive.
 
 
 Riser position
-^^^^^^^^^^^^^^
+--------------
 
 .. Design variables: kappa_x, kappa_z, kappa_A, kappa_C, kappa_a
 
@@ -594,7 +590,7 @@ a reasonable starting point is :math:`\kappa_x = 0.5`.
 
 
 Brakes
-^^^^^^
+------
 
 
 The second group of parameters :eq:`suspension lines parameters, brakes` for
@@ -692,11 +688,10 @@ compare with the reference photos:
    Quartic brake deflections, :math:`\delta_{bl} = 1.00` and
    :math:`\delta_{br} = 1.0`
 
-**FIXME: update these old examples with the true brake deflections!!!!**
 
 
 Line drag
-^^^^^^^^^
+---------
 
 .. Design variables: total line length, line diameter, r_L2LE (lumped
    positions for the line surface area), and Cd_lines
@@ -728,7 +723,7 @@ are essentially cylinders, a suitable drag coefficient is simply :math:`C_{d,l}
 
 
 Payload
--------
+=======
 
 .. Total payload mass, spherical radius, drag coefficient, etc
 
