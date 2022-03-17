@@ -352,11 +352,11 @@ significant.
 
 Because apparent mass effects are the result of a volume in motion relative to
 a fluid, its magnitude depends on the volume's shape and the direction of the
-motion. Unlike the inertia due to real mass, apparent inertia is anisotropic,
-and the diagonal terms of the apparent mass matrix are independent.
-Calculating the apparent mass of an arbitrary geometry is difficult. For
-a classic discussion of the topic, see :cite:`lamb1945Hydrodynamics`. For
-a more recent discussion of apparent mass in the context of parafoils, see
+motion. Unlike the real mass, apparent mass is anisotropic, and the diagonal
+terms of the apparent inertia matrix are independent. Calculating the apparent
+mass of an arbitrary geometry is difficult. For a classic discussion of the
+topic, see :cite:`lamb1945Hydrodynamics`. For a more recent discussion of
+apparent mass in the context of parafoils, see
 :cite:`lissaman1993ApparentMassEffects`, which used an ellipsoid model to
 establish a parametric form commonly used in parafoil-payload literature
 

@@ -84,7 +84,7 @@ developing an intuition of how their interactions affect the system behavior.
 Study: affects of apparent mass
 -------------------------------
 
-.. figure:: figures/paraglider/demonstration/figure8_apparent_inertia.svg
+.. figure:: figures/paraglider/demonstration/figure8_apparent_mass.svg
 
    Figure-8 with and without apparent mass
 

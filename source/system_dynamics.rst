@@ -119,12 +119,11 @@ angular inertia are calculated. A common choice for conventional aircraft is
 the center of real mass because it decouples the translational and angular
 dynamics of isolated objects. For a paraglider, however, this is not possible:
 paragliders are sensitive to apparent mass, which depends on the direction of
-motion, so there is no "center" that decouples the translational and
-rotational terms of the apparent inertia matrix
-:cite:`barrows2002ApparentMassParafoils`. Because the system matrix cannot be
-diagonalized there is no advantage in choosing the center of real mass.
-Instead, the reference point can be chosen such that it simplifies other
-calculations.
+motion, so there is no "center" that decouples the translational and rotational
+terms of the apparent inertia matrix :cite:`barrows2002ApparentMassParafoils`.
+Because the system matrix cannot be diagonalized there is no advantage in
+choosing the center of real mass. Instead, the reference point can be chosen
+such that it simplifies other calculations.
 
 .. Note that the reference point for the dynamics can be different from the
    point for tracking the glider position
@@ -135,10 +134,10 @@ the :math:`xz`-plane of the canopy. Two natural choices in that plane are the
 leading edge of the central section, or the midpoint between the two risers.
 The :ref:`riser midpoint <system_dynamics:Connections>` :math:`RM` has the
 advantage that is a fixed point in both the body and payload coordinate
-systems, which means it does not depend on the relative position or
-orientation of the payload with respect to the body. (This choice simplifies
-the equations for the :ref:`9-DoF model <derivations:Model 9a>` while
-maintaining consistency with the :ref:`6-DoF model <derivations:Model 9a>`.)
+systems, which means it does not depend on the relative position or orientation
+of the payload with respect to the body. (This choice simplifies the equations
+for the :ref:`9-DoF model <derivations:Model 9a>` while maintaining consistency
+with the :ref:`6-DoF model <derivations:Model 9a>`.)
 
 .. 6a and 9a use `RM`, but the others don't
 

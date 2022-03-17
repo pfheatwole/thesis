@@ -1,4 +1,4 @@
-"""Plot two partial figure-8s w/ and w/o apparent inertia."""
+"""Plot two partial figure-8s w/ and w/o apparent mass."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -71,6 +71,6 @@ gsim.extras.plots.plot_3d_simulation_path(**points2, ax=ax, alpha=alpha)
 
 handles, labels = ax.get_legend_handles_labels()
 handles = [handles[1], handles[4]]
-labels = ["With apparent inertia", "Without apparent inertia"]
+labels = ["With apparent mass", "Without apparent mass"]
 ax.legend(handles, labels)
 plt.show()
