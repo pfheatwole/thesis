@@ -1041,128 +1041,6 @@ An elliptical arc with a mean anhedral of 30 degrees and a wingtip roll of
    Profile surface of a simple parafoil.
 
 
-Case study
-==========
-
-.. Introduce Belloc's reference wing geometry. There are two points here:
-
-   1. Show how easy it is to implement specs from actual papers
-
-   2. Prepare for the wind tunnel test in the next chapter
-
-The purpose of the `Expanded model`_ is to increase the freedom of how a foil
-is specified. The examples demonstrated how this freedom can be used to design
-complex foil geometries using simple design curves. Another benefit of this
-freedom is that it is more adaptable to the variety of foil specifications
-used in literature.
-
-
-The geometry from a 2015 parafoil wind tunnel test
-:cite:`belloc2015WindTunnelInvestigation` makes an excellent case study of
-a foil specification from literature that positions the sections using
-alternative reference points on the section chords. Moreover, the geometry
-satisfies the assumptions of the `Simplified model`_, making an implementation
-of the geometry almost trivial.
-
-First, the paper describes the geometry of the full-scale canopy they wish to
-study:
-
-.. list-table:: Full-scale wing dimensions
-   :header-rows: 1
-
-   * - Property
-     - Value
-     - Unit
-   * - Arch height
-     - 3.00
-     - m
-   * - Central chord
-     - 2.80
-     - m
-   * - Projected area
-     - 25.08
-     - m\ :sup:`2`
-   * - Projected span
-     - 11.00
-     - m
-   * - Projected aspect ratio
-     - 4.82
-     - --
-   * - Flat area
-     - 28.56
-     - m\ :sup:`2`
-   * - Flat span
-     - 13.64
-     - m
-   * - Flat aspect ratio
-     - 6.52
-     - --
-
-For the wind tunnel test, a physical model was built at a quarter-scale.
-Physical dimensions and positions were provided for the physical model as
-pointwise data with linear interpolation between each point.
-
-.. FIXME: Should I use these tables or just give the explicit equations?
-   They're messy, but I do like the fact that they highlight the fact that you
-   **can** use pointwise data in a linear interpolator just as easily.
-
-.. csv-table:: Wind tunnel wing geometry data at panel’s ends
-   :header: :math:`i`, :math:`y` [m], :math:`z` [m], :math:`c` [m], :math:`r_x`, :math:`r_{yz}`, :math:`\\theta` [deg]
-
-   0, -0.688,  0.000, 0.107, 0.6, 0.6, 3
-   1, -0.664, -0.097, 0.137, 0.6, 0.6, 3
-   2, -0.595, -0.188, 0.198, 0.6, 0.6, 0
-   3, -0.486, -0.265, 0.259, 0.6, 0.6, 0
-   4, -0.344, -0.325, 0.308, 0.6, 0.6, 0
-   5, -0.178, -0.362, 0.339, 0.6, 0.6, 0
-   6,  0.000, -0.375, 0.350, 0.6, 0.6, 0
-   7,  0.178, -0.362, 0.339, 0.6, 0.6, 0
-   8,  0.344, -0.325, 0.308, 0.6, 0.6, 0
-   9,  0.486, -0.265, 0.259, 0.6, 0.6, 0
-   10, 0.595, -0.188, 0.198, 0.6, 0.6, 0
-   11,  0.664, -0.097, 0.137, 0.6, 0.6, 3
-   12,  0.688,  0.000, 0.107, 0.6, 0.6, 3
-
-It is important to notice the difference between the section numbers :math:`i`
-used in the paper and the section indices :math:`s` used in the simplified
-model. The section indices are easily calculated using the normalized linear
-distance along the :math:`\left< y, z \right>` points.
-
-Another important point is that the reference data is defined with the wing
-tips at :math:`z = 0`, whereas the convention of this paper places the canopy
-origin at the leading edge of the central section. This is easily accommodated
-by subtracting the central :math:`z = -0.375` from all :math:`z`-coordinates.
-(The implementation of the simplified model in ``glidersim`` shifts the origin
-automatically.) [[This is the same issue as for normal parametric functions;
-the origin of the parametric functions is arbitrary; the origin of the canopy
-is a predetermined point.]]
-
-For the section profiles, the model uses a NACA 23015 airfoil.
-
-.. figure:: figures/paraglider/geometry/airfoil/NACA-23015.*
-
-   NACA 23015
-
-Calculating the section indices for each point and building a linear
-interpolator for each component as a function of the section index produces
-a set of piecewise-linear design curves:
-
-.. raw:: latex
-
-   \newpage
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_curves.*
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy_chords.*
-
-   Chord surface for Belloc's reference paraglider wing.
-
-.. figure:: figures/paraglider/geometry/canopy/examples/build/belloc_canopy_airfoils.*
-
-   Profile surface for Belloc's reference paraglider wing.
-
-[[FIXME: compute the summary specs and compare; area, span, etc]]
-
 
 Discussion
 ==========
@@ -1190,8 +1068,8 @@ Discussion
   that eliminated most of the extra complexity of the expanded model, and
   showed examples of canopies using that parametrization.
 
-* Reference the :ref:`foil_aerodynamics:Case study` (Belloc's wing) and
-  :doc:`demonstration` (my Hook3ish)
+* Reference the :ref:`validation:Wind tunnel model` (Belloc's wing) and
+  :doc:`demonstration` (creating a Hook 3 model)
 
 
 Advantages
