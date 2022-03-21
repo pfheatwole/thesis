@@ -11,4 +11,4 @@
 <Thanks to friends and family goes here.>
 
 Thanks to Hervé Belloc for providing the wind tunnel data for
-:ref:`validation:Wind tunnel model`.
+:ref:`validation:Foil aerodynamics`.

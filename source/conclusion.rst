@@ -2,21 +2,27 @@
 Conclusion
 **********
 
-.. What are the results of this project?
+.. "The conclusion interprets the results to answer the question that we posted
+   at the end of the context section."
 
    Assume an impatient reader will jump here. This is your last chance to
    convince them the paper is worth reading.
 
 
-Applications
-============
+Results
+=======
 
-[[Discuss how can people use these sorts of models: statistical filtering,
-control modeling, and studying wing behavior. This section is one of payoffs
-for the paper In the introduction to the paper I claimed that one of the
-applications of dynamic simulations is to study the behavior of a system.
-Having concluded the model is usably accurate, demonstrate how the model can be
-used to learn about the behavior of the physical system.]]
+.. This section is one of payoffs for the paper! Until now I was developing the
+   model, showing how to construct them, and validating the results. This is
+   where I get to show some applications. (Granted, estimating the polar curve
+   is a good application already.) In the introduction I claimed that one of
+   the applications of dynamic simulations is to study the behavior of
+   a system.
+
+In the introduction to this paper, the :ref:`introduction:Modeling
+requirements` section posed several example questions about paraglider
+behavior. Those questions will now be revisited using the models developed in
+this paper.
 
 
 Study: drag breakdown
@@ -122,15 +128,27 @@ deformations.) Three simulations were run:
 
    Figure-8 when neglecting apparent mass
 
+.. raw:: html or singlehtml
+
+   <br/>
+
 .. figure:: figures/paraglider/demonstration/figure8_Reynolds.*
    :name: figure8_Reynolds
 
    Figure-8 when neglecting accurate Reynolds numbers
 
+.. raw:: html or singlehtml
+
+   <br/>
+
 .. figure:: figures/paraglider/demonstration/figure8_Reynolds_and_apparent_mass.*
    :name: figure8_Reynolds_and_apparent_mass
 
    Figure-8 neglecting both apparent mass and accurate Reynolds numbers
+
+.. raw:: html or singlehtml
+
+   <br/>
 
 .. figure:: figures/paraglider/demonstration/figure8_Reynolds_and_apparent_mass_topdown.*
    :name: figure8_Reynolds_and_apparent_mass_topdown
@@ -188,6 +206,8 @@ the impact of such choices is readily available.
 Study: indirect thermal interactions
 ------------------------------------
 
+[[FIXME: show a top-down view of the xy-track through the 5% thermal radius]]
+
 .. figure:: figures/paraglider/demonstration/indirect_thermal.*
 
    Indirect thermal interaction.
@@ -197,4 +217,4 @@ a thermal 15 meters to its right. The thermal strength has a squared distance
 decay to 5% by the time it :math:`y = 0`, so only the right side of the wing
 experiences a significant change to lift.  Etc etc.]]
 
-[[Inconclusive results; discuss that in `Future work`_.]]
+[[Inconclusive results; discuss that in "Future work".]]

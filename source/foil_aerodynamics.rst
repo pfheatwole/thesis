@@ -598,13 +598,12 @@ theoretical justification; instead, this paper relies on the superior
 aerodynamics knowledge of its sources. First, the use of this method with
 non-zero rotation is explicitly mentioned in
 :cite:`hunsaker2006LiftinglineApproachEstimating`. Also, this assumption is
-shared with the vortex-lattice model used in `AVL
-<https://web.mit.edu/drela/Public/web/avl/>`_, although in that method the
-trailing legs are aligned with the foil :math:`x`-axis, regardless of
-freestream flow. In Phillips' method the trailing are aligned to the
-freestream, which for this work is defined as the local upstream velocity
-:math:`\vec{u}_{\infty,0}` of the central section under the assumption that it
-minimizes average deviation.
+shared with the vortex-lattice model used in AVL
+:cite:`drelaAthenaVortexLattice`, although in that method the trailing legs are
+aligned with the foil :math:`x`-axis, regardless of freestream flow. In
+Phillips' method the trailing are aligned to the freestream, which for this
+work is defined as the local upstream velocity :math:`\vec{u}_{\infty,0}` of
+the central section under the assumption that it minimizes average deviation.
 
 For a related technical discussion that incorporates rotation rates into
 a vortex lattice method, refer to :cite:`drela2014FlightVehicleAerodynamics`

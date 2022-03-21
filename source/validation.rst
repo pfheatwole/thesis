@@ -21,26 +21,39 @@ Validation
       measured results.
 
 
-Wind tunnel model
+Foil aerodynamics
 -----------------
 
-This section does two things:
+.. This section performs two things:
 
-1. Constructs a model of the foil geometry
+   1. Constructs a model of the foil geometry
 
-2. Compares the NLLT estimates to the wind tunnel measurements
+   2. Compares the NLLT estimates to the wind tunnel measurements
+
+   It accomplishes:
+
+   1. The foil geometry is easy to use
+
+   2. The foil geometry implementation is correct
+
+   3. The NLLT appears to be working correctly
+
+   4. The NLLT appears to be a good choice for modeling a paraglider in static,
+      uniform-flow conditions
 
 
 .. Validate the performance of Phillips' method for analyzing a parafoil canopy
    in steady-state conditions.
 
-[[FIXME: moved from foil aerodynamics chapter, edit if worth keeping]]
-
-This section considers the ability of Phillips' NLLT to predict the
-aerodynamics of a typical paraglider geometry. It continues the discussion from
-the foil geometry :ref:`case study <foil_geometry:Case study>` by comparing the
-theoretical predictions of several aerodynamics models against experimental
-wind tunnel data.
+The :doc:`foil_aerodynamics` chapter selected Phillips' NLLT because it
+appeared to satisfy the :ref:`introduction:Modeling requirements` established
+at the beginning of this paper; this section uses wind tunnel measurements to
+validate that choice. First it recreates the geometry using the
+:ref:`foil_geometry:Simplified model`, then it recreates the range of test
+conditions used by the experiment and tabulates the aerodynamic coefficients
+estimated by the NLLT. The estimates are compared to the wind tunnel data, as
+well as to other standard aerodynamic models commonly recommended for nonlinear
+geometries.
 
 
 Geometry
@@ -123,27 +136,23 @@ pointwise data with linear interpolation between each point.
 
 It is important to notice the difference between the section numbers :math:`i`
 used in the paper and the section indices :math:`s` used in the simplified
-model. The section indices are easily calculated using the normalized linear
-distance along the :math:`\left< y, z \right>` points.
-
-Another important point is that the reference data is defined with the wing
-tips at :math:`z = 0`, whereas the convention of this paper places the canopy
-origin at the leading edge of the central section. This is easily accommodated
-by subtracting the central :math:`z = -0.375` from all :math:`z`-coordinates.
-(The implementation of the simplified model in ``glidersim`` shifts the origin
-automatically.) [[This is the same issue as for normal parametric functions;
-the origin of the parametric functions is arbitrary; the origin of the canopy
-is a predetermined point.]]
-
-For the section profiles, the model uses a NACA 23015 airfoil.
+model; the section indices are easily calculated using the normalized linear
+distance along the :math:`\left< y, z \right>` points. Also, the reference data
+is defined with the wing tips at :math:`z = 0`, whereas the convention of this
+paper places the canopy origin at the leading edge of the central section; this
+is easily accommodated by subtracting the central :math:`z = -0.375` from all
+:math:`z`-coordinates. (Alternatively, the implementation of the simplified
+model in ``glidersim`` can shift the origin automatically.)
 
 .. figure:: figures/paraglider/geometry/airfoil/NACA-23015.*
+   :name: airfoil_NACA_23015
 
    NACA 23015
 
 Calculating the section indices for each point and building a linear
 interpolator for each component as a function of the section index produces
-a set of piecewise-linear design curves:
+a set of piecewise-linear design curves, and assigning every section a NACA
+23015 airfoil (:numref:`airfoil_NACA_23015`) completes the foil geometry model.
 
 .. raw:: latex
 
@@ -159,7 +168,7 @@ a set of piecewise-linear design curves:
 
    Profile surface for Belloc's reference paraglider wing.
 
-[[FIXME: compute the summary specs and compare; area, span, etc]]
+.. FIXME: compute the summary specs and compare; area, span, etc
 
 
 Wind tunnel setup
@@ -280,102 +289,11 @@ Coefficients vs each other
 Discussion
 ^^^^^^^^^^
 
-.. FIXME: create an outline. There are two aspects to this discussion:
-
-   1. Performance in general (does the model agree with the wind tunnel data?)
-
-   2. Performance relative to the *model selection* criteria (how well do
-      I expect the model to work for dynamic paraglider simulations?)
-
-* Does the NLLT include the empirical viscous drag corrections?
-
-* The inviscid solutions agree with the NLLT quite well for small angles of
-  attack. I think the deviation occurs when the "thin boundary layer"
-  assumption starts to break down; for the 2D lift coefficient, the BL really
-  starts to thicken around alpha=12, so when you consider the **effective**
-  angle of attack it happens around alpha=9? Seems about right. I'm not sure if
-  flow separation is involved, but I don't think that tends to happen until
-  after a section exceeds `Cl_max`?
-
-* The VLM and NLLT disagree on the zero-lift angle of attack? Hm. That seems to
-  suggest bad airfoil coefficients, doesn't it? I would think you'd have the
-  least amount of flow separation at that alpha; is that intuition correct? Or
-  maybe BL thickness is already significant at that angle; I should check the
-  overall spanwise alphas.
-
-* The wind tunnel data is only testing the **uniform** flow-field case. In my
-  simulations I'm using this method for **asymmetric** flows (spanwise
-  variation in speed and/or direction). That's definitely questionable (similar
-  to what I mention about assuming the trailing wake is aligned to the central
-  freestream: highly questionable).
-
-  Not a big deal though; I just need to be clear that the point isn't to claim
-  this is a great model; I just need something useful for testing the geometry
-  and "good enough" for simulations.
-
-  **This was always meant to be used in an uncertain environment (stochastic
-  simulations). As long as the choice of aerodynamic method is not the dominant
-  source of error, I'm fine with it.**
+.. Add tables that summarize and quantify the accuracy
 
 
-* Did Belloc account for hysteresis? In
-  :cite:`anderson1980NumericalLiftingLine` they plots how both the experimental
-  and numerical data were strongly affected by increasing vs decreasing alpha.
-
-  TODO: run the numerical solutions forward and backwards in alpha!
-
-* I'm frustrated that the lift curve for all methods is so high compared to the
-  wind tunnel data, but at least the NLLT matches AVL, XFLR5, and MachUpX, so
-  I'm pretty confident I've implemented it correctly. I need to make a list of
-  explanations for the discrepancies though: unmodeled viscous effects in
-  particular, but there's still the chance of an issues with the `CZa` or
-  `Alphac` values in the wind tunnel data.
-
-  Also, maybe it's not such a terrible result overall? It is a pretty low
-  aspect ratio wing, after all. See Fig:7.22 of
-  :cite:`bertin2014AerodynamicsEngineers` shows theoretical vs experimental CL
-  for a wing with AR=5.3; the theoretical estimate significantly overestimates
-  (IMHO) the lift coefficient, but the author calls it a "reasonable" estimate.
-
-  Possibly related to the lift discrepancy:
-
-  * "Aerodynamics for Engineers", p. 326, he discusses the effects of
-    a "separated wake", although that's in the context of airfoils. Still it
-    does have the same look as my data.
-
-  * In https://www.xflr5.tech/docs/Part%20IV:%20Limitations.pdf, p. 29, he
-    mentions that the "flat wake" assumption (no wake roll-up) causes an
-    overestimation of the vortex strengths (and thus the lift), and that the
-    error can be in the order of 1% to 10% for the lift and induced drag.
-
-* Why is this a good/useful test?
-
-  * The range of angle of attack is suitable for capturing the longitudinal
-    performance of the wing post-stall
-
-  * The range of sideslip angles is useful for considering the impact of the
-    ref:`foil_aerodynamics:Straight-wake assumption` for a non-rotating wing.
-
-    FIXME: how is the straight-wake assumption under question for
-    a non-rotating wing? It's important for aerodynamic models that assume the
-    wind is head on, I think; isn't that the issue that the experimental VLM2
-    in XFLR5 is meant to address? Like, doesn't AVL "assume" the wind is head
-    on then make corrections instead of modeling the wind directly?
-
-  * In terms of aerodynamics: good representation of the unusual geometry of
-    a paraglider; completely known geometry (including airfoil); extensive data
-    for a range of wind conditions; internal wood structure maintains the
-    shape, eliminating uncertainty due to distortions
-
-  * It also provides a good demonstration of how to use my geometry.
-
-
-
-Hook 3 model
-------------
-
-[[Move the polar curve, 360 turn, etc, content here]]
-
+Niviuk Hook 3 system dynamics
+-----------------------------
 
 .. How accurate is the model? This section involves **expected** outcomes,
    which means we already know what we expect to see. Validation is about
@@ -384,14 +302,16 @@ Hook 3 model
 
 .. What is model validation? Why is it difficult for paragliders?
 
-Having defined the parameters for the three component models, they are combined
-into a composite :doc:`system_dynamics` model that provides the behavior of the
-complete glider. Getting to this point with such little information required
-many modeling assumptions, simplifications, approximations, and outright
-guesswork. The natural next step is to question the validity of the model: how
-accurately does it estimate the true behavior of the physical system? In any
-modeling project it is vital to validate the model by comparing its estimates
-to experimental data, and this case is no exception.
+The previous chapter provided a :doc:`demonstration` of how to estimate the
+parameters of the component models for a commercial paraglider wing. Having
+defined the component models, they are combined into a composite
+:doc:`system_dynamics` model that provides the behavior of the complete glider.
+Getting to this point with such little information required many modeling
+assumptions, simplifications, approximations, and outright guesswork, so the
+natural next step is to question the validity of the model: how accurately does
+it estimate the true behavior of the physical system? In any modeling project
+it is vital to validate the model by comparing its estimates to experimental
+data, and this case is no exception.
 
 Unfortunately, experimental data is extremely scarce for commercial paraglider
 wings. Unlike the previous section, wind tunnel measurements are unavailable.
@@ -451,17 +371,17 @@ measurements from test flights to the predicted polar curves.
 Size 25
 """""""
 
-For the experimental data, a size 25 version of the wing was reviewed for the
-French magazine "Parapente Mag" [[FIXME: citation; see `Hook 3 Parapente Mag
-148.pdf`]].
+.. FIXME: how to cite `Hook 3 Parapente Mag 148.pdf`?
 
-Unfortunately, reviews such as this cannot provide the entire polar curve;
-because each point is laborious to measure accurately, reviews only provide
-noteworthy values, such as the minimum and maximum speeds, or the horizontal
-and vertical speeds that mark the "minimum sink" and "best glide" operating
-points of the glider. Despite this ambiguity, by plotting the experimental
-point data over the theoretical curve it is possible to get a sense of the
-general accuracy of the model estimates.
+The experimental data for this section is taken from a size 25 version of the
+wing that was reviewed for the French magazine "Parapente Mag". Unfortunately,
+reviews such as this cannot provide the entire polar curve: because each point
+is laborious to measure accurately, reviews only provide noteworthy values,
+such as the minimum and maximum speeds, or the horizontal and vertical speeds
+that mark the "minimum sink" and "best glide" operating points of the glider.
+Despite this ambiguity, by plotting the experimental point data over the
+theoretical curve it is possible to get a sense of the general accuracy of the
+model estimates.
 
 .. figure:: figures/paraglider/demonstration/polar_25.svg
 
@@ -497,30 +417,37 @@ Although the diagram is a convenient way to summarize so much information it
 can be hard to distinguish specific values, so their numerical equivalents are
 listed below.
 
-.. list-table::
+.. list-table:: Niviuk Hook 3 25 simulated polar curve vs flight data
    :header-rows: 1
 
    * - Value
-     - Theoretical
      - Experimental
-   * - Minimum groundspeed
-     - 7.4
+     - Simulated
+     - Error
+   * - Minimum speed
      - 6.7
+     - 7.4
+     - +10%
    * - Minimum sink <h, v>
-     - <9.6, 1.06>
-     - <9.22, 1.02>
+     - 9.22, 1.02
+     - 9.6, 1.06
+     - +4.2%, +3.9%
    * - Trim speed
-     - 10.2
      - 10.6
+     - 10.2
+     - -3.8%
    * - Maximum speed
-     - 14.7
      - 14.4
+     - 14.7
+     - +2.08%
    * - Best glide <h, v>
-     - <10.2, 1.08>
-     - <10.4, 1.12>
+     - 10.4, 1.12
+     - 10.2, 1.08
+     - -1.9%, -3.6%
    * - Best glide ratio
-     - 9.44
      - 9.3
+     - 9.44
+     - +1.5%
 
 Observations:
 
@@ -556,22 +483,24 @@ Observations:
   the accelerator produces a perfect pitch-rotation of the foil) as well as the
   section profile deformations that increase with speed.
 
-In truth, these observations are just a drop in the bucket of possible issues
-with the theoretical model (not to mention issues with the experimental data
-itself); there are so many simplifications at work, and point data cannot hope
-to reveal all their flaws. These results suggest that the performance of the
-model is excellent when predicting longitudinal equilibrium, but a wider
-variety of wing models need to be examined to determine if this excellence
-generalizes to other wings.
+In truth, these observations are just a few of the possible issues with the
+theoretical model (not to mention issues with the experimental data itself);
+there are so many simplifications at work, and point data cannot hope to reveal
+all their flaws. These results suggest that the performance of the model is
+excellent when predicting longitudinal equilibrium, but a wider variety of wing
+models need to be examined to determine if this excellence generalizes to other
+wings.
 
 
 Size 27
 """""""
 
-For the experimental data, a size 27 model of the wing was reviewed for the
-Spanish magazine "Parapente" [[FIXME: citation; see `hook 3 perfils.pdf`]]. As
-with the size 25 model, plotting the experimental data on top of the
-theoretical curves produces valuable reference data:
+.. FIXME: how to cite `hook 3 perfils.pdf`?
+
+The experimental data for this section is taken from a size 27 version of the
+wing that was reviewed for the Spanish magazine "Parapente". As with the size
+25 model, plotting the experimental data on top of the theoretical curves
+produces valuable reference data:
 
 .. figure:: figures/paraglider/demonstration/polar_27.svg
 
@@ -585,32 +514,39 @@ theoretical curves produces valuable reference data:
    "minimum sink" operating point, and the right dot is the "best glide"
    operating point.
 
-And as before, the numerical equivalents of the data in the figure above:
+As before, the numerical equivalents of the data in the figure above:
 
-.. list-table::
+.. list-table:: Niviuk Hook 3 27 simulated polar curve vs flight data
    :header-rows: 1
 
    * - Value
-     - Theoretical
      - Experimental
+     - Simulated
+     - Error
    * - Minimum groundspeed
-     - 7.83
      - 6.7
+     - 7.83
+     - +17%
    * - Minimum sink <h, v>
-     - <10.2, 1.12>
-     - <9.72, 1.15>
+     - 9.72, 1.15
+     - 10.2, 1.12
+     - +4.9%, -2.6%
    * - Trim speed
-     - 10.8
      - 11.1
+     - 10.8
+     - -2.7%
    * - Maximum speed
-     - 15.4
      - 15
+     - 15.4
+     - +2.7%
    * - Best glide <h, v>
-     - <10.8, 1.13>
-     - <11.1, 1.17>
+     - 11.1, 1.17
+     - 10.8, 1.13
+     - -2.7%, -3.4%
    * - Best glide ratio
-     - 9.52
      - 9.5
+     - 9.52
+     - 0.21%
 
 The observations are similar to that for the size 25 model. Overall the fit is
 excellent. This model was limited to :math:`\kappa_b = 0.46 \, [m]`, or <76% of
@@ -665,24 +601,47 @@ Steady-state turn
 
 .. 360° turn at 20° bank angle. Compare to Pagen's ballpark figures
 
-Although longitudinal are the best place to start testing a model, the more
-difficult tests are for the dynamic behavior.
+Although the simplicity of longitudinal dynamics make them the best place to
+start testing a model, the more difficult tests are for the dynamic behavior.
+One simple test is to check the behavior during a steady 360° maneuver and
+compare them to the "guidelines" in :cite:`pagen2001ArtParagliding` that lists
+approximate sink rates and turn radii as a function of bank angle. The method
+does come with some caveats, however: for example, the author does is not
+discussing a specific glider, so these values are assumed to be averages of
+wing performance; this this is a midrange paraglider wing, it is assumed to be
+"average". Also, the author does not define the control inputs, but standard
+piloting practice is to use a combination of weight shift and brake for an
+efficient turn, so it is safe to assume the author is describing situations
+with those control inputs. Simulating this scenario produces the results in
+:numref:`path_360_topdown`:
 
+.. figure:: figures/validation/path_360_topdown.svg
+   :name: path_360_topdown
+   
+   Steady-state turn, top-down view
 
-.. image:: figures/validation/path_360_topdown.svg
-
-.. list-table::
+.. list-table:: Steady-state turn validation
    :header-rows: 1
 
    * - Value
-     - Expected
+     - Guideline
      - Simulated
+     - Error
    * - Turn radius [m]
      - ~12
      - 20
+     - +67%
    * - Sink rate [m/s]
      - ~1.1
      - 1.5
+     - +36%
    * - 360° turn rate [sec]
      - ~11.5
      - 16
+     - +40%
+
+Unlike the accurate estimates for the polar curves, which measured
+steady-state, longitudinal dynamics, this model clearly struggles with this
+test. It is unclear what is causing the discrepancy, but it is an important
+counterpoint that highlights the many dimensions of model accuracy. It is also
+useful for directing future work.

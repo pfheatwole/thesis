@@ -54,8 +54,8 @@ Technical specifications
 
 The following sections demonstrate how to estimate the parameters for a size
 23 version of the wing. The same process is used (but not shown) to create
-models of the size 25 and 27 wings to :ref:`validate <validation:Hook 3 model>`
-the modeling choices and implementation.
+models of the size 25 and 27 wings to :ref:`validate <validation:Niviuk Hook
+3 system dynamics>` the modeling choices and implementation.
 
 The process begins with the primary technical data from the official `technical
 specifications manual
@@ -300,12 +300,12 @@ mentions that "newer gliders" have been design with "low-speed sections", such
 as the LS(1)-0417 (for example, see
 :cite:`becker2017ExperimentalStudyParaglider`). For literature targeting
 paragliders specifically, one option is the NACA 23015: a classic, general
-purpose airfoil used in the wind tunnel :ref:`validation:Wind tunnel model`
-:cite:`belloc2015WindTunnelInvestigation`. Another paraglider-specific option
-is the "Ascender": an 18% thickness airfoil developed for an open-design
-paraglider :cite:`casellasParagliderDesignHandbook`; for an example of
-literature using that airfoil, see
-:cite:`boffadossi2016AnalysisAerodynamicCharacteristics`.
+purpose airfoil used in the :ref:`wind tunnel model <validation:Foil
+aerodynamics>` :cite:`belloc2015WindTunnelInvestigation`. Another
+paraglider-specific option is the "Ascender": an 18% thickness airfoil
+developed for an open-design paraglider
+:cite:`casellasParagliderDesignHandbook`; for an example of literature using
+that airfoil, see :cite:`boffadossi2016AnalysisAerodynamicCharacteristics`.
 
 The criteria for selecting an airfoil is beyond the scope of this
 demonstration, but a key observation is the tendency for paragliders to use
@@ -381,9 +381,10 @@ results of these choices is that choosing such a large radius for ``C2`` is
 wildly optimistic, but was chosen anyway to reduce the curvature of the
 transition region. For small brake inputs the transition curvature is
 negligible, but becomes progressively sharper as deflection increases. High
-curvature is a problem when using a theoretical aerodynamics model (such as
-XFOIL) to estimate the section coefficients, since the high curvature inhibits
-the method from converging on a solution when viscosity is taken into account.
+curvature can be a problem for some theoretical models used to estimate the
+section coefficients (including the viscous/inviscid coupling method in XFOIL
+:cite:`drela1989XFOILAnalysisDesign`), since the high curvature inhibits the
+method from converging on a solution when viscosity is taken into account.
 Softening the curvature allows the estimate to converge, but at the cost of
 hiding convergence failures that typically suggest flow separation. As
 a result, this profile set is likely to overestimate lift and underestimate
@@ -674,20 +675,19 @@ allow the brake lines to be pulled a maximum distance of :math:`42.6 \, [cm]`.
 To check the model fit, plot the undeflected and deflected trailing edge to
 compare with the reference photos:
 
-.. figure:: figures/paraglider/demonstration/Hook3_TE_0.25_0.50.*
+.. figure:: figures/paraglider/demonstration/brake_deflections_TE_Bl0.25_Br0.50.svg
 
-   Quartic brake deflections, :math:`\delta_{bl} = 0.25` and :math:`\delta_{br}
-   = 0.5`
+   Niviuk Hook 3 23 brake distribution, :math:`\delta_{bl} = 0.25` and
+   :math:`\delta_{br} = 0.5`
 
 .. raw:: html or singlehtml
 
    <br/>
 
-.. figure:: figures/paraglider/demonstration/Hook3_TE_1.00_1.00.*
+.. figure:: figures/paraglider/demonstration/brake_deflections_TE_Bl1.00_Br1.00.svg
 
-   Quartic brake deflections, :math:`\delta_{bl} = 1.00` and
+   Niviuk Hook 3 23 brake distribution, :math:`\delta_{bl} = 1.00` and
    :math:`\delta_{br} = 1.0`
-
 
 
 Line drag
