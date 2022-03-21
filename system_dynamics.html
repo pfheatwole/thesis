@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="6. State dynamics" href="state_dynamics.html" /><link rel="prev" title="4. Component models" href="paraglider_components.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="7. State dynamics" href="state_dynamics.html" /><link rel="prev" title="5. Component models" href="paraglider_components.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
-        <title>5. System dynamics - Parametric Paraglider Modeling</title>
+        <title>6. System dynamics - Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
@@ -162,13 +162,15 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">5. System dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related_works.html">2. Related works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">3. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">4. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">5. Component models</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">6. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">7. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">8. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">9. Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
@@ -210,7 +212,7 @@
         </div>
         <article role="main">
           <section id="system-dynamics">
-<h1><span class="section-number">5. </span>System dynamics<a class="headerlink" href="#system-dynamics" title="Permalink to this headline">#</a></h1>
+<h1><span class="section-number">6. </span>System dynamics<a class="headerlink" href="#system-dynamics" title="Permalink to this headline">#</a></h1>
 <p>This chapter combines the individual <a class="reference internal" href="paraglider_components.html"><span class="doc">component models</span></a> into composite <em>system dynamics</em> models. In this
 paper, a <em>system dynamics</em> model is a set of derivatives that define the
 translational and angular acceleration of groups of components that represent
@@ -223,7 +225,7 @@ Developing a system model can be roughly described as a sequence of steps:</p>
 <li><p>Develop the system of equations for the accelerations</p></li>
 </ol>
 <section id="components">
-<h2><span class="section-number">5.1. </span>Components<a class="headerlink" href="#components" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">6.1. </span>Components<a class="headerlink" href="#components" title="Permalink to this headline">#</a></h2>
 <p>The previous chapter defined component models for the canopy, suspension lines,
 and harness; in the system models, these are lumped into two quasi-rigid-body
 groups called the <em>body</em> and the <em>payload</em>. The <em>body</em> of the glider is the
@@ -251,7 +253,7 @@ Referring to whatever group of components include the canopy as the <em>body</em
 a compromise chosen for consistency with existing literature.</p>
 </section>
 <section id="connections">
-<h2><span class="section-number">5.2. </span>Connections<a class="headerlink" href="#connections" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">6.2. </span>Connections<a class="headerlink" href="#connections" title="Permalink to this headline">#</a></h2>
 <p>Next, the system model must characterize the connection between the body and
 payload. In literature, parafoil-payload models are commonly categorized by
 their <em>degrees-of-freedom</em> (DoF): the total number of dimensions in which the
@@ -263,7 +265,7 @@ a 6-DoF model, the body and payload are connected as a single rigid body, with
 no relative motion between them.</p>
 <figure class="align-default" id="paraglider-fbd-6dof">
 <img alt="_images/paraglider_fbd_6dof.svg" src="_images/paraglider_fbd_6dof.svg"/><figcaption>
-<p><span class="caption-number">Fig. 5.1 </span><span class="caption-text">Diagram for a 6-DoF model.</span><a class="headerlink" href="#paraglider-fbd-6dof" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 6.1 </span><span class="caption-text">Diagram for a 6-DoF model.</span><a class="headerlink" href="#paraglider-fbd-6dof" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>For typical paragliding flight maneuvers, assuming a fixed payload orientation
@@ -282,43 +284,42 @@ a spring-damper system, which produces an internal force <span class="math notra
 moment <span class="math notranslate nohighlight">\(\vec{M}_R\)</span>:</p>
 <figure class="align-default" id="paraglider-fbd-9dof">
 <img alt="_images/paraglider_fbd_9dof.svg" src="_images/paraglider_fbd_9dof.svg"/><figcaption>
-<p><span class="caption-number">Fig. 5.2 </span><span class="caption-text">Diagram for a 9-DoF model with internal forces.</span><a class="headerlink" href="#paraglider-fbd-9dof" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 6.2 </span><span class="caption-text">Diagram for a 9-DoF model with internal forces.</span><a class="headerlink" href="#paraglider-fbd-9dof" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
 <section id="reference-point">
-<h2><span class="section-number">5.3. </span>Reference point<a class="headerlink" href="#reference-point" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">6.3. </span>Reference point<a class="headerlink" href="#reference-point" title="Permalink to this headline">#</a></h2>
 <p>Each dynamics model must choose a reference point about which the moments and
 angular inertia are calculated. A common choice for conventional aircraft is
 the center of real mass because it decouples the translational and angular
 dynamics of isolated objects. For a paraglider, however, this is not possible:
 paragliders are sensitive to apparent mass, which depends on the direction of
-motion, so there is no “center” that decouples the translational and
-rotational terms of the apparent inertia matrix
-<span id="id1">[<a class="reference internal" href="zreferences.html#id8" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">16</a>]</span>. Because the system matrix cannot be
-diagonalized there is no advantage in choosing the center of real mass.
-Instead, the reference point can be chosen such that it simplifies other
-calculations.</p>
+motion, so there is no “center” that decouples the translational and rotational
+terms of the apparent inertia matrix <span id="id1">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">23</a>]</span>.
+Because the system matrix cannot be diagonalized there is no advantage in
+choosing the center of real mass. Instead, the reference point can be chosen
+such that it simplifies other calculations.</p>
 <p>In particular, the <a class="reference internal" href="paraglider_components.html#apparent-mass"><span class="std std-ref">method</span></a> to
 estimate the apparent inertia matrix requires that the reference point lies in
 the <span class="math notranslate nohighlight">\(xz\)</span>-plane of the canopy. Two natural choices in that plane are the
 leading edge of the central section, or the midpoint between the two risers.
 The <a class="reference internal" href="#connections"><span class="std std-ref">riser midpoint</span></a> <span class="math notranslate nohighlight">\(RM\)</span> has the
 advantage that is a fixed point in both the body and payload coordinate
-systems, which means it does not depend on the relative position or
-orientation of the payload with respect to the body. (This choice simplifies
-the equations for the <a class="reference internal" href="derivations.html#model-9a"><span class="std std-ref">9-DoF model</span></a> while
-maintaining consistency with the <a class="reference internal" href="derivations.html#model-9a"><span class="std std-ref">6-DoF model</span></a>.)</p>
+systems, which means it does not depend on the relative position or orientation
+of the payload with respect to the body. (This choice simplifies the equations
+for the <a class="reference internal" href="derivations.html#model-9a"><span class="std std-ref">9-DoF model</span></a> while maintaining consistency
+with the <a class="reference internal" href="derivations.html#model-9a"><span class="std std-ref">6-DoF model</span></a>.)</p>
 </section>
 <section id="system-inputs">
-<h2><span class="section-number">5.4. </span>System inputs<a class="headerlink" href="#system-inputs" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">6.4. </span>System inputs<a class="headerlink" href="#system-inputs" title="Permalink to this headline">#</a></h2>
 <p>The inputs <span class="math notranslate nohighlight">\(\vec{u}\)</span> to the system model the control inputs for each
 component (with the exception of the trailing edge <a class="reference internal" href="paraglider_components.html#deflected-airfoil-arc"><span class="std std-ref">deflection distances</span></a> <span class="math notranslate nohighlight">\(\delta_d(s)\)</span> which are computed internally
 using the suspension lines and foil geometry models), the wind velocity
 <span class="math notranslate nohighlight">\(\vec{v}_{W/e}\)</span>, air density <span class="math notranslate nohighlight">\(\rho_\textrm{air}\)</span>, and the gravity
 vector <span class="math notranslate nohighlight">\(\vec{g}\)</span>.</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-system-inputs">
-<span class="eqno">(5.1)<a class="headerlink" href="#equation-system-inputs" title="Permalink to this equation">#</a></span>\[\vec{u} =
+<span class="eqno">(6.1)<a class="headerlink" href="#equation-system-inputs" title="Permalink to this equation">#</a></span>\[\vec{u} =
   \left\{
     \delta_a,
     \delta_{bl},
@@ -334,12 +335,12 @@ wind fields there will be a unique wind vector for each aerodynamic control
 point.</p>
 </section>
 <section id="equations-of-motion">
-<h2><span class="section-number">5.5. </span>Equations of motion<a class="headerlink" href="#equations-of-motion" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">6.5. </span>Equations of motion<a class="headerlink" href="#equations-of-motion" title="Permalink to this headline">#</a></h2>
 <p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Equations_of_motion">equations of motion</a>
 are developed by solving for the derivatives of translational momentum
 <span class="math notranslate nohighlight">\({^e \dot{\vec{p}}} = \sum{\vec{F}} = m \dot{\vec{v}}\)</span> and angular
 momentum <span class="math notranslate nohighlight">\({^e \dot{\vec{h}}} = \sum \vec{M} = \mat{J} \dot{\vec{\omega}}\)</span>
-for each group of components <span id="id2">[<a class="reference internal" href="zreferences.html#id27" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">24</a>]</span>. In
+for each group of components <span id="id2">[<a class="reference internal" href="zreferences.html#id33" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">10</a>]</span>. In
 addition to requiring the forces, moments, and inertia matrices for each
 component, each system model must choose a dynamics reference point and whether
 to account for the affects of <em>apparent mass</em>. The <a class="reference internal" href="derivations.html#paraglider-system-models"><span class="std std-ref">appendix</span></a> includes derivations demonstrating
@@ -354,7 +355,7 @@ derivatives that describe the accelerations of the body relative to the earth
 frame <span class="math notranslate nohighlight">\(\mathcal{F}_e\)</span> taken with respect to the body frame
 <span class="math notranslate nohighlight">\(\mathcal{F}_b\)</span>:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-system-derivatives">
-<span class="eqno">(5.2)<a class="headerlink" href="#equation-model6a-system-derivatives" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+<span class="eqno">(6.2)<a class="headerlink" href="#equation-model6a-system-derivatives" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   {^b \dot{\vec{v}}_{RM/e}} \qquad &amp; \textrm{translational acceleration of the riser midpoint} \, RM \\
   {^b \dot{\vec{\omega}}_{b/e}} \qquad &amp; \textrm{angular acceleration of the body} \\
 \end{aligned}\end{split}\]</div></div>
@@ -364,7 +365,7 @@ apparent mass of the canopy, but with the addition of a separate angular
 acceleration for the payload with respect to the payload frame
 <span class="math notranslate nohighlight">\(\mathcal{F}_p\)</span>:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-system-derivatives">
-<span class="eqno">(5.3)<a class="headerlink" href="#equation-model9a-system-derivatives" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+<span class="eqno">(6.3)<a class="headerlink" href="#equation-model9a-system-derivatives" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   {^b \dot{\vec{v}}_{RM/e}} \qquad &amp;\textrm{translational acceleration of the riser midpoint} \, RM \\
   {^b \dot{\vec{\omega}}_{b/e}} \qquad &amp; \textrm{angular acceleration of the body} \\
   {^p \dot{\vec{\omega}}_{p/e}} \qquad &amp; \textrm{angular acceleration of the payload} \\
@@ -382,7 +383,7 @@ acceleration for the payload with respect to the payload frame
         <div class="context">
           <span>Next</span>
         </div>
-        <div class="title"><span class="section-number">6. </span>State dynamics</div>
+        <div class="title"><span class="section-number">7. </span>State dynamics</div>
       </div>
       <svg><use href="#svg-arrow-right"></use></svg>
     </a>
@@ -393,7 +394,7 @@ acceleration for the payload with respect to the payload frame
           <span>Previous</span>
         </div>
         
-        <div class="title"><span class="section-number">4. </span>Component models</div>
+        <div class="title"><span class="section-number">5. </span>Component models</div>
         
       </div>
     </a>
@@ -439,12 +440,12 @@ acceleration for the payload with respect to the payload frame
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">5. System dynamics</a><ul>
-<li><a class="reference internal" href="#components">5.1. Components</a></li>
-<li><a class="reference internal" href="#connections">5.2. Connections</a></li>
-<li><a class="reference internal" href="#reference-point">5.3. Reference point</a></li>
-<li><a class="reference internal" href="#system-inputs">5.4. System inputs</a></li>
-<li><a class="reference internal" href="#equations-of-motion">5.5. Equations of motion</a></li>
+<li><a class="reference internal" href="#">6. System dynamics</a><ul>
+<li><a class="reference internal" href="#components">6.1. Components</a></li>
+<li><a class="reference internal" href="#connections">6.2. Connections</a></li>
+<li><a class="reference internal" href="#reference-point">6.3. Reference point</a></li>
+<li><a class="reference internal" href="#system-inputs">6.4. System inputs</a></li>
+<li><a class="reference internal" href="#equations-of-motion">6.5. Equations of motion</a></li>
 </ul>
 </li>
 </ul>

@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="2. Foil geometry" href="foil_geometry.html" /><link rel="prev" title="Acknowledgements" href="acknowledgements.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="2. Related works" href="related_works.html" /><link rel="prev" title="Acknowledgements" href="acknowledgements.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>1. Introduction - Parametric Paraglider Modeling</title>
@@ -162,13 +162,15 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related_works.html">2. Related works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">3. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">4. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">5. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">6. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">7. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">8. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">9. Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
@@ -211,99 +213,206 @@
         <article role="main">
           <section id="introduction">
 <h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h1>
+<section id="overview">
+<h2><span class="section-number">1.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h2>
 <p>The objective of this paper is to create a set of parametric models that can
-estimate the system dynamics of commercial paraglider wings using only limited
-technical specifications. These <em>flight dynamics models</em> describe the behavior
-of a paraglider by computing the translational and angular acceleration of the
-aircraft in response to the pilot control inputs and its interactions with the
-environment.</p>
-<figure class="align-default">
-<img alt="_images/block0.svg" src="_images/block0.svg"/></figure>
-<p>The models are composed as systems of parametric components. Each component
-model is responsible for calculating the inertial properties and resultant
-forces that the system model will use to compute the glider acceleration. The
-fact that only summary data is available for commercial wings means that each
-component must encode a large amount of structural knowledge to augment the
-data, and provide carefully chosen structural parameters that can be estimated
-from that data.</p>
-<section id="motivation">
-<h2><span class="section-number">1.1. </span>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">#</a></h2>
-<p>Paragliding is a recreational flying activity that uses a lightweight, flexible
-wing for non-powered flight. Pilots are strapped into a harness suspended from
-the wing by a network of flexible connecting lines, and control the glider by
-manipulating the lengths of the suspension lines and shifting their weight
-inside the harness. Because paragliders lack a motor, their motion is entirely
-dictated by interactions with gravity and wind. If the air is ascending a pilot
-can slow their descent, or even gain altitude; conversely, sinking air will
-cause the wing to descend more quickly. The horizontal component of the wind
-dictates the ground speed of the glider in a given direction, which determines
-what regions of the air the pilot can access, and what landing zones they can
-reach.</p>
-<p>As a result, a successful flight depends on the pilot’s ability to recognize
-the structure of the local air currents and navigate them in order to achieve
-their flight goals, which may include optimizing for flight time, distance, or
-a particular route. Because a glider is constantly spending energy to
-counteract the force of gravity, the pilot must recognize the wind structure as
-quickly as possible to minimize energy loss. Experienced pilots assess the
-nearby air currents by observing vegetation, birds, or other pilots, but they
-can also leverage knowledge gained from previous flights; although local wind
-configurations are difficult to predict in detail, they can exhibit recurring
-patterns. By learning those patterns a pilot can assess the current wind
-conditions more quickly and more accurately, and can prioritize flying to areas
-that are likely to support their flight goals.</p>
-<p>Traditionally, wind patterns are discovered by pilots with a lot of flight time
-in a particular area, and are shared directly from one pilot to another. For
-the pilot community to learn reliable patterns, individual pilots must first
-recognize a pattern and then be able to communicate it with precision. An
-appealing alternative would be to aggregate recorded flight data from many
-pilots over many flights, detect any wind patterns automatically from those
-flights, and build a graphical map to communicate the features of the wind
-field visually instead of relying on verbal descriptions. In support of this
-idea, there already exist large databases with millions of recorded flights
-spanning several decades from pilots who share their flights for personal and
-competitive purposes. The difficulty with using those records is that most
-flight devices only record a tiny amount of the information available to
-a pilot; in fact, the average flight record can only be expected to include
-a time series of positions. There is typically no information regarding the
-orientation, velocity, acceleration, pilot control inputs, or the weather
-conditions. Even the details of the aircraft are unknown (in most cases). The
-ability to learn wind patterns from a set of flight records hinges on the
-ability to estimate the structure of the wind field that was present during
-individual flights using position-only data.</p>
-<p>The key to success is to recognize that although position is the only available
-data, it is not the only available information: we also know that each flight
-record was produced by a paraglider. That information — knowledge of the
-dynamics of the system that produced the data — establishes a causal
-relationship between the sequence of glider positions and the underlying wind
-field. This is vital information, because given a causal model it may be
-possible to perform statistical <em>flight reconstruction</em>. [[FIXME: finish; add
-reference to the MH370 paper.]]</p>
-<p>The need for a flight dynamics model of the paraglider that produced the data
-is a major stumbling block: not only are the dynamics unknown, but the glider
-itself is unknown. Flight reconstruction would require not just a single model,
-but an entire distribution over all dynamics models that could have produced
-the data. It is laborious to create a single model for a commercial paraglider,
-much less an entire set of models, then there’s the killing blow that the only
-available wing data is a sparse collection of summary measurements. The
-response taken in this project is to encode large amounts of structural
-knowledge in parametric functions that can augment the data and eliminate large
-portions of the modeling process.</p>
+estimate the flight dynamics of commercial paraglider wings using only limited
+technical specifications.</p>
+<p>In this paper, <em>modeling</em> refers to creating a mathematical representation of
+a physical characteristic or behavior. A <em>dynamics model</em> is a mathematical
+function that computes the acceleration of an object given the forces that act
+on it, as described by Newton’s 2nd law of motion <a class="reference internal" href="#equation-newtons-2nd">(1.1)</a>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-newtons-2nd">
+<span class="eqno">(1.1)<a class="headerlink" href="#equation-newtons-2nd" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+\textrm{Translational} \qquad F &amp;= ma \\
+\textrm{Angular} \qquad M &amp;= J \alpha
+\end{aligned}\end{split}\]</div></div>
+<p>These equations show that to compute the translational acceleration <span class="math notranslate nohighlight">\(a\)</span>
+and the rotational acceleration <span class="math notranslate nohighlight">\(\alpha\)</span>, a dynamics model requires:</p>
+<ol class="arabic simple">
+<li><p>The mass <span class="math notranslate nohighlight">\(m\)</span> and mass moment of inertia <span class="math notranslate nohighlight">\(J\)</span></p></li>
+<li><p>The forces <span class="math notranslate nohighlight">\(F\)</span> and moments <span class="math notranslate nohighlight">\(M\)</span></p></li>
+</ol>
+<p>For a paraglider, the forces and moments that act on it are determined by its
+current velocity, the relative wind flowing past the glider, air density,
+gravity, and the pilot control inputs. The motion that is produced are the
+<em>flight dynamics</em>, and the equations that represent how those inputs produce
+the accelerations are called a <em>flight dynamics model</em>:</p>
+<figure class="align-default" id="id2">
+<img alt="_images/block0.svg" src="_images/block0.svg"/><figcaption>
+<p><span class="caption-number">Fig. 1.1 </span><span class="caption-text">Flight dynamics model block diagram</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The purpose of these <em>flight dynamics models</em> is to enable <em>dynamic
+simulations</em>. A <em>dynamic simulation</em> is when acceleration is integrated over
+time to produce a record of the object’s velocity and position. The ability to
+simulate a system’s behavior provides opportunities such as studying that
+behavior, developing control models, and running statistical filtering
+pipelines. In fact, the inspiration for this project was a question whether
+statistical flight reconstruction could be used to recreate the wind fields
+present during a paraglider flight given only a record of its position, in much
+the same way as researchers attempted to locate the lost Malaysia Airlines
+Flight 370 <span id="id1">[<a class="reference internal" href="zreferences.html#id23" title="Sam Davey, Neil Gordon, Ian Holland, Mark Rutten, and Jason Williams. Bayesian Methods in the Search for MH370. SpringerBriefs in Electrical and Computer Engineering. Springer Publishing Company, Incorporated, 1st edition, 2016. ISBN 978-981-10-0379-0. doi:10.1007/978-981-10-0379-0.">1</a>]</span>.</p>
+<p>The steps to producing a dynamic simulation can be summarized as follows:</p>
+<ol class="arabic simple">
+<li><p>Understand the physical system</p></li>
+<li><p>Model its inertial properties and forces</p></li>
+<li><p>Develop the equations of motion (Newton’s 2nd law)</p></li>
+<li><p>Integrate the equations of motion over time</p></li>
+</ol>
+<p>The majority of the work for this project is in step 2 (estimating the inertial
+properties and forces) because the estimation process requires accurate models
+of the mass distribution and aerodynamics of each component of the glider.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The remainder of this chapter assumes a working familiarity with
+fundamental aerodynamics. For the necessary background to understand this
+work, the section of the “Related works” covering <a class="reference internal" href="related_works.html#flight-simulation"><span class="std std-ref">Flight simulation</span></a> provides an overview and complete list of material that I found
+helpful.</p>
+</div>
+</section>
+<section id="modeling-challenges">
+<h2><span class="section-number">1.2. </span>Modeling challenges<a class="headerlink" href="#modeling-challenges" title="Permalink to this headline">#</a></h2>
+<p>The existence of this project suggests that existing (and freely available)
+tools for aircraft simulations are inadequate for simulating paragliders. The
+reason is that paragliders have a variety of unique characteristics that make
+them difficult to model using tools built for conventional aircraft:</p>
+<ol class="arabic">
+<li><p>Highly curved shape</p>
+<p>Aerodynamics models must simplify the Navier-Stokes equations in order to
+produce a tractable system of equations. Those simplifications frequently
+make them incapable of representing the flow field around a nonlinear wing.</p>
+</li>
+<li><p>Low airspeed</p>
+<p>Paraglider airspeeds are typically in the range 24–72 [km/h]. They also have
+relatively short wing sections, with chord lengths ranging from 0.5–3 [m].
+These characteristics combined with the reduced airspeed at the inside
+wingtip during a turn means that the canopy (and the wing tips in
+particular) are frequently operating at Reynolds values in the 300k range,
+far below the <span class="math notranslate nohighlight">\(Re = 10^6\)</span> range where where viscous effects start to
+become significant.</p>
+</li>
+<li><p>High angles of attack</p>
+<p>Compounding the issue of operating at low Reynolds values, paragliders
+frequently operate at high angles of attack, leading to flow separation and
+the dramatic nonlinear aerodynamic behavior that results. As they approach
+stall conditions, simple aircraft simulators that rely on linear
+aerodynamics can dramatically overestimate the true lift produced by the
+wing.</p>
+</li>
+<li><p>Flexible</p>
+<p>Paragliders are constructed from flexible nylon sheets and rely on air
+pressure and suspension lines to maintain their shape. Their internal cells
+billow and wrinkle while the canopy twists and bends in the wind. It can
+even collapse entirely. Systems that rely on a predetermined geometry are
+fundamentally incapable of modeling such behavior.</p>
+</li>
+<li><p>Air intakes</p>
+<p>To produce the internal pressure that forms the canopy, paragliders use air
+intakes at the leading edge which pressurize its volume. These air intakes
+violate the expected pressure gradients predicted by analyses that use the
+idealized airfoils used to define the section profiles. As a result,
+theoretical aerodynamic coefficients underestimate the section drag.</p>
+</li>
+<li><p>Lightweight</p>
+<p>A paraglider canopy is a large volume with a small amount of solid mass. Its
+low density means that a naive application of Newton’s 2nd law will
+overestimate acceleration because it fails to account for the momentum of
+the fluid surrounding the glider, an effect known as <em>apparent mass</em>.</p>
+</li>
+</ol>
+<p>In addition to these characteristics, there is another issue that is relatively
+unique to gliding aircraft:</p>
+<ol class="arabic" start="7">
+<li><p>Pilots care about the details of the wing behavior in non-uniform wind
+fields.</p>
+<p>The reason is that glider pilots rely on the ability to determine the
+structure of the wind field by sensing the imbalanced forces produced by
+differences in relative wind vectors across the wing.</p>
+</li>
+</ol>
+<p>Each of these characteristics introduce modeling challenges. The modeling
+requirements will depend on which of these characteristics the dynamics model
+attempts to capture.</p>
+</section>
+<section id="modeling-requirements">
+<h2><span class="section-number">1.3. </span>Modeling requirements<a class="headerlink" href="#modeling-requirements" title="Permalink to this headline">#</a></h2>
+<p>The nuances of paraglider behavior are dominated by subtle interactions. The
+design philosophy for this project was to avoid simplifying assumptions
+whenever reasonable to avoid accidentally masking those subtle interactions.
+This approach was driven by a desire to answer questions such as:</p>
+<ul class="simple">
+<li><p>How much drag comes from each individual component?</p></li>
+<li><p>How important are section-specific Reynolds values?</p></li>
+<li><p>How important is apparent mass?</p></li>
+<li><p>How does a paraglider react when one side of the wing is in a stronger
+thermal than the other side?</p></li>
+</ul>
+<p>The desire for accuracy must be balanced with practical limitations, choosing
+which characteristics to include and which to simplify away. Having considered
+the tradeoffs, this project chose the following set of modeling requirements,
+beginning with the fundamental <a class="reference external" href="Modelingchallenges">challenges</a> of the
+previous section:</p>
+<ol class="arabic simple">
+<li><p>The aerodynamics method must use the true, nonlinear geometry. It must not
+flatten the canopy geometry in any dimension.</p></li>
+<li><p>The aerodynamics method must support variable Reynolds values.</p></li>
+<li><p>The aerodynamics method must provide graceful degradation as it approaches
+high angles of attack. (A decrease in accuracy is acceptable, but assuming
+linear aerodynamics up to high alpha is not. The goal is to fly the wing
+into strong thermals which will rapidly increase angle of attack, so the
+method must at least approximate those conditions.)</p></li>
+<li><p>Canopy deformations due to flexibility will be neglected. This means that
+glider controls that use non-brake-line manipulations will also be neglected
+(since they rely on canopy deformations).</p></li>
+<li><p>The aerodynamics method must support empirical viscous correction factors to
+mitigate the issues caused by a mismatch between the theoretical and actual
+section profiles.</p></li>
+<li><p>The system model must support apparent mass (in order to verify its
+significance).</p></li>
+<li><p>The aerodynamics method must support non-uniform vectors along the span.</p></li>
+</ol>
+<p>In addition to those characteristic behaviors, this project had an additional
+goal:</p>
+<ol class="arabic" start="8">
+<li><p>Computationally fast</p>
+<p>The fundamental goal of this project is to enable people to create models of
+commercial paraglider wings, and that process requires iteration, so the
+software should pursue simulation speed that would allow rapid iteration.</p>
+</li>
+</ol>
 </section>
 <section id="roadmap">
-<h2><span class="section-number">1.2. </span>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">#</a></h2>
-<p>The modeling process begins by developing a novel <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a> tailored
-for nonlinear shapes, enabling simple, parametric representations of typical
-paraglider canopies. It then chooses a <a class="reference internal" href="foil_aerodynamics.html"><span class="doc">Foil aerodynamics</span></a> method suitable
-for the nonlinear geometry and typical flight conditions of a parafoil canopy,
-and compares its estimates to experimental wind tunnel data. Next,
-<a class="reference internal" href="paraglider_components.html"><span class="doc">Component models</span></a> decomposes a paraglider into a system of
-components, and develops parametric models for each component. Finally,
-<a class="reference internal" href="system_dynamics.html"><span class="doc">System dynamics</span></a> combine the components into complete dynamics models,
-and <a class="reference internal" href="state_dynamics.html"><span class="doc">State dynamics</span></a> selects a suitable set of state variables and defines
-their derivatives in terms of the system dynamics. The paper concludes with
-a collection of <a class="reference internal" href="demonstration.html"><span class="doc">demonstrations</span></a> that show how to estimate
-the parameters of the component models for a commercial paraglider wing, how to
-validate the model, and how the model can be used to study paraglider behavior.</p>
+<h2><span class="section-number">1.4. </span>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">#</a></h2>
+<p>The majority of this work is spent producing the models that estimate the
+inertial properties and resultant forces for each component, but it also
+develops the additional models necessary to generate flight simulations. For
+reference, a complete flight simulation architecture is shown in
+<a class="reference internal" href="#block-simulator"><span class="std std-numref">Fig. 1.2</span></a>. This paper will develop everything inside the “State
+dynamics” block.</p>
+<figure class="align-default" id="block-simulator">
+<a class="reference internal image-reference" href="_images/diagram_block_simulator.svg"><img alt="_images/diagram_block_simulator.svg" src="_images/diagram_block_simulator.svg" width="50%"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 1.2 </span><span class="caption-text">Flight simulation block diagram</span><a class="headerlink" href="#block-simulator" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The modeling process begins by developing a novel <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a> with
+increased flexibility compared to other open source wing modeling tools,
+enabling simple, parametric representations of typical paraglider canopies. It
+then chooses a <a class="reference internal" href="foil_aerodynamics.html"><span class="doc">Foil aerodynamics</span></a> method that satisfies those <a class="reference internal" href="#modeling-requirements">Modeling
+requirements</a> that relate to the canopy aerodynamics. Next, it develops a set
+of parametric <a class="reference internal" href="paraglider_components.html"><span class="doc">Component models</span></a> using parametrizations that simplify
+creating models of commercial paraglider systems. Finally,
+<a class="reference internal" href="system_dynamics.html"><span class="doc">System dynamics</span></a> models combine the components into complete flight
+dynamics models, and <a class="reference internal" href="state_dynamics.html"><span class="doc">State dynamics</span></a> shows how to define the derivatives
+of a set of state variables in terms of those system dynamics. Having completed
+the model derivations, the paper provides a complete <a class="reference internal" href="demonstration.html"><span class="doc">demonstration</span></a> of how they can be used to model a commercial paraglider wing.
+The penultimate chapter provides <a class="reference internal" href="validation.html"><span class="doc">Validation</span></a> data of the aerodynamics
+method by comparing wind tunnel measurements for a scale-model paraglider wing
+against simulated results, as well as comparing simulated polar curves for the
+<a class="reference internal" href="demonstration.html"><span class="doc">demonstration</span></a> model against basic flight test data.
+Finally, the <a class="reference internal" href="conclusion.html"><span class="doc">Conclusion</span></a> revisits the questions from the <a class="reference internal" href="#modeling-requirements">Modeling
+requirements</a> and proposes how this material may be used in future work.</p>
 </section>
 </section>
 
@@ -312,12 +421,12 @@ validate the model, and how the model can be used to study paraglider behavior.<
       <footer>
         
 <div class="related-pages">
-  <a class="next-page" href="foil_geometry.html">
+  <a class="next-page" href="related_works.html">
       <div class="page-info">
         <div class="context">
           <span>Next</span>
         </div>
-        <div class="title"><span class="section-number">2. </span>Foil geometry</div>
+        <div class="title"><span class="section-number">2. </span>Related works</div>
       </div>
       <svg><use href="#svg-arrow-right"></use></svg>
     </a>
@@ -375,8 +484,10 @@ validate the model, and how the model can be used to study paraglider behavior.<
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">1. Introduction</a><ul>
-<li><a class="reference internal" href="#motivation">1.1. Motivation</a></li>
-<li><a class="reference internal" href="#roadmap">1.2. Roadmap</a></li>
+<li><a class="reference internal" href="#overview">1.1. Overview</a></li>
+<li><a class="reference internal" href="#modeling-challenges">1.2. Modeling challenges</a></li>
+<li><a class="reference internal" href="#modeling-requirements">1.3. Modeling requirements</a></li>
+<li><a class="reference internal" href="#roadmap">1.4. Roadmap</a></li>
 </ul>
 </li>
 </ul>
@@ -393,5 +504,7 @@ validate the model, and how the model can be used to study paraglider behavior.<
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/cancel"]}, "tex": {"macros": {"defas": "\\stackrel{\\mathrm{def}}{=}", "given": "\\;\\middle\\vert\\;", "vec": ["\\mathbf{#1}", 1], "mat": ["\\mathbf{#1}", 1], "crossmat": ["\\left[{#1}\\right]^{\\times}", 1], "norm": ["\\left\\|{#1}\\right\\|", 1]}, "packages": {"[+]": ["cancel"]}}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

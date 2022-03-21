@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Glossary" href="glossary.html" /><link rel="prev" title="7. Demonstration" href="demonstration.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Glossary" href="glossary.html" /><link rel="prev" title="9. Validation" href="validation.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
-        <title>8. Conclusion - Parametric Paraglider Modeling</title>
+        <title>10. Conclusion - Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
@@ -137,7 +137,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -162,13 +162,15 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">8. Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related_works.html">2. Related works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">3. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">4. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">5. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">6. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">7. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">8. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">9. Validation</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">10. Conclusion</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
@@ -203,15 +205,168 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
           <section id="conclusion">
-<h1><span class="section-number">8. </span>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h1>
-<p><em>This page intentionally left blank.</em></p>
+<h1><span class="section-number">10. </span>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h1>
+<section id="results">
+<h2><span class="section-number">10.1. </span>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
+<p>In the introduction to this paper, the <a class="reference internal" href="introduction.html#modeling-requirements"><span class="std std-ref">Modeling requirements</span></a> section posed several example questions about paraglider
+behavior. Those questions will now be revisited using the models developed in
+this paper.</p>
+<section id="study-drag-breakdown">
+<h3><span class="section-number">10.1.1. </span>Study: drag breakdown<a class="headerlink" href="#study-drag-breakdown" title="Permalink to this headline">#</a></h3>
+<p>A common question for curious pilots is how to reduce the drag of their glider
+so they can improve the glide ratio or top speed of their wing. The natural
+progression of this curiosity is wonder where all the drag comes from in the
+first place. One way to answer that question is to plot the drag contributions
+from each component <span id="id1">[<a class="reference internal" href="zreferences.html#id7" title="Holger Babinsky. Aerodynamic improvements of paraglider performance. In 17th Applied Aerodynamics Conference, 3148. 1999.">49</a>]</span>.</p>
+<figure class="align-default" id="id2">
+<img alt="_images/drag_breakdown.svg" src="_images/drag_breakdown.svg"/><figcaption>
+<p><span class="caption-number">Fig. 10.1 </span><span class="caption-text">Drag breakdown for Niviuk Hook 3 23 with a pod harness.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Viscous drag includes effects such as the sheer forces produced by the
+viscosity of the air, and the pressure drag due to flow separation (the
+“vacuum” that can occur on the downwind side of an object); these forms of drag
+occur on every surface of the glider, including the lines and payload. Inviscid
+drag is less intuitive: commonly referred to as “lift-induced drag”, it is the
+energy lost in the vorticity that the wing sheds into its wake as a side-effect
+of producing lift.</p>
+<p>This diagram provides a satisfying look into the behavior of a wing across the
+range of speeds. At the low end, pilots understand that the “brakes” will slow
+the wing by increasing its drag, but may be surprised to discover that the
+increase in drag is dominated by how the wing produces lift. At the high end,
+it can be surprising to learn what proportion of the total system drag is
+produced by the seemingly-negligible suspension lines. Although drag is just
+one piece of the lift/drag ratio, this sort of breakdown is valuable for
+estimating how much improvement is possible by (for example) reducing the drag
+of the payload.</p>
+<p>This decomposition is also educational because it offers another perspective of
+how each component of the wing affects the overall design. Consider the general
+guideline that paraglider wings are designed to achieve their maximum glide
+ratio at “trim” (zero controls), which usually coincides with the speed that
+minimizes the total system drag (as seen here). Now suppose the design was
+changed; for example, increasing the aspect ratio of the canopy will tend to
+decrease its lift-induced drag, which in turn requires repositioning the
+payload at trim. The complete system behavior is a complex interaction of
+components, and having access to a parametric model such as this is an
+excellent resource for quickly answering questions about glider efficiency by
+developing an intuition of how their interactions affect the system behavior.</p>
+</section>
+<section id="study-effects-of-reynolds-numbers-and-apparent-mass">
+<h3><span class="section-number">10.1.2. </span>Study: effects of Reynolds numbers and apparent mass<a class="headerlink" href="#study-effects-of-reynolds-numbers-and-apparent-mass" title="Permalink to this headline">#</a></h3>
+<p>There were two questions at the start of this project that affected my modeling
+choices:</p>
+<ol class="arabic simple">
+<li><p>How significant are the effects of apparent mass?</p></li>
+<li><p>How significant are the effects of accurate Reynolds numbers?</p></li>
+</ol>
+<p>Both contributions to the flight dynamics are typically neglected in paraglider
+dynamics models without clear justification or discussion of their expected
+impact on model accuracy. The models developed in this paper can be used to
+provide insight on those questions. Using the Niviuk Hook 3 (size 23) component
+models created for the <a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a>, a programming script created
+multiple instances of the 6-DoF system models, configuring them to either
+respect or ignore the effects of apparent mass and precise Reynolds numbers
+(which are normally computed dynamically for each wing section). Pairs of
+models — one with the full dynamics and the other lacking one or both effects
+— are put into a figure-8 maneuver starting at that model’s equilibrium state
+and receiving the same control inputs over a span of 60 seconds. (The maneuver
+did not use weight shift control to avoid possible issues modeling canopy
+deformations.) Three simulations were run:</p>
+<ol class="arabic simple">
+<li><p>To show the affect of neglecting apparent mass
+(<a class="reference internal" href="#figure8-apparent-mass"><span class="std std-numref">Fig. 10.2</span></a>)</p></li>
+<li><p>To show the effect of neglecting accurate Reynolds numbers by using
+a constant <span class="math notranslate nohighlight">\(Re = 2 \times 10^6\)</span> (<a class="reference internal" href="#figure8-reynolds"><span class="std std-numref">Fig. 10.3</span></a>)</p></li>
+<li><p>To show the combined effect of neglecting both apparent mass and accurate
+Reynolds values (<a class="reference internal" href="#figure8-reynolds-and-apparent-mass"><span class="std std-numref">Fig. 10.4</span></a>)</p></li>
+</ol>
+<figure class="align-default" id="figure8-apparent-mass">
+<img alt="_images/figure8_apparent_mass.svg" src="_images/figure8_apparent_mass.svg"/><figcaption>
+<p><span class="caption-number">Fig. 10.2 </span><span class="caption-text">Figure-8 when neglecting apparent mass</span><a class="headerlink" href="#figure8-apparent-mass" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<br/><figure class="align-default" id="figure8-reynolds">
+<img alt="_images/figure8_Reynolds.svg" src="_images/figure8_Reynolds.svg"/><figcaption>
+<p><span class="caption-number">Fig. 10.3 </span><span class="caption-text">Figure-8 when neglecting accurate Reynolds numbers</span><a class="headerlink" href="#figure8-reynolds" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<br/><figure class="align-default" id="figure8-reynolds-and-apparent-mass">
+<img alt="_images/figure8_Reynolds_and_apparent_mass.svg" src="_images/figure8_Reynolds_and_apparent_mass.svg"/><figcaption>
+<p><span class="caption-number">Fig. 10.4 </span><span class="caption-text">Figure-8 neglecting both apparent mass and accurate Reynolds numbers</span><a class="headerlink" href="#figure8-reynolds-and-apparent-mass" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<br/><figure class="align-default" id="figure8-reynolds-and-apparent-mass-topdown">
+<img alt="_images/figure8_Reynolds_and_apparent_mass_topdown.svg" src="_images/figure8_Reynolds_and_apparent_mass_topdown.svg"/><figcaption>
+<p><span class="caption-number">Fig. 10.5 </span><span class="caption-text">Figure-8 neglecting both apparent mass and accurate Reynolds numbers,
+topdown view</span><a class="headerlink" href="#figure8-reynolds-and-apparent-mass-topdown" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The differences produced by each simplification are similar in this case, and
+will be discussed jointly. First, the less noticeable difference between the
+two simulations in <a class="reference internal" href="#figure8-reynolds-and-apparent-mass"><span class="std std-numref">Fig. 10.4</span></a> is the total
+altitude loss, where the “fixed Reynolds, no apparent mass” model descended an
+extra 2 meters. The difference is not visually interesting so no side-view is
+shown, but the effect is worth noting and should be expected for two reasons:</p>
+<ol class="arabic simple">
+<li><p>There is minimal acceleration in the <span class="math notranslate nohighlight">\(z\)</span>-direction so the
+<span class="math notranslate nohighlight">\(z\)</span>-component of the apparent mass is negligible.</p></li>
+<li><p>The sections most impacted by the incorrect Reynolds values are at the
+outside of the span. Since the majority of the lift is produced by the
+central sections, which are already near the <span class="math notranslate nohighlight">\(Re = 2 \times 10^6\)</span>
+value, total lift is not greatly affected by assuming a fixed value of
+<span class="math notranslate nohighlight">\(Re\)</span>.</p></li>
+</ol>
+<p>The more significant effect was on the lateral motion of the glider, which is
+easier to see from a top-down perspective
+(<a class="reference internal" href="#figure8-reynolds-and-apparent-mass-topdown"><span class="std std-numref">Fig. 10.5</span></a>), where the complete
+model exhibited a turn radius of <span class="math notranslate nohighlight">\(54 \, [m]\)</span> versus <span class="math notranslate nohighlight">\(51 \, [m]\)</span> of
+the simplified model. (The cumulative horizontal distances traveled were
+<span class="math notranslate nohighlight">\(522 \, [m]\)</span> at <span class="math notranslate nohighlight">\(8.7 \, \left[\frac{m}{s}\right]\)</span> and <span class="math notranslate nohighlight">\(532 \,
+[m]\)</span> at <span class="math notranslate nohighlight">\(8.87 \, \left[\frac{m}{s}\right]\)</span>, respectively.) Again, the
+effect is expected for two reasons:</p>
+<ol class="arabic simple">
+<li><p>Apparent mass resists changes to the translational velocity, which reduced
+the complete models centripetal acceleration and prevented it from producing
+as narrow a turn as the simplified model.</p></li>
+<li><p>Lower Reynolds values resulted in lower lift coefficients, especially for
+sections with deflected trailing edges (since their increased curvature
+magnifies the viscous effects). The lift vectors of sections on the inside
+semispan are angled into the turn and pull the canopy into the circle, so
+reducing their lift contributions further reduced the complete models
+centripetal acceleration.</p></li>
+</ol>
+<p>Because these affects are heavily dependent on the glider design and specific
+flight maneuvers, this discussion focused on the qualitative nature of these
+effects. Whether these sources of error are significant depend heavily on the
+model (the canopy geometry in particular, as well as target airspeed of the
+glider) and its application. For example, when developing a linearized model to
+generate an error term for a control model these effects can be safely
+neglected, but any long-run simulation should review their specific control
+sequence (because turning magnifies their impact). With this model, checking
+the impact of such choices is readily available.</p>
+</section>
+<section id="study-indirect-thermal-interactions">
+<h3><span class="section-number">10.1.3. </span>Study: indirect thermal interactions<a class="headerlink" href="#study-indirect-thermal-interactions" title="Permalink to this headline">#</a></h3>
+<p>[[FIXME: show a top-down view of the xy-track through the 5% thermal radius]]</p>
+<figure class="align-default" id="id3">
+<img alt="_images/indirect_thermal.svg" src="_images/indirect_thermal.svg"/><figcaption>
+<p><span class="caption-number">Fig. 10.6 </span><span class="caption-text">Indirect thermal interaction.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>[[FIXME: explain. The wing is flying straight at equilibrium, when it enters
+a thermal 15 meters to its right. The thermal strength has a squared distance
+decay to 5% by the time it <span class="math notranslate nohighlight">\(y = 0\)</span>, so only the right side of the wing
+experiences a significant change to lift.  Etc etc.]]</p>
+<p>[[Inconclusive results; discuss that in “Future work”.]]</p>
+</section>
+</section>
 </section>
 
         </article>
@@ -228,14 +383,14 @@
       </div>
       <svg><use href="#svg-arrow-right"></use></svg>
     </a>
-  <a class="prev-page" href="demonstration.html">
+  <a class="prev-page" href="validation.html">
       <svg><use href="#svg-arrow-right"></use></svg>
       <div class="page-info">
         <div class="context">
           <span>Previous</span>
         </div>
         
-        <div class="title"><span class="section-number">7. </span>Demonstration</div>
+        <div class="title"><span class="section-number">9. </span>Validation</div>
         
       </div>
     </a>
@@ -269,8 +424,32 @@
 
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">10. Conclusion</a><ul>
+<li><a class="reference internal" href="#results">10.1. Results</a><ul>
+<li><a class="reference internal" href="#study-drag-breakdown">10.1.1. Study: drag breakdown</a></li>
+<li><a class="reference internal" href="#study-effects-of-reynolds-numbers-and-apparent-mass">10.1.2. Study: effects of Reynolds numbers and apparent mass</a></li>
+<li><a class="reference internal" href="#study-indirect-thermal-interactions">10.1.3. Study: indirect thermal interactions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -280,5 +459,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/cancel"]}, "tex": {"macros": {"defas": "\\stackrel{\\mathrm{def}}{=}", "given": "\\;\\middle\\vert\\;", "vec": ["\\mathbf{#1}", 1], "mat": ["\\mathbf{#1}", 1], "crossmat": ["\\left[{#1}\\right]^{\\times}", 1], "norm": ["\\left\\|{#1}\\right\\|", 1]}, "packages": {"[+]": ["cancel"]}}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

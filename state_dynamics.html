@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="7. Demonstration" href="demonstration.html" /><link rel="prev" title="5. System dynamics" href="system_dynamics.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="8. Demonstration" href="demonstration.html" /><link rel="prev" title="6. System dynamics" href="system_dynamics.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
-        <title>6. State dynamics - Parametric Paraglider Modeling</title>
+        <title>7. State dynamics - Parametric Paraglider Modeling</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
@@ -162,13 +162,15 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">6. State dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related_works.html">2. Related works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">3. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">4. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">5. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">6. System dynamics</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">7. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">8. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">9. Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
@@ -210,7 +212,7 @@
         </div>
         <article role="main">
           <section id="state-dynamics">
-<h1><span class="section-number">6. </span>State dynamics<a class="headerlink" href="#state-dynamics" title="Permalink to this headline">#</a></h1>
+<h1><span class="section-number">7. </span>State dynamics<a class="headerlink" href="#state-dynamics" title="Permalink to this headline">#</a></h1>
 <p>The <a class="reference internal" href="system_dynamics.html"><span class="doc">System dynamics</span></a> defined the instantaneous accelerations of the
 aircraft in terms of local reference frames traveling with the aircraft. To
 record the behavior of an aircraft over time, a set of variables must be chosen
@@ -224,15 +226,8 @@ For each system model, it chooses a global coordinate system, defines a set of
 <em>state variables</em> <span class="math notranslate nohighlight">\(\vec{x}\)</span> in terms of that global coordinate system,
 and defines the <em>state dynamics</em> <span class="math notranslate nohighlight">\(\dot{\vec{x}}\)</span> in terms of the system
 dynamics.</p>
-<p>[[Miscellaneous notes:]]</p>
-<ul class="simple">
-<li><p>The <a class="reference internal" href="system_dynamics.html"><span class="doc">System dynamics</span></a> are treated separately from the state dynamics
-because the system behavior is independent of the representation of state.</p></li>
-<li><p>A state dynamics model serves as the interface between the system dynamics
-and the flight simulator.</p></li>
-</ul>
 <section id="state-variables">
-<h2><span class="section-number">6.1. </span>State variables<a class="headerlink" href="#state-variables" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">7.1. </span>State variables<a class="headerlink" href="#state-variables" title="Permalink to this headline">#</a></h2>
 <p>To track the position of the glider, the state models must choose a reference
 point in the glider’s local coordinate system. It does not have to be the same
 <a class="reference internal" href="system_dynamics.html#reference-point"><span class="std std-ref">reference point</span></a> used to calculate the
@@ -250,7 +245,7 @@ position using the WGS-84 <em>geodetic datum</em>, which uses the geocentric
 coordinates of latitude, longitude, and altitude. However, positioning on the
 global spheroid is overkill for these simulations, so to avoid the complexity
 involved with angular coordinates the state models here use a <em>tangent-plane</em>
-(<span class="math notranslate nohighlight">\(tp\)</span>) approximation (<span id="id1">[<a class="reference internal" href="zreferences.html#id45" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span>, p.
+(<span class="math notranslate nohighlight">\(tp\)</span>) approximation (<span id="id1">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>, p.
 27) that records position as a linear displacement from an arbitrary origin.</p>
 <p>For orientation, there are two common representations: <em>Euler angles</em> and
 <em>quaternions</em>. Euler angles have the advantage of being easier to understand,
@@ -262,7 +257,7 @@ down, quaternions provide peace of mind and a minor improvement in
 computational efficiency.</p>
 <p>Given these choices, the state variables of the 6-DoF models are four vectors:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model6a-state-variables">
-<span class="eqno">(6.1)<a class="headerlink" href="#equation-model6a-state-variables" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+<span class="eqno">(7.1)<a class="headerlink" href="#equation-model6a-state-variables" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   {\vec{r}}_{RM/O} \qquad &amp; \textrm{absolute position of the riser midpoint} \, RM \\
   {\vec{v}}_{RM/e} \qquad &amp; \textrm{translational velocity of the riser midpoint} \, RM \\
   {\vec{q}}_{b/tp} \qquad &amp; \textrm{orientation of the body to the tangent plane} \\
@@ -271,7 +266,7 @@ computational efficiency.</p>
 <p>Similarly, the 9-DoF models use the same four vectors, plus an additional
 quaternion and angular acceleration vector for the payload:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-model9a-state-variables">
-<span class="eqno">(6.2)<a class="headerlink" href="#equation-model9a-state-variables" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+<span class="eqno">(7.2)<a class="headerlink" href="#equation-model9a-state-variables" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   {\vec{r}}_{RM/O} \qquad &amp; \textrm{absolute position of the riser midpoint} \, RM \\
   {\vec{v}}_{RM/e} \qquad &amp; \textrm{translational velocity of the riser midpoint} \, RM \\
   {\vec{q}}_{b/tp} \qquad &amp; \textrm{orientation of the body to the tangent plane} \\
@@ -281,7 +276,7 @@ quaternion and angular acceleration vector for the payload:</p>
 \end{aligned}\end{split}\]</div></div>
 </section>
 <section id="state-derivatives">
-<h2><span class="section-number">6.2. </span>State derivatives<a class="headerlink" href="#state-derivatives" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">7.2. </span>State derivatives<a class="headerlink" href="#state-derivatives" title="Permalink to this headline">#</a></h2>
 <p>[[Now we need to define the derivatives of the state variables in terms of the
 current state and the system derivatives.]]</p>
 <p>[[Position is easy since we’re using the same reference point for the dynamics
@@ -292,8 +287,8 @@ the position and orientation of the aircraft relative to the tangent plane
 requires derivatives taken with respect to the inertial frame
 <span class="math notranslate nohighlight">\(\mathcal{F}_e\)</span>. To provide the simulator with the proper derivatives,
 the state dynamics models must use the <em>equation of Coriolis</em>
-<span id="id2">[<a class="reference internal" href="zreferences.html#id45" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span> to calculate the state derivatives
-taken with respect to the inertial frame:</p>
+(<span id="id2">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>, Eq. 1.4-2) to calculate the
+derivative of velocity taken with respect to the inertial frame:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
   {^e \dot{\vec{v}}_{RM/e}^{tp}} &amp;=
@@ -311,7 +306,7 @@ taken with respect to the inertial frame:</p>
 using the object’s angular velocity vector <span class="math notranslate nohighlight">\(\vec{\omega} = \{ p, q, r \}\)</span>
 in the coordinate system attached to that object (<span class="math notranslate nohighlight">\(\vec{\omega}_{b/e}^b\)</span>
 for the body, or <span class="math notranslate nohighlight">\(\vec{\omega}_{p/e}^p\)</span> for the payload)
-(<span id="id3">[<a class="reference internal" href="zreferences.html#id45" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">25</a>]</span>, Eq. 1.8-15):</p>
+(<span id="id3">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>, Eq. 1.8-15):</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\mat{\Omega} \defas
   \begin{bmatrix}
@@ -323,10 +318,10 @@ for the body, or <span class="math notranslate nohighlight">\(\vec{\omega}_{p/e}
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\dot{\vec{q}} = \frac{1}{2} \mat{\Omega} \cdot \vec{q}\]</div></div>
 <p>The complete set of state dynamics equation for the 6-DoF models in terms of
-the system derivatives <a class="reference internal" href="system_dynamics.html#equation-model6a-system-derivatives">(5.2)</a> and state variables
-<a class="reference internal" href="#equation-model6a-state-variables">(6.1)</a> are then:</p>
+the system derivatives <a class="reference internal" href="system_dynamics.html#equation-model6a-system-derivatives">(6.2)</a> and state variables
+<a class="reference internal" href="#equation-model6a-state-variables">(7.1)</a> are then:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-6dof-state-dynamics">
-<span class="eqno">(6.3)<a class="headerlink" href="#equation-6dof-state-dynamics" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+<span class="eqno">(7.3)<a class="headerlink" href="#equation-6dof-state-dynamics" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   {^e \dot{\vec{r}}_{RM/O}^{tp}} &amp;= {\vec{v}_{RM/e}^{tp}}
   \\
   {^e \dot{\vec{v}}_{RM/e}^{tp}} &amp;=
@@ -339,10 +334,10 @@ the system derivatives <a class="reference internal" href="system_dynamics.html#
   {^e \dot{\vec{\omega}}_{b/e}^b} &amp;= {^b \dot{\vec{\omega}}_{b/e}}
 \end{aligned}\end{split}\]</div></div>
 <p>Similarly, the complete set of state dynamics equation for the 9-DoF models in
-terms of the system derivatives <a class="reference internal" href="system_dynamics.html#equation-model9a-system-derivatives">(5.3)</a> and state
-variables <a class="reference internal" href="#equation-model9a-state-variables">(6.2)</a>:</p>
+terms of the system derivatives <a class="reference internal" href="system_dynamics.html#equation-model9a-system-derivatives">(6.3)</a> and state
+variables <a class="reference internal" href="#equation-model9a-state-variables">(7.2)</a>:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-9dof-state-dynamics">
-<span class="eqno">(6.4)<a class="headerlink" href="#equation-9dof-state-dynamics" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
+<span class="eqno">(7.4)<a class="headerlink" href="#equation-9dof-state-dynamics" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   {^e \dot{\vec{r}}_{RM/O}^{tp}} &amp;= {\vec{v}_{RM/e}^{tp}}
   \\
   {^e \dot{\vec{v}}_{RM/e}^{tp}} &amp;=
@@ -358,8 +353,8 @@ variables <a class="reference internal" href="#equation-model9a-state-variables"
   \\
   {^e \dot{\vec{\omega}}_{p/e}^p} &amp;= {^p \dot{\vec{\omega}}_{p/e}^p}
 \end{aligned}\end{split}\]</div></div>
-<p>The state dynamics models in <a class="reference internal" href="#equation-6dof-state-dynamics">(6.3)</a> and
-<a class="reference internal" href="#equation-9dof-state-dynamics">(6.4)</a> are ready to be used with a suitable numerical
+<p>The state dynamics models in <a class="reference internal" href="#equation-6dof-state-dynamics">(7.3)</a> and
+<a class="reference internal" href="#equation-9dof-state-dynamics">(7.4)</a> are ready to be used with a suitable numerical
 integration method to generate the state trajectories. Due to the significant
 nonlinear behavior of the dynamics, the implementation for this project uses
 a standard 4th order <a class="reference external" href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge-Kutta</a> method.</p>
@@ -376,7 +371,7 @@ a standard 4th order <a class="reference external" href="https://en.wikipedia.or
         <div class="context">
           <span>Next</span>
         </div>
-        <div class="title"><span class="section-number">7. </span>Demonstration</div>
+        <div class="title"><span class="section-number">8. </span>Demonstration</div>
       </div>
       <svg><use href="#svg-arrow-right"></use></svg>
     </a>
@@ -387,7 +382,7 @@ a standard 4th order <a class="reference external" href="https://en.wikipedia.or
           <span>Previous</span>
         </div>
         
-        <div class="title"><span class="section-number">5. </span>System dynamics</div>
+        <div class="title"><span class="section-number">6. </span>System dynamics</div>
         
       </div>
     </a>
@@ -433,9 +428,9 @@ a standard 4th order <a class="reference external" href="https://en.wikipedia.or
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">6. State dynamics</a><ul>
-<li><a class="reference internal" href="#state-variables">6.1. State variables</a></li>
-<li><a class="reference internal" href="#state-derivatives">6.2. State derivatives</a></li>
+<li><a class="reference internal" href="#">7. State dynamics</a><ul>
+<li><a class="reference internal" href="#state-variables">7.1. State variables</a></li>
+<li><a class="reference internal" href="#state-derivatives">7.2. State derivatives</a></li>
 </ul>
 </li>
 </ul>

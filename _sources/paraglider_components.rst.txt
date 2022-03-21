@@ -11,7 +11,13 @@ A paraglider can be modeled as a :doc:`system <system_dynamics>` of three
 components: a canopy, a harness, and suspension lines that connect the canopy
 to the harness.
 
-.. FIXME: add a figure to help visualize the 3 components?
+.. figure:: figures/paraglider/Paraglider.svg
+   :width: 50%
+
+   Paraglider component breakdown
+
+   Diagram remixed from a `Wikipedia contribution
+   <https://commons.wikimedia.org/wiki/File:Paraglider.svg>`__  by user Mysid.
 
 To compute the dynamics of the composite system, each component model must
 define three things:
@@ -33,11 +39,6 @@ relatively rigid during typical flight conditions.
 Canopy
 ======
 
-**FIXME: make sure to clearly explain that a canopy is an instance of a foil,
-and we're going to use the foil geometry to estimate its aerodynamics and
-inertial properties.**
-
-
 .. What is the canopy? What does it do?
 
 A paraglider canopy (or *parafoil*) is a kind of ram-air parachute: inflatable
@@ -51,29 +52,30 @@ them to control its aerodynamics.
 
 .. How am I modeling it?
 
-[[**FIXME: this paragraph is really wordy and hard to follow**]] To model
-a parafoil, it is helpful to think of the canopy as a physical realization of
-some idealized :doc:`foil geometry <foil_geometry>` that was optimized for
-aerodynamic efficiency and stability. The physical wing is significantly more
-complex since it must attempt to implement the target design using flexible
-materials that deform once the canopy is pressurized (plus additional concerns
-such as weight, physical reliability, manufacturability, etc), but the
-deformations (cell billowing, profile flattening, surface wrinkling, etc) are
-also exceptionally difficult to model without resorting to complete material
-simulation :cite:`lolies2019NumericalMethodsEfficient`.
+To model a parafoil, it is helpful to think of the canopy as a physical
+realization of some idealized :doc:`foil geometry <foil_geometry>`. The
+physical canopy is significantly more complex because it must attempt to create
+the foil geometry using flexible materials that deform once the canopy is
+pressurized (as well as meeting requirements such as weight, physical
+reliability, manufacturability, etc). Modeling the deformations that occur
+during flight (cell billowing, profile flattening, surface wrinkling, etc) are
+exceptionally difficult to model without resorting to complete material
+simulation :cite:`lolies2019NumericalMethodsEfficient`, which is why this
+project does not consider any deformations other than deflections of the
+trailing edge due to brake inputs (which are :ref:`calculated separately
+<Profiles>`).
 
-Instead, this model assumes that the idealized target geometry is an effective
-representation of the physical canopy, then adds small empirical corrections
-to account for the most significant error. It models the canopy volume with
-smooth upper and lower surfaces, whose extents also serve to define the
-section air intakes. It does not model individual cells, but it does
-incorporate an estimate of the additional inertia from the internal ribs
-between each cell. The only deformations included in the model are trailing
-edge deflections due to pilot control inputs, which are accounted for with
-precomputed section aerodynamic coefficients; it does not support manipulation
-via load-bearing lines (used by pilots for maneuvers such as "big ears",
-C-riser control, etc) or the *stabilo* lines (since the canopy is a rigid
-model the wing tips can never cravat).
+Instead, this model assumes that the foil geometry is an exact representation
+of the physical canopy, then adds small empirical corrections to account for
+the most significant error. It models the canopy volume with smooth upper and
+lower surfaces, whose extents also serve to define the section air intakes. It
+does not model individual cells, but it does incorporate an estimate of the
+additional inertia from the internal ribs between each cell. The only
+deformations included in the model are trailing edge deflections due to pilot
+control inputs, which are accounted for with precomputed section aerodynamic
+coefficients; it does not support manipulation via load-bearing lines (used by
+pilots for maneuvers such as "big ears", C-riser control, etc) or the *stabilo*
+lines.
 
 .. Technically, the foil design curves could be parametrized to implement
    time-dependent deformations, but in this paper the canopy is modeled as
@@ -236,6 +238,21 @@ mitigated by the absence of accounting for the other internal structures.
 
 .. FIXME: discuss this simplification in :ref:`demonstration:Model`?
 
+
+It does, however, account for the extents of the upper and lower surfaces along
+the section profile. This extent will be used to calculate the inertial
+properties of the upper and lower surface materials, as well as to calculate
+empirical viscous correction factors for the section drag coefficients. For
+this model, the extent of the upper surface and lower surface can be defined
+using the normalized distance along the section profile, with :math:`-1 \le
+r_\textrm{lower} \le r_\textrm{upper} \le 1`, with their symmetric spanwise extent
+controlled by a section index :math:`0 \le s_\textrm{end} \le 1`.
+
+.. figure:: figures/paraglider/geometry/air_intakes.svg
+   :name: air_intake_parameters
+
+   Air intake parameters
+
 Assuming the material densities are uniform, the inertial properties of the
 materials can be determined by first calculating the total area :math:`a` and
 areal inertia matrix :math:`\mat{J}` for each surface (using the method in
@@ -267,8 +284,6 @@ In theory the inertial properties are functions of the brake inputs since they
 alter the distribution of mass, but in practice the effect is negligible. For
 this project the centroids and moments of inertia for the solid mass are
 calculated once using the undeflected section profiles.
-
-.. FIXME: define the upper/lower surface extents due to air intakes?
 
 
 Air mass
@@ -352,11 +367,11 @@ significant.
 
 Because apparent mass effects are the result of a volume in motion relative to
 a fluid, its magnitude depends on the volume's shape and the direction of the
-motion. Unlike the inertia due to real mass, apparent inertia is anisotropic,
-and the diagonal terms of the apparent mass matrix are independent.
-Calculating the apparent mass of an arbitrary geometry is difficult. For
-a classic discussion of the topic, see :cite:`lamb1945Hydrodynamics`. For
-a more recent discussion of apparent mass in the context of parafoils, see
+motion. Unlike the real mass, apparent mass is anisotropic, and the diagonal
+terms of the apparent inertia matrix are independent. Calculating the apparent
+mass of an arbitrary geometry is difficult. For a classic discussion of the
+topic, see :cite:`lamb1945Hydrodynamics`. For a more recent discussion of
+apparent mass in the context of parafoils, see
 :cite:`lissaman1993ApparentMassEffects`, which used an ellipsoid model to
 establish a parametric form commonly used in parafoil-payload literature
 
@@ -376,51 +391,37 @@ Resultant force
 
 .. FIXME: review, this is a very crude draft
 
-A fast and effective method for estimating the canopy aerodynamics was
-presented :ref:`earlier <foil_aerodynamics:Phillips' numerical lifting-line>`.
-A significant advantage of that method is that it does not assume any
-particular functional form of the aerodynamic coefficients (linear,
-polynomial, etc), allowing their definition to use whatever form is
-convenient. This model uses that flexibility to compose the section
-coefficients as a two step process:
+A method for estimating the canopy aerodynamics was presented :ref:`earlier
+<foil_aerodynamics:Phillips' numerical lifting-line>`. An advantage of that
+method is that it does not assume any particular functional form of the
+aerodynamic coefficients (linear, polynomial, etc), allowing their definition
+to use whatever form is convenient. This model uses that flexibility to compose
+the section coefficients as a two step process:
 
-1. Pre-design the idealized airfoils associated with the range of trailing
-   edge deflection, and estimate their aerodynamic coefficients.
+1. Design a set of airfoils associated with the range of trailing edge
+   deflection, and estimate their aerodynamic coefficients.
 
-2. Apply correction factors to individual sections to account for physical
+2. Apply correction factors to each section to account for physical
    inaccuracies in the idealized airfoils.
 
-The idealized airfoils are indexed by their normalized deflection distance
+The airfoils are indexed by their normalized deflection distance
 :eq:`normalized deflection distance`, which appears in Phillip' NLLT as the
 control input :math:`\delta_i`; the indexed airfoils allow the brakes to
-control the canopy aerodynamics with no modifications to the NLLT. Physical
-inaccuracies refers to characteristics such as flattening, wrinkling, surface
-roughness, air intakes, etc. For example, a common correction for parafoils is
-to add an empirical estimate of the additional viscous drag due to air intakes;
-see the :ref:`example model <demonstration:Physical details>` for a discussion.
+control the canopy aerodynamics with no modifications to the NLLT. This section
+index allows each section to provide its own section coefficients, as well as
+empirical correction factors. One correction factor included in this model,
+:math:`C_{D,\textrm{surface}}`, is for "surface roughness"
+(:cite:`ware1969WindtunnelInvestigationRamair`,
+:cite:`babinsky1999AerodynamicPerformanceParagliders`), and the other,
+:math:`C_{D,\textrm{intakes}}`, is for the additional viscous drag due to the
+air intakes :cite:`babinsky1999AerodynamicPerformanceParagliders`. (See the
+:ref:`demonstration <demonstration:Physical details>` for an example.)
 
-.. FIXME: discussion?
-
-   * Inherits the limitations of the aerodynamics method:
-
-     * Assumes section coefficients are representative of entire wing segments
-       (ignores inter-segment flow effects, etc)
-
-
-[[FIXME: introduce the coefficient modifiers:
-
-* :math:`C_{D,\textrm{surface}}`, "surface characteristics"
-  :cite:`ware1969WindtunnelInvestigationRamair`,
-  :cite:`babinsky1999AerodynamicPerformanceParagliders`
-
-* :math:`C_{D,\textrm{intakes}}`, air intakes
-  :cite:`babinsky1999AerodynamicPerformanceParagliders`
-
-The :ref:`aerodynamics model <foil_aerodynamics:Phillips' numerical
-lifting-line>` provides the aerodynamic forces
-:math:`\vec{f}_{f,\textrm{aero},n}` :eq:`section lift, 3D vortex lifting law`
-and moments :math:`\vec{g}_{f,\textrm{aero},n}` :eq:`section moment` for the
-:math:`N` foil sections.
+Given the foil geometry and aerodynamic coefficients, the :ref:`aerodynamics
+model <foil_aerodynamics:Phillips' numerical lifting-line>` estimates the
+aerodynamic forces :math:`\vec{f}_{f,\textrm{aero},n}` :eq:`section lift, 3D
+vortex lifting law` and moments :math:`\vec{g}_{f,\textrm{aero},n}`
+:eq:`section moment` for the :math:`N` foil sections.
 
 .. math::
    :label: canopy weight
@@ -452,6 +453,9 @@ associated with that geometry:
    :label: canopy parameters
 
    \begin{aligned}
+     r_\textrm{upper} \qquad & \textrm{Profile extent of the upper surface} \\
+     r_\textrm{lower} \qquad & \textrm{Profile extent of the lower surface} \\
+     s_\textrm{end} \qquad & \textrm{Section index where air intakes end} \\
      \rho_u \qquad & \textrm{Areal density of the upper surface material} \\
      \rho_r \qquad & \textrm{Areal density of the internal rib material} \\
      \rho_l \qquad & \textrm{Areal density of the lower surface material} \\
@@ -639,6 +643,17 @@ left and right brake:
      \left(
        \delta_{bl} \cdot q(p(-s)) + \delta_{br} \cdot q(p(s))
      \right) \cdot \kappa_b
+
+A feature of this design is that setting :math:`s_\textrm{start,1} < 0` allows
+deep brake inputs to deflect the opposing semispan, and
+:math:`s_\textrm{stop,1} > 1` allows deflections at the wing tips, as shown in
+:numref:`brake_deflection_start_stop`.
+
+.. figure:: figures/paraglider/geometry/brake_deflections_TE_Bl1.00_Br1.00.svg
+   :name: brake_deflection_start_stop
+
+   Quartic brake deflections, :math:`\delta_{bl} = 1.00` and
+   :math:`\delta_{br} = 1.0`
 
 Together with the :doc:`foil_geometry`, the absolute brake deflection
 distances can be used to compute each section's *airfoil index*

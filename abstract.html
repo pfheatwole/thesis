@@ -162,13 +162,15 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related_works.html">2. Related works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">3. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">4. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">5. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">6. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">7. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">8. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">9. Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
@@ -218,12 +220,16 @@ flight simulations could be used to analyze how a wing behaves when it
 encounters wind shear, or to reconstruct the wind field that was present during
 a flight. Unfortunately, creating dynamics models for commercial paraglider
 wings is difficult: not only are detailed specifications unavailable, but even
-if they were a detailed model would be laborious to create. To address that
-difficulty, this project decomposes a paraglider system into a set of
-parametric component models that can approximate paraglider flight dynamics
-using incomplete technical specifications and knowledge of typical wing design.
-[[An implementation of the models is available as an <a class="reference external" href="https://github.com/pfheatwole/glidersim">open source library</a> built on the Python scientific
-computing stack.]]</p>
+if they were, a detailed model would be laborious to create. To address that
+difficulty, this project develops a paraglider flight dynamics model that uses
+parametric components to model commercial paraglider wings given only limited
+technical specifications and knowledge of typical wing design. To validate the
+model design and implementation, an aerodynamic simulation of a reference
+paraglider canopy is compared to wind tunnel measurements, and a dynamic
+simulation of a commercial paraglider system is compared to basic flight test
+data. The entirety of the models and example wings are available as an <a class="reference external" href="https://github.com/pfheatwole/glidersim">open
+source library</a> built on the Python
+scientific computing stack.</p>
 
         </article>
       </div>

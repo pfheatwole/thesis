@@ -32,16 +32,6 @@ and defines the *state dynamics* :math:`\dot{\vec{x}}` in terms of the system
 dynamics.
 
 
-.. How are state dynamics different from system dynamics?
-
-[[Miscellaneous notes:]]
-
-* The :doc:`system_dynamics` are treated separately from the state dynamics
-  because the system behavior is independent of the representation of state.
-
-* A state dynamics model serves as the interface between the system dynamics
-  and the flight simulator.
-
 
 State variables
 ===============
@@ -146,8 +136,8 @@ the position and orientation of the aircraft relative to the tangent plane
 requires derivatives taken with respect to the inertial frame
 :math:`\mathcal{F}_e`. To provide the simulator with the proper derivatives,
 the state dynamics models must use the *equation of Coriolis*
-:cite:`stevens2015AircraftControlSimulation` to calculate the state derivatives
-taken with respect to the inertial frame:
+(:cite:`stevens2015AircraftControlSimulation`, Eq. 1.4-2) to calculate the
+derivative of velocity taken with respect to the inertial frame:
 
 .. math::
 
@@ -243,3 +233,20 @@ integration method to generate the state trajectories. Due to the significant
 nonlinear behavior of the dynamics, the implementation for this project uses
 a standard 4th order `Runge-Kutta
 <https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods>`__ method.
+
+
+.. Tip to remember
+
+   How are state dynamics different from system dynamics?
+
+   At this point it can be easy to confuse the system and state dynamics. For
+   example, they both offer variables such as translational velocity, so it's
+   easy to forget why there is a distinction. The key thing to remember is that
+   the system behavior is independent of the representation of state.
+
+   Consider if the state variable for position was defined using latitude and
+   longitude instead of linear distance. The system dynamics do not deal with
+   angles; they deal with meters. That choice would clearly reveal why the
+   state dynamics are separate from the system dynamics: the role of the state
+   dynamics is to serve as the interface between the system dynamics and the
+   flight simulator.

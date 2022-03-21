@@ -162,13 +162,15 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related_works.html">2. Related works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">3. Foil geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">4. Foil aerodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">5. Component models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">6. System dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">7. State dynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">8. Demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">9. Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
@@ -218,12 +220,16 @@ flight simulations could be used to analyze how a wing behaves when it
 encounters wind shear, or to reconstruct the wind field that was present during
 a flight. Unfortunately, creating dynamics models for commercial paraglider
 wings is difficult: not only are detailed specifications unavailable, but even
-if they were a detailed model would be laborious to create. To address that
-difficulty, this project decomposes a paraglider system into a set of
-parametric component models that can approximate paraglider flight dynamics
-using incomplete technical specifications and knowledge of typical wing design.
-[[An implementation of the models is available as an <a class="reference external" href="https://github.com/pfheatwole/glidersim">open source library</a> built on the Python scientific
-computing stack.]]</p>
+if they were, a detailed model would be laborious to create. To address that
+difficulty, this project develops a paraglider flight dynamics model that uses
+parametric components to model commercial paraglider wings given only limited
+technical specifications and knowledge of typical wing design. To validate the
+model design and implementation, an aerodynamic simulation of a reference
+paraglider canopy is compared to wind tunnel measurements, and a dynamic
+simulation of a commercial paraglider system is compared to basic flight test
+data. The entirety of the models and example wings are available as an <a class="reference external" href="https://github.com/pfheatwole/glidersim">open
+source library</a> built on the Python
+scientific computing stack.</p>
 <section id="contents">
 <h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">#</a></h1>
 <div class="toctree-wrapper compound">
@@ -234,122 +240,139 @@ computing stack.]]</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#motivation">1.1. Motivation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#roadmap">1.2. Roadmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#overview">1.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#modeling-challenges">1.2. Modeling challenges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#modeling-requirements">1.3. Modeling requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#roadmap">1.4. Roadmap</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">2. Foil geometry</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#modeling-with-wing-sections">2.1. Modeling with wing sections</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#section-index">2.1.1. Section index</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#airfoil">2.1.2. Airfoil</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#scale">2.1.3. Scale</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#position">2.1.4. Position</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#orientation">2.1.5. Orientation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related_works.html">2. Related works</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="related_works.html#flight-simulation">2.1. Flight simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="related_works.html#paraglider-modeling">2.2. Paraglider modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="related_works.html#this-work">2.3. This work</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#basic-model">2.2. Basic model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#expanded-model">2.3. Expanded model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#simplified-model">2.4. Simplified model</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#simplified-model-section-index">2.4.1. Section index</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#reference-point">2.4.2. Reference point</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#id8">2.4.3. Orientation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#summary">2.4.4. Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_geometry.html">3. Foil geometry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#modeling-with-wing-sections">3.1. Modeling with wing sections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#section-index">3.1.1. Section index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#airfoil">3.1.2. Airfoil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#scale">3.1.3. Scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#position">3.1.4. Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#orientation">3.1.5. Orientation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#examples">2.5. Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#delta-wing">2.5.1. Delta wing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#elliptical-wing">2.5.2. Elliptical wing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#twisted-wing">2.5.3. Twisted wing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#manta-ray">2.5.4. Manta ray</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#parafoil">2.5.5. Parafoil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#basic-model">3.2. Basic model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#expanded-model">3.3. Expanded model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#simplified-model">3.4. Simplified model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#simplified-model-section-index">3.4.1. Section index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#reference-point">3.4.2. Reference point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#id8">3.4.3. Orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#summary">3.4.4. Summary</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#case-study">2.6. Case study</a></li>
-<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#discussion">2.7. Discussion</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#advantages">2.7.1. Advantages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#limitations">2.7.2. Limitations</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">3. Foil aerodynamics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="foil_aerodynamics.html#aerodynamics-models">3.1. Aerodynamics models</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#model-requirements">3.1.1. Model requirements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#model-selection">3.1.2. Model selection</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line">3.2. Phillips’ numerical lifting-line</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#derivation">3.2.1. Derivation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#modifications">3.2.2. Modifications</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#limitations">3.2.3. Limitations</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="foil_aerodynamics.html#case-study">3.3. Case study</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#wind-tunnel-data">3.3.1. Wind tunnel data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#id20">3.3.2. Aerodynamics models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#experimental-vs-theoretical-results">3.3.3. Experimental vs theoretical results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#discussion">3.3.4. Discussion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foil_geometry.html#examples">3.5. Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#delta-wing">3.5.1. Delta wing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#elliptical-wing">3.5.2. Elliptical wing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#twisted-wing">3.5.3. Twisted wing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#manta-ray">3.5.4. Manta ray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_geometry.html#parafoil">3.5.5. Parafoil</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">4. Component models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#canopy">4.1. Canopy</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#controls">4.1.1. Controls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#inertia">4.1.2. Inertia</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#resultant-force">4.1.3. Resultant force</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#parameter-summary">4.1.4. Parameter summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foil_aerodynamics.html">4. Foil aerodynamics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foil_aerodynamics.html#aerodynamics-models">4.1. Aerodynamics models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#model-requirements">4.1.1. Model requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#model-selection">4.1.2. Model selection</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#suspension-lines">4.2. Suspension lines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id11">4.2.1. Controls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id12">4.2.2. Inertia</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id13">4.2.3. Resultant force</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id19">4.2.4. Parameter summary</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#harness">4.3. Harness</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id20">4.3.1. Controls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id21">4.3.2. Inertia</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id24">4.3.3. Resultant force</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id27">4.3.4. Parameter summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line">4.2. Phillips’ numerical lifting-line</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#derivation">4.2.1. Derivation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#modifications">4.2.2. Modifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foil_aerodynamics.html#limitations">4.2.3. Limitations</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">5. System dynamics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#components">5.1. Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#connections">5.2. Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#reference-point">5.3. Reference point</a></li>
-<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#system-inputs">5.4. System inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#equations-of-motion">5.5. Equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paraglider_components.html">5. Component models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#canopy">5.1. Canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#controls">5.1.1. Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#inertia">5.1.2. Inertia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#resultant-force">5.1.3. Resultant force</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#parameter-summary">5.1.4. Parameter summary</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">6. State dynamics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="state_dynamics.html#state-variables">6.1. State variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="state_dynamics.html#state-derivatives">6.2. State derivatives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#suspension-lines">5.2. Suspension lines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id11">5.2.1. Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id12">5.2.2. Inertia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id13">5.2.3. Resultant force</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id19">5.2.4. Parameter summary</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="demonstration.html">7. Demonstration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="demonstration.html#model-creation">7.1. Model creation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#technical-specs">7.1.1. Technical specs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#canopy">7.1.2. Canopy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#suspension-lines">7.1.3. Suspension lines</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#payload">7.1.4. Payload</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="demonstration.html#model-validation">7.2. Model validation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#polar-curve">7.2.1. Polar curve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#pitch-stability">7.2.2. Pitch stability</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="demonstration.html#model-investigation">7.3. Model investigation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="demonstration.html#drag-breakdown">7.3.1. Drag breakdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paraglider_components.html#harness">5.3. Harness</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id20">5.3.1. Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id21">5.3.2. Inertia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id24">5.3.3. Resultant force</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paraglider_components.html#id27">5.3.4. Parameter summary</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="conclusion.html">8. Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_dynamics.html">6. System dynamics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#components">6.1. Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#connections">6.2. Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#reference-point">6.3. Reference point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#system-inputs">6.4. System inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_dynamics.html#equations-of-motion">6.5. Equations of motion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="state_dynamics.html">7. State dynamics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="state_dynamics.html#state-variables">7.1. State variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="state_dynamics.html#state-derivatives">7.2. State derivatives</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demonstration.html">8. Demonstration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="demonstration.html#technical-specifications">8.1. Technical specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demonstration.html#canopy">8.2. Canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#foil-geometry">8.2.1. Foil geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#physical-details">8.2.2. Physical details</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="demonstration.html#suspension-lines">8.3. Suspension lines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#riser-position">8.3.1. Riser position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#brakes">8.3.2. Brakes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="demonstration.html#line-drag">8.3.3. Line drag</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="demonstration.html#payload">8.4. Payload</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">9. Validation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="validation.html#foil-aerodynamics">9.1. Foil aerodynamics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="validation.html#geometry">9.1.1. Geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation.html#wind-tunnel-setup">9.1.2. Wind tunnel setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation.html#aerodynamics-models">9.1.3. Aerodynamics models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation.html#results">9.1.4. Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation.html#discussion">9.1.5. Discussion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html#niviuk-hook-3-system-dynamics">9.2. Niviuk Hook 3 system dynamics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="validation.html#polar-curve">9.2.1. Polar curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation.html#pitch-stability">9.2.2. Pitch stability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation.html#steady-state-turn">9.2.3. Steady-state turn</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="conclusion.html#results">10.1. Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="conclusion.html#study-drag-breakdown">10.1.1. Study: drag breakdown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="conclusion.html#study-effects-of-reynolds-numbers-and-apparent-mass">10.1.2. Study: effects of Reynolds numbers and apparent mass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="conclusion.html#study-indirect-thermal-interactions">10.1.3. Study: indirect thermal interactions</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">

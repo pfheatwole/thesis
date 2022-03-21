@@ -48,11 +48,6 @@ Notation and Symbols
        :math:`\mathcal{F}_a`
    * - :math:`f(\cdot)`, :math:`func(\cdot)`, etc
      - functions, where ``f``, ``func``, can be any identifier
-   * - :math:`p(\cdot)`
-     - a probability density function. This identifier is unique because it
-       can be used many times for different density functions. For example,
-       :math:`p(x)` and :math:`p(y)` are different functions even though both
-       use :math:`p`.
 
 Another notation which is useful when building systems of equations involving
 matrices is the *cross-product matrix operator*, so that
