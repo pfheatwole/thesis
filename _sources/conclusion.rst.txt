@@ -9,6 +9,8 @@ Conclusion
    convince them the paper is worth reading.
 
 
+
+
 Results
 =======
 
@@ -19,10 +21,37 @@ Results
    the applications of dynamic simulations is to study the behavior of
    a system.
 
-In the introduction to this paper, the :ref:`introduction:Modeling
-requirements` section posed several example questions about paraglider
-behavior. Those questions will now be revisited using the models developed in
-this paper.
+.. What was done? Summarize the work and its key outcomes.
+
+This project completed the set of tasks outline in its
+:ref:`introduction:Roadmap:`:
+
+1. It developed a novel :doc:`foil_geometry` specifically to enable simple
+   representations of paraglider canopies.
+
+2. It selected, implemented and :ref:`validated <validation:Foil aerodynamics>`
+   a fast-but-accurate theoretical aerodynamics model well-suited to the
+   nonlinear geometries and challenging flow conditions of paraglider canopies,
+   as outlined in the :ref:`introduction:Modeling requirements` defined at the
+   beginning of the project.
+
+3. It developed :doc:`parametric models <paraglider_components>` to estimate
+   the inertial properties and resultant forces of the components of
+   a paraglider.
+
+4. It used the parametric components to :doc:`demonstrate <demonstration>` how
+   to produce a complete flight dynamics model of a commercial paraglider wing
+   using only limited technical data, photos, and video of the wing.
+
+5. It :ref:`validated <validation:Niviuk Hook 3 system dynamics` the
+   longitudinal performance of the demonstration model against basic flight
+   test data, as well as highlighted some areas in which the accuracy of flight
+   dynamics could be improved.
+
+This final section of the paper will address the last of the
+:ref:`introduction:Modeling requirements`: it will revisit the set of
+:ref:`motivating questions <introduction:questions>` that helped guide the
+design process, and consider the ability of these models to answer them.
 
 
 Study: drag breakdown
@@ -206,15 +235,187 @@ the impact of such choices is readily available.
 Study: indirect thermal interactions
 ------------------------------------
 
-[[FIXME: show a top-down view of the xy-track through the 5% thermal radius]]
+A reliable way to start a lively discussion on a paragliding forum is to
+question what happens when a wing encounters a thermal on only one side of its
+wing. Some pilots will argue that the thermal will pull the wing in; other
+pilots will argue that the thermal will push the wing away. A grand desire of
+this project was that the resulting flight dynamics model might be able to shed
+light on why two seasoned pilots might hold such opposing views.
+
+This final study used the Niviuk Hook 3 size 23 components from the
+:doc:`demonstration` with a 6-DoF system dynamics model. The scenario is
+simple: place a thermal slightly off-center of the path of a paraglider flying
+straight forward at equilibrium with symmetric brakes. Because the span of the
+wing is only :math:`8.84 \, [m]`, the thermal was placed :math:`15 \, [m]` to
+the right with exponential falloff such that the thermal strength was reduced
+to 5% by the time it reached the center of the canopy with a peak (core)
+strength of :math:`3 \, [\frac{m}{s}]` (extremely strong for such a tight
+thermal). The effect of the exponential falloff was a peak gradient of
+:math:`0.67 \, [\frac{m}{s}]` from the wingtip nearest the thermal to the
+center of the canopy as the glider passed the core.
 
 .. figure:: figures/paraglider/demonstration/indirect_thermal.*
 
    Indirect thermal interaction.
 
-[[FIXME: explain. The wing is flying straight at equilibrium, when it enters
-a thermal 15 meters to its right. The thermal strength has a squared distance
-decay to 5% by the time it :math:`y = 0`, so only the right side of the wing
-experiences a significant change to lift.  Etc etc.]]
+   The first row represents the Euler angles for position, the second row
+   represents the angular velocities, and the third row is the angular
+   accelerations.
 
-[[Inconclusive results; discuss that in "Future work".]]
+These results can be viewed in two ways: quantitatively and qualitatively. From
+a quantitative perspective the results are disappointing: the absolute angular
+deviations were on the order of 1°, which seem impossibly small for pilots to
+argue over. From a qualitative perspective, however, the results are perhaps
+more interesting. As the wing passes the thermal, the canopy initially rolls to
+the right (into the thermal), pitches forward (into the thermal), and the
+adverse yaw twists the wing to the left (away from the thermal); although the
+angular deviations are tiny it may produce an effect similar to falling, which
+needs only a small distance to produce a striking sensation. The same logic
+applies after the initial response, where the accelerates again, but more
+rapidly, and in the opposite direction: now the wing is rolling away from the
+thermal while yawing into it. Perhaps the sensation of acceleration holds the
+key to the argument: whether a pilot is more sensitive to roll or yaw, and
+whether they're more sensitive to the initial or secondary accelerations may
+offer a partial explanation?
+
+Personally I find this argument unconvincing. Despite the potential explanation
+offered by the qualitative analysis, it seems much more likely that the model
+has failed to capture one or more of the significant dynamics of the system.
+One possible cause is the foil aerodynamics model, which is not intended to
+capture unsteady aerodynamics; despite its accuracy in the wind tunnel testing,
+it may be inadequate for this level of subtlety in dynamic scenarios. Another
+possible cause is the quasi-rigid-body assumption imposed on the canopy
+geometry; real wings would flex and distort, especially in such a strong
+thermal, and it seems like that such deformations may play a larger roll that
+anticipated.
+
+All in all, despite the underwhelming results the truth is this was always an
+ambitious goal, and I hope it demonstrates the theoretical advantages of
+pursuing flight dynamics models that are capable of capturing the effects of
+non-uniform wind vectors along the span of the wing, and will serve as
+a starting point for some future work. Perhaps we will someday have an answer
+for the forums.
+
+
+Future work
+===========
+
+
+Canopy
+------
+
+* Arc deformations: the :ref:`design curves <foil_geometry:Summary>` that
+  define the foil geometry are not required to be constant functions; they can
+  be functions of control inputs, such as weight shift. The primary difficulty
+  is that the current implementation of the :ref:`NLLT
+  <foil_aerodynamics:Phillips' numerical lifting-line>` assumes that the shape
+  of the canopy is constant, but that a practical limitation, not a theoretical
+  one.
+
+.. _Weight shift modeling:
+
+* Weight shift modeling: the :ref:`validation:Steady-state turn` sanity check
+  of the demonstration model suggests that lateral movement of the mass
+  centroid is not the primary control mechanism for weight shift control. The
+  alternative mechanism is the wing deformations that occur during weight
+  shift. At the outset of this project the assumption was that the canopy
+  deformations during weight shift would be negligible compared to the
+  displacement of payload mass, but the turn radius and sink rate suggest
+  otherwise. It may be fruitful to generate plausible :math:`yz(s, \delta_w)`
+  design curves (so the foil arc deforms as a function of weight shift), and
+  consider if the changes to the canopy aerodynamics would explain the
+  inaccuracies in the rigid canopy model. If canopy arc deflections prove to be
+  a significant factor for accurate weight shift predictions, they should
+  probably be implemented as an interaction between :math:`yz(s)` and the
+  suspension line model. (Paraglider pilots quickly discover the relationship
+  between chest riser strap width and weight shift control, which strongly
+  suggests that the lines play a dominant role).
+
+* Choice of airfoil: the :doc:`demonstration` chose the NACA 24018 as an
+  example of a conservative guess, but if a few commercial section profiles
+  were measured accurately (including their spanwise variation), all models of
+  commercial paraglider wings would benefit.
+
+* Deflected profiles: the demonstration used section
+  :ref:`demonstration:Profiles` produced by a "two circle" model of trailing
+  edge deflection. That optimistic model was designed to balance the accuracy
+  of profile deformation against the ability to estimate the aerodynamic
+  coefficients with XFOIL. In reality, their unnaturally smooth curvature
+  likely causes them to underestimate flow separation. Future work would
+  benefit from more accurate deflection profiles.
+
+* Aerodynamic coefficients: in conjunction with more accurate deflection
+  profiles, another improvement would be is to use more sophisticated methods
+  to estimate the aerodynamic coefficients. One option is RFOIL from Delft
+  University of Technology (a fork of XFOIL that is reported to improve
+  estimates, particularly at high angles of attack), or to apply a complete
+  computational fluid dynamics approach with OpenFoam.
+
+
+Lines
+-----
+
+* The parameters for the :ref:`brakes <paraglider_components>` are confusing at
+  first glance, and tedious to tune. At the least they would benefit from an
+  automated procedure where instead of having to tune
+  :math:`s_\textrm{start,1}` and :math:`s_\textrm{stop,1}` to match
+  :math:`\kappa_b` (which was in turn limited by the
+  :math:`\bar{\delta_d}_\textrm{max}` supported by the aerodynamic coefficient
+  set). It would be much easier to define :math:`s_\textrm{start,1}` and
+  :math:`s_\textrm{stop,1}` at some hypothetical value of :math:`\kappa_b` and
+  have the lines adjust their values based on the true :math:`\kappa_b`.
+
+
+Harness
+-------
+
+* The :ref:`spherical model <paraglider_components:Harness>` neglects pitch and
+  yaw moments due to angle of attack and sideslip, but because paragliders put
+  their legs out in front those effects seem likely.
+
+* The harness model uses constant drag coefficients.
+  :cite:`kulhanek2019IdentificationDegradationAerodynamic` developed a model
+  for the harness that accounts for Reynolds numbers, but that model was not
+  tested in this work.
+
+
+System dynamics
+---------------
+
+* This paper derived a :ref:`9-DoF <derivations:Model 9a>` system dynamics
+  model that modeled the connection between the lines and payload as
+  a spring-damper system, but without flight testing the parameters were
+  difficult to estimate. It would be interesting to review the applicability of
+  the spring-damper model and to estimate suitable parameters. I suspect that
+  the lack of canopy deformations and the inability of the 6-DoF to show
+  payload-relative roll are at least partial explanation of the underwhelming
+  results of the `indirect thermal study <Study: indirect thermal
+  interaction>`_. The sensation of payload-relative roll and yaw accelerations
+  could definitely play a role in why pilots disagree on the behavior of
+  a paraglider encountering a thermal.
+
+
+Open source
+===========
+
+The `materials <https://github.com/pfheatwole/thesis/>`__ to produce this paper
+and its `implementation <https://github.com/pfheatwole/glidersim/>`__ are both
+available under permissive open source licenses. Although this work focused on
+paragliders, the structure of the models is mirrored in the structure of the
+code, and should be easily adaptable to other gliding aircraft such as hang
+gliders or kites. For maximum versatility and approachability, the entire
+implementation was built on the Python scientific computing stack; despite not
+producing the fastest implementation, Python made up for the performance cost
+with value in other areas:
+
+* Free (unlike MATLAB, AutoCAD, etc)
+
+* Extensive cross-domain usage (aerospace, computer science, etc)
+
+* Powerful scientific computing libraries (NumPy, SciPy, Numba)
+
+* Easy to integrate into tools with native Python interpreters (such as
+  FreeCAD, Blender, and QGIS)
+
+I am grateful for the work freely shared by those who came before, and hope
+that this material may provide some value to those who follow.

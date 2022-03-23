@@ -173,7 +173,6 @@
 <li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 <ul>
@@ -564,45 +563,66 @@ of design curves:</p>
 </section>
 <section id="simplified-model">
 <h2><span class="section-number">3.4. </span>Simplified model<a class="headerlink" href="#simplified-model" title="Permalink to this headline">#</a></h2>
-<p>The basic model is adequate to represent wings composed of airfoils, but its
-inflexibility forced incidental complexity into the design curves. The expanded
-model provides additional flexibility, but it’s generality can make it
-difficult for a designer to identify which aspects of the foil structure result
-in a simple parametric representation. This section identifies several
-simplifying assumptions that provide a foundation for a particularly concise
-representation of many foils (parafoils in particular). The result is an
-intuitive, partially-parametrized foil geometry model that decouples the design
-curves and allows a parafoil to be rapidly approximated using only minimal
-available data, even if that data was obtained from a flattened version of the
-parafoil.</p>
+<p>The <a class="reference internal" href="#basic-model">Basic model</a> is adequate to represent wings arbitrary foils composed of
+airfoils, but its inflexibility forced incidental complexity into the design
+curves. The <a class="reference internal" href="#expanded-model">Expanded model</a> provides additional flexibility, but it’s
+generality can make it difficult for a designer to identify which aspects of
+the foil structure result in a simple parametric representation. This section
+identifies several simplifying assumptions that provide a foundation for
+a particularly concise representation of many foils (parafoils in particular).
+The result is an intuitive, partially-parametrized foil geometry model that
+decouples the design curves and allows a parafoil to be rapidly approximated
+using only minimal available data, even if that data was obtained from
+a flattened version of the parafoil.</p>
 <section id="simplified-model-section-index">
 <span id="id6"></span><h3><span class="section-number">3.4.1. </span>Section index<a class="headerlink" href="#simplified-model-section-index" title="Permalink to this headline">#</a></h3>
-<p>[[FIXME: finish]]</p>
-<p>Although most tools do not explicitly refer to their choice of section index,
-there are two conventions in common use: one is to use the section
-<span class="math notranslate nohighlight">\(y\)</span>-coordinate, and the other is the linear distance along the position
-curve <span class="math notranslate nohighlight">\(\vec{r}_{RP/O}\)</span>. Unfortunately, both are problematic for modeling
-a parafoil from the most readily-available data.</p>
-<p>[[FIXME: explain the advantages of my choice]]</p>
+<p>Although most tools do not explicitly announce to their choice of section
+index, there are two conventions in common use: the most common is to use the
+reference point <span class="math notranslate nohighlight">\(y\)</span>-coordinate (<span class="math notranslate nohighlight">\(s = y\)</span>, or its normalized version
+<span class="math notranslate nohighlight">\(s = \frac{y}{b/2}\)</span>). Although simple and intuitive for flat wings,
+defining a nonlinear geometry in terms of <span class="math notranslate nohighlight">\(y\)</span> can become unwieldy, so
+another common choice is to use the linear distance along the locus of
+reference points <span class="math notranslate nohighlight">\(\vec{r}_{RP/O}\)</span> (or its normalized version that ranges
+±1). Unfortunately, both are problematic for modeling a paraglider canopy using
+the most readily-available data.</p>
+<p>When trying to create a model of a flexible wing like a paraglider canopy, it
+is much easier to take measurements when the wing is stretched out flat. When
+the canopy is flat it is possible to measure <span class="math notranslate nohighlight">\(c(s)\)</span> and <span class="math notranslate nohighlight">\(x(s)\)</span>
+directly, whether from the physical wing or from photos (such as are found in
+user manuals). Also, it is trivial to measure the flattened span compared to
+trying to measure the span of an in-flight canopy. The solution is to use the
+normalized section <span class="math notranslate nohighlight">\(y\)</span>-coordinates from the flattened foil:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-yz-distance-section-index">
 <span class="eqno">(3.10)<a class="headerlink" href="#equation-yz-distance-section-index" title="Permalink to this equation">#</a></span>\[s = \frac{y_{flat}}{b_{flat}/2}\]</div></div>
+<p>Not only does this choice make the section index easy to measure from
+a flattened paraglider canopy, but with a careful choice of reference points it
+also decouples the <span class="math notranslate nohighlight">\(yz\)</span>-coordinates of the reference positions
+(<span class="math notranslate nohighlight">\(yz(s)\)</span>) from all the other design curves, which is a key aspect of this
+model’s ability to define complex nonlinear foils using simple parametric
+functions. The next section explains the process in detail, but the key idea
+(and why this choice of section index is so important) is that using this
+definition of <span class="math notranslate nohighlight">\(s\)</span> and choosing the same chord position for the <span class="math notranslate nohighlight">\(y\)</span>
+and <span class="math notranslate nohighlight">\(z\)</span> components of the reference point you can simply “wrap” the
+flattened paraglider canopy around <span class="math notranslate nohighlight">\(yz(s)\)</span> to produce the final geometry.
+It becomes possible design the flattened foil geometry before designing its
+arc, a natural process that enables the direct use of the most readily
+available measurements for commercial paraglider canopies.</p>
 </section>
 <section id="reference-point">
 <h3><span class="section-number">3.4.2. </span>Reference point<a class="headerlink" href="#reference-point" title="Permalink to this headline">#</a></h3>
-<p>The basic model positions each section using the section origins (the leading
-edges). The expanded model allows the sections to be positioned using arbitrary
-reference points anywhere in the 3D section coordinate systems. Although
-flexible, the freedom of the expanded model does not address the problem of
-choosing good reference points.</p>
+<p>The <a class="reference internal" href="#basic-model">Basic model</a> positions each section using the section origins (the
+leading edges). The <a class="reference internal" href="#expanded-model">Expanded model</a> allows the sections to be positioned
+using arbitrary reference points anywhere in the 3D section coordinate systems.
+Although flexible, the freedom of the expanded model does not address the
+problem of choosing good reference points.</p>
 <p>One intuitive choice is to use points on the section chords, in which case the
-reference point is a function of a chord ratio <span class="math notranslate nohighlight">\(0 \le r \le 1\)</span>. The
-chord lies on the negative section <span class="math notranslate nohighlight">\(x\)</span>-axis, so a reference point at
-some fraction <span class="math notranslate nohighlight">\(r\)</span> along the chord is given by <span class="math notranslate nohighlight">\(\vec{r}_{RP/LE}^s
-= -r\, c\, \hat{x}^s_s\)</span> (where <span class="math notranslate nohighlight">\(\hat{x}^s_s \defas \begin{bmatrix}1
-&amp; 0 &amp; 0\end{bmatrix}^T\)</span>, the <span class="math notranslate nohighlight">\(x\)</span>-axis of section <span class="math notranslate nohighlight">\(s\)</span> in that
-section’s local coordinate system).</p>
-<p>Substituting <span class="math notranslate nohighlight">\(\vec{r}_{LE/RP} = -\vec{r}_{RP/LE}\)</span> into
-<a class="reference internal" href="#equation-expanded-equation">(3.8)</a> produces:</p>
+reference point is a function of a chord ratio <span class="math notranslate nohighlight">\(0 \le r \le 1\)</span>. The chord
+lies on the negative section <span class="math notranslate nohighlight">\(x\)</span>-axis, so a reference point at some
+fraction <span class="math notranslate nohighlight">\(r\)</span> along the chord is given by <span class="math notranslate nohighlight">\(\vec{r}_{RP/LE}^s = -r\,
+c\, \hat{x}^s_s\)</span> (where <span class="math notranslate nohighlight">\(\hat{x}^s_s \defas \left[1 \, 0 \;
+0 \right]^T\)</span>, the <span class="math notranslate nohighlight">\(x\)</span>-axis of section <span class="math notranslate nohighlight">\(s\)</span> in that section’s local
+coordinate system). Substituting <span class="math notranslate nohighlight">\(\vec{r}_{LE/RP} = -\vec{r}_{RP/LE}\)</span>
+into <a class="reference internal" href="#equation-expanded-equation">(3.8)</a> produces:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\vec{r}_{LE/O}^f =
       \mat{C}_{f/s}\, r\, c\, \hat{x}^s_s
@@ -645,8 +665,8 @@ curve with that dimension’s coordinate of that dimension’s reference point.
 The <span class="math notranslate nohighlight">\(x(s)\)</span> design curve specifies the <span class="math notranslate nohighlight">\(x\)</span>-coordinate of the
 reference point for the <span class="math notranslate nohighlight">\(x\)</span>-dimension, etc.</p>
 <p>Fortunately, providing this flexibility is easier to implement and use than it
-is to describe. Instead of a shared <span class="math notranslate nohighlight">\(r\)</span> for all three dimension, allow
-each dimension of the reference point to choose an independent <span class="math notranslate nohighlight">\(r\)</span>:</p>
+is to describe. Instead of a shared <span class="math notranslate nohighlight">\(r\)</span> for all three dimension, allow an
+independent <span class="math notranslate nohighlight">\(r\)</span> for each dimension of the reference point:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\mat{R} \defas \begin{bmatrix}
    r_x &amp; 0 &amp; 0\\
@@ -663,19 +683,19 @@ positioning for each dimension, is surprisingly simple:</p>
 \[\vec{r}_{LE/O}^f =
   \mat{R} \mat{C}_{f/s} c\, \hat{x}^s_s
   + \vec{r}_{RP/O}^f\]</div></div>
-<p>This choice of reference point makes the earlier examples trivial to
-implement. For the first, which was struggling with the fact that geometric
-twist has coupled the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span> positions is solved with
-<span class="math notranslate nohighlight">\(\{r_x = 0, r_z = 1\}\)</span> (because the foil is flat, every choice of
-<span class="math notranslate nohighlight">\(r_y\)</span> is equivalent). The second example, which was struggling to define
-an <span class="math notranslate nohighlight">\(x(s)\)</span> to achieve a straight trailing edge, the answer is simply
-<span class="math notranslate nohighlight">\(\{ r_x = 1, r_y = 0.25, r_z = 0.25 \}\)</span>. In both cases, the designer is
-able to specify their target directly, using simple design curves, with no
-translation necessary.</p>
-<p>[[FIXME: explain how choosing <cite>r_y = r_z</cite> simplifies the design by maintaining
-the proportional scaling of the <cite>y</cite> and <cite>z</cite> curves; you can design a joint
-<cite>yz</cite> curve and it won’t get distorted on the final foil. Useful for defining
-<cite>yz(s)</cite> as a single vector-valued parametric function.]]</p>
+<p>This choice of reference point makes the earlier examples trivial to implement.
+For the first, which was struggling with the fact that geometric twist has
+coupled the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(z\)</span> positions is solved with <span class="math notranslate nohighlight">\(\{r_x = 0,
+r_z = 1\}\)</span> (because the foil is flat, every choice of <span class="math notranslate nohighlight">\(r_y\)</span> is
+equivalent). The second example, which was struggling to define an <span class="math notranslate nohighlight">\(x(s)\)</span>
+to achieve a straight trailing edge, the answer is simply <span class="math notranslate nohighlight">\(\{ r_x = 1,
+r_y = 0.25, r_z = 0.25 \}\)</span>. In both cases, the designer is able to specify
+their target directly, using simple design curves, with no translation
+necessary. The reason is that <a class="reference internal" href="#equation-yz-distance-section-index">(3.10)</a> combined with
+<span class="math notranslate nohighlight">\(r_y = r_z\)</span> means that changing <span class="math notranslate nohighlight">\(yz(s)\)</span> does not change the section
+index; having designed the orientation and fore-aft position <span class="math notranslate nohighlight">\(x(s)\)</span> of
+a section, changing <span class="math notranslate nohighlight">\(yz(s)\)</span> will not affect that design. The curves have
+been decoupled.</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-simplified-model-reference-point-vector">
 <span class="eqno">(3.11)<a class="headerlink" href="#equation-simplified-model-reference-point-vector" title="Permalink to this equation">#</a></span>\[\vec{r}_{LE/RP}^f = \mat{R} \mat{C}_{f/s} c\, \hat{x}^s_s\]</div></div>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-simplified-model-reference-point-matrix">
@@ -688,23 +708,22 @@ the proportional scaling of the <cite>y</cite> and <cite>z</cite> curves; you ca
 <section id="id8">
 <h3><span class="section-number">3.4.3. </span>Orientation<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h3>
 <p>The expanded model <a class="reference internal" href="#equation-expanded-equation">(3.8)</a> uses a <em>direction cosine matrix</em>
-(DCM) to define the orientation of each section. A natural parametrization of
-a DCM is a set of three Euler angles <span class="math notranslate nohighlight">\(\left&lt; \phi, \theta, \gamma
-\right&gt;\)</span>, corresponding to roll, pitch, and yaw. The Euler parametrization
-replaces the <span class="math notranslate nohighlight">\(\mathbb{R}^{3 \times 3}\)</span> matrix with a 3-vector, but the
-structure of typical parafoils can provide further simplifications.</p>
+(DCM) to define the orientation of each section; the problem is how to define
+that matrix. A natural parametrization of a DCM is a set of three Euler angles
+<span class="math notranslate nohighlight">\(\left&lt; \phi, \theta, \gamma \right&gt;\)</span>, corresponding to roll, pitch, and
+yaw. The Euler parametrization replaces the <span class="math notranslate nohighlight">\(\mathbb{R}^{3 \times 3}\)</span>
+matrix with a 3-vector — three parameters — but the structure of typical
+parafoils can provide further simplifications.</p>
 <p>In particular, observe that when a parafoil is flattened out on the ground, the
 sections are (essentially) vertical, with no relative roll or yaw. Inflating
-the parafoil and using the suspension lines to form the arc will produce
-a natural section roll without affecting the section yaw. These observations
-reveal that the section orientation produced by inflating a parafoil is well
-approximated by a single degree of freedom, resulting in a minimal
-parametrization with a single design variable for section pitch
-<span class="math notranslate nohighlight">\(\theta(s)\)</span>.</p>
-<p>[[Why does this paragraph repeat so much information that follows?]]</p>
+the parafoil and using the suspension lines to form the arc will naturally roll
+the sections without affecting the section yaw. These observations reveal that
+the section orientation produced by inflating a parafoil is well approximated
+by a single degree of freedom, resulting in a minimal parametrization with
+a single design variable for section pitch <span class="math notranslate nohighlight">\(\theta(s)\)</span>.</p>
 <p>For the section roll <span class="math notranslate nohighlight">\(\phi(s)\)</span>, observe that inflating the foil to
 produce the arc does not produce a shearing effect between sections; instead,
-the sections roll together with the arc. This relationship can be encoded using
+the sections roll jointly with the arc. This relationship can be encoded using
 the derivatives of the <span class="math notranslate nohighlight">\(\left&lt; y(s), z(s) \right&gt;\)</span> components of the
 position curve <span class="math notranslate nohighlight">\(\vec{r}_{RP/O}(s)\)</span>:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-roll-from-position">
@@ -714,10 +733,10 @@ arc anhedral will roll the sections in the foil’s <span class="math notranslat
 affect the section yaw, which remains zero:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-section-yaw-constant-zero">
 <span class="eqno">(3.14)<a class="headerlink" href="#equation-section-yaw-constant-zero" title="Permalink to this equation">#</a></span>\[\gamma = 0\]</div></div>
-<p>Lastly, although inflating a parafoil will not cause the sections to rotate
-about their spanwise axes, the relative section pitch <span class="math notranslate nohighlight">\(\theta(s)\)</span>
-produced during manufacturing is an important design variable, referred to as
-<em>geometric torsion</em>.</p>
+<p>The remaining degree of freedom is the rotation about each sections
+<span class="math notranslate nohighlight">\(y\)</span>-axis. This pitch angle <span class="math notranslate nohighlight">\(\theta(s)\)</span>, conventionally known as
+<em>geometric torsion</em>, is produced when the wing is manufactured, and is not
+affected when the flattened wing is shaped into its final arched form.</p>
 <figure class="align-default" id="id12">
 <img alt="_images/geometric_torsion.svg" src="_images/geometric_torsion.svg"/><figcaption>
 <p><span class="caption-number">Fig. 3.6 </span><span class="caption-text">Geometric torsion.</span><a class="headerlink" href="#id12" title="Permalink to this image">#</a></p>
@@ -730,7 +749,13 @@ particular rotation point.</p>
 </section>
 <section id="summary">
 <h3><span class="section-number">3.4.4. </span>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">#</a></h3>
-<p>[[List the design variables as in the Basic and Expanded model subsections.]]</p>
+<p>In conclusion, the simplifications identified by this model not only reduced
+the number of parameters of the expanded model <a class="reference internal" href="#equation-expanded-foil-geometry-variables">(3.9)</a>, it also replaced the arbitrary and unwieldy 3D reference points
+with simple ratios of the section chords. It allows rapid and intuitive
+conversion of measurements from a flattened paraglider canopy to a foil
+geometry, and decoupled the design curves to allow the design of each variable
+to be manipulated without affect the others. In short, it provides the
+flexibility of the expanded model but without its complexity.</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-simplified-foil-geometry-variables">
 <span class="eqno">(3.15)<a class="headerlink" href="#equation-simplified-foil-geometry-variables" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{aligned}
   c(s) \qquad &amp; \textrm{Scale} \\
@@ -744,19 +769,23 @@ particular rotation point.</p>
 </section>
 <section id="examples">
 <h2><span class="section-number">3.5. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">#</a></h2>
-<p>[[FIXME: finish]]</p>
-<p>These examples demonstrate how the expanded model makes it easy to represent
+<p>These examples demonstrate how the simplified model makes it easy to represent
 nonlinear foil geometries using simple parametric functions, such as constants,
 absolute functions, ellipticals, and polynomials. For a discussion of the
 elliptical functions for the arc and chord distributions, see
 <a class="reference internal" href="derivations.html#parametric-design-curves"><span class="std std-ref">Parametric design curves</span></a>.</p>
 <p>All examples show a wireframe view of the chord surface because it is easier to
 visualize the foil layout. The green dashed lines are projections of the
-section quarter-chord positions. The red dashed lines are the projections of
-the <span class="math notranslate nohighlight">\(r_x\)</span> and <span class="math notranslate nohighlight">\(r_{yz}\)</span> chord positions.</p>
+section quarter-chord positions (shown because of their use in analyzing
+aerodynamics). The red dashed lines are the projections of the <span class="math notranslate nohighlight">\(r_x\)</span> and
+<span class="math notranslate nohighlight">\(r_{yz}\)</span> chord positions.</p>
 <section id="delta-wing">
 <h3><span class="section-number">3.5.1. </span>Delta wing<a class="headerlink" href="#delta-wing" title="Permalink to this headline">#</a></h3>
-<p>Straight wing with a linear chord distribution and no twist.</p>
+<p>A delta with with a linear chord distribution and straight trailing edge can be
+defined with <span class="math notranslate nohighlight">\(r_x = 1\)</span> and a piecewise-linear <span class="math notranslate nohighlight">\(c(s)\)</span>. Unlike
+conventional wing modeling tools, because the trailing edge is used directly
+for position in the <span class="math notranslate nohighlight">\(x\)</span>-direction, the <span class="math notranslate nohighlight">\(x(s)\)</span> curve does not need
+to be coupled to <span class="math notranslate nohighlight">\(c(s)\)</span> to compute offsets for the leading edge.</p>
 <figure class="align-default">
 <img alt="_images/flat2_curves.svg" src="_images/flat2_curves.svg"/></figure>
 <figure class="align-default" id="id13">
@@ -767,7 +796,9 @@ the <span class="math notranslate nohighlight">\(r_x\)</span> and <span class="m
 </section>
 <section id="elliptical-wing">
 <h3><span class="section-number">3.5.2. </span>Elliptical wing<a class="headerlink" href="#elliptical-wing" title="Permalink to this headline">#</a></h3>
-<p>Straight wing with an elliptical chord distribution and no twist.</p>
+<p>Similarly, a flat wing with an elliptical chord distribution and fore-aft
+symmetric is trivial to define using <span class="math notranslate nohighlight">\(r_x = 0.5\)</span> and an elliptical chord
+function.</p>
 <figure class="align-default">
 <img alt="_images/flat3_curves.svg" src="_images/flat3_curves.svg"/></figure>
 <figure class="align-default" id="id14">
@@ -778,7 +809,7 @@ the <span class="math notranslate nohighlight">\(r_x\)</span> and <span class="m
 </section>
 <section id="twisted-wing">
 <h3><span class="section-number">3.5.3. </span>Twisted wing<a class="headerlink" href="#twisted-wing" title="Permalink to this headline">#</a></h3>
-<p>Wings with geometric torsion (or “twist”) typically use relatively small
+<p>Wings with twist typically use relatively small
 angles that can be difficult to visualize. Exaggerating the angles with
 extreme torsion makes it easier to see the relationship.</p>
 <figure class="align-default">
@@ -792,8 +823,12 @@ extreme torsion makes it easier to see the relationship.</p>
 <section id="manta-ray">
 <h3><span class="section-number">3.5.4. </span>Manta ray<a class="headerlink" href="#manta-ray" title="Permalink to this headline">#</a></h3>
 <p>The effect of changing the reference positions can be surprising. A great
-example is a “manta ray” inspired design that changes nothing but the constant
-value of <span class="math notranslate nohighlight">\(r_x\)</span>.</p>
+example is a “manta ray” inspired design: each model uses the same
+piecewise-linear chord distribution and circular <span class="math notranslate nohighlight">\(x(s)\)</span>, changing only
+the constant value of <span class="math notranslate nohighlight">\(r_x\)</span>. These examples clearly demonstrate the
+flexibility of the <a class="reference internal" href="#simplified-model">Simplified model</a>: four of the six design “curves” are
+merely constants, and yet they enable significantly nonlinear designs in an
+intuitive way.</p>
 <figure class="align-default">
 <img alt="_images/manta1_curves.svg" src="_images/manta1_curves.svg"/></figure>
 <figure class="align-default" id="id16">
@@ -815,17 +850,13 @@ value of <span class="math notranslate nohighlight">\(r_x\)</span>.</p>
 <p><span class="caption-number">Fig. 3.12 </span><span class="caption-text">“Manta ray” with <span class="math notranslate nohighlight">\(r_x = 1.0\)</span></span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p>These examples clearly demonstrate the power of wing design using extremely
-simple parametric curves. Four of the six design “curves” are merely constants,
-and yet they enable significantly nonlinear designs in an intuitive way.</p>
 </section>
 <section id="parafoil">
 <h3><span class="section-number">3.5.5. </span>Parafoil<a class="headerlink" href="#parafoil" title="Permalink to this headline">#</a></h3>
-<p>[[This example should be a complete description, explaining the design curves
-and the plots. The other examples can be less detailed; the curves and result
-should suffice.]]</p>
-<p>An elliptical arc with a mean anhedral of 30 degrees and a wingtip roll of
-89 degrees:</p>
+<p>Lastly, as this project is primarily focused on paragliders, these examples
+would not be complete without showing how the <a class="reference internal" href="#simplified-model">Simplified model</a> allows two
+simple elliptical functions and <span class="math notranslate nohighlight">\(r_x = 0.75\)</span> to easily produce an
+accurate generalization of a paraglider canopy.</p>
 <figure class="align-default">
 <img alt="_images/elliptical3_curves.svg" src="_images/elliptical3_curves.svg"/></figure>
 <figure class="align-default" id="id19">
@@ -833,6 +864,9 @@ should suffice.]]</p>
 <p><span class="caption-number">Fig. 3.13 </span><span class="caption-text">Chord surface of a simple parafoil.</span><a class="headerlink" href="#id19" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+<p>In addition to the surface produced by the section chords, it may be helpful to
+see the upper and lower profile surfaces produced after assigned every section
+an airfoil (NACA 23015):</p>
 <figure class="align-default" id="id20">
 <img alt="_images/elliptical3_canopy_airfoils.svg" src="_images/elliptical3_canopy_airfoils.svg"/><figcaption>
 <p><span class="caption-number">Fig. 3.14 </span><span class="caption-text">Profile surface of a simple parafoil.</span><a class="headerlink" href="#id20" title="Permalink to this image">#</a></p>

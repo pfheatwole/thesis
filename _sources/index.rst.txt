@@ -53,7 +53,6 @@ Contents
 .. toctree::
    :maxdepth: 3
 
-   glossary
    zreferences
 
 .. All documents beyond this point are considered appendices

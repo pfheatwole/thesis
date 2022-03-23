@@ -23,11 +23,11 @@ combining fundamental equations of fluid behavior with the foil geometry.
 
 This chapter suggests performance criteria for simulating paraglider
 aerodynamics, and selects a theoretical method capable of simulating those
-dynamics under the [[target flight conditions]]. It presents a derivation of
-the method, modifies the method to improve its behavior in the context of
-flight simulation, and validates the modified method by comparing its
-predictions against wind tunnel measurements of a representative parafoil model
-from literature.
+dynamics under the typical flight conditions. It presents a derivation of the
+method, modifies the method to improve its behavior in the context of flight
+simulation, and validates the modified method by comparing its predictions
+against wind tunnel measurements of a representative parafoil model from
+literature.
 
 .. FIXME: ensure I have a definition for "target flight conditions" in the
    Introduction and link to it.
@@ -70,28 +70,86 @@ characteristics of the flow-field.
 Model requirements
 ------------------
 
-.. Define the selection criteria
+.. Review the selection criteria from the introduction
 
-[[FIXME: finish.]]
+The introduction to this paper established a set of :ref:`introduction:Modeling
+requirements`, which determine the choice of aerodynamics method. Summarizing
+those requirements here for convenience, the model must account for the
+following characteristics:
 
-[[Each simplification restricts the physical scenarios that a model can
-represent, so the first step in selecting a method is to establish what
-characteristics of the foil geometry and flight conditions are relevant to
-paraglider simulations. Start with the geometry and flow-field since they
-establish the selection criteria. Cover issues like nonlinear geometry, slow
-airspeed, non-longitudinal, wind shear, high angle of attack, etc.]]
+* Nonlinear geometry
+
+* Viscosity
+
+* Non-uniform wind field (different relative wind angles at different sections)
+
+Where "viscosity" is elaborated as a collection of requirements:
+
+* The model should account for the decreased lift and increased drag due to
+  flow separation across individual wing segments (at least approximately).
+  This requirement is due to paraglider's tendency to fly at relatively high
+  angles of attack, and for individual sections to experience high angles due
+  to the arc anhedral (especially during turns).
+
+* The model must demonstrate graceful accuracy degradation approaching stall
+  (but is not required to model post-stall). The goal is not to simulate with
+  absolute accuracy through stall, but the flight simulator should tolerate
+  brief moments near stall.
+
+* The model should accept empirical corrections to viscous drag to individual
+  wing sections to incorporate experimental wind tunnel results.
+
+* The model should use section-specific Reynolds values (not a wing average)
+  since the sections of a paraglider canopy can vary from 300k to 2M during
+  a turn (thus spanning the transition regime of Reynolds values)
+
+There was also an optional, but desirable, goal that the method should be fast
+enough for real-time simulations to support rapid iteration during parameter
+estimation.
 
 
 Model selection
 ---------------
 
-[[FIXME: finish]]
+Despite the wide variety of options for choosing a theoretical aerodynamics
+model, in practice the :ref:`introduction:Modeling requirements` makes the
+selection process rather straightforward. The first requirement — to support
+nonlinear foil geometries — eliminates the classic LLT. Several authors have
+developed extensions of the LLT that are able to account for circular arc
+(:cite:`gonzalez1993PrandtlTheoryApplied`,
+:cite:`iosilevskii1996LiftinglineTheoryArched`), but are unable to model
+a swept quarter-chord.
 
-* Survey the available models (LLT, VLM, panel methods, CFD, etc) and
-  progressively eliminate them.
+The practical answer to nonlinear geometries is to switch to a vortex lattice
+method or panel method :cite:`drela2014FlightVehicleAerodynamics`, which place
+the aerodynamic singularities on the nonlinear camber surface, or the profile
+surface itself, and apply the inviscid flow approximation to reformulate the
+problem as an instance of Laplace's equation. Unfortunately, the inviscid
+assumption necessary to produce those solutions violate another of the modeling
+requirements: the ability to model viscous effects. Although extended models
+may apply strip theory to incorporate viscous drag coefficients (through
+lookups based on the estimated section angle of attack or lift coefficient),
+the inviscid methods fail to provide graceful accuracy degradation near stall.
+Because the inviscid solutions rely on linear relationships that are assumed to
+hold indefinitely, they are incapable of capturing the aerodynamic
+nonlinearities that arise at high angles of attack.
 
-* Conclusion: only Phillips' NLLT met my requirements (except that no open
-  source implementations were available at the time).
+The next level of aerodynamic models are the computational fluid dynamics
+:cite:`cummings2015AppliedComputationalAerodynamics` methods. Instead of
+limiting the singularities to points on (or inside) the foil, CFD methods
+simulate the dynamics of the entire volume surrounding the object. In this way
+they are able to capture the entire array of flow characteristics such as
+viscosity, turbulence, and compressibility. Unfortunately, CFD methods have the
+downside of violating another of the modeling requirements: the requirement for
+speed. The purpose of this project is to enable a user to rapidly iterate the
+parameters of a model in order to improve the accuracy of a model. Individual
+CFD simulations at this level are commonly measured in seconds, if not minutes,
+rendering the fundamentally unsuitable.
+
+Fortunately, there is yet another category, numerical lifting-line methods,
+which has progressed sufficiently to introduce a method suitable for wings with
+arbitrary camber, sweep, and dihedral while also supporting (some) viscous
+effects.
 
 
 Phillips' numerical lifting-line
@@ -314,6 +372,18 @@ paraglider flights. This section presents a number of modifications to improve
 the usability, functionality, and numerical stability of the method that
 greatly extend its applicability.
 
+.. FIXME: reenable in the web version
+
+   .. caution:: The material in this chapter up to this point has been
+      a presentation of expert knowledge from literature. What follows is
+      a best-effort attempt on my part as an amateur to identify the
+      limitations with Phillips' NLLT, and to suggest practical mitigations
+      that allow its use in dynamic simulations of paraglider wings. I am
+      a computer engineering by training, whereas my knowledge of aerodynamics
+      is from reading the materials listed in the :ref:`related works
+      <related_works:Flight simulation>`. As such, these discussions should be
+      viewed with a critical eye.
+
 
 Control point distribution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -513,12 +583,12 @@ basis, there are several strong justifications:
    valid range you can expect that the wingtip alpha is (relatively) close to
    the valid range.
 
-   [[The :math:`C_L` curve stays (relatively) flat for significant range of
+.. [[The :math:`C_L` curve stays (relatively) flat for significant range of
    :math:`\alpha` post-stall, so the true value of :math:`C_L` should be
-   relatively close to the clamped value, so even if :math:`\alpha_\textrm{true}
-   > \alpha_\textrm{max}`, it's unlikely for :math:`C_L(\alpha_\textrm{max})`
-   to be wildly inaccurate (provided the section coefficient data covers
-   a reasonably high :math:`\alpha`).]]
+   relatively close to the clamped value, so even if
+   :math:`\alpha_\textrm{true} > \alpha_\textrm{max}`, it's unlikely for
+   :math:`C_L(\alpha_\textrm{max})` to be wildly inaccurate (provided the
+   section coefficient data covers a reasonably high :math:`\alpha`).]]
 
 
 .. FIXME:
@@ -608,7 +678,8 @@ the central section under the assumption that it minimizes average deviation.
 For a related technical discussion that incorporates rotation rates into
 a vortex lattice method, refer to :cite:`drela2014FlightVehicleAerodynamics`
 Sec. 6.5; in particular, Eq. 6.33 for aligning the trailing legs with the
-:math:`x`-axis and Eq. 6.39 for incorporating the rotation rates into the
+:math:`x`-axis, Eq. 6.37 for accounting by adding it to the flow tangency
+equations, and Eq. 6.39 for incorporating the rotation rates into the
 aerodynamic influence coefficients matrix.
 
 

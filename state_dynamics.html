@@ -173,7 +173,6 @@
 <li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 <ul>
@@ -277,18 +276,18 @@ quaternion and angular acceleration vector for the payload:</p>
 </section>
 <section id="state-derivatives">
 <h2><span class="section-number">7.2. </span>State derivatives<a class="headerlink" href="#state-derivatives" title="Permalink to this headline">#</a></h2>
-<p>[[Now we need to define the derivatives of the state variables in terms of the
-current state and the system derivatives.]]</p>
-<p>[[Position is easy since we’re using the same reference point for the dynamics
-and for the position state variable. The only catch is that]] the derivatives
-calculated by the system dynamics models were taken in the body and payload
-reference frames, <span class="math notranslate nohighlight">\(\mathcal{F}_b\)</span> and <span class="math notranslate nohighlight">\(\mathcal{F}_p\)</span>, but tracking
-the position and orientation of the aircraft relative to the tangent plane
-requires derivatives taken with respect to the inertial frame
-<span class="math notranslate nohighlight">\(\mathcal{F}_e\)</span>. To provide the simulator with the proper derivatives,
-the state dynamics models must use the <em>equation of Coriolis</em>
-(<span id="id2">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>, Eq. 1.4-2) to calculate the
-derivative of velocity taken with respect to the inertial frame:</p>
+<p>Next, define the derivatives of the state variables in terms of the current
+state and the system derivatives. The derivative of state variable for position
+is straightforward since it uses the same reference point as dynamics. The only
+modification is that the derivatives calculated by the system dynamics models
+were taken in the body and payload reference frames, <span class="math notranslate nohighlight">\(\mathcal{F}_b\)</span> and
+<span class="math notranslate nohighlight">\(\mathcal{F}_p\)</span>, but tracking the position and orientation of the
+aircraft relative to the tangent plane requires derivatives taken with respect
+to the inertial frame <span class="math notranslate nohighlight">\(\mathcal{F}_e\)</span>. To provide the simulator with the
+proper derivatives, the state dynamics models must use the <em>equation of
+Coriolis</em> (<span id="id2">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>, Eq.
+1.4-2) to calculate the derivative of velocity taken with respect to the
+inertial frame:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
   {^e \dot{\vec{v}}_{RM/e}^{tp}} &amp;=

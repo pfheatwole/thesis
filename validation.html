@@ -173,7 +173,6 @@
 <li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 <ul>
@@ -234,8 +233,8 @@ satisfies the assumptions of the <a class="reference internal" href="foil_geomet
 an implementation of the geometry almost trivial.</p>
 <p>First, the paper describes the geometry of the full-scale canopy they wish to
 study:</p>
-<div class="table-wrapper"><table class="docutils align-default" id="id7">
-<caption><span class="caption-number">Table 9.1 </span><span class="caption-text">Full-scale wing dimensions</span><a class="headerlink" href="#id7" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper"><table class="docutils align-default" id="id10">
+<caption><span class="caption-number">Table 9.1 </span><span class="caption-text">Full-scale wing dimensions</span><a class="headerlink" href="#id10" title="Permalink to this table">#</a></caption>
 <colgroup>
 <col style="width: 33%"/>
 <col style="width: 33%"/>
@@ -286,8 +285,8 @@ study:</p>
 from a wood-carbon frame with polyurethane foam sections covered in fiberglass.
 Physical dimensions and positions were provided for the physical model as
 pointwise data with linear interpolation between each point.</p>
-<div class="table-wrapper"><table class="docutils align-default" id="id8">
-<caption><span class="caption-number">Table 9.2 </span><span class="caption-text">Wind tunnel wing geometry data at panel’s ends</span><a class="headerlink" href="#id8" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper"><table class="docutils align-default" id="id11">
+<caption><span class="caption-number">Table 9.2 </span><span class="caption-text">Wind tunnel wing geometry data at panel’s ends</span><a class="headerlink" href="#id11" title="Permalink to this table">#</a></caption>
 <colgroup>
 <col style="width: 14%"/>
 <col style="width: 14%"/>
@@ -428,105 +427,267 @@ model in <code class="docutils literal notranslate"><span class="pre">glidersim<
 <p><span class="caption-number">Fig. 9.1 </span><span class="caption-text">NACA 23015</span><a class="headerlink" href="#airfoil-naca-23015" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p>Calculating the section indices for each point and building a linear
-interpolator for each component as a function of the section index produces
-a set of piecewise-linear design curves, and assigning every section a NACA
+<p>Calculating the section indices for each point and using linear interpolation
+as a function of the section index produces a set of piecewise-linear design
+curves, and assigning every section a NACA
 23015 airfoil (<a class="reference internal" href="#airfoil-naca-23015"><span class="std std-numref">Fig. 9.1</span></a>) completes the foil geometry model.</p>
 <figure class="align-default">
 <img alt="_images/belloc_curves.svg" src="_images/belloc_curves.svg"/></figure>
-<figure class="align-default" id="id9">
+<figure class="align-default" id="id12">
 <img alt="_images/belloc_canopy_chords.svg" src="_images/belloc_canopy_chords.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.2 </span><span class="caption-text">Chord surface for Belloc’s reference paraglider wing.</span><a class="headerlink" href="#id9" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.2 </span><span class="caption-text">Chord surface for Belloc’s reference paraglider wing.</span><a class="headerlink" href="#id12" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="id10">
+<figure class="align-default" id="id13">
 <img alt="_images/belloc_canopy_airfoils.svg" src="_images/belloc_canopy_airfoils.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.3 </span><span class="caption-text">Profile surface for Belloc’s reference paraglider wing.</span><a class="headerlink" href="#id10" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.3 </span><span class="caption-text">Profile surface for Belloc’s reference paraglider wing.</span><a class="headerlink" href="#id13" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
 <section id="wind-tunnel-setup">
 <h3><span class="section-number">9.1.2. </span>Wind tunnel setup<a class="headerlink" href="#wind-tunnel-setup" title="Permalink to this headline">#</a></h3>
-<p>As explained in <span id="id2">[<a class="reference internal" href="zreferences.html#id12" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">18</a>]</span>, a 1/8th-scale model
-was fabricated from wood and [[material]], mounted on a 1 meter rod connected
-to force sensors, and placed in a wind tunnel configured for 40 m/s airspeed.
-Measurements were taken with the angle of attack and sideslip ranging over
-<span class="math notranslate nohighlight">\(-5 &lt; \alpha &lt; 22\)</span> and <span class="math notranslate nohighlight">\(-15 &lt; \beta &lt; 15\)</span>.</p>
-<p>For better accuracy, wind tunnel measurements should be corrected for wall
-interactions with the flow (<span id="id3">[<a class="reference internal" href="zreferences.html#id9" title="Jewel B. Barlow, William H. Rae, and Alan Pope. Low-Speed Wind Tunnel Testing. John Wiley &amp; Sons, third edition, February 1999. ISBN 978-0-471-55774-6.">48</a>]</span>;
-<span id="id4">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">7</a>]</span>, Sec. 10.3). However, because
+<p>The setup mounted the 1/8-scale model on a 1 meter rod connected to force
+sensors, and set the wind tunnel to a 40 m/s airspeed. Measurements were taken
+with the angle of attack and sideslip ranging over <span class="math notranslate nohighlight">\(-5 &lt; \alpha &lt; 22\)</span> and
+<span class="math notranslate nohighlight">\(-15 &lt; \beta &lt; 15\)</span> (a range suitable capturing longitudinal performance
+post-stall). For better accuracy, wind tunnel measurements should be corrected
+for wall interactions with the flow (<span id="id2">[<a class="reference internal" href="zreferences.html#id9" title="Jewel B. Barlow, William H. Rae, and Alan Pope. Low-Speed Wind Tunnel Testing. John Wiley &amp; Sons, third edition, February 1999. ISBN 978-0-471-55774-6.">48</a>]</span>;
+<span id="id3">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">7</a>]</span>, Sec. 10.3). However, because
 classical wind tunnel wall corrections assume a flat wing, the data for the
 arched parafoil are uncorrected for wall effects.</p>
 </section>
 <section id="aerodynamics-models">
 <h3><span class="section-number">9.1.3. </span>Aerodynamics models<a class="headerlink" href="#aerodynamics-models" title="Permalink to this headline">#</a></h3>
-<p>[[FIXME: Introduce the aerodynamic models I’ll be comparing against the NLLT:
-a traditional <em>vortex lattice method</em> (VLM) in <a class="reference external" href="https://web.mit.edu/drela/Public/web/avl/">AVL</a> , and an experimental VLM in
-<a class="reference external" href="https://www.xflr5.tech/xflr5.htm">XFLR5</a> (which tilts the geometry to
-mitigate the “small angles” approximation for alpha and beta).]]</p>
+<p>The wind tunnel data will be compared to three theoretical aerodynamics models,
+one that includes viscous effects, and two that do not (inviscid models):</p>
+<ol class="arabic simple">
+<li><p>NLLT: the <a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line"><span class="std std-ref">numerical lifting-line</span></a> model from
+<span id="id4">[<a class="reference internal" href="zreferences.html#id52" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">20</a>]</span></p></li>
+<li><p><a class="reference external" href="https://web.mit.edu/drela/Public/web/avl/">AVL</a>: an extended vortex
+lattice method by Mark Drela <span id="id5">[<a class="reference internal" href="zreferences.html#id27" title="Mark Drela and Harold Youngren. Athena Vortex Lattice.">40</a>]</span> (who also
+authored XFOIL <span id="id6">[<a class="reference internal" href="zreferences.html#id25" title="Mark Drela. XFOIL: An Analysis and Design System for Low Reynolds Number Airfoils. In Thomas J. Mueller, editor, Low Reynolds Number Aerodynamics, 1–12. Springer Berlin Heidelberg, 1989. doi:10.1007/978-3-642-84010-4_1.">46</a>]</span> while at MIT) . With
+a long history in academic research, this is the primary reference for
+comparing the results of the NLLT.</p></li>
+<li><p><a class="reference external" href="https://www.xflr5.tech/xflr5.htm">XFLR5</a>: an experimental vortex lattice
+method from the open source wing modeling tool by André Deperrois. This
+model is marked “experimental” by the author because it is still under
+development, but the principle is to mitigate the “small angles”
+approximation relied on by standard vortex lattice methods by reorienting
+the foil geometry instead of reorienting the flow. The purpose of including
+this method in these tests is to show the effect of the simplifying
+assumptions used when designing the system of equations for aerodynamics
+models. For conventional aircraft where the flow angles are relatively
+small, small angle approximations are reasonable, but for nonlinear
+geometries at large angles of attack, classic methods such as AVL begin to
+struggle.</p></li>
+</ol>
 </section>
 <section id="results">
 <h3><span class="section-number">9.1.4. </span>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h3>
+<section id="lift-vs-drag">
+<h4><span class="section-number">9.1.4.1. </span>Lift vs drag<a class="headerlink" href="#lift-vs-drag" title="Permalink to this headline">#</a></h4>
+<p>The standard way to summarize the efficiency of a wing is to plot the amount of
+lift it produces versus the amount of drag; with practice, such charts can be
+used to quickly approximate performance characteristics such as its glide
+ratio. They are also useful for quickly comparing the relative performance of
+each aerodynamics method.</p>
+<figure class="align-default" id="belloc-cl-vs-cd-pseudoinviscid">
+<img alt="_images/CL_vs_CD.svg" src="_images/CL_vs_CD.svg"/><figcaption>
+<p><span class="caption-number">Fig. 9.4 </span><span class="caption-text">Lift vs induced drag</span><a class="headerlink" href="#belloc-cl-vs-cd-pseudoinviscid" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The first thing step during validation is to verify the test setup for each of
+the models. One way to do that is by comparing methods that are expected to
+produce equivalent results; in this case, the inviscid methods from AVL and
+XFLR5 should be nearly identical at low angles of attack, and should estimate
+zero drag at zero lift coefficient and zero sideslip. Because the NLLT uses
+aerodynamic coefficients that include viscous effects it is not directly
+comparable to the inviscid models, but because viscosity is not expected to
+have a significant effect on lift at low angles of attack, it is possible to
+disregard the viscous drag coefficients and plot the pseudo-inviscid polar
+curve by setting the viscous drag coefficients to zero, as shown in
+<a class="reference internal" href="#belloc-cl-vs-cd-pseudoinviscid"><span class="std std-numref">Fig. 9.4</span></a>. (This is a “pseudo” inviscid curve
+since the section lift coefficients used by the NLLT include viscous effects.)
+The resulting drag coefficient is limited to drag produced by the creation of
+lift, as would be predicted by the inviscid methods. This plot is useful
+because it validates that the geometry model and test conditions were
+configured correctly in all tools, and provides evidence that the NLLT was
+implemented correctly.</p>
+<figure class="align-default" id="belloc-cl-vs-cd">
+<img alt="_images/CL_vs_CD1.svg" src="_images/CL_vs_CD1.svg"/><figcaption>
+<p><span class="caption-number">Fig. 9.5 </span><span class="caption-text">Lift vs drag</span><a class="headerlink" href="#belloc-cl-vs-cd" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The second plot (<a class="reference internal" href="#belloc-cl-vs-cd"><span class="std std-numref">Fig. 9.5</span></a>) compares the inviscid methods to
+the NLLT with the unadjusted aerodynamic coefficients from XFOIL. The first
+thing to note is the difference compared to the pseudo-inviscid plot
+(<a class="reference internal" href="#belloc-cl-vs-cd-pseudoinviscid"><span class="std std-numref">Fig. 9.4</span></a>): as expected, including viscous drag
+significantly improves the agreement between the theoretical and experimental
+results for the NLLT. Another observation is the significance of the inviscid
+assumption, with both inviscid methods overestimating lift and underestimating
+drag at higher angles of attack. This plot also appears to show the effect of
+the “small angles” approximation relied on by AVL, with the experimental
+“tilted geometry” method from XFLR5 providing better accuracy at high angles of
+attack and sideslip.</p>
+<figure class="align-default" id="belloc-cl-vs-cd-surface">
+<img alt="_images/CL_vs_CD2.svg" src="_images/CL_vs_CD2.svg"/><figcaption>
+<p><span class="caption-number">Fig. 9.6 </span><span class="caption-text">Lift vs drag with extra viscous drag due to “surface characteristics”</span><a class="headerlink" href="#belloc-cl-vs-cd-surface" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>A final plot (<a class="reference internal" href="#belloc-cl-vs-cd-surface"><span class="std std-numref">Fig. 9.6</span></a>) is more for future reference
+than validation. Instead of the unadjusted aerodynamic coefficients from XFOIL,
+it adds the additional viscous drag due to “surface characteristics” suggested
+in <span id="id7">[<a class="reference internal" href="zreferences.html#id63" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">42</a>]</span> as a result of their wind
+tunnel tests on parafoils. Because this empirical adjustment will be used in
+the <a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a> portion of this paper, this plot is useful to show the
+expected accuracy of the NLLT when applied to a model of commercial paraglider
+wing used for dynamic simulations.</p>
+</section>
 <section id="coefficients-vs-angle-of-attack">
-<h4><span class="section-number">9.1.4.1. </span>Coefficients vs angle of attack<a class="headerlink" href="#coefficients-vs-angle-of-attack" title="Permalink to this headline">#</a></h4>
-<p>[[Coefficients versus angle of attack <span class="math notranslate nohighlight">\(\alpha\)</span>, measured at four
-different angles of sideslip <span class="math notranslate nohighlight">\(\beta\)</span>]]</p>
+<h4><span class="section-number">9.1.4.2. </span>Coefficients vs angle of attack<a class="headerlink" href="#coefficients-vs-angle-of-attack" title="Permalink to this headline">#</a></h4>
+<p>Another valuable way to summarize wing behavior is to plot the
+longitudinal-centric coefficients (lift, drag, and pitching moment) versus the
+angle of attack <span class="math notranslate nohighlight">\(\alpha\)</span>. These results are grouped into four quadrants
+by the sideslip angle <span class="math notranslate nohighlight">\(\beta\)</span> used during the test.</p>
 <figure class="align-default" id="belloc-cl-vs-alpha">
 <img alt="_images/CL_vs_alpha.svg" src="_images/CL_vs_alpha.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.4 </span><span class="caption-text">Lift coefficient vs angle of attack.</span><a class="headerlink" href="#belloc-cl-vs-alpha" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.7 </span><span class="caption-text">Lift coefficient vs angle of attack</span><a class="headerlink" href="#belloc-cl-vs-alpha" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+<p>The first (and arguably most interesting) plot is for lift versus angle of
+attack (<a class="reference internal" href="#belloc-cl-vs-alpha"><span class="std std-numref">Fig. 9.7</span></a>). Separating lift into its own plot
+reveals the source of the flatline region in the “Lift vs drag” plots; the wing
+enters stall (so lift ceases to grow) at approximately <span class="math notranslate nohighlight">\(\alpha = 17°,
+\beta = 0°\)</span>, and slightly earlier during sideslip (although the nonlinearity of
+the geometry dramatically affects the stall pattern and “smooths” the effect
+making it more difficult to see).</p>
+<p>The more interesting result, however, is that all three theoretical methods are
+in very close agreement for the majority of the range, they all mispredict the
+zero-lift angle of attack, and they all uniformly overestimate the slope of the
+lift curve. This anomaly is difficult to explain; at <span class="math notranslate nohighlight">\(\beta = 0°\)</span> and low
+angles of attack, the effects of viscosity should have a negligible effect on
+lift, and the vortex lattice methods should perform very well, but they don’t.
+The fact that the NLLT agrees with them is encouraging (again, the fact that it
+uses lift coefficients that account for viscosity should have a negligible
+effect in this test, and so the NLLT is expected to agree with the inviscid
+methods). I contacted the authors of both the wind tunnel data and the NLLT,
+and neither author had any immediate feedback on what would cause this issue.
+Nevertheless, there are two useful takeaways:</p>
+<ol class="arabic simple">
+<li><p>The NLLT is at least as accurate as the inviscid methods.</p></li>
+<li><p>The NLLT is approximating the nonlinear effects of early stall, whereas the
+inviscid methods maintain a virtually linear response. This is an
+encouraging sign that the NLLT is a suitable choice given my
+<a class="reference internal" href="introduction.html#modeling-requirements"><span class="std std-ref">Modeling requirements</span></a> that the aerodynamics should
+provide “graceful degradation of accuracy” as it approaches high angles of
+attack.</p></li>
+</ol>
+<p>This plot also highlights a limitation of relying on aerodynamic coefficients:
+the NLLT cannot produce a solution if any of the sections experience
+a section-local angle of attack that exceeds the range supported by the set of
+aerodynamic coefficients. This is effect is clear as the sideslip angle
+increases: because the wing is arched, as sideslip becomes positive (so the
+relative wind approaches from the right of the wing) the angle of attack on the
+left wingtip increases. As a result, as soon as global <span class="math notranslate nohighlight">\(\alpha\)</span> and
+<span class="math notranslate nohighlight">\(\beta\)</span> produce a section-local <span class="math notranslate nohighlight">\(\alpha\)</span> that exceeds the maximum
+value in the coefficients lookup table, the NLLT cannot produce a solution. The
+inviscid models, on the other hand, are founded on linear relationships with no
+upper bound, allowing them to generate estimates at significantly higher angles
+of attack and sideslip. Whether a bad estimate is better than no estimate,
+however, depends on the application.</p>
 <figure class="align-default" id="belloc-cd-vs-alpha">
 <img alt="_images/CD_vs_alpha.svg" src="_images/CD_vs_alpha.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.5 </span><span class="caption-text">Drag coefficient vs angle of attack.</span><a class="headerlink" href="#belloc-cd-vs-alpha" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.8 </span><span class="caption-text">Drag coefficient vs angle of attack</span><a class="headerlink" href="#belloc-cd-vs-alpha" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+<p>When considering drag versus angle of attack (<a class="reference internal" href="#belloc-cd-vs-alpha"><span class="std std-numref">Fig. 9.8</span></a>),
+the most noteworthy details are how all three methods fail to predict the rapid
+increase in drag as the wing enters the stall region, and how the “tilted
+geometry” of the XFLR5 model allows it to more accurately track the shape (if
+not the value) of the viscous solution.</p>
 <figure class="align-default" id="belloc-cm-vs-alpha">
 <img alt="_images/Cm_vs_alpha.svg" src="_images/Cm_vs_alpha.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.6 </span><span class="caption-text">Pitching coefficient vs angle of attack.</span><a class="headerlink" href="#belloc-cm-vs-alpha" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.9 </span><span class="caption-text">Pitching coefficient vs angle of attack.</span><a class="headerlink" href="#belloc-cm-vs-alpha" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p>[[This is the global pitching coefficient, which includes contributions from
-both the section pitching coefficients and the aerodynamic forces. These
-coefficients are computed using the riser midpoint <cite>RM</cite>.]]</p>
+<p>Another coefficient that has a strong impact on the pitch stability of
+a paraglider canopy is the pitching moment versus angle of attack
+(<a class="reference internal" href="#belloc-cm-vs-alpha"><span class="std std-numref">Fig. 9.9</span></a>). This plot can be viewed as pre- and post-stall
+conditions (before and after <span class="math notranslate nohighlight">\(\alpha = 17°\)</span> in the <span class="math notranslate nohighlight">\(\beta = 0°\)</span>
+quadrant), and are worth considering separately.</p>
+<p>In the pre-stall region, the plot shows how a negative pitching moment grows
+with <span class="math notranslate nohighlight">\(\alpha\)</span>, resulting in negative feedback that provides a restoring
+force back to equilibrium. If the wing pitches backwards, the negative pitching
+moment will help bring the canopy back overhead into a stable position.</p>
+<p>In the post-stall region, the effect of flow separation can be seen in the
+experimental data by the sudden flat response of the pitching coefficient to
+<span class="math notranslate nohighlight">\(\alpha\)</span>. This reason is complex, but informative:</p>
+<ul class="simple">
+<li><p>Because the lift vector at positive <span class="math notranslate nohighlight">\(\alpha\)</span> points forwards, lift
+creates a negative (forward) pitching moment. At stall, lift decreases, which
+increases <span class="math notranslate nohighlight">\(C_m\)</span>.</p></li>
+<li><p>Because drag points backwards, it creates a positive (backwards) pitching
+moment. At stall, drag dramatically increases, which also increases
+<span class="math notranslate nohighlight">\(C_m\)</span>.</p></li>
+<li><p>At stall, flow separation typically starts at the trailing edge on the upper
+surface. The loss of pressure creates a negative (forwards) pitching moment,
+which decreases <span class="math notranslate nohighlight">\(C_m\)</span>.</p></li>
+</ul>
+<p>For the wind tunnel model, it appears that (again, for the <span class="math notranslate nohighlight">\(\beta = 0°\)</span>
+case) these effects are counteracting each other, producing a relatively flat
+<span class="math notranslate nohighlight">\(C_m\)</span> in the post-stall region. The inviscid method used by AVL fails to
+capture the nonlinearity of flow separation, causing it to overestimate the
+lift and underestimate drag that together producing a significantly inaccurate
+pitching moment post-stall. (Unfortunately the experimental method in XFLR5 had
+a bug that produced zero sideforce, so its results are omitted.) The NLLT
+performs much better, but still highlights the effect of using the well-known
+“optimistic” estimates produced by XFOIL near the stall region; and again, the
+NLLT fails to converge when the section-local <span class="math notranslate nohighlight">\(\alpha\)</span> of the downwind
+wingtip exceeds the maximum <span class="math notranslate nohighlight">\(\alpha\)</span> supported by the coefficients lookup
+table instead of producing progressively more incorrect results.</p>
 </section>
 <section id="coefficients-vs-sideslip">
-<h4><span class="section-number">9.1.4.2. </span>Coefficients vs sideslip<a class="headerlink" href="#coefficients-vs-sideslip" title="Permalink to this headline">#</a></h4>
-<p>[[Coefficients versus angle of sideslip <span class="math notranslate nohighlight">\(\beta\)</span>, measured at four
-different angles of attack <span class="math notranslate nohighlight">\(\alpha\)</span>]]</p>
+<h4><span class="section-number">9.1.4.3. </span>Coefficients vs sideslip<a class="headerlink" href="#coefficients-vs-sideslip" title="Permalink to this headline">#</a></h4>
+<p>A third perspective of wing behavior is to plot the coefficients that affect
+motion in the <span class="math notranslate nohighlight">\(y\)</span>-direction (sideforce, rolling moment, and yawing
+moment) versus angle of sideslip <span class="math notranslate nohighlight">\(\beta\)</span>. These results are grouped into
+four quadrants by the angle of attack <span class="math notranslate nohighlight">\(\alpha\)</span> used during the test.
+Unfortunately, the experimental method in XFLR5 had a bug that produced zero
+sideforce, which is also coupled to the roll and yaw moments, so its results
+are omitted.</p>
 <figure class="align-default" id="belloc-cy-vs-beta">
 <img alt="_images/CY_vs_beta.svg" src="_images/CY_vs_beta.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.7 </span><span class="caption-text">Lateral force coefficient vs sideslip.</span><a class="headerlink" href="#belloc-cy-vs-beta" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.10 </span><span class="caption-text">Lateral force coefficient vs sideslip</span><a class="headerlink" href="#belloc-cy-vs-beta" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+<p>Plotting sideforce vs sideslip (<a class="reference internal" href="#belloc-cy-vs-beta"><span class="std std-numref">Fig. 9.10</span></a>) showed good
+agreement between the experimental data and both theoretical models, although
+the NLLT has a slight accuracy advantage over the inviscid method.</p>
 <figure class="align-default" id="belloc-cl-vs-beta">
 <img alt="_images/Cl_vs_beta.svg" src="_images/Cl_vs_beta.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.8 </span><span class="caption-text">Rolling coefficient vs sideslip.</span><a class="headerlink" href="#belloc-cl-vs-beta" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.11 </span><span class="caption-text">Rolling coefficient vs sideslip</span><a class="headerlink" href="#belloc-cl-vs-beta" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+<p>In the rolling moment versus sideslip test (<a class="reference internal" href="#belloc-cl-vs-beta"><span class="std std-numref">Fig. 9.11</span></a>) we
+find the only examples where the inviscid method outperforms the NLLT, but
+otherwise this plot demonstrates no noteworthy effects.</p>
 <figure class="align-default" id="belloc-cn-vs-beta">
 <img alt="_images/Cn_vs_beta.svg" src="_images/Cn_vs_beta.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.9 </span><span class="caption-text">Yawing coefficient vs sideslip.</span><a class="headerlink" href="#belloc-cn-vs-beta" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.12 </span><span class="caption-text">Yawing coefficient vs sideslip</span><a class="headerlink" href="#belloc-cn-vs-beta" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+<p>The last plot, for the yawing moment versus sideslip
+(<a class="reference internal" href="#belloc-cn-vs-beta"><span class="std std-numref">Fig. 9.12</span></a>) has several similarities to
+<a class="reference internal" href="#belloc-cm-vs-alpha"><span class="std std-numref">Fig. 9.9</span></a>, except instead of demonstrating the pitch
+stability of the wing, it demonstrates the yaw stability of the wing. When the
+relative wind approaches from the right (<span class="math notranslate nohighlight">\(\beta &gt; 0°\)</span>) a positive yaw
+moment will turn the canopy into the wind, and vice-versa for wind from the
+left. And again, the effect of failing to accurately model stall conditions on
+individual sections (the downwind sections, specifically) causes both methods
+to overestimate the restoring moment. Nevertheless, the NLLT succeeded in
+capturing at least part of the effect, once again proving the value of the
+method over purely inviscid solutions.</p>
 </section>
-<section id="coefficients-vs-each-other">
-<h4><span class="section-number">9.1.4.3. </span>Coefficients vs each other<a class="headerlink" href="#coefficients-vs-each-other" title="Permalink to this headline">#</a></h4>
-<p>[[This is the classic way to consider the overall performance of a wing.]]</p>
-<figure class="align-default" id="belloc-cl-vs-cd">
-<img alt="_images/CL_vs_CD.svg" src="_images/CL_vs_CD.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.10 </span><span class="caption-text">Lift coefficient vs drag coefficient.</span><a class="headerlink" href="#belloc-cl-vs-cd" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-<figure class="align-default" id="belloc-cl-vs-cm">
-<img alt="_images/CL_vs_Cm.svg" src="_images/CL_vs_Cm.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.11 </span><span class="caption-text">Lift coefficient vs global pitching coefficient.</span><a class="headerlink" href="#belloc-cl-vs-cm" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-</section>
-</section>
-<section id="discussion">
-<h3><span class="section-number">9.1.5. </span>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h3>
 </section>
 </section>
 <section id="niviuk-hook-3-system-dynamics">
@@ -574,9 +735,9 @@ that mark the “minimum sink” and “best glide” operating points of the gl
 Despite this ambiguity, by plotting the experimental point data over the
 theoretical curve it is possible to get a sense of the general accuracy of the
 model estimates.</p>
-<figure class="align-default" id="id11">
+<figure class="align-default" id="id14">
 <img alt="_images/polar_25.svg" src="_images/polar_25.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.12 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 25</span><a class="headerlink" href="#id11" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.13 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 25</span><a class="headerlink" href="#id14" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p>Colored markings are theoretical data from the model, black markings are
 experimental data from Parapente Mag. Red represents symmetric braking,
@@ -605,8 +766,8 @@ touches the polar curve</p></li>
 <p>Although the diagram is a convenient way to summarize so much information it
 can be hard to distinguish specific values, so their numerical equivalents are
 listed below.</p>
-<div class="table-wrapper"><table class="docutils align-default" id="id12">
-<caption><span class="caption-number">Table 9.3 </span><span class="caption-text">Niviuk Hook 3 25 simulated polar curve vs flight data</span><a class="headerlink" href="#id12" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper"><table class="docutils align-default" id="id15">
+<caption><span class="caption-number">Table 9.3 </span><span class="caption-text">Niviuk Hook 3 25 simulated polar curve vs flight data</span><a class="headerlink" href="#id15" title="Permalink to this table">#</a></caption>
 <colgroup>
 <col style="width: 25%"/>
 <col style="width: 25%"/>
@@ -695,9 +856,9 @@ wings.</p>
 wing that was reviewed for the Spanish magazine “Parapente”. As with the size
 25 model, plotting the experimental data on top of the theoretical curves
 produces valuable reference data:</p>
-<figure class="align-default" id="id13">
+<figure class="align-default" id="id16">
 <img alt="_images/polar_27.svg" src="_images/polar_27.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.13 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 27</span><a class="headerlink" href="#id13" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.14 </span><span class="caption-text">Polar curve for Niviuk Hook 3 size 27</span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p>Colored markings are theoretical data from the model, black markings are
 experimental data from Parapente. Red represents symmetric braking, green
@@ -710,8 +871,8 @@ operating point.</p>
 </figcaption>
 </figure>
 <p>As before, the numerical equivalents of the data in the figure above:</p>
-<div class="table-wrapper"><table class="docutils align-default" id="id14">
-<caption><span class="caption-number">Table 9.4 </span><span class="caption-text">Niviuk Hook 3 27 simulated polar curve vs flight data</span><a class="headerlink" href="#id14" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper"><table class="docutils align-default" id="id17">
+<caption><span class="caption-number">Table 9.4 </span><span class="caption-text">Niviuk Hook 3 27 simulated polar curve vs flight data</span><a class="headerlink" href="#id17" title="Permalink to this table">#</a></caption>
 <colgroup>
 <col style="width: 25%"/>
 <col style="width: 25%"/>
@@ -770,7 +931,7 @@ underestimates the ground speed where that occurs.</p>
 <h3><span class="section-number">9.2.2. </span>Pitch stability<a class="headerlink" href="#pitch-stability" title="Permalink to this headline">#</a></h3>
 <p>Another simple sanity check is to verify the glider pitch stability by flying
 on a straight course at maximum speed and abruptly releasing the accelerator
-(<span id="id5">[<a class="reference internal" href="zreferences.html#id65" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">47</a>]</span>, Sec. 4.1.5). Releasing
+(<span id="id8">[<a class="reference internal" href="zreferences.html#id65" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">47</a>]</span>, Sec. 4.1.5). Releasing
 the accelerator shifts the payload to shift aft, causing the canopy to pitch
 backwards; in the positive-pitch position the glider briefly ascends as it
 converts the energy from its high airspeed into altitude, but because the wing
@@ -784,18 +945,18 @@ wing pitches forward less than 30° it receives an “A”; if it pitches forwar
 rated as an “B” wing, and should not pitch forward more than 30°. Using this
 model to simulate the test protocol by releasing the accelerator in 0.3s
 produces:</p>
-<figure class="align-default" id="id15">
+<figure class="align-default" id="id18">
 <img alt="_images/accelerator_fast_release_path_sideview.svg" src="_images/accelerator_fast_release_path_sideview.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.14 </span><span class="caption-text">Flight test, rapidly exiting accelerated flight, side view</span><a class="headerlink" href="#id15" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.15 </span><span class="caption-text">Flight test, rapidly exiting accelerated flight, side view</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p>Black lines are drawn from the riser to the point directly above the payload
 to help visualize the canopy pitch angle, and are added every 0.5 seconds.</p>
 </div>
 </figcaption>
 </figure>
-<figure class="align-default" id="id16">
+<figure class="align-default" id="id19">
 <img alt="_images/accelerator_fast_release_pitch_angle.svg" src="_images/accelerator_fast_release_pitch_angle.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.15 </span><span class="caption-text">Flight test, rapidly exiting accelerated flight, pitch angle</span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.16 </span><span class="caption-text">Flight test, rapidly exiting accelerated flight, pitch angle</span><a class="headerlink" href="#id19" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The model predicts the wing configuration will pitch backwards 23° before
@@ -808,7 +969,7 @@ worthwhile.</p>
 <p>Although the simplicity of longitudinal dynamics make them the best place to
 start testing a model, the more difficult tests are for the dynamic behavior.
 One simple test is to check the behavior during a steady 360° maneuver and
-compare them to the “guidelines” in <span id="id6">[<a class="reference internal" href="zreferences.html#id50" title="Dennis Pagen. The Art of Paragliding. Black Mountain Books, 2001. ISBN 0-936310-14-6.">12</a>]</span> that lists
+compare them to the “guidelines” in <span id="id9">[<a class="reference internal" href="zreferences.html#id50" title="Dennis Pagen. The Art of Paragliding. Black Mountain Books, 2001. ISBN 0-936310-14-6.">12</a>]</span> that lists
 approximate sink rates and turn radii as a function of bank angle. The method
 does come with some caveats, however: for example, the author does is not
 discussing a specific glider, so these values are assumed to be averages of
@@ -817,14 +978,14 @@ wing performance; this this is a midrange paraglider wing, it is assumed to be
 piloting practice is to use a combination of weight shift and brake for an
 efficient turn, so it is safe to assume the author is describing situations
 with those control inputs. Simulating this scenario produces the results in
-<a class="reference internal" href="#path-360-topdown"><span class="std std-numref">Fig. 9.16</span></a>:</p>
+<a class="reference internal" href="#path-360-topdown"><span class="std std-numref">Fig. 9.17</span></a>:</p>
 <figure class="align-default" id="path-360-topdown">
 <img alt="_images/path_360_topdown.svg" src="_images/path_360_topdown.svg"/><figcaption>
-<p><span class="caption-number">Fig. 9.16 </span><span class="caption-text">Steady-state turn, top-down view</span><a class="headerlink" href="#path-360-topdown" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9.17 </span><span class="caption-text">Steady-state turn at a 20° bank angle, top-down view</span><a class="headerlink" href="#path-360-topdown" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<div class="table-wrapper"><table class="docutils align-default" id="id17">
-<caption><span class="caption-number">Table 9.5 </span><span class="caption-text">Steady-state turn validation</span><a class="headerlink" href="#id17" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper"><table class="docutils align-default" id="id20">
+<caption><span class="caption-number">Table 9.5 </span><span class="caption-text">Steady-state turn validation</span><a class="headerlink" href="#id20" title="Permalink to this table">#</a></caption>
 <colgroup>
 <col style="width: 25%"/>
 <col style="width: 25%"/>
@@ -860,7 +1021,7 @@ with those control inputs. Simulating this scenario produces the results in
 steady-state, longitudinal dynamics, this model clearly struggles with this
 test. It is unclear what is causing the discrepancy, but it is an important
 counterpoint that highlights the many dimensions of model accuracy. It is also
-useful for directing future work.</p>
+suggests a direction for future work on <span class="xref std std-ref">Weight shift modeling</span>.</p>
 </section>
 </section>
 </section>
@@ -938,12 +1099,11 @@ useful for directing future work.</p>
 <li><a class="reference internal" href="#wind-tunnel-setup">9.1.2. Wind tunnel setup</a></li>
 <li><a class="reference internal" href="#aerodynamics-models">9.1.3. Aerodynamics models</a></li>
 <li><a class="reference internal" href="#results">9.1.4. Results</a><ul>
-<li><a class="reference internal" href="#coefficients-vs-angle-of-attack">9.1.4.1. Coefficients vs angle of attack</a></li>
-<li><a class="reference internal" href="#coefficients-vs-sideslip">9.1.4.2. Coefficients vs sideslip</a></li>
-<li><a class="reference internal" href="#coefficients-vs-each-other">9.1.4.3. Coefficients vs each other</a></li>
+<li><a class="reference internal" href="#lift-vs-drag">9.1.4.1. Lift vs drag</a></li>
+<li><a class="reference internal" href="#coefficients-vs-angle-of-attack">9.1.4.2. Coefficients vs angle of attack</a></li>
+<li><a class="reference internal" href="#coefficients-vs-sideslip">9.1.4.3. Coefficients vs sideslip</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#discussion">9.1.5. Discussion</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#niviuk-hook-3-system-dynamics">9.2. Niviuk Hook 3 system dynamics</a><ul>

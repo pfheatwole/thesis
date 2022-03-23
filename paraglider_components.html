@@ -173,7 +173,6 @@
 <li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 <ul>
@@ -234,10 +233,14 @@ define three things:</p>
 </ol>
 <p>This chapter develops basic models for each component, favoring simplicity
 whenever possible. In particular, all models are based on a quasi-rigid body
-assumption. [[FIXME: explain.]] This may seem like a major oversimplification,
-but in practice it works quite well: although nearly every component of
-a paraglider is made from highly flexible materials, they tend to remain
-relatively rigid during typical flight conditions.</p>
+assumption; unlike a true rigid-body model where no component is allowed to
+move, these models (and their connections) are treated as “instantaneously
+rigid”, where they are allowed specific reconfigurations based on the control
+inputs (moving the pilot in the harness, or deflecting the trailing edges of
+the canopy). This may seem like a major oversimplification, but in practice it
+works quite well: although nearly every component of a paraglider is made from
+highly flexible materials, they tend to remain relatively rigid during typical
+flight conditions.</p>
 <section id="canopy">
 <h2><span class="section-number">5.1. </span>Canopy<a class="headerlink" href="#canopy" title="Permalink to this headline">#</a></h2>
 <p>A paraglider canopy (or <em>parafoil</em>) is a kind of ram-air parachute: inflatable
@@ -649,7 +652,7 @@ deep brake inputs to deflect the opposing semispan, and
 <span class="math notranslate nohighlight">\(s_\textrm{stop,1} &gt; 1\)</span> allows deflections at the wing tips, as shown in
 <a class="reference internal" href="#brake-deflection-start-stop"><span class="std std-numref">Fig. 5.9</span></a>.</p>
 <figure class="align-default" id="brake-deflection-start-stop">
-<img alt="_images/brake_deflections_TE_Bl1.00_Br1.001.svg" src="_images/brake_deflections_TE_Bl1.00_Br1.001.svg"/><figcaption>
+<img alt="_images/brake_deflections_TE_Bl1.00_Br1.00.svg" src="_images/brake_deflections_TE_Bl1.00_Br1.00.svg"/><figcaption>
 <p><span class="caption-number">Fig. 5.9 </span><span class="caption-text">Quartic brake deflections, <span class="math notranslate nohighlight">\(\delta_{bl} = 1.00\)</span> and
 <span class="math notranslate nohighlight">\(\delta_{br} = 1.0\)</span></span><a class="headerlink" href="#brake-deflection-start-stop" title="Permalink to this image">#</a></p>
 </figcaption>

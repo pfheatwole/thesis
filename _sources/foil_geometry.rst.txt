@@ -159,11 +159,6 @@ explicit coordinate, which means less work (and less data) is required to
 specify a design.
 
 
-.. Advantages of parametric geometries
-
-   FIXME?
-
-
 .. Wing sections
 
 The standard first step towards parametrizing a foil geometry is to define it
@@ -595,17 +590,17 @@ Simplified model
    `C_f/s` and `r_LE/RP` that are easier to specify with parametric curves.
 
 
-The basic model is adequate to represent wings composed of airfoils, but its
-inflexibility forced incidental complexity into the design curves. The expanded
-model provides additional flexibility, but it's generality can make it
-difficult for a designer to identify which aspects of the foil structure result
-in a simple parametric representation. This section identifies several
-simplifying assumptions that provide a foundation for a particularly concise
-representation of many foils (parafoils in particular). The result is an
-intuitive, partially-parametrized foil geometry model that decouples the design
-curves and allows a parafoil to be rapidly approximated using only minimal
-available data, even if that data was obtained from a flattened version of the
-parafoil.
+The `Basic model`_ is adequate to represent wings arbitrary foils composed of
+airfoils, but its inflexibility forced incidental complexity into the design
+curves. The `Expanded model`_ provides additional flexibility, but it's
+generality can make it difficult for a designer to identify which aspects of
+the foil structure result in a simple parametric representation. This section
+identifies several simplifying assumptions that provide a foundation for
+a particularly concise representation of many foils (parafoils in particular).
+The result is an intuitive, partially-parametrized foil geometry model that
+decouples the design curves and allows a parafoil to be rapidly approximated
+using only minimal available data, even if that data was obtained from
+a flattened version of the parafoil.
 
 
 .. To make it clear how this parametrization is valuable for designing
@@ -629,8 +624,6 @@ parafoil.
 Section index
 -------------
 
-[[FIXME: finish]]
-
 .. This section defines the section index as a dependent variable of `yz(s)`
 
    Key idea: the choice of section index should help identify simple
@@ -640,18 +633,42 @@ Section index
 
 .. What are the common choices?
 
-Although most tools do not explicitly refer to their choice of section index,
-there are two conventions in common use: one is to use the section
-:math:`y`-coordinate, and the other is the linear distance along the position
-curve :math:`\vec{r}_{RP/O}`. Unfortunately, both are problematic for modeling
-a parafoil from the most readily-available data.
+Although most tools do not explicitly announce to their choice of section
+index, there are two conventions in common use: the most common is to use the
+reference point :math:`y`-coordinate (:math:`s = y`, or its normalized version
+:math:`s = \frac{y}{b/2}`). Although simple and intuitive for flat wings,
+defining a nonlinear geometry in terms of :math:`y` can become unwieldy, so
+another common choice is to use the linear distance along the locus of
+reference points :math:`\vec{r}_{RP/O}` (or its normalized version that ranges
+±1). Unfortunately, both are problematic for modeling a paraglider canopy using
+the most readily-available data.
 
-[[FIXME: explain the advantages of my choice]]
+When trying to create a model of a flexible wing like a paraglider canopy, it
+is much easier to take measurements when the wing is stretched out flat. When
+the canopy is flat it is possible to measure :math:`c(s)` and :math:`x(s)`
+directly, whether from the physical wing or from photos (such as are found in
+user manuals). Also, it is trivial to measure the flattened span compared to
+trying to measure the span of an in-flight canopy. The solution is to use the
+normalized section :math:`y`-coordinates from the flattened foil:
 
 .. math::
    :label: yz-distance section index
 
    s = \frac{y_{flat}}{b_{flat}/2}
+
+Not only does this choice make the section index easy to measure from
+a flattened paraglider canopy, but with a careful choice of reference points it
+also decouples the :math:`yz`-coordinates of the reference positions
+(:math:`yz(s)`) from all the other design curves, which is a key aspect of this
+model's ability to define complex nonlinear foils using simple parametric
+functions. The next section explains the process in detail, but the key idea
+(and why this choice of section index is so important) is that using this
+definition of :math:`s` and choosing the same chord position for the :math:`y`
+and :math:`z` components of the reference point you can simply "wrap" the
+flattened paraglider canopy around :math:`yz(s)` to produce the final geometry.
+It becomes possible design the flattened foil geometry before designing its
+arc, a natural process that enables the direct use of the most readily
+available measurements for commercial paraglider canopies.
 
 
 Reference point
@@ -659,22 +676,20 @@ Reference point
 
 .. This section defines `r_LE/RP` using points on section chords
 
-The basic model positions each section using the section origins (the leading
-edges). The expanded model allows the sections to be positioned using arbitrary
-reference points anywhere in the 3D section coordinate systems. Although
-flexible, the freedom of the expanded model does not address the problem of
-choosing good reference points.
+The `Basic model`_ positions each section using the section origins (the
+leading edges). The `Expanded model`_ allows the sections to be positioned
+using arbitrary reference points anywhere in the 3D section coordinate systems.
+Although flexible, the freedom of the expanded model does not address the
+problem of choosing good reference points.
 
 One intuitive choice is to use points on the section chords, in which case the
-reference point is a function of a chord ratio :math:`0 \le r \le 1`. The
-chord lies on the negative section :math:`x`-axis, so a reference point at
-some fraction :math:`r` along the chord is given by :math:`\vec{r}_{RP/LE}^s
-= -r\, c\, \hat{x}^s_s` (where :math:`\hat{x}^s_s \defas \begin{bmatrix}1
-& 0 & 0\end{bmatrix}^T`, the :math:`x`-axis of section :math:`s` in that
-section's local coordinate system).
-
-Substituting :math:`\vec{r}_{LE/RP} = -\vec{r}_{RP/LE}` into
-:eq:`expanded-equation` produces:
+reference point is a function of a chord ratio :math:`0 \le r \le 1`. The chord
+lies on the negative section :math:`x`-axis, so a reference point at some
+fraction :math:`r` along the chord is given by :math:`\vec{r}_{RP/LE}^s = -r\,
+c\, \hat{x}^s_s` (where :math:`\hat{x}^s_s \defas \left[1 \, 0 \;
+0 \right]^T`, the :math:`x`-axis of section :math:`s` in that section's local
+coordinate system). Substituting :math:`\vec{r}_{LE/RP} = -\vec{r}_{RP/LE}`
+into :eq:`expanded-equation` produces:
 
 .. math::
 
@@ -743,8 +758,8 @@ reference point for the :math:`x`-dimension, etc.
    the LE. These `r_x` etc are just scaling those deltas.
 
 Fortunately, providing this flexibility is easier to implement and use than it
-is to describe. Instead of a shared :math:`r` for all three dimension, allow
-each dimension of the reference point to choose an independent :math:`r`:
+is to describe. Instead of a shared :math:`r` for all three dimension, allow an
+independent :math:`r` for each dimension of the reference point:
 
 .. math::
 
@@ -767,22 +782,19 @@ positioning for each dimension, is surprisingly simple:
      \mat{R} \mat{C}_{f/s} c\, \hat{x}^s_s
      + \vec{r}_{RP/O}^f
 
-This choice of reference point makes the earlier examples trivial to
-implement. For the first, which was struggling with the fact that geometric
-twist has coupled the :math:`x` and :math:`z` positions is solved with
-:math:`\{r_x = 0, r_z = 1\}` (because the foil is flat, every choice of
-:math:`r_y` is equivalent). The second example, which was struggling to define
-an :math:`x(s)` to achieve a straight trailing edge, the answer is simply
-:math:`\{ r_x = 1, r_y = 0.25, r_z = 0.25 \}`. In both cases, the designer is
-able to specify their target directly, using simple design curves, with no
-translation necessary.
-
-
-[[FIXME: explain how choosing `r_y = r_z` simplifies the design by maintaining
-the proportional scaling of the `y` and `z` curves; you can design a joint
-`yz` curve and it won't get distorted on the final foil. Useful for defining
-`yz(s)` as a single vector-valued parametric function.]]
-
+This choice of reference point makes the earlier examples trivial to implement.
+For the first, which was struggling with the fact that geometric twist has
+coupled the :math:`x` and :math:`z` positions is solved with :math:`\{r_x = 0,
+r_z = 1\}` (because the foil is flat, every choice of :math:`r_y` is
+equivalent). The second example, which was struggling to define an :math:`x(s)`
+to achieve a straight trailing edge, the answer is simply :math:`\{ r_x = 1,
+r_y = 0.25, r_z = 0.25 \}`. In both cases, the designer is able to specify
+their target directly, using simple design curves, with no translation
+necessary. The reason is that :eq:`yz-distance section index` combined with
+:math:`r_y = r_z` means that changing :math:`yz(s)` does not change the section
+index; having designed the orientation and fore-aft position :math:`x(s)` of
+a section, changing :math:`yz(s)` will not affect that design. The curves have
+been decoupled.
 
 .. math::
    :label: simplified model reference point vector
@@ -805,22 +817,20 @@ Orientation
 .. This section defines `C_f/s` using `dz/dy` and `theta`
 
 The expanded model :eq:`expanded-equation` uses a *direction cosine matrix*
-(DCM) to define the orientation of each section. A natural parametrization of
-a DCM is a set of three Euler angles :math:`\left< \phi, \theta, \gamma
-\right>`, corresponding to roll, pitch, and yaw. The Euler parametrization
-replaces the :math:`\mathbb{R}^{3 \times 3}` matrix with a 3-vector, but the
-structure of typical parafoils can provide further simplifications.
+(DCM) to define the orientation of each section; the problem is how to define
+that matrix. A natural parametrization of a DCM is a set of three Euler angles
+:math:`\left< \phi, \theta, \gamma \right>`, corresponding to roll, pitch, and
+yaw. The Euler parametrization replaces the :math:`\mathbb{R}^{3 \times 3}`
+matrix with a 3-vector — three parameters — but the structure of typical
+parafoils can provide further simplifications.
 
 In particular, observe that when a parafoil is flattened out on the ground, the
 sections are (essentially) vertical, with no relative roll or yaw. Inflating
-the parafoil and using the suspension lines to form the arc will produce
-a natural section roll without affecting the section yaw. These observations
-reveal that the section orientation produced by inflating a parafoil is well
-approximated by a single degree of freedom, resulting in a minimal
-parametrization with a single design variable for section pitch
-:math:`\theta(s)`.
-
-[[Why does this paragraph repeat so much information that follows?]]
+the parafoil and using the suspension lines to form the arc will naturally roll
+the sections without affecting the section yaw. These observations reveal that
+the section orientation produced by inflating a parafoil is well approximated
+by a single degree of freedom, resulting in a minimal parametrization with
+a single design variable for section pitch :math:`\theta(s)`.
 
 
 .. The default orientation of each section is parallel to the central section.
@@ -829,7 +839,7 @@ parametrization with a single design variable for section pitch
 
 For the section roll :math:`\phi(s)`, observe that inflating the foil to
 produce the arc does not produce a shearing effect between sections; instead,
-the sections roll together with the arc. This relationship can be encoded using
+the sections roll jointly with the arc. This relationship can be encoded using
 the derivatives of the :math:`\left< y(s), z(s) \right>` components of the
 position curve :math:`\vec{r}_{RP/O}(s)`:
 
@@ -851,10 +861,10 @@ affect the section yaw, which remains zero:
    section y-axes are all parallel to the yz-plane, so forward motion does not
    produce spanwise flow?
 
-Lastly, although inflating a parafoil will not cause the sections to rotate
-about their spanwise axes, the relative section pitch :math:`\theta(s)`
-produced during manufacturing is an important design variable, referred to as
-*geometric torsion*.
+The remaining degree of freedom is the rotation about each sections
+:math:`y`-axis. This pitch angle :math:`\theta(s)`, conventionally known as
+*geometric torsion*, is produced when the wing is manufactured, and is not
+affected when the flattened wing is shaped into its final arched form.
 
 .. figure:: figures/paraglider/geometry/airfoil/geometric_torsion.*
 
@@ -871,7 +881,14 @@ produced during manufacturing is an important design variable, referred to as
 Summary
 -------
 
-[[List the design variables as in the Basic and Expanded model subsections.]]
+In conclusion, the simplifications identified by this model not only reduced
+the number of parameters of the expanded model :eq:`expanded foil geometry
+variables`, it also replaced the arbitrary and unwieldy 3D reference points
+with simple ratios of the section chords. It allows rapid and intuitive
+conversion of measurements from a flattened paraglider canopy to a foil
+geometry, and decoupled the design curves to allow the design of each variable
+to be manipulated without affect the others. In short, it provides the
+flexibility of the expanded model but without its complexity.
 
 .. math::
    :label: simplified foil geometry variables
@@ -889,12 +906,10 @@ Summary
 Examples
 ========
 
-[[FIXME: finish]]
-
 
 .. This section highlights the elegance of the "simplified" parametrization.
 
-These examples demonstrate how the expanded model makes it easy to represent
+These examples demonstrate how the simplified model makes it easy to represent
 nonlinear foil geometries using simple parametric functions, such as constants,
 absolute functions, ellipticals, and polynomials. For a discussion of the
 elliptical functions for the arc and chord distributions, see
@@ -902,8 +917,9 @@ elliptical functions for the arc and chord distributions, see
 
 All examples show a wireframe view of the chord surface because it is easier to
 visualize the foil layout. The green dashed lines are projections of the
-section quarter-chord positions. The red dashed lines are the projections of
-the :math:`r_x` and :math:`r_{yz}` chord positions.
+section quarter-chord positions (shown because of their use in analyzing
+aerodynamics). The red dashed lines are the projections of the :math:`r_x` and
+:math:`r_{yz}` chord positions.
 
 .. FIXME: that's a mighty terse explanation of the lines
 
@@ -919,7 +935,11 @@ the :math:`r_x` and :math:`r_{yz}` chord positions.
 Delta wing
 ----------
 
-Straight wing with a linear chord distribution and no twist.
+A delta with with a linear chord distribution and straight trailing edge can be
+defined with :math:`r_x = 1` and a piecewise-linear :math:`c(s)`. Unlike
+conventional wing modeling tools, because the trailing edge is used directly
+for position in the :math:`x`-direction, the :math:`x(s)` curve does not need
+to be coupled to :math:`c(s)` to compute offsets for the leading edge.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat2_curves.*
 
@@ -935,7 +955,9 @@ Straight wing with a linear chord distribution and no twist.
 Elliptical wing
 ---------------
 
-Straight wing with an elliptical chord distribution and no twist.
+Similarly, a flat wing with an elliptical chord distribution and fore-aft
+symmetric is trivial to define using :math:`r_x = 0.5` and an elliptical chord
+function.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/flat3_curves.*
 
@@ -951,7 +973,7 @@ Straight wing with an elliptical chord distribution and no twist.
 Twisted wing
 ------------
 
-Wings with geometric torsion (or "twist") typically use relatively small
+Wings with twist typically use relatively small
 angles that can be difficult to visualize. Exaggerating the angles with
 extreme torsion makes it easier to see the relationship.
 
@@ -970,8 +992,12 @@ Manta ray
 ----------
 
 The effect of changing the reference positions can be surprising. A great
-example is a "manta ray" inspired design that changes nothing but the constant
-value of :math:`r_x`.
+example is a "manta ray" inspired design: each model uses the same
+piecewise-linear chord distribution and circular :math:`x(s)`, changing only
+the constant value of :math:`r_x`. These examples clearly demonstrate the
+flexibility of the `Simplified model`_: four of the six design "curves" are
+merely constants, and yet they enable significantly nonlinear designs in an
+intuitive way.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/manta1_curves.*
 
@@ -1001,9 +1027,6 @@ value of :math:`r_x`.
 
    "Manta ray" with :math:`r_x = 1.0`
 
-These examples clearly demonstrate the power of wing design using extremely
-simple parametric curves. Four of the six design "curves" are merely constants,
-and yet they enable significantly nonlinear designs in an intuitive way.
 
 
 .. raw:: latex
@@ -1013,18 +1036,25 @@ and yet they enable significantly nonlinear designs in an intuitive way.
 Parafoil
 --------
 
-[[This example should be a complete description, explaining the design curves
-and the plots. The other examples can be less detailed; the curves and result
-should suffice.]]
-
-An elliptical arc with a mean anhedral of 30 degrees and a wingtip roll of
-89 degrees:
+Lastly, as this project is primarily focused on paragliders, these examples
+would not be complete without showing how the `Simplified model`_ allows two
+simple elliptical functions and :math:`r_x = 0.75` to easily produce an
+accurate generalization of a paraglider canopy.
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_curves.*
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_chords.*
 
    Chord surface of a simple parafoil.
+
+
+.. raw:: latex
+
+   \newpage
+
+In addition to the surface produced by the section chords, it may be helpful to
+see the upper and lower profile surfaces produced after assigned every section
+an airfoil (NACA 23015):
 
 .. figure:: figures/paraglider/geometry/canopy/examples/build/elliptical3_canopy_airfoils.*
 

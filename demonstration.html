@@ -173,7 +173,6 @@
 <li class="toctree-l1"><a class="reference internal" href="conclusion.html">10. Conclusion</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 <ul>
@@ -250,8 +249,8 @@ unavailable.</p>
 models of the size 25 and 27 wings to <a class="reference internal" href="validation.html#niviuk-hook-3-system-dynamics"><span class="std std-ref">validate</span></a> the modeling choices and implementation.</p>
 <p>The process begins with the primary technical data from the official <a class="reference external" href="https://niviuk.com/niviuk/customer_pdf/Descatalogado/Hook%203/Datos%20t%C3%A9cnicos/HOOK3_TECNIC_ENG.pdf">technical
 specifications manual</a>:</p>
-<div class="table-wrapper"><table class="colwidths-auto docutils align-default" id="id14">
-<caption><span class="caption-number">Table 8.1 </span><span class="caption-text">Wing data</span><a class="headerlink" href="#id14" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default" id="id16">
+<caption><span class="caption-number">Table 8.1 </span><span class="caption-text">Wing data</span><a class="headerlink" href="#id16" title="Permalink to this table">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Property [unit]</p></th>
 <th class="head"><p>Size 23</p></th>
@@ -493,7 +492,8 @@ detail, but this “two-circle model” can be used to generate a set of deflect
 airfoils.</p>
 <figure class="align-default" id="generating-deflected-airfoils">
 <img alt="_images/deflected_Ascender_airfoil.svg" src="_images/deflected_Ascender_airfoil.svg"/><figcaption>
-<p><span class="caption-number">Fig. 8.3 </span><span class="caption-text">Generating an airfoil with a smoothly-deflecting trailing edge.</span><a class="headerlink" href="#generating-deflected-airfoils" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 8.3 </span><span class="caption-text">Two-circle model to generate an airfoil with a smoothly-deflecting trailing
+edge.</span><a class="headerlink" href="#generating-deflected-airfoils" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>For the upper surface, first choose a point (<code class="docutils literal notranslate"><span class="pre">a</span></code>) at some distance from the
@@ -608,12 +608,25 @@ of that missing mass is near the system center of mass and does not impart
 a major weight moment, so for the goals of this project the discrepancy is
 assumed to have a negligible impact on the overall system behavior.</p>
 <p class="rubric">Viscous drag corrections</p>
-<p>[[FIXME: add the viscous drag corrections</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(C_{D,\textrm{intakes}}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(C_{D,\textrm{surface}}\)</span></p></li>
-</ul>
-<p>[[This assumes a single profile is used for all sections.]]</p>
+<p>The last step is to add the empirical corrections to the section viscous drag
+coefficients. The first is a general factor applied to all the sections evenly
+to account for “surface characteristics”, as estimated during wind tunnel
+measurements of parafoils in <span id="id10">[<a class="reference internal" href="zreferences.html#id63" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">42</a>]</span>:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-cd-surface">
+<span class="eqno">(8.1)<a class="headerlink" href="#equation-cd-surface" title="Permalink to this equation">#</a></span>\[C_{d,\textrm{surface}} = 0.004\]</div></div>
+<p>The second correction is to account for the additional viscous drag due to the
+presence of air intakes at the leading edge of some of the sections. In
+<span id="id11">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span> they propose a simple
+linear relationship between the length of the air intake:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-cd-intakes">
+<span class="eqno">(8.2)<a class="headerlink" href="#equation-cd-intakes" title="Permalink to this equation">#</a></span>\[C_{d,\textrm{intakes}} = 0.07 \, \frac{h}{c}\]</div></div>
+<p>where <span class="math notranslate nohighlight">\(h\)</span> is the length of the air intakes and <span class="math notranslate nohighlight">\(c\)</span> is the length of
+the chord. This model assumes the air intakes constant (but proportional) size
+along the entire span between from <span class="math notranslate nohighlight">\(-s_\textrm{start} \le s \le
+-s_\textrm{start}\)</span>. As seen in <a class="reference internal" href="#naca24018-with-air-intakes"><span class="std std-numref">Fig. 8.5</span></a>, the air
+intakes are roughly 5% of the chord, for a value of roughly
+<span class="math notranslate nohighlight">\(C_{D,\textrm{intakes}} = 0.0035\)</span>. (The precise value is computed
+automatically by the implementation.)</p>
 </section>
 </section>
 <section id="suspension-lines">
@@ -683,11 +696,10 @@ distribution while keeping the starting point centered at <span class="math notr
 <span class="math notranslate nohighlight">\(s_{\textrm{start},0} = 0.3\)</span> and <span class="math notranslate nohighlight">\(s_{\textrm{stop},0} = 0.7\)</span> look
 about right.</p>
 <p>The maximum-brake values are more difficult, since they must coordinate with
-the value of <span class="math notranslate nohighlight">\(\kappa_b\)</span>, but from [[FIXME: link to the youtube video]] it
-can be seen that maximum brakes produce a deflection from roughly
-<span class="math notranslate nohighlight">\(s_{\textrm{start},1} = 0.08\)</span> to <span class="math notranslate nohighlight">\(s_{\textrm{stop},1} = 1.05\)</span>
-(where the stopping position exceeds the wing tip to indicate that the wing tip
-itself experiences a small deflection).</p>
+the value of <span class="math notranslate nohighlight">\(\kappa_b\)</span>, but from <a class="reference external" href="https://www.youtube.com/watch?v=D-OyGZbOmS0">safety training footage</a> it can be seen that maximum
+brakes produce a deflection from roughly <span class="math notranslate nohighlight">\(s_{\textrm{start},1} = 0.08\)</span> to
+<span class="math notranslate nohighlight">\(s_{\textrm{stop},1} = 1.05\)</span> (where the stopping position exceeds the
+wing tip to indicate that the wing tip itself experiences a small deflection).</p>
 <p>Next, the model needs the maximum distance the brake lines can be pulled. On
 a real wing the brake lines effectively don’t have a well-defined limit, since
 a pilot can literally wrap the brake lines around their hand to pull the
@@ -710,16 +722,16 @@ foil’s chord distribution, and these brake position parameters, the model can
 allow the brake lines to be pulled a maximum distance of <span class="math notranslate nohighlight">\(42.6 \, [cm]\)</span>.</p>
 <p>To check the model fit, plot the undeflected and deflected trailing edge to
 compare with the reference photos:</p>
-<figure class="align-default" id="id15">
-<img alt="_images/brake_deflections_TE_Bl0.25_Br0.50.svg" src="_images/brake_deflections_TE_Bl0.25_Br0.50.svg"/><figcaption>
+<figure class="align-default" id="id17">
+<img alt="_images/hook3_brake_deflections_TE_Bl0.25_Br0.50.svg" src="_images/hook3_brake_deflections_TE_Bl0.25_Br0.50.svg"/><figcaption>
 <p><span class="caption-number">Fig. 8.7 </span><span class="caption-text">Niviuk Hook 3 23 brake distribution, <span class="math notranslate nohighlight">\(\delta_{bl} = 0.25\)</span> and
-<span class="math notranslate nohighlight">\(\delta_{br} = 0.5\)</span></span><a class="headerlink" href="#id15" title="Permalink to this image">#</a></p>
+<span class="math notranslate nohighlight">\(\delta_{br} = 0.5\)</span></span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<br/><figure class="align-default" id="id16">
-<img alt="_images/brake_deflections_TE_Bl1.00_Br1.00.svg" src="_images/brake_deflections_TE_Bl1.00_Br1.00.svg"/><figcaption>
+<br/><figure class="align-default" id="id18">
+<img alt="_images/hook3_brake_deflections_TE_Bl1.00_Br1.00.svg" src="_images/hook3_brake_deflections_TE_Bl1.00_Br1.00.svg"/><figcaption>
 <p><span class="caption-number">Fig. 8.8 </span><span class="caption-text">Niviuk Hook 3 23 brake distribution, <span class="math notranslate nohighlight">\(\delta_{bl} = 1.00\)</span> and
-<span class="math notranslate nohighlight">\(\delta_{br} = 1.0\)</span></span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
+<span class="math notranslate nohighlight">\(\delta_{br} = 1.0\)</span></span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -747,7 +759,7 @@ to estimate visually; using <a class="reference internal" href="#hook3-rear-view
 <span class="math notranslate nohighlight">\(\vec{r}_{CP/R} = \left&lt; -0.5 c_\textrm{root}, ±1.75, 1.75 \right&gt;\)</span>.
 Lastly, each lumped line area is assigned a drag coefficient; because the lines
 are essentially cylinders, a suitable drag coefficient is simply <span class="math notranslate nohighlight">\(C_{d,l}
-= 1\)</span> <span id="id10">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span>.</p>
+= 1\)</span> <span id="id12">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span>.</p>
 </section>
 </section>
 <section id="payload">
@@ -765,7 +777,7 @@ can displace the centroid using weight-shift control (<span class="math notransl
 wing as 65–85 [kg], so <span class="math notranslate nohighlight">\(m_p = 75 \left[\textrm{kg}\right]\)</span> is
 a conservative choice.</p>
 <p>For the mass centroid, one option is to consider the DHV airworthiness
-guidelines <span id="id11">[<a class="reference internal" href="zreferences.html#id65" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">47</a>]</span>, which specify
+guidelines <span id="id13">[<a class="reference internal" href="zreferences.html#id65" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">47</a>]</span>, which specify
 that the riser attachment points must be “35–65cm above the seat board”, which
 suggests that <span class="math notranslate nohighlight">\(z_\textrm{riser} = 0.5 \left[\textrm{m}\right]\)</span> is
 a reasonable value in most cases. Alternatively, simply look up the technical
@@ -773,8 +785,8 @@ diagram of a suitable harness; for example, the wing certification flight tests
 (published in the Hook 3 User Manual, p. 22) list the “harness to risers
 distance” as 49cm.</p>
 <p>For the surface area and its associated drag coefficient, consider
-<span id="id12">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">30</a>]</span> (p. 85) or
-<span id="id13">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span> (p. 422); given that 75kg
+<span id="id14">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">30</a>]</span> (p. 85) or
+<span id="id15">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span> (p. 422); given that 75kg
 is a lower-than-average payload (so smaller frontal area), and that this is
 a beginner-grade wing (so a high performance “pod” harness is less likely),
 a reasonable choice of the area would be <span class="math notranslate nohighlight">\(S_\textrm{payload} = 0.55

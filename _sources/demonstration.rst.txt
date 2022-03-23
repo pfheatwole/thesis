@@ -348,7 +348,8 @@ airfoils.
 .. figure:: figures/paraglider/demonstration/deflected_Ascender_airfoil.*
    :name: generating deflected airfoils
 
-   Generating an airfoil with a smoothly-deflecting trailing edge.
+   Two-circle model to generate an airfoil with a smoothly-deflecting trailing
+   edge.
 
 For the upper surface, first choose a point (``a``) at some distance from the
 trailing edge (``c``) and attach a circle ``C2`` tangent to the airfoil at
@@ -460,7 +461,6 @@ discussion, see :cite:`boffadossi2016AnalysisAerodynamicCharacteristics`.
 
    NACA 24018 with air intakes
 
-
 At this point the canopy can compute the total mass, which is another
 opportunity to sanity check the approximations. The technical specs list the
 total wing weight at 4.9kg, but the canopy materials included in this model
@@ -476,13 +476,34 @@ assumed to have a negligible impact on the overall system behavior.
 
 .. Aerodynamic coefficients for viscous drag corrections
 
-[[FIXME: add the viscous drag corrections
+The last step is to add the empirical corrections to the section viscous drag
+coefficients. The first is a general factor applied to all the sections evenly
+to account for "surface characteristics", as estimated during wind tunnel
+measurements of parafoils in :cite:`ware1969WindtunnelInvestigationRamair`:
 
-* :math:`C_{D,\textrm{intakes}}`
+.. math::
+   :label: Cd_surface
 
-* :math:`C_{D,\textrm{surface}}`
+   C_{d,\textrm{surface}} = 0.004
 
-[[This assumes a single profile is used for all sections.]]
+
+The second correction is to account for the additional viscous drag due to the
+presence of air intakes at the leading edge of some of the sections. In
+:cite:`babinsky1999AerodynamicPerformanceParagliders` they propose a simple
+linear relationship between the length of the air intake:
+
+.. math::
+   :label: Cd_intakes
+
+   C_{d,\textrm{intakes}} = 0.07 \, \frac{h}{c}
+
+where :math:`h` is the length of the air intakes and :math:`c` is the length of
+the chord. This model assumes the air intakes constant (but proportional) size
+along the entire span between from :math:`-s_\textrm{start} \le s \le
+-s_\textrm{start}`. As seen in :numref:`NACA24018 with air intakes`, the air
+intakes are roughly 5% of the chord, for a value of roughly
+:math:`C_{D,\textrm{intakes}} = 0.0035`. (The precise value is computed
+automatically by the implementation.)
 
 
 Suspension lines
@@ -593,6 +614,25 @@ a reasonable starting point is :math:`\kappa_x = 0.5`.
 Brakes
 ------
 
+.. Don't discuss the design of the brake model, just explain how to estimate
+   the parameters, but for my own sake, here's a recap:
+
+   * `\delta_d` is the absolute deflection distance
+
+   * `\bar{\delta}_d` is the normalized deflection distance
+
+   * `\bar{\delta_{d,max}` is the largest normalized delta_d supported by the
+     airfoil set
+
+   * `kappa_b` is the maximum distance you can pull the brakes. It is the
+     scaling factor applied to the quartic, which produces `\delta_d`
+
+   * `kappa_b` should be as large as possible in order to maximize the usable
+     range of the brakes. It's not necessarily determined by section that
+     experiences the maximum ABSOLUTE deflection; it's determined by the
+     section with the maximum NORMALIZED deflection, which depends on the
+     section chord.
+
 
 The second group of parameters :eq:`suspension lines parameters, brakes` for
 the suspension line model determine how the trailing edge of the canopy is
@@ -618,11 +658,11 @@ distribution while keeping the starting point centered at :math:`s = 0.5`, so
 about right.
 
 The maximum-brake values are more difficult, since they must coordinate with
-the value of :math:`\kappa_b`, but from [[FIXME: link to the youtube video]] it
-can be seen that maximum brakes produce a deflection from roughly
-:math:`s_{\textrm{start},1} = 0.08` to :math:`s_{\textrm{stop},1} = 1.05`
-(where the stopping position exceeds the wing tip to indicate that the wing tip
-itself experiences a small deflection).
+the value of :math:`\kappa_b`, but from `safety training footage
+<https://www.youtube.com/watch?v=D-OyGZbOmS0>`_ it can be seen that maximum
+brakes produce a deflection from roughly :math:`s_{\textrm{start},1} = 0.08` to
+:math:`s_{\textrm{stop},1} = 1.05` (where the stopping position exceeds the
+wing tip to indicate that the wing tip itself experiences a small deflection).
 
 
 .. Maximum trailing edge deflection (kappa_b)
@@ -675,7 +715,7 @@ allow the brake lines to be pulled a maximum distance of :math:`42.6 \, [cm]`.
 To check the model fit, plot the undeflected and deflected trailing edge to
 compare with the reference photos:
 
-.. figure:: figures/paraglider/demonstration/brake_deflections_TE_Bl0.25_Br0.50.svg
+.. figure:: figures/paraglider/demonstration/hook3_brake_deflections_TE_Bl0.25_Br0.50.svg
 
    Niviuk Hook 3 23 brake distribution, :math:`\delta_{bl} = 0.25` and
    :math:`\delta_{br} = 0.5`
@@ -684,7 +724,7 @@ compare with the reference photos:
 
    <br/>
 
-.. figure:: figures/paraglider/demonstration/brake_deflections_TE_Bl1.00_Br1.00.svg
+.. figure:: figures/paraglider/demonstration/hook3_brake_deflections_TE_Bl1.00_Br1.00.svg
 
    Niviuk Hook 3 23 brake distribution, :math:`\delta_{bl} = 1.00` and
    :math:`\delta_{br} = 1.0`

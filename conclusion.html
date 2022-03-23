@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Glossary" href="glossary.html" /><link rel="prev" title="9. Validation" href="validation.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="References" href="zreferences.html" /><link rel="prev" title="9. Validation" href="validation.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>10. Conclusion - Parametric Paraglider Modeling</title>
@@ -173,7 +173,6 @@
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">10. Conclusion</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 <ul>
@@ -215,9 +214,31 @@
 <h1><span class="section-number">10. </span>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h1>
 <section id="results">
 <h2><span class="section-number">10.1. </span>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
-<p>In the introduction to this paper, the <a class="reference internal" href="introduction.html#modeling-requirements"><span class="std std-ref">Modeling requirements</span></a> section posed several example questions about paraglider
-behavior. Those questions will now be revisited using the models developed in
-this paper.</p>
+<p>This project completed the set of tasks outline in its
+<span class="xref std std-ref">introduction:Roadmap:</span>:</p>
+<ol class="arabic simple">
+<li><p>It developed a novel <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a> specifically to enable simple
+representations of paraglider canopies.</p></li>
+<li><p>It selected, implemented and <a class="reference internal" href="validation.html#foil-aerodynamics"><span class="std std-ref">validated</span></a>
+a fast-but-accurate theoretical aerodynamics model well-suited to the
+nonlinear geometries and challenging flow conditions of paraglider canopies,
+as outlined in the <a class="reference internal" href="introduction.html#modeling-requirements"><span class="std std-ref">Modeling requirements</span></a> defined at the
+beginning of the project.</p></li>
+<li><p>It developed <a class="reference internal" href="paraglider_components.html"><span class="doc">parametric models</span></a> to estimate
+the inertial properties and resultant forces of the components of
+a paraglider.</p></li>
+<li><p>It used the parametric components to <a class="reference internal" href="demonstration.html"><span class="doc">demonstrate</span></a> how
+to produce a complete flight dynamics model of a commercial paraglider wing
+using only limited technical data, photos, and video of the wing.</p></li>
+<li><p>It <span class="xref std std-ref">validated &lt;validation:Niviuk Hook 3 system dynamics</span> the
+longitudinal performance of the demonstration model against basic flight
+test data, as well as highlighted some areas in which the accuracy of flight
+dynamics could be improved.</p></li>
+</ol>
+<p>This final section of the paper will address the last of the
+<a class="reference internal" href="introduction.html#modeling-requirements"><span class="std std-ref">Modeling requirements</span></a>: it will revisit the set of
+<span class="xref std std-ref">motivating questions</span> that helped guide the
+design process, and consider the ability of these models to answer them.</p>
 <section id="study-drag-breakdown">
 <h3><span class="section-number">10.1.1. </span>Study: drag breakdown<a class="headerlink" href="#study-drag-breakdown" title="Permalink to this headline">#</a></h3>
 <p>A common question for curious pilots is how to reduce the drag of their glider
@@ -225,9 +246,9 @@ so they can improve the glide ratio or top speed of their wing. The natural
 progression of this curiosity is wonder where all the drag comes from in the
 first place. One way to answer that question is to plot the drag contributions
 from each component <span id="id1">[<a class="reference internal" href="zreferences.html#id7" title="Holger Babinsky. Aerodynamic improvements of paraglider performance. In 17th Applied Aerodynamics Conference, 3148. 1999.">49</a>]</span>.</p>
-<figure class="align-default" id="id2">
+<figure class="align-default" id="id3">
 <img alt="_images/drag_breakdown.svg" src="_images/drag_breakdown.svg"/><figcaption>
-<p><span class="caption-number">Fig. 10.1 </span><span class="caption-text">Drag breakdown for Niviuk Hook 3 23 with a pod harness.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 10.1 </span><span class="caption-text">Drag breakdown for Niviuk Hook 3 23 with a pod harness.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Viscous drag includes effects such as the sheer forces produced by the
@@ -354,18 +375,176 @@ the impact of such choices is readily available.</p>
 </section>
 <section id="study-indirect-thermal-interactions">
 <h3><span class="section-number">10.1.3. </span>Study: indirect thermal interactions<a class="headerlink" href="#study-indirect-thermal-interactions" title="Permalink to this headline">#</a></h3>
-<p>[[FIXME: show a top-down view of the xy-track through the 5% thermal radius]]</p>
-<figure class="align-default" id="id3">
+<p>A reliable way to start a lively discussion on a paragliding forum is to
+question what happens when a wing encounters a thermal on only one side of its
+wing. Some pilots will argue that the thermal will pull the wing in; other
+pilots will argue that the thermal will push the wing away. A grand desire of
+this project was that the resulting flight dynamics model might be able to shed
+light on why two seasoned pilots might hold such opposing views.</p>
+<p>This final study used the Niviuk Hook 3 size 23 components from the
+<a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a> with a 6-DoF system dynamics model. The scenario is
+simple: place a thermal slightly off-center of the path of a paraglider flying
+straight forward at equilibrium with symmetric brakes. Because the span of the
+wing is only <span class="math notranslate nohighlight">\(8.84 \, [m]\)</span>, the thermal was placed <span class="math notranslate nohighlight">\(15 \, [m]\)</span> to
+the right with exponential falloff such that the thermal strength was reduced
+to 5% by the time it reached the center of the canopy with a peak (core)
+strength of <span class="math notranslate nohighlight">\(3 \, [\frac{m}{s}]\)</span> (extremely strong for such a tight
+thermal). The effect of the exponential falloff was a peak gradient of
+<span class="math notranslate nohighlight">\(0.67 \, [\frac{m}{s}]\)</span> from the wingtip nearest the thermal to the
+center of the canopy as the glider passed the core.</p>
+<figure class="align-default" id="id4">
 <img alt="_images/indirect_thermal.svg" src="_images/indirect_thermal.svg"/><figcaption>
-<p><span class="caption-number">Fig. 10.6 </span><span class="caption-text">Indirect thermal interaction.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 10.6 </span><span class="caption-text">Indirect thermal interaction.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<div class="legend">
+<p>The first row represents the Euler angles for position, the second row
+represents the angular velocities, and the third row is the angular
+accelerations.</p>
+</div>
 </figcaption>
 </figure>
-<p>[[FIXME: explain. The wing is flying straight at equilibrium, when it enters
-a thermal 15 meters to its right. The thermal strength has a squared distance
-decay to 5% by the time it <span class="math notranslate nohighlight">\(y = 0\)</span>, so only the right side of the wing
-experiences a significant change to lift.  Etc etc.]]</p>
-<p>[[Inconclusive results; discuss that in “Future work”.]]</p>
+<p>These results can be viewed in two ways: quantitatively and qualitatively. From
+a quantitative perspective the results are disappointing: the absolute angular
+deviations were on the order of 1°, which seem impossibly small for pilots to
+argue over. From a qualitative perspective, however, the results are perhaps
+more interesting. As the wing passes the thermal, the canopy initially rolls to
+the right (into the thermal), pitches forward (into the thermal), and the
+adverse yaw twists the wing to the left (away from the thermal); although the
+angular deviations are tiny it may produce an effect similar to falling, which
+needs only a small distance to produce a striking sensation. The same logic
+applies after the initial response, where the accelerates again, but more
+rapidly, and in the opposite direction: now the wing is rolling away from the
+thermal while yawing into it. Perhaps the sensation of acceleration holds the
+key to the argument: whether a pilot is more sensitive to roll or yaw, and
+whether they’re more sensitive to the initial or secondary accelerations may
+offer a partial explanation?</p>
+<p>Personally I find this argument unconvincing. Despite the potential explanation
+offered by the qualitative analysis, it seems much more likely that the model
+has failed to capture one or more of the significant dynamics of the system.
+One possible cause is the foil aerodynamics model, which is not intended to
+capture unsteady aerodynamics; despite its accuracy in the wind tunnel testing,
+it may be inadequate for this level of subtlety in dynamic scenarios. Another
+possible cause is the quasi-rigid-body assumption imposed on the canopy
+geometry; real wings would flex and distort, especially in such a strong
+thermal, and it seems like that such deformations may play a larger roll that
+anticipated.</p>
+<p>All in all, despite the underwhelming results the truth is this was always an
+ambitious goal, and I hope it demonstrates the theoretical advantages of
+pursuing flight dynamics models that are capable of capturing the effects of
+non-uniform wind vectors along the span of the wing, and will serve as
+a starting point for some future work. Perhaps we will someday have an answer
+for the forums.</p>
 </section>
+</section>
+<section id="future-work">
+<h2><span class="section-number">10.2. </span>Future work<a class="headerlink" href="#future-work" title="Permalink to this headline">#</a></h2>
+<section id="canopy">
+<h3><span class="section-number">10.2.1. </span>Canopy<a class="headerlink" href="#canopy" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Arc deformations: the <a class="reference internal" href="foil_geometry.html#summary"><span class="std std-ref">design curves</span></a> that
+define the foil geometry are not required to be constant functions; they can
+be functions of control inputs, such as weight shift. The primary difficulty
+is that the current implementation of the <a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line"><span class="std std-ref">NLLT</span></a> assumes that the shape
+of the canopy is constant, but that a practical limitation, not a theoretical
+one.</p></li>
+</ul>
+<ul class="simple" id="weight-shift-modeling">
+<li><p>Weight shift modeling: the <a class="reference internal" href="validation.html#steady-state-turn"><span class="std std-ref">Steady-state turn</span></a> sanity check
+of the demonstration model suggests that lateral movement of the mass
+centroid is not the primary control mechanism for weight shift control. The
+alternative mechanism is the wing deformations that occur during weight
+shift. At the outset of this project the assumption was that the canopy
+deformations during weight shift would be negligible compared to the
+displacement of payload mass, but the turn radius and sink rate suggest
+otherwise. It may be fruitful to generate plausible <span class="math notranslate nohighlight">\(yz(s, \delta_w)\)</span>
+design curves (so the foil arc deforms as a function of weight shift), and
+consider if the changes to the canopy aerodynamics would explain the
+inaccuracies in the rigid canopy model. If canopy arc deflections prove to be
+a significant factor for accurate weight shift predictions, they should
+probably be implemented as an interaction between <span class="math notranslate nohighlight">\(yz(s)\)</span> and the
+suspension line model. (Paraglider pilots quickly discover the relationship
+between chest riser strap width and weight shift control, which strongly
+suggests that the lines play a dominant role).</p></li>
+<li><p>Choice of airfoil: the <a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a> chose the NACA 24018 as an
+example of a conservative guess, but if a few commercial section profiles
+were measured accurately (including their spanwise variation), all models of
+commercial paraglider wings would benefit.</p></li>
+<li><p>Deflected profiles: the demonstration used section
+<span class="xref std std-ref">demonstration:Profiles</span> produced by a “two circle” model of trailing
+edge deflection. That optimistic model was designed to balance the accuracy
+of profile deformation against the ability to estimate the aerodynamic
+coefficients with XFOIL. In reality, their unnaturally smooth curvature
+likely causes them to underestimate flow separation. Future work would
+benefit from more accurate deflection profiles.</p></li>
+<li><p>Aerodynamic coefficients: in conjunction with more accurate deflection
+profiles, another improvement would be is to use more sophisticated methods
+to estimate the aerodynamic coefficients. One option is RFOIL from Delft
+University of Technology (a fork of XFOIL that is reported to improve
+estimates, particularly at high angles of attack), or to apply a complete
+computational fluid dynamics approach with OpenFoam.</p></li>
+</ul>
+</section>
+<section id="lines">
+<h3><span class="section-number">10.2.2. </span>Lines<a class="headerlink" href="#lines" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>The parameters for the <span class="xref std std-ref">brakes</span> are confusing at
+first glance, and tedious to tune. At the least they would benefit from an
+automated procedure where instead of having to tune
+<span class="math notranslate nohighlight">\(s_\textrm{start,1}\)</span> and <span class="math notranslate nohighlight">\(s_\textrm{stop,1}\)</span> to match
+<span class="math notranslate nohighlight">\(\kappa_b\)</span> (which was in turn limited by the
+<span class="math notranslate nohighlight">\(\bar{\delta_d}_\textrm{max}\)</span> supported by the aerodynamic coefficient
+set). It would be much easier to define <span class="math notranslate nohighlight">\(s_\textrm{start,1}\)</span> and
+<span class="math notranslate nohighlight">\(s_\textrm{stop,1}\)</span> at some hypothetical value of <span class="math notranslate nohighlight">\(\kappa_b\)</span> and
+have the lines adjust their values based on the true <span class="math notranslate nohighlight">\(\kappa_b\)</span>.</p></li>
+</ul>
+</section>
+<section id="harness">
+<h3><span class="section-number">10.2.3. </span>Harness<a class="headerlink" href="#harness" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>The <a class="reference internal" href="paraglider_components.html#harness"><span class="std std-ref">spherical model</span></a> neglects pitch and
+yaw moments due to angle of attack and sideslip, but because paragliders put
+their legs out in front those effects seem likely.</p></li>
+<li><p>The harness model uses constant drag coefficients.
+<span id="id2">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span> developed a model
+for the harness that accounts for Reynolds numbers, but that model was not
+tested in this work.</p></li>
+</ul>
+</section>
+<section id="system-dynamics">
+<h3><span class="section-number">10.2.4. </span>System dynamics<a class="headerlink" href="#system-dynamics" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>This paper derived a <a class="reference internal" href="derivations.html#model-9a"><span class="std std-ref">9-DoF</span></a> system dynamics
+model that modeled the connection between the lines and payload as
+a spring-damper system, but without flight testing the parameters were
+difficult to estimate. It would be interesting to review the applicability of
+the spring-damper model and to estimate suitable parameters. I suspect that
+the lack of canopy deformations and the inability of the 6-DoF to show
+payload-relative roll are at least partial explanation of the underwhelming
+results of the <a class="reference external" href="Study:indirectthermalinteraction">indirect thermal study</a>. The sensation of payload-relative roll and yaw accelerations
+could definitely play a role in why pilots disagree on the behavior of
+a paraglider encountering a thermal.</p></li>
+</ul>
+</section>
+</section>
+<section id="open-source">
+<h2><span class="section-number">10.3. </span>Open source<a class="headerlink" href="#open-source" title="Permalink to this headline">#</a></h2>
+<p>The <a class="reference external" href="https://github.com/pfheatwole/thesis/">materials</a> to produce this paper
+and its <a class="reference external" href="https://github.com/pfheatwole/glidersim/">implementation</a> are both
+available under permissive open source licenses. Although this work focused on
+paragliders, the structure of the models is mirrored in the structure of the
+code, and should be easily adaptable to other gliding aircraft such as hang
+gliders or kites. For maximum versatility and approachability, the entire
+implementation was built on the Python scientific computing stack; despite not
+producing the fastest implementation, Python made up for the performance cost
+with value in other areas:</p>
+<ul class="simple">
+<li><p>Free (unlike MATLAB, AutoCAD, etc)</p></li>
+<li><p>Extensive cross-domain usage (aerospace, computer science, etc)</p></li>
+<li><p>Powerful scientific computing libraries (NumPy, SciPy, Numba)</p></li>
+<li><p>Easy to integrate into tools with native Python interpreters (such as
+FreeCAD, Blender, and QGIS)</p></li>
+</ul>
+<p>I am grateful for the work freely shared by those who came before, and hope
+that this material may provide some value to those who follow.</p>
 </section>
 </section>
 
@@ -374,12 +553,12 @@ experiences a significant change to lift.  Etc etc.]]</p>
       <footer>
         
 <div class="related-pages">
-  <a class="next-page" href="glossary.html">
+  <a class="next-page" href="zreferences.html">
       <div class="page-info">
         <div class="context">
           <span>Next</span>
         </div>
-        <div class="title">Glossary</div>
+        <div class="title">References</div>
       </div>
       <svg><use href="#svg-arrow-right"></use></svg>
     </a>
@@ -443,6 +622,14 @@ experiences a significant change to lift.  Etc etc.]]</p>
 <li><a class="reference internal" href="#study-indirect-thermal-interactions">10.1.3. Study: indirect thermal interactions</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#future-work">10.2. Future work</a><ul>
+<li><a class="reference internal" href="#canopy">10.2.1. Canopy</a></li>
+<li><a class="reference internal" href="#lines">10.2.2. Lines</a></li>
+<li><a class="reference internal" href="#harness">10.2.3. Harness</a></li>
+<li><a class="reference internal" href="#system-dynamics">10.2.4. System dynamics</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#open-source">10.3. Open source</a></li>
 </ul>
 </li>
 </ul>
