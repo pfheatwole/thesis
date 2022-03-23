@@ -21,6 +21,20 @@ Validation
       measured results.
 
 
+.. Bridget:
+
+     Here you can put all the results that validate your model.  Put in all the
+     tables and graphs that show that your model is giving comparable (if not
+     better) results to existing models and that your model is giving results
+     that match the specifications of the Hook3. For the data on the Hook 3,
+     you can even provide percent error (gives a numerical result stating how
+     far off was your model from the published performance data)
+
+     Then provide a section of limitations (can include the data on the 360
+     degree turn at 20 degree bank angle) and a bulleted list of other
+     limitations you want to mention.
+
+
 Foil aerodynamics
 -----------------
 
@@ -149,9 +163,9 @@ model in ``glidersim`` can shift the origin automatically.)
 
    NACA 23015
 
-Calculating the section indices for each point and building a linear
-interpolator for each component as a function of the section index produces
-a set of piecewise-linear design curves, and assigning every section a NACA
+Calculating the section indices for each point and using linear interpolation
+as a function of the section index produces a set of piecewise-linear design
+curves, and assigning every section a NACA
 23015 airfoil (:numref:`airfoil_NACA_23015`) completes the foil geometry model.
 
 .. raw:: latex
@@ -176,17 +190,12 @@ Wind tunnel setup
 
 .. Describe the test setup and the data
 
-As explained in :cite:`belloc2015WindTunnelInvestigation`, a 1/8th-scale model
-was fabricated from wood and [[material]], mounted on a 1 meter rod connected
-to force sensors, and placed in a wind tunnel configured for 40 m/s airspeed.
-Measurements were taken with the angle of attack and sideslip ranging over
-:math:`-5 < \alpha < 22` and :math:`-15 < \beta < 15`.
-
-.. This range of alpha is suitable for capturing longitudinal performance
-   post-stall.
-
-For better accuracy, wind tunnel measurements should be corrected for wall
-interactions with the flow (:cite:`barlow1999LowSpeedWindTunnel`;
+The setup mounted the 1/8-scale model on a 1 meter rod connected to force
+sensors, and set the wind tunnel to a 40 m/s airspeed. Measurements were taken
+with the angle of attack and sideslip ranging over :math:`-5 < \alpha < 22` and
+:math:`-15 < \beta < 15` (a range suitable capturing longitudinal performance
+post-stall). For better accuracy, wind tunnel measurements should be corrected
+for wall interactions with the flow (:cite:`barlow1999LowSpeedWindTunnel`;
 :cite:`drela2014FlightVehicleAerodynamics`, Sec. 10.3). However, because
 classical wind tunnel wall corrections assume a flat wing, the data for the
 arched parafoil are uncorrected for wall effects.
@@ -195,101 +204,278 @@ arched parafoil are uncorrected for wall effects.
 Aerodynamics models
 ^^^^^^^^^^^^^^^^^^^
 
-[[FIXME: Introduce the aerodynamic models I'll be comparing against the NLLT:
-a traditional *vortex lattice method* (VLM) in `AVL
-<https://web.mit.edu/drela/Public/web/avl/>`__ , and an experimental VLM in
-`XFLR5 <https://www.xflr5.tech/xflr5.htm>`__ (which tilts the geometry to
-mitigate the "small angles" approximation for alpha and beta).]]
+The wind tunnel data will be compared to three theoretical aerodynamics models,
+one that includes viscous effects, and two that do not (inviscid models):
+
+1. NLLT: the :ref:`numerical lifting-line <foil_aerodynamics:Phillips'
+   numerical lifting-line>` model from
+   :cite:`phillips2000ModernAdaptationPrandtl`
+
+2. `AVL <https://web.mit.edu/drela/Public/web/avl/>`__: an extended vortex
+   lattice method by Mark Drela :cite:`drelaAthenaVortexLattice` (who also
+   authored XFOIL :cite:`drela1989XFOILAnalysisDesign` while at MIT) . With
+   a long history in academic research, this is the primary reference for
+   comparing the results of the NLLT. 
+
+3. `XFLR5 <https://www.xflr5.tech/xflr5.htm>`__: an experimental vortex lattice
+   method from the open source wing modeling tool by André Deperrois. This
+   model is marked "experimental" by the author because it is still under
+   development, but the principle is to mitigate the "small angles"
+   approximation relied on by standard vortex lattice methods by reorienting
+   the foil geometry instead of reorienting the flow. The purpose of including
+   this method in these tests is to show the effect of the simplifying
+   assumptions used when designing the system of equations for aerodynamics
+   models. For conventional aircraft where the flow angles are relatively
+   small, small angle approximations are reasonable, but for nonlinear
+   geometries at large angles of attack, classic methods such as AVL begin to
+   struggle.
 
 
 Results
 ^^^^^^^
 
-.. FIXME: I removed the VLM results from XFLR5 for the moment coefficients
-   because they were VERY wrong; looks like they were using the wrong reference
-   point somehow, but it's not clear from the documentation what's wrong.
+.. I removed the VLM results from XFLR5 for the moment coefficients because
+   they were VERY wrong; it computes drag correctly with sideslip, but the
+   sideforce (CY) is always zero, which ruins everything.
+
+
+Lift vs drag
+""""""""""""
+
+The standard way to summarize the efficiency of a wing is to plot the amount of
+lift it produces versus the amount of drag; with practice, such charts can be
+used to quickly approximate performance characteristics such as its glide
+ratio. They are also useful for quickly comparing the relative performance of
+each aerodynamics method.
+
+
+.. Pseudo-inviscid results; requires setting `Cd = 0`
+
+   Demonstrates how well the NLLT lift matches XLFR5's "Tilted Geometry" method
+   over the lower range of alpha. Once alpha approaches stall, the NLLT
+   diverges since it's not a true inviscid method; it's using the viscous lift
+   coefficients to determine the circulation distribution.
+
+.. figure:: figures/paraglider/belloc/NLLT/pseudoinviscid/CL_vs_CD.*
+   :name: Belloc_CL_vs_CD_pseudoinviscid
+
+   Lift vs induced drag
+
+The first thing step during validation is to verify the test setup for each of
+the models. One way to do that is by comparing methods that are expected to
+produce equivalent results; in this case, the inviscid methods from AVL and
+XFLR5 should be nearly identical at low angles of attack, and should estimate
+zero drag at zero lift coefficient and zero sideslip. Because the NLLT uses
+aerodynamic coefficients that include viscous effects it is not directly
+comparable to the inviscid models, but because viscosity is not expected to
+have a significant effect on lift at low angles of attack, it is possible to
+disregard the viscous drag coefficients and plot the pseudo-inviscid polar
+curve by setting the viscous drag coefficients to zero, as shown in
+:numref:`Belloc_CL_vs_CD_pseudoinviscid`. (This is a "pseudo" inviscid curve
+since the section lift coefficients used by the NLLT include viscous effects.)
+The resulting drag coefficient is limited to drag produced by the creation of
+lift, as would be predicted by the inviscid methods. This plot is useful
+because it validates that the geometry model and test conditions were
+configured correctly in all tools, and provides evidence that the NLLT was
+implemented correctly.
+
+.. figure:: figures/paraglider/belloc/NLLT/standard/CL_vs_CD.*
+   :name: Belloc_CL_vs_CD
+
+   Lift vs drag
+
+The second plot (:numref:`Belloc_CL_vs_CD`) compares the inviscid methods to
+the NLLT with the unadjusted aerodynamic coefficients from XFOIL. The first
+thing to note is the difference compared to the pseudo-inviscid plot
+(:numref:`Belloc_CL_vs_CD_pseudoinviscid`): as expected, including viscous drag
+significantly improves the agreement between the theoretical and experimental
+results for the NLLT. Another observation is the significance of the inviscid
+assumption, with both inviscid methods overestimating lift and underestimating
+drag at higher angles of attack. This plot also appears to show the effect of
+the "small angles" approximation relied on by AVL, with the experimental
+"tilted geometry" method from XFLR5 providing better accuracy at high angles of
+attack and sideslip.
+
+
+.. figure:: figures/paraglider/belloc/NLLT/Cd_surface/CL_vs_CD.*
+   :name: Belloc_CL_vs_CD_surface
+
+   Lift vs drag with extra viscous drag due to "surface characteristics"
+
+A final plot (:numref:`Belloc_CL_vs_CD_surface`) is more for future reference
+than validation. Instead of the unadjusted aerodynamic coefficients from XFOIL,
+it adds the additional viscous drag due to "surface characteristics" suggested
+in :cite:`ware1969WindtunnelInvestigationRamair` as a result of their wind
+tunnel tests on parafoils. Because this empirical adjustment will be used in
+the :doc:`demonstration` portion of this paper, this plot is useful to show the
+expected accuracy of the NLLT when applied to a model of commercial paraglider
+wing used for dynamic simulations.
 
 
 Coefficients vs angle of attack
 """""""""""""""""""""""""""""""
 
-[[Coefficients versus angle of attack :math:`\alpha`, measured at four
-different angles of sideslip :math:`\beta`]]
+Another valuable way to summarize wing behavior is to plot the
+longitudinal-centric coefficients (lift, drag, and pitching moment) versus the
+angle of attack :math:`\alpha`. These results are grouped into four quadrants
+by the sideslip angle :math:`\beta` used during the test.
 
-.. figure:: figures/paraglider/belloc/CL_vs_alpha.*
+.. figure:: figures/paraglider/belloc/NLLT/standard/CL_vs_alpha.*
    :name: Belloc_CL_vs_alpha
 
-   Lift coefficient vs angle of attack.
+   Lift coefficient vs angle of attack
 
-.. figure:: figures/paraglider/belloc/CD_vs_alpha.*
+The first (and arguably most interesting) plot is for lift versus angle of
+attack (:numref:`Belloc_CL_vs_alpha`). Separating lift into its own plot
+reveals the source of the flatline region in the "Lift vs drag" plots; the wing
+enters stall (so lift ceases to grow) at approximately :math:`\alpha = 17°,
+\beta = 0°`, and slightly earlier during sideslip (although the nonlinearity of
+the geometry dramatically affects the stall pattern and "smooths" the effect
+making it more difficult to see).
+
+The more interesting result, however, is that all three theoretical methods are
+in very close agreement for the majority of the range, they all mispredict the
+zero-lift angle of attack, and they all uniformly overestimate the slope of the
+lift curve. This anomaly is difficult to explain; at :math:`\beta = 0°` and low
+angles of attack, the effects of viscosity should have a negligible effect on
+lift, and the vortex lattice methods should perform very well, but they don't.
+The fact that the NLLT agrees with them is encouraging (again, the fact that it
+uses lift coefficients that account for viscosity should have a negligible
+effect in this test, and so the NLLT is expected to agree with the inviscid
+methods). I contacted the authors of both the wind tunnel data and the NLLT,
+and neither author had any immediate feedback on what would cause this issue.
+Nevertheless, there are two useful takeaways:
+
+1. The NLLT is at least as accurate as the inviscid methods.
+
+2. The NLLT is approximating the nonlinear effects of early stall, whereas the
+   inviscid methods maintain a virtually linear response. This is an
+   encouraging sign that the NLLT is a suitable choice given my
+   :ref:`introduction:Modeling requirements` that the aerodynamics should
+   provide "graceful degradation of accuracy" as it approaches high angles of
+   attack.
+
+This plot also highlights a limitation of relying on aerodynamic coefficients:
+the NLLT cannot produce a solution if any of the sections experience
+a section-local angle of attack that exceeds the range supported by the set of
+aerodynamic coefficients. This is effect is clear as the sideslip angle
+increases: because the wing is arched, as sideslip becomes positive (so the
+relative wind approaches from the right of the wing) the angle of attack on the
+left wingtip increases. As a result, as soon as global :math:`\alpha` and
+:math:`\beta` produce a section-local :math:`\alpha` that exceeds the maximum
+value in the coefficients lookup table, the NLLT cannot produce a solution. The
+inviscid models, on the other hand, are founded on linear relationships with no
+upper bound, allowing them to generate estimates at significantly higher angles
+of attack and sideslip. Whether a bad estimate is better than no estimate,
+however, depends on the application.
+
+
+.. figure:: figures/paraglider/belloc/NLLT/standard/CD_vs_alpha.*
    :name: Belloc_CD_vs_alpha
 
-   Drag coefficient vs angle of attack.
+   Drag coefficient vs angle of attack
 
-.. figure:: figures/paraglider/belloc/Cm_vs_alpha.*
+When considering drag versus angle of attack (:numref:`Belloc_CD_vs_alpha`),
+the most noteworthy details are how all three methods fail to predict the rapid
+increase in drag as the wing enters the stall region, and how the "tilted
+geometry" of the XFLR5 model allows it to more accurately track the shape (if
+not the value) of the viscous solution.
+
+
+.. figure:: figures/paraglider/belloc/NLLT/standard/Cm_vs_alpha.*
    :name: Belloc_Cm_vs_alpha
 
    Pitching coefficient vs angle of attack.
 
-[[This is the global pitching coefficient, which includes contributions from
-both the section pitching coefficients and the aerodynamic forces. These
-coefficients are computed using the riser midpoint `RM`.]]
+Another coefficient that has a strong impact on the pitch stability of
+a paraglider canopy is the pitching moment versus angle of attack
+(:numref:`Belloc_Cm_vs_alpha`). This plot can be viewed as pre- and post-stall
+conditions (before and after :math:`\alpha = 17°` in the :math:`\beta = 0°`
+quadrant), and are worth considering separately.
+
+In the pre-stall region, the plot shows how a negative pitching moment grows
+with :math:`\alpha`, resulting in negative feedback that provides a restoring
+force back to equilibrium. If the wing pitches backwards, the negative pitching
+moment will help bring the canopy back overhead into a stable position.
+
+In the post-stall region, the effect of flow separation can be seen in the
+experimental data by the sudden flat response of the pitching coefficient to
+:math:`\alpha`. This reason is complex, but informative:
+
+* Because the lift vector at positive :math:`\alpha` points forwards, lift
+  creates a negative (forward) pitching moment. At stall, lift decreases, which
+  increases :math:`C_m`.
+
+* Because drag points backwards, it creates a positive (backwards) pitching
+  moment. At stall, drag dramatically increases, which also increases
+  :math:`C_m`.
+
+* At stall, flow separation typically starts at the trailing edge on the upper
+  surface. The loss of pressure creates a negative (forwards) pitching moment,
+  which decreases :math:`C_m`.
+
+For the wind tunnel model, it appears that (again, for the :math:`\beta = 0°`
+case) these effects are counteracting each other, producing a relatively flat
+:math:`C_m` in the post-stall region. The inviscid method used by AVL fails to
+capture the nonlinearity of flow separation, causing it to overestimate the
+lift and underestimate drag that together producing a significantly inaccurate
+pitching moment post-stall. (Unfortunately the experimental method in XFLR5 had
+a bug that produced zero sideforce, so its results are omitted.) The NLLT
+performs much better, but still highlights the effect of using the well-known
+"optimistic" estimates produced by XFOIL near the stall region; and again, the
+NLLT fails to converge when the section-local :math:`\alpha` of the downwind
+wingtip exceeds the maximum :math:`\alpha` supported by the coefficients lookup
+table instead of producing progressively more incorrect results.
 
 
 Coefficients vs sideslip
 """"""""""""""""""""""""
 
-[[Coefficients versus angle of sideslip :math:`\beta`, measured at four
-different angles of attack :math:`\alpha`]]
+A third perspective of wing behavior is to plot the coefficients that affect
+motion in the :math:`y`-direction (sideforce, rolling moment, and yawing
+moment) versus angle of sideslip :math:`\beta`. These results are grouped into
+four quadrants by the angle of attack :math:`\alpha` used during the test.
+Unfortunately, the experimental method in XFLR5 had a bug that produced zero
+sideforce, which is also coupled to the roll and yaw moments, so its results
+are omitted.
 
-.. figure:: figures/paraglider/belloc/CY_vs_beta.*
+
+.. figure:: figures/paraglider/belloc/NLLT/standard/CY_vs_beta.*
    :name: Belloc_CY_vs_beta
 
-   Lateral force coefficient vs sideslip.
+   Lateral force coefficient vs sideslip
 
-.. figure:: figures/paraglider/belloc/Cl_vs_beta.*
+Plotting sideforce vs sideslip (:numref:`Belloc_CY_vs_beta`) showed good
+agreement between the experimental data and both theoretical models, although
+the NLLT has a slight accuracy advantage over the inviscid method.
+
+
+.. figure:: figures/paraglider/belloc/NLLT/standard/Cl_vs_beta.*
    :name: Belloc_Cl_vs_beta
 
-   Rolling coefficient vs sideslip.
+   Rolling coefficient vs sideslip
 
-.. figure:: figures/paraglider/belloc/Cn_vs_beta.*
+In the rolling moment versus sideslip test (:numref:`Belloc_Cl_vs_beta`) we
+find the only examples where the inviscid method outperforms the NLLT, but
+otherwise this plot demonstrates no noteworthy effects.
+
+
+.. figure:: figures/paraglider/belloc/NLLT/standard/Cn_vs_beta.*
    :name: Belloc_Cn_vs_beta
 
-   Yawing coefficient vs sideslip.
+   Yawing coefficient vs sideslip
 
-
-Coefficients vs each other
-""""""""""""""""""""""""""
-
-[[This is the classic way to consider the overall performance of a wing.]]
-
-.. Pseudo-inviscid results; requires setting `Cd = 0`
-
-   .. figure:: figures/paraglider/belloc/CL_vs_CD_pseudoinviscid.*
-      :name: Belloc_CL_vs_CD_pseudoinviscid
-
-      Pseudo-inviscid lift coefficient vs drag coefficient.
-
-   [[Demonstrates how well the NLLT lift matches XLFR5's "Tilted Geometry"
-   method over the lower range of alpha. Once alpha approaches stall, the NLLT
-   diverges since it's not a true inviscid method; it's using the viscous lift
-   coefficients to determine the circulation distribution.]]
-
-.. figure:: figures/paraglider/belloc/CL_vs_CD.*
-   :name: Belloc_CL_vs_CD
-
-   Lift coefficient vs drag coefficient.
-
-.. figure:: figures/paraglider/belloc/CL_vs_Cm.*
-   :name: Belloc_CL_vs_Cm
-
-   Lift coefficient vs global pitching coefficient.
-
-
-Discussion
-^^^^^^^^^^
-
-.. Add tables that summarize and quantify the accuracy
+The last plot, for the yawing moment versus sideslip
+(:numref:`Belloc_Cn_vs_beta`) has several similarities to
+:numref:`Belloc_Cm_vs_alpha`, except instead of demonstrating the pitch
+stability of the wing, it demonstrates the yaw stability of the wing. When the
+relative wind approaches from the right (:math:`\beta > 0°`) a positive yaw
+moment will turn the canopy into the wind, and vice-versa for wind from the
+left. And again, the effect of failing to accurately model stall conditions on
+individual sections (the downwind sections, specifically) causes both methods
+to overestimate the restoring moment. Nevertheless, the NLLT succeeded in
+capturing at least part of the effect, once again proving the value of the
+method over purely inviscid solutions.
 
 
 Niviuk Hook 3 system dynamics
@@ -617,8 +803,8 @@ with those control inputs. Simulating this scenario produces the results in
 
 .. figure:: figures/validation/path_360_topdown.svg
    :name: path_360_topdown
-   
-   Steady-state turn, top-down view
+
+   Steady-state turn at a 20° bank angle, top-down view
 
 .. list-table:: Steady-state turn validation
    :header-rows: 1
@@ -644,4 +830,4 @@ Unlike the accurate estimates for the polar curves, which measured
 steady-state, longitudinal dynamics, this model clearly struggles with this
 test. It is unclear what is causing the discrepancy, but it is an important
 counterpoint that highlights the many dimensions of model accuracy. It is also
-useful for directing future work.
+suggests a direction for future work on :ref:`Weight shift modeling`.

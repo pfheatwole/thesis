@@ -122,22 +122,18 @@ State derivatives
 .. Define the derivatives of the state variables in terms of the current state
    and the system derivatives.
 
-[[Now we need to define the derivatives of the state variables in terms of the
-current state and the system derivatives.]]
-
-
-.. Position: translational acceleration in the inertial reference frame
-
-[[Position is easy since we're using the same reference point for the dynamics
-and for the position state variable. The only catch is that]] the derivatives
-calculated by the system dynamics models were taken in the body and payload
-reference frames, :math:`\mathcal{F}_b` and :math:`\mathcal{F}_p`, but tracking
-the position and orientation of the aircraft relative to the tangent plane
-requires derivatives taken with respect to the inertial frame
-:math:`\mathcal{F}_e`. To provide the simulator with the proper derivatives,
-the state dynamics models must use the *equation of Coriolis*
-(:cite:`stevens2015AircraftControlSimulation`, Eq. 1.4-2) to calculate the
-derivative of velocity taken with respect to the inertial frame:
+Next, define the derivatives of the state variables in terms of the current
+state and the system derivatives. The derivative of state variable for position
+is straightforward since it uses the same reference point as dynamics. The only
+modification is that the derivatives calculated by the system dynamics models
+were taken in the body and payload reference frames, :math:`\mathcal{F}_b` and
+:math:`\mathcal{F}_p`, but tracking the position and orientation of the
+aircraft relative to the tangent plane requires derivatives taken with respect
+to the inertial frame :math:`\mathcal{F}_e`. To provide the simulator with the
+proper derivatives, the state dynamics models must use the *equation of
+Coriolis* (:cite:`stevens2015AircraftControlSimulation`, Eq.
+1.4-2) to calculate the derivative of velocity taken with respect to the
+inertial frame:
 
 .. math::
 

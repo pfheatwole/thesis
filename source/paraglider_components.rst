@@ -30,10 +30,14 @@ define three things:
 
 This chapter develops basic models for each component, favoring simplicity
 whenever possible. In particular, all models are based on a quasi-rigid body
-assumption. [[FIXME: explain.]] This may seem like a major oversimplification,
-but in practice it works quite well: although nearly every component of
-a paraglider is made from highly flexible materials, they tend to remain
-relatively rigid during typical flight conditions.
+assumption; unlike a true rigid-body model where no component is allowed to
+move, these models (and their connections) are treated as "instantaneously
+rigid", where they are allowed specific reconfigurations based on the control
+inputs (moving the pilot in the harness, or deflecting the trailing edges of
+the canopy). This may seem like a major oversimplification, but in practice it
+works quite well: although nearly every component of a paraglider is made from
+highly flexible materials, they tend to remain relatively rigid during typical
+flight conditions.
 
 
 Canopy

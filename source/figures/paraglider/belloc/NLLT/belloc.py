@@ -121,9 +121,13 @@ layout = gsim.foil_layout.FoilLayout(
 airfoil = gsim.airfoil.NACA(23015, convention="vertical")
 sections = gsim.foil_sections.FoilSections(
     profiles=gsim.airfoil.AirfoilGeometryInterpolator({0: airfoil}),
-    coefficients=gsim.airfoil.XFLR5Coefficients("xflr5/airfoil_polars", flapped=False),
-    Cd_surface=0.004,  # ref: ware1969WindtunnelInvestigationRamair
+    coefficients=gsim.airfoil.XFLR5Coefficients("../xflr5/airfoil_polars", flapped=False),
+    # Cd_surface=0.004,  # ref: ware1969WindtunnelInvestigationRamair
 )
+
+# Pseudo-inviscid mode
+# sections.Cd = lambda s, ai, alpha, Re, clamp: 0
+
 
 canopy = gsim.foil.SimpleFoil(
     layout=layout,
@@ -304,7 +308,7 @@ plotted_betas = {0, 5, 10, 15}  # The betas present in Belloc's plots
 belloc: dict[int, dict] = {}  # Keyed by `beta` [deg]
 for beta in plotted_betas:
     belloc[beta] = np.genfromtxt(
-        f"windtunnel/beta{beta:02}.csv",
+        f"../windtunnel/beta{beta:02}.csv",
         names=True,
         delimiter=",",
     )
@@ -313,7 +317,7 @@ for beta in plotted_betas:
 xflr5: dict[int, dict] = {}  # Keyed by `beta` [deg]
 for beta in plotted_betas:
     xflr5[beta] = np.genfromtxt(
-        f"xflr5/wing_polars/Belloc_VLM2-b{beta:02}-Inviscid.txt",
+        f"../xflr5/wing_polars/Belloc_VLM2-b{beta:02}-Inviscid.txt",
         skip_header=7,
         names=True,
     )
@@ -321,7 +325,7 @@ for beta in plotted_betas:
 # Dataset: AVL
 avl: dict[int, dict] = {}  # Keyed by `beta` [deg]
 for beta in betas:
-    data = np.genfromtxt(f"avl/polars/beta{beta:02}.txt", names=True)
+    data = np.genfromtxt(f"../avl/polars/beta{beta:02}.txt", names=True)
     avl[beta] = {field: data[field] for field in data.dtype.fields}
     euler = np.stack(np.broadcast_arrays(0, -data["alpha"], beta), axis=-1)
     CXa, CYa, CZa = np.einsum(  # Force coefficients in wind axes
@@ -390,7 +394,7 @@ for beta in betas:
 
 belloc2: dict[float, dict] = {}
 for alpha in [0, 5, 10, 15]:
-    filename = f"windtunnel/alpha{alpha:02}v40.csv"
+    filename = f"../windtunnel/alpha{alpha:02}v40.csv"
     belloc2[alpha] = np.genfromtxt(filename, names=True, delimiter=",")
 
 avl2: dict[float, dict] = {}
@@ -560,8 +564,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.plot(belloc[beta]["CMT1"][:42], belloc[beta]["CZa"][:42], **belloc_args)
     if plot_avl:
         ax.plot(avl[beta]["Cm"], -avl[beta]["CZa"], **avl_args)
-    # if plot_xflr5:
-    #     ax.plot(xflr5[beta]["Cm"], xflr5[beta]["CL"], **xflr5_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["Cm"], xflr5[beta]["CL"], **xflr5_args)
     ax.plot(nllt[beta]["Cm"], -nllt[beta]["CZa"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower left")
@@ -576,8 +580,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CLT1"], **belloc_args)
     if plot_avl:
         ax.plot(avl[beta]["alpha"], avl[beta]["Cl"], **avl_args)
-    # if plot_xflr5:
-    #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cl"], **xflr5_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cl"], **xflr5_args)
     ax.plot(nllt[beta]["alpha"], nllt[beta]["Cl"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower left")
@@ -592,8 +596,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CMT1"], **belloc_args)
     if plot_avl:
         ax.plot(avl[beta]["alpha"], avl[beta]["Cm"], **avl_args)
-    # if plot_xflr5:
-    #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cm"], **xflr5_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cm"], **xflr5_args)
     ax.plot(nllt[beta]["alpha"], nllt[beta]["Cm"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="lower left")
@@ -608,8 +612,8 @@ for beta in sorted(plotted_betas.intersection(betas)):
     ax.plot(belloc[beta]["Alphac"], belloc[beta]["CNT1"], **belloc_args)
     if plot_avl:
         ax.plot(avl[beta]["alpha"], avl[beta]["Cn"], **avl_args)
-    # if plot_xflr5:
-    #     ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cn"], **xflr5_args)
+    if plot_xflr5:
+        ax.plot(xflr5[beta]["alpha"], xflr5[beta]["Cn"], **xflr5_args)
     ax.plot(nllt[beta]["alpha"], nllt[beta]["Cn"], **nllt_args)
     ax.set_title(f"$\\beta$={beta}°")
 axes[0, 0].legend(loc="upper left")

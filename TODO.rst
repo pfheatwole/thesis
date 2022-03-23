@@ -1,3 +1,51 @@
+* When sending the draft:
+
+  * Is it accurate to say that quantitative results go in "Validation" and
+    qualitative results go in "Conclusion"? The qualitative results are when
+    I ask questions about glider behavior without specific quantitative
+    expectations.
+
+  * I deferred the definition of basic aerodynamic principles, and replaced it
+    with a thorough list of books and papers necessary to learn them.
+
+    1. The paper covers more than just aerodynamics, and having an "intro to
+       aero" section in the introduction felt out of place.
+
+    2. I am confident my attempts to summarize the key aerodynamic principles
+       in just a few sentences was worse than useless.
+
+  * For the PDF version, sorry about the figure: Latex is doing some crazy
+    stuff, I'll see if I can improve it.
+
+
+
+
+
+* Cut release for glidersim? Create DOI
+
+* Add glidersim DOI to thesis
+
+* Tag a new draft and create a DOI
+
+
+* **At the start of each chapter, provide a paragraph about why this chapter is
+  important and how it fits into the whole thesis document.**
+
+
+
+
+
+* Create `Rx = Ryz = 0` versions of the foil geometry curves for Belloc's wing
+  and the Hook 3 to show their complexity. I'm curious.
+
+* Bridget would like the intro to acknowledge that although I'm a computer
+  engineering student the thesis will use math and physics that I had to learn
+  before using my "computer engineering skills to program the implementation".
+
+* In related works, discuss existing open source aerodynamics models
+
+
+
 * Why do I use `image.*` versus `image.svg` in some places?
 
 * `generate_canopy_examples.py` is broken; need's the updated the API
@@ -24,16 +72,8 @@ Content
 Drafting
 --------
 
-* **Define the concrete "key ideas" for the paper.** These will drive how
-  I develop the entire paper, both in structure and content.
-
-* Write an informal overview of the goal, problems, resources, and solutions.
-  Avoid technical details; fill those in later.
-
 * Write an "introduction to the introduction". **Don't make the reader wait
   a long time to understand my contribution.**
-
-* Draft a full abstract.
 
 * Draft a full introduction.
 
@@ -46,69 +86,6 @@ Drafting
   Don't worry about actually producing those elements; this is about
   establishing a pathway to a cohesive structure: once you know what elements
   you really want, only then should you spend time creating them.
-
-
-Feedback
-^^^^^^^^
-
-Summary of Bridget's comments from `2021w42`:
-
-* The goal of the thesis is to:
-
-  1. Put the project into plain terms
-
-  2. Provide details for future work building a paragliding flight simulator
-
-* Regarding putting the project into "plain terms":
-
-  * Motivation for the project - describe paragliding and what paragliders
-    (and you in particular) need / desire
-
-  * Existing technology - describe what paragliding models / simulators
-    currently exist and what is lacking from these
-
-  * Your contribution - describe what your contribution is and distinguish
-    how it is different / similar to existing models/devices. It would also
-    be helpful to include a top level system block diagram showing the main
-    input and outputs of the system (I am currently unclear as to what the
-    output is - positional data (i.e. a track)?)
-
-  * An overview of the sections of your thesis so the reader will understand
-    the organization of your chapters. My understanding is that you spend
-    two whole chapters describing the model for the geometry (chapter 2) and
-    aerodynamics (chapter 3) of the foil and then spend a chapter on the
-    models of the 3 main components of the paraglider system (canopy,
-    suspension lines and harness). What is unclear to me here is how does
-    the canopy of chapter 4 differ from what you described in chapters 2 and
-    3 (or is it just a particular instance of a foil). Then chapter 5 is
-    about modeling the system as a whole, and chapter 6 is a case study that
-    tests the performance/accuracy of the system model. It might also be
-    useful to include somewhere in the intro (perhaps near the start as you
-    are describing the motivation) how that even though you are a computer
-    engineering student, the thesis delves into math, statistics, flight
-    dynamics, etc. - all of which you had to learn before you could use your
-    computer engineering skills to program your implementation
-
-* **At the start of each chapter, provide a paragraph about why this chapter
-  is important and how it fits into the whole thesis document.**
-
-* "I kept wanting the document to tell me how your design differed / was the
-  same as existing designs. For example, I know air foils have been modeled
-  before (as well as paragliding wings) - so for your design choices, how
-  much of it was based on an existing design and how much of it did you
-  modify/create (some of your square bracket remarks seemed to hint at this,
-  but I would like to see it more explicitly stated)."
-
-* Chapter 6 (Demonstration)
-
-  "What exactly is the output of the model?"
-
-  "Just describe what it currently does and the limitations it has."
-
-* "Focus on communicating your contributions in a way that someone like me,
-  Lynne, and Marty (who don't have the background in flight dynamics and
-  stats) can understand what you did." (ie, "more intro paragraphs to each
-  section and subsection")
 
 
 References

@@ -72,8 +72,6 @@ to the desired :math:`yz`-curve produces an intermediate result:
      \vec{f}(t) &= \left< A \cos(t), B \sin(t) \right>
    \end{aligned}
 
-.. FIXME: this really needs a diagram
-
 This design requires that :math:`\phi_\textrm{tip} > 2 \Gamma_\textrm{tip}` (so
 the wing must be wider than it is tall and the wing tip roll cannot exceed 90°)
 and is valid over :math:`t_{min} \le t \le \pi - t_{min}`, where :math:`t_{min}

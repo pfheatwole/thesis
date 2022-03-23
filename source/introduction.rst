@@ -101,11 +101,13 @@ properties and forces) because the estimation process requires accurate models
 of the mass distribution and aerodynamics of each component of the glider.
 
 
-.. attention:: The remainder of this chapter assumes a working familiarity with
-   fundamental aerodynamics. For the necessary background to understand this
-   work, the section of the "Related works" covering :ref:`related_works:Flight
-   simulation` provides an overview and complete list of material that I found
-   helpful.
+.. FIXME: restore in the web version
+
+   .. attention:: The remainder of this chapter assumes a working familiarity
+      with fundamental aerodynamics. For the necessary background to understand
+      this work, the section of the "Related works" covering
+      :ref:`related_works:Flight simulation` provides an overview and complete
+      list of material that I found helpful.
 
 
 Modeling challenges
@@ -192,6 +194,8 @@ The nuances of paraglider behavior are dominated by subtle interactions. The
 design philosophy for this project was to avoid simplifying assumptions
 whenever reasonable to avoid accidentally masking those subtle interactions.
 This approach was driven by a desire to answer questions such as:
+
+.. _Questions:
 
 * How much drag comes from each individual component?
 
