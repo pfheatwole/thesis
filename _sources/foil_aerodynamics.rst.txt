@@ -29,9 +29,6 @@ simulation, and validates the modified method by comparing its predictions
 against wind tunnel measurements of a representative parafoil model from
 literature.
 
-.. FIXME: ensure I have a definition for "target flight conditions" in the
-   Introduction and link to it.
-
 
 Aerodynamics models
 ===================

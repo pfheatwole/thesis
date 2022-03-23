@@ -215,7 +215,7 @@
 <section id="results">
 <h2><span class="section-number">10.1. </span>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
 <p>This project completed the set of tasks outline in its
-<span class="xref std std-ref">introduction:Roadmap:</span>:</p>
+<a class="reference internal" href="introduction.html#roadmap"><span class="std std-ref">Roadmap</span></a>:</p>
 <ol class="arabic simple">
 <li><p>It developed a novel <a class="reference internal" href="foil_geometry.html"><span class="doc">Foil geometry</span></a> specifically to enable simple
 representations of paraglider canopies.</p></li>
@@ -230,15 +230,15 @@ a paraglider.</p></li>
 <li><p>It used the parametric components to <a class="reference internal" href="demonstration.html"><span class="doc">demonstrate</span></a> how
 to produce a complete flight dynamics model of a commercial paraglider wing
 using only limited technical data, photos, and video of the wing.</p></li>
-<li><p>It <span class="xref std std-ref">validated &lt;validation:Niviuk Hook 3 system dynamics</span> the
+<li><p>It <a class="reference internal" href="validation.html#niviuk-hook-3-system-dynamics"><span class="std std-ref">validated</span></a> the
 longitudinal performance of the demonstration model against basic flight
 test data, as well as highlighted some areas in which the accuracy of flight
 dynamics could be improved.</p></li>
 </ol>
 <p>This final section of the paper will address the last of the
 <a class="reference internal" href="introduction.html#modeling-requirements"><span class="std std-ref">Modeling requirements</span></a>: it will revisit the set of
-<span class="xref std std-ref">motivating questions</span> that helped guide the
-design process, and consider the ability of these models to answer them.</p>
+<a class="reference internal" href="introduction.html#questions"><span class="std std-ref">motivating questions</span></a> that helped guide the design process,
+and consider the ability of these models to answer them.</p>
 <section id="study-drag-breakdown">
 <h3><span class="section-number">10.1.1. </span>Study: drag breakdown<a class="headerlink" href="#study-drag-breakdown" title="Permalink to this headline">#</a></h3>
 <p>A common question for curious pilots is how to reduce the drag of their glider
@@ -468,13 +468,12 @@ suggests that the lines play a dominant role).</p></li>
 example of a conservative guess, but if a few commercial section profiles
 were measured accurately (including their spanwise variation), all models of
 commercial paraglider wings would benefit.</p></li>
-<li><p>Deflected profiles: the demonstration used section
-<span class="xref std std-ref">demonstration:Profiles</span> produced by a “two circle” model of trailing
-edge deflection. That optimistic model was designed to balance the accuracy
-of profile deformation against the ability to estimate the aerodynamic
-coefficients with XFOIL. In reality, their unnaturally smooth curvature
-likely causes them to underestimate flow separation. Future work would
-benefit from more accurate deflection profiles.</p></li>
+<li><p>Deflected profiles: the demonstration used section <a class="reference internal" href="demonstration.html#profiles"><span class="std std-ref">Profiles</span></a> produced
+by a “two circle” model of trailing edge deflection. That optimistic model
+was designed to balance the accuracy of profile deformation against the
+ability to estimate the aerodynamic coefficients with XFOIL. In reality,
+their unnaturally smooth curvature likely causes them to underestimate flow
+separation. Future work would benefit from more accurate deflection profiles.</p></li>
 <li><p>Aerodynamic coefficients: in conjunction with more accurate deflection
 profiles, another improvement would be is to use more sophisticated methods
 to estimate the aerodynamic coefficients. One option is RFOIL from Delft
@@ -486,9 +485,9 @@ computational fluid dynamics approach with OpenFoam.</p></li>
 <section id="lines">
 <h3><span class="section-number">10.2.2. </span>Lines<a class="headerlink" href="#lines" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
-<li><p>The parameters for the <span class="xref std std-ref">brakes</span> are confusing at
-first glance, and tedious to tune. At the least they would benefit from an
-automated procedure where instead of having to tune
+<li><p>The parameters for the <a class="reference internal" href="paraglider_components.html#brakes"><span class="std std-ref">brakes</span></a> are
+confusing at first glance, and tedious to tune. At the least they would
+benefit from an automated procedure where instead of having to tune
 <span class="math notranslate nohighlight">\(s_\textrm{start,1}\)</span> and <span class="math notranslate nohighlight">\(s_\textrm{stop,1}\)</span> to match
 <span class="math notranslate nohighlight">\(\kappa_b\)</span> (which was in turn limited by the
 <span class="math notranslate nohighlight">\(\bar{\delta_d}_\textrm{max}\)</span> supported by the aerodynamic coefficient

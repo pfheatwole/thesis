@@ -429,8 +429,9 @@ system. For example, the most common choice of reference point is the leading
 edge of the section profile; by convention the section leading edge will
 coincide with the origin of the airfoil coordinate system, which means no
 additional translations are required to position the profile. This conventional
-choice is demonstrated by the <a class="reference internal" href="#basic-model"><span class="std std-ref">Basic model</span></a>, then relaxed by
-the <a class="reference internal" href="#expanded-model"><span class="std std-ref">Expanded model</span></a>.</p>
+but inflexible choice is demonstrated by the <a class="reference internal" href="#basic-model"><span class="std std-ref">Basic model</span></a>,
+then relaxed by the <a class="reference internal" href="#expanded-model"><span class="std std-ref">Expanded model</span></a>, and made convenient by
+the <a class="reference internal" href="#simplified-model"><span class="std std-ref">Simplified model</span></a>.</p>
 </section>
 <section id="orientation">
 <h3><span class="section-number">3.1.5. </span>Orientation<a class="headerlink" href="#orientation" title="Permalink to this headline">#</a></h3>
@@ -451,7 +452,9 @@ exhibited by wings with arc anhedral).</p>
 <p>Choosing to model a foil using <em>wing sections</em> means that the surfaces are
 defined by 2D airfoils. The 2D airfoil curves must be converted into a 3D
 section-local coordinate system, then scaled, positioned, and oriented relative
-to the foil coordinate system.</p>
+to the foil coordinate system. This “basic” model describes how that is done by
+conventional wing modeling tools, which position the sections by their leading
+edge.</p>
 <p>First, let <span class="math notranslate nohighlight">\(P\)</span> represent any point in a wing section (such as points on
 the chord, mean camber line, or profile), and <span class="math notranslate nohighlight">\(LE\)</span> be the leading edge of
 that section. It is conventional to share the origin between the airfoil and

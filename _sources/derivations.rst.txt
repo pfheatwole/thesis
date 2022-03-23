@@ -45,7 +45,7 @@ In this paper the *arc* of a parafoil is the vector-valued function of
 :math:`\left< y, z \right>` coordinates that position the section reference
 points. For parafoils, the arc is typically defined by an elliptical function.
 
-.. Explain arc anhedral and section roll. FIXME: draw a diagram
+.. Explain arc anhedral and section roll.
 
 A centered elliptical curve can be defined as a function of four parameters,
 but the symmetry of the wing reduces that to three free design parameters, and

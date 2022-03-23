@@ -254,7 +254,8 @@ work uses to replace the parametric design curves in
 :cite:`benedetti2012ParaglidersFlightDynamics` with new parametrizations that
 are easier to estimate for an existing paraglider canopy. It also replaces the
 approximate inertia calculations for the canopy surface and volume with
-a mesh-based method, and adds vertical ribs to account for their extra mass.
+a mesh-based method that can account for different upper and lower surface
+densities, and the extra solid mass from vertical ribs.
 
 
 .. Also mention the different choice of section index? That has a big impact
