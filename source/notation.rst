@@ -19,7 +19,7 @@ Notation and Symbols
    * - :math:`\vec{x}^c`
      - a vector in the coordinate system :math:`c`
    * - :math:`\vec{x}_{B/A}`
-     - a vector from point A to point B (point B with respect to point A)
+     - a vector from point A to point B ("B with respect to A")
    * - :math:`{^r \dot{\vec{x}}}`
      - the derivative of a vector taken in reference frame
        :math:`\mathcal{F}_r`

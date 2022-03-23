@@ -256,7 +256,7 @@ each aerodynamics method.
    diverges since it's not a true inviscid method; it's using the viscous lift
    coefficients to determine the circulation distribution.
 
-.. figure:: figures/paraglider/belloc/NLLT/pseudoinviscid/CL_vs_CD.*
+.. figure:: figures/paraglider/belloc/NLLT/pseudoinviscid_CL_vs_CD.*
    :name: Belloc_CL_vs_CD_pseudoinviscid
 
    Lift vs induced drag
@@ -297,7 +297,7 @@ the "small angles" approximation relied on by AVL, with the experimental
 attack and sideslip.
 
 
-.. figure:: figures/paraglider/belloc/NLLT/Cd_surface/CL_vs_CD.*
+.. figure:: figures/paraglider/belloc/NLLT/Cd_surface_CL_vs_CD.*
    :name: Belloc_CL_vs_CD_surface
 
    Lift vs drag with extra viscous drag due to "surface characteristics"
@@ -830,4 +830,5 @@ Unlike the accurate estimates for the polar curves, which measured
 steady-state, longitudinal dynamics, this model clearly struggles with this
 test. It is unclear what is causing the discrepancy, but it is an important
 counterpoint that highlights the many dimensions of model accuracy. It is also
-suggests a direction for future work on :ref:`Weight shift modeling`.
+suggests a direction for future work on :ref:`weight shift modeling
+<weight_shift_modeling>`.

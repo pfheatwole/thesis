@@ -380,8 +380,9 @@ system. For example, the most common choice of reference point is the leading
 edge of the section profile; by convention the section leading edge will
 coincide with the origin of the airfoil coordinate system, which means no
 additional translations are required to position the profile. This conventional
-choice is demonstrated by the :ref:`foil_geometry:Basic model`, then relaxed by
-the :ref:`foil_geometry:Expanded model`.
+but inflexible choice is demonstrated by the :ref:`foil_geometry:Basic model`,
+then relaxed by the :ref:`foil_geometry:Expanded model`, and made convenient by
+the :ref:`foil_geometry:Simplified model`.
 
 .. FIXME: this paragraph feels awkward. What's its point?
 
@@ -407,7 +408,9 @@ Basic model
 Choosing to model a foil using *wing sections* means that the surfaces are
 defined by 2D airfoils. The 2D airfoil curves must be converted into a 3D
 section-local coordinate system, then scaled, positioned, and oriented relative
-to the foil coordinate system.
+to the foil coordinate system. This "basic" model describes how that is done by
+conventional wing modeling tools, which position the sections by their leading
+edge.
 
 First, let :math:`P` represent any point in a wing section (such as points on
 the chord, mean camber line, or profile), and :math:`LE` be the leading edge of
@@ -438,13 +441,15 @@ terms of section coordinates:
 
    \vec{r}_{P/LE}^f = \mat{C}_{f/s} \vec{r}_{P/LE}^s
 
-Because airfoil curves are defined in the 2D airfoil-local coordinate system,
-another transformation is required to convert them into 3D section-local
-coordinates. The convention for airfoil coordinates places the origin at the
-leading edge, with the :math:`x`-axis pointing from the leading edge towards
-the trailing edge, and the :math:`y`-axis oriented towards the upper surface.
-This paper uses a front-right-down convention for all 3D coordinate systems, so
-the conversion can be written with a matrix transformation:
+Because airfoil curves are defined in the 2D airfoil-local coordinate system
+:math:`a`, another transformation is required to convert them into the 3D
+section-local coordinate system :math:`s`. The convention for airfoil
+coordinates places the origin at the leading edge, with the :math:`x`-axis
+pointing from the leading edge towards the trailing edge, and the
+:math:`y`-axis oriented towards the upper surface. This paper uses
+a front-right-down convention for all 3D coordinate systems, so the conversion
+from 2D airfoil coordinates :math:`a` to 3D section coordinates :math:`s` can
+be written as a matrix transformation:
 
 .. math::
    :label: T_s2a

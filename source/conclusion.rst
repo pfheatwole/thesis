@@ -9,8 +9,6 @@ Conclusion
    convince them the paper is worth reading.
 
 
-
-
 Results
 =======
 
@@ -24,7 +22,7 @@ Results
 .. What was done? Summarize the work and its key outcomes.
 
 This project completed the set of tasks outline in its
-:ref:`introduction:Roadmap:`:
+:ref:`introduction:Roadmap`:
 
 1. It developed a novel :doc:`foil_geometry` specifically to enable simple
    representations of paraglider canopies.
@@ -43,15 +41,15 @@ This project completed the set of tasks outline in its
    to produce a complete flight dynamics model of a commercial paraglider wing
    using only limited technical data, photos, and video of the wing.
 
-5. It :ref:`validated <validation:Niviuk Hook 3 system dynamics` the
+5. It :ref:`validated <validation:Niviuk Hook 3 system dynamics>` the
    longitudinal performance of the demonstration model against basic flight
    test data, as well as highlighted some areas in which the accuracy of flight
    dynamics could be improved.
 
 This final section of the paper will address the last of the
 :ref:`introduction:Modeling requirements`: it will revisit the set of
-:ref:`motivating questions <introduction:questions>` that helped guide the
-design process, and consider the ability of these models to answer them.
+:ref:`motivating questions <Questions>` that helped guide the design process,
+and consider the ability of these models to answer them.
 
 
 Study: drag breakdown
@@ -312,7 +310,7 @@ Canopy
   of the canopy is constant, but that a practical limitation, not a theoretical
   one.
 
-.. _Weight shift modeling:
+.. _Weight_shift_modeling:
 
 * Weight shift modeling: the :ref:`validation:Steady-state turn` sanity check
   of the demonstration model suggests that lateral movement of the mass
@@ -336,13 +334,12 @@ Canopy
   were measured accurately (including their spanwise variation), all models of
   commercial paraglider wings would benefit.
 
-* Deflected profiles: the demonstration used section
-  :ref:`demonstration:Profiles` produced by a "two circle" model of trailing
-  edge deflection. That optimistic model was designed to balance the accuracy
-  of profile deformation against the ability to estimate the aerodynamic
-  coefficients with XFOIL. In reality, their unnaturally smooth curvature
-  likely causes them to underestimate flow separation. Future work would
-  benefit from more accurate deflection profiles.
+* Deflected profiles: the demonstration used section :ref:`Profiles` produced
+  by a "two circle" model of trailing edge deflection. That optimistic model
+  was designed to balance the accuracy of profile deformation against the
+  ability to estimate the aerodynamic coefficients with XFOIL. In reality,
+  their unnaturally smooth curvature likely causes them to underestimate flow
+  separation. Future work would benefit from more accurate deflection profiles.
 
 * Aerodynamic coefficients: in conjunction with more accurate deflection
   profiles, another improvement would be is to use more sophisticated methods
@@ -355,9 +352,9 @@ Canopy
 Lines
 -----
 
-* The parameters for the :ref:`brakes <paraglider_components>` are confusing at
-  first glance, and tedious to tune. At the least they would benefit from an
-  automated procedure where instead of having to tune
+* The parameters for the :ref:`brakes <paraglider_components:Brakes>` are
+  confusing at first glance, and tedious to tune. At the least they would
+  benefit from an automated procedure where instead of having to tune
   :math:`s_\textrm{start,1}` and :math:`s_\textrm{stop,1}` to match
   :math:`\kappa_b` (which was in turn limited by the
   :math:`\bar{\delta_d}_\textrm{max}` supported by the aerodynamic coefficient
