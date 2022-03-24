@@ -100,14 +100,11 @@ The majority of the work for this project is in step 2 (estimating the inertial
 properties and forces) because the estimation process requires accurate models
 of the mass distribution and aerodynamics of each component of the glider.
 
-
-.. FIXME: restore in the web version
-
-   .. attention:: The remainder of this chapter assumes a working familiarity
-      with fundamental aerodynamics. For the necessary background to understand
-      this work, the section of the "Related works" covering
-      :ref:`related_works:Flight simulation` provides an overview and complete
-      list of material that I found helpful.
+.. attention:: The remainder of this work assumes a working familiarity with
+   fundamental aerodynamics. For the necessary background to understand this
+   work, the section of the "Related works" covering :ref:`related_works:Flight
+   simulation` provides an overview and complete list of material that I found
+   helpful.
 
 
 Modeling challenges

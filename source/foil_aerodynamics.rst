@@ -369,17 +369,15 @@ paraglider flights. This section presents a number of modifications to improve
 the usability, functionality, and numerical stability of the method that
 greatly extend its applicability.
 
-.. FIXME: reenable in the web version
-
-   .. caution:: The material in this chapter up to this point has been
-      a presentation of expert knowledge from literature. What follows is
-      a best-effort attempt on my part as an amateur to identify the
-      limitations with Phillips' NLLT, and to suggest practical mitigations
-      that allow its use in dynamic simulations of paraglider wings. I am
-      a computer engineering by training, whereas my knowledge of aerodynamics
-      is from reading the materials listed in the :ref:`related works
-      <related_works:Flight simulation>`. As such, these discussions should be
-      viewed with a critical eye.
+.. caution:: The material in this chapter up to this point has been
+   a presentation of expert knowledge from literature. What follows is
+   a best-effort attempt on my part as an amateur to identify the
+   limitations with Phillips' NLLT, and to suggest practical mitigations
+   that allow its use in dynamic simulations of paraglider wings. I am
+   a computer engineering by training, whereas my knowledge of aerodynamics
+   is from reading the materials listed in the :ref:`related works
+   <related_works:Flight simulation>`. As such, these discussions should be
+   viewed with a critical eye.
 
 
 Control point distribution
