@@ -437,11 +437,11 @@ defined by the curvature of the <span class="math notranslate nohighlight">\(yz\
 wing in hand). Relying on the fact that parafoils commonly benefit from a small
 amount of increasing geometric torsion towards the wing tips (or <em>washin</em>),
 a conservative guess of 4° at the wingtip should be reasonably accurate
-<span id="id1">[<a class="reference internal" href="zreferences.html#id17" title="Pere Casellas. Paraglider Design Handbook. http://laboratoridenvol.com/paragliderdesign/.">31</a>]</span>. For lack of better information, this
+<span id="id1">[<a class="reference internal" href="zreferences.html#id17" title="Pere Casellas. Paraglider Design Handbook. http://laboratoridenvol.com/paragliderdesign/.">32</a>]</span>. For lack of better information, this
 demonstration chose a piecewise <a class="reference internal" href="derivations.html#polynomial-torsion"><span class="std std-ref">linear model</span></a> that grows 0–4° degrees over the range <span class="math notranslate nohighlight">\(0.05 \le |s| \le 1\)</span>.</p>
 <p class="rubric" id="profiles">Profiles</p>
 <p>Having finished defining the section layout (scale, position, and orientation),
-each section must be assigned an airfoil <span id="id2">[<a class="reference internal" href="zreferences.html#id2" title="Ira H. Abbott and Albert E. Von Doenhoff. Theory of Wing Sections. Dover Publications, Inc., New York, USA, 1959. ISBN 978-0-486-60586-9.">36</a>]</span>.
+each section must be assigned an airfoil <span id="id2">[<a class="reference internal" href="zreferences.html#id2" title="Ira H. Abbott and Albert E. Von Doenhoff. Theory of Wing Sections. Dover Publications, Inc., New York, USA, 1959. ISBN 978-0-486-60586-9.">37</a>]</span>.
 The most accurate way to determine the section profiles would be to cut open
 the wing and trace the outline of the internal ribs, but in this case that’s
 not an option. Another option would be to search an airfoil database, but the
@@ -449,17 +449,17 @@ simplest approach is to use a choice from literature. When using literature,
 it’s important to keep in mind that although papers discussing “parafoils” and
 “ram-air parachutes” have much in common with paraglider canopies, those papers
 are typically analyzing large canopies designed for heavy payloads.</p>
-<p>From the ram-air category, <span id="id3">[<a class="reference internal" href="zreferences.html#id42" title="J Stephen Lingard. Ram-air parachute Design. In 13th AIAA Aerodynamic Decelerator Systems Technology Conference, 15–18. 1995.">28</a>]</span> observes
+<p>From the ram-air category, <span id="id3">[<a class="reference internal" href="zreferences.html#id43" title="J Stephen Lingard. Ram-air parachute Design. In 13th AIAA Aerodynamic Decelerator Systems Technology Conference, 15–18. 1995.">29</a>]</span> observes
 that many “older designs” use a Clark-Y airfoil with 18% thickness; it also
 mentions that “newer gliders” have been design with “low-speed sections”, such
 as the LS(1)-0417 (for example, see
-<span id="id4">[<a class="reference internal" href="zreferences.html#id11" title="Sarah Becker and Paul Bruce. Experimental Study of Paraglider Aerodynamics. Master's thesis, Imperial College London, September 2017. doi:10.13140/RG.2.2.33674.16321.">44</a>]</span>). For literature targeting
+<span id="id4">[<a class="reference internal" href="zreferences.html#id11" title="Sarah Becker and Paul Bruce. Experimental Study of Paraglider Aerodynamics. Master's thesis, Imperial College London, September 2017. doi:10.13140/RG.2.2.33674.16321.">45</a>]</span>). For literature targeting
 paragliders specifically, one option is the NACA 23015: a classic, general
-purpose airfoil used in the <a class="reference internal" href="validation.html#foil-aerodynamics"><span class="std std-ref">wind tunnel model</span></a> <span id="id5">[<a class="reference internal" href="zreferences.html#id12" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">18</a>]</span>. Another
+purpose airfoil used in the <a class="reference internal" href="validation.html#foil-aerodynamics"><span class="std std-ref">wind tunnel model</span></a> <span id="id5">[<a class="reference internal" href="zreferences.html#id12" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">19</a>]</span>. Another
 paraglider-specific option is the “Ascender”: an 18% thickness airfoil
 developed for an open-design paraglider
-<span id="id6">[<a class="reference internal" href="zreferences.html#id17" title="Pere Casellas. Paraglider Design Handbook. http://laboratoridenvol.com/paragliderdesign/.">31</a>]</span>; for an example of literature using
-that airfoil, see <span id="id7">[<a class="reference internal" href="zreferences.html#id16" title="Maurizio Boffadossi and Federico Savorgnan. Analysis on aerodynamic characteristics of a paraglider airfoil. AEROTECNICA, MISSILI E SPAZIO, 95(4):211–218, 2016. doi:10.19249/ams.v95i4.286.">45</a>]</span>.</p>
+<span id="id6">[<a class="reference internal" href="zreferences.html#id17" title="Pere Casellas. Paraglider Design Handbook. http://laboratoridenvol.com/paragliderdesign/.">32</a>]</span>; for an example of literature using
+that airfoil, see <span id="id7">[<a class="reference internal" href="zreferences.html#id16" title="Maurizio Boffadossi and Federico Savorgnan. Analysis on aerodynamic characteristics of a paraglider airfoil. AEROTECNICA, MISSILI E SPAZIO, 95(4):211–218, 2016. doi:10.19249/ams.v95i4.286.">46</a>]</span>.</p>
 <p>The criteria for selecting an airfoil is beyond the scope of this
 demonstration, but a key observation is the tendency for paragliders to use
 unusually thick airfoils. The reason for this is that thick airfoils tend to
@@ -527,7 +527,7 @@ transition region. For small brake inputs the transition curvature is
 negligible, but becomes progressively sharper as deflection increases. High
 curvature can be a problem for some theoretical models used to estimate the
 section coefficients (including the viscous/inviscid coupling method in XFOIL
-<span id="id8">[<a class="reference internal" href="zreferences.html#id25" title="Mark Drela. XFOIL: An Analysis and Design System for Low Reynolds Number Airfoils. In Thomas J. Mueller, editor, Low Reynolds Number Aerodynamics, 1–12. Springer Berlin Heidelberg, 1989. doi:10.1007/978-3-642-84010-4_1.">46</a>]</span>), since the high curvature inhibits the
+<span id="id8">[<a class="reference internal" href="zreferences.html#id25" title="Mark Drela. XFOIL: An Analysis and Design System for Low Reynolds Number Airfoils. In Thomas J. Mueller, editor, Low Reynolds Number Aerodynamics, 1–12. Springer Berlin Heidelberg, 1989. doi:10.1007/978-3-642-84010-4_1.">47</a>]</span>), since the high curvature inhibits the
 method from converging on a solution when viscosity is taken into account.
 Softening the curvature allows the estimate to converge, but at the cost of
 hiding convergence failures that typically suggest flow separation. As
@@ -592,7 +592,7 @@ thankfully its effect on the solid mass inertia and viscous drag is relatively
 minor; in the absence of physical measurements, a reasonable guess is
 <span class="math notranslate nohighlight">\(r_\textrm{upper} = -0.04\)</span> and <span class="math notranslate nohighlight">\(r_\textrm{lower} = -0.09\)</span> for an
 air intake length roughly 5% of the length of the chord. For a related
-discussion, see <span id="id9">[<a class="reference internal" href="zreferences.html#id16" title="Maurizio Boffadossi and Federico Savorgnan. Analysis on aerodynamic characteristics of a paraglider airfoil. AEROTECNICA, MISSILI E SPAZIO, 95(4):211–218, 2016. doi:10.19249/ams.v95i4.286.">45</a>]</span>.</p>
+discussion, see <span id="id9">[<a class="reference internal" href="zreferences.html#id16" title="Maurizio Boffadossi and Federico Savorgnan. Analysis on aerodynamic characteristics of a paraglider airfoil. AEROTECNICA, MISSILI E SPAZIO, 95(4):211–218, 2016. doi:10.19249/ams.v95i4.286.">46</a>]</span>.</p>
 <figure class="align-default" id="naca24018-with-air-intakes">
 <img alt="_images/air_intakes.svg" src="_images/air_intakes.svg"/><figcaption>
 <p><span class="caption-number">Fig. 8.5 </span><span class="caption-text">NACA 24018 with air intakes</span><a class="headerlink" href="#naca24018-with-air-intakes" title="Permalink to this image">#</a></p>
@@ -611,12 +611,12 @@ assumed to have a negligible impact on the overall system behavior.</p>
 <p>The last step is to add the empirical corrections to the section viscous drag
 coefficients. The first is a general factor applied to all the sections evenly
 to account for “surface characteristics”, as estimated during wind tunnel
-measurements of parafoils in <span id="id10">[<a class="reference internal" href="zreferences.html#id63" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">42</a>]</span>:</p>
+measurements of parafoils in <span id="id10">[<a class="reference internal" href="zreferences.html#id64" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">43</a>]</span>:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-cd-surface">
 <span class="eqno">(8.1)<a class="headerlink" href="#equation-cd-surface" title="Permalink to this equation">#</a></span>\[C_{d,\textrm{surface}} = 0.004\]</div></div>
 <p>The second correction is to account for the additional viscous drag due to the
 presence of air intakes at the leading edge of some of the sections. In
-<span id="id11">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span> they propose a simple
+<span id="id11">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">30</a>]</span> they propose a simple
 linear relationship between the length of the air intake:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-cd-intakes">
 <span class="eqno">(8.2)<a class="headerlink" href="#equation-cd-intakes" title="Permalink to this equation">#</a></span>\[C_{d,\textrm{intakes}} = 0.07 \, \frac{h}{c}\]</div></div>
@@ -759,7 +759,7 @@ to estimate visually; using <a class="reference internal" href="#hook3-rear-view
 <span class="math notranslate nohighlight">\(\vec{r}_{CP/R} = \left&lt; -0.5 c_\textrm{root}, ±1.75, 1.75 \right&gt;\)</span>.
 Lastly, each lumped line area is assigned a drag coefficient; because the lines
 are essentially cylinders, a suitable drag coefficient is simply <span class="math notranslate nohighlight">\(C_{d,l}
-= 1\)</span> <span id="id12">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span>.</p>
+= 1\)</span> <span id="id12">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span>.</p>
 </section>
 </section>
 <section id="payload">
@@ -777,7 +777,7 @@ can displace the centroid using weight-shift control (<span class="math notransl
 wing as 65–85 [kg], so <span class="math notranslate nohighlight">\(m_p = 75 \left[\textrm{kg}\right]\)</span> is
 a conservative choice.</p>
 <p>For the mass centroid, one option is to consider the DHV airworthiness
-guidelines <span id="id13">[<a class="reference internal" href="zreferences.html#id65" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">47</a>]</span>, which specify
+guidelines <span id="id13">[<a class="reference internal" href="zreferences.html#id66" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">48</a>]</span>, which specify
 that the riser attachment points must be “35–65cm above the seat board”, which
 suggests that <span class="math notranslate nohighlight">\(z_\textrm{riser} = 0.5 \left[\textrm{m}\right]\)</span> is
 a reasonable value in most cases. Alternatively, simply look up the technical
@@ -785,8 +785,8 @@ diagram of a suitable harness; for example, the wing certification flight tests
 (published in the Hook 3 User Manual, p. 22) list the “harness to risers
 distance” as 49cm.</p>
 <p>For the surface area and its associated drag coefficient, consider
-<span id="id14">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">30</a>]</span> (p. 85) or
-<span id="id15">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span> (p. 422); given that 75kg
+<span id="id14">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">31</a>]</span> (p. 85) or
+<span id="id15">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">30</a>]</span> (p. 422); given that 75kg
 is a lower-than-average payload (so smaller frontal area), and that this is
 a beginner-grade wing (so a high performance “pod” harness is less likely),
 a reasonable choice of the area would be <span class="math notranslate nohighlight">\(S_\textrm{payload} = 0.55

@@ -244,7 +244,7 @@ position using the WGS-84 <em>geodetic datum</em>, which uses the geocentric
 coordinates of latitude, longitude, and altitude. However, positioning on the
 global spheroid is overkill for these simulations, so to avoid the complexity
 involved with angular coordinates the state models here use a <em>tangent-plane</em>
-(<span class="math notranslate nohighlight">\(tp\)</span>) approximation (<span id="id1">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>, p.
+(<span class="math notranslate nohighlight">\(tp\)</span>) approximation (<span id="id1">[<a class="reference internal" href="zreferences.html#id58" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">12</a>]</span>, p.
 27) that records position as a linear displacement from an arbitrary origin.</p>
 <p>For orientation, there are two common representations: <em>Euler angles</em> and
 <em>quaternions</em>. Euler angles have the advantage of being easier to understand,
@@ -285,7 +285,7 @@ were taken in the body and payload reference frames, <span class="math notransla
 aircraft relative to the tangent plane requires derivatives taken with respect
 to the inertial frame <span class="math notranslate nohighlight">\(\mathcal{F}_e\)</span>. To provide the simulator with the
 proper derivatives, the state dynamics models must use the <em>equation of
-Coriolis</em> (<span id="id2">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>, Eq.
+Coriolis</em> (<span id="id2">[<a class="reference internal" href="zreferences.html#id58" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">12</a>]</span>, Eq.
 1.4-2) to calculate the derivative of velocity taken with respect to the
 inertial frame:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
@@ -305,7 +305,7 @@ inertial frame:</p>
 using the object’s angular velocity vector <span class="math notranslate nohighlight">\(\vec{\omega} = \{ p, q, r \}\)</span>
 in the coordinate system attached to that object (<span class="math notranslate nohighlight">\(\vec{\omega}_{b/e}^b\)</span>
 for the body, or <span class="math notranslate nohighlight">\(\vec{\omega}_{p/e}^p\)</span> for the payload)
-(<span id="id3">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>, Eq. 1.8-15):</p>
+(<span id="id3">[<a class="reference internal" href="zreferences.html#id58" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">12</a>]</span>, Eq. 1.8-15):</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[\begin{split}\mat{\Omega} \defas
   \begin{bmatrix}

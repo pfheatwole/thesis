@@ -258,7 +258,7 @@ pressurized (as well as meeting requirements such as weight, physical
 reliability, manufacturability, etc). Modeling the deformations that occur
 during flight (cell billowing, profile flattening, surface wrinkling, etc) are
 exceptionally difficult to model without resorting to complete material
-simulation <span id="id1">[<a class="reference internal" href="zreferences.html#id44" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">35</a>]</span>, which is why this
+simulation <span id="id1">[<a class="reference internal" href="zreferences.html#id45" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">36</a>]</span>, which is why this
 project does not consider any deformations other than deflections of the
 trailing edge due to brake inputs (which are <a class="reference internal" href="demonstration.html#profiles"><span class="std std-ref">calculated separately</span></a>).</p>
 <p>Instead, this model assumes that the foil geometry is an exact representation
@@ -353,7 +353,7 @@ a combination of three different masses: a <em>solid mass</em>, from the structu
 materials, an <em>air mass</em>, from the air enclosed in the foil, and an <em>apparent
 mass</em>, from the air surrounding the foil. (Some texts refer to the combination
 of the solid and enclosed air masses as the <em>real mass</em>
-<span id="id2">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">23</a>]</span>.)</p>
+<span id="id2">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">24</a>]</span>.)</p>
 <section id="solid-mass">
 <h4><span class="section-number">5.1.2.1. </span>Solid mass<a class="headerlink" href="#solid-mass" title="Permalink to this headline">#</a></h4>
 <p>The <em>solid mass</em> is all the surface and structural materials that comprise the
@@ -446,7 +446,7 @@ object would have in isolation, as if the vehicle has increased its mass:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[a = \frac{\sum{F}}{m + m_a}\]</div></div>
 <p>This <em>apparent mass</em> <span class="math notranslate nohighlight">\(m_a\)</span> (or <em>added mass</em>
-<span id="id3">[<a class="reference internal" href="zreferences.html#id58" title="Peter G. Thomasson. Equations of motion of a vehicle in a moving fluid. Journal of Aircraft, 37(4):630–639, 2000. doi:10.2514/2.2645.">24</a>]</span>) tends to become more significant
+<span id="id3">[<a class="reference internal" href="zreferences.html#id59" title="Peter G. Thomasson. Equations of motion of a vehicle in a moving fluid. Journal of Aircraft, 37(4):630–639, 2000. doi:10.2514/2.2645.">25</a>]</span>) tends to become more significant
 as the density of the vehicle approaches the density of the fluid. If the
 density of the vehicle is much greater than the density of the fluid then the
 effect is often ignored, but for lightweight aircraft the effect can be
@@ -456,13 +456,13 @@ a fluid, its magnitude depends on the volume’s shape and the direction of the
 motion. Unlike the real mass, apparent mass is anisotropic, and the diagonal
 terms of the apparent inertia matrix are independent. Calculating the apparent
 mass of an arbitrary geometry is difficult. For a classic discussion of the
-topic, see <span id="id4">[<a class="reference internal" href="zreferences.html#id40" title="Horace Lamb. Hydrodynamics. Dover Publications, Inc., New York, USA, June 1945.">21</a>]</span>. For a more recent discussion of
+topic, see <span id="id4">[<a class="reference internal" href="zreferences.html#id41" title="Horace Lamb. Hydrodynamics. Dover Publications, Inc., New York, USA, June 1945.">22</a>]</span>. For a more recent discussion of
 apparent mass in the context of parafoils, see
-<span id="id5">[<a class="reference internal" href="zreferences.html#id43" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">22</a>]</span>, which used an ellipsoid model to
+<span id="id5">[<a class="reference internal" href="zreferences.html#id44" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">23</a>]</span>, which used an ellipsoid model to
 establish a parametric form commonly used in parafoil-payload literature</p>
 <p>This paper uses an updated method from
-<span id="id6">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">23</a>]</span> which added corrections to the
-ellipsoid model of <span id="id7">[<a class="reference internal" href="zreferences.html#id43" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">22</a>]</span>. (For a replication
+<span id="id6">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">24</a>]</span> which added corrections to the
+ellipsoid model of <span id="id7">[<a class="reference internal" href="zreferences.html#id44" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">23</a>]</span>. (For a replication
 of the equations in that method but given in the notation of this paper, see
 <a class="reference internal" href="derivations.html#apparent-mass-of-a-parafoil"><span class="std std-ref">Apparent mass of a parafoil</span></a>.) The method uses several
 significant simplifying assumptions (the dynamics reference point must lie in
@@ -491,10 +491,10 @@ control the canopy aerodynamics with no modifications to the NLLT. This section
 index allows each section to provide its own section coefficients, as well as
 empirical correction factors. One correction factor included in this model,
 <span class="math notranslate nohighlight">\(C_{D,\textrm{surface}}\)</span>, is for “surface roughness”
-(<span id="id8">[<a class="reference internal" href="zreferences.html#id63" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">42</a>]</span>,
-<span id="id9">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span>), and the other,
+(<span id="id8">[<a class="reference internal" href="zreferences.html#id64" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">43</a>]</span>,
+<span id="id9">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">30</a>]</span>), and the other,
 <span class="math notranslate nohighlight">\(C_{D,\textrm{intakes}}\)</span>, is for the additional viscous drag due to the
-air intakes <span id="id10">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span>. (See the
+air intakes <span id="id10">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">30</a>]</span>. (See the
 <a class="reference internal" href="demonstration.html#physical-details"><span class="std std-ref">demonstration</span></a> for an example.)</p>
 <p>Given the foil geometry and aerodynamic coefficients, the <a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line"><span class="std std-ref">aerodynamics
 model</span></a> estimates the
@@ -773,22 +773,22 @@ contribute a significant amount of aerodynamic drag. Because the total system
 drag of a paraglider is relatively small, even a small increase can have
 a large impact on sensitive characteristics such as glide ratio; in fact,
 paraglider suspension lines contribute upwards of 20% of the total paraglider
-system drag (<span id="id14">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span>,
-<span id="id15">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span>), and should not be
+system drag (<span id="id14">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">30</a>]</span>,
+<span id="id15">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span>), and should not be
 neglected.</p>
 <p>This model does not provide an explicit line geometry, so it can’t compute the
 true line area distribution. Instead, it lumps the entire length of the lines
 into configurable control points; for example, given the total line length and
 average line diameter, the line area can be lumped into singularities such as
 the centroid of line area for each semispan. As with other similar designs
-<span id="id16">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span>, this model treats
+<span id="id16">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span>, this model treats
 the drag as isotropic (because the operating ranges of alpha and beta are so
 small the line drag is effectively constant, and what little force exists
 along the <span class="math notranslate nohighlight">\(z\)</span>-axis is negligible compared to the lift of the canopy).
 Given the total area <span class="math notranslate nohighlight">\(S_\textrm{lines}\)</span> represented by each singularity
 the total aerodynamic drag at some control point <span class="math notranslate nohighlight">\(L\)</span> can be calculated
-as in <span id="id17">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span> or
-<span id="id18">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span>:</p>
+as in <span id="id17">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span> or
+<span id="id18">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">30</a>]</span>:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-suspension-lines-total-length">
 <span class="eqno">(5.20)<a class="headerlink" href="#equation-suspension-lines-total-length" title="Permalink to this equation">#</a></span>\[S_l = \kappa_L \kappa_d\]</div></div>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-suspension-lines-aerodynamics-individual">
@@ -881,8 +881,8 @@ coordinate system, the position of the displaced center of mass is then:</p>
 </section>
 <section id="id21">
 <h3><span class="section-number">5.3.2. </span>Inertia<a class="headerlink" href="#id21" title="Permalink to this headline">#</a></h3>
-<p>As in <span id="id22">[<a class="reference internal" href="zreferences.html#id60" title="Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.">43</a>]</span> (and similarly in
-<span id="id23">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span>), the payload is
+<p>As in <span id="id22">[<a class="reference internal" href="zreferences.html#id61" title="Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.">44</a>]</span> (and similarly in
+<span id="id23">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span>), the payload is
 modeled as a solid sphere of uniform density. With a total mass <span class="math notranslate nohighlight">\(m_p\)</span>,
 center of mass <span class="math notranslate nohighlight">\(P\)</span>, and projected surface area <span class="math notranslate nohighlight">\(S_p\)</span>, the moment
 of inertia about the payload center of mass is simply:</p>
@@ -900,12 +900,12 @@ of inertia about the payload center of mass is simply:</p>
 <section id="id24">
 <h3><span class="section-number">5.3.3. </span>Resultant force<a class="headerlink" href="#id24" title="Permalink to this headline">#</a></h3>
 <p>Harness drag coefficients were studied experimentally in
-<span id="id25">[<a class="reference internal" href="zreferences.html#id60" title="Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.">43</a>]</span>. The author measured several
+<span id="id25">[<a class="reference internal" href="zreferences.html#id61" title="Nuno Filipe Esperança Virgílio. Study of the aerodynamic efficiency of Free flight equipment. 2004.">44</a>]</span>. The author measured several
 harness models in a wind tunnel and converted the results into aerodynamic
 coefficients normalized by the cross-sectional area of the sphere. For a more
 sophisticated approach the coefficient can be adjusted to account
 (approximately) for angle of attack and Reynolds number
-<span id="id26">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span>, but this model
+<span id="id26">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span>, but this model
 simply treats the drag coefficient as a constant.</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-payload-weight">
 <span class="eqno">(5.28)<a class="headerlink" href="#equation-payload-weight" title="Permalink to this equation">#</a></span>\[\vec{f}_{p,\textrm{weight}} = m_p \vec{g}\]</div></div>

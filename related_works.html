@@ -226,10 +226,10 @@ physical system and how it behaves. Key concepts in the context of this paper
 include characteristics of wing geometry; conventions for axes and relative
 motion; flow angles (angle of attack and sideslip); aerodynamic coefficients;
 and control inputs, actuators, and surfaces. An approachable starting point is
-<span id="id1">[<a class="reference internal" href="zreferences.html#id32" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">2</a>]</span>, which provides a thorough
+<span id="id1">[<a class="reference internal" href="zreferences.html#id32" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">3</a>]</span>, which provides a thorough
 discussion of the terminology and significance of the major wing design
 characteristics. Another ubiquitous resource is
-<span id="id2">[<a class="reference internal" href="zreferences.html#id4" title="John David Anderson. Aircraft Performance and Design. Volume 1. WCB/McGraw-Hill Boston, 1999.">3</a>]</span>, which may be more suitable to
+<span id="id2">[<a class="reference internal" href="zreferences.html#id4" title="John David Anderson. Aircraft Performance and Design. Volume 1. WCB/McGraw-Hill Boston, 1999.">4</a>]</span>, which may be more suitable to
 in-depth study.</p>
 <p>Next, to model a behavior you must be able to explain the behavior. The unique
 characteristic of aircraft dynamics is that they experience aerodynamic forces
@@ -238,22 +238,22 @@ of an aircraft are the results of the geometry, relative motion, and
 characteristics of the fluid. Key concepts include the characteristics of the
 flow (inviscid versus viscous, laminar versus turbulent, compressibility, etc)
 and the modeling intuition of Prandtl’s seminal work on boundary layers
-<span id="id3">[<a class="reference internal" href="zreferences.html#id5" title="John Anderson. Ludwig Prandtl's Boundary Layer. Physics Today, 58(12):42–48, December 2005. doi:10.1063/1.2169443.">4</a>]</span> (both 2D and 3D, which are vital to
+<span id="id3">[<a class="reference internal" href="zreferences.html#id5" title="John Anderson. Ludwig Prandtl's Boundary Layer. Physics Today, 58(12):42–48, December 2005. doi:10.1063/1.2169443.">5</a>]</span> (both 2D and 3D, which are vital to
 understanding some of the aerodynamic difficulties in simulating flow around
 a paraglider canopy). When selecting and working with aerodynamics models, it
 is highly beneficial to have a general awareness of the complexity of
 Navier-Stokes, and how the variety of aerodynamics models are the result of
 attempts to produce tractable systems of equations by applying different
 simplifying assumptions. An excellent introduction to these topics is
-<span id="id4">[<a class="reference internal" href="zreferences.html#id14" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">5</a>]</span>, which provides an approachable
+<span id="id4">[<a class="reference internal" href="zreferences.html#id14" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">6</a>]</span>, which provides an approachable
 introduction to the underlying physics, overviews of the core aerodynamic
 models, and how they’re derived. Another prevalent work is
-<span id="id5">[<a class="reference internal" href="zreferences.html#id6" title="John D. Anderson. Fundamentals of Aerodynamics. McGraw-Hill Education, sixth edition, 2017. ISBN 978-1-259-12991-9.">6</a>]</span> (or any of Anderson’s works). For
-more targeted discussions, <span id="id6">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">7</a>]</span> provides
+<span id="id5">[<a class="reference internal" href="zreferences.html#id6" title="John D. Anderson. Fundamentals of Aerodynamics. McGraw-Hill Education, sixth edition, 2017. ISBN 978-1-259-12991-9.">7</a>]</span> (or any of Anderson’s works). For
+more targeted discussions, <span id="id6">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">8</a>]</span> provides
 clear insight into the theoretical details of common aerodynamics models, and
-<span id="id7">[<a class="reference internal" href="zreferences.html#id22" title="Russel M. Cummings, William H. Mason, Scott A. Morton, and David R. McDaniel. Applied Computational Aerodynamics. Cambridge University Press, April 2015. ISBN 978-1-316-23651-2.">8</a>]</span> provides a guide to their
+<span id="id7">[<a class="reference internal" href="zreferences.html#id22" title="Russel M. Cummings, William H. Mason, Scott A. Morton, and David R. McDaniel. Applied Computational Aerodynamics. Cambridge University Press, April 2015. ISBN 978-1-316-23651-2.">9</a>]</span> provides a guide to their
 computational aspects. For a less conventional approach,
-<span id="id8">[<a class="reference internal" href="zreferences.html#id46" title="Doug McLean. Understanding Aerodynamics: Arguing from the Real Physics. John Wiley &amp; Sons, 2012. ISBN 978-1-119-96751-4.">9</a>]</span> provides a unique
+<span id="id8">[<a class="reference internal" href="zreferences.html#id47" title="Doug McLean. Understanding Aerodynamics: Arguing from the Real Physics. John Wiley &amp; Sons, 2012. ISBN 978-1-119-96751-4.">10</a>]</span> provides a unique
 perspective of these aerodynamics models and the assumptions that underlie
 them, including an excellent discussion of some issues with the NLLT that may
 shed light on the difficulties that arise when using that approach.</p>
@@ -267,7 +267,7 @@ relationships exist involves writing equations for the translational and
 angular momentum of the system and taking their derivatives with respect to
 time (since acceleration is the time rate of change of momentum). For
 a thorough explanation with a focus on aircraft dynamics see
-<span id="id9">[<a class="reference internal" href="zreferences.html#id33" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">10</a>]</span>; although the notation can be
+<span id="id9">[<a class="reference internal" href="zreferences.html#id34" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">11</a>]</span>; although the notation can be
 opaque, it provides an excellent development for conservation of momentum of
 multi-body systems, which is especially useful for understanding the
 derivations of system models that include degrees of freedom between the
@@ -278,7 +278,7 @@ inputs. Key concepts include the choice of state variables, coordinate systems
 and their relative advantages, encoding geometric orientation, representing the
 environment, and applying numerical integration to the equations of motion to
 produce the simulated result. For this work I found a complete reference in
-<span id="id10">[<a class="reference internal" href="zreferences.html#id57" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">11</a>]</span>; the opening chapters provide
+<span id="id10">[<a class="reference internal" href="zreferences.html#id58" title="Brian L. Stevens, Frank L. Lewis, and Eric N. Johnson. Aircraft Control and Simulation: Dynamics, Controls Design, and Autonomous Systems. John Wiley &amp; Sons, 2015. ISBN 978-1-118-87098-3.">12</a>]</span>; the opening chapters provide
 a masterful introduction to these key concepts, including a principled
 mathematical notation (adopted by this paper, see <a class="reference internal" href="notation.html"><span class="doc">Notation and Symbols</span></a>) and
 a thorough review of vector calculus (especially the counter-intuitive results
@@ -290,7 +290,7 @@ frame, which is important when defining the <a class="reference internal" href="
 <p>In addition to the general knowledge of aircraft behavior, it is necessary to
 understand the unique characteristics of paraglider flight. For practical
 knowledge, recreational pilot materials make excellent resources. One thorough
-introduction targeting beginner pilots <span id="id11">[<a class="reference internal" href="zreferences.html#id50" title="Dennis Pagen. The Art of Paragliding. Black Mountain Books, 2001. ISBN 0-936310-14-6.">12</a>]</span> provides
+introduction targeting beginner pilots <span id="id11">[<a class="reference internal" href="zreferences.html#id51" title="Dennis Pagen. The Art of Paragliding. Black Mountain Books, 2001. ISBN 0-936310-14-6.">13</a>]</span> provides
 a tour of the components of a paraglider, their function, behavior, and an
 admirable review of their aerodynamics; if any of the paraglider-specific
 terminology in this paper is unclear, this book will likely clear up the
@@ -300,7 +300,7 @@ modeling is typically from one of two branches: parafoil-payload systems, and
 paragliders. Parafoil-payload systems usually (but not always) refer to
 large-scale ram-air gliding parachutes intended for heavy payload applications
 such as cargo delivery and vehicle-recovery (such as landing the X-38
-experimental space plane <span id="id12">[<a class="reference internal" href="zreferences.html#id45" title="Chris Madsen, Ronald Sostaric, and Chris Cerimele. Flight performance, aerodynamics, and simulation development for the X-38 parafoil test program. In 17th AIAA Aerodynamic Decelerator Systems Technology Conference and Seminar, 2108. 2003.">13</a>]</span>, or
+experimental space plane <span id="id12">[<a class="reference internal" href="zreferences.html#id46" title="Chris Madsen, Ronald Sostaric, and Chris Cerimele. Flight performance, aerodynamics, and simulation development for the X-38 parafoil test program. In 17th AIAA Aerodynamic Decelerator Systems Technology Conference and Seminar, 2108. 2003.">14</a>]</span>, or
 the more recent work by SpaceX to catch rocket fairings on a boat), while the
 term “paraglider” usually (but not always) refers to the recreational aircraft.
 Although the physical characteristics of parafoil-payload systems differ
@@ -315,33 +315,33 @@ Their nonlinear geometry made analyses difficult, so early studies were limited
 to their longitudinal dynamics (fore-aft two-dimensional motion).
 Alternatively, simple models of their 3D dynamics divide the wing into several
 discrete segments that act independently (thus neglecting the 3D flow
-interactions of a real 3D model) <span id="id13">[<a class="reference internal" href="zreferences.html#id55" title="Nathan Slegers and Mark Costello. Aspects of control for a parafoil and payload system. Journal of Guidance, Control, and Dynamics, 26(6):898–905, 2003. doi:10.2514/2.6933.">14</a>]</span>.
+interactions of a real 3D model) <span id="id13">[<a class="reference internal" href="zreferences.html#id56" title="Nathan Slegers and Mark Costello. Aspects of control for a parafoil and payload system. Journal of Guidance, Control, and Dynamics, 26(6):898–905, 2003. doi:10.2514/2.6933.">15</a>]</span>.
 Attempts to account for the full 3D aerodynamics typically involved either
 measuring the longitudinal and lateral aerodynamic coefficients experimentally
-<span id="id14">[<a class="reference internal" href="zreferences.html#id47" title="John D Nicolaides. Parafoil wind tunnel tests. Technical Report, Notre Dame Univ in Dept of Aerospace and Mechanical Engineering, 1971.">15</a>]</span>, or estimating them using vortex
+<span id="id14">[<a class="reference internal" href="zreferences.html#id48" title="John D Nicolaides. Parafoil wind tunnel tests. Technical Report, Notre Dame Univ in Dept of Aerospace and Mechanical Engineering, 1971.">16</a>]</span>, or estimating them using vortex
 lattice and panel methods that can account for their nonlinear geometry by
 neglecting viscous effects. The significance of the viscous effects led to
 attempts to incorporate experimental aerodynamic coefficients via extended
 lifting-line models; two important works regarding this approach were
-<span id="id15">[<a class="reference internal" href="zreferences.html#id30" title="Miguel A. González. Prandtl theory applied to paraglider aerodynamics. In Aerospace Design Conference, 1220. 1993. doi:10.2514/6.1993-1220.">16</a>]</span> and
-<span id="id16">[<a class="reference internal" href="zreferences.html#id37" title="Gil Iosilevskii. Lifting-line theory of an arched wing in asymmetric flight. Journal of Aircraft, 33(5):1023–1026, 1996. doi:10.2514/3.47050.">17</a>]</span>, which could estimate the 3D
+<span id="id15">[<a class="reference internal" href="zreferences.html#id30" title="Miguel A. González. Prandtl theory applied to paraglider aerodynamics. In Aerospace Design Conference, 1220. 1993. doi:10.2514/6.1993-1220.">17</a>]</span> and
+<span id="id16">[<a class="reference internal" href="zreferences.html#id38" title="Gil Iosilevskii. Lifting-line theory of an arched wing in asymmetric flight. Journal of Aircraft, 33(5):1023–1026, 1996. doi:10.2514/3.47050.">18</a>]</span>, which could estimate the 3D
 aerodynamics of wings with circular arcs, but were unable to account for sweep.
 As nonlinear lifting-line theory (NLLT) models continue to be developed, their
 applicability to paraglider wings has greatly improved
-<span id="id17">[<a class="reference internal" href="zreferences.html#id12" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">18</a>]</span>; for example,
-<span id="id18">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span> successfully applied
-the method from <span id="id19">[<a class="reference internal" href="zreferences.html#id52" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">20</a>]</span> to a reference
+<span id="id17">[<a class="reference internal" href="zreferences.html#id12" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">19</a>]</span>; for example,
+<span id="id18">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span> successfully applied
+the method from <span id="id19">[<a class="reference internal" href="zreferences.html#id53" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">21</a>]</span> to a reference
 paraglider wing in a static flight test, confirming the merit of the of
 a modern NLLT to this application.</p>
 <p>Another significant characteristic of paraglider canopies is their low density,
 which makes them sensitive to the effects of <em>apparent mass</em>
-<span id="id20">[<a class="reference internal" href="zreferences.html#id40" title="Horace Lamb. Hydrodynamics. Dover Publications, Inc., New York, USA, June 1945.">21</a>]</span>. Early attempts to model the apparent mass of
+<span id="id20">[<a class="reference internal" href="zreferences.html#id41" title="Horace Lamb. Hydrodynamics. Dover Publications, Inc., New York, USA, June 1945.">22</a>]</span>. Early attempts to model the apparent mass of
 a paraglider simplified the wing as an ellipsoid with a single center of
-rotation <span id="id21">[<a class="reference internal" href="zreferences.html#id43" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">22</a>]</span>. Further developments
+rotation <span id="id21">[<a class="reference internal" href="zreferences.html#id44" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">23</a>]</span>. Further developments
 recognized the inadequacies the ellipsoid model, and adjusted the estimates to
 account for two separate centers of rotation for rolling and pitching motions
-<span id="id22">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">23</a>]</span>. Both models are limited by their
-assumption of steady flow <span id="id23">[<a class="reference internal" href="zreferences.html#id58" title="Peter G. Thomasson. Equations of motion of a vehicle in a moving fluid. Journal of Aircraft, 37(4):630–639, 2000. doi:10.2514/2.2645.">24</a>]</span> so their
+<span id="id22">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">24</a>]</span>. Both models are limited by their
+assumption of steady flow <span id="id23">[<a class="reference internal" href="zreferences.html#id59" title="Peter G. Thomasson. Equations of motion of a vehicle in a moving fluid. Journal of Aircraft, 37(4):630–639, 2000. doi:10.2514/2.2645.">25</a>]</span> so their
 adequacy for simulations involving dynamic maneuvers is unclear; nevertheless,
 the adapted model is assumed to be adequate for the purposes of this paper.</p>
 <p>The last major topic of research is the system model. There are many system
@@ -355,32 +355,32 @@ their <em>degrees of freedom</em> (DoF) and the character of the connection poin
 a 6-DoF model does not allow the payload to move at all, a 7-DoF allows the
 payload to translate or rotate (relative to the suspension lines) in one
 dimension, an 8-DoF adds two degrees of freedom, etc. For a general
-understanding of the impact, <span id="id24">[<a class="reference internal" href="zreferences.html#id59" title="Chiara Toglia and Marilena Vendittelli. Modeling and motion analysis of autonomous paragliders. Department of computer and system sciences Antonio Ruberti technical reports, 2010.">25</a>]</span> provides
+understanding of the impact, <span id="id24">[<a class="reference internal" href="zreferences.html#id60" title="Chiara Toglia and Marilena Vendittelli. Modeling and motion analysis of autonomous paragliders. Department of computer and system sciences Antonio Ruberti technical reports, 2010.">26</a>]</span> provides
 a comparative analysis of a fixed (6-DoF) model versus a 9-DoF system model.
 For a more thorough review of the many available system models,
-<span id="id25">[<a class="reference internal" href="zreferences.html#id66" title="Oleg Yakimenko. On the development of a scalable 8-DoF model for a generic parafoil-payload delivery system. In 18th AIAA Aerodynamic Decelerator Systems Technology Conference and Seminar, 1665. 2005.">26</a>]</span> has a seemingly exhaustive list of
+<span id="id25">[<a class="reference internal" href="zreferences.html#id67" title="Oleg Yakimenko. On the development of a scalable 8-DoF model for a generic parafoil-payload delivery system. In 18th AIAA Aerodynamic Decelerator Systems Technology Conference and Seminar, 1665. 2005.">27</a>]</span> has a seemingly exhaustive list of
 the models through 2005, including a discussion of those models that account
 for apparent mass. Two informative models that incorporate apparent mass are
-<span id="id26">[<a class="reference internal" href="zreferences.html#id55" title="Nathan Slegers and Mark Costello. Aspects of control for a parafoil and payload system. Journal of Guidance, Control, and Dynamics, 26(6):898–905, 2003. doi:10.2514/2.6933.">14</a>]</span> (which used the older method in
-<span id="id27">[<a class="reference internal" href="zreferences.html#id43" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">22</a>]</span>) and
-<span id="id28">[<a class="reference internal" href="zreferences.html#id21" title="Christelle Cumer, Clément Toussaint, Thierry Le Moing, Eric Poquillon, and Yves Coquet. Simulation of generic dynamics flight equations of a parafoil/payload system. In Control &amp; Automation (MED), 2012 20th Mediterranean Conference On, 222–228. IEEE, 2012.">27</a>]</span> (which used the adapted apparent
-mass model from <span id="id29">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">23</a>]</span>).</p>
+<span id="id26">[<a class="reference internal" href="zreferences.html#id56" title="Nathan Slegers and Mark Costello. Aspects of control for a parafoil and payload system. Journal of Guidance, Control, and Dynamics, 26(6):898–905, 2003. doi:10.2514/2.6933.">15</a>]</span> (which used the older method in
+<span id="id27">[<a class="reference internal" href="zreferences.html#id44" title="Peter Lissaman and Glen J. Brown. Apparent mass effects on parafoil dynamics. In Aerospace Design Conference, 1236. 1993. doi:10.2514/6.1993-1236.">23</a>]</span>) and
+<span id="id28">[<a class="reference internal" href="zreferences.html#id21" title="Christelle Cumer, Clément Toussaint, Thierry Le Moing, Eric Poquillon, and Yves Coquet. Simulation of generic dynamics flight equations of a parafoil/payload system. In Control &amp; Automation (MED), 2012 20th Mediterranean Conference On, 222–228. IEEE, 2012.">28</a>]</span> (which used the adapted apparent
+mass model from <span id="id29">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">24</a>]</span>).</p>
 <p>In addition to topical works, there have been several more comprehensive
-studies. The best place to start is <span id="id30">[<a class="reference internal" href="zreferences.html#id42" title="J Stephen Lingard. Ram-air parachute Design. In 13th AIAA Aerodynamic Decelerator Systems Technology Conference, 15–18. 1995.">28</a>]</span>:
+studies. The best place to start is <span id="id30">[<a class="reference internal" href="zreferences.html#id43" title="J Stephen Lingard. Ram-air parachute Design. In 13th AIAA Aerodynamic Decelerator Systems Technology Conference, 15–18. 1995.">29</a>]</span>:
 although it has a parafoil-payload perspective, this approachable paper is
 a thorough introduction to the terminology, geometric parameters, choice of
 airfoil, and control schemes of parafoils (which it calls a “ram-air
 parachute”); this paper also used geometric simplifications to study the canopy
 aerodynamics and drag contributions, and developed linear models of the
 longitudinal and lateral dynamics to study performance and stability. Next, for
-a paraglider perspective, <span id="id31">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span>
+a paraglider perspective, <span id="id31">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">30</a>]</span>
 provides a compact survey on the sources of aerodynamic drag; it reviews the
 impacts of arc, flexibility, air intakes, lines, and pilot. Worth reading
-immediately after is <span id="id32">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span>,
+immediately after is <span id="id32">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span>,
 as it is essentially an updated revision of
-<span id="id33">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">29</a>]</span>.</p>
+<span id="id33">[<a class="reference internal" href="zreferences.html#id8" title="Holger Babinsky. The aerodynamic performance of paragliders. The Aeronautical Journal (1968), 103(1027):421–428, 1999. doi:10.1017/S0001924000027974.">30</a>]</span>.</p>
 <p>The most comprehensive work on paraglider flight dynamics to date is the
-dissertation <span id="id34">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">30</a>]</span> that inspired the
+dissertation <span id="id34">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">31</a>]</span> that inspired the
 general structure of this paper. First, it provides an overview of paraglider
 geometry, construction, and behavior. It then develops a foil geometry that
 uses the locus of quarter-chord points to position the sections, as well as
@@ -401,24 +401,24 @@ controllability (takeoff, maneuvering, and landing).</p>
 <section id="this-work">
 <h2><span class="section-number">2.3. </span>This work<a class="headerlink" href="#this-work" title="Permalink to this headline">#</a></h2>
 <p>As mentioned in the previous paragraph, this project began with
-<span id="id35">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">30</a>]</span> as its starting point. While
+<span id="id35">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">31</a>]</span> as its starting point. While
 attempting to use those models to recreate commercial paraglider wings, this
 work identified a collection of improvements that led to newly derived
 models.</p>
 <p>First, it improves the canopy geometry by developing a novel foil geometry
-model inspired by a suggestion in <span id="id36">[<a class="reference internal" href="zreferences.html#id17" title="Pere Casellas. Paraglider Design Handbook. http://laboratoridenvol.com/paragliderdesign/.">31</a>]</span> that
+model inspired by a suggestion in <span id="id36">[<a class="reference internal" href="zreferences.html#id17" title="Pere Casellas. Paraglider Design Handbook. http://laboratoridenvol.com/paragliderdesign/.">32</a>]</span> that
 allows independent reference points for the <span class="math notranslate nohighlight">\(x\)</span>- and
 <span class="math notranslate nohighlight">\(yz\)</span>-positions. This increased flexibility allows accurate
 representations of existing wings using simple parametric equations, which this
 work uses to replace the parametric design curves in
-<span id="id37">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">30</a>]</span> with new parametrizations that
+<span id="id37">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">31</a>]</span> with new parametrizations that
 are easier to estimate for an existing paraglider canopy. It also replaces the
 approximate inertia calculations for the canopy surface and volume with
 a mesh-based method that can account for different upper and lower surface
 densities, and the extra solid mass from vertical ribs.</p>
 <p>For the canopy aerodynamics, it replaces his pseudo-LLT with a full NLLT
-(<span id="id38">[<a class="reference internal" href="zreferences.html#id52" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">20</a>]</span>,
-<span id="id39">[<a class="reference internal" href="zreferences.html#id34" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">32</a>]</span>) that supports arbitrary arc,
+(<span id="id38">[<a class="reference internal" href="zreferences.html#id53" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">21</a>]</span>,
+<span id="id39">[<a class="reference internal" href="zreferences.html#id35" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">33</a>]</span>) that supports arbitrary arc,
 sweep, twist, specific (nonlinear model) aerodynamic coefficients for each
 section as a function of Reynolds number and deflection distance, and
 non-uniform wind vectors along the span. Also, instead of modeling trailing
@@ -444,13 +444,14 @@ equivalent, I personally felt that this change makes simulation scenarios
 easier to write and understand.</p>
 <p>For the system model, this paper derived 6-DoF and 9-DoF models (the 9-DoF is
 a rederivation of the model used in
-<span id="id40">[<a class="reference internal" href="zreferences.html#id56" title="Nathan J Slegers. Effects of canopy-payload relative motion on control of autonomous parafoils. Journal of guidance, control, and dynamics, 33(1):116–125, 2010.">33</a>]</span> and
-<span id="id41">[<a class="reference internal" href="zreferences.html#id31" title="Chrystine M. Gorman and Nathan Slegers. Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature Wireless Sensors. Journal of Aircraft, 49(2):546–555, 2012. doi:10.2514/1.C031566.">34</a>]</span>) that may optionally incorporate
-the apparent mass estimates from <span id="id42">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">23</a>]</span>. The
+<span id="id40">[<a class="reference internal" href="zreferences.html#id57" title="Nathan J Slegers. Effects of canopy-payload relative motion on control of autonomous parafoils. Journal of guidance, control, and dynamics, 33(1):116–125, 2010.">34</a>]</span> and
+<span id="id41">[<a class="reference internal" href="zreferences.html#id31" title="Chrystine M. Gorman and Nathan Slegers. Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature Wireless Sensors. Journal of Aircraft, 49(2):546–555, 2012. doi:10.2514/1.C031566.">35</a>]</span>) that may optionally incorporate
+the apparent mass estimates from <span id="id42">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">24</a>]</span>. The
 9-DoF model is included for demonstration and testing purposes, and is not used
 in any analyses.</p>
-<p>The implementation of all models are available as an <a class="reference external" href="https://github.com/pfheatwole/glidersim">open source library</a> including example wing models, and
-the simulations used in this paper are available as part of the <a class="reference external" href="https://github.com/pfheatwole/thesis">open source
+<p>The implementation of all models are available as an <a class="reference external" href="https://github.com/pfheatwole/glidersim">open source library</a>
+<span id="id43">[<a class="reference internal" href="zreferences.html#id33" title="Peter F. Heatwole. Glidersim. v2022.03.0a. doi:10.5281/zenodo.6383053.">1</a>]</span>, including example wing models, and the
+simulations used in this paper are available as part of the <a class="reference external" href="https://github.com/pfheatwole/thesis">open source
 materials</a> used to produce this paper.</p>
 </section>
 </section>

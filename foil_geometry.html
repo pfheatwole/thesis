@@ -267,7 +267,7 @@ a poor choice.</p>
 <p>In addition, note that these are idealized geometry models, not detailed
 structural models. Structural models include physical details that can be used
 to simulate effects such as internal forces and wing deformations
-<span id="id1">[<a class="reference internal" href="zreferences.html#id44" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">35</a>]</span>. Unfortunately, as discussed
+<span id="id1">[<a class="reference internal" href="zreferences.html#id45" title="Tom Lolies, Nicolas Gourdain, Miguel Charlotte, Herve Belloc, and Bruce Goldsmith. Numerical Methods for Efficient Fluid–Structure Interaction Simulations of Paragliders. Aerotecnica Missili &amp; Spazio, 98(3):221–229, September 2019. doi:10.1007/s42496-019-00017-2.">36</a>]</span>. Unfortunately, as discussed
 earlier, such details are not available for commercial paraglider wings, and
 such analyses would be time prohibitive even if they were. Instead, this design
 will model only those details of the shape that can be approximated from the
@@ -287,8 +287,8 @@ structure: a structural parameter communicates more information than an
 explicit coordinate, which means less work (and less data) is required to
 specify a design.</p>
 <p>The standard first step towards parametrizing a foil geometry is to define it
-in terms of <em>wing sections</em> (<span id="id2">[<a class="reference internal" href="zreferences.html#id2" title="Ira H. Abbott and Albert E. Von Doenhoff. Theory of Wing Sections. Dover Publications, Inc., New York, USA, 1959. ISBN 978-0-486-60586-9.">36</a>]</span>;
-<span id="id3">[<a class="reference internal" href="zreferences.html#id14" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">5</a>]</span>, Sec. 5.2). The foil is modeled as
+in terms of <em>wing sections</em> (<span id="id2">[<a class="reference internal" href="zreferences.html#id2" title="Ira H. Abbott and Albert E. Von Doenhoff. Theory of Wing Sections. Dover Publications, Inc., New York, USA, 1959. ISBN 978-0-486-60586-9.">37</a>]</span>;
+<span id="id3">[<a class="reference internal" href="zreferences.html#id14" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">6</a>]</span>, Sec. 5.2). The foil is modeled as
 a sequence of <em>sections</em> (typically arranged spanwise, left to right) over some
 continuous <em>section index</em> <span class="math notranslate nohighlight">\(s\)</span>. Each section is assigned a 2D
 cross-sectional profile, called an <em>airfoil</em>, which lies perpendicular to the
@@ -310,7 +310,7 @@ profile at specific points along the span.</p>
 </div>
 </figcaption>
 </figure>
-<p>In some literature <span id="id4">[<a class="reference internal" href="zreferences.html#id32" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">2</a>]</span> these two
+<p>In some literature <span id="id4">[<a class="reference internal" href="zreferences.html#id32" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">3</a>]</span> these two
 steps are described as designing the <em>planform</em> and the <em>profile</em>, but this
 description is problematic due to inconsistent uses of the term <em>planform</em>
 across literature. Specifically, in some cases the planform is the complete
@@ -414,7 +414,7 @@ wingtip stalls, leading to “gentler” stall characteristics)</p></li>
 <h3><span class="section-number">3.1.4. </span>Position<a class="headerlink" href="#position" title="Permalink to this headline">#</a></h3>
 <p>The relative position of the sections is fundamental to controlling important
 foil characteristics such as <em>span</em>, <em>sweep</em>, and <em>arc</em>
-<span id="id5">[<a class="reference internal" href="zreferences.html#id32" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">2</a>]</span>. Span (the width of the wing,
+<span id="id5">[<a class="reference internal" href="zreferences.html#id32" title="Snorri Gudmundsson. General Aviation Aircraft Design. Butterworth-Heinemann, Boston, January 2014. ISBN 978-0-12-397308-5. doi:10.1016/B978-0-12-397308-5.00001-5.">3</a>]</span>. Span (the width of the wing,
 roughly speaking) together with the chord distribution determines the <em>aspect
 ratio</em> of a foil, which impacts characteristics such as aerodynamic efficiency
 and maneuverability. Sweep (the fore-aft relative positioning of the sections)
@@ -474,13 +474,15 @@ coordinate systems, position vectors in foil coordinates can be written in
 terms of section coordinates:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-profile-points">
 <span class="eqno">(3.2)<a class="headerlink" href="#equation-profile-points" title="Permalink to this equation">#</a></span>\[\vec{r}_{P/LE}^f = \mat{C}_{f/s} \vec{r}_{P/LE}^s\]</div></div>
-<p>Because airfoil curves are defined in the 2D airfoil-local coordinate system,
-another transformation is required to convert them into 3D section-local
-coordinates. The convention for airfoil coordinates places the origin at the
-leading edge, with the <span class="math notranslate nohighlight">\(x\)</span>-axis pointing from the leading edge towards
-the trailing edge, and the <span class="math notranslate nohighlight">\(y\)</span>-axis oriented towards the upper surface.
-This paper uses a front-right-down convention for all 3D coordinate systems, so
-the conversion can be written with a matrix transformation:</p>
+<p>Because airfoil curves are defined in the 2D airfoil-local coordinate system
+<span class="math notranslate nohighlight">\(a\)</span>, another transformation is required to convert them into the 3D
+section-local coordinate system <span class="math notranslate nohighlight">\(s\)</span>. The convention for airfoil
+coordinates places the origin at the leading edge, with the <span class="math notranslate nohighlight">\(x\)</span>-axis
+pointing from the leading edge towards the trailing edge, and the
+<span class="math notranslate nohighlight">\(y\)</span>-axis oriented towards the upper surface. This paper uses
+a front-right-down convention for all 3D coordinate systems, so the conversion
+from 2D airfoil coordinates <span class="math notranslate nohighlight">\(a\)</span> to 3D section coordinates <span class="math notranslate nohighlight">\(s\)</span> can
+be written as a matrix transformation:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-t-s2a">
 <span class="eqno">(3.3)<a class="headerlink" href="#equation-t-s2a" title="Permalink to this equation">#</a></span>\[\begin{split}\mat{T}_{s/a} \defas \begin{bmatrix}
    -1 &amp; 0 \\
@@ -633,7 +635,7 @@ into <a class="reference internal" href="#equation-expanded-equation">(3.8)</a> 
 <p>Simple and intuitive, this parametrization captures the choices used by every
 foil modelling tool reviewed for this project. Models that position sections by
 their leading edge (XFLR5, AVL, MachUpX) are equivalent to setting <span class="math notranslate nohighlight">\(r
-= 0\)</span>. Another (less common <span id="id7">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">30</a>]</span>)
+= 0\)</span>. Another (less common <span id="id7">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">31</a>]</span>)
 choice is to use the quarter-chord positions, in which case <span class="math notranslate nohighlight">\(r = 0.25\)</span>.
 The problem with the constraint that reference points lie on the section chords
 is that it couples the position functions for all three dimensions. For many

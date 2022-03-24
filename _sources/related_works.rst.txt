@@ -300,8 +300,9 @@ the apparent mass estimates from :cite:`barrows2002ApparentMassParafoils`. The
 in any analyses.
 
 The implementation of all models are available as an `open source library
-<https://github.com/pfheatwole/glidersim>`__ including example wing models, and
-the simulations used in this paper are available as part of the `open source
+<https://github.com/pfheatwole/glidersim>`__
+:cite:`heatwolev2022.03.0aGlidersim`, including example wing models, and the
+simulations used in this paper are available as part of the `open source
 materials <https://github.com/pfheatwole/thesis>`__ used to produce this paper.
 
 

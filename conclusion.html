@@ -245,10 +245,10 @@ and consider the ability of these models to answer them.</p>
 so they can improve the glide ratio or top speed of their wing. The natural
 progression of this curiosity is wonder where all the drag comes from in the
 first place. One way to answer that question is to plot the drag contributions
-from each component <span id="id1">[<a class="reference internal" href="zreferences.html#id7" title="Holger Babinsky. Aerodynamic improvements of paraglider performance. In 17th Applied Aerodynamics Conference, 3148. 1999.">49</a>]</span>.</p>
-<figure class="align-default" id="id3">
+from each component <span id="id1">[<a class="reference internal" href="zreferences.html#id7" title="Holger Babinsky. Aerodynamic improvements of paraglider performance. In 17th Applied Aerodynamics Conference, 3148. 1999.">50</a>]</span>.</p>
+<figure class="align-default" id="id4">
 <img alt="_images/drag_breakdown.svg" src="_images/drag_breakdown.svg"/><figcaption>
-<p><span class="caption-number">Fig. 10.1 </span><span class="caption-text">Drag breakdown for Niviuk Hook 3 23 with a pod harness.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 10.1 </span><span class="caption-text">Drag breakdown for Niviuk Hook 3 23 with a pod harness.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Viscous drag includes effects such as the sheer forces produced by the
@@ -392,9 +392,9 @@ strength of <span class="math notranslate nohighlight">\(3 \, [\frac{m}{s}]\)</s
 thermal). The effect of the exponential falloff was a peak gradient of
 <span class="math notranslate nohighlight">\(0.67 \, [\frac{m}{s}]\)</span> from the wingtip nearest the thermal to the
 center of the canopy as the glider passed the core.</p>
-<figure class="align-default" id="id4">
+<figure class="align-default" id="id5">
 <img alt="_images/indirect_thermal.svg" src="_images/indirect_thermal.svg"/><figcaption>
-<p><span class="caption-number">Fig. 10.6 </span><span class="caption-text">Indirect thermal interaction.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 10.6 </span><span class="caption-text">Indirect thermal interaction.</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p>The first row represents the Euler angles for position, the second row
 represents the angular velocities, and the third row is the angular
@@ -503,7 +503,7 @@ have the lines adjust their values based on the true <span class="math notransla
 yaw moments due to angle of attack and sideslip, but because paragliders put
 their legs out in front those effects seem likely.</p></li>
 <li><p>The harness model uses constant drag coefficients.
-<span id="id2">[<a class="reference internal" href="zreferences.html#id39" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">19</a>]</span> developed a model
+<span id="id2">[<a class="reference internal" href="zreferences.html#id40" title="Robert Kulhánek. Identification of a degradation of aerodynamic characteristics of a paraglider due to its flexibility from flight test. Aircraft Engineering and Aerospace Technology, January 2019. doi:10.1108/AEAT-06-2018-0162.">20</a>]</span> developed a model
 for the harness that accounts for Reynolds numbers, but that model was not
 tested in this work.</p></li>
 </ul>
@@ -527,14 +527,15 @@ a paraglider encountering a thermal.</p></li>
 <section id="open-source">
 <h2><span class="section-number">10.3. </span>Open source<a class="headerlink" href="#open-source" title="Permalink to this headline">#</a></h2>
 <p>The <a class="reference external" href="https://github.com/pfheatwole/thesis/">materials</a> to produce this paper
-and its <a class="reference external" href="https://github.com/pfheatwole/glidersim/">implementation</a> are both
-available under permissive open source licenses. Although this work focused on
-paragliders, the structure of the models is mirrored in the structure of the
-code, and should be easily adaptable to other gliding aircraft such as hang
-gliders or kites. For maximum versatility and approachability, the entire
-implementation was built on the Python scientific computing stack; despite not
-producing the fastest implementation, Python made up for the performance cost
-with value in other areas:</p>
+and its <a class="reference external" href="https://github.com/pfheatwole/glidersim/">implementation</a>
+<span id="id3">[<a class="reference internal" href="zreferences.html#id33" title="Peter F. Heatwole. Glidersim. v2022.03.0a. doi:10.5281/zenodo.6383053.">1</a>]</span> are both available under permissive open
+source licenses. Although this work focused on paragliders, the structure of
+the models is mirrored in the structure of the code, and should be easily
+adaptable to other gliding aircraft such as hang gliders or kites. For maximum
+versatility and approachability, the entire implementation was built on the
+Python scientific computing stack; despite not producing the fastest
+implementation, Python made up for the performance cost with value in other
+areas:</p>
 <ul class="simple">
 <li><p>Free (unlike MATLAB, AutoCAD, etc)</p></li>
 <li><p>Extensive cross-domain usage (aerospace, computer science, etc)</p></li>

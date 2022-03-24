@@ -248,7 +248,7 @@ normalizing the arc length reduces it to just two. There are several possible
 parametrizations, but an intuitive choice is the mean anhedral angle
 <span class="math notranslate nohighlight">\(\Gamma_\textrm{tip}\)</span> and the section roll angle
 <span class="math notranslate nohighlight">\(\phi_\textrm{tip}\)</span> of the wing tips
-<span id="id1">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">30</a>]</span>.</p>
+<span id="id1">[<a class="reference internal" href="zreferences.html#id13" title="Diego Muniz Benedetti. Paragliders Flight Dynamics. PhD thesis, Universidade Federal de Minas Gerais, 2012.">31</a>]</span>.</p>
 <figure class="align-default" id="id9">
 <img alt="_images/chord_surface_yz.svg" src="_images/chord_surface_yz.svg"/><figcaption>
 <p><span class="caption-number">Fig. 1 </span><span class="caption-text">Parametrized elliptical arc</span><a class="headerlink" href="#id9" title="Permalink to this image">#</a></p>
@@ -336,8 +336,8 @@ areas and volume. These include the magnitudes (total mass or volume),
 centroids, and inertia tensors. All of these quantities can be computed using
 a triangular surface mesh over the canopy surfaces.</p>
 <p>What follows is a reproduction of the procedure developed in
-<span id="id2">[<a class="reference internal" href="zreferences.html#id15" title="Jonathan Blow and Atman J. Binstock. How to find the inertia tensor (or other mass properties) of a 3D solid body represented by a triangle mesh. http://www.number-none.com/blow/inertia/index.html, 2004.">50</a>]</span>, which is a functionally equivalent to the
-procedure from <span id="id3">[<a class="reference internal" href="zreferences.html#id68" title="Cha Zhang and Tsuhan Chen. Efficient feature extraction for 2D/3D objects in mesh representation. In Proceedings 2001 International Conference on Image Processing (Cat. No.01CH37205), volume 3, 935-938 vol.3. October 2001.">51</a>]</span> but with a more
+<span id="id2">[<a class="reference internal" href="zreferences.html#id15" title="Jonathan Blow and Atman J. Binstock. How to find the inertia tensor (or other mass properties) of a 3D solid body represented by a triangle mesh. http://www.number-none.com/blow/inertia/index.html, 2004.">51</a>]</span>, which is a functionally equivalent to the
+procedure from <span id="id3">[<a class="reference internal" href="zreferences.html#id69" title="Cha Zhang and Tsuhan Chen. Efficient feature extraction for 2D/3D objects in mesh representation. In Proceedings 2001 International Conference on Image Processing (Cat. No.01CH37205), volume 3, 935-938 vol.3. October 2001.">52</a>]</span> but with a more
 intuitive interpretation and complete equations for the inertia tensors.</p>
 <section id="area">
 <h3>Area<a class="headerlink" href="#area" title="Permalink to this headline">#</a></h3>
@@ -452,7 +452,7 @@ be computed directly from the covariance matrix:</p>
 </section>
 <section id="apparent-mass-of-a-parafoil">
 <h2>Apparent mass of a parafoil<a class="headerlink" href="#apparent-mass-of-a-parafoil" title="Permalink to this headline">#</a></h2>
-<p>This section presents Barrows’ method <span id="id4">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">23</a>]</span>
+<p>This section presents Barrows’ method <span id="id4">[<a class="reference internal" href="zreferences.html#id10" title="Timothy M. Barrows. Apparent mass of parafoils with spanwise camber. Journal of Aircraft, 39(3):445–451, 2002. doi:10.2514/2.2949.">24</a>]</span>
 for estimating the apparent mass matrix of a wing with circular arc anhedral.
 (For a discussion of apparent mass effects, see
 <a class="reference internal" href="paraglider_components.html#apparent-mass"><span class="std std-ref">Apparent Mass</span></a>.) The equations have been adapted
@@ -625,7 +625,7 @@ all vectors are in the canopy coordinate system <span class="math notranslate no
 coordinate systems are implicit in the notation.</p>
 <p>The derivation develops the equations of motion by starting with derivatives
 of linear and angular momentum. The derivation is largely based on the
-excellent <span id="id5">[<a class="reference internal" href="zreferences.html#id33" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">10</a>]</span>, although this section
+excellent <span id="id5">[<a class="reference internal" href="zreferences.html#id34" title="Peter C. Hughes. Spacecraft Attitude Dynamics. Dover Publications, Inc., Mineola, New York, 2004. ISBN 978-0-486-43925-9.">11</a>]</span>, although this section
 uses this paper’s version of Stevens’ notation (see <a class="reference internal" href="notation.html#notation-and-symbols"><span class="std std-ref">Notation and Symbols</span></a>).</p>
 <p>An implementation of this model is available as
 <a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics6a" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider6a</span></code></a> in the <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>
@@ -883,7 +883,7 @@ the reference point for both the body and the payload, which simplifies
 incorporating the apparent mass matrix. However, this model treats the body
 and payload as separate components, connected by a rotational spring-damper
 model that adds an additional three degrees-of-freedom. A similar 9DoF model
-derivation can be found in <span id="id6">[<a class="reference internal" href="zreferences.html#id31" title="Chrystine M. Gorman and Nathan Slegers. Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature Wireless Sensors. Journal of Aircraft, 49(2):546–555, 2012. doi:10.2514/1.C031566.">34</a>]</span>
+derivation can be found in <span id="id6">[<a class="reference internal" href="zreferences.html#id31" title="Chrystine M. Gorman and Nathan Slegers. Evaluation of Multibody Parafoil Dynamics Using Distributed Miniature Wireless Sensors. Journal of Aircraft, 49(2):546–555, 2012. doi:10.2514/1.C031566.">35</a>]</span>
 (9DoF, but relative roll and pitch are unconstrained).</p>
 <p>An implementation of this model is available as
 <a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.paraglider.html#pfh.glidersim.paraglider.ParagliderSystemDynamics9a" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paraglider9a</span></code></a> in the <code class="docutils literal notranslate"><span class="pre">glidersim</span></code>

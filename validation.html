@@ -226,7 +226,7 @@ geometries.</p>
 <section id="geometry">
 <h3><span class="section-number">9.1.1. </span>Geometry<a class="headerlink" href="#geometry" title="Permalink to this headline">#</a></h3>
 <p>The geometry from a 2015 parafoil wind tunnel test
-<span id="id1">[<a class="reference internal" href="zreferences.html#id12" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">18</a>]</span> makes an excellent case study of
+<span id="id1">[<a class="reference internal" href="zreferences.html#id12" title="Hervé Belloc. Wind tunnel investigation of a rigid paraglider reference wing. Journal of Aircraft, 52(2):703–708, 2015. doi:10.2514/1.C032513.">19</a>]</span> makes an excellent case study of
 a foil specification from literature that positions the sections using
 alternative reference points on the section chords. Moreover, the geometry
 satisfies the assumptions of the <a class="reference internal" href="foil_geometry.html#simplified-model"><span class="std std-ref">Simplified model</span></a>, making
@@ -420,8 +420,9 @@ distance along the <span class="math notranslate nohighlight">\(\left&lt; y, z \
 is defined with the wing tips at <span class="math notranslate nohighlight">\(z = 0\)</span>, whereas the convention of this
 paper places the canopy origin at the leading edge of the central section; this
 is easily accommodated by subtracting the central <span class="math notranslate nohighlight">\(z = -0.375\)</span> from all
-<span class="math notranslate nohighlight">\(z\)</span>-coordinates. (Alternatively, the implementation of the simplified
-model in <code class="docutils literal notranslate"><span class="pre">glidersim</span></code> can shift the origin automatically.)</p>
+<span class="math notranslate nohighlight">\(z\)</span>-coordinates. (Alternatively, the
+<a class="reference external" href="https://pfheatwole.github.io/glidersim/_autosummary/pfh.glidersim.foil_layout.html#pfh.glidersim.foil_layout.FoilLayout" title="(in pfh.glidersim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">implementation</span></code></a> of the simplified model in
+<code class="docutils literal notranslate"><span class="pre">glidersim</span></code> can shift the origin automatically.)</p>
 <figure class="align-default" id="airfoil-naca-23015">
 <img alt="_images/NACA-23015.svg" src="_images/NACA-23015.svg"/><figcaption>
 <p><span class="caption-number">Fig. 9.1 </span><span class="caption-text">NACA 23015</span><a class="headerlink" href="#airfoil-naca-23015" title="Permalink to this image">#</a></p>
@@ -451,8 +452,8 @@ sensors, and set the wind tunnel to a 40 m/s airspeed. Measurements were taken
 with the angle of attack and sideslip ranging over <span class="math notranslate nohighlight">\(-5 &lt; \alpha &lt; 22\)</span> and
 <span class="math notranslate nohighlight">\(-15 &lt; \beta &lt; 15\)</span> (a range suitable capturing longitudinal performance
 post-stall). For better accuracy, wind tunnel measurements should be corrected
-for wall interactions with the flow (<span id="id2">[<a class="reference internal" href="zreferences.html#id9" title="Jewel B. Barlow, William H. Rae, and Alan Pope. Low-Speed Wind Tunnel Testing. John Wiley &amp; Sons, third edition, February 1999. ISBN 978-0-471-55774-6.">48</a>]</span>;
-<span id="id3">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">7</a>]</span>, Sec. 10.3). However, because
+for wall interactions with the flow (<span id="id2">[<a class="reference internal" href="zreferences.html#id9" title="Jewel B. Barlow, William H. Rae, and Alan Pope. Low-Speed Wind Tunnel Testing. John Wiley &amp; Sons, third edition, February 1999. ISBN 978-0-471-55774-6.">49</a>]</span>;
+<span id="id3">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">8</a>]</span>, Sec. 10.3). However, because
 classical wind tunnel wall corrections assume a flat wing, the data for the
 arched parafoil are uncorrected for wall effects.</p>
 </section>
@@ -462,10 +463,10 @@ arched parafoil are uncorrected for wall effects.</p>
 one that includes viscous effects, and two that do not (inviscid models):</p>
 <ol class="arabic simple">
 <li><p>NLLT: the <a class="reference internal" href="foil_aerodynamics.html#phillips-numerical-lifting-line"><span class="std std-ref">numerical lifting-line</span></a> model from
-<span id="id4">[<a class="reference internal" href="zreferences.html#id52" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">20</a>]</span></p></li>
+<span id="id4">[<a class="reference internal" href="zreferences.html#id53" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">21</a>]</span></p></li>
 <li><p><a class="reference external" href="https://web.mit.edu/drela/Public/web/avl/">AVL</a>: an extended vortex
-lattice method by Mark Drela <span id="id5">[<a class="reference internal" href="zreferences.html#id27" title="Mark Drela and Harold Youngren. Athena Vortex Lattice.">40</a>]</span> (who also
-authored XFOIL <span id="id6">[<a class="reference internal" href="zreferences.html#id25" title="Mark Drela. XFOIL: An Analysis and Design System for Low Reynolds Number Airfoils. In Thomas J. Mueller, editor, Low Reynolds Number Aerodynamics, 1–12. Springer Berlin Heidelberg, 1989. doi:10.1007/978-3-642-84010-4_1.">46</a>]</span> while at MIT) . With
+lattice method by Mark Drela <span id="id5">[<a class="reference internal" href="zreferences.html#id27" title="Mark Drela and Harold Youngren. Athena Vortex Lattice.">41</a>]</span> (who also
+authored XFOIL <span id="id6">[<a class="reference internal" href="zreferences.html#id25" title="Mark Drela. XFOIL: An Analysis and Design System for Low Reynolds Number Airfoils. In Thomas J. Mueller, editor, Low Reynolds Number Aerodynamics, 1–12. Springer Berlin Heidelberg, 1989. doi:10.1007/978-3-642-84010-4_1.">47</a>]</span> while at MIT) . With
 a long history in academic research, this is the primary reference for
 comparing the results of the NLLT.</p></li>
 <li><p><a class="reference external" href="https://www.xflr5.tech/xflr5.htm">XFLR5</a>: an experimental vortex lattice
@@ -537,7 +538,7 @@ attack and sideslip.</p>
 <p>A final plot (<a class="reference internal" href="#belloc-cl-vs-cd-surface"><span class="std std-numref">Fig. 9.6</span></a>) is more for future reference
 than validation. Instead of the unadjusted aerodynamic coefficients from XFOIL,
 it adds the additional viscous drag due to “surface characteristics” suggested
-in <span id="id7">[<a class="reference internal" href="zreferences.html#id63" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">42</a>]</span> as a result of their wind
+in <span id="id7">[<a class="reference internal" href="zreferences.html#id64" title="George M. Ware and James L. Hassell. Wind-tunnel investigation of ram-air inflated all flexible wings of aspect ratios 1.0 to 3.0. Technical Report NASA TM SX-1923, National Aeronautics and Space Administration, 1969.">43</a>]</span> as a result of their wind
 tunnel tests on parafoils. Because this empirical adjustment will be used in
 the <a class="reference internal" href="demonstration.html"><span class="doc">Demonstration</span></a> portion of this paper, this plot is useful to show the
 expected accuracy of the NLLT when applied to a model of commercial paraglider
@@ -931,7 +932,7 @@ underestimates the ground speed where that occurs.</p>
 <h3><span class="section-number">9.2.2. </span>Pitch stability<a class="headerlink" href="#pitch-stability" title="Permalink to this headline">#</a></h3>
 <p>Another simple sanity check is to verify the glider pitch stability by flying
 on a straight course at maximum speed and abruptly releasing the accelerator
-(<span id="id8">[<a class="reference internal" href="zreferences.html#id65" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">47</a>]</span>, Sec. 4.1.5). Releasing
+(<span id="id8">[<a class="reference internal" href="zreferences.html#id66" title="Peter Wild. Airworthiness requirements for hanggliders and paragliders. 2009.">48</a>]</span>, Sec. 4.1.5). Releasing
 the accelerator shifts the payload to shift aft, causing the canopy to pitch
 backwards; in the positive-pitch position the glider briefly ascends as it
 converts the energy from its high airspeed into altitude, but because the wing
@@ -969,7 +970,7 @@ worthwhile.</p>
 <p>Although the simplicity of longitudinal dynamics make them the best place to
 start testing a model, the more difficult tests are for the dynamic behavior.
 One simple test is to check the behavior during a steady 360° maneuver and
-compare them to the “guidelines” in <span id="id9">[<a class="reference internal" href="zreferences.html#id50" title="Dennis Pagen. The Art of Paragliding. Black Mountain Books, 2001. ISBN 0-936310-14-6.">12</a>]</span> that lists
+compare them to the “guidelines” in <span id="id9">[<a class="reference internal" href="zreferences.html#id51" title="Dennis Pagen. The Art of Paragliding. Black Mountain Books, 2001. ISBN 0-936310-14-6.">13</a>]</span> that lists
 approximate sink rates and turn radii as a function of bank angle. The method
 does come with some caveats, however: for example, the author does is not
 discussing a specific glider, so these values are assumed to be averages of

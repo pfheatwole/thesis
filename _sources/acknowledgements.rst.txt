@@ -16,8 +16,8 @@ your tongue when the best laid plans went awry.
 To Bridget: my friend and advisor, I couldn't have done it without your
 encouragement. It's been quite the experience.
 
-Also, as computer engineering student with no background in aerodynamics it was
-a long road of self-study to reach even my humble level of understanding of
+Also, as computer engineering student with no background in aerodynamics, it
+was a long road of self-study to reach even my humble level of understanding of
 this topic. I would like to extend a warm "Thank you!" to Hervé Belloc for his
 generosity to share the wind tunnel data, and to Robert Kulhánek for taking the
 time to explain some subtleties of aerodynamics.

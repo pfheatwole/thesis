@@ -239,7 +239,7 @@ a surprising variety of situations, but — despite their elegance — such
 analytical solutions are inadequate for analyzing the geometry and flight
 conditions of a paraglider.</p>
 <p>In contrast, modern <em>computational aerodynamics</em>
-<span id="id1">[<a class="reference internal" href="zreferences.html#id22" title="Russel M. Cummings, William H. Mason, Scott A. Morton, and David R. McDaniel. Applied Computational Aerodynamics. Cambridge University Press, April 2015. ISBN 978-1-316-23651-2.">8</a>]</span> solve the equations
+<span id="id1">[<a class="reference internal" href="zreferences.html#id22" title="Russel M. Cummings, William H. Mason, Scott A. Morton, and David R. McDaniel. Applied Computational Aerodynamics. Cambridge University Press, April 2015. ISBN 978-1-316-23651-2.">9</a>]</span> solve the equations
 numerically, relaxing the need for analytical solutions. As a result, modern
 methods can analyze significantly more complex foil geometries over the entire
 set of flow-field characteristics. However, even with modern computers the
@@ -286,11 +286,11 @@ model, in practice the <a class="reference internal" href="introduction.html#mod
 selection process rather straightforward. The first requirement — to support
 nonlinear foil geometries — eliminates the classic LLT. Several authors have
 developed extensions of the LLT that are able to account for circular arc
-(<span id="id2">[<a class="reference internal" href="zreferences.html#id30" title="Miguel A. González. Prandtl theory applied to paraglider aerodynamics. In Aerospace Design Conference, 1220. 1993. doi:10.2514/6.1993-1220.">16</a>]</span>,
-<span id="id3">[<a class="reference internal" href="zreferences.html#id37" title="Gil Iosilevskii. Lifting-line theory of an arched wing in asymmetric flight. Journal of Aircraft, 33(5):1023–1026, 1996. doi:10.2514/3.47050.">17</a>]</span>), but are unable to model
+(<span id="id2">[<a class="reference internal" href="zreferences.html#id30" title="Miguel A. González. Prandtl theory applied to paraglider aerodynamics. In Aerospace Design Conference, 1220. 1993. doi:10.2514/6.1993-1220.">17</a>]</span>,
+<span id="id3">[<a class="reference internal" href="zreferences.html#id38" title="Gil Iosilevskii. Lifting-line theory of an arched wing in asymmetric flight. Journal of Aircraft, 33(5):1023–1026, 1996. doi:10.2514/3.47050.">18</a>]</span>), but are unable to model
 a swept quarter-chord.</p>
 <p>The practical answer to nonlinear geometries is to switch to a vortex lattice
-method or panel method <span id="id4">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">7</a>]</span>, which place
+method or panel method <span id="id4">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">8</a>]</span>, which place
 the aerodynamic singularities on the nonlinear camber surface, or the profile
 surface itself, and apply the inviscid flow approximation to reformulate the
 problem as an instance of Laplace’s equation. Unfortunately, the inviscid
@@ -303,7 +303,7 @@ Because the inviscid solutions rely on linear relationships that are assumed to
 hold indefinitely, they are incapable of capturing the aerodynamic
 nonlinearities that arise at high angles of attack.</p>
 <p>The next level of aerodynamic models are the computational fluid dynamics
-<span id="id5">[<a class="reference internal" href="zreferences.html#id22" title="Russel M. Cummings, William H. Mason, Scott A. Morton, and David R. McDaniel. Applied Computational Aerodynamics. Cambridge University Press, April 2015. ISBN 978-1-316-23651-2.">8</a>]</span> methods. Instead of
+<span id="id5">[<a class="reference internal" href="zreferences.html#id22" title="Russel M. Cummings, William H. Mason, Scott A. Morton, and David R. McDaniel. Applied Computational Aerodynamics. Cambridge University Press, April 2015. ISBN 978-1-316-23651-2.">9</a>]</span> methods. Instead of
 limiting the singularities to points on (or inside) the foil, CFD methods
 simulate the dynamics of the entire volume surrounding the object. In this way
 they are able to capture the entire array of flow characteristics such as
@@ -322,7 +322,7 @@ effects.</p>
 <section id="phillips-numerical-lifting-line">
 <h2><span class="section-number">4.2. </span>Phillips’ numerical lifting-line<a class="headerlink" href="#phillips-numerical-lifting-line" title="Permalink to this headline">#</a></h2>
 <p>Phillips’ numerical lifting-line method (NLLT)
-<span id="id6">[<a class="reference internal" href="zreferences.html#id52" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">20</a>]</span> is an extension of Prandtl’s
+<span id="id6">[<a class="reference internal" href="zreferences.html#id53" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">21</a>]</span> is an extension of Prandtl’s
 classic <em>lifting-line theory</em> (LLT) to account for the effects of a curved
 lifting-line.</p>
 <p>Unlike the classical LLT, this numerical approach supports the characteristic
@@ -497,8 +497,8 @@ should be an explicit function of Reynolds number.</p>
 </section>
 <section id="non-uniform-upstream-velocities">
 <h4><span class="section-number">4.2.2.3. </span>Non-uniform upstream velocities<a class="headerlink" href="#non-uniform-upstream-velocities" title="Permalink to this headline">#</a></h4>
-<p>Phillips’ original derivation <span id="id7">[<a class="reference internal" href="zreferences.html#id52" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">20</a>]</span>
-assumes uniform flow, but <span id="id8">[<a class="reference internal" href="zreferences.html#id34" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">32</a>]</span>
+<p>Phillips’ original derivation <span id="id7">[<a class="reference internal" href="zreferences.html#id53" title="Warren F. Phillips and Deryl O. Snyder. Modern adaptation of Prandtl's classic lifting-line theory. Journal of Aircraft, 37(4):662–670, 2000. doi:10.2514/2.2649.">21</a>]</span>
+assumes uniform flow, but <span id="id8">[<a class="reference internal" href="zreferences.html#id35" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">33</a>]</span>
 relaxes that assumption by replacing the uniform <em>freestream velocity</em>
 <span class="math notranslate nohighlight">\(V_{\infty}\)</span> with the relative <em>upstream velocity</em> <span class="math notranslate nohighlight">\(V_{rel,i}\)</span> that
 “may also have contributions from prop-wash or rotations of the lifting surface
@@ -507,7 +507,7 @@ Hunsaker-Snyder Eq:5.) The result is that <a class="reference internal" href="#e
 replaced with:</p>
 <div class="math-wrapper"><div class="math notranslate nohighlight" id="equation-local-velocity-hunsaker">
 <span class="eqno">(4.14)<a class="headerlink" href="#equation-local-velocity-hunsaker" title="Permalink to this equation">#</a></span>\[\vec{V}_i = \vec{V}_{rel,i} + \sum^N_{j=1} \Gamma_j \vec{v}_{ji}\]</div></div>
-<p>In <span id="id9">[<a class="reference internal" href="zreferences.html#id34" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">32</a>]</span> they are concerned with
+<p>In <span id="id9">[<a class="reference internal" href="zreferences.html#id35" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">33</a>]</span> they are concerned with
 accounting for propeller wash, but for a parafoil the upstream velocity is
 simply the local wind velocity at control point <span class="math notranslate nohighlight">\(i\)</span> combined with the
 velocity produced by the control point <span class="math notranslate nohighlight">\(CP,i\)</span> rotating about the glider
@@ -569,7 +569,7 @@ from the previous iteration as the proposal. Provided the time resolution of
 the simulation is reasonably small then the state of the aircraft should be
 similar between each timestep, so the proposal will be very close to the
 target. An added advantage of using a prior solution is an ability to capture
-hysteresis effects <span id="id10">[<a class="reference internal" href="zreferences.html#id48" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">37</a>]</span>.</p>
+hysteresis effects <span id="id10">[<a class="reference internal" href="zreferences.html#id49" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">38</a>]</span>.</p>
 </section>
 <section id="clamping-section-coefficients">
 <h4><span class="section-number">4.2.2.6. </span>Clamping section coefficients<a class="headerlink" href="#clamping-section-coefficients" title="Permalink to this headline">#</a></h4>
@@ -624,17 +624,17 @@ the valid range.</p></li>
 <section id="assumes-minimal-spanwise-flow">
 <h4><span class="section-number">4.2.3.1. </span>Assumes minimal spanwise flow<a class="headerlink" href="#assumes-minimal-spanwise-flow" title="Permalink to this headline">#</a></h4>
 <p>This method argues that the derivation of the 3D vortex lifting law in
-<span id="id11">[<a class="reference internal" href="zreferences.html#id54" title="P. G. Saffman. Vortex Dynamics. Cambridge University Press, California Institute of Technology, 1992.">38</a>]</span> proves that “the relationship between section
+<span id="id11">[<a class="reference internal" href="zreferences.html#id55" title="P. G. Saffman. Vortex Dynamics. Cambridge University Press, California Institute of Technology, 1992.">39</a>]</span> proves that “the relationship between section
 lift and section circulation is not affected by flow parallel to the bound
 vorticity.” In other words, it relies on the fact that the 3D vortex lifting
 law holds even in the presence of spanwise flow. What this does not account
 for, however, is the effect of spanwise flow on the section coefficients. Wing
 analysis using section coefficients relies on the assumption that each wing
 segment acts as a finite segment of an infinite wing, provided the spanwise
-flow is negligible (<span id="id12">[<a class="reference internal" href="zreferences.html#id14" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">5</a>]</span>, p. 356). Although
+flow is negligible (<span id="id12">[<a class="reference internal" href="zreferences.html#id14" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">6</a>]</span>, p. 356). Although
 the 3D vortex law holds in the presence of spanwise flow, solving for the
 circulation strengths using section coefficients does not.</p>
-<p>A similar discussion can be found in <span id="id13">[<a class="reference internal" href="zreferences.html#id48" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">37</a>]</span>,
+<p>A similar discussion can be found in <span id="id13">[<a class="reference internal" href="zreferences.html#id49" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">38</a>]</span>,
 who apply a similar NLLT to a flat wing with 45° sweep. They acknowledge that
 although the sweep introduces significant 3D flow-field effects, the method
 “shows very good agreement” versus experimental measurements. Their success
@@ -648,14 +648,14 @@ continuous arc anhedral is involved.</p>
 into the wake as a trailing <em>vortex sheet</em>; the strength of the shed vorticity
 varies with the local variation of lift along the span. In a rigorous analysis,
 the trailing vorticity should follow a curved path
-(<span id="id14">[<a class="reference internal" href="zreferences.html#id14" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">5</a>]</span>, p. 390), but this produces an
+(<span id="id14">[<a class="reference internal" href="zreferences.html#id14" title="John J. Bertin and Russel M. Cummings. Aerodynamics for Engineers. Pearson Education, sixth edition, 2014.">6</a>]</span>, p. 390), but this produces an
 intractable nonlinear system of equations. Instead, models apply a further
 simplification known as the <em>straight-wake assumption</em>: that the trailing <em>wake
 vortex sheet</em> streams straight back from the lifting-line. The straight-wake
 assumption is an important step in linearizing the system of equations to allow
 mathematically tractable solutions.</p>
 <p>For a discretized method, such as Phillips’ or Weissinger’s LLT
-<span id="id15">[<a class="reference internal" href="zreferences.html#id64" title="J. Weissinger. The lift distribution of swept-back wings. Technical 1120, NACA, March 1947.">39</a>]</span>, the vortex sheet is lumped
+<span id="id15">[<a class="reference internal" href="zreferences.html#id65" title="J. Weissinger. The lift distribution of swept-back wings. Technical 1120, NACA, March 1947.">40</a>]</span>, the vortex sheet is lumped
 into a series of shed vortex filaments whose strength is proportional to the
 difference in local lift of neighboring segments. Under the straight-wake
 assumption, the trailing legs of all horseshoe vortices extend from the nodes
@@ -668,15 +668,15 @@ still provides useful approximations. This assumption is made without
 theoretical justification; instead, this paper relies on the superior
 aerodynamics knowledge of its sources. First, the use of this method with
 non-zero rotation is explicitly mentioned in
-<span id="id16">[<a class="reference internal" href="zreferences.html#id34" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">32</a>]</span>. Also, this assumption is
+<span id="id16">[<a class="reference internal" href="zreferences.html#id35" title="Douglas F. Hunsaker and Deryl O. Snyder. A lifting-line approach to estimating propeller/wing interactions. In 24th AIAA Applied Aerodynamics Conference. San Francisco, CA, USA, 2006. doi:10.2514/6.2006-3466.">33</a>]</span>. Also, this assumption is
 shared with the vortex-lattice model used in AVL
-<span id="id17">[<a class="reference internal" href="zreferences.html#id27" title="Mark Drela and Harold Youngren. Athena Vortex Lattice.">40</a>]</span>, although in that method the trailing legs are
+<span id="id17">[<a class="reference internal" href="zreferences.html#id27" title="Mark Drela and Harold Youngren. Athena Vortex Lattice.">41</a>]</span>, although in that method the trailing legs are
 aligned with the foil <span class="math notranslate nohighlight">\(x\)</span>-axis, regardless of freestream flow. In
 Phillips’ method the trailing are aligned to the freestream, which for this
 work is defined as the local upstream velocity <span class="math notranslate nohighlight">\(\vec{u}_{\infty,0}\)</span> of
 the central section under the assumption that it minimizes average deviation.</p>
 <p>For a related technical discussion that incorporates rotation rates into
-a vortex lattice method, refer to <span id="id18">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">7</a>]</span>
+a vortex lattice method, refer to <span id="id18">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">8</a>]</span>
 Sec. 6.5; in particular, Eq. 6.33 for aligning the trailing legs with the
 <span class="math notranslate nohighlight">\(x\)</span>-axis, Eq. 6.37 for accounting by adding it to the flow tangency
 equations, and Eq. 6.39 for incorporating the rotation rates into the
@@ -707,7 +707,7 @@ a parafoil.</p>
 <h4><span class="section-number">4.2.3.4. </span>No unsteady effects<a class="headerlink" href="#no-unsteady-effects" title="Permalink to this headline">#</a></h4>
 <p>This method produces a steady-state (non-accelerated) solution. It does not
 include unsteady (time-varying) effects, such as
-(<span id="id19">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">7</a>]</span>, p. 149):</p>
+(<span id="id19">[<a class="reference internal" href="zreferences.html#id26" title="Mark Drela. Flight Vehicle Aerodynamics. The MIT Press, February 2014. ISBN 978-0-262-52644-9.">8</a>]</span>, p. 149):</p>
 <ul class="simple">
 <li><p>Unsteady foil motion</p></li>
 <li><p>Unsteady foil deformation</p></li>
@@ -736,8 +736,8 @@ a major problem when the intended use is flight simulation; solutions are
 generated iteratively, in which case the previous solution is a natural choice
 for minimizing the initial residual error (see <cite>Reference solutions</cite>). As an
 added bonus, using the previous solution adds the capability of capturing
-hysteresis effects <span id="id20">[<a class="reference internal" href="zreferences.html#id48" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">37</a>]</span>; for example, in
-<span id="id21">[<a class="reference internal" href="zreferences.html#id3" title="John D. Anderson and Stephen Corda. Numerical lifting line theory applied to drooped leading-edge wings below and above stall. Journal of Aircraft, 17(12):898–904, 1980. doi:10.2514/3.44690.">41</a>]</span> they discuss a wing that demonstrates
+hysteresis effects <span id="id20">[<a class="reference internal" href="zreferences.html#id49" title="D. Owens. Weissinger's model of the nonlinear lifting-line method for aircraft design. In 36th AIAA Aerospace Sciences Meeting and Exhibit, Aerospace Sciences Meetings. American Institute of Aeronautics and Astronautics, January 1998. doi:10.2514/6.1998-597.">38</a>]</span>; for example, in
+<span id="id21">[<a class="reference internal" href="zreferences.html#id3" title="John D. Anderson and Stephen Corda. Numerical lifting line theory applied to drooped leading-edge wings below and above stall. Journal of Aircraft, 17(12):898–904, 1980. doi:10.2514/3.44690.">42</a>]</span> they discuss a wing that demonstrates
 hysteresis depending on whether data were generated with increasing versus
 decreasing alpha. Nevertheless, the fact that the method has a tendency to
 produce different solutions for different proposals mean the method will
