@@ -1,40 +1,22 @@
 .. This chapter demonstrates how to use the component models to create
    paraglider system models and simulate their dynamics. The modeling process
    combines basic technical specs from a user manual with photographic
-   information and reasonable assumptions about paraglider wing design. The
-   simulations perform static and dynamic performance tests (polar plots and
-   flight maneuvers, respectively) and compare them to expected behaviors.
+   information and reasonable assumptions about paraglider wing design.
 
 
 *************
 Demonstration
 *************
 
-The motivation for this project was a need for flight dynamics models of
-commercial paraglider wings. The goal of this project was to create parametric
-:doc:`component models <paraglider_components>` that can approximate those
-flight dynamics by augmenting the [[limited available specifications with
-assumptions of the unknown structure]].
+The motivation for this project was a need for paraglider flight dynamics
+models for commercial paraglider wings. The goal of this project was to build
+those system models by creating parametric :doc:`component models
+<paraglider_components>` that augment the limited available specifications with
+assumptions of the unknown structure. This chapter demonstrates one possible
+workflow to estimate the parameters of those component models by combining
+publicly available technical specifications and photographs with knowledge of
+typical paraglider wing design.
 
-
-.. This chapter demonstrates creating, validating and using models. Learning
-   about paraglider behavior was one of the motivations (along with control
-   modeling and statistical filtering), so "learning" is where I demonstrate
-   the success of this project.
-
-This chapter demonstrates one possible workflow to estimate the parameters of
-the component models by combining publicly available technical specifications
-and photographs with knowledge of typical paraglider wing design. Once the
-components are combined into a :doc:`system model <system_dynamics>`, it is
-validated by comparing its estimates of the glider's longitudinal steady-state
-aerodynamics over the range of control inputs against published performance
-data, such as minimum sink rate and speed range. The chapter concludes by
-demonstrating how flight dynamics models can be used to study paraglider
-behavior.
-
-
-Model creation
-==============
 
 .. Introduce the wing
 
@@ -67,13 +49,13 @@ feasible to create an approximate wing model even if physical measurements are
 unavailable.
 
 
-Technical specs
----------------
+Technical specifications
+========================
 
 The following sections demonstrate how to estimate the parameters for a size
 23 version of the wing. The same process is used (but not shown) to create
-models of the size 25 and 27 wings for the discussion in
-:ref:`demonstration:Model validation`.
+models of the size 25 and 27 wings to :ref:`validate <validation:Niviuk Hook
+3 system dynamics>` the modeling choices and implementation.
 
 The process begins with the primary technical data from the official `technical
 specifications manual
@@ -158,7 +140,7 @@ which will be used to define a suitable payload.
 
 
 Canopy
-------
+======
 
 .. This section should highlight how a reasonable approximation can be
    produced from the minimal wing data like flat and inflated span, taper,
@@ -183,7 +165,7 @@ easiest to think of them in two groups:
 
 
 Foil geometry
-^^^^^^^^^^^^^
+-------------
 
 .. _Layout:
 
@@ -318,12 +300,12 @@ mentions that "newer gliders" have been design with "low-speed sections", such
 as the LS(1)-0417 (for example, see
 :cite:`becker2017ExperimentalStudyParaglider`). For literature targeting
 paragliders specifically, one option is the NACA 23015: a classic, general
-purpose airfoil used in the wind tunnel :ref:`foil_geometry:Case study`
-:cite:`belloc2015WindTunnelInvestigation`. Another paraglider-specific option
-is the "Ascender": an 18% thickness airfoil developed for an open-design
-paraglider :cite:`casellasParagliderDesignHandbook`; for an example of
-literature using that airfoil, see
-:cite:`boffadossi2016AnalysisAerodynamicCharacteristics`.
+purpose airfoil used in the :ref:`wind tunnel model <validation:Foil
+aerodynamics>` :cite:`belloc2015WindTunnelInvestigation`. Another
+paraglider-specific option is the "Ascender": an 18% thickness airfoil
+developed for an open-design paraglider
+:cite:`casellasParagliderDesignHandbook`; for an example of literature using
+that airfoil, see :cite:`boffadossi2016AnalysisAerodynamicCharacteristics`.
 
 The criteria for selecting an airfoil is beyond the scope of this
 demonstration, but a key observation is the tendency for paragliders to use
@@ -366,7 +348,8 @@ airfoils.
 .. figure:: figures/paraglider/demonstration/deflected_Ascender_airfoil.*
    :name: generating deflected airfoils
 
-   Generating an airfoil with a smoothly-deflecting trailing edge.
+   Two-circle model to generate an airfoil with a smoothly-deflecting trailing
+   edge.
 
 For the upper surface, first choose a point (``a``) at some distance from the
 trailing edge (``c``) and attach a circle ``C2`` tangent to the airfoil at
@@ -399,9 +382,10 @@ results of these choices is that choosing such a large radius for ``C2`` is
 wildly optimistic, but was chosen anyway to reduce the curvature of the
 transition region. For small brake inputs the transition curvature is
 negligible, but becomes progressively sharper as deflection increases. High
-curvature is a problem when using a theoretical aerodynamics model (such as
-XFOIL) to estimate the section coefficients, since the high curvature inhibits
-the method from converging on a solution when viscosity is taken into account.
+curvature can be a problem for some theoretical models used to estimate the
+section coefficients (including the viscous/inviscid coupling method in XFOIL
+:cite:`drela1989XFOILAnalysisDesign`), since the high curvature inhibits the
+method from converging on a solution when viscosity is taken into account.
 Softening the curvature allows the estimate to converge, but at the cost of
 hiding convergence failures that typically suggest flow separation. As
 a result, this profile set is likely to overestimate lift and underestimate
@@ -409,7 +393,7 @@ drag.
 
 
 Physical details
-^^^^^^^^^^^^^^^^
+----------------
 
 In addition to a :doc:`foil geometry <foil_geometry>`, a canopy model requires
 details of physical attributes such as surface material densities and air
@@ -477,7 +461,6 @@ discussion, see :cite:`boffadossi2016AnalysisAerodynamicCharacteristics`.
 
    NACA 24018 with air intakes
 
-
 At this point the canopy can compute the total mass, which is another
 opportunity to sanity check the approximations. The technical specs list the
 total wing weight at 4.9kg, but the canopy materials included in this model
@@ -493,16 +476,38 @@ assumed to have a negligible impact on the overall system behavior.
 
 .. Aerodynamic coefficients for viscous drag corrections
 
-[[FIXME: add the viscous drag corrections
+The last step is to add the empirical corrections to the section viscous drag
+coefficients. The first is a general factor applied to all the sections evenly
+to account for "surface characteristics", as estimated during wind tunnel
+measurements of parafoils in :cite:`ware1969WindtunnelInvestigationRamair`:
 
-* :math:`C_{D,\textrm{intakes}}`
-* :math:`C_{D,\textrm{surface}}`
+.. math::
+   :label: Cd_surface
 
-]]
+   C_{d,\textrm{surface}} = 0.004
+
+
+The second correction is to account for the additional viscous drag due to the
+presence of air intakes at the leading edge of some of the sections. In
+:cite:`babinsky1999AerodynamicPerformanceParagliders` they propose a simple
+linear relationship between the length of the air intake:
+
+.. math::
+   :label: Cd_intakes
+
+   C_{d,\textrm{intakes}} = 0.07 \, \frac{h}{c}
+
+where :math:`h` is the length of the air intakes and :math:`c` is the length of
+the chord. This model assumes the air intakes constant (but proportional) size
+along the entire span between from :math:`-s_\textrm{start} \le s \le
+-s_\textrm{start}`. As seen in :numref:`NACA24018 with air intakes`, the air
+intakes are roughly 5% of the chord, for a value of roughly
+:math:`C_{D,\textrm{intakes}} = 0.0035`. (The precise value is computed
+automatically by the implementation.)
 
 
 Suspension lines
-----------------
+================
 
 The second component model of the paraglider system is for the :ref:`suspension
 lines <paraglider_components:Suspension lines>`. The behavior of the lines is
@@ -511,7 +516,7 @@ related functionality to (hopefully) make their relationships more intuitive.
 
 
 Riser position
-^^^^^^^^^^^^^^
+--------------
 
 .. Design variables: kappa_x, kappa_z, kappa_A, kappa_C, kappa_a
 
@@ -607,7 +612,26 @@ a reasonable starting point is :math:`\kappa_x = 0.5`.
 
 
 Brakes
-^^^^^^
+------
+
+.. Don't discuss the design of the brake model, just explain how to estimate
+   the parameters, but for my own sake, here's a recap:
+
+   * `\delta_d` is the absolute deflection distance
+
+   * `\bar{\delta}_d` is the normalized deflection distance
+
+   * `\bar{\delta_{d,max}` is the largest normalized delta_d supported by the
+     airfoil set
+
+   * `kappa_b` is the maximum distance you can pull the brakes. It is the
+     scaling factor applied to the quartic, which produces `\delta_d`
+
+   * `kappa_b` should be as large as possible in order to maximize the usable
+     range of the brakes. It's not necessarily determined by section that
+     experiences the maximum ABSOLUTE deflection; it's determined by the
+     section with the maximum NORMALIZED deflection, which depends on the
+     section chord.
 
 
 The second group of parameters :eq:`suspension lines parameters, brakes` for
@@ -634,11 +658,11 @@ distribution while keeping the starting point centered at :math:`s = 0.5`, so
 about right.
 
 The maximum-brake values are more difficult, since they must coordinate with
-the value of :math:`\kappa_b`, but from [[FIXME: link to the youtube video]] it
-can be seen that maximum brakes produce a deflection from roughly
-:math:`s_{\textrm{start},1} = 0.08` to :math:`s_{\textrm{stop},1} = 1.05`
-(where the stopping position exceeds the wing tip to indicate that the wing tip
-itself experiences a small deflection).
+the value of :math:`\kappa_b`, but from `safety training footage
+<https://www.youtube.com/watch?v=D-OyGZbOmS0>`_ it can be seen that maximum
+brakes produce a deflection from roughly :math:`s_{\textrm{start},1} = 0.08` to
+:math:`s_{\textrm{stop},1} = 1.05` (where the stopping position exceeds the
+wing tip to indicate that the wing tip itself experiences a small deflection).
 
 
 .. Maximum trailing edge deflection (kappa_b)
@@ -691,25 +715,23 @@ allow the brake lines to be pulled a maximum distance of :math:`42.6 \, [cm]`.
 To check the model fit, plot the undeflected and deflected trailing edge to
 compare with the reference photos:
 
-.. figure:: figures/paraglider/demonstration/Hook3_TE_0.25_0.50.*
+.. figure:: figures/paraglider/demonstration/hook3_brake_deflections_TE_Bl0.25_Br0.50.svg
 
-   Quartic brake deflections, :math:`\delta_{bl} = 0.25` and :math:`\delta_{br}
-   = 0.5`
+   Niviuk Hook 3 23 brake distribution, :math:`\delta_{bl} = 0.25` and
+   :math:`\delta_{br} = 0.5`
 
 .. raw:: html or singlehtml
 
    <br/>
 
-.. figure:: figures/paraglider/demonstration/Hook3_TE_1.00_1.00.*
+.. figure:: figures/paraglider/demonstration/hook3_brake_deflections_TE_Bl1.00_Br1.00.svg
 
-   Quartic brake deflections, :math:`\delta_{bl} = 1.00` and
+   Niviuk Hook 3 23 brake distribution, :math:`\delta_{bl} = 1.00` and
    :math:`\delta_{br} = 1.0`
-
-**FIXME: update these old examples with the true brake deflections!!!!**
 
 
 Line drag
-^^^^^^^^^
+---------
 
 .. Design variables: total line length, line diameter, r_L2LE (lumped
    positions for the line surface area), and Cd_lines
@@ -741,7 +763,7 @@ are essentially cylinders, a suitable drag coefficient is simply :math:`C_{d,l}
 
 
 Payload
--------
+=======
 
 .. Total payload mass, spherical radius, drag coefficient, etc
 
@@ -786,318 +808,3 @@ overestimates, since an underestimate merely limits the range of behavior the
 model can produce, whereas an overestimate can produce fictitious behavior; in
 the absence of a rigorous measurement, a conservative guess is :math:`\kappa_w
 = 0.15 \left[\textrm{m}\right]`.
-
-
-Model validation
-================
-
-.. How accurate is the model? This section involves **expected** outcomes,
-   which means we already know what we expect to see. Validation is about
-   *confirming*, not *learning*.
-
-
-.. What is model validation? Why is it difficult for paragliders?
-
-Having defined the parameters for the three component models, they are combined
-into a composite :doc:`system_dynamics` model that provides the behavior of the
-complete glider. Getting to this point with such little information required
-many modeling assumptions, simplifications, approximations, and outright
-guesswork. The natural next step is to question the validity of the model: how
-accurately does it estimate the true behavior of the physical system? In any
-modeling project it is vital to validate the model by comparing its estimates
-to experimental data, and this case is no exception.
-
-Unfortunately, experimental data is extremely scarce for commercial paraglider
-wings. Unlike the aerodynamics :ref:`case study <foil_aerodynamics:Case
-study>`, wind tunnel measurements are unavailable. What's worse, the dynamic
-behavior of a wing in motion is significantly more complex than the static
-behavior of a wing held fixedly in a wind tunnel. As a result, we must make do
-with point data and general expectations gleaned from sources such as glider
-certifications and consumer wing reviews. Clearly such sources lack the rigor
-to "prove" model accuracy, a fact that may be disheartening after all the work
-thus far. Nevertheless, when taken together they can at least provide
-incremental confidence that a model is adequate to answer basic questions of
-wing performance.
-
-
-Polar curve
------------
-
-.. Plot and discuss the predicted polar curves.
-
-   I don't have access to experimental polar curves, but I do have point
-   estimates from certification and wing review flights.
-
-   Use this section to really highlight the limitations/assumptions of the
-   model? Unknown airfoil, unknown true line positions, lack of a proper
-   `LineGeometry` (so brake deflections and arc changes when accelerator is
-   applied are both unknown), no cell billowing, etc etc. Seems like a good
-   place to point out "this is overestimating lift and underestimating drag, as
-   expected."
-
-
-.. Polar curves
-
-The conventional way to summarize the performance of a gliding aircraft is with
-a chart called the *polar curve*. These curves show the vertical and horizontal
-speed of the aircraft at equilibrium over the range of brake and accelerator
-inputs, providing information such as the usable range of the glider and its
-glide ratio at different ground speeds. Given the wealth of information
-compactly communicated by a polar curve, they are an excellent starting point
-for critiquing the estimates of a flight dynamics model for a glider.
-
-The previous section demonstrated the creation of a paraglider model for
-a Niviuk Hook 3, size 23. Now, models for the larger sizes of the wing (created
-using the same workflow) will be compared to experimental data by comparing
-measurements from test flights to the predicted polar curves.
-
-
-Size 25
-^^^^^^^
-
-For the experimental data, a size 25 version of the wing was reviewed for the
-French magazine "Parapente Mag" [[FIXME: citation; see `Hook 3 Parapente Mag
-148.pdf`]].
-
-Unfortunately, reviews such as this cannot provide the entire polar curve;
-because each point is laborious to measure accurately, reviews only provide
-noteworthy values, such as the minimum and maximum speeds, or the horizontal
-and vertical speeds that mark the "minimum sink" and "best glide" operating
-points of the glider. Despite this ambiguity, by plotting the experimental
-point data over the theoretical curve it is possible to get a sense of the
-general accuracy of the model estimates.
-
-.. figure:: figures/paraglider/demonstration/polar_25.svg
-
-   Polar curve for Niviuk Hook 3 size 25
-
-   Colored markings are theoretical data from the model, black markings are
-   experimental data from Parapente Mag. Red represents braking, green
-   represents accelerating, and the blue diagonal line marks the predicted best
-   glide ratio. The three black vertical lines mark the experimental values for
-   minimum speed, trim speed, and maximum speed; the left black dot is the
-   "minimum sink" operating point, and the right dot is the "best glide"
-   operating point.
-
-If the model is a good approximation of the glider that generated the data
-— and assuming the data was collected accurately — then the experimental values
-should match the predicted values:
-
-* The minimum ground speed should align with the leftmost endpoint of the red
-  curve
-
-* Trim speed should align with the point where the red and green curves connect
-
-* The maximum ground speed should align with the rightmost endpoint of the
-  green curve
-
-* The "minimum sink" operating point should lie on the point where the curve
-  reaches its minimum
-
-* The "best glide" operating point should lie on the point where the blue line
-  touches the polar curve
-
-Although the diagram is a convenient way to summarize so much information it
-can be hard to distinguish specific values, so their numerical equivalents are
-listed below.
-
-.. list-table::
-   :header-rows: 1
-
-   * - Value
-     - Theoretical
-     - Experimental
-   * - Minimum groundspeed
-     - 7.4
-     - 6.7
-   * - Minimum sink <h, v>
-     - <9.6, 1.06>
-     - <9.22, 1.02>
-   * - Trim speed
-     - 10.2
-     - 10.6
-   * - Maximum speed
-     - 14.7
-     - 14.4
-   * - Best glide <h, v>
-     - <10.2, 1.08>
-     - <10.4, 1.12>
-   * - Best glide ratio
-     - 9.44
-     - 9.3
-
-Observations:
-
-* The minimum ground speed of the theoretical model is significantly higher
-  than the experimental value. That may be explained by the conservative value
-  of :math:`\kappa_b = 0.44 \, [m]` (the maximum distance the brakes can be
-  pulled; see the earlier discussion when defining the parameters for the
-  :ref:`demonstration:Brakes`). The review listed the maximum brake length as
-  >60cm, which suggests that this model can only apply <73% of the full range
-  of brakes, so this result in unsurprising.
-
-* Minimum sink occurs at about 0.4 m/s slower ground speed. This may be related
-  to the procedure to generate the deflected `Profiles`_, to the deflection
-  distribution, or to the aerodynamic coefficient estimates from XFOIL.
-
-* Minimum sink rate is remarkably close (1.06 versus 1.02 m/s), which I find
-  surprising since I expected the "optimistic" airfoil set :numref:`airfoil
-  set, braking NACA24018` to overestimate lift during braking.
-
-* The theoretical model underestimates the ground speed at trim. Although this
-  could be due to it overestimating the drag, it is far more likely that the
-  model is overestimating the lift of the wing, so less speed is required to
-  counteract the weight of the glider.
-
-* This experimental data reported the best glide at 10.4 m/s when trim was 10.6
-  m/s. This disagrees with our earlier assumption that best glide should occur
-  at trim.
-
-* The model overestimates the maximum ground speed. This may suggest it is
-  underestimating drag, or it could suggest that the model parameters are wrong
-  (:math:`\kappa_C` in particular has a large impact on maximum speed), or it
-  could be because this rigid body model neglects foil deformations (it assumes
-  the accelerator produces a perfect pitch-rotation of the foil) as well as the
-  section profile deformations that increase with speed.
-
-In truth, these observations are just a drop in the bucket of possible issues
-with the theoretical model (not to mention issues with the experimental data
-itself); there are so many simplifications at work, and point data cannot hope
-to reveal all their flaws. These results suggest that the performance of the
-model is excellent when predicting longitudinal equilibrium, but a wider
-variety of wing models need to be examined to determine if this excellence
-generalizes to other wings.
-
-
-Size 27
-^^^^^^^
-
-For the experimental data, a size 27 model of the wing was reviewed for the
-Spanish magazine "Parapente" [[FIXME: citation; see `hook 3 perfils.pdf`]]. As
-with the size 25 model, plotting the experimental data on top of the
-theoretical curves produces valuable reference data:
-
-.. figure:: figures/paraglider/demonstration/polar_27.svg
-
-   Polar curve for Niviuk Hook 3 size 27
-
-   Colored markings are theoretical data from the model, black markings are
-   experimental data from Parapente. Red represents braking, green represents
-   accelerating, and the blue diagonal line marks the predicted best glide
-   ratio. The three black vertical lines mark the experimental values for
-   minimum speed, trim speed, and maximum speed; the left black dot is the
-   "minimum sink" operating point, and the right dot is the "best glide"
-   operating point.
-
-And as before, the numerical equivalents of the data in the figure above:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Value
-     - Theoretical
-     - Experimental
-   * - Minimum groundspeed
-     - 7.83
-     - 6.7
-   * - Minimum sink <h, v>
-     - <10.2, 1.12>
-     - <9.72, 1.15>
-   * - Trim speed
-     - 10.8
-     - 11.1
-   * - Maximum speed
-     - 15.4
-     - 15
-   * - Best glide <h, v>
-     - <10.8, 1.13>
-     - <11.1, 1.17>
-   * - Best glide ratio
-     - 9.52
-     - 9.5
-
-The observations are similar to that for the size 25 model. Overall the fit is
-excellent. This model was limited to :math:`\kappa_b = 0.46 \, [m]`, or <76% of
-the usable ">60cm" brake length, so the minimum ground speed is still too high.
-And again, the model underestimates the ground speed at trim. The best glide
-ratio matches exactly, although the theoretical model still slightly
-underestimates the ground speed where that occurs.
-
-
-Model investigation
-===================
-
-.. Validation was about CONFIRMATION; this section is about LEARNING. What can
-   we learn by playing with the model?
-
-   This section is the payoff for the paper! In the introduction to the paper
-   I claimed that one of the applications of dynamic simulations is to study
-   the behavior of a system. Having concluded the model is usably accurate,
-   demonstrate how it can be used to learn about paraglider behavior.
-
-
-[[Assuming the model has been successfully validated to within useful accuracy,
-now we can use the model to learn about the behavior of the physical system.
-Run demonstrative scenarios and consider the observed behavior. Useful to
-discuss both the behavior of the (true) physical system and the model.]]
-
-
-Drag breakdown
---------------
-
-A common question for curious pilots is how to reduce the drag of their glider
-so they can improve the glide ratio or top speed of their wing. The natural
-progression of this curiosity is wonder where all the drag comes from in the
-first place. One way to answer that question is to plot the drag contributions
-from each component :cite:`babinsky1999AerodynamicImprovementsParaglider`.
-
-.. figure:: figures/paraglider/demonstration/drag_breakdown.*
-
-   Drag breakdown for Niviuk Hook 3 23 with a pod harness.
-
-Viscous drag includes effects such as the sheer forces produced by the
-viscosity of the air, and the pressure drag due to flow separation (the
-"vacuum" that can occur on the downwind side of an object); these forms of drag
-occur on every surface of the glider, including the lines and payload. Inviscid
-drag is less intuitive: commonly referred to as "lift-induced drag", it is the
-energy lost in the vorticity that the wing sheds into its wake as a side-effect
-of producing lift.
-
-This diagram provides a satisfying look into the behavior of a wing across the
-range of speeds. At the low end, pilots understand that the "brakes" will slow
-the wing by increasing its drag, but may be surprised to discover that the
-increase in drag is dominated by how the wing produces lift. At the high end,
-it can be surprising to learn what proportion of the total system drag is
-produced by the seemingly-negligible suspension lines. Although drag is just
-one piece of the lift/drag ratio, this sort of breakdown is valuable for
-estimating how much improvement is possible by (for example) reducing the drag
-of the payload.
-
-This decomposition is also educational because it offers another perspective of
-how each component of the wing affects the overall design. Consider the general
-guideline that paraglider wings are designed to achieve their maximum glide
-ratio at "trim" (zero controls), which usually coincides with the speed that
-minimizes the total system drag (as seen here). Now suppose the design was
-changed; for example, increasing the aspect ratio of the canopy will tend to
-decrease its lift-induced drag, which in turn requires repositioning the
-payload at trim. The complete system behavior is a complex interaction of
-components, and having access to a parametric model such as this is an
-excellent resource for quickly answering questions about glider efficiency by
-developing an intuition of how their interactions affect the system behavior.
-
-
-.. This diagram can also provide a useful to "sanity check".
-
-   Compare the model to known results, such as
-   :cite:`babinsky1999AerodynamicImprovementsParaglider`.
-
-   * Accuracy of the :ref:`section profiles <Profiles>`
-
-   * Accuracy of the 2D aerodynamic coefficients (XFOIL tends to overestimate
-     CL and underestimate CD)
-
-   Then again, are these really THAT different from the accuracy limitations of
-   the 3D aerodynamics? Spanwise-flow violate the assumptions of the 2D
-   coefficients, surface imperfections, etc. At maximum braking you'd expect
-   the foil distortions (creasing, etc) to have a significant impact for a real
-   wing. At high speed I'm ignoring deformations to the air intakes [[]]

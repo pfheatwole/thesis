@@ -204,14 +204,14 @@ def centered_thermal(delta_a=0, delta_b=0, py=0, mag=-3, radius5=10):
         "delta_bl": delta_b,
         "delta_br": delta_b,
         "v_W2e": simulation.CircularThermal(
-            px=10 * 10,  # At 10m/s, roughly 10 seconds in
+            px=radius5 * 1.5,  # 50% margin away
             py=py,
             mag=mag,
             radius5=radius5,
             t_enable=0,
         ),
     }
-    T = 20
+    T = 12
     return inputs, T
 
 
@@ -256,6 +256,7 @@ def build_paragliders(
     use_apparent_mass=True,
     kappa_RM=(-100, 0, -10),  # Coefficients for Theta_p2b
     kappa_RM_dot=(-50, -5, -50),  # Coefficients for dot{Theta_p2b}
+    verbose=True,
 ):
     """
     Build a set of glider models.
@@ -267,18 +268,18 @@ def build_paragliders(
     ###########################################################################
     # Build the wings and appropriate payloads
 
-    # size=23 using an upright harness like mine
-    wing23 = gsim.extras.wings.niviuk_hook3(size=23, verbose=True)
+    # size=23 using a pod harness
+    wing23 = gsim.extras.wings.niviuk_hook3(size=23, verbose=verbose)
     harness23 = gsim.paraglider_harness.Spherical(
         mass=75,
         z_riser=0.5,
         S=0.55,
-        CD=0.8,
+        CD=0.4,
         kappa_w=0.15,
     )
 
     # size=25 using a pod harness as in `Hook 3 Parapente Mag 148.pdf`
-    wing25 = gsim.extras.wings.niviuk_hook3(size=25, verbose=True)
+    wing25 = gsim.extras.wings.niviuk_hook3(size=25, verbose=verbose)
     harness25 = gsim.paraglider_harness.Spherical(
         mass=94,
         z_riser=0.5,
@@ -288,7 +289,7 @@ def build_paragliders(
     )
 
     # size=27 using a pod harness as in `hook_3_perfils.pdf`
-    wing27 = gsim.extras.wings.niviuk_hook3(size=27, verbose=True)
+    wing27 = gsim.extras.wings.niviuk_hook3(size=27, verbose=verbose)
     harness27 = gsim.paraglider_harness.Spherical(
         mass=115,
         z_riser=0.5,
@@ -442,7 +443,6 @@ def build_paragliders(
 def simulate(model, state0, dt, T):
     gsim.simulator.prettyprint_state(state0, "Initial state:", "")
     t_start = time.perf_counter()
-    dt = 0.25  # Time step for the sequence of `states`
     times, states = gsim.simulator.simulate(model, state0, dt=dt, T=T)
     states_dot = gsim.simulator.recompute_derivatives(model, times, states)
     t_stop = time.perf_counter()
@@ -487,3 +487,34 @@ def plot_xy(states, ax=None):
     ax.set_ylabel("x")
     ax.set_aspect("equal")
     return ax
+
+
+def plot_path_sideview(r_RM2O, r_C02O, r_P2O, ax):
+    """
+    Plot glider positions over time with lines to the wing and harness.
+
+    See `pfh.glidersim.extras.simulation.sample_glider_positions` for a helper
+    function to compute the positions from a simulated glider path.
+
+    Parameters
+    ----------
+    r_RM2O : array of float, shape (T,3)
+        Position vectors of the riser midpoint with respect to the world origin O.
+    r_C02O : array of float, shape (T,3)
+        Position vectors of the point on the central chord directly above RM
+        with respect to to the world origin O. The vertical line makes it easy
+        to visualize the pitch angle of the wing.
+    r_P2O : array of float, shape (T,3)
+        Position vectors of a payload reference point with respect to the world
+        origin O. Using a fixed reference point makes it easy to visualize the
+        relative orientation of the payload.
+    ax : matplotlib.axes
+    """
+    ax.plot(*r_RM2O[:, [0, 2]].T, label="Riser midpoint")
+    ax.plot(*r_C02O[:, [0, 2]].T, label="Central chord")
+    ax.plot(*r_P2O[:, [0, 2]].T, label="Payload", lw=0.5, c="r")
+    for t in range(0, len(r_RM2O)):
+        p1, p2 = r_RM2O[t], r_C02O[t]  # Risers -> wing central chord
+        ax.plot([p1[0], p2[0]], [p1[2], p2[2]], lw=0.5, c="k")
+        p1, p2 = r_RM2O[t], r_P2O[t]  # Risers -> payload
+        ax.plot([p1[0], p2[0]], [p1[2], p2[2]], lw=0.5, c="k")

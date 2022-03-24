@@ -40,18 +40,19 @@ Contents
    :numbered:
 
    introduction
+   related_works
    foil_geometry
    foil_aerodynamics
    paraglider_components
    system_dynamics
    state_dynamics
    demonstration
+   validation
    conclusion
 
 .. toctree::
    :maxdepth: 3
 
-   glossary
    zreferences
 
 .. All documents beyond this point are considered appendices

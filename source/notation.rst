@@ -19,7 +19,7 @@ Notation and Symbols
    * - :math:`\vec{x}^c`
      - a vector in the coordinate system :math:`c`
    * - :math:`\vec{x}_{B/A}`
-     - a vector from point A to point B (point B with respect to point A)
+     - a vector from point A to point B ("B with respect to A")
    * - :math:`{^r \dot{\vec{x}}}`
      - the derivative of a vector taken in reference frame
        :math:`\mathcal{F}_r`
@@ -48,11 +48,6 @@ Notation and Symbols
        :math:`\mathcal{F}_a`
    * - :math:`f(\cdot)`, :math:`func(\cdot)`, etc
      - functions, where ``f``, ``func``, can be any identifier
-   * - :math:`p(\cdot)`
-     - a probability density function. This identifier is unique because it
-       can be used many times for different density functions. For example,
-       :math:`p(x)` and :math:`p(y)` are different functions even though both
-       use :math:`p`.
 
 Another notation which is useful when building systems of equations involving
 matrices is the *cross-product matrix operator*, so that

@@ -45,7 +45,7 @@ In this paper the *arc* of a parafoil is the vector-valued function of
 :math:`\left< y, z \right>` coordinates that position the section reference
 points. For parafoils, the arc is typically defined by an elliptical function.
 
-.. Explain arc anhedral and section roll. FIXME: draw a diagram
+.. Explain arc anhedral and section roll.
 
 A centered elliptical curve can be defined as a function of four parameters,
 but the symmetry of the wing reduces that to three free design parameters, and
@@ -53,9 +53,14 @@ normalizing the arc length reduces it to just two. There are several possible
 parametrizations, but an intuitive choice is the mean anhedral angle
 :math:`\Gamma_\textrm{tip}` and the section roll angle
 :math:`\phi_\textrm{tip}` of the wing tips
-:cite:`benedetti2012ParaglidersFlightDynamics`. Choosing those parameters to
-define an elliptical function that is proportional to the desired
-:math:`yz`-curve produces an intermediate result:
+:cite:`benedetti2012ParaglidersFlightDynamics`.
+
+.. figure:: figures/paraglider/geometry/canopy/chord_surface_yz.*
+
+   Parametrized elliptical arc
+
+Choosing those parameters to define an elliptical function that is proportional
+to the desired :math:`yz`-curve produces an intermediate result:
 
 .. math::
 
@@ -66,8 +71,6 @@ define an elliptical function that is proportional to the desired
      B          &= \frac{k_1}{k_2} \tan(\Gamma_\textrm{tip}) \\
      \vec{f}(t) &= \left< A \cos(t), B \sin(t) \right>
    \end{aligned}
-
-.. FIXME: this really needs a diagram
 
 This design requires that :math:`\phi_\textrm{tip} > 2 \Gamma_\textrm{tip}` (so
 the wing must be wider than it is tall and the wing tip roll cannot exceed 90°)
@@ -171,12 +174,6 @@ intuitive interpretation and complete equations for the inertia tensors.
 Area
 ----
 
-To compute the mass distribution of the upper and lower surfaces, start by
-computing the dimensionless inertia tensor of the areas then scale them by the
-surface material areal densities. [[FIXME: what? Reword: we want the total
-area, total area centroid, and dimensionless inertia matrices. We can scale
-those by the upper and lower surface densities to get the actual values.]]
-
 First, for each of the upper and lower surfaces, cover the surface with
 a triangulated mesh so it is represented by a set of :math:`N` triangles. Each
 triangle is defined by three points :math:`\left\{ \mathrm{P1}, \mathrm{P2},
@@ -234,8 +231,8 @@ The inertia tensor of the total surface area :math:`a` about the canopy origin
 
    \mat{J}_{a/\mathrm{O}} = \mathrm{trace} \left( \mat{\Sigma}_a \right) \vec{I}_3 - \mat{\Sigma}_a
 
-And tada, we've computed the three relevant properties for each surface area:
-the total area :math:`a`, the area centroid
+This completes the calculation of the three relevant properties for each
+surface area: the total area :math:`a`, the area centroid
 :math:`\vec{r}_{\mathrm{A}/\mathrm{O}}`, and the inertia tensor
 :math:`\mat{J}_{a/\mathrm{O}}`.
 
@@ -586,11 +583,11 @@ implementation.
 Paraglider system models
 ========================
 
-[[**FIXME**: preview the models. Model `6a` is the most complete, and accounts
-for apparent mass. Models `6b` and `6c` are simpler but require computing the
-body center of mass :math:`r_{B/RM}` before computing :math:`A_{a/B}` (plus
-:math:`B` is not strictly a fixed point since air density changes); they are
-mostly useful for verifying the implementations.]]
+.. FIXME: preview the models? Model `6a` is the most complete, and accounts for
+   apparent mass. Models `6b` and `6c` are simpler but require computing the
+   body center of mass :math:`r_{B/RM}` before computing :math:`A_{a/B}` (plus
+   :math:`B` is not strictly a fixed point since air density changes); they are
+   mostly useful for verifying the implementations.
 
 
 Model 6a
@@ -1120,14 +1117,14 @@ frame:
        \vec{g}_{p/RM} + \vec{g}_{RM} \\
    \end{aligned}
 
-[[**FIXME**: ambiguous notation? I'm interested in communicating "the moment
-about `RM` due to the spring" and "the moment about `RM` due to the aerodynamic
-forces", etc]]
+.. FIXME: ambiguous notation? I'm interested in communicating "the moment about
+   `RM` due to the spring" and "the moment about `RM` due to the aerodynamic
+   forces", etc
 
-[[**FIXME**: define `g_{b,aero}` etc? Has contributions from both aerodynamic
-moments as well as forces applied on some lever arm to `RM`.]]
+.. FIXME: define `g_{b,aero}` etc? Has contributions from both aerodynamic
+   moments as well as forces applied on some lever arm to `RM`.
 
-[[**FIXME**: need to describe `f_{RM}` and `g_{RM}`
+.. FIXME: need to describe `f_{RM}` and `g_{RM}`
 
 The spring-damper connection produces forces and moments shared by the body
 and the payload. There are six variables but only three degrees of freedom.
