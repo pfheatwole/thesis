@@ -137,9 +137,9 @@ html_title = project  # Override "<project>'s documentation"
 html_static_path = ['_static']
 html_css_files = ["css/custom.css"]
 
-html_theme_options = {
-    "announcement": "<b>This document is a draft!</b>",
-}
+# html_theme_options = {
+#     "announcement": "<b>This document is a draft!</b>",
+# }
 
 
 # -- Options for HTMLHelp output ------------------------------------------
