@@ -1,6 +1,9 @@
 Parametric Paraglider Modeling
 ==============================
 
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.6383051.svg
+   :target: https://doi.org/10.5281/zenodo.6383051
+
 This repository contains the source material for my Master's thesis:
 `Parametric Paraglider Modeling <https://pfheatwole.github.io/thesis/>`__
 

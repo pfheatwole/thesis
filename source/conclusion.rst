@@ -396,14 +396,15 @@ Open source
 ===========
 
 The `materials <https://github.com/pfheatwole/thesis/>`__ to produce this paper
-and its `implementation <https://github.com/pfheatwole/glidersim/>`__ are both
-available under permissive open source licenses. Although this work focused on
-paragliders, the structure of the models is mirrored in the structure of the
-code, and should be easily adaptable to other gliding aircraft such as hang
-gliders or kites. For maximum versatility and approachability, the entire
-implementation was built on the Python scientific computing stack; despite not
-producing the fastest implementation, Python made up for the performance cost
-with value in other areas:
+and its `implementation <https://github.com/pfheatwole/glidersim/>`__
+:cite:`heatwolev2022.03.0aGlidersim` are both available under permissive open
+source licenses. Although this work focused on paragliders, the structure of
+the models is mirrored in the structure of the code, and should be easily
+adaptable to other gliding aircraft such as hang gliders or kites. For maximum
+versatility and approachability, the entire implementation was built on the
+Python scientific computing stack; despite not producing the fastest
+implementation, Python made up for the performance cost with value in other
+areas:
 
 * Free (unlike MATLAB, AutoCAD, etc)
 

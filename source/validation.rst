@@ -155,8 +155,10 @@ distance along the :math:`\left< y, z \right>` points. Also, the reference data
 is defined with the wing tips at :math:`z = 0`, whereas the convention of this
 paper places the canopy origin at the leading edge of the central section; this
 is easily accommodated by subtracting the central :math:`z = -0.375` from all
-:math:`z`-coordinates. (Alternatively, the implementation of the simplified
-model in ``glidersim`` can shift the origin automatically.)
+:math:`z`-coordinates. (Alternatively, the
+:external+glidersim:py:class:`implementation
+<pfh.glidersim.foil_layout.FoilLayout>` of the simplified model in
+``glidersim`` can shift the origin automatically.)
 
 .. figure:: figures/paraglider/geometry/airfoil/NACA-23015.*
    :name: airfoil_NACA_23015

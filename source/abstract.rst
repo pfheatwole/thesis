@@ -25,5 +25,9 @@ model design and implementation, an aerodynamic simulation of a reference
 paraglider canopy is compared to wind tunnel measurements, and a dynamic
 simulation of a commercial paraglider system is compared to basic flight test
 data. The entirety of the models and example wings are available as an `open
-source library <https://github.com/pfheatwole/glidersim>`__ built on the Python
-scientific computing stack.
+source library <https://github.com/pfheatwole/glidersim>`__
+:cite:`heatwolev2022.03.0aGlidersim` built on the Python scientific computing
+stack.
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.6383051.svg
+   :target: https://doi.org/10.5281/zenodo.6383051
