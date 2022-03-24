@@ -107,7 +107,7 @@ pathspec==0.9.0
     # via black
 pfh.glidersim==2020.03.0a
     # via -r develop.in
-pillow==9.0.0
+pillow==9.0.1
     # via matplotlib
 platformdirs==2.4.1
     # via black
