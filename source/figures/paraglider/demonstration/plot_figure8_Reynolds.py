@@ -76,9 +76,8 @@ points2 = gsim.extras.simulation.sample_paraglider_positions(model2, states, tim
 
 fig, ax = gsim.extras.plots._create_3d_axes()
 ax.view_init(azim=20, elev=25)
-alpha = 0.75
-gsim.extras.plots.plot_3d_simulation_path(**points1, ax=ax, alpha=alpha)
-gsim.extras.plots.plot_3d_simulation_path(**points2, ax=ax, alpha=alpha)
+gsim.extras.plots.plot_3d_simulation_path(**points1, ax=ax)
+gsim.extras.plots.plot_3d_simulation_path(**points2, ax=ax)
 
 handles, labels = ax.get_legend_handles_labels()
 handles = [handles[1], handles[4]]
