@@ -171,14 +171,10 @@ distance* :math:`\delta_d` of the trailing edge:
 
    Deflection as a vertical displacement of the trailing edge.
 
-.. FIXME: is it safe to say that because the brakes pull nearly perpendicular
-   to the chord that the decrease in brake line length is almost exactly equal
-   to the deflection distance delta_d?
-
 Because airfoils and section coefficients are conventionally normalized to
 a unit chord, the natural choice of airfoil index for a parafoil is the
-*normalized deflection distance* :math:`\overline{\delta_d}`, a function of
-the *deflection distance* :math:`\delta_d` and the *chord length* :math:`c`:
+*normalized deflection distance* :math:`\overline{\delta_d}`, a function of the
+*deflection distance* :math:`\delta_d` and the *chord length* :math:`c`:
 
 .. math::
    :label: normalized deflection distance
@@ -199,20 +195,6 @@ along the span is a function of section index and brake inputs:
      \frac
        {\delta_d \left(s, \delta_{bl}, \delta_{br} \right)}
        {c \left( s \right)}
-
-
-.. FIXME: discussion
-
-   * This model only defines the choice of section index; it does not specify
-     how to generate the deflected profiles, which must be designed
-     separately. This represents a significant extra step in the design
-     process, but once a set of deformed profiles have been generated they can
-     be reused for each canopy model. For an example set of deformed profiles,
-     :ref:`demonstration:Section profiles`
-
-   * This model assumes that a given vertical deflection distance will always
-     produce a unique deflected profile (ie, the deformed profiles always take
-     the same shape for a given value of :math:`\overline{\delta_d}`).
 
 
 Inertia

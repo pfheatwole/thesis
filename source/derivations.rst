@@ -337,9 +337,6 @@ be computed directly from the covariance matrix:
 
    \mat{J}_{v/O} = \mathrm{trace} \left( \mat{\Sigma}_v \right) \vec{I}_3 - \mat{\Sigma}_v
 
-.. FIXME: make a table showing the six variables and their names. Well, nine
-   variables? There are upper and lower surfaces.
-
 
 Apparent mass of a parafoil
 ===========================

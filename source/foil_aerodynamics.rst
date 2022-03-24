@@ -450,8 +450,6 @@ a discussion.
 Better solver
 ^^^^^^^^^^^^^
 
-.. FIXME: section title
-
 To solve for the circulation strengths :math:`\Gamma_i`, the Phillips paper
 suggests using *Newtons' method*, which computes the zero of a function via
 gradient descent. Gradient descent has several practical issues, but the most
@@ -735,51 +733,6 @@ Gradient descent will find a zero of the residual, but it is not guaranteed to
 be unique, especially given that the numerical solver relies on tolerances
 instead of exact solutions. Depending on the initial conditions, the solver may
 converge to different circulation distributions.
-
-.. See `demonstration:Bonk`_.
-
-
-.. Unstable at high resolution
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-   [[**FIXME**: finish writing]]
-
-   This method places the control points on the lifting-line, which causes
-   issues as the number of control points is increased (the grid is refined).
-   Recall the **very** informative discussion in Sec:8.2.3 from "Understanding
-   Aerodynamics" (McLeanauth; 2013): "a curved lifting-line has infinite
-   self-induced velocity" and "locating the control points away from the bound
-   vortex is still the only way to have a general formulation that doesn't
-   behave badly as the discretization is refined".
-
-   [[The reason the effect becomes more significant as the number of segments
-   is increased can be seen in :eq:`induced velocities`. As distance between
-   the segments is reduced, the denominators decrease, the induced velocities,
-   and the "imbalance" at the wing tip increases. (I think.)]]
-
-   See also :cite:`chreim2018ChangesModernLiftingLine`, p. 3: long discussion
-   of the PBC, and later on he notes "the circulation distribution becomes
-   unstable and leads to divergence as the mesh is refined". **Worth
-   revisiting: that paper proposes alternate horseshoe vortex geometries**.
-
-   See also: :cite:`reid2020GeneralApproachLiftingLine`, where they mention:
-
-     Previous attempts have been made to extend lifting-line theory to wings
-     with sweep. One commonly used method moves the control pints off the locus
-     of aerodynamic centers to the three-quarter chord line. This method then
-     constrains the total velocity at each control point to be tangential to
-     the wing camber line. **The downside of this approach is that it is no
-     longer possible to use arbitrary section properties that account for
-     thickness or contain viscous corrections to the lift slope.**
-
-   [[Most of those papers are discussing problems for wings with sweep, but it
-   seems like it'd also apply to wings with dihedral. Why wouldn't it? Oh, note
-   to self: big difference between a wing with dihedral versus **a wing with
-   sweep is that the wing with sweep will (probably?) experience significant
-   spanwise flow.** Also, for a swept wing the set of bound vortices are not
-   planar, which (I think) would mean they will induce velocities experienced
-   at each other (whereas if they are planar then it's just the trailing
-   vortices that influence the neighbors?)]]
 
 
 Sensitive to initial proposal
