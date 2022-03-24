@@ -21,20 +21,6 @@ Validation
       measured results.
 
 
-.. Bridget:
-
-     Here you can put all the results that validate your model.  Put in all the
-     tables and graphs that show that your model is giving comparable (if not
-     better) results to existing models and that your model is giving results
-     that match the specifications of the Hook3. For the data on the Hook 3,
-     you can even provide percent error (gives a numerical result stating how
-     far off was your model from the published performance data)
-
-     Then provide a section of limitations (can include the data on the 360
-     degree turn at 20 degree bank angle) and a bulleted list of other
-     limitations you want to mention.
-
-
 Foil aerodynamics
 -----------------
 
@@ -235,10 +221,6 @@ one that includes viscous effects, and two that do not (inviscid models):
 
 Results
 ^^^^^^^
-
-.. I removed the VLM results from XFLR5 for the moment coefficients because
-   they were VERY wrong; it computes drag correctly with sideslip, but the
-   sideforce (CY) is always zero, which ruins everything.
 
 
 Lift vs drag
@@ -510,14 +492,6 @@ from sources such as glider certifications and consumer wing reviews. Clearly
 such sources lack the rigor to "prove" model accuracy, but — when taken
 together — they can still provide incremental confidence that a model is
 adequate to answer basic questions of wing performance.
-
-.. FIXME: focus on establishing that I'm at least getting close! And yeah, The
-   absence of detailed performance information clearly limits the suitability
-   of these models to different applications, but at least I've got this far.
-   "More work is needed" is a satisfactory conclusion to this project, in my
-   opinion. The component models leave a lot of room for improvement. But
-   that's part of the point: it was designed for flexibility from the get go,
-   and it succeeded at that.]]
 
 
 Polar curve

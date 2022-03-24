@@ -57,9 +57,6 @@ Referring to whatever group of components include the canopy as the *body* was
 a compromise chosen for consistency with existing literature.
 
 
-.. FIXME: summarize the inputs to each lumped component?
-
-
 Connections
 ===========
 
@@ -74,10 +71,6 @@ payload is allowed to translate or rotate relative to the body, those
 additional DoF are added to the total DoF of the system model. For example, in
 a 6-DoF model, the body and payload are connected as a single rigid body, with
 no relative motion between them.
-
-.. FIXME: Parafoil-payload literature typically define models with 6 to 10
-   degrees of freedom. Discuss models from literature?
-
 
 .. figure:: figures/paraglider/dynamics/paraglider_fbd_6dof.*
    :name: paraglider_fbd_6dof

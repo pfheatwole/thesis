@@ -63,14 +63,6 @@ matrices is the *cross-product matrix operator*, so that
          -v_2 & v_1 & 0
       \end{bmatrix}
 
-.. FIXME:
-
-   Define random variables (eg, :math:`X`) and random variates (:math:`x
-   \in X`). Most of my functions are developed in terms of deterministic
-   variables, but later those variables will be considered random (so the
-   functions are now defined in terms of random variates). Not sure if/how
-   to call this out explicitly.
-
 By their nature, vectors require the most intricate notation, since a fully
 specified vector might include all of:
 
